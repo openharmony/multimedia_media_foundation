@@ -64,8 +64,7 @@
                 "init",
                 "player_framework",
                 "ipc",
-                "memory_utils",
-                "drm_framework"
+                "memory_utils"
             ]
         },
         "build": {
