@@ -43,7 +43,7 @@ if (hst_is_standard_sys) {
 
     external_deps = [
       "audio_framework:audio_capturer",
-      "graphic_2d:surface",
+      "graphic_surface:surface",
       "hilog:libhilog",
     ]
     sanitize = {

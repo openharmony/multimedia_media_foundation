@@ -64,7 +64,7 @@ ohos_unittest("meta_inner_unit_test") {
 
   external_deps = [
     "c_utils:utils",
-    "graphic_2d:surface",
+    "graphic_surface:surface",
     "graphic_2d:sync_fence",
     "hilog:libhilog",
     "ipc:ipc_core",

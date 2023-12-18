@@ -46,7 +46,7 @@ if (hst_is_lite_sys) {
     ]
 
     external_deps = [
-      "graphic_2d:surface",
+      "graphic_surface:surface",
       "hilog:libhilog",
     ]
     sanitize = {

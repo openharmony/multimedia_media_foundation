@@ -88,7 +88,7 @@ if (hst_is_lite_sys) {
     ]
     deps = [ "//third_party/bounds_checking_function:libsec_shared" ]
     external_deps = [
-      "graphic_2d:surface",
+      "graphic_surface:surface",
       "hilog:libhilog",
       "hitrace:hitrace_meter",
       "ipc:ipc_single",

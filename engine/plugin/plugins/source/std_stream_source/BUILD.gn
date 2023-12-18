@@ -39,7 +39,7 @@ if (hst_is_standard_sys) {
       "//foundation/multimedia/histreamer/engine/plugin:histreamer_plugin_base",
     ]
     external_deps = [
-      "graphic_2d:surface",
+      "graphic_surface:surface",
       "hilog:libhilog",
       "player_framework:media_service_utils",
     ]
