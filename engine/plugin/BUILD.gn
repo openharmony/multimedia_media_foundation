@@ -87,7 +87,7 @@ if (hst_is_lite_sys) {
       external_deps = [
         "c_utils:utils",
         "graphic_surface:surface",
-        "graphic_2d:sync_fence",
+        "graphic_surface:sync_fence",
         "hilog:libhilog",
         "ipc:ipc_single",
       ]
