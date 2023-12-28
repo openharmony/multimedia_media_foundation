@@ -24,16 +24,16 @@ group("plugin_ffmpeg_adapter") {
       ":histreamer_plugin_FFmpegAudioDecoders",
       ":histreamer_plugin_FFmpegDemuxer",
     ]
-    if (histreamer_enable_video) {
+    if (media_foundation_enable_video) {
       deps += [ ":histreamer_plugin_FFmpegVideoDecoders" ]
     }
   }
-  if (!hst_is_lite_sys && histreamer_enable_recorder) {
+  if (!hst_is_lite_sys && media_foundation_enable_recorder) {
     deps += [
       ":histreamer_plugin_FFmpegAudioEncoders",
       ":histreamer_plugin_FFmpegMuxers",
     ]
-    if (histreamer_enable_video) {
+    if (media_foundation_enable_video) {
       deps += [ ":histreamer_plugin_FFmpegVideoEncoders" ]
     }
   }
@@ -98,7 +98,7 @@ ohos_source_set("ffmpeg_demuxers") {
     "utils/aac_audio_config_parser.cpp",
     "utils/bit_reader.cpp",
   ]
-  if (histreamer_enable_video) {
+  if (media_foundation_enable_video) {
     sources += [ "utils/avc_config_data_parser.cpp" ]
   }
   public_configs = [

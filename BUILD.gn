@@ -31,13 +31,13 @@ config("histreamer_presets") {
     "-Wno-format",
   ]
   cflags_cc = cflags
-  if (histreamer_enable_recorder) {
+  if (media_foundation_enable_recorder) {
     defines += [ "RECORDER_SUPPORT" ]
   }
-  if (histreamer_enable_video) {
+  if (media_foundation_enable_video) {
     defines += [ "VIDEO_SUPPORT" ]
   }
-  if (histreamer_enable_avs3da) {
+  if (media_foundation_enable_avs3da) {
     defines += [ "AVS3DA_SUPPORT" ]
   }
   if (hst_is_lite_sys) {
@@ -62,7 +62,7 @@ if (!hst_is_mini_sys) {
       include_dirs = [ "//foundation/multimedia/media_foundation/interface" ]
       sources = []
       deps = [ "engine/scene/player:histreamer_player" ]
-      if (histreamer_enable_recorder) {
+      if (media_foundation_enable_recorder) {
         deps += [ "engine/scene/recorder:histreamer_recorder" ]
       }
       public_deps = [ "//foundation/multimedia/media_utils_lite:media_common" ]
@@ -90,7 +90,7 @@ if (!hst_is_mini_sys) {
       "engine/plugin/plugins:histreamer_plugin_store",
       "engine/scene/player:histreamer_player",
     ]
-    if (histreamer_enable_recorder) {
+    if (media_foundation_enable_recorder) {
       deps += [ "engine/scene/recorder:histreamer_recorder" ]
     }
     public_deps = [ "//foundation/multimedia/media_utils_lite:media_common" ]

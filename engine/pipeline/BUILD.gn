@@ -136,9 +136,9 @@ ohos_source_set("histreamer_pipeline") {
     "filters/source:audio_capture_filter",
     "filters/source:media_source_filter",
   ]
-  if (histreamer_enable_video) {
+  if (media_foundation_enable_video) {
     public_deps += [ "filters/sink:video_sink_filter" ]
-    if (histreamer_enable_recorder) {
+    if (media_foundation_enable_recorder) {
       public_deps += [ "filters/source:video_capture_filter" ]
     }
   }

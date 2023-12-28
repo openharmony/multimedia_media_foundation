@@ -34,7 +34,7 @@ config("hst_plugin_intf_config") {
       "//foundation/multimedia/media_foundation/engine/scene/standard",
       "//foundation/multimedia/player_framework/interfaces/inner_api/native",
     ]
-    if (histreamer_enable_video) {
+    if (media_foundation_enable_video) {
       include_dirs += [
         "//commonlibrary/c_utils/base/include",
         "//drivers/peripheral/display/interfaces/include",
@@ -77,7 +77,7 @@ if (hst_is_lite_sys) {
       "//foundation/multimedia/media_foundation:histreamer_presets",
     ]
     deps = [ "//third_party/bounds_checking_function:libsec_shared" ]
-    if (histreamer_enable_video) {
+    if (media_foundation_enable_video) {
       sources += [
         "common/share_allocator.cpp",
         "common/share_memory.cpp",

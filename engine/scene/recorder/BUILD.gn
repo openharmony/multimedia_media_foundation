@@ -14,7 +14,7 @@
 import("//foundation/multimedia/media_foundation/config.gni")
 
 config("histreamer_recorder_config") {
-  if (histreamer_enable_recorder) {
+  if (media_foundation_enable_recorder) {
     include_dirs = [
       "//foundation/multimedia/media_foundation/engine/include",
       "//foundation/multimedia/media_foundation/engine/scene/recorder",
@@ -35,7 +35,7 @@ config("histreamer_recorder_config") {
 ohos_source_set("histreamer_recorder") {
   subsystem_name = "multimedia"
   part_name = "media_foundation"
-  if (histreamer_enable_recorder) {
+  if (media_foundation_enable_recorder) {
     include_dirs = [ "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter" ]
     sources = [
       "internal/state.cpp",

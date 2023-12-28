@@ -31,7 +31,7 @@ ohos_source_set("std_engine_factory") {
       "graphic_2d:surface",
       "init:libbegetutil",
     ]
-    if (histreamer_enable_recorder) {
+    if (media_foundation_enable_recorder) {
       deps += [ "recorder:histreamer_recorder" ]
     }
     defines = []
