@@ -29,10 +29,11 @@ config("media_foundation_capi_unit_test_config") {
     "$histreamer_root_dir/interface/inner_api/buffer",
     "$histreamer_root_dir/interface/inner_api/meta",
     "$histreamer_root_dir/src/buffer/avbuffer/include",
-    "$histreamer_root_dir/../../graphic/graphic_2d/interface/inner_api/surface",
+    "$histreamer_root_dir/../../graphic/graphic_surface/interface/inner_api/surface",
     "$histreamer_root_dir/../../graphic/graphic_2d/utils/sync_fence/export",
     "$histreamer_root_dir/../../graphic/graphic_surface/surface/include",
     "$histreamer_root_dir/../../graphic/graphic_2d/interface/inner_api",
+    "$histreamer_root_dir/../../graphic/graphic_surface/interface/inner_api",
     "$histreamer_root_dir/../../window/window_manager/interface/innerkits",
   ]
 
@@ -122,10 +123,11 @@ config("media_foundation_inner_unit_test_config") {
     "$histreamer_root_dir/interface/inner_api/buffer",
     "$histreamer_root_dir/interface/inner_api/meta",
     "$histreamer_root_dir/src/buffer/avbuffer/include",
-    "$histreamer_root_dir/../../graphic/graphic_2d/interface/inner_api/surface",
+    "$histreamer_root_dir/../../graphic/graphic_surface/interface/inner_api/surface",
     "$histreamer_root_dir/../../graphic/graphic_2d/utils/sync_fence/export",
     "$histreamer_root_dir/../../graphic/graphic_surface/surface/include",
     "$histreamer_root_dir/../../graphic/graphic_2d/interface/inner_api",
+    "$histreamer_root_dir/../../graphic/graphic_surface/interface/inner_api",
     "$histreamer_root_dir/../../window/window_manager/interface/innerkits",
   ]
 

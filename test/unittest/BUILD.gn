@@ -38,7 +38,7 @@ ohos_unittest("histreamer_unit_test") {
     "//drivers/peripheral/display/interfaces/include",
     "//third_party/openmax/api/1.1.2",
     "$histreamer_root_dir/engine/include/",
-    "//graphic/graphic_2d/interfaces/innerkits/surface",
+    "//graphic/graphic_surface/interfaces/innerkits/surface",
     "//foundation/window/window_manager/interfaces/innerkits/wm",
   ]
   cflags = histreamer_unittest_cflags

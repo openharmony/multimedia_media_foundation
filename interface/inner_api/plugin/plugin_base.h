@@ -25,7 +25,7 @@
 
 namespace OHOS {
 namespace Media {
-namespace Plugin {
+namespace Plugins {
 enum class ErrorType {
     PLUGIN_ERROR,
     ALGO_ERROR,
@@ -180,7 +180,7 @@ struct PluginBase {
      *  @retval OK: Plugin GetParameter succeeded.
      *  @retval ERROR_INVALID_PARAMETER: The plugin does not support this parameter.
      */
-    virtual Status GetParameter(std::shared_ptr<Meta> meta)
+    virtual Status GetParameter(std::shared_ptr<Meta> &meta)
     {
         (void)meta;
         return Status::ERROR_UNIMPLEMENTED;
@@ -199,7 +199,7 @@ struct PluginBase {
      *  @retval ERROR_INVALID_DATA: The value is not in the valid range.
      *  @retval ERROR_MISMATCHED_TYPE: The data type is mismatched.
      */
-    virtual Status SetParameter(std::shared_ptr<Meta> meta)
+    virtual Status SetParameter(const std::shared_ptr<Meta> &meta)
     {
         (void)meta;
         return Status::ERROR_UNIMPLEMENTED;
@@ -223,7 +223,7 @@ struct PluginBase {
 protected:
     const std::string pluginName_;
 };
-} // namespace Plugin
+} // namespace Plugins
 } // namespace Media
 } // namespace OHOS
 #endif // HISTREAMER_PLUGIN_INTF_PLUGIN_BASE_H

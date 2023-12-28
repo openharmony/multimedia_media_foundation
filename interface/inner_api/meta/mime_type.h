@@ -18,7 +18,7 @@
 
 namespace OHOS {
 namespace Media {
-namespace Plugin {
+namespace Plugins {
 class MimeType {
 public:
     static constexpr const char VIDEO_H263[] = "video/h263";
@@ -37,6 +37,7 @@ public:
     static constexpr const char AUDIO_OPUS[] = "audio/opus";
     static constexpr const char AUDIO_FLAC[] = "audio/flac";
     static constexpr const char AUDIO_RAW[] = "audio/raw";
+    static constexpr const char AUDIO_G711MU[] = "audio/g711mu";
     static constexpr const char AUDIO_AVS3DA[] = "audio/av3a";
 
     static constexpr const char IMAGE_JPG[] = "image/jpeg";
@@ -46,7 +47,7 @@ public:
     static constexpr const char MEDIA_MP4[] = "media/mp4";
     static constexpr const char MEDIA_M4A[] = "media/m4a";
 };
-} // namespace Plugin
+} // namespace Plugins
 } // namespace Media
 } // namespace OHOS
 #endif // MEDIA_FOUNDATION_MIME_TYPE_H

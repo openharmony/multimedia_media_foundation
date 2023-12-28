@@ -230,7 +230,7 @@ HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_Int32_PlainInput, TestSize.Level1)
 HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_Enum_As_Int32, TestSize.Level1)
 {
     int32_t valueOut = 0;
-    int32_t valueIn = static_cast<int32_t>(Plugin::VideoRotation::VIDEO_ROTATION_90);
+    int32_t valueIn = static_cast<int32_t>(Plugins::VideoRotation::VIDEO_ROTATION_90);
     SetMetaData(*metaIn, Tag::VIDEO_ROTATION, valueIn);
     GetMetaData(*metaIn, Tag::VIDEO_ROTATION, valueOut);
     EXPECT_EQ(valueOut, valueIn);
@@ -262,8 +262,8 @@ HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_Int32_Using_Parcel, TestSize.Level1)
  */
 HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_Enum_As_Int32_Using_Parcel, TestSize.Level1)
 {
-    Plugin::VideoRotation valueOut;
-    int32_t valueIn = static_cast<int32_t>(Plugin::VideoRotation::VIDEO_ROTATION_90);
+    Plugins::VideoRotation valueOut;
+    int32_t valueIn = static_cast<int32_t>(Plugins::VideoRotation::VIDEO_ROTATION_90);
     SetMetaData(*metaIn, Tag::VIDEO_ROTATION, valueIn);
     ASSERT_TRUE(metaIn->ToParcel(*parcel));
     ASSERT_TRUE(metaOut->FromParcel(*parcel));
@@ -281,8 +281,8 @@ HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_Enum_As_Int32_Using_Parcel, TestSize
  */
 HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_Enum_As_Int64_Using_Parcel, TestSize.Level1)
 {
-    Plugin::AudioChannelLayout valueOut;
-    int64_t valueIn = static_cast<int64_t>(Plugin::AudioChannelLayout::HOA_ORDER1_FUMA);
+    Plugins::AudioChannelLayout valueOut;
+    int64_t valueIn = static_cast<int64_t>(Plugins::AudioChannelLayout::HOA_ORDER1_FUMA);
     SetMetaData(*metaIn, Tag::AUDIO_CHANNEL_LAYOUT, valueIn);
     ASSERT_TRUE(metaIn->ToParcel(*parcel));
     ASSERT_TRUE(metaOut->FromParcel(*parcel));
@@ -335,23 +335,23 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::VIDEO_STRIDE, 17},
     {Tag::VIDEO_DISPLAY_WIDTH, 19},
     {Tag::VIDEO_DISPLAY_HEIGHT, 23},
-    {Tag::SRC_INPUT_TYPE, static_cast<int32_t>(Plugin::SrcInputType::AUD_ES)},
-    {Tag::AUDIO_SAMPLE_FORMAT, static_cast<int32_t>(Plugin::AudioSampleFormat::SAMPLE_S16LE)},
-    {Tag::VIDEO_PIXEL_FORMAT, static_cast<int32_t>(Plugin::VideoPixelFormat::YUV411P)},
-    {Tag::MEDIA_TYPE, static_cast<int32_t>(Plugin::MediaType::AUDIO)},
-    {Tag::VIDEO_H264_PROFILE, static_cast<int32_t>(Plugin::VideoH264Profile::BASELINE)},
-    {Tag::VIDEO_ROTATION, static_cast<int32_t>(Plugin::VideoRotation::VIDEO_ROTATION_90)},
-    {Tag::VIDEO_COLOR_PRIMARIES, static_cast<int32_t>(Plugin::ColorPrimary::BT2020)},
-    {Tag::VIDEO_COLOR_TRC, static_cast<int32_t>(Plugin::TransferCharacteristic::BT1361)},
-    {Tag::VIDEO_COLOR_MATRIX_COEFF, static_cast<int32_t>(Plugin::MatrixCoefficient::BT2020_CL)},
-    {Tag::VIDEO_H265_PROFILE, static_cast<int32_t>(Plugin::HEVCProfile::HEVC_PROFILE_MAIN_10_HDR10)},
-    {Tag::VIDEO_H265_LEVEL, static_cast<int32_t>(Plugin::HEVCLevel::HEVC_LEVEL_41)},
-    {Tag::VIDEO_CHROMA_LOCATION, static_cast<int32_t>(Plugin::ChromaLocation::BOTTOM)},
-    {Tag::MEDIA_FILE_TYPE, static_cast<int32_t>(Plugin::FileType::AMR)},
-    {Tag::VIDEO_ENCODE_BITRATE_MODE, static_cast<int32_t>(Plugin::VideoEncodeBitrateMode::CBR)},
+    {Tag::SRC_INPUT_TYPE, static_cast<int32_t>(Plugins::SrcInputType::AUD_ES)},
+    {Tag::AUDIO_SAMPLE_FORMAT, static_cast<int32_t>(Plugins::AudioSampleFormat::SAMPLE_S16LE)},
+    {Tag::VIDEO_PIXEL_FORMAT, static_cast<int32_t>(Plugins::VideoPixelFormat::YUV411P)},
+    {Tag::MEDIA_TYPE, static_cast<int32_t>(Plugins::MediaType::AUDIO)},
+    {Tag::VIDEO_H264_PROFILE, static_cast<int32_t>(Plugins::VideoH264Profile::BASELINE)},
+    {Tag::VIDEO_ROTATION, static_cast<int32_t>(Plugins::VideoRotation::VIDEO_ROTATION_90)},
+    {Tag::VIDEO_COLOR_PRIMARIES, static_cast<int32_t>(Plugins::ColorPrimary::BT2020)},
+    {Tag::VIDEO_COLOR_TRC, static_cast<int32_t>(Plugins::TransferCharacteristic::BT1361)},
+    {Tag::VIDEO_COLOR_MATRIX_COEFF, static_cast<int32_t>(Plugins::MatrixCoefficient::BT2020_CL)},
+    {Tag::VIDEO_H265_PROFILE, static_cast<int32_t>(Plugins::HEVCProfile::HEVC_PROFILE_MAIN_10_HDR10)},
+    {Tag::VIDEO_H265_LEVEL, static_cast<int32_t>(Plugins::HEVCLevel::HEVC_LEVEL_41)},
+    {Tag::VIDEO_CHROMA_LOCATION, static_cast<int32_t>(Plugins::ChromaLocation::BOTTOM)},
+    {Tag::MEDIA_FILE_TYPE, static_cast<int32_t>(Plugins::FileType::AMR)},
+    {Tag::VIDEO_ENCODE_BITRATE_MODE, static_cast<int32_t>(Plugins::VideoEncodeBitrateMode::CBR)},
     // UINT8_T
-    {Tag::AUDIO_AAC_PROFILE, static_cast<int32_t>(Plugin::AudioAacProfile::ELD)},
-    {Tag::AUDIO_AAC_STREAM_FORMAT, static_cast<int32_t>(Plugin::AudioAacStreamFormat::ADIF)},
+    {Tag::AUDIO_AAC_PROFILE, static_cast<int32_t>(Plugins::AudioAacProfile::ELD)},
+    {Tag::AUDIO_AAC_STREAM_FORMAT, static_cast<int32_t>(Plugins::AudioAacStreamFormat::ADIF)},
     // Bool
     {Tag::VIDEO_COLOR_RANGE, 1},
     {Tag::VIDEO_REQUEST_I_FRAME, 0},
@@ -395,8 +395,8 @@ map<TagType, int64_t> testInt64Data = {
     {Tag::MEDIA_FILE_SIZE, 1234567890007},
     {Tag::MEDIA_POSITION, 1234567890008},
     {Tag::MEDIA_TIME_STAMP, 1234567890009},
-    {Tag::AUDIO_CHANNEL_LAYOUT, static_cast<int64_t>(Plugin::AudioChannelLayout::CH_10POINT2)},
-    {Tag::AUDIO_OUTPUT_CHANNEL_LAYOUT, static_cast<int64_t>(Plugin::AudioChannelLayout::HOA_ORDER3_FUMA)}
+    {Tag::AUDIO_CHANNEL_LAYOUT, static_cast<int64_t>(Plugins::AudioChannelLayout::CH_10POINT2)},
+    {Tag::AUDIO_OUTPUT_CHANNEL_LAYOUT, static_cast<int64_t>(Plugins::AudioChannelLayout::HOA_ORDER3_FUMA)}
 };
 
 /**
@@ -418,6 +418,33 @@ HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_All_As_Int64_Using_ParcelPackage, Te
         GetMetaData(*metaOut, item.first, valueOut);
         std::cout <<  item.first << " , " << valueOut << " , " << valueIn << std::endl;
         EXPECT_EQ(valueOut, valueIn);
+    }
+}
+
+map<TagType, float> testFloatData = {
+    // Float
+    {Tag::MEDIA_LATITUDE, 1.01f},
+    {Tag::MEDIA_LONGITUDE, 1.02f}
+};
+
+/**
+ * @tc.name: SetGet_MetaData_All_As_Float_Using_ParcelPackage
+ * @tc.desc: SetGet_MetaData_All_As_Float_Using_ParcelPackage
+ * @tc.type: FUNC
+ */
+HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_All_As_Float_Using_ParcelPackage, TestSize.Level1)
+{
+    for (auto item : testFloatData) {
+        float valueIn = item.second;
+        metaIn->SetData(item.first, valueIn);
+    }
+    ASSERT_TRUE(metaIn->ToParcel(*parcel));
+    ASSERT_TRUE(metaOut->FromParcel(*parcel));
+    for (auto item : testFloatData) {
+        float valueIn = item.second;
+        float valueOut = 0.0f;
+        metaOut->GetData(item.first, valueOut);
+        ASSERT_FLOAT_EQ(valueOut, valueIn);
     }
 }
 
@@ -470,7 +497,8 @@ map<TagType, std::string> testStringData = {
     {Tag::MEDIA_COMPOSER, "String MEDIA_COMPOSER"},
     {Tag::MEDIA_LYRICS, "String MEDIA_LYRICS"},
     {Tag::MEDIA_CODEC_NAME, "String MEDIA_CODEC_NAME"},
-    {Tag::PROCESS_NAME, "String PROCESS_NAME"}
+    {Tag::PROCESS_NAME, "String PROCESS_NAME"},
+    {Tag::MEDIA_CREATION_TIME, "String MEDIA_CREATION_TIME"},
 };
 
 /**
@@ -538,6 +566,10 @@ HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_All_As_Mix_Using_ParcelPackage, Test
         std::vector<uint8_t> valueInVecInt8 = item.second;
         metaIn->SetData(item.first, valueInVecInt8);
     }
+    for (auto item : testFloatData) {
+        float valueInFloat = item.second;
+        metaIn->SetData(item.first, valueInFloat);
+    }
     for (auto item : testDoubleData) {
         double valueInDouble = item.second;
         metaIn->SetData(item.first, valueInDouble);
@@ -564,6 +596,12 @@ HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_All_As_Mix_Using_ParcelPackage, Test
         metaOut->GetData(item.first, valueOutStr);
         EXPECT_EQ(valueOutStr, valueInStr);
     }
+    for (auto item : testFloatData) {
+        float valueInFloat = item.second;
+        float valueOutFloat = 0.0f;
+        metaOut->GetData(item.first, valueOutFloat);
+        ASSERT_FLOAT_EQ(valueOutFloat, valueInFloat);
+    }
     for (auto item : testDoubleData) {
         double valueInDouble = item.second;
         double valueOutDouble = 0.0;
@@ -588,6 +626,10 @@ HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_All_As_Mix_Using_AssignCopy, TestSiz
     for (auto item : testVetcorInt8Data) {
         std::vector<uint8_t> valueInVecInt8 = item.second;
         metaIn->SetData(item.first, valueInVecInt8);
+    }
+    for (auto item : testFloatData) {
+        float valueInFloat = item.second;
+        metaIn->SetData(item.first, valueInFloat);
     }
     for (auto item : testDoubleData) {
         double valueInDouble = item.second;
@@ -618,6 +660,12 @@ HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_All_As_Mix_Using_AssignCopy, TestSiz
         metaCopy.GetData(item.first, valueOutStr);
         EXPECT_EQ(valueOutStr, valueInStr);
     }
+    for (auto item : testFloatData) {
+        float valueInFloat = item.second;
+        float valueOutFloat = 0.0f;
+        metaCopy.GetData(item.first, valueOutFloat);
+        ASSERT_FLOAT_EQ(valueOutFloat, valueInFloat);
+    }
     for (auto item : testDoubleData) {
         double valueInDouble = item.second;
         double valueOutDouble = 0.0;
@@ -642,6 +690,10 @@ HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_All_As_Mix_Using_SwapCopy, TestSize.
     for (auto item : testVetcorInt8Data) {
         std::vector<uint8_t> valueInVecInt8 = item.second;
         metaIn->SetData(item.first, valueInVecInt8);
+    }
+    for (auto item : testFloatData) {
+        float valueInFloat = item.second;
+        metaIn->SetData(item.first, valueInFloat);
     }
     for (auto item : testDoubleData) {
         double valueInDouble = item.second;
@@ -671,6 +723,12 @@ HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_All_As_Mix_Using_SwapCopy, TestSize.
         std::string valueOutStr = "String Value";
         metaCopy.GetData(item.first, valueOutStr);
         EXPECT_EQ(valueOutStr, valueInStr);
+    }
+    for (auto item : testFloatData) {
+        float valueInFloat = item.second;
+        float valueOutFloat = 0.0f;
+        metaCopy.GetData(item.first, valueOutFloat);
+        ASSERT_FLOAT_EQ(valueOutFloat, valueInFloat);
     }
     for (auto item : testDoubleData) {
         double valueInDouble = item.second;

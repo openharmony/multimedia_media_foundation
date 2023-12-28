@@ -19,12 +19,12 @@
 namespace OHOS {
 namespace Media {
 namespace Plugins {
-#define HST_TIME_NONE ((int64_t)-1)
-#define HST_TIME_BASE ((int64_t)1)
-#define HST_NSECOND HST_TIME_BASE
-#define HST_USECOND ((int64_t)1000 * HST_NSECOND)
-#define HST_MSECOND ((int64_t)1000 * HST_USECOND)
-#define HST_SECOND ((int64_t)1000 * HST_MSECOND)
+constexpr int HST_TIME_NONE = (int64_t)-1;
+constexpr int HST_TIME_BASE = (int64_t)1;
+constexpr int HST_NSECOND = HST_TIME_BASE;
+constexpr int HST_USECOND = ((int64_t)1000 * HST_NSECOND);
+constexpr int HST_MSECOND = ((int64_t)1000 * HST_USECOND);
+constexpr int HST_SECOND = ((int64_t)1000 * HST_MSECOND);
 
 inline int64_t HstTime2Ns(int64_t hTime)
 {
@@ -78,7 +78,7 @@ inline bool Sec2HstTime (int64_t sec, int64_t& hTime)
     hTime = sec * HST_SECOND;
     return true;
 }
-} // Plugin
+} // Plugins
 } // Media
 } // OHOS
 #endif // HISTREAMER_PLUGIN_COMMON_TIME_H

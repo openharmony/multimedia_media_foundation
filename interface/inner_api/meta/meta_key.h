@@ -68,6 +68,10 @@ public:
     static constexpr const char MEDIA_LYRICS[] = "lyrics";             ///< lyrics
     static constexpr const char MEDIA_AUTHOR[] = "author";             ///< authoe
     static constexpr const char MEDIA_COMPOSER[] = "composer";         ///< composer
+    static constexpr const char MEDIA_CREATION_TIME[] =
+        "creation_time"; ///< creation time, string as YYYY-MM-DD HH:MM:SS.XXX or now
+    static constexpr const char MEDIA_LATITUDE[] = "latitude";         ///< latitude, float
+    static constexpr const char MEDIA_LONGITUDE[] = "longitude";       ///< longitude, float
     static constexpr const char MEDIA_DURATION[] = "duration";         ///< duration based on {@link HST_TIME_BASE}
     static constexpr const char MEDIA_FILE_SIZE[] = "media.file.size"; ///< file size
     static constexpr const char MEDIA_BITRATE[] = "bitrate";           ///< bite rate
@@ -123,6 +127,10 @@ public:
     static constexpr const char AUDIO_VORBIS_IDENTIFICATION_HEADER[] =
         "identification_header";                                              ///< Key for vorbis identification header
     static constexpr const char AUDIO_VORBIS_SETUP_HEADER[] = "setup_header"; ///< Key for vorbis setup header
+    static constexpr const char OH_MD_KEY_AUDIO_OBJECT_NUMBER[] =
+        "audio_object_number_key";                                            ///< Key for audio object number
+    static constexpr const char OH_MD_KEY_AUDIO_VIVID_METADATA[] =
+        "audio_vivid_metadata_key";                                           ///< Key for audio vivid metadata
 
     /* -------------------- video universal tag -------------------- */
     static constexpr const char VIDEO_WIDTH[] = "width";                               ///< video width

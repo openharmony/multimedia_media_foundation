@@ -46,7 +46,7 @@
  **/
 namespace OHOS {
 namespace Media {
-using namespace Plugin;
+using namespace Plugins;
 
 #define DEFINE_METADATA_SETTER_GETTER_FUNC(EnumTypeName, ExtTypeName)                       \
 static bool Set##EnumTypeName(Meta& meta, const TagType& tag, ExtTypeName& value)           \
@@ -177,6 +177,7 @@ static Any defaultUInt8 = (uint8_t)0;
 static Any defaultInt32 = (int32_t)0;
 static Any defaultInt64 = (int64_t)0;
 static Any defaultUInt64 = (uint64_t)0;
+static Any defaultFloat = 0.0f;
 static Any defaultDouble = (double)0.0;
 static Any defaultBool = (bool) false;
 static Any defaultSrcInputType = SrcInputType::UNKNOWN;
@@ -278,6 +279,10 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::MEDIA_LYRICS, defaultString},
     {Tag::MEDIA_CODEC_NAME, defaultString},
     {Tag::PROCESS_NAME, defaultString},
+    {Tag::MEDIA_CREATION_TIME, defaultString},
+    // Float
+    {Tag::MEDIA_LATITUDE, defaultFloat},
+    {Tag::MEDIA_LONGITUDE, defaultFloat},
     // Double
     {Tag::VIDEO_CAPTURE_RATE, defaultDouble},
     {Tag::VIDEO_FRAME_RATE, defaultDouble},
@@ -312,7 +317,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::MEDIA_COVER, defaultVectorUInt8},
     {Tag::AUDIO_VORBIS_IDENTIFICATION_HEADER, defaultVectorUInt8},
     {Tag::AUDIO_VORBIS_SETUP_HEADER, defaultVectorUInt8},
-    // vector<Plugin::VideoBitStreamFormat>
+    // vector<Plugins::VideoBitStreamFormat>
     {Tag::VIDEO_BIT_STREAM_FORMAT, defaultVectorVideoBitStreamFormat}};
 
 Any GetDefaultAnyValue(const TagType& tag)
@@ -350,6 +355,11 @@ bool Meta::FromParcel(MessageParcel &parcel)
 {
     map_.clear();
     int32_t size = parcel.ReadInt32();
+    if (size <= 0 || size > parcel.GetRawDataCapacity()) {
+        MEDIA_LOG_E("fail to Unmarshalling size: %{public}d", size);
+        return false;
+    }
+    
     for (int32_t index = 0; index < size; index++) {
         std::string key = parcel.ReadString();
         Any value = GetDefaultAnyValue(key); //Init Default Value

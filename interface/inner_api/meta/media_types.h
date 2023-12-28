@@ -17,11 +17,12 @@
 #define MEDIA_FOUNDATION_MEDIA_TYPES_H
 
 #include <cstdint>  // NOLINT: used it
+#include <string_view>
 #include <vector>
 
 namespace OHOS {
 namespace Media {
-namespace Plugin {
+namespace Plugins {
 /**
  * @enum Media Track Type
  *
@@ -220,7 +221,7 @@ private:
  * The tag content is stored in key-value format.
  */
 using CodecConfig = std::vector<uint8_t>;
-} // namespace Plugin
+} // namespace Plugins
 } // namespace Media
 } // namespace OHOS
 #endif // MEDIA_FOUNDATION_MEDIA_TYPES_H

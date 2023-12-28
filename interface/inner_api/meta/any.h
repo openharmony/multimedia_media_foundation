@@ -26,6 +26,16 @@
 #endif
 #endif
 
+#ifndef MEDIA_NO_OHOS
+#ifndef MEDIA_OHOS
+#define MEDIA_OHOS
+#endif
+#else
+#ifdef MEDIA_OHOS
+#undef MEDIA_OHOS
+#endif
+#endif
+
 #if defined(__clang__) || defined(__GNUC__)
 #define CPP_STANDARD __cplusplus
 #elif defined(_MSC_VER)
@@ -213,20 +223,15 @@ public:
         return *this;
     }
 
+    /**
+     * Get TypeName From function info.
+     * @return Name of Type T
+     */
     template<typename T>
     static constexpr std::string_view GetTypeName() noexcept
     {
-        const char* charInfo = __PRETTY_FUNCTION__ ;
-        std::string_view stringInfo = charInfo;
-        uint32_t beginIndex = stringInfo.find_first_of('=') + 2; // 2 表示右移两位
-#ifdef MEDIA_OHOS
-        uint32_t endIndex = stringInfo.find_last_of(']');
-        std::string_view typeName(charInfo + beginIndex, endIndex - beginIndex);
-#else
-        uint32_t endIndex = stringInfo.find_last_of(';');
-        std::string_view typeName(charInfo + beginIndex, endIndex - beginIndex);
-#endif
-        return typeName;
+        const char* functionInfo = __PRETTY_FUNCTION__ ;
+        return GetTypeNameFromFunctionInfo(functionInfo);
     }
 
     template<typename T>
@@ -412,6 +417,8 @@ private:
     static bool BaseTypesToParcel(const Any *operand, MessageParcel& parcel) noexcept;
     // returnValue : 0 -- success; 1 -- retry enum; 2 -- failed no retry
     static int BaseTypesFromParcel(Any *operand, MessageParcel& parcel) noexcept;
+
+    static std::string_view GetTypeNameFromFunctionInfo(const char* functionInfo) noexcept;
 
     template <typename T>
     struct TrivialStackFunctionTable {
