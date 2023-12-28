@@ -21,7 +21,7 @@ HiStreamer作为媒体引擎，向上对接player_framework(standard设备上)�
 - Pipeline框架层: 包括Pipeline框架，各个Filter节点实现。
 - 插件层: 包括插件框架，各种插件。
 
-![逻辑架构图](images/media_foundation_architecture.png)
+![逻辑架构图](images/histreamer_architecture.png)
 
 ## 插件列表<a name="section_histreamer_plugins"></a>
 HiStreamer插件列表如下:
@@ -39,7 +39,7 @@ HiStreamer插件列表如下:
 仓目录结构如下：
 
 ```
-/foundation/multimedia/media_foundation      # HiStreamer媒体引擎组件业务代码
+/foundation/multimedia/histreamer      # HiStreamer媒体引擎组件业务代码
 ├─LICENSE                              # 证书文件
 ├─engine                               # 引擎代码
 │  ├─foundation                        # 基础工具类, 包括OS适配
