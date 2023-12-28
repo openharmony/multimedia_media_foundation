@@ -13,7 +13,7 @@
 import("//build/test.gni")
 import("//foundation/multimedia/media_foundation/config.gni")
 
-module_output_path = "histreamer/scenetest/video_recorder"
+module_output_path = "media_foundation/scenetest/video_recorder"
 
 histreamer_unittest_cflags = [
   "-std=c++17",

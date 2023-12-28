@@ -16,7 +16,7 @@
 import("//foundation/multimedia/media_foundation/config.gni")
 ohos_source_set("histreamer_pipeline_base") {
   subsystem_name = "multimedia"
-  part_name = "histreamer"
+  part_name = "media_foundation"
   include_dirs = [ "//foundation/multimedia/media_foundation/engine/include" ]
   sources = [
     "core/compatible_check.cpp",
@@ -70,7 +70,7 @@ if (hst_is_lite_sys) {
   import("//build/ohos.gni")
   ohos_shared_library("histreamer_base") {
     subsystem_name = "multimedia"
-    part_name = "histreamer"
+    part_name = "media_foundation"
     public_configs = [ ":histreamer_base_external_config" ]
     deps = [ ":histreamer_pipeline_base" ]
     external_deps = [ "hilog:libhilog" ]
@@ -108,7 +108,7 @@ if (hst_is_lite_sys) {
   import("//build/ohos.gni")
   ohos_shared_library("histreamer_codec_filters") {
     subsystem_name = "multimedia"
-    part_name = "histreamer"
+    part_name = "media_foundation"
     public_configs = [ ":histreamer_codec_filters_external_config" ]
     deps = [ "filters/codec:codec_filters" ]
     external_deps = [ "hilog:libhilog" ]
@@ -123,7 +123,7 @@ if (hst_is_lite_sys) {
 
 ohos_source_set("histreamer_pipeline") {
   subsystem_name = "multimedia"
-  part_name = "histreamer"
+  part_name = "media_foundation"
   sources = []
   public_configs = [ "//foundation/multimedia/media_foundation:histreamer_presets" ]
   public_deps = [
@@ -159,7 +159,7 @@ if (hst_is_lite_sys) {
   import("//build/ohos.gni")
   ohos_shared_library("histreamer_engine_filters") {
     subsystem_name = "multimedia"
-    part_name = "histreamer"
+    part_name = "media_foundation"
     deps = [ ":histreamer_pipeline" ]
     external_deps = [ "hilog:libhilog" ]
     sanitize = {

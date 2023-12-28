@@ -66,7 +66,7 @@ if (hst_is_lite_sys) {
 } else {
   ohos_source_set("histreamer_plugin_intf") {
     subsystem_name = "multimedia"
-    part_name = "histreamer"
+    part_name = "media_foundation"
     sources = [
       "common/media_sink.cpp",
       "common/media_source.cpp",
@@ -97,7 +97,7 @@ if (hst_is_lite_sys) {
 
 ohos_source_set("plugin_base") {
   subsystem_name = "multimedia"
-  part_name = "histreamer"
+  part_name = "media_foundation"
   sources = []
   public_deps = [
     ":histreamer_plugin_intf",
@@ -132,7 +132,7 @@ if (hst_is_lite_sys) {
   import("//build/ohos.gni")
   ohos_shared_library("histreamer_plugin_base") {
     subsystem_name = "multimedia"
-    part_name = "histreamer"
+    part_name = "media_foundation"
     public_configs = [ ":histreamer_plugin_base_external_config" ]
     deps = [ ":plugin_base" ]
     external_deps = [ "hilog:libhilog" ]
@@ -147,7 +147,7 @@ if (hst_is_lite_sys) {
 
 ohos_source_set("ffmpeg_convert") {
   subsystem_name = "multimedia"
-  part_name = "histreamer"
+  part_name = "media_foundation"
   include_dirs = [
     "//foundation/multimedia/media_foundation/engine/include",
     "//third_party/ffmpeg",
@@ -179,7 +179,7 @@ if (hst_is_lite_sys) {
   import("//build/ohos.gni")
   ohos_shared_library("histreamer_ffmpeg_convert") {
     subsystem_name = "multimedia"
-    part_name = "histreamer"
+    part_name = "media_foundation"
     include_dirs = [
       "//foundation/multimedia/media_foundation/engine/include",
       "//third_party/ffmpeg",
@@ -197,7 +197,7 @@ if (hst_is_lite_sys) {
 
 ohos_source_set("histreamer_plugin_core") {
   subsystem_name = "multimedia"
-  part_name = "histreamer"
+  part_name = "media_foundation"
   include_dirs = [ "//foundation/multimedia/media_foundation/engine/include" ]
   sources = [
     "core/audio_sink.cpp",

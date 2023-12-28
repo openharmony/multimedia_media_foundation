@@ -175,7 +175,7 @@ if (hst_is_standard_sys) {
     ]
 
     subsystem_name = "multimedia"
-    part_name = "histreamer"
+    part_name = "media_foundation"
   }
 } else {
   group("media_foundation") {

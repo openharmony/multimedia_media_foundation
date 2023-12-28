@@ -21,7 +21,7 @@ if (hst_is_standard_sys) {
   import("//build/ohos.gni")
   ohos_shared_library("histreamer_plugin_AudioServerSink") {
     subsystem_name = "multimedia"
-    part_name = "histreamer"
+    part_name = "media_foundation"
     include_dirs = [
       "//foundation/multimedia/media_foundation/engine/include/",
       "//foundation/multimedia/media_foundation/engine/plugin/",

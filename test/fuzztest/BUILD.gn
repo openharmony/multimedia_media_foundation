@@ -13,7 +13,7 @@
 import("//build/test.gni")
 import("//foundation/multimedia/media_foundation/config.gni")
 
-module_output_path = "histreamer/media_foundation"
+module_output_path = "media_foundation/media_foundation"
 
 histreamer_unittest_cflags = [
   "-std=c++17",

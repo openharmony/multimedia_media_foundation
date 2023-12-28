@@ -22,7 +22,7 @@ if (hst_is_standard_sys) {
   import("//build/ohos.gni")
   ohos_shared_library("histreamer_plugin_StdAudioCapture") {
     subsystem_name = "multimedia"
-    part_name = "histreamer"
+    part_name = "media_foundation"
     include_dirs = [
       "//foundation/multimedia/audio_framework/interfaces/inner_api/native/audiocommon/include",
       "//foundation/multimedia/media_foundation/engine/include",

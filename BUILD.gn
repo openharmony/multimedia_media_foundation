@@ -66,7 +66,7 @@ if (!hst_is_mini_sys) {
         deps += [ "engine/scene/recorder:histreamer_recorder" ]
       }
       public_deps = [ "//foundation/multimedia/media_utils_lite:media_common" ]
-      output_name = "histreamer"
+      output_name = "media_foundation"
     }
     group("media_foundation") {
     }

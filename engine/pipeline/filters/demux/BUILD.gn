@@ -16,7 +16,7 @@
 import("//foundation/multimedia/media_foundation/config.gni")
 ohos_source_set("demuxer_filter") {
   subsystem_name = "multimedia"
-  part_name = "histreamer"
+  part_name = "media_foundation"
   include_dirs = [
     "../../../",
     "../../../include",

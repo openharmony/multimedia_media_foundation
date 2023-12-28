@@ -69,7 +69,7 @@ if (hst_is_lite_sys) {
 } else {
   ohos_source_set("histreamer_foundation") {
     subsystem_name = "multimedia"
-    part_name = "histreamer"
+    part_name = "media_foundation"
     include_dirs = [ "$hiviewdfx_root_dir/hitrace/interfaces/native/innerkits/include/hitrace_meter" ]
     sources = [
       "osal/filesystem/file_system.cpp",

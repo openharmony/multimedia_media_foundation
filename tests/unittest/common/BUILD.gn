@@ -195,5 +195,5 @@ ohos_static_library("media_foundation_inner_unit_test") {
   ]
 
   subsystem_name = "multimedia"
-  part_name = "histreamer"
+  part_name = "media_foundation"
 }

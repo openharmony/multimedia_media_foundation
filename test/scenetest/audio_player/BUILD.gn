@@ -14,7 +14,7 @@ import("//build/test.gni")
 import("//foundation/multimedia/media_foundation/config.gni")
 import("//foundation/multimedia/player_framework/config.gni")
 
-module_output_path = "histreamer/scenetest/audio_player"
+module_output_path = "media_foundation/scenetest/audio_player"
 
 histreamer_unittest_cflags = [
   "-std=c++17",

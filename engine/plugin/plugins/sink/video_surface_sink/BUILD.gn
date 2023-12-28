@@ -23,7 +23,7 @@ group("plugin_standard_video_surface_sink") {
 
 ohos_source_set("std_video_surface_sink") {
   subsystem_name = "multimedia"
-  part_name = "histreamer"
+  part_name = "media_foundation"
   sources = [ "surface_sink_plugin.cpp" ]
   public_deps = [
     "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
@@ -68,6 +68,6 @@ if (hst_is_lite_sys) {
     external_deps = [ "hilog:libhilog" ]
     relative_install_dir = "media/media_foundation_plugins"
     subsystem_name = "multimedia"
-    part_name = "histreamer"
+    part_name = "media_foundation"
   }
 }

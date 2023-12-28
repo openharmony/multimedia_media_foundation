@@ -48,7 +48,7 @@ config("plugin_ffmpeg_adapter_config") {
 
 ohos_source_set("ffmpeg_adapter_common") {
   subsystem_name = "multimedia"
-  part_name = "histreamer"
+  part_name = "media_foundation"
   sources = [ "utils/ffmpeg_utils.cpp" ]
   public_configs = [
     ":plugin_ffmpeg_adapter_config",
@@ -70,7 +70,7 @@ ohos_source_set("ffmpeg_adapter_common") {
 
 ohos_source_set("ffmpeg_audio_decoders") {
   subsystem_name = "multimedia"
-  part_name = "histreamer"
+  part_name = "media_foundation"
   sources = [ "audio_decoder/audio_ffmpeg_decoder_plugin.cpp" ]
   public_configs = [
     ":plugin_ffmpeg_adapter_config",
@@ -91,7 +91,7 @@ ohos_source_set("ffmpeg_audio_decoders") {
 }
 ohos_source_set("ffmpeg_demuxers") {
   subsystem_name = "multimedia"
-  part_name = "histreamer"
+  part_name = "media_foundation"
   sources = [
     "demuxer/ffmpeg_demuxer_plugin.cpp",
     "demuxer/ffmpeg_track_meta.cpp",
@@ -122,7 +122,7 @@ ohos_source_set("ffmpeg_demuxers") {
 
 ohos_source_set("ffmpeg_audio_encoders") {
   subsystem_name = "multimedia"
-  part_name = "histreamer"
+  part_name = "media_foundation"
   sources = [
     "audio_encoder/audio_ffmpeg_encoder_plugin.cpp",
     "audio_encoder/ffmpeg_au_enc_config.cpp",
@@ -148,7 +148,7 @@ ohos_source_set("ffmpeg_audio_encoders") {
 
 ohos_source_set("ffmpeg_video_decoders") {
   subsystem_name = "multimedia"
-  part_name = "histreamer"
+  part_name = "media_foundation"
   sources = [ "video_decoder/video_ffmpeg_decoder_plugin.cpp" ]
   public_configs = [
     ":plugin_ffmpeg_adapter_config",
@@ -171,7 +171,7 @@ ohos_source_set("ffmpeg_video_decoders") {
 
 ohos_source_set("ffmpeg_video_encoders") {
   subsystem_name = "multimedia"
-  part_name = "histreamer"
+  part_name = "media_foundation"
   sources = [
     "video_encoder/ffmpeg_vid_enc_config.cpp",
     "video_encoder/video_ffmpeg_encoder_plugin.cpp",
@@ -196,7 +196,7 @@ ohos_source_set("ffmpeg_video_encoders") {
 
 ohos_source_set("ffmpeg_muxers") {
   subsystem_name = "multimedia"
-  part_name = "histreamer"
+  part_name = "media_foundation"
   sources = [
     "muxer/ffmpeg_muxer_plugin.cpp",
     "utils/ffmpeg_codec_map.cpp",
@@ -267,7 +267,7 @@ if (hst_is_lite_sys) {
     external_deps = [ "hilog:libhilog" ]
     relative_install_dir = "media/media_foundation_plugins"
     subsystem_name = "multimedia"
-    part_name = "histreamer"
+    part_name = "media_foundation"
   }
   ohos_shared_library("histreamer_plugin_FFmpegVideoDecoders") {
     sanitize = {
@@ -283,7 +283,7 @@ if (hst_is_lite_sys) {
     external_deps = [ "hilog:libhilog" ]
     relative_install_dir = "media/media_foundation_plugins"
     subsystem_name = "multimedia"
-    part_name = "histreamer"
+    part_name = "media_foundation"
   }
   ohos_shared_library("histreamer_plugin_FFmpegDemuxer") {
     sanitize = {
@@ -299,7 +299,7 @@ if (hst_is_lite_sys) {
     external_deps = [ "hilog:libhilog" ]
     relative_install_dir = "media/media_foundation_plugins"
     subsystem_name = "multimedia"
-    part_name = "histreamer"
+    part_name = "media_foundation"
   }
   ohos_shared_library("histreamer_plugin_FFmpegAudioEncoders") {
     sanitize = {
@@ -315,7 +315,7 @@ if (hst_is_lite_sys) {
     external_deps = [ "hilog:libhilog" ]
     relative_install_dir = "media/media_foundation_plugins"
     subsystem_name = "multimedia"
-    part_name = "histreamer"
+    part_name = "media_foundation"
   }
   ohos_shared_library("histreamer_plugin_FFmpegVideoEncoders") {
     sanitize = {
@@ -331,7 +331,7 @@ if (hst_is_lite_sys) {
     external_deps = [ "hilog:libhilog" ]
     relative_install_dir = "media/media_foundation_plugins"
     subsystem_name = "multimedia"
-    part_name = "histreamer"
+    part_name = "media_foundation"
   }
   ohos_shared_library("histreamer_plugin_FFmpegMuxers") {
     sanitize = {
@@ -347,6 +347,6 @@ if (hst_is_lite_sys) {
     external_deps = [ "hilog:libhilog" ]
     relative_install_dir = "media/media_foundation_plugins"
     subsystem_name = "multimedia"
-    part_name = "histreamer"
+    part_name = "media_foundation"
   }
 }

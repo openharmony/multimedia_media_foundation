@@ -34,7 +34,7 @@ config("histreamer_recorder_config") {
 
 ohos_source_set("histreamer_recorder") {
   subsystem_name = "multimedia"
-  part_name = "histreamer"
+  part_name = "media_foundation"
   if (histreamer_enable_recorder) {
     include_dirs = [ "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter" ]
     sources = [

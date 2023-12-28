@@ -50,7 +50,7 @@ if (hst_is_mini_sys) {
 } else {
   ohos_shared_library("histreamer_plugin_Minimp3Demuxer") {
     subsystem_name = "multimedia"
-    part_name = "histreamer"
+    part_name = "media_foundation"
     sources = [
       "minimp3_demuxer_plugin.cpp",
       "minimp3_wrapper.c",
@@ -74,7 +74,7 @@ if (hst_is_mini_sys) {
   }
   ohos_shared_library("histreamer_plugin_Minimp3Decoder") {
     subsystem_name = "multimedia"
-    part_name = "histreamer"
+    part_name = "media_foundation"
     sources = [
       "minimp3_decoder_plugin.cpp",
       "minimp3_wrapper.c",

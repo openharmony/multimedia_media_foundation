@@ -14,8 +14,7 @@
 
 import("//foundation/multimedia/media_foundation/config.gni")
 
-print("histreamer plugin: ffmpeg_adapter =",
-      histreamer_enable_plugin_ffmpeg_adapter)
+print("histreamer plugin: ffmpeg_adapter =",histreamer_enable_plugin_ffmpeg_adapter)
 print("histreamer plugin: wav_demuxer =", histreamer_enable_plugin_wav_demuxer)
 print("histreamer plugin: hdi_adapter =", histreamer_enable_plugin_hdi_adapter)
 print("histreamer plugin: file_source =", histreamer_enable_plugin_file_source)

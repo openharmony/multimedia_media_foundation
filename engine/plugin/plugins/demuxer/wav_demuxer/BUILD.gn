@@ -23,7 +23,7 @@ group("plugin_wav_demuxer") {
 
 ohos_source_set("wavdemuxer") {
   subsystem_name = "multimedia"
-  part_name = "histreamer"
+  part_name = "media_foundation"
   include_dirs = [ "//foundation/multimedia/media_foundation/engine/include" ]
   sources = [ "wav_demuxer_plugin.cpp" ]
   public_configs = [ "//foundation/multimedia/media_foundation:histreamer_presets" ]
@@ -41,7 +41,7 @@ if (hst_is_lite_sys) {
   import("//build/ohos.gni")
   ohos_shared_library("histreamer_plugin_WavDemuxer") {
     subsystem_name = "multimedia"
-    part_name = "histreamer"
+    part_name = "media_foundation"
     deps = [ ":wavdemuxer" ]
     external_deps = [ "hilog:libhilog" ]
     relative_install_dir = "media/media_foundation_plugins"

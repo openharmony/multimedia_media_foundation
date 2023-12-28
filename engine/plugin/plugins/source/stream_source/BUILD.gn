@@ -19,7 +19,7 @@ group("plugin_stream_source") {
 
 ohos_source_set("streamsource") {
   subsystem_name = "multimedia"
-  part_name = "histreamer"
+  part_name = "media_foundation"
   include_dirs = [ "//foundation/multimedia/media_foundation/engine/include" ]
   sources = [ "stream_source_plugin.cpp" ]
   public_deps = [
@@ -48,7 +48,7 @@ if (hst_is_lite_sys) {
   import("//build/ohos.gni")
   ohos_shared_library("histreamer_plugin_StreamSource") {
     subsystem_name = "multimedia"
-    part_name = "histreamer"
+    part_name = "media_foundation"
     deps = [ ":streamsource" ]
     external_deps = [ "hilog:libhilog" ]
     sanitize = {
