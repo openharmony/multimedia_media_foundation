@@ -11,7 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-import("//foundation/multimedia/histreamer/config.gni")
+import("//foundation/multimedia/media_foundation/config.gni")
 group("plugin_file_source") {
   deps = [ ":histreamer_plugin_FileSource" ]
 }
@@ -23,12 +23,12 @@ group("plugin_file_fd_source") {
 ohos_source_set("filesource") {
   subsystem_name = "multimedia"
   part_name = "histreamer"
-  include_dirs = [ "//foundation/multimedia/histreamer/engine/include" ]
+  include_dirs = [ "//foundation/multimedia/media_foundation/engine/include" ]
   sources = [ "file_source_plugin.cpp" ]
-  public_configs = [ "//foundation/multimedia/histreamer:histreamer_presets" ]
+  public_configs = [ "//foundation/multimedia/media_foundation:histreamer_presets" ]
   public_deps = [
-    "//foundation/multimedia/histreamer/engine/foundation:histreamer_foundation",
-    "//foundation/multimedia/histreamer/engine/plugin:histreamer_plugin_base",
+    "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
+    "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",
   ]
   if (hst_is_standard_sys) {
     external_deps = [ "graphic_2d:surface" ]
@@ -38,12 +38,12 @@ ohos_source_set("filesource") {
 ohos_source_set("filefdsource") {
   subsystem_name = "multimedia"
   part_name = "histreamer"
-  include_dirs = [ "//foundation/multimedia/histreamer/engine/include" ]
+  include_dirs = [ "//foundation/multimedia/media_foundation/engine/include" ]
   sources = [ "file_fd_source_plugin.cpp" ]
-  public_configs = [ "//foundation/multimedia/histreamer:histreamer_presets" ]
+  public_configs = [ "//foundation/multimedia/media_foundation:histreamer_presets" ]
   public_deps = [
-    "//foundation/multimedia/histreamer/engine/foundation:histreamer_foundation",
-    "//foundation/multimedia/histreamer/engine/plugin:histreamer_plugin_base",
+    "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
+    "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",
   ]
   if (hst_is_standard_sys) {
     external_deps = [ "graphic_2d:surface" ]
@@ -86,7 +86,7 @@ if (hst_is_lite_sys) {
       debug = false
       integer_overflow = true
     }
-    relative_install_dir = "media/histreamer_plugins"
+    relative_install_dir = "media/media_foundation_plugins"
   }
 
   ohos_shared_library("histreamer_plugin_FileFdSource") {
@@ -100,6 +100,6 @@ if (hst_is_lite_sys) {
       debug = false
       integer_overflow = true
     }
-    relative_install_dir = "media/histreamer_plugins"
+    relative_install_dir = "media/media_foundation_plugins"
   }
 }

@@ -13,11 +13,11 @@
 #
 
 # build plugin interface
-import("//foundation/multimedia/histreamer/config.gni")
+import("//foundation/multimedia/media_foundation/config.gni")
 ohos_source_set("histreamer_pipeline_base") {
   subsystem_name = "multimedia"
   part_name = "histreamer"
-  include_dirs = [ "//foundation/multimedia/histreamer/engine/include" ]
+  include_dirs = [ "//foundation/multimedia/media_foundation/engine/include" ]
   sources = [
     "core/compatible_check.cpp",
     "core/error_code.cpp",
@@ -30,10 +30,10 @@ ohos_source_set("histreamer_pipeline_base") {
     "filters/common/plugin_settings.cpp",
     "filters/common/plugin_utils.cpp",
   ]
-  public_configs = [ "//foundation/multimedia/histreamer:histreamer_presets" ]
+  public_configs = [ "//foundation/multimedia/media_foundation:histreamer_presets" ]
   public_deps = [
-    "//foundation/multimedia/histreamer/engine/foundation:histreamer_foundation",
-    "//foundation/multimedia/histreamer/engine/plugin:histreamer_plugin_core",
+    "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
+    "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_core",
   ]
   if (hst_is_standard_sys) {
     external_deps = [
@@ -45,12 +45,12 @@ ohos_source_set("histreamer_pipeline_base") {
 
 config("histreamer_base_external_config") {
   include_dirs = [
-    "//foundation/multimedia/histreamer/engine/include/pipeline/core",
-    "//foundation/multimedia/histreamer/engine/include/pipeline/factory",
-    "//foundation/multimedia/histreamer/engine/include/plugin/common",
-    "//foundation/multimedia/histreamer/engine/include/plugin/core",
-    "//foundation/multimedia/histreamer/engine/include/plugin/factory",
-    "//foundation/multimedia/histreamer/engine/include/plugin/interface",
+    "//foundation/multimedia/media_foundation/engine/include/pipeline/core",
+    "//foundation/multimedia/media_foundation/engine/include/pipeline/factory",
+    "//foundation/multimedia/media_foundation/engine/include/plugin/common",
+    "//foundation/multimedia/media_foundation/engine/include/plugin/core",
+    "//foundation/multimedia/media_foundation/engine/include/plugin/factory",
+    "//foundation/multimedia/media_foundation/engine/include/plugin/interface",
     "//foundation/multimedia/player_framework/interfaces/inner_api/native",
   ]
 }
@@ -85,11 +85,11 @@ if (hst_is_lite_sys) {
 
 config("histreamer_codec_filters_external_config") {
   include_dirs = [
-    "//foundation/multimedia/histreamer/engine/scene/standard",
-    "//foundation/multimedia/histreamer/engine/include/pipeline/filters/codec/audio_decoder",
-    "//foundation/multimedia/histreamer/engine/include/pipeline/filters/codec/audio_encoder",
-    "//foundation/multimedia/histreamer/engine/include/pipeline/filters/codec/video_decoder",
-    "//foundation/multimedia/histreamer/engine/include/pipeline/filters/codec/video_encoder",
+    "//foundation/multimedia/media_foundation/engine/scene/standard",
+    "//foundation/multimedia/media_foundation/engine/include/pipeline/filters/codec/audio_decoder",
+    "//foundation/multimedia/media_foundation/engine/include/pipeline/filters/codec/audio_encoder",
+    "//foundation/multimedia/media_foundation/engine/include/pipeline/filters/codec/video_decoder",
+    "//foundation/multimedia/media_foundation/engine/include/pipeline/filters/codec/video_encoder",
   ]
 }
 
@@ -125,7 +125,7 @@ ohos_source_set("histreamer_pipeline") {
   subsystem_name = "multimedia"
   part_name = "histreamer"
   sources = []
-  public_configs = [ "//foundation/multimedia/histreamer:histreamer_presets" ]
+  public_configs = [ "//foundation/multimedia/media_foundation:histreamer_presets" ]
   public_deps = [
     ":histreamer_codec_filters",
     "filters/codec:codec_filters",

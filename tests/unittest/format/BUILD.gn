@@ -12,7 +12,7 @@
 # limitations under the License.
 
 import("//build/test.gni")
-import("//foundation/multimedia/histreamer/config.gni")
+import("//foundation/multimedia/media_foundation/config.gni")
 
 module_output_path = "histreamer/unittest"
 

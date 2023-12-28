@@ -76,7 +76,7 @@ elseif (MINGW)
             )
     message(STATUS "CMAKE_BINARY_DIR: ${CMAKE_BINARY_DIR}")
     file(GLOB sdl_shared_libraries ${sdl_path}/lib/x64/*.dll)
-    file(COPY ${sdl_shared_libraries} DESTINATION ${CMAKE_BINARY_DIR}/_deps/histreamer-build/tests/unittest)
+    file(COPY ${sdl_shared_libraries} DESTINATION ${CMAKE_BINARY_DIR}/_deps/media_foundation-build/tests/unittest)
 else ()
     target_link_libraries(media_foundation_unit_test
             dl

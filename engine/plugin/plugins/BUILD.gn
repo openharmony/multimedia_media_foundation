@@ -12,7 +12,7 @@
 # limitations under the License.
 #
 
-import("//foundation/multimedia/histreamer/config.gni")
+import("//foundation/multimedia/media_foundation/config.gni")
 
 print("histreamer plugin: ffmpeg_adapter =",
       histreamer_enable_plugin_ffmpeg_adapter)
@@ -114,7 +114,7 @@ group("histreamer_plugin_store") {
   }
 
   if (histreamer_enable_plugin_avs3_audio_decoder) {
-    deps += [ "//foundation/multimedia/histreamer_ext/codec/avs3_audio_decoder:plugin_avs3_audio_decoder" ]
+    deps += [ "//foundation/multimedia/media_foundation_ext/codec/avs3_audio_decoder:plugin_avs3_audio_decoder" ]
   }
 
   if (histreamer_enable_plugin_codec_adapter) {
@@ -127,10 +127,10 @@ config("gen_plugin_static_header_config") {
 }
 
 action("gen_plugin_static_header") {
-  script = "//foundation/multimedia/histreamer/engine/plugin/plugins/plugin_config.py"
+  script = "//foundation/multimedia/media_foundation/engine/plugin/plugins/plugin_config.py"
 
   args = [
-    rebase_path("//foundation/multimedia/histreamer/engine/plugin/plugins",
+    rebase_path("//foundation/multimedia/media_foundation/engine/plugin/plugins",
                 root_build_dir),
     rebase_path("${target_gen_dir}/include/", root_build_dir),
   ]

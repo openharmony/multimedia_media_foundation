@@ -12,7 +12,7 @@
 # limitations under the License.
 
 import("//build/ohos.gni")
-import("//foundation/multimedia/histreamer/config.gni")
+import("//foundation/multimedia/media_foundation/config.gni")
 
 #################################################################################################################capi
 config("media_foundation_capi_unit_test_config") {
@@ -104,7 +104,7 @@ ohos_static_library("media_foundation_capi_unit_test") {
   ]
 
   subsystem_name = "multimedia"
-  part_name = "histreamer"
+  part_name = "media_foundation"
 }
 
 #################################################################################################################inner

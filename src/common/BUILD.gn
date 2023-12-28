@@ -12,7 +12,7 @@
 # limitations under the License.
 #
 
-import("//foundation/multimedia/histreamer/config.gni")
+import("//foundation/multimedia/media_foundation/config.gni")
 
 config("histreamer_foundation_config") {
   include_dirs = [

@@ -13,7 +13,7 @@
 #
 
 # build plugin interface
-import("//foundation/multimedia/histreamer/config.gni")
+import("//foundation/multimedia/media_foundation/config.gni")
 config("sink_config") {
   include_dirs = [
     "../../../",

@@ -1,17 +1,17 @@
 {
-    "name": "@ohos/histreamer",
-    "description": "Histreamer engine.",
+    "name": "@ohos/media_foundation",
+    "description": "media foundation functions.",
     "optional": "true",
     "version": "3.1",
     "license": "Apache License 2.0",
     "publishAs": "code-segment",
     "segment": {
-        "destPath": "foundation/multimedia/histreamer"
+        "destPath": "foundation/multimedia/media_foundation"
     },
     "dirs": {},
     "scripts": {},
     "component": {
-        "name": "histreamer",
+        "name": "media_foundation",
         "subsystem": "multimedia",
         "syscap": [],
         "features": [
@@ -68,45 +68,45 @@
         },
         "build": {
             "sub_component": [
-                "//foundation/multimedia/histreamer:histreamer",
-                "//foundation/multimedia/histreamer:media_foundation"
+                "//foundation/multimedia/media_foundation:histreamer",
+                "//foundation/multimedia/media_foundation:media_foundation"
             ],
             "inner_kits": [
               {
                 "type": "so",
-                "name": "//foundation/multimedia/histreamer/engine/pipeline:histreamer_base",
+                "name": "//foundation/multimedia/media_foundation/engine/pipeline:histreamer_base",
                 "header": {
                   "header_files": [],
-                  "header_base": "//foundation/multimedia/histreamer/engine/include"
+                  "header_base": "//foundation/multimedia/media_foundation/engine/include"
                 }
               },
               {
                 "type": "so",
-                "name": "//foundation/multimedia/histreamer/engine/pipeline:histreamer_codec_filters",
+                "name": "//foundation/multimedia/media_foundation/engine/pipeline:histreamer_codec_filters",
                 "header": {
                   "header_files": [],
-                  "header_base": "//foundation/multimedia/histreamer/engine/include"
+                  "header_base": "//foundation/multimedia/media_foundation/engine/include"
                 }
               },
               {
                 "type": "so",
-                "name": "//foundation/multimedia/histreamer/engine/plugin:histreamer_ffmpeg_convert",
+                "name": "//foundation/multimedia/media_foundation/engine/plugin:histreamer_ffmpeg_convert",
                 "header": {
                   "header_files": [],
-                  "header_base": "//foundation/multimedia/histreamer/engine/include"
+                  "header_base": "//foundation/multimedia/media_foundation/engine/include"
                 }
               },
               {
                 "type": "so",
-                "name": "//foundation/multimedia/histreamer/engine/plugin:histreamer_plugin_base",
+                "name": "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",
                 "header": {
                   "header_files": [],
-                  "header_base": "//foundation/multimedia/histreamer/engine/include"
+                  "header_base": "//foundation/multimedia/media_foundation/engine/include"
                 }
               },
               {
                 "type": "so",
-                "name": "//foundation/multimedia/histreamer/src:media_foundation",
+                "name": "//foundation/multimedia/media_foundation/src:media_foundation",
                 "header": {
                   "header_files": [
                     "buffer/avsharedmemory.h",
@@ -153,13 +153,13 @@
                     "plugin/plugin_manager.h",
                     "plugin/plugin_register.h"
                   ],
-                  "header_base": "//foundation/multimedia/histreamer/interface/inner_api"
+                  "header_base": "//foundation/multimedia/media_foundation/interface/inner_api"
                 }
               }
             ],
             "test": [
-              "//foundation/multimedia/histreamer/test:histreamer_test",
-              "//foundation/multimedia/histreamer/tests:media_foundation_unit_test"
+              "//foundation/multimedia/media_foundation/test:histreamer_test",
+              "//foundation/multimedia/media_foundation/tests:media_foundation_unit_test"
             ]
         }
     }

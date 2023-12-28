@@ -11,7 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-import("//foundation/multimedia/histreamer/config.gni")
+import("//foundation/multimedia/media_foundation/config.gni")
 
 group("plugin_wav_demuxer") {
   if (hst_is_mini_sys) {
@@ -24,12 +24,12 @@ group("plugin_wav_demuxer") {
 ohos_source_set("wavdemuxer") {
   subsystem_name = "multimedia"
   part_name = "histreamer"
-  include_dirs = [ "//foundation/multimedia/histreamer/engine/include" ]
+  include_dirs = [ "//foundation/multimedia/media_foundation/engine/include" ]
   sources = [ "wav_demuxer_plugin.cpp" ]
-  public_configs = [ "//foundation/multimedia/histreamer:histreamer_presets" ]
+  public_configs = [ "//foundation/multimedia/media_foundation:histreamer_presets" ]
   public_deps = [
-    "//foundation/multimedia/histreamer/engine/foundation:histreamer_foundation",
-    "//foundation/multimedia/histreamer/engine/plugin:histreamer_plugin_base",
+    "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
+    "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",
   ]
 }
 
@@ -44,7 +44,7 @@ if (hst_is_lite_sys) {
     part_name = "histreamer"
     deps = [ ":wavdemuxer" ]
     external_deps = [ "hilog:libhilog" ]
-    relative_install_dir = "media/histreamer_plugins"
+    relative_install_dir = "media/media_foundation_plugins"
     sanitize = {
       cfi = true
       cfi_cross_dso = true

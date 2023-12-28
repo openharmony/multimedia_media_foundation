@@ -18,7 +18,7 @@ group("plugin_minimp4_demuxer") {
 config("plugin_minimp4_demuxer_adapter_config") {
   include_dirs = [
     "minimp4_demuxer",
-    "//foundation/multimedia/histreamer/engine/include",
+    "//foundation/multimedia/media_foundation/engine/include",
     "//third_party/minimp4",
   ]
 }
@@ -28,11 +28,11 @@ if (hst_is_mini_sys) {
     sources = [ "minimp4_demuxer_plugin.cpp" ]
     public_configs = [
       ":plugin_minimp4_demuxer_adapter_config",
-      "//foundation/multimedia/histreamer:histreamer_presets",
+      "//foundation/multimedia/media_foundation:histreamer_presets",
     ]
     public_deps = [
-      "//foundation/multimedia/histreamer/engine/foundation:histreamer_foundation",
-      "//foundation/multimedia/histreamer/engine/plugin:histreamer_plugin_base",
+      "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
+      "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",
     ]
   }
 } else {
@@ -40,11 +40,11 @@ if (hst_is_mini_sys) {
     sources = [ "minimp4_demuxer_plugin.cpp" ]
     public_configs = [
       ":plugin_minimp4_demuxer_adapter_config",
-      "//foundation/multimedia/histreamer:histreamer_presets",
+      "//foundation/multimedia/media_foundation:histreamer_presets",
     ]
     public_deps = [
-      "//foundation/multimedia/histreamer/engine/foundation:histreamer_foundation",
-      "//foundation/multimedia/histreamer/engine/plugin:histreamer_plugin_intf",
+      "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
+      "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_intf",
     ]
   }
 }

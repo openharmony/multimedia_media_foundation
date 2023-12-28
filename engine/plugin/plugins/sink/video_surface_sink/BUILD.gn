@@ -11,7 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-import("//foundation/multimedia/histreamer/config.gni")
+import("//foundation/multimedia/media_foundation/config.gni")
 group("plugin_standard_video_surface_sink") {
   deps = []
   if (hst_is_lite_sys) {
@@ -26,11 +26,11 @@ ohos_source_set("std_video_surface_sink") {
   part_name = "histreamer"
   sources = [ "surface_sink_plugin.cpp" ]
   public_deps = [
-    "//foundation/multimedia/histreamer/engine/foundation:histreamer_foundation",
-    "//foundation/multimedia/histreamer/engine/plugin:histreamer_plugin_base",
+    "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
+    "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",
   ]
 
-  public_configs = [ "//foundation/multimedia/histreamer:histreamer_presets" ]
+  public_configs = [ "//foundation/multimedia/media_foundation:histreamer_presets" ]
   if (hst_is_lite_sys) {
     print("std video surface sink plugin is not available on lite systems")
   } else {
@@ -42,7 +42,7 @@ ohos_source_set("std_video_surface_sink") {
       "//commonlibrary/c_utils/base/include",
       "//base/startup/init/interfaces/innerkits/include/syspara",
       "//third_party/bounds_checking_function/include",
-      "//foundation/multimedia/histreamer/engine/include",
+      "//foundation/multimedia/media_foundation/engine/include",
     ]
     deps = [ "//third_party/bounds_checking_function:libsec_shared" ]
     external_deps = [
@@ -66,7 +66,7 @@ if (hst_is_lite_sys) {
     }
     deps = [ ":std_video_surface_sink" ]
     external_deps = [ "hilog:libhilog" ]
-    relative_install_dir = "media/histreamer_plugins"
+    relative_install_dir = "media/media_foundation_plugins"
     subsystem_name = "multimedia"
     part_name = "histreamer"
   }

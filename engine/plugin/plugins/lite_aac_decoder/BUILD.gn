@@ -12,7 +12,7 @@
 # limitations under the License.
 #
 
-import("//foundation/multimedia/histreamer/config.gni")
+import("//foundation/multimedia/media_foundation/config.gni")
 
 group("plugin_lite_aac_decoder_adapter") {
   if (hst_is_mini_sys) {
@@ -22,7 +22,7 @@ group("plugin_lite_aac_decoder_adapter") {
 config("plugin_lite_aac_decoder_adapter_config") {
   include_dirs = [
     "lite_aac_decoder",
-    "//foundation/multimedia/histreamer/engine/include",
+    "//foundation/multimedia/media_foundation/engine/include",
   ]
 }
 
@@ -30,10 +30,10 @@ static_library("histreamer_plugin_AACDecoder") {
   sources = [ "lite_aac_decoder_plugin.cpp" ]
   public_configs = [
     ":plugin_lite_aac_decoder_adapter_config",
-    "//foundation/multimedia/histreamer:histreamer_presets",
+    "//foundation/multimedia/media_foundation:histreamer_presets",
   ]
   public_deps = [
-    "//foundation/multimedia/histreamer/engine/foundation:histreamer_foundation",
-    "//foundation/multimedia/histreamer/engine/plugin:histreamer_plugin_base",
+    "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
+    "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",
   ]
 }

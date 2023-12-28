@@ -20,7 +20,7 @@ config("plugin_aac_demuxer_adapter_config") {
     "aac_demuxer",
     "//device/bestechnic/bes2600w/sdk_liteos/bsp/services/multimedia/audio/codec/fdkaac_codec/libAACdec/include",
     "//device/bestechnic/bes2600w/sdk_liteos/bsp/services/multimedia/audio/codec/fdkaac_codec/libSYS/include",
-    "//foundation/multimedia/histreamer/engine/include",
+    "//foundation/multimedia/media_foundation/engine/include",
   ]
 }
 
@@ -29,11 +29,11 @@ if (hst_is_mini_sys) {
     sources = [ "aac_demuxer_plugin.cpp" ]
     public_configs = [
       ":plugin_aac_demuxer_adapter_config",
-      "//foundation/multimedia/histreamer:histreamer_presets",
+      "//foundation/multimedia/media_foundation:histreamer_presets",
     ]
     public_deps = [
-      "//foundation/multimedia/histreamer/engine/foundation:histreamer_foundation",
-      "//foundation/multimedia/histreamer/engine/plugin:histreamer_plugin_base",
+      "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
+      "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",
     ]
   }
 } else {
@@ -41,11 +41,11 @@ if (hst_is_mini_sys) {
     sources = [ "aac_demuxer_plugin.cpp" ]
     public_configs = [
       ":plugin_aac_demuxer_adapter_config",
-      "//foundation/multimedia/histreamer:histreamer_presets",
+      "//foundation/multimedia/media_foundation:histreamer_presets",
     ]
     public_deps = [
-      "//foundation/multimedia/histreamer/engine/foundation:histreamer_foundation",
-      "//foundation/multimedia/histreamer/engine/plugin:histreamer_plugin_intf",
+      "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
+      "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_intf",
     ]
   }
 }

@@ -13,7 +13,7 @@
 #
 import("//build/ohos.gni")
 declare_args() {
-  histreamer_root_dir = "//foundation/multimedia/histreamer"
+  histreamer_root_dir = "//foundation/multimedia/media_foundation"
   multimedia_root_dir = "//foundation/multimedia"
   hiviewdfx_root_dir = "//base/hiviewdfx"
 
@@ -44,7 +44,7 @@ declare_args() {
   histreamer_enable_plugin_aac_demuxer = false
   histreamer_enable_plugin_wav_demuxer = false
 
-  # no release (https://gitee.com/histreamer/minimp3)
+  # no release (https://gitee.com/media_foundation/minimp3)
   histreamer_enable_plugin_minimp3_adapter = false
   histreamer_enable_plugin_minimp4_demuxer = false
 

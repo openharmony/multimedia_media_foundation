@@ -11,7 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-import("//foundation/multimedia/histreamer/config.gni")
+import("//foundation/multimedia/media_foundation/config.gni")
 
 group("plugin_hdi_adapter") {
   if (hst_is_lite_sys) {
@@ -28,7 +28,7 @@ if (hst_is_lite_sys) {
   config("plugin_hdi_adapter_config") {
     include_dirs = [
       "//drivers/peripheral/audio/interfaces/include",
-      "//foundation/multimedia/histreamer/engine/include",
+      "//foundation/multimedia/media_foundation/engine/include",
     ]
     ldflags = [ "-lhdi_videodisplayer" ]
     ldflags += [ "-laudio_hw" ]
@@ -43,11 +43,11 @@ if (hst_is_lite_sys) {
     sources = plugin_hdi_adapter_src
     public_configs = [
       ":plugin_hdi_adapter_config",
-      "//foundation/multimedia/histreamer:histreamer_presets",
+      "//foundation/multimedia/media_foundation:histreamer_presets",
     ]
     public_deps = [
-      "//foundation/multimedia/histreamer/engine/foundation:histreamer_foundation",
-      "//foundation/multimedia/histreamer/engine/plugin:histreamer_plugin_base",
+      "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
+      "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",
     ]
   }
 } else {

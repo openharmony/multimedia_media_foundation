@@ -11,10 +11,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-import("//foundation/multimedia/histreamer/config.gni")
+import("//foundation/multimedia/media_foundation/config.gni")
 config("histreamer_presets") {
   include_dirs = [
-    "//foundation/multimedia/histreamer/engine",
+    "//foundation/multimedia/media_foundation/engine",
     "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter",
   ]
   defines = [
@@ -59,7 +59,7 @@ if (!hst_is_mini_sys) {
     import("//build/lite/config/component/lite_component.gni")
     lite_library("media_engine_histreamer") {
       target_type = "shared_library"
-      include_dirs = [ "//foundation/multimedia/histreamer/interface" ]
+      include_dirs = [ "//foundation/multimedia/media_foundation/interface" ]
       sources = []
       deps = [ "engine/scene/player:histreamer_player" ]
       if (histreamer_enable_recorder) {
@@ -85,7 +85,7 @@ if (!hst_is_mini_sys) {
     target_type = "static_library"
     complete_static_lib = true
     sources = []
-    include_dirs = [ "//foundation/multimedia/histreamer/interface" ]
+    include_dirs = [ "//foundation/multimedia/media_foundation/interface" ]
     deps = [
       "engine/plugin/plugins:histreamer_plugin_store",
       "engine/scene/player:histreamer_player",
