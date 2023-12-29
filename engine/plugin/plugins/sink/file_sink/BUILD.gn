@@ -21,7 +21,8 @@ if (hst_is_lite_sys) {
   lite_library("histreamer_plugin_FileFdSink") {
     include_dirs = [ "//foundation/multimedia/media_foundation/engine/include" ]
     sources = [ "file_fd_sink_plugin.cpp" ]
-    public_configs = [ "//foundation/multimedia/media_foundation:histreamer_presets" ]
+    public_configs =
+        [ "//foundation/multimedia/media_foundation:histreamer_presets" ]
     public_deps = [
       "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
       "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",
@@ -39,7 +40,8 @@ if (hst_is_lite_sys) {
     part_name = "media_foundation"
     include_dirs = [ "//foundation/multimedia/media_foundation/engine/include" ]
     sources = [ "file_fd_sink_plugin.cpp" ]
-    public_configs = [ "//foundation/multimedia/media_foundation:histreamer_presets" ]
+    public_configs =
+        [ "//foundation/multimedia/media_foundation:histreamer_presets" ]
     public_deps = [
       "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
       "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",

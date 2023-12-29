@@ -25,7 +25,8 @@ ohos_source_set("filesource") {
   part_name = "media_foundation"
   include_dirs = [ "//foundation/multimedia/media_foundation/engine/include" ]
   sources = [ "file_source_plugin.cpp" ]
-  public_configs = [ "//foundation/multimedia/media_foundation:histreamer_presets" ]
+  public_configs =
+      [ "//foundation/multimedia/media_foundation:histreamer_presets" ]
   public_deps = [
     "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
     "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",
@@ -40,7 +41,8 @@ ohos_source_set("filefdsource") {
   part_name = "media_foundation"
   include_dirs = [ "//foundation/multimedia/media_foundation/engine/include" ]
   sources = [ "file_fd_source_plugin.cpp" ]
-  public_configs = [ "//foundation/multimedia/media_foundation:histreamer_presets" ]
+  public_configs =
+      [ "//foundation/multimedia/media_foundation:histreamer_presets" ]
   public_deps = [
     "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
     "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",

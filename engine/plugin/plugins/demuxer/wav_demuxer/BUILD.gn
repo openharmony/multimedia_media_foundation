@@ -26,7 +26,8 @@ ohos_source_set("wavdemuxer") {
   part_name = "media_foundation"
   include_dirs = [ "//foundation/multimedia/media_foundation/engine/include" ]
   sources = [ "wav_demuxer_plugin.cpp" ]
-  public_configs = [ "//foundation/multimedia/media_foundation:histreamer_presets" ]
+  public_configs =
+      [ "//foundation/multimedia/media_foundation:histreamer_presets" ]
   public_deps = [
     "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
     "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",

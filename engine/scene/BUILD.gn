@@ -24,7 +24,8 @@ ohos_source_set("std_engine_factory") {
       "//base/startup/init/interfaces/innerkits/include/syspara",
     ]
     public_deps = [ "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation" ]
-    public_configs = [ "//foundation/multimedia/media_foundation:histreamer_presets" ]
+    public_configs =
+        [ "//foundation/multimedia/media_foundation:histreamer_presets" ]
     sources = [ "standard/hst_engine_factory.cpp" ]
     deps = [ "player:histreamer_player" ]
     external_deps = [
@@ -55,5 +56,6 @@ ohos_source_set("scene_common") {
     "common/data_stream_impl.cpp",
     "common/media_stat_stub.cpp",
   ]
-  public_configs = [ "//foundation/multimedia/media_foundation:histreamer_presets" ]
+  public_configs =
+      [ "//foundation/multimedia/media_foundation:histreamer_presets" ]
 }

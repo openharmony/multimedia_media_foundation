@@ -16,14 +16,18 @@ import("//foundation/multimedia/media_foundation/config.gni")
 
 print("histreamer plugin: ffmpeg_adapter =",
       media_foundation_enable_plugin_ffmpeg_adapter)
-print("histreamer plugin: wav_demuxer =", media_foundation_enable_plugin_wav_demuxer)
-print("histreamer plugin: hdi_adapter =", media_foundation_enable_plugin_hdi_adapter)
-print("histreamer plugin: file_source =", media_foundation_enable_plugin_file_source)
+print("histreamer plugin: wav_demuxer =",
+      media_foundation_enable_plugin_wav_demuxer)
+print("histreamer plugin: hdi_adapter =",
+      media_foundation_enable_plugin_hdi_adapter)
+print("histreamer plugin: file_source =",
+      media_foundation_enable_plugin_file_source)
 print("histreamer plugin: file_fd_source =",
       media_foundation_enable_plugin_file_fd_source)
 print("histreamer plugin: std_stream_source =",
       media_foundation_enable_plugin_std_stream_source)
-print("histreamer plugin: http_source =", media_foundation_enable_plugin_http_source)
+print("histreamer plugin: http_source =",
+      media_foundation_enable_plugin_http_source)
 print("histreamer plugin: stream_source =",
       media_foundation_enable_plugin_stream_source)
 print("histreamer plugin: audio_server_sink =",
@@ -130,8 +134,9 @@ action("gen_plugin_static_header") {
   script = "//foundation/multimedia/media_foundation/engine/plugin/plugins/plugin_config.py"
 
   args = [
-    rebase_path("//foundation/multimedia/media_foundation/engine/plugin/plugins",
-                root_build_dir),
+    rebase_path(
+        "//foundation/multimedia/media_foundation/engine/plugin/plugins",
+        root_build_dir),
     rebase_path("${target_gen_dir}/include/", root_build_dir),
   ]
 

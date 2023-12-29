@@ -103,7 +103,8 @@ ohos_source_set("plugin_base") {
     ":histreamer_plugin_intf",
     "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
   ]
-  public_configs = [ "//foundation/multimedia/media_foundation:histreamer_presets" ]
+  public_configs =
+      [ "//foundation/multimedia/media_foundation:histreamer_presets" ]
 }
 
 config("histreamer_plugin_base_external_config") {
@@ -153,7 +154,8 @@ ohos_source_set("ffmpeg_convert") {
     "//third_party/ffmpeg",
   ]
   sources = [ "convert/ffmpeg_convert.cpp" ]
-  public_configs = [ "//foundation/multimedia/media_foundation:histreamer_presets" ]
+  public_configs =
+      [ "//foundation/multimedia/media_foundation:histreamer_presets" ]
   public_deps = [
     "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
     "//foundation/multimedia/media_foundation/engine/pipeline:histreamer_base",
@@ -218,7 +220,8 @@ ohos_source_set("histreamer_plugin_core") {
     sources += [ "core/plugin_loader.cpp" ]
     defines += [ "DYNAMIC_PLUGINS" ]
   }
-  public_configs = [ "//foundation/multimedia/media_foundation:histreamer_presets" ]
+  public_configs =
+      [ "//foundation/multimedia/media_foundation:histreamer_presets" ]
   public_deps = [
     ":histreamer_plugin_base",
     "plugins:gen_plugin_static_header",

@@ -26,7 +26,8 @@ ohos_source_set("streamsource") {
     "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
     "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",
   ]
-  public_configs = [ "//foundation/multimedia/media_foundation:histreamer_presets" ]
+  public_configs =
+      [ "//foundation/multimedia/media_foundation:histreamer_presets" ]
   if (hst_is_lite_sys) {
     public_deps += [ "//foundation/multimedia/media_utils_lite:media_common" ]
   }
