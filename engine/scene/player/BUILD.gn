@@ -11,12 +11,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-import("//foundation/multimedia/histreamer/config.gni")
+import("//foundation/multimedia/media_foundation/config.gni")
 
 config("histreamer_player_config") {
   include_dirs = [
-    "//foundation/multimedia/histreamer/engine/include",
-    "//foundation/multimedia/histreamer/engine/scene/player",
+    "//foundation/multimedia/media_foundation/engine/include",
+    "//foundation/multimedia/media_foundation/engine/scene/player",
   ]
   if (hst_is_lite_sys) {
     include_dirs += [
@@ -39,48 +39,48 @@ if (hst_is_lite_sys) {
   source_set("histreamer_player") {
     include_dirs = [ "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter" ]
     sources = [
-      "//foundation/multimedia/histreamer/engine/scene/player/internal/state.cpp",
-      "//foundation/multimedia/histreamer/engine/scene/player/internal/state_machine.cpp",
+      "//foundation/multimedia/media_foundation/engine/scene/player/internal/state.cpp",
+      "//foundation/multimedia/media_foundation/engine/scene/player/internal/state_machine.cpp",
     ]
     public_configs = [
       ":histreamer_player_config",
-      "//foundation/multimedia/histreamer:histreamer_presets",
+      "//foundation/multimedia/media_foundation:histreamer_presets",
     ]
     public_deps = [
-      "//foundation/multimedia/histreamer/engine/foundation:histreamer_foundation",
-      "//foundation/multimedia/histreamer/engine/pipeline:histreamer_base",
-      "//foundation/multimedia/histreamer/engine/pipeline:histreamer_engine_filters",
-      "//foundation/multimedia/histreamer/engine/scene:scene_common",
+      "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
+      "//foundation/multimedia/media_foundation/engine/pipeline:histreamer_base",
+      "//foundation/multimedia/media_foundation/engine/pipeline:histreamer_engine_filters",
+      "//foundation/multimedia/media_foundation/engine/scene:scene_common",
     ]
     sources += [
-      "//foundation/multimedia/histreamer/engine/scene/player/lite/hiplayer.cpp",
-      "//foundation/multimedia/histreamer/engine/scene/player/lite/hiplayer_impl.cpp",
+      "//foundation/multimedia/media_foundation/engine/scene/player/lite/hiplayer.cpp",
+      "//foundation/multimedia/media_foundation/engine/scene/player/lite/hiplayer_impl.cpp",
     ]
     public_deps += [ "//foundation/multimedia/media_utils_lite:media_common" ]
   }
 } else {
   ohos_source_set("histreamer_player") {
     subsystem_name = "multimedia"
-    part_name = "histreamer"
+    part_name = "media_foundation"
     include_dirs = [ "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter" ]
     sources = [
-      "//foundation/multimedia/histreamer/engine/scene/player/internal/state.cpp",
-      "//foundation/multimedia/histreamer/engine/scene/player/internal/state_machine.cpp",
+      "//foundation/multimedia/media_foundation/engine/scene/player/internal/state.cpp",
+      "//foundation/multimedia/media_foundation/engine/scene/player/internal/state_machine.cpp",
     ]
     public_configs = [
       ":histreamer_player_config",
-      "//foundation/multimedia/histreamer:histreamer_presets",
+      "//foundation/multimedia/media_foundation:histreamer_presets",
     ]
     public_deps = [
-      "//foundation/multimedia/histreamer/engine/foundation:histreamer_foundation",
-      "//foundation/multimedia/histreamer/engine/pipeline:histreamer_base",
-      "//foundation/multimedia/histreamer/engine/pipeline:histreamer_engine_filters",
-      "//foundation/multimedia/histreamer/engine/scene:scene_common",
+      "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
+      "//foundation/multimedia/media_foundation/engine/pipeline:histreamer_base",
+      "//foundation/multimedia/media_foundation/engine/pipeline:histreamer_engine_filters",
+      "//foundation/multimedia/media_foundation/engine/scene:scene_common",
     ]
     sources += [
-      "//foundation/multimedia/histreamer/engine/scene/player/standard/hiplayer_callback_looper.cpp",
-      "//foundation/multimedia/histreamer/engine/scene/player/standard/hiplayer_impl.cpp",
-      "//foundation/multimedia/histreamer/engine/scene/player/standard/media_utils.cpp",
+      "//foundation/multimedia/media_foundation/engine/scene/player/standard/hiplayer_callback_looper.cpp",
+      "//foundation/multimedia/media_foundation/engine/scene/player/standard/hiplayer_impl.cpp",
+      "//foundation/multimedia/media_foundation/engine/scene/player/standard/media_utils.cpp",
     ]
     external_deps = [ "graphic_2d:surface" ]
   }

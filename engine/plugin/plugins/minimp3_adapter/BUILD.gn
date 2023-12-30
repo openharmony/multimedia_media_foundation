@@ -12,7 +12,7 @@
 # limitations under the License.
 #
 import("//build/ohos.gni")
-import("//foundation/multimedia/histreamer/config.gni")
+import("//foundation/multimedia/media_foundation/config.gni")
 
 group("plugin_minimp3_adapter") {
   if (hst_is_mini_sys) {
@@ -26,7 +26,7 @@ group("plugin_minimp3_adapter") {
 config("plugin_minimp3_adapter_config") {
   include_dirs = [
     "minimp3_adapter",
-    "//foundation/multimedia/histreamer/engine/include",
+    "//foundation/multimedia/media_foundation/engine/include",
     "//third_party/minimp3",
   ]
 }
@@ -40,28 +40,28 @@ if (hst_is_mini_sys) {
     ]
     public_configs = [
       ":plugin_minimp3_adapter_config",
-      "//foundation/multimedia/histreamer:histreamer_presets",
+      "//foundation/multimedia/media_foundation:histreamer_presets",
     ]
     public_deps = [
-      "//foundation/multimedia/histreamer/engine/foundation:histreamer_foundation",
-      "//foundation/multimedia/histreamer/engine/plugin:histreamer_plugin_base",
+      "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
+      "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",
     ]
   }
 } else {
   ohos_shared_library("histreamer_plugin_Minimp3Demuxer") {
     subsystem_name = "multimedia"
-    part_name = "histreamer"
+    part_name = "media_foundation"
     sources = [
       "minimp3_demuxer_plugin.cpp",
       "minimp3_wrapper.c",
     ]
     public_configs = [
       ":plugin_minimp3_adapter_config",
-      "//foundation/multimedia/histreamer:histreamer_presets",
+      "//foundation/multimedia/media_foundation:histreamer_presets",
     ]
     public_deps = [
-      "//foundation/multimedia/histreamer/engine/foundation:histreamer_foundation",
-      "//foundation/multimedia/histreamer/engine/plugin:histreamer_plugin_base",
+      "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
+      "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",
     ]
     external_deps = [ "hilog:libhilog" ]
     sanitize = {
@@ -70,23 +70,23 @@ if (hst_is_mini_sys) {
       debug = false
       integer_overflow = true
     }
-    relative_install_dir = "media/histreamer_plugins"
+    relative_install_dir = "media/media_foundation_plugins"
   }
   ohos_shared_library("histreamer_plugin_Minimp3Decoder") {
     subsystem_name = "multimedia"
-    part_name = "histreamer"
+    part_name = "media_foundation"
     sources = [
       "minimp3_decoder_plugin.cpp",
       "minimp3_wrapper.c",
     ]
     public_configs = [
       ":plugin_minimp3_adapter_config",
-      "//foundation/multimedia/histreamer:histreamer_presets",
+      "//foundation/multimedia/media_foundation:histreamer_presets",
     ]
     external_deps = [ "hilog:libhilog" ]
     public_deps = [
-      "//foundation/multimedia/histreamer/engine/foundation:histreamer_foundation",
-      "//foundation/multimedia/histreamer/engine/plugin:histreamer_plugin_intf",
+      "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
+      "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_intf",
     ]
     sanitize = {
       cfi = true
@@ -94,6 +94,6 @@ if (hst_is_mini_sys) {
       debug = false
       integer_overflow = true
     }
-    relative_install_dir = "media/histreamer_plugins"
+    relative_install_dir = "media/media_foundation_plugins"
   }
 }

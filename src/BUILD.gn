@@ -12,7 +12,7 @@
 # limitations under the License.
 
 import("//build/ohos.gni")
-import("//foundation/multimedia/histreamer/config.gni")
+import("//foundation/multimedia/media_foundation/config.gni")
 
 if (hst_is_standard_sys) {
   config("media_foundation_public_config") {
@@ -177,7 +177,7 @@ if (hst_is_standard_sys) {
     ]
 
     subsystem_name = "multimedia"
-    part_name = "histreamer"
+    part_name = "media_foundation"
   }
 } else {
   group("media_foundation") {

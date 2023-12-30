@@ -45,28 +45,28 @@ ENDIF (CMAKE_CL_64)
 
 ######################################################
 include_directories(
-        ${TOP_DIR}/histreamer/src
-        ${TOP_DIR}/histreamer/src/capi/common
-        ${TOP_DIR}/histreamer/src/buffer/avbuffer/include
-        ${TOP_DIR}/histreamer/src/buffer/avbuffer_queue/include
-        ${TOP_DIR}/histreamer/interface
-        ${TOP_DIR}/histreamer/interface/inner_api
-        ${TOP_DIR}/histreamer/interface/kits/c
+        ${TOP_DIR}/media_foundation/src
+        ${TOP_DIR}/media_foundation/src/capi/common
+        ${TOP_DIR}/media_foundation/src/buffer/avbuffer/include
+        ${TOP_DIR}/media_foundation/src/buffer/avbuffer_queue/include
+        ${TOP_DIR}/media_foundation/interface
+        ${TOP_DIR}/media_foundation/interface/inner_api
+        ${TOP_DIR}/media_foundation/interface/kits/c
 )
 
 ######################################################
 
 file(GLOB_RECURSE FOUNDATION_SRCS
-        ${TOP_DIR}/histreamer/src/buffer/*.cpp
-        ${TOP_DIR}/histreamer/src/common/*.cpp
-        ${TOP_DIR}/histreamer/src/common/cpp_ext/*.cpp
-        ${TOP_DIR}/histreamer/src/meta/*.cpp
-        ${TOP_DIR}/histreamer/src/osal/base/*.cpp
-        ${TOP_DIR}/histreamer/src/osal/filesystem/*.cpp
-        ${TOP_DIR}/histreamer/src/osal/task/pthread/*.cpp
-        ${TOP_DIR}/histreamer/src/osal/utils/*.cpp
-        ${TOP_DIR}/histreamer/src/pipeline/*.cpp
-        ${TOP_DIR}/histreamer/src/plugin/*.cpp
+        ${TOP_DIR}/media_foundation/src/buffer/*.cpp
+        ${TOP_DIR}/media_foundation/src/common/*.cpp
+        ${TOP_DIR}/media_foundation/src/common/cpp_ext/*.cpp
+        ${TOP_DIR}/media_foundation/src/meta/*.cpp
+        ${TOP_DIR}/media_foundation/src/osal/base/*.cpp
+        ${TOP_DIR}/media_foundation/src/osal/filesystem/*.cpp
+        ${TOP_DIR}/media_foundation/src/osal/task/pthread/*.cpp
+        ${TOP_DIR}/media_foundation/src/osal/utils/*.cpp
+        ${TOP_DIR}/media_foundation/src/pipeline/*.cpp
+        ${TOP_DIR}/media_foundation/src/plugin/*.cpp
 )
 
 set(MEDIA_FOUNDATION_SRCS ${FOUNDATION_SRCS})
