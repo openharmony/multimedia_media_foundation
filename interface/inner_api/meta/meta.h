@@ -112,11 +112,12 @@ public:
     DECLARE_INFO_CLASS
 
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::SRC_INPUT_TYPE, Plugins::SrcInputType, ValueType::INT32_T);
-    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::MEDIA_CODEC_CONFIG or tagCharSeq == Tag::MEDIA_COVER or
-                               tagCharSeq == Tag::AUDIO_VIVID_METADATA or
-                               tagCharSeq == Tag::AUDIO_VORBIS_IDENTIFICATION_HEADER or
-                               tagCharSeq == Tag::AUDIO_VORBIS_SETUP_HEADER or
-                               tagCharSeq == Tag::OH_MD_KEY_AUDIO_VIVID_METADATA,
+    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::MEDIA_CODEC_CONFIG or 
+	                       tagCharSeq == Tag::MEDIA_COVER or
+                           tagCharSeq == Tag::AUDIO_VIVID_METADATA or
+                           tagCharSeq == Tag::AUDIO_VORBIS_IDENTIFICATION_HEADER or
+                           tagCharSeq == Tag::AUDIO_VORBIS_SETUP_HEADER or
+                           tagCharSeq == Tag::OH_MD_KEY_AUDIO_VIVID_METADATA,
                            std::vector<uint8_t>, ValueType::VECTOR_UINT8);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_CHANNEL_LAYOUT or
                            tagCharSeq == Tag::AUDIO_OUTPUT_CHANNEL_LAYOUT,
