@@ -112,8 +112,8 @@ public:
     DECLARE_INFO_CLASS
 
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::SRC_INPUT_TYPE, Plugins::SrcInputType, ValueType::INT32_T);
-    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::MEDIA_CODEC_CONFIG or 
-	                       tagCharSeq == Tag::MEDIA_COVER or
+    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::MEDIA_CODEC_CONFIG or
+                           tagCharSeq == Tag::MEDIA_COVER or
                            tagCharSeq == Tag::AUDIO_VIVID_METADATA or
                            tagCharSeq == Tag::AUDIO_VORBIS_IDENTIFICATION_HEADER or
                            tagCharSeq == Tag::AUDIO_VORBIS_SETUP_HEADER or
