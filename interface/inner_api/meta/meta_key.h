@@ -178,6 +178,9 @@ public:
     static constexpr const char USER_SHARED_MEMORY_FD[] =
         "user.shared.memory.fd";                                               ///< std::string : The shared memory fd
     static constexpr const char USER_PUSH_DATA_TIME[] = "user.push.data.time"; ///< The user push data time
+
+    /* -------------------- drm tag -------------------- */
+    static constexpr const char DRM_CENC_INFO[] = "drm_cenc_info"; ///< drm cenc info
 };
 
 using TagTypeCharSeq = const char *;
