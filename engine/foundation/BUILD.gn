@@ -12,10 +12,10 @@
 # limitations under the License.
 #
 
-import("//foundation/multimedia/histreamer/config.gni")
+import("//foundation/multimedia/media_foundation/config.gni")
 
 config("histreamer_foundation_config") {
-  include_dirs = [ "//foundation/multimedia/histreamer/engine/include" ]
+  include_dirs = [ "//foundation/multimedia/media_foundation/engine/include" ]
   if (hst_is_lite_sys) {
     include_dirs += [
       "//foundation/multimedia/media_utils_lite/interfaces/kits",
@@ -45,7 +45,7 @@ if (hst_is_lite_sys) {
     ]
     public_configs = [
       ":histreamer_foundation_config",
-      "//foundation/multimedia/histreamer:histreamer_presets",
+      "//foundation/multimedia/media_foundation:histreamer_presets",
     ]
     deps = [ "//foundation/multimedia/media_utils_lite:media_common" ]
     if (hst_is_mini_sys) {
@@ -64,7 +64,7 @@ if (hst_is_lite_sys) {
 } else {
   ohos_source_set("histreamer_foundation") {
     subsystem_name = "multimedia"
-    part_name = "histreamer"
+    part_name = "media_foundation"
     include_dirs = [ "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter" ]
     sources = [
       "osal/filesystem/file_system.cpp",
@@ -81,11 +81,9 @@ if (hst_is_lite_sys) {
     ]
     public_configs = [
       ":histreamer_foundation_config",
-      "//foundation/multimedia/histreamer:histreamer_presets",
+      "//foundation/multimedia/media_foundation:histreamer_presets",
     ]
-    public_deps = [
-      "//foundation/multimedia/histreamer/engine/plugin:histreamer_plugin_intf",
-    ]
+    public_deps = [ "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_intf" ]
     deps = [ "//third_party/bounds_checking_function:libsec_shared" ]
     external_deps = [
       "graphic_surface:surface",

@@ -17,7 +17,7 @@ As a media engine, HiStreamer connects to player_framework (on a Standard device
 - Pipeline framework layer: including Pipeline framework, each Filter node implementation.
 - Plug-in layer: includes plug-in framework, various plug-ins.
 
-![Logical architecture diagram](images/histreamer_architecture.png)
+![Logical architecture diagram](images/media_foundation_architecture.png)
 
 ## Plugin list<a name="section1158716411639"></a>
 The HiStreamer plug-in list is as follows:
@@ -37,7 +37,7 @@ The HiStreamer plug-in list is as follows:
 The structure of the repository directory is as follows:
 
 ```
-/foundation/multimedia/histreamer      # HiStreamer media engine component business code
+/foundation/multimedia/media_foundation      # HiStreamer media engine component business code
 ├─LICENSE                              # The license file
 ├─engine                               # The engine code
 │  ├─foundation                        # Basic tool classes, including OS adaptation

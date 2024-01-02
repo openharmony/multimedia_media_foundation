@@ -11,13 +11,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-import("//foundation/multimedia/histreamer/config.gni")
+import("//foundation/multimedia/media_foundation/config.gni")
 
 config("histreamer_recorder_config") {
-  if (histreamer_enable_recorder) {
+  if (media_foundation_enable_recorder) {
     include_dirs = [
-      "//foundation/multimedia/histreamer/engine/include",
-      "//foundation/multimedia/histreamer/engine/scene/recorder",
+      "//foundation/multimedia/media_foundation/engine/include",
+      "//foundation/multimedia/media_foundation/engine/scene/recorder",
     ]
     if (hst_is_standard_sys) {
       include_dirs += [
@@ -34,8 +34,8 @@ config("histreamer_recorder_config") {
 
 ohos_source_set("histreamer_recorder") {
   subsystem_name = "multimedia"
-  part_name = "histreamer"
-  if (histreamer_enable_recorder) {
+  part_name = "media_foundation"
+  if (media_foundation_enable_recorder) {
     include_dirs = [ "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter" ]
     sources = [
       "internal/state.cpp",
@@ -44,17 +44,17 @@ ohos_source_set("histreamer_recorder") {
     public_configs = [
       ":histreamer_recorder_config",
       "//foundation/communication/ipc/interfaces/innerkits/ipc_core:libipc_core_private_config",
-      "//foundation/multimedia/histreamer:histreamer_presets",
+      "//foundation/multimedia/media_foundation:histreamer_presets",
     ]
-    deps = [ "//foundation/multimedia/histreamer/engine/foundation:histreamer_foundation" ]
+    deps = [ "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation" ]
     if (hst_is_standard_sys) {
       sources += [
         "standard/hirecorder_impl.cpp",
         "standard/recorder_utils.cpp",
       ]
       deps += [
-        "//foundation/multimedia/histreamer/engine/pipeline:histreamer_base",
-        "//foundation/multimedia/histreamer/engine/pipeline:histreamer_engine_filters",
+        "//foundation/multimedia/media_foundation/engine/pipeline:histreamer_base",
+        "//foundation/multimedia/media_foundation/engine/pipeline:histreamer_engine_filters",
       ]
       external_deps = [ "graphic_surface:surface" ]
     }

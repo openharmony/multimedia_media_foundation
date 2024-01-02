@@ -11,10 +11,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import("//build/test.gni")
-import("//foundation/multimedia/histreamer/config.gni")
+import("//foundation/multimedia/media_foundation/config.gni")
 import("//foundation/multimedia/player_framework/config.gni")
 
-module_output_path = "histreamer/scenetest/video_player"
+module_output_path = "media_foundation/scenetest/video_player"
 
 histreamer_unittest_cflags = [
   "-std=c++17",

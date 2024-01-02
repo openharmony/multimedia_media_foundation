@@ -12,7 +12,7 @@
 # limitations under the License.
 
 import("//build/ohos.gni")
-import("//foundation/multimedia/histreamer/config.gni")
+import("//foundation/multimedia/media_foundation/config.gni")
 
 group("capi_packages") {
   deps = [ ":native_media_core" ]
@@ -57,5 +57,5 @@ ohos_shared_library("native_media_core") {
 
   output_extension = "so"
   subsystem_name = "multimedia"
-  part_name = "histreamer"
+  part_name = "media_foundation"
 }

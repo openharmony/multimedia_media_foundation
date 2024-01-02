@@ -11,7 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-import("//foundation/multimedia/histreamer/config.gni")
+import("//foundation/multimedia/media_foundation/config.gni")
 group("plugin_standard_audio_capture") {
   if (hst_is_standard_sys) {
     deps = [ ":histreamer_plugin_StdAudioCapture" ]
@@ -22,10 +22,10 @@ if (hst_is_standard_sys) {
   import("//build/ohos.gni")
   ohos_shared_library("histreamer_plugin_StdAudioCapture") {
     subsystem_name = "multimedia"
-    part_name = "histreamer"
+    part_name = "media_foundation"
     include_dirs = [
       "//foundation/multimedia/audio_framework/interfaces/inner_api/native/audiocommon/include",
-      "//foundation/multimedia/histreamer/engine/include",
+      "//foundation/multimedia/media_foundation/engine/include",
       "//commonlibrary/c_utils/base/include/",
     ]
     sources = [
@@ -33,12 +33,12 @@ if (hst_is_standard_sys) {
       "audio_type_translate.cpp",
     ]
     public_configs = [
-      "//foundation/multimedia/histreamer:histreamer_presets",
+      "//foundation/multimedia/media_foundation:histreamer_presets",
       "//foundation/multimedia/audio_framework/frameworks/native/audiocapturer:audio_capturer_config",
     ]
     public_deps = [
-      "//foundation/multimedia/histreamer/engine/foundation:histreamer_foundation",
-      "//foundation/multimedia/histreamer/engine/plugin:histreamer_plugin_base",
+      "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
+      "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",
     ]
 
     external_deps = [
@@ -52,6 +52,6 @@ if (hst_is_standard_sys) {
       debug = false
       integer_overflow = true
     }
-    relative_install_dir = "media/histreamer_plugins"
+    relative_install_dir = "media/media_foundation_plugins"
   }
 }

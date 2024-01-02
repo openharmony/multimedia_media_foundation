@@ -11,7 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-import("//foundation/multimedia/histreamer/config.gni")
+import("//foundation/multimedia/media_foundation/config.gni")
 group("plugin_std_stream_source") {
   if (hst_is_standard_sys) {
     deps = [ ":histreamer_plugin_StdStreamSource" ]
@@ -22,21 +22,21 @@ if (hst_is_standard_sys) {
   import("//build/ohos.gni")
   ohos_shared_library("histreamer_plugin_StdStreamSource") {
     subsystem_name = "multimedia"
-    part_name = "histreamer"
+    part_name = "media_foundation"
     include_dirs = [
       "//foundation/multimedia/player_framework/interfaces/inner_api/native",
       "//foundation/multimedia/player_framework/services/utils/include",
-      "//foundation/multimedia/histreamer/engine/include",
+      "//foundation/multimedia/media_foundation/engine/include",
       "//commonlibrary/c_utils/base/include",
     ]
     sources = [ "std_stream_source_plugin.cpp" ]
     public_configs = [
-      "//foundation/multimedia/histreamer:histreamer_presets",
+      "//foundation/multimedia/media_foundation:histreamer_presets",
       "//foundation/multimedia/player_framework/services/utils:media_service_utils_public_config",
     ]
     public_deps = [
-      "//foundation/multimedia/histreamer/engine/foundation:histreamer_foundation",
-      "//foundation/multimedia/histreamer/engine/plugin:histreamer_plugin_base",
+      "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
+      "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",
     ]
     external_deps = [
       "graphic_surface:surface",
@@ -50,6 +50,6 @@ if (hst_is_standard_sys) {
       debug = false
       integer_overflow = true
     }
-    relative_install_dir = "media/histreamer_plugins"
+    relative_install_dir = "media/media_foundation_plugins"
   }
 }

@@ -1,42 +1,42 @@
 {
-    "name": "@ohos/histreamer",
-    "description": "Histreamer engine.",
+    "name": "@ohos/media_foundation",
+    "description": "media foundation functions.",
     "optional": "true",
     "version": "3.1",
     "license": "Apache License 2.0",
     "publishAs": "code-segment",
     "segment": {
-        "destPath": "foundation/multimedia/histreamer"
+        "destPath": "foundation/multimedia/media_foundation"
     },
     "dirs": {},
     "scripts": {},
     "component": {
-        "name": "histreamer",
+        "name": "media_foundation",
         "subsystem": "multimedia",
         "syscap": [],
         "features": [
-          "histreamer_enable_plugin_ffmpeg_adapter",
-          "histreamer_enable_plugin_hdi_adapter",
-          "histreamer_enable_plugin_file_source",
-          "histreamer_enable_plugin_file_fd_source",
-          "histreamer_enable_plugin_http_source",
-          "histreamer_enable_plugin_stream_source",
-          "histreamer_enable_plugin_http_lite_source",
-          "histreamer_enable_plugin_minimp3_adapter",
-          "histreamer_enable_plugin_minimp4_demuxer",
-          "histreamer_enable_plugin_aac_demuxer",
-          "histreamer_enable_plugin_std_audio_capture",
-          "histreamer_enable_plugin_file_sink",
-          "histreamer_enable_plugin_audio_server_sink",
-          "histreamer_enable_plugin_lite_aac_decoder",
-          "histreamer_enable_plugin_std_video_surface_sink",
-          "histreamer_enable_plugin_std_video_capture",
-          "histreamer_enable_plugin_wav_demuxer",
-          "histreamer_enable_plugin_avs3_audio_decoder",
-          "histreamer_enable_recorder",
-          "histreamer_enable_video",
-          "histreamer_enable_avs3da",
-          "histreamer_enable_plugin_codec_adapter"
+          "media_foundation_enable_plugin_ffmpeg_adapter",
+          "media_foundation_enable_plugin_hdi_adapter",
+          "media_foundation_enable_plugin_file_source",
+          "media_foundation_enable_plugin_file_fd_source",
+          "media_foundation_enable_plugin_http_source",
+          "media_foundation_enable_plugin_stream_source",
+          "media_foundation_enable_plugin_http_lite_source",
+          "media_foundation_enable_plugin_minimp3_adapter",
+          "media_foundation_enable_plugin_minimp4_demuxer",
+          "media_foundation_enable_plugin_aac_demuxer",
+          "media_foundation_enable_plugin_std_audio_capture",
+          "media_foundation_enable_plugin_file_sink",
+          "media_foundation_enable_plugin_audio_server_sink",
+          "media_foundation_enable_plugin_lite_aac_decoder",
+          "media_foundation_enable_plugin_std_video_surface_sink",
+          "media_foundation_enable_plugin_std_video_capture",
+          "media_foundation_enable_plugin_wav_demuxer",
+          "media_foundation_enable_plugin_avs3_audio_decoder",
+          "media_foundation_enable_recorder",
+          "media_foundation_enable_video",
+          "media_foundation_enable_avs3da",
+          "media_foundation_enable_plugin_codec_adapter"
         ],
         "adapted_system_type": [
             "mini",
@@ -69,45 +69,45 @@
         },
         "build": {
             "sub_component": [
-                "//foundation/multimedia/histreamer:histreamer",
-                "//foundation/multimedia/histreamer:media_foundation"
+                "//foundation/multimedia/media_foundation:histreamer",
+                "//foundation/multimedia/media_foundation:media_foundation"
             ],
             "inner_kits": [
               {
                 "type": "so",
-                "name": "//foundation/multimedia/histreamer/engine/pipeline:histreamer_base",
+                "name": "//foundation/multimedia/media_foundation/engine/pipeline:histreamer_base",
                 "header": {
                   "header_files": [],
-                  "header_base": "//foundation/multimedia/histreamer/engine/include"
+                  "header_base": "//foundation/multimedia/media_foundation/engine/include"
                 }
               },
               {
                 "type": "so",
-                "name": "//foundation/multimedia/histreamer/engine/pipeline:histreamer_codec_filters",
+                "name": "//foundation/multimedia/media_foundation/engine/pipeline:histreamer_codec_filters",
                 "header": {
                   "header_files": [],
-                  "header_base": "//foundation/multimedia/histreamer/engine/include"
+                  "header_base": "//foundation/multimedia/media_foundation/engine/include"
                 }
               },
               {
                 "type": "so",
-                "name": "//foundation/multimedia/histreamer/engine/plugin:histreamer_ffmpeg_convert",
+                "name": "//foundation/multimedia/media_foundation/engine/plugin:histreamer_ffmpeg_convert",
                 "header": {
                   "header_files": [],
-                  "header_base": "//foundation/multimedia/histreamer/engine/include"
+                  "header_base": "//foundation/multimedia/media_foundation/engine/include"
                 }
               },
               {
                 "type": "so",
-                "name": "//foundation/multimedia/histreamer/engine/plugin:histreamer_plugin_base",
+                "name": "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",
                 "header": {
                   "header_files": [],
-                  "header_base": "//foundation/multimedia/histreamer/engine/include"
+                  "header_base": "//foundation/multimedia/media_foundation/engine/include"
                 }
               },
               {
                 "type": "so",
-                "name": "//foundation/multimedia/histreamer/src:media_foundation",
+                "name": "//foundation/multimedia/media_foundation/src:media_foundation",
                 "header": {
                   "header_files": [
                     "buffer/avsharedmemory.h",
@@ -130,6 +130,7 @@
                     "meta/meta_key.h",
                     "meta/mime_type.h",
                     "cpp_ext/type_cast_ext.h",
+                    "common/avsharedmemorypool.h",
                     "common/status.h",
                     "common/native_mfmagic.h",
                     "osal/filesystem/file_system.h",
@@ -146,6 +147,7 @@
                     "filter/filter.h",
                     "pipeline/pipeline.h",
                     "plugin/generic_plugin.h",
+                    "common/media_data_source.h",
                     "plugin/plugin_base.h",
                     "plugin/plugin_caps.h",
                     "plugin/plugin_definition.h",
@@ -154,13 +156,13 @@
                     "plugin/plugin_manager.h",
                     "plugin/plugin_register.h"
                   ],
-                  "header_base": "//foundation/multimedia/histreamer/interface/inner_api"
+                  "header_base": "//foundation/multimedia/media_foundation/interface/inner_api"
                 }
               }
             ],
             "test": [
-              "//foundation/multimedia/histreamer/test:histreamer_test",
-              "//foundation/multimedia/histreamer/tests:media_foundation_unit_test"
+              "//foundation/multimedia/media_foundation/test:histreamer_test",
+              "//foundation/multimedia/media_foundation/tests:media_foundation_unit_test"
             ]
         }
     }
