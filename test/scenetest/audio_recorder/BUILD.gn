@@ -36,7 +36,7 @@ ohos_unittest("histreamer_audio_recorder_test") {
     "//third_party/googletest:gtest_rtti",
   ]
   external_deps = [
-    "graphic_2d:surface",
+    "graphic_surface:surface",
     "hilog:libhilog",
   ]
   public_configs = []

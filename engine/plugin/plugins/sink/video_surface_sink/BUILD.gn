@@ -48,8 +48,8 @@ ohos_source_set("std_video_surface_sink") {
     deps = [ "//third_party/bounds_checking_function:libsec_shared" ]
     external_deps = [
       "c_utils:utils",
-      "graphic_2d:surface",
-      "graphic_2d:sync_fence",
+      "graphic_surface:surface",
+      "graphic_surface:sync_fence",
     ]
   }
 }
