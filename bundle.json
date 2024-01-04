@@ -58,6 +58,7 @@
                 "audio_framework",
                 "drivers_peripheral_codec",
                 "graphic_2d",
+                "graphic_surface",
                 "hdf_core",
                 "c_utils",
                 "init",

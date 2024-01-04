@@ -39,7 +39,7 @@ ohos_unittest("histreamer_video_player_test") {
     "//third_party/googletest:gtest_rtti",
   ]
   external_deps = [
-    "graphic_2d:surface",
+    "graphic_surface:surface",
     "hilog:libhilog",
   ]
   public_configs = []

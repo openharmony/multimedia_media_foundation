@@ -221,6 +221,56 @@ private:
  * The tag content is stored in key-value format.
  */
 using CodecConfig = std::vector<uint8_t>;
+
+/**
+ * DRM structure definition
+ */
+#define META_DRM_KEY_ID_SIZE                    16
+#define META_DRM_IV_SIZE                        16
+#define META_DRM_MAX_SUB_SAMPLE_NUM             64
+#define META_DRM_MAX_DRM_UUID_LEN               16
+#define META_DRM_MAX_DRM_PSSH_LEN               2048
+
+enum struct MetaDrmCencAlgorithm : uint32_t {
+    META_DRM_ALG_CENC_UNENCRYPTED = 0x0,
+    META_DRM_ALG_CENC_AES_CTR = 0x1,
+    META_DRM_ALG_CENC_AES_WV = 0x2,
+    META_DRM_ALG_CENC_AES_CBC = 0x3,
+    META_DRM_ALG_CENC_SM4_CBC = 0x4,
+    META_DRM_ALG_CENC_SM4_CTR,
+};
+
+struct _MetaDrmSubSample {
+    uint32_t clearHeaderLen;
+    uint32_t payLoadLen;
+};
+typedef struct _MetaDrmSubSample MetaDrmSubSample;
+
+struct _MetaDrmCencInfo {
+    MetaDrmCencAlgorithm algo;
+    uint8_t keyId[META_DRM_KEY_ID_SIZE];
+    uint32_t keyIdLen;
+    uint8_t iv[META_DRM_IV_SIZE];
+    uint32_t ivLen;
+    uint32_t isAmbiguity;
+    uint32_t encryptBlocks;
+    uint32_t skipBlocks;
+    uint32_t firstEncryptOffset;
+    MetaDrmSubSample subSample[META_DRM_MAX_SUB_SAMPLE_NUM];
+    uint32_t subSampleNum;
+};
+typedef struct _MetaDrmCencInfo MetaDrmCencInfo;
+
+struct _MetaDrmInfo {
+    MetaDrmCencAlgorithm algo;
+    uint32_t encryptBlocks;
+    uint32_t skipBlocks;
+    uint32_t uuidLen;
+    uint8_t uuid[META_DRM_MAX_DRM_UUID_LEN];
+    uint32_t psshLen;
+    uint8_t pssh[META_DRM_MAX_DRM_PSSH_LEN];
+};
+typedef struct _MetaDrmInfo MetaDrmInfo;
 } // namespace Plugins
 } // namespace Media
 } // namespace OHOS

@@ -82,6 +82,6 @@ if (hst_is_lite_sys) {
       "//foundation/multimedia/media_foundation/engine/scene/player/standard/hiplayer_impl.cpp",
       "//foundation/multimedia/media_foundation/engine/scene/player/standard/media_utils.cpp",
     ]
-    external_deps = [ "graphic_2d:surface" ]
+    external_deps = [ "graphic_surface:surface" ]
   }
 }

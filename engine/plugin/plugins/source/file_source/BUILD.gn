@@ -32,7 +32,7 @@ ohos_source_set("filesource") {
     "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",
   ]
   if (hst_is_standard_sys) {
-    external_deps = [ "graphic_2d:surface" ]
+    external_deps = [ "graphic_surface:surface" ]
   }
 }
 
@@ -48,7 +48,7 @@ ohos_source_set("filefdsource") {
     "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",
   ]
   if (hst_is_standard_sys) {
-    external_deps = [ "graphic_2d:surface" ]
+    external_deps = [ "graphic_surface:surface" ]
   }
 }
 

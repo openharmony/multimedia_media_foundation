@@ -743,6 +743,55 @@ HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_All_As_Mix_Using_SwapCopy, TestSize.
         EXPECT_EQ(valueOutVecInt8, valueInVecInt8);
     }
 }
+
+/**
+ * @tc.name: SetGet_Data_DrmStruct_Using_Parcel
+ * @tc.desc: SetGet_Data_DrmStruct_Using_Parcel
+ * @tc.type: FUNC
+ */
+HWTEST_F(MetaInnerUnitTest, SetGet_Data_DrmStruct_Using_Parcel, TestSize.Level1)
+{
+    uint8_t iv[META_DRM_IV_SIZE] = {
+        0x3d, 0x5e, 0x6d, 0x35, 0x9b, 0x9a, 0x41, 0xe8, 0xb8, 0x43, 0xdd, 0x3c, 0x6e, 0x72, 0xc4, 0x2c
+    };
+    uint8_t keyId[META_DRM_KEY_ID_SIZE] = {
+        0x3a, 0x5e, 0x6d, 0x35, 0x9b, 0x9a, 0x41, 0xe8, 0xb8, 0x43, 0xdd, 0x3c, 0x6e, 0x72, 0xc4, 0x2a
+    };
+    Plugins::MetaDrmCencInfo *drmCencInfoIn = (Plugins::MetaDrmCencInfo *)malloc(sizeof(Plugins::MetaDrmCencInfo));
+    drmCencInfoIn->algo = Plugins::MetaDrmCencAlgorithm::META_DRM_ALG_CENC_SM4_CBC;
+    drmCencInfoIn->keyIdLen = META_DRM_KEY_ID_SIZE;
+    auto error = memcpy_s(drmCencInfoIn->keyId, sizeof(drmCencInfoIn->keyId), keyId, META_DRM_KEY_ID_SIZE);
+    ASSERT_EQ(error, EOK);
+    drmCencInfoIn->ivLen = META_DRM_IV_SIZE;
+    error = memcpy_s(drmCencInfoIn->iv, sizeof(drmCencInfoIn->iv), iv, META_DRM_IV_SIZE);
+    ASSERT_EQ(error, EOK);
+    drmCencInfoIn->encryptBlocks = 0;
+    drmCencInfoIn->skipBlocks = 0;
+    drmCencInfoIn->firstEncryptOffset = 0;
+    drmCencInfoIn->subSampleNum = 1;
+    for (uint32_t i = 0; i < drmCencInfoIn->subSampleNum; i++) {
+        drmCencInfoIn->subSample[i].clearHeaderLen = 0x10;
+        drmCencInfoIn->subSample[i].payLoadLen = 0;
+    }
+    std::vector<uint8_t> drmCencVecIn((uint8_t *)drmCencInfoIn,
+        ((uint8_t *)drmCencInfoIn) + sizeof(Plugins::MetaDrmCencInfo));
+    std::shared_ptr<Meta> metaIn = nullptr;
+    std::shared_ptr<Meta> metaOut = nullptr;
+    std::shared_ptr<MessageParcel> parcel = nullptr;
+    parcel = std::make_shared<MessageParcel>();
+    metaIn = std::make_shared<Meta>();
+    metaOut = std::make_shared<Meta>();
+    metaIn->SetData(Tag::DRM_CENC_INFO, drmCencVecIn);
+    ASSERT_TRUE(metaIn->ToParcel(*parcel));
+    ASSERT_TRUE(metaOut->FromParcel(*parcel));
+
+    std::vector<uint8_t> drmCencVecOut;
+    metaOut->GetData(Tag::DRM_CENC_INFO, drmCencVecOut);
+    Plugins::MetaDrmCencInfo *drmCencInfoOut = reinterpret_cast<Plugins::MetaDrmCencInfo *>(&drmCencVecOut[0]);
+
+    EXPECT_EQ(drmCencInfoIn->keyIdLen, drmCencInfoOut->keyIdLen);
+    free(drmCencInfoIn);
+}
 } // namespace MetaFuncUT
 } // namespace Media
 } // namespace OHOS

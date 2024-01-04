@@ -24,7 +24,6 @@ if (hst_is_standard_sys) {
     subsystem_name = "multimedia"
     part_name = "media_foundation"
     include_dirs = [
-      "//foundation/graphic/graphic_2d/interfaces/inner_api/surface",
       "//drivers/peripheral/display/interfaces/include",
       "//foundation/graphic/graphic_2d/interfaces/inner_api/common",
       "//commonlibrary/c_utils/base/include",
@@ -39,8 +38,8 @@ if (hst_is_standard_sys) {
       "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",
     ]
     external_deps = [
-      "graphic_2d:surface",
-      "graphic_2d:sync_fence",
+      "graphic_surface:surface",
+      "graphic_surface:sync_fence",
       "hilog:libhilog",
     ]
     sanitize = {

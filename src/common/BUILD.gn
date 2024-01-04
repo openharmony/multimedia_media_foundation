@@ -91,7 +91,7 @@ if (hst_is_lite_sys) {
     public_deps = [ "$histreamer_root_dir/plugin:histreamer_plugin_intf" ]
     deps = [ "//third_party/bounds_checking_function:libsec_shared" ]
     external_deps = [
-      "graphic_2d:surface",
+      "graphic_surface:surface",
       "hilog:libhilog",
       "hitrace:hitrace_meter",
     ]
