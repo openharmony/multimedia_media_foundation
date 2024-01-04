@@ -75,7 +75,7 @@ if (hst_is_lite_sys) {
       "drivers_peripheral_codec:libcodec_hdi_omx_client",
       "hilog:libhilog",
     ]
-    relative_install_dir = "media/media_foundation_plugins"
+    relative_install_dir = "media/histreamer_plugins"
     subsystem_name = "multimedia"
     part_name = "media_foundation"
   }

@@ -88,7 +88,7 @@ if (hst_is_lite_sys) {
       debug = false
       integer_overflow = true
     }
-    relative_install_dir = "media/media_foundation_plugins"
+    relative_install_dir = "media/histreamer_plugins"
   }
 
   ohos_shared_library("histreamer_plugin_FileFdSource") {
@@ -102,6 +102,6 @@ if (hst_is_lite_sys) {
       debug = false
       integer_overflow = true
     }
-    relative_install_dir = "media/media_foundation_plugins"
+    relative_install_dir = "media/histreamer_plugins"
   }
 }
