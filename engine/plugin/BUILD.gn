@@ -241,9 +241,9 @@ ohos_source_set("histreamer_plugin_core") {
     }
   } else {
     if (target_cpu == "arm64") {
-      hst_plugin_path = "\"/system/lib64/media/media_foundation_plugins\""
+      hst_plugin_path = "\"/system/lib64/media/histreamer_plugins\""
     } else {
-      hst_plugin_path = "\"/system/lib/media/media_foundation_plugins\""
+      hst_plugin_path = "\"/system/lib/media/histreamer_plugins\""
     }
     defines += [
       "HST_PLUGIN_PATH=${hst_plugin_path}",
