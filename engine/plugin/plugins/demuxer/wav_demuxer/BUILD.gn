@@ -45,7 +45,7 @@ if (hst_is_lite_sys) {
     part_name = "media_foundation"
     deps = [ ":wavdemuxer" ]
     external_deps = [ "hilog:libhilog" ]
-    relative_install_dir = "media/media_foundation_plugins"
+    relative_install_dir = "media/histreamer_plugins"
     sanitize = {
       cfi = true
       cfi_cross_dso = true

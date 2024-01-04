@@ -67,7 +67,7 @@ if (hst_is_lite_sys) {
     }
     deps = [ ":std_video_surface_sink" ]
     external_deps = [ "hilog:libhilog" ]
-    relative_install_dir = "media/media_foundation_plugins"
+    relative_install_dir = "media/histreamer_plugins"
     subsystem_name = "multimedia"
     part_name = "media_foundation"
   }

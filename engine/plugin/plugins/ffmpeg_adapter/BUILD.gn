@@ -265,7 +265,7 @@ if (hst_is_lite_sys) {
       ":ffmpeg_audio_decoders",
     ]
     external_deps = [ "hilog:libhilog" ]
-    relative_install_dir = "media/media_foundation_plugins"
+    relative_install_dir = "media/histreamer_plugins"
     subsystem_name = "multimedia"
     part_name = "media_foundation"
   }
@@ -281,7 +281,7 @@ if (hst_is_lite_sys) {
       ":ffmpeg_video_decoders",
     ]
     external_deps = [ "hilog:libhilog" ]
-    relative_install_dir = "media/media_foundation_plugins"
+    relative_install_dir = "media/histreamer_plugins"
     subsystem_name = "multimedia"
     part_name = "media_foundation"
   }
@@ -297,7 +297,7 @@ if (hst_is_lite_sys) {
       ":ffmpeg_demuxers",
     ]
     external_deps = [ "hilog:libhilog" ]
-    relative_install_dir = "media/media_foundation_plugins"
+    relative_install_dir = "media/histreamer_plugins"
     subsystem_name = "multimedia"
     part_name = "media_foundation"
   }
@@ -313,7 +313,7 @@ if (hst_is_lite_sys) {
       ":ffmpeg_audio_encoders",
     ]
     external_deps = [ "hilog:libhilog" ]
-    relative_install_dir = "media/media_foundation_plugins"
+    relative_install_dir = "media/histreamer_plugins"
     subsystem_name = "multimedia"
     part_name = "media_foundation"
   }
@@ -329,7 +329,7 @@ if (hst_is_lite_sys) {
       ":ffmpeg_video_encoders",
     ]
     external_deps = [ "hilog:libhilog" ]
-    relative_install_dir = "media/media_foundation_plugins"
+    relative_install_dir = "media/histreamer_plugins"
     subsystem_name = "multimedia"
     part_name = "media_foundation"
   }
@@ -345,7 +345,7 @@ if (hst_is_lite_sys) {
       ":ffmpeg_muxers",
     ]
     external_deps = [ "hilog:libhilog" ]
-    relative_install_dir = "media/media_foundation_plugins"
+    relative_install_dir = "media/histreamer_plugins"
     subsystem_name = "multimedia"
     part_name = "media_foundation"
   }
