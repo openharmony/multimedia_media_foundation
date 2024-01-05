@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-#ifndef MEDIA_FOUNDATION_ERRORS_H
-#define MEDIA_FOUNDATION_ERRORS_H
+#ifndef MEDIA_CODE_H
+#define MEDIA_CODE_H
 
 #include <string_view>
 
@@ -50,6 +50,87 @@ enum MediaServiceExtErrCodeAPI9 : int32_t {
     MSERR_EXT_API9_UNSUPPORT_FORMAT = 5400106,      // unsupport format.
     MSERR_EXT_API9_AUDIO_INTERRUPTED = 5400107,     // audio interrupted.
 };
-} // namespace MediaFoundation
+
+/**
+ *  Media type
+ */
+enum MediaType : int32_t {
+    /**
+     * track is audio.
+     */
+    MEDIA_TYPE_AUD = 0,
+    /**
+     * track is video.
+     */
+    MEDIA_TYPE_VID = 1,
+    /**
+     * track is subtitle.
+     */
+    MEDIA_TYPE_SUBTITLE = 2,
+};
+
+/**
+ * Enumerates the state change reason.
+ *
+ */
+enum StateChangeReason {
+    /**
+     * audio/video state change by user
+     */
+    USER = 1,
+    /**
+     * audio/video state change by system
+     */
+    BACKGROUND = 2,
+};
+
+enum BufferingInfoType : int32_t {
+    /* begin to b buffering */
+    BUFFERING_START = 1,
+    /* end to buffering */
+    BUFFERING_END = 2,
+    /* buffering percent */
+    BUFFERING_PERCENT = 3,
+    /* cached duration in milliseconds */
+    CACHED_DURATION = 4,
+};
+
+enum PlayerSeekMode : int32_t {
+    /* sync to keyframes after the time point. */
+    SEEK_NEXT_SYNC = 0,
+    /* sync to keyframes before the time point. */
+    SEEK_PREVIOUS_SYNC,
+    /* sync to closest keyframes. */
+    SEEK_CLOSEST_SYNC,
+    /* seek to frames closest the time point. */
+    SEEK_CLOSEST,
+};
+
+/**
+ * @brief Enumerates the container format types.
+ */
+class ContainerFormatType {
+public:
+    static constexpr std::string_view CFT_MPEG_4A = "m4a";
+    static constexpr std::string_view CFT_MPEG_4 = "mp4";
+};
+
+/**
+ * @brief the struct of geolocation
+ *
+ * @param latitude float: latitude in degrees. Its value must be in the range [-90, 90].
+ * @param longitude float: longitude in degrees. Its value must be in the range [-180, 180].
+ */
+struct Location {
+    int32_t latitude = 0;
+    int32_t longitude = 0;
+};
+
+struct AVFileDescriptor {
+    int32_t fd = 0;
+    int64_t offset = 0;
+    int64_t length = -1;
+};
+} // namespace Media
 } // namespace OHOS
-#endif // MEDIA_FOUNDATION_ERRORS_H
+#endif // MEDIA_CODE_H
