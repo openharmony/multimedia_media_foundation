@@ -13,9 +13,7 @@
     "component": {
         "name": "media_foundation",
         "subsystem": "multimedia",
-        "syscap": [
-          "SystemCapability.Multimedia.Media.Core"
-        ],
+        "syscap": [],
         "features": [
           "media_foundation_enable_plugin_ffmpeg_adapter",
           "media_foundation_enable_plugin_hdi_adapter",
