@@ -117,6 +117,7 @@ public:
                            tagCharSeq == Tag::AUDIO_VIVID_METADATA or
                            tagCharSeq == Tag::AUDIO_VORBIS_IDENTIFICATION_HEADER or
                            tagCharSeq == Tag::AUDIO_VORBIS_SETUP_HEADER or
+                           tagCharSeq == Tag::OH_MD_KEY_AUDIO_VIVID_METADATA or
                            tagCharSeq == Tag::DRM_CENC_INFO,
                            std::vector<uint8_t>, ValueType::VECTOR_UINT8);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_CHANNEL_LAYOUT or
@@ -194,7 +195,8 @@ public:
         tagCharSeq == Tag::MEDIA_LEVEL or
         tagCharSeq == Tag::VIDEO_STRIDE or
         tagCharSeq == Tag::VIDEO_DISPLAY_WIDTH or
-        tagCharSeq == Tag::VIDEO_DISPLAY_HEIGHT, int32_t, ValueType::INT32_T);
+        tagCharSeq == Tag::VIDEO_DISPLAY_HEIGHT or
+        tagCharSeq == Tag::OH_MD_KEY_AUDIO_OBJECT_NUMBER, int32_t, ValueType::INT32_T);
 
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::APP_FULL_TOKEN_ID or
