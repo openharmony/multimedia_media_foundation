@@ -187,7 +187,8 @@ Status Pipeline::LinkFilters(const std::shared_ptr<Filter> &preFilter,
                              StreamType type)
 {
     for (auto nextFilter : nextFilters) {
-        preFilter->LinkNext(nextFilter, type);
+        auto ret = preFilter->LinkNext(nextFilter, type);
+        FALSE_RETURN_V(ret == Status::OK, ret);
     }
     return Status::OK;
 }
