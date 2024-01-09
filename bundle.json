@@ -160,6 +160,20 @@
                   ],
                   "header_base": "//foundation/multimedia/media_foundation/interface/inner_api"
                 }
+              },
+              {
+                "type": "so",
+                "name": "//foundation/multimedia/media_foundation/src/capi:capi_packages",
+                "header": {
+                  "header_files": [
+                    "native_avbuffer_info.h",
+                    "native_avbuffer.h",
+                    "native_averrors.h",
+                    "native_avformat.h",
+                    "native_avmemory.h"
+                  ],
+                  "header_base": "//foundation/multimedia/media_foundation/interface/kits/c"
+                }
               }
             ],
             "test": [

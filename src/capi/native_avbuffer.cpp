@@ -15,7 +15,6 @@
 
 #include "native_avbuffer.h"
 #include <shared_mutex>
-#include "buffer/avbuffer.h"
 #include "common/log.h"
 #include "common/native_mfmagic.h"
 #include "meta/meta.h"
@@ -24,16 +23,6 @@
 using namespace OHOS;
 using namespace OHOS::Media;
 
-OH_AVBuffer::OH_AVBuffer(const std::shared_ptr<OHOS::Media::AVBuffer> &buffer)
-    : MFObjectMagic(MFMagic::MFMAGIC_AVBUFFER), buffer_(buffer)
-{
-}
-
-bool OH_AVBuffer::IsEqualBuffer(const std::shared_ptr<OHOS::Media::AVBuffer> &buffer)
-{
-    return (buffer == buffer_);
-}
-
 OH_AVBuffer *OH_AVBuffer_Create(int32_t capacity)
 {
     FALSE_RETURN_V_MSG_E(capacity > 0, nullptr, "capacity %{public}d is error!", capacity);
@@ -41,8 +30,9 @@ OH_AVBuffer *OH_AVBuffer_Create(int32_t capacity)
     FALSE_RETURN_V_MSG_E(allocator != nullptr, nullptr, "create allocator failed");
 
     std::shared_ptr<AVBuffer> buffer = AVBuffer::CreateAVBuffer(allocator, capacity);
-    FALSE_RETURN_V_MSG_E(buffer->memory_ != nullptr, nullptr, "create OH_AVBuffer failed");
-    FALSE_RETURN_V_MSG_E(buffer->memory_->GetAddr() != nullptr, nullptr, "create OH_AVBuffer failed");
+    FALSE_RETURN_V_MSG_E(buffer != nullptr, nullptr, "create OH_AVBuffer failed");
+    FALSE_RETURN_V_MSG_E(buffer->memory_ != nullptr, nullptr, "memory is nullptr");
+    FALSE_RETURN_V_MSG_E(buffer->memory_->GetAddr() != nullptr, nullptr, "memory's addr is nullptr");
 
     struct OH_AVBuffer *buf = new (std::nothrow) OH_AVBuffer(buffer);
     FALSE_RETURN_V_MSG_E(buffer != nullptr, nullptr, "failed to new OH_AVBuffer");
