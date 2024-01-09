@@ -65,8 +65,7 @@
                 "c_utils",
                 "init",
                 "player_framework",
-                "ipc",
-                "memory_utils"
+                "ipc"
             ]
         },
         "build": {
