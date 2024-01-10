@@ -32,6 +32,10 @@ if (hst_is_standard_sys) {
       "MEDIA_OHOS",
     ]
 
+    if (media_foundation_enable_ffrt) {
+      defines += [ "MEDIA_FOUNDATION_FFRT" ]
+    }
+
     include_dirs = [
       "$histreamer_root_dir/osal/base",
       "$histreamer_root_dir/plugin",
@@ -119,15 +123,26 @@ if (hst_is_standard_sys) {
 
     sources += [
       "$histreamer_root_dir/src/osal/filesystem/file_system.cpp",
-      "$histreamer_root_dir/src/osal/task/pthread/autolock.cpp",
-      "$histreamer_root_dir/src/osal/task/pthread/condition_variable.cpp",
-      "$histreamer_root_dir/src/osal/task/pthread/jobutils.cpp",
-      "$histreamer_root_dir/src/osal/task/pthread/mutex.cpp",
-      "$histreamer_root_dir/src/osal/task/pthread/task.cpp",
-      "$histreamer_root_dir/src/osal/task/pthread/thread.cpp",
       "$histreamer_root_dir/src/osal/utils/steady_clock.cpp",
       "$histreamer_root_dir/src/osal/utils/util.cpp",
     ]
+
+    if (media_foundation_enable_ffrt) {
+      sources += [
+        "$histreamer_root_dir/src/osal/task/ffrt/condition_variable.cpp",
+        "$histreamer_root_dir/src/osal/task/ffrt/jobutils.cpp",
+        "$histreamer_root_dir/src/osal/task/ffrt/task.cpp",
+      ]
+    } else {
+      sources += [
+        "$histreamer_root_dir/src/osal/task/pthread/autolock.cpp",
+        "$histreamer_root_dir/src/osal/task/pthread/condition_variable.cpp",
+        "$histreamer_root_dir/src/osal/task/pthread/jobutils.cpp",
+        "$histreamer_root_dir/src/osal/task/pthread/mutex.cpp",
+        "$histreamer_root_dir/src/osal/task/pthread/task.cpp",
+        "$histreamer_root_dir/src/osal/task/pthread/thread.cpp",
+      ]
+    }
 
     sources += [
       "$histreamer_root_dir/src/filter/filter.cpp",
@@ -157,6 +172,10 @@ if (hst_is_standard_sys) {
       "hitrace:hitrace_meter",
       "ipc:ipc_core",
     ]
+
+    if (media_foundation_enable_ffrt) {
+      external_deps += [ "ffrt:libffrt" ]
+    }
 
     symlink_target_name = [ "libnative_media_core.so" ]
 

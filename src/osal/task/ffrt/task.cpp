@@ -16,7 +16,7 @@
 #define HST_LOG_TAG "Task"
 
 #include "osal/task/task.h"
-#include "inner_api/common/log.h"
+#include "common/log.h"
 
 namespace OHOS {
 namespace Media {
@@ -41,13 +41,13 @@ ffrt::qos ConvertPriorityType(TaskPriority priority)
 Task::Task(std::string name, TaskPriority priority)
     : name_(std::move(name)), priority_(priority), runningState_(RunningState::STOPPED)
 {
-    MEDIA_LOG_D("task " PUBLIC_LOG_S " ctor called", name_.c_str());
+    MEDIA_LOG_I("task " PUBLIC_LOG_S " ctor called", name_.c_str());
 }
 
 Task::Task(std::string name, std::function<void()> job, TaskPriority priority)
     : Task(std::move(name), priority)
 {
-    MEDIA_LOG_D("task " PUBLIC_LOG_S " ctor called", name_.c_str());
+    MEDIA_LOG_I("task " PUBLIC_LOG_S " ctor called", name_.c_str());
     job_ = std::move(job);
 }
 
