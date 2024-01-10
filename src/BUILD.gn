@@ -33,7 +33,7 @@ if (hst_is_standard_sys) {
     ]
 
     if (media_foundation_enable_ffrt) {
-      defines +=  [ "MEDIA_FOUNDATION_FFRT" ]
+      defines += [ "MEDIA_FOUNDATION_FFRT" ]
     }
 
     include_dirs = [
