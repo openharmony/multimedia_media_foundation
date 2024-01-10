@@ -15,6 +15,17 @@
 
 #include "common/native_mfmagic.h"
 
+
+// ndk 接口:
+//     1. 声明在 ./interface/kits/c/*.h;
+//     2. 定义在 ./src/capi/*.cpp;
+//     3. 编译到 ./src/capi/BUILD.gn 的 capi_packages;
+// ndk 接口对应的struct实例:
+//     1. 声明在 ./interface/inner_api/common/native_mfmagic.h;
+//     2. 定义在 ./src/capi/common/native_mfmagic.cpp;
+//     3. 编译到 ./src/BUILD.gn 的 media_foundation.
+
+
 using namespace OHOS::Media;
 
 OH_AVFormat::OH_AVFormat() : MFObjectMagic(MFMagic::MFMAGIC_FORMAT) {}
