@@ -65,7 +65,8 @@
                 "c_utils",
                 "init",
                 "player_framework",
-                "ipc"
+                "ipc",
+                "ffrt"
             ]
         },
         "build": {

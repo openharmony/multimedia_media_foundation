@@ -64,6 +64,9 @@ declare_args() {
   media_foundation_enable_recorder = false
   media_foundation_enable_video = false
   media_foundation_enable_avs3da = false
+  
+  # enable ffrt task instead of pthread task
+  media_foundation_enable_ffrt = false
 
   # configuration for histreamer created thread's stack size.
   # 0 means using system default thread stack size, other positive values will be accepted.
