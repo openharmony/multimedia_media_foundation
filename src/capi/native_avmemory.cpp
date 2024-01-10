@@ -16,22 +16,10 @@
 #include "native_avmemory.h"
 #include "buffer/avsharedmemorybase.h"
 #include "common/log.h"
-#include "common/status.h"
 #include "common/native_mfmagic.h"
+#include "common/status.h"
 
 using namespace OHOS::Media;
-
-OH_AVMemory::OH_AVMemory(const std::shared_ptr<OHOS::Media::AVSharedMemory> &mem)
-    : MFObjectMagic(MFMagic::MFMAGIC_SHARED_MEMORY), memory_(mem)
-{
-}
-
-OH_AVMemory::~OH_AVMemory() {}
-
-bool OH_AVMemory::IsEqualMemory(const std::shared_ptr<OHOS::Media::AVSharedMemory> &mem)
-{
-    return (mem == memory_) ? true : false;
-}
 
 struct OH_AVMemory *OH_AVMemory_Create(int32_t size)
 {

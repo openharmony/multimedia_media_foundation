@@ -115,11 +115,7 @@ if (hst_is_standard_sys) {
       "$histreamer_root_dir/src/meta/meta.cpp",
     ]
 
-    sources += [
-      "$histreamer_root_dir/src/capi/native_avbuffer.cpp",
-      "$histreamer_root_dir/src/capi/native_avformat.cpp",
-      "$histreamer_root_dir/src/capi/native_avmemory.cpp",
-    ]
+    sources += [ "$histreamer_root_dir/src/capi/common/native_mfmagic.cpp" ]
 
     sources += [
       "$histreamer_root_dir/src/osal/filesystem/file_system.cpp",
@@ -176,8 +172,6 @@ if (hst_is_standard_sys) {
     if (media_foundation_enable_ffrt) {
       external_deps += [ "ffrt:libffrt" ]
     }
-
-    symlink_target_name = [ "libnative_media_core.so" ]
 
     innerapi_tags = [
       "platformsdk",

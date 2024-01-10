@@ -21,29 +21,12 @@
 #include "meta/meta_key.h"
 #include "securec.h"
 
-
 namespace {
 constexpr uint32_t MAX_STRING_LENGTH = 256;
 constexpr uint32_t MAX_DUMP_LENGTH = 1024;
 } // namespace
 
 using namespace OHOS::Media;
-
-OH_AVFormat::OH_AVFormat() : MFObjectMagic(MFMagic::MFMAGIC_FORMAT) {}
-
-OH_AVFormat::OH_AVFormat(const Format &fmt) : MFObjectMagic(MFMagic::MFMAGIC_FORMAT), format_(fmt) {}
-
-OH_AVFormat::~OH_AVFormat()
-{
-    if (outString_ != nullptr) {
-        free(outString_);
-        outString_ = nullptr;
-    }
-    if (dumpInfo_ != nullptr) {
-        free(dumpInfo_);
-        dumpInfo_ = nullptr;
-    }
-}
 
 struct OH_AVFormat *OH_AVFormat_Create(void)
 {

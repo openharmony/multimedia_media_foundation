@@ -75,7 +75,10 @@ if (!hst_is_mini_sys) {
       deps = [ "engine/plugin/plugins:histreamer_plugin_store" ]
     }
     group("media_foundation") {
-      deps = [ "src:media_foundation" ]
+      deps = [
+        "src:media_foundation",
+        "src/capi:capi_packages",
+      ]
     }
   }
 } else {
