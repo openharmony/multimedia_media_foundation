@@ -34,6 +34,7 @@ enum struct PluginEventType : int32_t {
     EVENT_CHANNEL_OPENED,
     EVENT_CHANNEL_OPEN_FAIL,
     EVENT_CHANNEL_CLOSED,
+    SOURCE_DRM_INFO_UPDATE,
 };
 
 enum class NetworkClientErrorCode : int32_t {
