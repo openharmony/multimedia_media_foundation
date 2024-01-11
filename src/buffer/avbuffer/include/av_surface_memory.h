@@ -34,6 +34,7 @@ private:
     Status Init() override;
     Status Init(MessageParcel &parcel) override;
     Status InitSurfaceBuffer(MessageParcel &parcel) override;
+    Status InitSurfaceBuffer(sptr<SurfaceBuffer> surfaceBuffer) override;
     bool WriteToMessageParcel(MessageParcel &parcel) override;
     bool ReadFromMessageParcel(MessageParcel &parcel) override;
     Status MapMemoryAddr();

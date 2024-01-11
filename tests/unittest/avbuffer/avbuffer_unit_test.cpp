@@ -189,11 +189,32 @@ void AVBufferInnerUnitTest::CreateLocalSurfaceMemByParcel()
     ASSERT_NE(nullptr, buffer_->memory_->GetAddr());
 }
 
+void AVBufferInnerUnitTest::CreateLocalSurfaceMemBySptr()
+{
+    sptr<SurfaceBuffer> surfaceBuffer = SurfaceBuffer::Create();
+    (void)surfaceBuffer->Alloc(DEFAULT_CONFIG);
+    // create local
+    remoteBuffer_ = buffer_ = AVBuffer::CreateAVBuffer(surfaceBuffer);
+    ASSERT_NE(nullptr, buffer_);
+    ASSERT_NE(nullptr, buffer_->memory_);
+    ASSERT_NE(nullptr, buffer_->memory_->GetAddr());
+}
+
 void AVBufferInnerUnitTest::CreateRemoteSurfaceMemByParcel()
 {
     parcel_ = std::make_shared<MessageParcel>();
     // create remote
     CreateLocalSurfaceMemByParcel();
+    buffer_ = nullptr;
+    ASSERT_FALSE((remoteBuffer_ == nullptr) || (remoteBuffer_->memory_ == nullptr));
+    std::cout << "remote fd: " << remoteBuffer_->memory_->GetFileDescriptor() << "\n";
+}
+
+void AVBufferInnerUnitTest::CreateRemoteSurfaceMemBySptr()
+{
+    parcel_ = std::make_shared<MessageParcel>();
+    // create remote
+    CreateLocalSurfaceMemBySptr();
     buffer_ = nullptr;
     ASSERT_FALSE((remoteBuffer_ == nullptr) || (remoteBuffer_->memory_ == nullptr));
     std::cout << "remote fd: " << remoteBuffer_->memory_->GetFileDescriptor() << "\n";

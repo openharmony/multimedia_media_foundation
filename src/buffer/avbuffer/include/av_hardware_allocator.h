@@ -24,7 +24,7 @@ namespace Media {
 class AVHardwareAllocator : public AVAllocator {
 public:
     friend class AVAllocatorFactory;
-    ~AVHardwareAllocator() override = default;
+    ~AVHardwareAllocator() override;
 
     void *Alloc(int32_t capacity) override;
     bool Free(void *ptr) override;
@@ -41,6 +41,7 @@ private:
     int32_t capacity_;
     uint8_t *allocBase_;
     MemoryFlag memFlag_;
+    bool hasAllocated_;
 };
 } // namespace Media
 } // namespace OHOS

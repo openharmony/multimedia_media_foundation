@@ -59,6 +59,14 @@ public:
     static std::shared_ptr<AVBuffer> CreateAVBuffer(uint8_t *ptr, int32_t capacity, int32_t size = 0);
 
     /**
+     * @brief Create the AVBuffer by surface buffer.
+     * @param surfaceBuffer The sptr of SurfaceBuffer, refer to {@link SurfaceBuffer}
+     * @return The shared pointer of AVBuffer.
+     * @since 4.1
+     */
+    static std::shared_ptr<AVBuffer> CreateAVBuffer(sptr<SurfaceBuffer> surfaceBuffer);
+
+    /**
      * @brief Create the AVBuffer.
      * @return The shared pointer of AVBuffer.
      * @since 4.1
@@ -110,7 +118,7 @@ private:
     AVBuffer();
     Status Init(std::shared_ptr<AVAllocator> allocator, int32_t capacity = 0, int32_t align = 0);
     Status Init(uint8_t *ptr, int32_t capacity, int32_t size = 0);
-
+    Status Init(sptr<SurfaceBuffer> surfaceBuffer);
     uint64_t uid_;
     AVBufferConfig config_;
 };
@@ -231,6 +239,7 @@ protected:
     virtual Status Init();
     virtual Status Init(MessageParcel &parcel);
     virtual Status InitSurfaceBuffer(MessageParcel &parcel);
+    virtual Status InitSurfaceBuffer(sptr<SurfaceBuffer> surfaceBuffer);
     virtual bool WriteToMessageParcel(MessageParcel &parcel);
     virtual bool ReadFromMessageParcel(MessageParcel &parcel);
 
@@ -252,6 +261,7 @@ private:
                                                     int32_t capacity = 0, int32_t align = 0);
     static std::shared_ptr<AVMemory> CreateAVMemory(uint8_t *ptr, int32_t capacity, int32_t size);
     static std::shared_ptr<AVMemory> CreateAVMemory(MessageParcel &parcel, bool isSurfaceBuffer = false);
+    static std::shared_ptr<AVMemory> CreateAVMemory(sptr<SurfaceBuffer> surfaceBuffer);
 };
 } // namespace Media
 } // namespace OHOS

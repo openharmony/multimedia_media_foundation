@@ -83,6 +83,7 @@ private:
     void CreateLocalVirtualMem();
 
     void CreateLocalSurfaceMemByParcel();
+    void CreateLocalSurfaceMemBySptr();
 
     void CreateLocalHardwareMemByConfig();
     void CreateLocalSharedMemByConfig();
@@ -93,6 +94,7 @@ private:
     void CreateRemoteSharedMem();
     void CreateRemoteSurfaceMem();
     void CreateRemoteSurfaceMemByParcel();
+    void CreateRemoteSurfaceMemBySptr();
     void CreateLocalNullMem();
     void GetRemoteBuffer();
 

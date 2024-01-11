@@ -112,6 +112,16 @@ Status AVSurfaceMemory::InitSurfaceBuffer(MessageParcel &parcel)
     return Status::OK;
 }
 
+Status AVSurfaceMemory::InitSurfaceBuffer(sptr<SurfaceBuffer> surfaceBuffer)
+{
+    surfaceBuffer_ = surfaceBuffer;
+    capacity_ = surfaceBuffer_->GetSize();
+
+    MEDIA_LOG_DD("enter init, instance: 0x%{public}06" PRIXPTR ", name = %{public}s", FAKE_POINTER(this),
+                 name_.c_str());
+    return Status::OK;
+}
+
 bool AVSurfaceMemory::WriteToMessageParcel(MessageParcel &parcel)
 {
 #ifdef MEDIA_OHOS

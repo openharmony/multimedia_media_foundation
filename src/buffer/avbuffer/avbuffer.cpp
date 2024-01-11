@@ -138,6 +138,23 @@ std::shared_ptr<AVBuffer> AVBuffer::CreateAVBuffer(uint8_t *ptr, int32_t capacit
     return buffer;
 }
 
+std::shared_ptr<AVBuffer> AVBuffer::CreateAVBuffer(sptr<SurfaceBuffer> surfaceBuffer)
+{
+    FALSE_RETURN_V_MSG_E(surfaceBuffer != nullptr, nullptr, "surfaceBuffer is nullptr");
+    FALSE_RETURN_V_MSG_E(surfaceBuffer->GetSptrRefCount() > 0, nullptr,
+                         "GetSptrRefCount is invalid, count: " PUBLIC_LOG_D32, surfaceBuffer->GetSptrRefCount());
+
+    auto buffer = std::shared_ptr<AVBuffer>(new AVBuffer());
+    FALSE_RETURN_V_MSG_E(buffer != nullptr, nullptr, "Create AVBuffer failed, no memory");
+
+    buffer->meta_ = std::make_shared<Meta>();
+    FALSE_RETURN_V_MSG_E(buffer->meta_ != nullptr, nullptr, "Create meta_ failed, no memory");
+
+    Status ret = buffer->Init(surfaceBuffer);
+    FALSE_RETURN_V_MSG_E(ret == Status::OK, nullptr, "Init AVBuffer failed");
+    return buffer;
+}
+
 std::shared_ptr<AVBuffer> AVBuffer::CreateAVBuffer()
 {
     auto buffer = std::shared_ptr<AVBuffer>(new AVBuffer());
@@ -159,6 +176,13 @@ Status AVBuffer::Init(std::shared_ptr<AVAllocator> allocator, int32_t capacity, 
 Status AVBuffer::Init(uint8_t *ptr, int32_t capacity, int32_t size)
 {
     memory_ = AVMemory::CreateAVMemory(ptr, capacity, size);
+    FALSE_RETURN_V_MSG_E(memory_ != nullptr, Status::ERROR_UNKNOWN, "Create memory failed");
+    return Status::OK;
+}
+
+Status AVBuffer::Init(sptr<SurfaceBuffer> surfaceBuffer)
+{
+    memory_ = AVMemory::CreateAVMemory(surfaceBuffer);
     FALSE_RETURN_V_MSG_E(memory_ != nullptr, Status::ERROR_UNKNOWN, "Create memory failed");
     return Status::OK;
 }
