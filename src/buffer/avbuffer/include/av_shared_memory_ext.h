@@ -36,7 +36,7 @@ private:
     Status Init(MessageParcel &parcel) override;
     bool WriteToMessageParcel(MessageParcel &parcel) override;
     bool ReadFromMessageParcel(MessageParcel &parcel) override;
-    void Close() noexcept;
+    void UnMapMemoryAddr() noexcept;
     Status MapMemoryAddr();
     int32_t fd_;
     bool isFirstFlag_;

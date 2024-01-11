@@ -74,7 +74,7 @@ AVSharedMemoryExt::~AVSharedMemoryExt()
 {
     MEDIA_LOG_DD("enter dtor, instance: 0x%{public}06" PRIXPTR ", name = %{public}s", FAKE_POINTER(this),
                  name_.c_str());
-    Close();
+    UnMapMemoryAddr();
     if (allocator_ == nullptr) {
         if (fd_ > 0) {
             (void)::close(fd_);
@@ -170,7 +170,7 @@ int32_t AVSharedMemoryExt::GetFileDescriptor()
     return fd_;
 }
 
-void AVSharedMemoryExt::Close() noexcept
+void AVSharedMemoryExt::UnMapMemoryAddr() noexcept
 {
 #ifdef MEDIA_OHOS
     if (base_ != nullptr) {
@@ -189,7 +189,7 @@ Status AVSharedMemoryExt::MapMemoryAddr()
         MEDIA_LOG_E("create avsharedmemory failed, name = %{public}s, size = " PUBLIC_LOG_D32 ", "
                     "flags = 0x%{public}x, fd = " PUBLIC_LOG_D32,
                     name_.c_str(), capacity_, memFlag_, fd_);
-        Close();
+        UnMapMemoryAddr();
         return Status::ERROR_NO_MEMORY;
     };
     FALSE_RETURN_V_MSG_E(capacity_ > 0, Status::ERROR_INVALID_DATA, "size is invalid, size = " PUBLIC_LOG_D32,

@@ -41,14 +41,22 @@ std::shared_ptr<AVAllocator> AVAllocatorFactory::CreateHardwareAllocator(int32_t
 }
 
 AVHardwareAllocator::AVHardwareAllocator()
-    : fd_(-1), capacity_(-1), allocBase_(nullptr), memFlag_(MemoryFlag::MEMORY_READ_ONLY){};
+    : fd_(-1), capacity_(-1), allocBase_(nullptr), memFlag_(MemoryFlag::MEMORY_READ_ONLY), hasAllocated_(false){};
+
+AVHardwareAllocator::~AVHardwareAllocator()
+{
+    if (fd_ > 0 && !hasAllocated_) {
+        (void)::close(fd_);
+        fd_ = -1;
+    }
+}
 
 void *AVHardwareAllocator::Alloc(int32_t capacity)
 {
     (void)capacity;
     Status ret = MapMemoryAddr();
     FALSE_RETURN_V_MSG_E(ret == Status::OK, nullptr, "Map dma buffer failed");
-
+    hasAllocated_ = true;
     return reinterpret_cast<void *>(allocBase_);
 }
 
@@ -56,6 +64,7 @@ bool AVHardwareAllocator::Free(void *ptr)
 {
 #ifdef MEDIA_OHOS
     FALSE_RETURN_V_MSG_E(static_cast<uint8_t *>(ptr) == allocBase_, false, "Mapped buffer not match");
+    FALSE_RETURN_V_MSG_E(hasAllocated_, false, "Never allocated memory by Alloc function of this allocator");
     if (allocBase_ != nullptr) {
         (void)::munmap(allocBase_, static_cast<size_t>(capacity_));
     }

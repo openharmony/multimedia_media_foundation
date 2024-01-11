@@ -122,6 +122,14 @@ std::shared_ptr<AVMemory> AVMemory::CreateAVMemory(MessageParcel &parcel, bool i
 #endif
 }
 
+std::shared_ptr<AVMemory> AVMemory::CreateAVMemory(sptr<SurfaceBuffer> surfaceBuffer)
+{
+    auto mem = std::shared_ptr<AVMemory>(new AVSurfaceMemory());
+    Status ret = mem->InitSurfaceBuffer(surfaceBuffer);
+    FALSE_RETURN_V_MSG_E(ret == Status::OK, nullptr, "Init AVSurfaceMemory failed");
+    return mem;
+}
+
 AVMemory::AVMemory() : name_("mem_null"), align_(0), offset_(0), size_(0), base_(nullptr), allocator_(nullptr) {}
 
 AVMemory::~AVMemory() {}
@@ -140,6 +148,12 @@ Status AVMemory::Init(MessageParcel &parcel)
 Status AVMemory::InitSurfaceBuffer(MessageParcel &parcel)
 {
     (void)parcel;
+    return Status::ERROR_UNIMPLEMENTED;
+}
+
+Status AVMemory::InitSurfaceBuffer(sptr<SurfaceBuffer> surfaceBuffer)
+{
+    (void)surfaceBuffer;
     return Status::ERROR_UNIMPLEMENTED;
 }
 

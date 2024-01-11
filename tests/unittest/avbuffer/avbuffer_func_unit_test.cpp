@@ -264,7 +264,7 @@ HWTEST_F(AVBufferInnerUnitTest, AVBuffer_CreateWithInvalid_001, TestSize.Level1)
  */
 HWTEST_F(AVBufferInnerUnitTest, AVBuffer_CreateWithInvalid_002, TestSize.Level1)
 {
-    buffer_ = AVBuffer::CreateAVBuffer(nullptr);
+    buffer_ = AVBuffer::CreateAVBuffer(std::shared_ptr<AVAllocator>(nullptr));
     EXPECT_EQ(nullptr, buffer_);
 }
 
@@ -294,6 +294,7 @@ HWTEST_F(AVBufferInnerUnitTest, AVBuffer_CreateWithInvalid_004, TestSize.Level1)
     DmabufHeapBuffer dmaBuffer = {.size = capacity_, .heapFlags = 0};
     int32_t dmaHeapFd = HardwareHeapFactory::GetInstance().GetHardwareHeapFd();
     DmabufHeapBufferAlloc(dmaHeapFd, &dmaBuffer);
+    dmaBufferLst_.push_back(dmaBuffer);
 
     allocator_ = AVAllocatorFactory::CreateHardwareAllocator(0, capacity_, memFlag_);
     buffer_ = AVBuffer::CreateAVBuffer(allocator_);
@@ -305,6 +306,23 @@ HWTEST_F(AVBufferInnerUnitTest, AVBuffer_CreateWithInvalid_004, TestSize.Level1)
 
     allocator_ = AVAllocatorFactory::CreateHardwareAllocator(dmaBuffer.fd, 0, memFlag_);
     buffer_ = AVBuffer::CreateAVBuffer(allocator_);
+    EXPECT_EQ(nullptr, buffer_);
+}
+
+/**
+ * @tc.name: AVBuffer_CreateWithInvalid_005
+ * @tc.desc: create surface memory with invalid surface buffer
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferInnerUnitTest, AVBuffer_CreateWithInvalid_005, TestSize.Level1)
+{
+    buffer_ = AVBuffer::CreateAVBuffer(sptr<SurfaceBuffer>(nullptr));
+    EXPECT_EQ(nullptr, buffer_);
+
+    auto surfaceBuffer = SurfaceBuffer::Create();
+    surfaceBuffer->Alloc(DEFAULT_CONFIG);
+    surfaceBuffer->DecStrongRef(surfaceBuffer.GetRefPtr());
+    buffer_ = AVBuffer::CreateAVBuffer(surfaceBuffer);
     EXPECT_EQ(nullptr, buffer_);
 }
 
@@ -814,6 +832,26 @@ HWTEST_F(AVBufferInnerUnitTest, AVBuffer_Create_Remote_SurfaceMemory_002, TestSi
 }
 
 /**
+ * @tc.name: AVBuffer_Create_Remote_SurfaceMemory_003
+ * @tc.desc: create avbuffer of surface memory by sptr of SurfaceBuffer
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferInnerUnitTest, AVBuffer_Create_Remote_SurfaceMemory_003, TestSize.Level1)
+{
+    align_ = 0;
+    CreateRemoteSurfaceMemBySptr();
+    ASSERT_FALSE((remoteBuffer_ == nullptr) || (remoteBuffer_->memory_ == nullptr));
+    GetRemoteBuffer();
+    ASSERT_FALSE((buffer_ == nullptr) || (buffer_->memory_ == nullptr));
+    ASSERT_EQ(remoteBuffer_->GetUniqueId(), buffer_->GetUniqueId());
+    int32_t offset = static_cast<size_t>(
+        AlignUp(reinterpret_cast<uintptr_t>(buffer_->memory_->GetAddr()), static_cast<uintptr_t>(align_)) -
+        reinterpret_cast<uintptr_t>(buffer_->memory_->GetAddr()));
+    EXPECT_EQ(buffer_->memory_->GetMemoryType(), MemoryType::SURFACE_MEMORY);
+    EXPECT_EQ(buffer_->memory_->offset_, offset);
+}
+
+/**
  * @tc.name: AVBuffer_SurfaceMemory_SetParams_001
  * @tc.desc: surface memory get and set params
  * @tc.type: FUNC
@@ -981,6 +1019,51 @@ HWTEST_F(AVBufferInnerUnitTest, AVBuffer_SurfaceMemory_WriteAndRead_008, TestSiz
     capacity_ = DEFAULT_CONFIG.width * DEFAULT_CONFIG.height * DEFAULT_PIXELSIZE;
     align_ = 0;
     CreateRemoteSurfaceMemByParcel();
+    ASSERT_FALSE((remoteBuffer_ == nullptr) || (remoteBuffer_->memory_ == nullptr));
+    CheckMemTransOutOfRange(POSITION_ONE);
+}
+
+/**
+ * @tc.name: AVBuffer_SurfaceMemory_WriteAndRead_009
+ * @tc.desc: 1. create surface memory with parcel sptr of SurfaceBuffer
+ *           2. surface memory write and read after reading parcel
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferInnerUnitTest, AVBuffer_SurfaceMemory_WriteAndRead_009, TestSize.Level1)
+{
+    capacity_ = DEFAULT_CONFIG.width * DEFAULT_CONFIG.height * DEFAULT_PIXELSIZE;
+    align_ = 0;
+    CreateRemoteSurfaceMemBySptr();
+    ASSERT_FALSE((remoteBuffer_ == nullptr) || (remoteBuffer_->memory_ == nullptr));
+    CheckMemTrans();
+}
+
+/**
+ * @tc.name: AVBuffer_SurfaceMemory_WriteAndRead_010
+ * @tc.desc: 1. create surface memory with parcel sptr of SurfaceBuffer
+ *           2. surface memory write and read with valid position after reading parcel
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferInnerUnitTest, AVBuffer_SurfaceMemory_WriteAndRead_010, TestSize.Level1)
+{
+    capacity_ = DEFAULT_CONFIG.width * DEFAULT_CONFIG.height * DEFAULT_PIXELSIZE;
+    align_ = 0;
+    CreateRemoteSurfaceMemBySptr();
+    ASSERT_FALSE((remoteBuffer_ == nullptr) || (remoteBuffer_->memory_ == nullptr));
+    CheckMemTransPos(POSITION_ONE);
+}
+
+/**
+ * @tc.name: AVBuffer_SurfaceMemory_WriteAndRead_011
+ * @tc.desc: 1. create surface memory with sptr of SurfaceBuffer
+ *           2. surface memory write and read with invalid position after reading parcel
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferInnerUnitTest, AVBuffer_SurfaceMemory_WriteAndRead_011, TestSize.Level1)
+{
+    capacity_ = DEFAULT_CONFIG.width * DEFAULT_CONFIG.height * DEFAULT_PIXELSIZE;
+    align_ = 0;
+    CreateRemoteSurfaceMemBySptr();
     ASSERT_FALSE((remoteBuffer_ == nullptr) || (remoteBuffer_->memory_ == nullptr));
     CheckMemTransOutOfRange(POSITION_ONE);
 }
