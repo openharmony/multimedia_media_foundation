@@ -452,8 +452,10 @@ void AVBufferInnerUnitTest::CheckDataSize()
     EXPECT_EQ(remoteBuffer_->memory_->GetSize(), 0);
     EXPECT_EQ(Status::OK, remoteBuffer_->memory_->SetSize(1));
     EXPECT_EQ(remoteBuffer_->memory_->GetSize(), 1);
-    EXPECT_EQ(Status::OK, remoteBuffer_->memory_->SetSize(-1));
-    EXPECT_EQ(remoteBuffer_->memory_->GetSize(), 0);
+    EXPECT_EQ(Status::ERROR_INVALID_PARAMETER, remoteBuffer_->memory_->SetSize(-1));
+    EXPECT_EQ(remoteBuffer_->memory_->GetSize(), 1);
+    EXPECT_EQ(Status::ERROR_INVALID_PARAMETER, remoteBuffer_->memory_->SetSize(capacity_ + 1));
+    EXPECT_EQ(remoteBuffer_->memory_->GetSize(), 1);
     EXPECT_EQ(Status::OK, remoteBuffer_->memory_->SetSize(capacity_));
     EXPECT_EQ(remoteBuffer_->memory_->GetSize(), capacity_);
     if (parcel_ != nullptr) {

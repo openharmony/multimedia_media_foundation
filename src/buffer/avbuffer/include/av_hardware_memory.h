@@ -35,7 +35,6 @@ private:
     Status Init(MessageParcel &parcel) override;
     bool WriteToMessageParcel(MessageParcel &parcel) override;
     bool ReadFromMessageParcel(MessageParcel &parcel) override;
-    void Close() noexcept;
     Status MapMemoryAddr();
     std::mutex mutex_;
     int32_t fd_;

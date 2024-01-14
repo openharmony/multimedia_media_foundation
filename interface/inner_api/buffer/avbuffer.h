@@ -28,7 +28,7 @@ namespace Media {
  */
 class __attribute__((visibility("default"))) AVBuffer {
 public:
-    virtual ~AVBuffer() = default;
+    ~AVBuffer();
     /**
      * @brief Create the AVBuffer by configuration.
      * @param config The configuration of AVBuffer, refer to {@link AVBufferConfig}
@@ -119,7 +119,6 @@ private:
     Status Init(std::shared_ptr<AVAllocator> allocator, int32_t capacity = 0, int32_t align = 0);
     Status Init(uint8_t *ptr, int32_t capacity, int32_t size = 0);
     Status Init(sptr<SurfaceBuffer> surfaceBuffer);
-    uint64_t uid_;
     AVBufferConfig config_;
 };
 
@@ -242,22 +241,23 @@ protected:
     virtual Status InitSurfaceBuffer(sptr<SurfaceBuffer> surfaceBuffer);
     virtual bool WriteToMessageParcel(MessageParcel &parcel);
     virtual bool ReadFromMessageParcel(MessageParcel &parcel);
+    void GetUniqueId();
 
     bool ReadCommonFromMessageParcel(MessageParcel &parcel);
     bool SkipCommonFromMessageParcel(MessageParcel &parcel);
     bool WriteCommonToMessageParcel(MessageParcel &parcel);
 
-    std::string name_;
     int32_t capacity_;
     int32_t align_;
 
     int32_t offset_;
     int32_t size_;
     uint8_t *base_;
+    uint64_t uid_;
     std::shared_ptr<AVAllocator> allocator_;
 
 private:
-    static std::shared_ptr<AVMemory> CreateAVMemory(const std::string &name, std::shared_ptr<AVAllocator> allocator,
+    static std::shared_ptr<AVMemory> CreateAVMemory(std::shared_ptr<AVAllocator> allocator,
                                                     int32_t capacity = 0, int32_t align = 0);
     static std::shared_ptr<AVMemory> CreateAVMemory(uint8_t *ptr, int32_t capacity, int32_t size);
     static std::shared_ptr<AVMemory> CreateAVMemory(MessageParcel &parcel, bool isSurfaceBuffer = false);

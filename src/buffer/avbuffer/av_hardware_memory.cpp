@@ -98,8 +98,8 @@ Status AVHardwareAllocator::MapMemoryAddr()
 #ifdef MEDIA_OHOS
     ON_SCOPE_EXIT(0)
     {
-        MEDIA_LOG_E("MapMemoryAddr failed, size = " PUBLIC_LOG_D32 ", "
-                    "flags = 0x%{public}x, fd = " PUBLIC_LOG_D32,
+        MEDIA_LOG_E("MapMemoryAddr failed. "
+                    "capacity:%{public}d, flags:0x%{public}x, fd:%{public}d",
                     capacity_, memFlag_, fd_);
         if (allocBase_ != nullptr) {
             (void)::munmap(allocBase_, static_cast<size_t>(capacity_));
@@ -107,10 +107,10 @@ Status AVHardwareAllocator::MapMemoryAddr()
         }
         return Status::ERROR_NO_MEMORY;
     };
-    FALSE_RETURN_V_MSG_E(capacity_ > 0, Status::ERROR_INVALID_DATA, "capacity is invalid, capacity = " PUBLIC_LOG_D32,
+    FALSE_RETURN_V_MSG_E(capacity_ > 0, Status::ERROR_INVALID_DATA, "capacity is invalid, capacity:%{public}d",
                          capacity_);
     unsigned int prot = PROT_READ | PROT_WRITE;
-    FALSE_RETURN_V_MSG_E(fd_ > 0, Status::ERROR_INVALID_OPERATION, "fd is invalid, fd = " PUBLIC_LOG_D32, fd_);
+    FALSE_RETURN_V_MSG_E(fd_ > 0, Status::ERROR_INVALID_OPERATION, "fd is invalid, fd:%{public}d", fd_);
     if (memFlag_ == MemoryFlag::MEMORY_READ_ONLY) {
         prot &= ~PROT_WRITE;
     } else if (memFlag_ == MemoryFlag::MEMORY_WRITE_ONLY) {
@@ -129,8 +129,6 @@ AVHardwareMemory::AVHardwareMemory() : isStartSync_(false), memFlag_(MemoryFlag:
 AVHardwareMemory::~AVHardwareMemory()
 {
 #ifdef MEDIA_OHOS
-    MEDIA_LOG_DD("enter dtor, instance: 0x%{public}06" PRIXPTR ", name = %{public}s", FAKE_POINTER(this),
-                 name_.c_str());
     if (allocator_ == nullptr) {
         if (base_ != nullptr) {
             (void)::munmap(base_, static_cast<size_t>(capacity_));
@@ -152,8 +150,6 @@ Status AVHardwareMemory::Init()
     base_ = static_cast<uint8_t *>(allocator_->Alloc(0));
 
     FALSE_RETURN_V_MSG_E(base_ != nullptr, Status::ERROR_NO_MEMORY, "dma memory alloc failed");
-    MEDIA_LOG_DD("enter init, instance: 0x%{public}06" PRIXPTR ", name = %{public}s", FAKE_POINTER(this),
-                 name_.c_str());
     return Status::OK;
 }
 
@@ -178,8 +174,6 @@ Status AVHardwareMemory::Init(MessageParcel &parcel)
     allocator_ = nullptr;
 
     FALSE_RETURN_V_MSG_E(base_ != nullptr, Status::ERROR_NO_MEMORY, "dma memory alloc failed");
-    MEDIA_LOG_DD("enter init, instance: 0x%{public}06" PRIXPTR ", name = %{public}s", FAKE_POINTER(this),
-                 name_.c_str());
 #endif
     return Status::OK;
 }

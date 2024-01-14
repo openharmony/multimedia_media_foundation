@@ -54,7 +54,7 @@ bool AVSurfaceAllocator::Free(void *ptr)
     sptr<SurfaceBuffer> surfaceBuffer = sptr<SurfaceBuffer>(static_cast<SurfaceBuffer *>(ptr));
     surfaceBuffer->DecStrongRef(surfaceBuffer.GetRefPtr());
 
-    MEDIA_LOG_D("GetSptrRefCount " PUBLIC_LOG_D32, surfaceBuffer->GetSptrRefCount());
+    MEDIA_LOG_DD("GetSptrRefCount:%{public}d", surfaceBuffer->GetSptrRefCount());
     surfaceBuffer = nullptr;
     return true;
 }
@@ -68,14 +68,13 @@ AVSurfaceMemory::AVSurfaceMemory() : isFirstFlag_(true) {}
 
 AVSurfaceMemory::~AVSurfaceMemory()
 {
-    MEDIA_LOG_DD("enter dtor, instance: 0x%{public}06" PRIXPTR ", name = %{public}s", FAKE_POINTER(this),
-                 name_.c_str());
     if (base_ != nullptr) {
         surfaceBuffer_->Unmap();
         base_ = nullptr;
     }
     if (allocator_ != nullptr) {
-        allocator_->Free(surfaceBuffer_.GetRefPtr());
+        bool ret = allocator_->Free(surfaceBuffer_.GetRefPtr());
+        FALSE_RETURN_MSG(ret, "Free memory failed, instance: 0x%{public}06" PRIXPTR, FAKE_POINTER(this));
     }
     surfaceBuffer_ = nullptr;
 }
@@ -86,8 +85,6 @@ Status AVSurfaceMemory::Init()
     FALSE_RETURN_V_MSG_E(surfaceBuffer_ != nullptr, Status::ERROR_NO_MEMORY, "surfaceBuffer_ alloc failed");
     capacity_ = surfaceBuffer_->GetSize();
 
-    MEDIA_LOG_DD("enter init, instance: 0x%{public}06" PRIXPTR ", name = %{public}s", FAKE_POINTER(this),
-                 name_.c_str());
     return Status::OK;
 }
 
@@ -103,12 +100,10 @@ Status AVSurfaceMemory::InitSurfaceBuffer(MessageParcel &parcel)
     FALSE_RETURN_V_MSG_E(surfaceBuffer_ != nullptr, Status::ERROR_NO_MEMORY, "No memory for new SurfaceBuffer!");
 
     GSError ret = surfaceBuffer_->ReadFromMessageParcel(parcel);
-    FALSE_RETURN_V_MSG_E(ret == GSERROR_OK, Status::ERROR_INVALID_OPERATION,
-                         "Read surface message parcel failed!, %{public}s", GSErrorStr(ret).c_str());
+    FALSE_RETURN_V_MSG_E(ret == GSERROR_OK, Status::ERROR_INVALID_OPERATION, "Read message parcel failed! %{public}s",
+                         GSErrorStr(ret).c_str());
     capacity_ = surfaceBuffer_->GetSize();
 
-    MEDIA_LOG_DD("enter init, instance: 0x%{public}06" PRIXPTR ", name = %{public}s", FAKE_POINTER(this),
-                 name_.c_str());
     return Status::OK;
 }
 
@@ -117,8 +112,6 @@ Status AVSurfaceMemory::InitSurfaceBuffer(sptr<SurfaceBuffer> surfaceBuffer)
     surfaceBuffer_ = surfaceBuffer;
     capacity_ = surfaceBuffer_->GetSize();
 
-    MEDIA_LOG_DD("enter init, instance: 0x%{public}06" PRIXPTR ", name = %{public}s", FAKE_POINTER(this),
-                 name_.c_str());
     return Status::OK;
 }
 
@@ -173,7 +166,7 @@ sptr<SurfaceBuffer> AVSurfaceMemory::GetSurfaceBuffer()
     return surfaceBuffer_;
 }
 
-void AVSurfaceMemory::Close()
+void AVSurfaceMemory::UnMapMemoryAddr()
 {
     if (base_ != nullptr) {
         surfaceBuffer_->Unmap();
@@ -185,9 +178,8 @@ Status AVSurfaceMemory::MapMemoryAddr()
 {
     ON_SCOPE_EXIT(0)
     {
-        MEDIA_LOG_E("create avsurfacememory failed, name = %{public}s, size = " PUBLIC_LOG_D32, name_.c_str(),
-                    capacity_);
-        Close();
+        MEDIA_LOG_E("create avsurfacememory failed, uid:%{public}u, capacity:%{public}d", uid_, capacity_);
+        UnMapMemoryAddr();
         return Status::ERROR_NO_MEMORY;
     };
     GSError ret = surfaceBuffer_->Map();
