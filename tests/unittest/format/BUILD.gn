@@ -21,7 +21,7 @@ group("format_unit_test") {
   deps = [
     ":format_capi_unit_test",
     ":format_inner_unit_test",
-    ":format_unit_channel_layout_test"
+    ":format_unit_channel_layout_test",
   ]
 }
 
@@ -108,4 +108,3 @@ ohos_unittest("format_unit_channel_layout_test") {
   ]
   public_deps = [ "../common:media_foundation_inner_unit_test" ]
 }
-
