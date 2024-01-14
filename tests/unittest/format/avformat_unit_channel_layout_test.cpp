@@ -354,7 +354,6 @@ HWTEST_F(AVFormatChannelayoutUnitTest, channel_layout_007, TestSize.Level1)
  */
 HWTEST_F(AVFormatChannelayoutUnitTest, channel_layout_008, TestSize.Level1)
 {
-
     int32_t size = nativeChanneLayouts.size();
     for (int32_t i = 0; i < size; ++i) {
         MessageParcel parcel;
