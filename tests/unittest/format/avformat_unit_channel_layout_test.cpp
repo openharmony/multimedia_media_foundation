@@ -205,7 +205,6 @@ HWTEST_F(AVFormatChannelayoutUnitTest, channel_layout_002, TestSize.Level1)
  */
 HWTEST_F(AVFormatChannelayoutUnitTest, channel_layout_003, TestSize.Level1)
 {
-
     int32_t size = nativeChanneLayouts.size();
     for (int32_t i = 0; i < size; ++i) {
         std::shared_ptr<Format> format = std::make_shared<Format>();
@@ -232,7 +231,6 @@ HWTEST_F(AVFormatChannelayoutUnitTest, channel_layout_003, TestSize.Level1)
  */
 HWTEST_F(AVFormatChannelayoutUnitTest, channel_layout_004, TestSize.Level1)
 {
-
     int32_t size = nativeChanneLayouts.size();
     for (int32_t i = 0; i < size; ++i) {
         std::shared_ptr<Meta> meta = std::make_shared<Meta>();
@@ -272,7 +270,6 @@ HWTEST_F(AVFormatChannelayoutUnitTest, channel_layout_004, TestSize.Level1)
  */
 HWTEST_F(AVFormatChannelayoutUnitTest, channel_layout_005, TestSize.Level1)
 {
-
     int32_t size = nativeChanneLayouts.size();
     for (int32_t i = 0; i < size; ++i) {
         MessageParcel parcel;
@@ -299,7 +296,6 @@ HWTEST_F(AVFormatChannelayoutUnitTest, channel_layout_005, TestSize.Level1)
  */
 HWTEST_F(AVFormatChannelayoutUnitTest, channel_layout_006, TestSize.Level1)
 {
-
     int32_t size = nativeChanneLayouts.size();
     for (int32_t i = 0; i < size; ++i) {
         MessageParcel parcel;
@@ -331,7 +327,6 @@ HWTEST_F(AVFormatChannelayoutUnitTest, channel_layout_006, TestSize.Level1)
  */
 HWTEST_F(AVFormatChannelayoutUnitTest, channel_layout_007, TestSize.Level1)
 {
-
     int32_t size = nativeChanneLayouts.size();
     for (int32_t i = 0; i < size; ++i) {
         MessageParcel parcel;
