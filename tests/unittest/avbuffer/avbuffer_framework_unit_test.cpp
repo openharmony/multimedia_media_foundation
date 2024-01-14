@@ -456,6 +456,62 @@ HWTEST_F(AVBufferFrameworkUnitTest, AVBuffer_Capi_SetBufferAttr_Invalid_004, Tes
 }
 
 /**
+ * @tc.name: AVBuffer_Capi_SetBufferAttr_Invalid_005
+ * @tc.desc: Set buffer attr with size is out of range 1
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferFrameworkUnitTest, AVBuffer_Capi_SetBufferAttr_Invalid_005, TestSize.Level1)
+{
+    auto buffer = OH_AVBuffer_Create(MEMSIZE);
+    OH_AVCodecBufferAttr getAttr;
+    getAttr.size = MEMSIZE + 1;
+    EXPECT_EQ(AV_ERR_INVALID_VAL, OH_AVBuffer_SetBufferAttr(buffer, &getAttr));
+    EXPECT_EQ(OH_AVBuffer_Destroy(buffer), AV_ERR_OK);
+}
+
+/**
+ * @tc.name: AVBuffer_Capi_SetBufferAttr_Invalid_006
+ * @tc.desc: Set buffer attr with size is out of range 2
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferFrameworkUnitTest, AVBuffer_Capi_SetBufferAttr_Invalid_006, TestSize.Level1)
+{
+    auto buffer = OH_AVBuffer_Create(MEMSIZE);
+    OH_AVCodecBufferAttr getAttr;
+    getAttr.size = -1;
+    EXPECT_EQ(AV_ERR_INVALID_VAL, OH_AVBuffer_SetBufferAttr(buffer, &getAttr));
+    EXPECT_EQ(OH_AVBuffer_Destroy(buffer), AV_ERR_OK);
+}
+
+/**
+ * @tc.name: AVBuffer_Capi_SetBufferAttr_Invalid_007
+ * @tc.desc: Set buffer attr with offset is out of range 1
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferFrameworkUnitTest, AVBuffer_Capi_SetBufferAttr_Invalid_007, TestSize.Level1)
+{
+    auto buffer = OH_AVBuffer_Create(MEMSIZE);
+    OH_AVCodecBufferAttr getAttr;
+    getAttr.offset = MEMSIZE + 1;
+    EXPECT_EQ(AV_ERR_INVALID_VAL, OH_AVBuffer_SetBufferAttr(buffer, &getAttr));
+    EXPECT_EQ(OH_AVBuffer_Destroy(buffer), AV_ERR_OK);
+}
+
+/**
+ * @tc.name: AVBuffer_Capi_SetBufferAttr_Invalid_008
+ * @tc.desc: Set buffer attr with offset is out of range 2
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferFrameworkUnitTest, AVBuffer_Capi_SetBufferAttr_Invalid_008, TestSize.Level1)
+{
+    auto buffer = OH_AVBuffer_Create(MEMSIZE);
+    OH_AVCodecBufferAttr getAttr;
+    getAttr.offset = -1;
+    EXPECT_EQ(AV_ERR_INVALID_VAL, OH_AVBuffer_SetBufferAttr(buffer, &getAttr));
+    EXPECT_EQ(OH_AVBuffer_Destroy(buffer), AV_ERR_OK);
+}
+
+/**
  * @tc.name: AVBuffer_Capi_SetAndGetParameter_001
  * @tc.desc: Set buffer parameter
  * @tc.type: FUNC

@@ -75,9 +75,13 @@ OH_AVErrCode OH_AVBuffer_SetBufferAttr(OH_AVBuffer *buffer, const OH_AVCodecBuff
     FALSE_RETURN_V_MSG_E(attr != nullptr, AV_ERR_INVALID_VAL, "attr is nullptr!");
     buffer->buffer_->pts_ = attr->pts;
     buffer->buffer_->flag_ = attr->flags;
+
     if (buffer->buffer_->memory_ != nullptr) {
-        buffer->buffer_->memory_->SetSize(attr->size);
-        buffer->buffer_->memory_->SetOffset(attr->offset);
+        Status ret = buffer->buffer_->memory_->SetSize(attr->size);
+        FALSE_RETURN_V_MSG_E(ret == Status::OK, AV_ERR_INVALID_VAL, "size is invalid!");
+
+        ret = buffer->buffer_->memory_->SetOffset(attr->offset);
+        FALSE_RETURN_V_MSG_E(ret == Status::OK, AV_ERR_INVALID_VAL, "offset is invalid!");
     }
     return AV_ERR_OK;
 }
@@ -90,7 +94,11 @@ OH_AVFormat *OH_AVBuffer_GetParameter(OH_AVBuffer *buffer)
     FALSE_RETURN_V_MSG_E(buffer->buffer_->meta_ != nullptr, nullptr, "buffer's meta is nullptr!");
 
     OH_AVFormat *avFormat = OH_AVFormat_Create();
-    avFormat->format_.SetMeta(buffer->buffer_->meta_);
+    if (!avFormat->format_.SetMeta(buffer->buffer_->meta_)) {
+        MEDIA_LOG_E("set meta failed!");
+        OH_AVFormat_Destroy(avFormat);
+        avFormat = nullptr;
+    }
     return avFormat;
 }
 
@@ -101,8 +109,12 @@ OH_AVErrCode OH_AVBuffer_SetParameter(OH_AVBuffer *buffer, const OH_AVFormat *fo
     FALSE_RETURN_V_MSG_E(buffer->buffer_ != nullptr, AV_ERR_INVALID_VAL, "buffer is nullptr!");
     FALSE_RETURN_V_MSG_E(format != nullptr, AV_ERR_INVALID_VAL, "input format is nullptr!");
     FALSE_RETURN_V_MSG_E(format->magic_ == MFMagic::MFMAGIC_FORMAT, AV_ERR_INVALID_VAL, "magic error!");
+
     auto formatRef = const_cast<OH_AVFormat *>(format);
-    *(buffer->buffer_->meta_) = *(formatRef->format_.GetMeta());
+    std::shared_ptr<Meta> meta = formatRef->format_.GetMeta();
+    FALSE_RETURN_V_MSG_E(meta != nullptr, AV_ERR_INVALID_VAL, "input meta is nullptr!!");
+
+    *(buffer->buffer_->meta_) = *(meta);
     return AV_ERR_OK;
 }
 

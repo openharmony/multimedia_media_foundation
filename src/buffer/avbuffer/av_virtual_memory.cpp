@@ -57,7 +57,6 @@ AVVirtualMemory::AVVirtualMemory() {}
 
 AVVirtualMemory::~AVVirtualMemory()
 {
-    MEDIA_LOG_DD("enter dtor, instance: 0x%{public}06" PRIXPTR, FAKE_POINTER(this));
     if (allocator_ == nullptr) {
         return;
     }
@@ -74,8 +73,6 @@ Status AVVirtualMemory::Init()
 
     uintptr_t addrBase = reinterpret_cast<uintptr_t>(base_);
     offset_ = static_cast<size_t>(AlignUp(addrBase, static_cast<uintptr_t>(offset_)) - addrBase);
-
-    MEDIA_LOG_DD("enter init, instance: 0x%{public}06" PRIXPTR, FAKE_POINTER(this));
     return Status::OK;
 }
 

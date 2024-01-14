@@ -25,14 +25,10 @@
 #include "securec.h"
 #include "surface_buffer.h"
 
-namespace {
-const std::string INVALID_MEMORY_NAME = "";
-} // namespace
-
 namespace OHOS {
 namespace Media {
-std::shared_ptr<AVMemory> AVMemory::CreateAVMemory(const std::string &name, std::shared_ptr<AVAllocator> allocator,
-                                                   int32_t capacity, int32_t align)
+std::shared_ptr<AVMemory> AVMemory::CreateAVMemory(std::shared_ptr<AVAllocator> allocator, int32_t capacity,
+                                                   int32_t align)
 {
     MemoryType type = allocator->GetMemoryType();
     std::shared_ptr<AVMemory> mem = nullptr;
@@ -56,14 +52,13 @@ std::shared_ptr<AVMemory> AVMemory::CreateAVMemory(const std::string &name, std:
         default:
             break;
     }
-    FALSE_RETURN_V_MSG_E(mem != nullptr, nullptr, "Create AVMemory failed, no memory, name = %{public}s", name.c_str());
+    FALSE_RETURN_V_MSG_E(mem != nullptr, nullptr, "Create AVMemory failed, no memory");
 
-    mem->name_ = name;
     mem->allocator_ = allocator;
     mem->capacity_ = capacity;
     mem->align_ = align;
     Status ret = mem->Init();
-    FALSE_RETURN_V_MSG_E(ret == Status::OK, nullptr, "Init AVMemory failed, name = %{public}s", mem->name_.c_str());
+    FALSE_RETURN_V_MSG_E(ret == Status::OK, nullptr, "Init AVMemory failed, uid:%{public}06u", mem->uid_);
     return mem;
 }
 
@@ -71,7 +66,6 @@ std::shared_ptr<AVMemory> AVMemory::CreateAVMemory(uint8_t *ptr, int32_t capacit
 {
     std::shared_ptr<AVMemory> mem = std::shared_ptr<AVMemory>(new AVVirtualMemory());
     FALSE_RETURN_V_MSG_E(mem != nullptr, nullptr, "Create AVVirtualMemory failed, no memory");
-    mem->name_ = "virtualMemory";
     mem->allocator_ = nullptr;
     mem->capacity_ = capacity;
     mem->size_ = size;
@@ -115,7 +109,7 @@ std::shared_ptr<AVMemory> AVMemory::CreateAVMemory(MessageParcel &parcel, bool i
     FALSE_RETURN_V_MSG_E(isReadParcel == true, nullptr, "Read common memory info from parcel failed");
 
     Status ret = mem->Init(parcel);
-    FALSE_RETURN_V_MSG_E(ret == Status::OK, nullptr, "Init AVMemory failed, name = %{public}s", mem->name_.c_str());
+    FALSE_RETURN_V_MSG_E(ret == Status::OK, nullptr, "Init AVMemory failed, uid:%{public}u", mem->uid_);
     return mem;
 #else
     return nullptr;
@@ -130,9 +124,16 @@ std::shared_ptr<AVMemory> AVMemory::CreateAVMemory(sptr<SurfaceBuffer> surfaceBu
     return mem;
 }
 
-AVMemory::AVMemory() : name_("mem_null"), align_(0), offset_(0), size_(0), base_(nullptr), allocator_(nullptr) {}
+AVMemory::AVMemory() : align_(0), offset_(0), size_(0), base_(nullptr), allocator_(nullptr)
+{
+    GetUniqueId();
+    MEDIA_LOG_DD("enter ctor, instance:0x%{public}06" PRIXPTR ", uid:%{public}u", FAKE_POINTER(this), uid_);
+}
 
-AVMemory::~AVMemory() {}
+AVMemory::~AVMemory()
+{
+    MEDIA_LOG_DD("enter dtor, instance:0x%{public}06" PRIXPTR ", uid:%{public}u", FAKE_POINTER(this), uid_);
+}
 
 Status AVMemory::Init()
 {
@@ -173,18 +174,28 @@ bool AVMemory::ReadCommonFromMessageParcel(MessageParcel &parcel)
 {
 #ifdef MEDIA_OHOS
     (void)parcel.ReadUint64();
-    bool ret = parcel.ReadString(name_) && parcel.ReadInt32(capacity_);
-    FALSE_RETURN_V_MSG_E(capacity_ >= 0, false, "capacity is invalid");
+    int32_t capacity = -1;
+    int32_t align = -1;
+    int32_t offset = -1;
+    int32_t size = -1;
 
-    ret &= parcel.ReadInt32(align_);
-    FALSE_RETURN_V_MSG_E(align_ >= 0, false, "align is invalid");
+    bool ret = parcel.ReadInt32(capacity);
+    FALSE_RETURN_V_MSG_E(ret && (capacity >= 0), false, "capacity is invalid");
 
-    ret &= parcel.ReadInt32(offset_);
-    FALSE_RETURN_V_MSG_E(offset_ >= 0, false, "offset is invalid");
+    ret = parcel.ReadInt32(align);
+    FALSE_RETURN_V_MSG_E(ret && (capacity >= align) && (align >= 0), false, "align is invalid");
 
-    ret &= parcel.ReadInt32(size_);
-    FALSE_RETURN_V_MSG_E((size_ >= 0) || (capacity_ < size_), false, "size is invalid");
-    return ret;
+    ret = parcel.ReadInt32(offset);
+    FALSE_RETURN_V_MSG_E(ret && (capacity >= offset) && (offset >= 0), false, "offset is invalid");
+
+    ret = parcel.ReadInt32(size);
+    FALSE_RETURN_V_MSG_E(ret && (capacity >= size) && (size >= 0), false, "size is invalid");
+
+    capacity_ = capacity;
+    align_ = align;
+    offset_ = offset;
+    size_ = size;
+    return true;
 #else
     return true;
 #endif
@@ -193,16 +204,23 @@ bool AVMemory::ReadCommonFromMessageParcel(MessageParcel &parcel)
 bool AVMemory::SkipCommonFromMessageParcel(MessageParcel &parcel)
 {
 #ifdef MEDIA_OHOS
-    uint64_t size = 0;
-    bool ret = parcel.ReadUint64(size);
-    parcel.SkipBytes(static_cast<size_t>(size) - 8); // 8: the size of size_ and offset_
+    uint64_t skipSize = 0;
+    bool ret = parcel.ReadUint64(skipSize);
+    FALSE_RETURN_V_MSG_E(ret, false, "unknown parcel");
+    parcel.SkipBytes(static_cast<size_t>(skipSize) - 2 * sizeof(int32_t)); // 2: the size of size_ and offset_
 
-    ret &= parcel.ReadInt32(offset_);
-    FALSE_RETURN_V_MSG_E(offset_ >= 0, false, "offset is invalid");
+    int32_t size = -1;
+    int32_t offset = -1;
 
-    ret &= parcel.ReadInt32(size_);
-    FALSE_RETURN_V_MSG_E((size_ >= 0) || (capacity_ < size_), false, "size is invalid");
-    return ret;
+    ret = parcel.ReadInt32(offset);
+    FALSE_RETURN_V_MSG_E(ret && (capacity_ >= offset) && (offset >= 0), false, "offset is invalid");
+
+    ret = parcel.ReadInt32(size);
+    FALSE_RETURN_V_MSG_E(ret && (capacity_ >= size) && (size >= 0), false, "size is invalid");
+
+    size_ = size;
+    offset_ = offset;
+    return true;
 #else
     return true;
 #endif
@@ -213,8 +231,8 @@ bool AVMemory::WriteCommonToMessageParcel(MessageParcel &parcel)
     bool ret = true;
 #ifdef MEDIA_OHOS
     MessageParcel bufferParcel;
-    ret = bufferParcel.WriteString(name_) && bufferParcel.WriteInt32(capacity_) && bufferParcel.WriteInt32(align_) &&
-          bufferParcel.WriteInt32(offset_) && bufferParcel.WriteInt32(size_);
+    ret = bufferParcel.WriteInt32(capacity_) && bufferParcel.WriteInt32(align_) && bufferParcel.WriteInt32(offset_) &&
+          bufferParcel.WriteInt32(size_);
 
     size_t size = bufferParcel.GetDataSize();
     return ret && parcel.WriteUint64(static_cast<uint64_t>(size)) && parcel.Append(bufferParcel);
@@ -244,8 +262,11 @@ int32_t AVMemory::GetSize()
 
 Status AVMemory::SetSize(int32_t size)
 {
-    size_ = std::max(0, size);
-    size_ = std::min(capacity_, size_);
+    FALSE_RETURN_V_MSG_E((capacity_ >= size) && (size >= 0), Status::ERROR_INVALID_PARAMETER,
+                         "size out of range, "
+                         "current size:%{public}d , capacity:%{public}d",
+                         size_, capacity_);
+    size_ = size;
     return Status::OK;
 }
 
@@ -256,8 +277,11 @@ int32_t AVMemory::GetOffset()
 
 Status AVMemory::SetOffset(int32_t offset)
 {
-    offset_ = std::max(0, offset);
-    offset_ = std::min(capacity_, offset_);
+    FALSE_RETURN_V_MSG_E((capacity_ >= offset) && (offset >= 0), Status::ERROR_INVALID_PARAMETER,
+                         "offset out of range, "
+                         "current offset:%{public}d , capacity:%{public}d",
+                         offset_, capacity_);
+    offset_ = offset;
     return Status::OK;
 }
 
@@ -274,7 +298,7 @@ int32_t AVMemory::GetFileDescriptor()
 int32_t AVMemory::Write(const uint8_t *in, int32_t writeSize, int32_t position)
 {
     FALSE_RETURN_V_MSG_E(in != nullptr, 0, "Input buffer is nullptr");
-    FALSE_RETURN_V_MSG_E(writeSize > 0, 0, "Input writeSize:" PUBLIC_LOG_D32 " is invalid", writeSize);
+    FALSE_RETURN_V_MSG_E(writeSize > 0, 0, "Input writeSize:%{public}d is invalid", writeSize);
     FALSE_RETURN_V_MSG_E((GetMemoryFlag() & MemoryFlag::MEMORY_WRITE_ONLY) != 0, 0, "Lack write permission");
     uint8_t *addr = GetAddr();
     FALSE_RETURN_V_MSG_E(addr != nullptr, 0, "Base buffer is nullptr");
@@ -287,14 +311,12 @@ int32_t AVMemory::Write(const uint8_t *in, int32_t writeSize, int32_t position)
     int32_t unusedSize = capacity_ - start;
     int32_t length = std::min(writeSize, unusedSize);
     FALSE_RETURN_V_MSG_E((length + start) <= capacity_, 0,
-                         "Write out of bounds, length:" PUBLIC_LOG_D32 ", start:" PUBLIC_LOG_D32
-                         ", capacity:" PUBLIC_LOG_D32,
-                         length, start, capacity_);
+                         "Write out of bounds, length:%{public}d , start:%{public}d , capacity:%{public}d", length,
+                         start, capacity_);
     uint8_t *dstPtr = addr + start;
     FALSE_RETURN_V_MSG_E(dstPtr != nullptr, 0, "Inner dstPtr is nullptr");
     auto error = memcpy_s(dstPtr, length, in, length);
-    FALSE_RETURN_V_MSG_E(error == EOK, 0, "Inner memcpy_s failed, name:%{public}s, %{public}s", name_.c_str(),
-                         strerror(error));
+    FALSE_RETURN_V_MSG_E(error == EOK, 0, "Inner memcpy_s failed, uid:%{public}u, %{public}s", uid_, strerror(error));
     size_ = start + length;
     return length;
 }
@@ -302,7 +324,7 @@ int32_t AVMemory::Write(const uint8_t *in, int32_t writeSize, int32_t position)
 int32_t AVMemory::Read(uint8_t *out, int32_t readSize, int32_t position)
 {
     FALSE_RETURN_V_MSG_E(out != nullptr, 0, "Output buffer is nullptr");
-    FALSE_RETURN_V_MSG_E(readSize > 0, 0, "Output readSize:" PUBLIC_LOG_D32 " is invalid", readSize);
+    FALSE_RETURN_V_MSG_E(readSize > 0, 0, "Output readSize:%{public}d is invalid", readSize);
     FALSE_RETURN_V_MSG_E((GetMemoryFlag() & MemoryFlag::MEMORY_READ_ONLY) != 0, 0, "Lack read permission");
     uint8_t *addr = GetAddr();
     FALSE_RETURN_V_MSG_E(addr != nullptr, 0, "Base buffer is nullptr");
@@ -314,14 +336,12 @@ int32_t AVMemory::Read(uint8_t *out, int32_t readSize, int32_t position)
     }
     int32_t length = std::min(static_cast<size_t>(readSize), maxLength);
     FALSE_RETURN_V_MSG_E((length + start) <= capacity_, 0,
-                         "Read out of bounds, length:" PUBLIC_LOG_D32 ", start:" PUBLIC_LOG_D32
-                         ", capacity:" PUBLIC_LOG_D32,
-                         length, start, capacity_);
+                         "Read out of bounds, length:%{public}d, start:%{public}d, capacity:%{public}d", length, start,
+                         capacity_);
     uint8_t *srcPtr = addr + start;
     FALSE_RETURN_V_MSG_E(srcPtr != nullptr, 0, "Inner srcPtr is nullptr");
     auto error = memcpy_s(out, length, srcPtr, length);
-    FALSE_RETURN_V_MSG_E(error == EOK, 0, "Inner memcpy_s failed, name:%{public}s, %{public}s", name_.c_str(),
-                         strerror(error));
+    FALSE_RETURN_V_MSG_E(error == EOK, 0, "Inner memcpy_s failed, uid:%{public}u, %{public}s", uid_, strerror(error));
     return length;
 }
 
@@ -333,6 +353,34 @@ void AVMemory::Reset()
 sptr<SurfaceBuffer> AVMemory::GetSurfaceBuffer()
 {
     return nullptr;
+}
+
+void AVMemory::GetUniqueId()
+{
+#ifdef MEDIA_OHOS
+    using namespace std::chrono;
+    static const uint64_t startTime = time_point_cast<seconds>(system_clock::now()).time_since_epoch().count();
+    static const uint16_t processId = static_cast<uint16_t>(getpid());
+#else
+    static const uint64_t startTime = 0;
+    static const uint16_t processId = 0;
+#endif
+    static std::atomic<uint32_t> bufferId = 0;
+
+    if (uid_ == 0) {
+        if (bufferId == UINT32_MAX) {
+            bufferId = 0;
+        }
+        union UniqueId {
+            uint64_t startTime;    //  1--16, 16: time
+            uint16_t processId[4]; // 17--32, 16: process id
+            uint32_t bufferId[2];  // 33--64, 32: atomic val
+        } uid = {.startTime = startTime};
+        ++bufferId;
+        uid.processId[1] = processId;
+        uid.bufferId[1] = bufferId;
+        uid_ = uid.startTime;
+    }
 }
 } // namespace Media
 } // namespace OHOS

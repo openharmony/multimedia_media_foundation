@@ -43,7 +43,7 @@ AVSharedAllocator::AVSharedAllocator(){};
 void *AVSharedAllocator::Alloc(int32_t capacity)
 {
     int32_t fd = AshmemCreate(0, static_cast<size_t>(capacity)); // release by close(fd)
-    FALSE_RETURN_V_MSG_E(fd > 0, nullptr, "fd is invalid, fd = " PUBLIC_LOG_D32, fd);
+    FALSE_RETURN_V_MSG_E(fd > 0, nullptr, "fd is invalid, fd:%{public}d", fd);
 
     return reinterpret_cast<void *>(fd);
 }
@@ -72,8 +72,6 @@ AVSharedMemoryExt::AVSharedMemoryExt() : fd_(-1), isFirstFlag_(true), memFlag_(M
 
 AVSharedMemoryExt::~AVSharedMemoryExt()
 {
-    MEDIA_LOG_DD("enter dtor, instance: 0x%{public}06" PRIXPTR ", name = %{public}s", FAKE_POINTER(this),
-                 name_.c_str());
     UnMapMemoryAddr();
     if (allocator_ == nullptr) {
         if (fd_ > 0) {
@@ -97,8 +95,6 @@ Status AVSharedMemoryExt::Init()
     uintptr_t addrBase = reinterpret_cast<uintptr_t>(base_);
     offset_ = static_cast<size_t>(AlignUp(addrBase, static_cast<uintptr_t>(offset_)) - addrBase);
 
-    MEDIA_LOG_DD("enter init, instance: 0x%{public}06" PRIXPTR ", name = %{public}s", FAKE_POINTER(this),
-                 name_.c_str());
     return Status::OK;
 }
 
@@ -110,8 +106,6 @@ Status AVSharedMemoryExt::Init(MessageParcel &parcel)
     fd_ = dup(fd);
 
     memFlag_ = static_cast<MemoryFlag>(parcel.ReadUint32());
-    MEDIA_LOG_DD("enter init, instance: 0x%{public}06" PRIXPTR ", name = %{public}s", FAKE_POINTER(this),
-                 name_.c_str());
     (void)::close(fd);
     return Status::OK;
 #else
@@ -186,14 +180,13 @@ Status AVSharedMemoryExt::MapMemoryAddr()
 #ifdef MEDIA_OHOS
     ON_SCOPE_EXIT(0)
     {
-        MEDIA_LOG_E("create avsharedmemory failed, name = %{public}s, size = " PUBLIC_LOG_D32 ", "
-                    "flags = 0x%{public}x, fd = " PUBLIC_LOG_D32,
-                    name_.c_str(), capacity_, memFlag_, fd_);
+        MEDIA_LOG_E("create avsharedmemory failed. "
+                    "uid:%{public}u, size:%{public}d, flags:0x%{public}x, fd:%{public}d",
+                    uid_, capacity_, memFlag_, fd_);
         UnMapMemoryAddr();
         return Status::ERROR_NO_MEMORY;
     };
-    FALSE_RETURN_V_MSG_E(capacity_ > 0, Status::ERROR_INVALID_DATA, "size is invalid, size = " PUBLIC_LOG_D32,
-                         capacity_);
+    FALSE_RETURN_V_MSG_E(capacity_ > 0, Status::ERROR_INVALID_DATA, "size is invalid, size:%{public}d", capacity_);
     unsigned int prot = PROT_READ | PROT_WRITE;
     if (memFlag_ == MemoryFlag::MEMORY_READ_ONLY) {
         prot &= ~PROT_WRITE;
@@ -201,7 +194,7 @@ Status AVSharedMemoryExt::MapMemoryAddr()
         prot &= ~PROT_READ;
     }
     int result = AshmemSetProt(fd_, static_cast<int>(prot));
-    FALSE_RETURN_V_MSG_E(result >= 0, Status::ERROR_INVALID_OPERATION, "AshmemSetProt failed, result = " PUBLIC_LOG_D32,
+    FALSE_RETURN_V_MSG_E(result >= 0, Status::ERROR_INVALID_OPERATION, "AshmemSetProt failed, result:%{public}d",
                          result);
 
     void *addr = ::mmap(nullptr, static_cast<size_t>(capacity_), static_cast<int>(prot), MAP_SHARED, fd_, 0);

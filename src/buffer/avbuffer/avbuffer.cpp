@@ -26,7 +26,10 @@
 
 namespace OHOS {
 namespace Media {
-AVBuffer::AVBuffer() : pts_(0), dts_(0), duration_(0), flag_(0), meta_(nullptr), memory_(nullptr), uid_(0) {}
+AVBuffer::AVBuffer() : pts_(0), dts_(0), duration_(0), flag_(0), meta_(nullptr), memory_(nullptr) {}
+
+AVBuffer::~AVBuffer() {}
+
 std::shared_ptr<AVBuffer> AVBuffer::CreateAVBuffer(const AVBufferConfig &config)
 {
     std::shared_ptr<AVAllocator> allocator = nullptr;
@@ -141,8 +144,8 @@ std::shared_ptr<AVBuffer> AVBuffer::CreateAVBuffer(uint8_t *ptr, int32_t capacit
 std::shared_ptr<AVBuffer> AVBuffer::CreateAVBuffer(sptr<SurfaceBuffer> surfaceBuffer)
 {
     FALSE_RETURN_V_MSG_E(surfaceBuffer != nullptr, nullptr, "surfaceBuffer is nullptr");
-    FALSE_RETURN_V_MSG_E(surfaceBuffer->GetSptrRefCount() > 0, nullptr,
-                         "GetSptrRefCount is invalid, count: " PUBLIC_LOG_D32, surfaceBuffer->GetSptrRefCount());
+    FALSE_RETURN_V_MSG_E(surfaceBuffer->GetSptrRefCount() > 0, nullptr, "GetSptrRefCount is invalid, count:%{public}d",
+                         surfaceBuffer->GetSptrRefCount());
 
     auto buffer = std::shared_ptr<AVBuffer>(new AVBuffer());
     FALSE_RETURN_V_MSG_E(buffer != nullptr, nullptr, "Create AVBuffer failed, no memory");
@@ -167,8 +170,7 @@ std::shared_ptr<AVBuffer> AVBuffer::CreateAVBuffer()
 
 Status AVBuffer::Init(std::shared_ptr<AVAllocator> allocator, int32_t capacity, int32_t align)
 {
-    std::string uidName = std::to_string(GetUniqueId());
-    memory_ = AVMemory::CreateAVMemory(uidName, allocator, capacity, align);
+    memory_ = AVMemory::CreateAVMemory(allocator, capacity, align);
     FALSE_RETURN_V_MSG_E(memory_ != nullptr, Status::ERROR_UNKNOWN, "Create memory failed");
     return Status::OK;
 }
@@ -189,34 +191,10 @@ Status AVBuffer::Init(sptr<SurfaceBuffer> surfaceBuffer)
 
 uint64_t AVBuffer::GetUniqueId()
 {
-#ifdef MEDIA_OHOS
-    using namespace std::chrono;
-    static const uint64_t startTime = time_point_cast<seconds>(system_clock::now()).time_since_epoch().count();
-    static const uint16_t processId = static_cast<uint16_t>(getpid());
-#else
-    static const uint64_t startTime = 0;
-    static const uint16_t processId = 0;
-#endif
-    static std::atomic<uint32_t> bufferId = 0;
     if (memory_ == nullptr) {
-        uid_ = 0;
         return 0;
     }
-    if (uid_ == 0) {
-        if (bufferId == UINT32_MAX) {
-            bufferId = 0;
-        }
-        union UniqueId {
-            uint64_t startTime;    //  1--16, 16: time
-            uint16_t processId[4]; // 17--32, 16: process id
-            uint32_t bufferId[2];  // 33--64, 32: atomic val
-        } uid = {.startTime = startTime};
-        ++bufferId;
-        uid.processId[1] = processId;
-        uid.bufferId[1] = bufferId;
-        uid_ = uid.startTime;
-    }
-    return uid_;
+    return memory_->uid_;
 }
 
 bool AVBuffer::WriteToMessageParcel(MessageParcel &parcel)
@@ -252,8 +230,6 @@ bool AVBuffer::ReadFromMessageParcel(MessageParcel &parcel, bool isSurfaceBuffer
         }
         memory_ = AVMemory::CreateAVMemory(parcel, true);
         FALSE_RETURN_V_MSG_E(memory_ != nullptr, false, "Create memory failed");
-
-        memory_->name_ = std::to_string(GetUniqueId());
         return true;
     }
     // 1. 不同buffer更新attr：  memroy != nullptr，uid != fromParcel， 返回错误
@@ -276,8 +252,8 @@ bool AVBuffer::ReadFromMessageParcel(MessageParcel &parcel, bool isSurfaceBuffer
         ret = memory_->SkipCommonFromMessageParcel(parcel) && memory_->ReadFromMessageParcel(parcel);
         FALSE_RETURN_V_MSG_E(ret, false, "Update memory info failed");
     } else if (uid != 0) {
-        uid_ = uid;
         memory_ = AVMemory::CreateAVMemory(parcel, false);
+        memory_->uid_ = uid;
         FALSE_RETURN_V_MSG_E(memory_ != nullptr, false, "Create memory failed");
     }
     pts_ = pts;
