@@ -165,71 +165,118 @@ enum AudioChannelSet : uint64_t {
     AMBISONICS_ACN15 = 1ULL << 56U, /** third-order ambisonics channel number 15. */
 };
 
+/**
+ * @brief Ambisonic attribute set.
+ *
+ * A set of 64-bit integers indicate the ambisonic attributes.
+ */
+enum AmbAttributeSet : int64_t {
+    /** Ambisonic attribute: order 1 */
+    AMB_ORD_1 = 1ULL << 0U,
+
+    /** Ambisonic attribute: order 2 */
+    AMB_ORD_2 = 2ULL << 0U,
+
+    /** Ambisonic attribute: order 3 */
+    AMB_ORD_3 = 3ULL << 0U,
+
+    /** Ambisonic attribute: ACN Component Ordering */
+    AMB_COM_ACN = 0ULL << 8U,
+
+    /** Ambisonic attribute: FUMA Component Ordering */
+    AMB_COM_FUMA = 1ULL << 8U,
+
+    /** Ambisonic attribute: N3D Normalization */
+    AMB_NOR_N3D = 0ULL << 12U,
+
+    /** Ambisonic attribute: SN3D Normalization */
+    AMB_NOR_SN3D = 1ULL << 12U,
+
+    /** Channel layout: Ambisonic mode */
+    AMB_MODE = 1ULL << 44U
+};
+
 enum AudioChannelLayout : int64_t {
     UNKNOWN = 0,
+
     MONO = (AudioChannelSet::FRONT_CENTER),
+
     STEREO = (AudioChannelSet::FRONT_LEFT | AudioChannelSet::FRONT_RIGHT),
+    STEREO_DOWNMIX = (AudioChannelSet::STEREO_LEFT | AudioChannelSet::STEREO_RIGHT),
+
     CH_2POINT1 = (STEREO | AudioChannelSet::LOW_FREQUENCY),
+
+    /**CH_LAYOUT_3POINT0 in native_audio_channel_layout*/
     CH_2_1 = (STEREO | AudioChannelSet::BACK_CENTER),
     SURROUND = (STEREO | AudioChannelSet::FRONT_CENTER),
     CH_3POINT1 = (SURROUND | AudioChannelSet::LOW_FREQUENCY),
     CH_4POINT0 = (SURROUND | AudioChannelSet::BACK_CENTER),
-    CH_4POINT1 = (CH_4POINT0 | AudioChannelSet::LOW_FREQUENCY),
+
+    /**CH_LAYOUT_QUAD_SIDE in native_audio_channel_layout*/
     CH_2_2 = (STEREO | AudioChannelSet::SIDE_LEFT | AudioChannelSet::SIDE_RIGHT),
     QUAD = (STEREO | AudioChannelSet::BACK_LEFT | AudioChannelSet::BACK_RIGHT),
+    CH_2POINT0POINT2 = (STEREO | AudioChannelSet::TOP_SIDE_LEFT | AudioChannelSet::TOP_SIDE_RIGHT),
+    HOA_ORDER1_ACN_N3D = AMB_MODE | AMB_ORD_1 | AMB_COM_ACN | AMB_NOR_N3D,
+    HOA_ORDER1_ACN_SN3D = AMB_MODE | AMB_ORD_1 | AMB_COM_ACN | AMB_NOR_SN3D,
+    HOA_ORDER1_FUMA = AMB_MODE | AMB_ORD_1 | AMB_COM_FUMA,
+
+    CH_4POINT1 = (CH_4POINT0 | AudioChannelSet::LOW_FREQUENCY),
     CH_5POINT0 = (SURROUND | AudioChannelSet::SIDE_LEFT | AudioChannelSet::SIDE_RIGHT),
-    CH_5POINT1 = (CH_5POINT0 | AudioChannelSet::LOW_FREQUENCY),
     CH_5POINT0_BACK = (SURROUND | AudioChannelSet::BACK_LEFT | AudioChannelSet::BACK_RIGHT),
+    CH_2POINT1POINT2 = (CH_2POINT0POINT2 | AudioChannelSet::LOW_FREQUENCY),
+    CH_3POINT0POINT2 = (CH_2POINT0POINT2 | AudioChannelSet::FRONT_CENTER),
+
+    CH_5POINT1 = (CH_5POINT0 | AudioChannelSet::LOW_FREQUENCY),
     CH_5POINT1_BACK = (CH_5POINT0_BACK | AudioChannelSet::LOW_FREQUENCY),
     CH_6POINT0 = (CH_5POINT0 | AudioChannelSet::BACK_CENTER),
+    CH_3POINT1POINT2 = (CH_3POINT1 | AudioChannelSet::TOP_FRONT_LEFT | AudioChannelSet::TOP_FRONT_RIGHT),
     CH_6POINT0_FRONT = (CH_2_2 | AudioChannelSet::FRONT_LEFT_OF_CENTER | AudioChannelSet::FRONT_RIGHT_OF_CENTER),
     HEXAGONAL = (CH_5POINT0_BACK | AudioChannelSet::BACK_CENTER),
+
     CH_6POINT1 = (CH_5POINT1 | AudioChannelSet::BACK_CENTER),
     CH_6POINT1_BACK = (CH_5POINT1_BACK | AudioChannelSet::BACK_CENTER),
     CH_6POINT1_FRONT = (CH_6POINT0_FRONT | AudioChannelSet::LOW_FREQUENCY),
     CH_7POINT0 = (CH_5POINT0 | AudioChannelSet::BACK_LEFT | AudioChannelSet::BACK_RIGHT),
     CH_7POINT0_FRONT = (CH_5POINT0 | AudioChannelSet::FRONT_LEFT_OF_CENTER | AudioChannelSet::FRONT_RIGHT_OF_CENTER),
+
     CH_7POINT1 = (CH_5POINT1 | AudioChannelSet::BACK_LEFT | AudioChannelSet::BACK_RIGHT),
+    OCTAGONAL = (CH_5POINT0 | AudioChannelSet::BACK_LEFT | AudioChannelSet::BACK_CENTER | AudioChannelSet::BACK_RIGHT),
+    CH_5POINT1POINT2 = (CH_5POINT1 | AudioChannelSet::TOP_SIDE_LEFT | AudioChannelSet::TOP_SIDE_RIGHT),
     CH_7POINT1_WIDE = (CH_5POINT1 | AudioChannelSet::FRONT_LEFT_OF_CENTER | AudioChannelSet::FRONT_RIGHT_OF_CENTER),
     CH_7POINT1_WIDE_BACK =
         (CH_5POINT1_BACK | AudioChannelSet::FRONT_LEFT_OF_CENTER | AudioChannelSet::FRONT_RIGHT_OF_CENTER),
-    CH_3POINT1POINT2 = (CH_3POINT1 | AudioChannelSet::TOP_FRONT_LEFT | AudioChannelSet::TOP_FRONT_RIGHT),
-    CH_5POINT1POINT2 = (CH_5POINT1 | AudioChannelSet::TOP_SIDE_LEFT | AudioChannelSet::TOP_SIDE_RIGHT),
+
+    HOA_ORDER2_ACN_N3D = AMB_MODE | AMB_ORD_2 | AMB_COM_ACN | AMB_NOR_N3D,
+    HOA_ORDER2_ACN_SN3D = AMB_MODE | AMB_ORD_2 | AMB_COM_ACN | AMB_NOR_SN3D,
+    HOA_ORDER2_FUMA = AMB_MODE | AMB_ORD_2 | AMB_COM_FUMA,
     CH_5POINT1POINT4 = (CH_5POINT1 | AudioChannelSet::TOP_FRONT_LEFT | AudioChannelSet::TOP_FRONT_RIGHT |
                         AudioChannelSet::TOP_BACK_LEFT | AudioChannelSet::TOP_BACK_RIGHT),
     CH_7POINT1POINT2 = (CH_7POINT1 | AudioChannelSet::TOP_SIDE_LEFT | AudioChannelSet::TOP_SIDE_RIGHT),
+
     CH_7POINT1POINT4 = (CH_7POINT1 | AudioChannelSet::TOP_FRONT_LEFT | AudioChannelSet::TOP_FRONT_RIGHT |
                         AudioChannelSet::TOP_BACK_LEFT | AudioChannelSet::TOP_BACK_RIGHT),
-    CH_9POINT1POINT4 = (CH_7POINT1POINT4 | AudioChannelSet::WIDE_LEFT | AudioChannelSet::WIDE_RIGHT),
-    CH_9POINT1POINT6 = (CH_9POINT1POINT4 | AudioChannelSet::TOP_SIDE_LEFT | AudioChannelSet::TOP_SIDE_RIGHT),
     CH_10POINT2 = (AudioChannelSet::FRONT_LEFT | AudioChannelSet::FRONT_RIGHT | AudioChannelSet::FRONT_CENTER |
                    AudioChannelSet::TOP_FRONT_LEFT | AudioChannelSet::TOP_FRONT_RIGHT | AudioChannelSet::BACK_LEFT |
                    AudioChannelSet::BACK_RIGHT | AudioChannelSet::BACK_CENTER | AudioChannelSet::SIDE_LEFT |
                    AudioChannelSet::SIDE_RIGHT | AudioChannelSet::WIDE_LEFT | AudioChannelSet::WIDE_RIGHT),
+
+    CH_9POINT1POINT4 = (CH_7POINT1POINT4 | AudioChannelSet::WIDE_LEFT | AudioChannelSet::WIDE_RIGHT),
+
+    CH_9POINT1POINT6 = (CH_9POINT1POINT4 | AudioChannelSet::TOP_SIDE_LEFT | AudioChannelSet::TOP_SIDE_RIGHT),
+    HEXADECAGONAL =
+        (OCTAGONAL | AudioChannelSet::WIDE_LEFT | AudioChannelSet::WIDE_RIGHT | AudioChannelSet::TOP_BACK_LEFT |
+         AudioChannelSet::TOP_BACK_RIGHT | AudioChannelSet::TOP_BACK_CENTER | AudioChannelSet::TOP_FRONT_CENTER |
+         AudioChannelSet::TOP_FRONT_LEFT | AudioChannelSet::TOP_FRONT_RIGHT),
+
+    HOA_ORDER3_ACN_N3D = AMB_MODE | AMB_ORD_3 | AMB_COM_ACN | AMB_NOR_N3D,
+    HOA_ORDER3_ACN_SN3D = AMB_MODE | AMB_ORD_3 | AMB_COM_ACN | AMB_NOR_SN3D,
+    HOA_ORDER3_FUMA = AMB_MODE | AMB_ORD_3 | AMB_COM_FUMA,
+
     CH_22POINT2 = (CH_7POINT1POINT4 | AudioChannelSet::FRONT_LEFT_OF_CENTER | AudioChannelSet::FRONT_RIGHT_OF_CENTER |
                    AudioChannelSet::BACK_CENTER | AudioChannelSet::TOP_CENTER | AudioChannelSet::TOP_FRONT_CENTER |
                    AudioChannelSet::TOP_BACK_CENTER | AudioChannelSet::TOP_SIDE_LEFT | AudioChannelSet::TOP_SIDE_RIGHT |
                    AudioChannelSet::BOTTOM_FRONT_LEFT | AudioChannelSet::BOTTOM_FRONT_RIGHT |
                    AudioChannelSet::BOTTOM_FRONT_CENTER | AudioChannelSet::LOW_FREQUENCY_2),
-    OCTAGONAL = (CH_5POINT0 | AudioChannelSet::BACK_LEFT | AudioChannelSet::BACK_CENTER | AudioChannelSet::BACK_RIGHT),
-    HEXADECAGONAL =
-        (OCTAGONAL | AudioChannelSet::WIDE_LEFT | AudioChannelSet::WIDE_RIGHT | AudioChannelSet::TOP_BACK_LEFT |
-         AudioChannelSet::TOP_BACK_RIGHT | AudioChannelSet::TOP_BACK_CENTER | AudioChannelSet::TOP_FRONT_CENTER |
-         AudioChannelSet::TOP_FRONT_LEFT | AudioChannelSet::TOP_FRONT_RIGHT),
-    STEREO_DOWNMIX = (AudioChannelSet::STEREO_LEFT | AudioChannelSet::STEREO_RIGHT),
-
-    CH_2POINT0POINT2 = (STEREO | AudioChannelSet::TOP_SIDE_LEFT | AudioChannelSet::TOP_SIDE_RIGHT),
-    CH_2POINT1POINT2 = (CH_2POINT0POINT2 | AudioChannelSet::LOW_FREQUENCY),
-    CH_3POINT0POINT2 = (CH_2POINT0POINT2 | AudioChannelSet::FRONT_CENTER),
-    HOA_ORDER1_ACN_N3D  = 0x100000000001,
-    HOA_ORDER1_ACN_SN3D = 0x100000001001,
-    HOA_ORDER1_FUMA     = 0x100000000101,
-    HOA_ORDER2_ACN_N3D  = 0x100000000002,
-    HOA_ORDER2_ACN_SN3D = 0x100000001002,
-    HOA_ORDER2_FUMA     = 0x100000000102,
-    HOA_ORDER3_ACN_N3D  = 0x100000000003,
-    HOA_ORDER3_ACN_SN3D = 0x100000001003,
-    HOA_ORDER3_FUMA     = 0x100000000103,
 };
 
 enum AACProfile : int32_t {
