@@ -241,7 +241,6 @@ protected:
     virtual Status InitSurfaceBuffer(sptr<SurfaceBuffer> surfaceBuffer);
     virtual bool WriteToMessageParcel(MessageParcel &parcel);
     virtual bool ReadFromMessageParcel(MessageParcel &parcel);
-    void GetUniqueId();
 
     bool ReadCommonFromMessageParcel(MessageParcel &parcel);
     bool SkipCommonFromMessageParcel(MessageParcel &parcel);
