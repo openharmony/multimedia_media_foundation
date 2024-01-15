@@ -178,7 +178,7 @@ Status AVSurfaceMemory::MapMemoryAddr()
 {
     ON_SCOPE_EXIT(0)
     {
-        MEDIA_LOG_E("create avsurfacememory failed, uid:%{public}u, capacity:%{public}d", uid_, capacity_);
+        MEDIA_LOG_E("create avsurfacememory failed, uid:" PUBLIC_LOG_U64 ", capacity:%{public}d", uid_, capacity_);
         UnMapMemoryAddr();
         return Status::ERROR_NO_MEMORY;
     };

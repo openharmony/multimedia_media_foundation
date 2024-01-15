@@ -181,7 +181,7 @@ Status AVSharedMemoryExt::MapMemoryAddr()
     ON_SCOPE_EXIT(0)
     {
         MEDIA_LOG_E("create avsharedmemory failed. "
-                    "uid:%{public}u, size:%{public}d, flags:0x%{public}x, fd:%{public}d",
+                    "uid:" PUBLIC_LOG_U64 ", size:%{public}d, flags:0x%{public}x, fd:%{public}d",
                     uid_, capacity_, memFlag_, fd_);
         UnMapMemoryAddr();
         return Status::ERROR_NO_MEMORY;
