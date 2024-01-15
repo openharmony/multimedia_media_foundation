@@ -41,6 +41,7 @@ enum struct EventType : uint32_t {
     EVENT_AUDIO_INTERRUPT,
     EVENT_AUDIO_STATE_CHANGE,
     EVENT_AUDIO_FIRST_FRAME,
+    EVENT_AUDIO_DEVICE_CHANGE,
 };
 
 struct Event {
