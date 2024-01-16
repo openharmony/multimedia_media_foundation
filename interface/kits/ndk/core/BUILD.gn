@@ -17,12 +17,18 @@ import("//foundation/multimedia/media_foundation/config.gni")
 ohos_ndk_headers("native_media_core_header") {
   dest_dir = "$ndk_headers_out_dir/multimedia/player_framework"
   sources = [
-    "$histreamer_root_dir/interface/kits/c/native_audio_channel_layout.h",
     "$histreamer_root_dir/interface/kits/c/native_avbuffer.h",
     "$histreamer_root_dir/interface/kits/c/native_avbuffer_info.h",
     "$histreamer_root_dir/interface/kits/c/native_averrors.h",
     "$histreamer_root_dir/interface/kits/c/native_avformat.h",
     "$histreamer_root_dir/interface/kits/c/native_avmemory.h",
+  ]
+}
+
+ohos_ndk_headers("native_media_core_common_header") {
+  dest_dir = "$ndk_headers_out_dir/multimedia"
+  sources = [
+    "$histreamer_root_dir/interface/kits/c/native_audio_channel_layout.h",
   ]
 }
 
