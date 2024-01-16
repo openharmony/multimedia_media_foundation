@@ -144,6 +144,7 @@ public:
         bool result = false;
         if (offset >= mediaOffset_ && offset - mediaOffset_ < GetSize()) {
             head_ += offset - mediaOffset_;
+            mediaOffset_ = offset;
             result = true;
         }
         writeCondition_.NotifyOne();
