@@ -320,7 +320,8 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     // vector<Plugins::VideoBitStreamFormat>
     {Tag::VIDEO_BIT_STREAM_FORMAT, defaultVectorVideoBitStreamFormat},
     // vector<uint8_t>
-    {Tag::DRM_CENC_INFO, defaultVectorUInt8}};
+    {Tag::DRM_CENC_INFO, defaultVectorUInt8}
+};
 
 Any GetDefaultAnyValue(const TagType& tag)
 {
