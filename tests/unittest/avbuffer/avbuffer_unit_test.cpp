@@ -446,6 +446,7 @@ void AVBufferInnerUnitTest::CheckMemTransOutOfRange(int32_t pos)
 
 void AVBufferInnerUnitTest::CheckDataSize()
 {
+    capacity_ = remoteBuffer_->memory_->GetCapacity();
     EXPECT_EQ(Status::OK, remoteBuffer_->memory_->SetSize(capacity_ - 1));
     EXPECT_EQ(remoteBuffer_->memory_->GetSize(), capacity_ - 1);
     EXPECT_EQ(Status::OK, remoteBuffer_->memory_->SetSize(0));
