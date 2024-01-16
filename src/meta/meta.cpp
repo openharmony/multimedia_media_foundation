@@ -320,7 +320,8 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     // vector<Plugins::VideoBitStreamFormat>
     {Tag::VIDEO_BIT_STREAM_FORMAT, defaultVectorVideoBitStreamFormat},
     // vector<uint8_t>
-    {Tag::DRM_CENC_INFO, defaultVectorUInt8}};
+    {Tag::DRM_CENC_INFO, defaultVectorUInt8}
+};
 
 Any GetDefaultAnyValue(const TagType& tag)
 {
@@ -356,13 +357,13 @@ bool Meta::ToParcel(MessageParcel &parcel) const
 bool Meta::FromParcel(MessageParcel &parcel)
 {
     map_.clear();
-    int32_t size = parcel.ReadInt32();
+    size_t size = parcel.ReadInt32();
     if (size < 0 || size > parcel.GetRawDataCapacity()) {
         MEDIA_LOG_E("fail to Unmarshalling size: %{public}d", size);
         return false;
     }
     
-    for (int32_t index = 0; index < size; index++) {
+    for (size_t index = 0; index < size; index++) {
         std::string key = parcel.ReadString();
         Any value = GetDefaultAnyValue(key); //Init Default Value
         if (value.FromParcel(parcel)) {
