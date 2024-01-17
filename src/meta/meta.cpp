@@ -357,7 +357,7 @@ bool Meta::FromParcel(MessageParcel &parcel)
 {
     map_.clear();
     int32_t size = parcel.ReadInt32();
-    if (size < 0 || ((size_t) size) > parcel.GetRawDataCapacity()) {
+    if (size < 0 || static_cast<size_t>(size) > parcel.GetRawDataCapacity()) {
         MEDIA_LOG_E("fail to Unmarshalling size: %{public}d", size);
         return false;
     }
