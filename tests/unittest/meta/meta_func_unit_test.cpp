@@ -67,6 +67,20 @@ void MetaInnerUnitTest::TearDown(void)
 }
 
 /**
+ * @tc.name: SetGet_PlainStringKey_Int
+ * @tc.desc: SetGet_PlainStringKey_Int
+ * @tc.type: FUNC
+ */
+HWTEST_F(MetaInnerUnitTest, SetGet_PlainStringKey_Int, TestSize.Level1)
+{
+    int32_t valueOut = 0;
+    int32_t valueIn = 141;
+    SetMetaData(*metaIn, "width", valueIn);
+    GetMetaData(*metaIn, "width", valueOut);
+    EXPECT_EQ(valueOut, valueIn);
+}
+
+/**
  * @tc.name: SetGet_Int32
  * @tc.desc: SetGet_Int32
  * @tc.type: FUNC

@@ -345,7 +345,6 @@ bool Meta::ToParcel(MessageParcel &parcel) const
             MEDIA_LOG_E("fail to Marshalling Key: " PUBLIC_LOG_S, it->first.c_str());
             return false;
         }
-        MEDIA_LOG_D("success to Marshalling Key: " PUBLIC_LOG_S, it->first.c_str());
     }
     if (ret) {
         ret &= parcel.WriteInt32(metaSize);
@@ -372,7 +371,6 @@ bool Meta::FromParcel(MessageParcel &parcel)
             MEDIA_LOG_E("fail to Unmarshalling Key: %{public}s", key.c_str());
             return false;
         }
-        MEDIA_LOG_D("success to Unmarshalling Key: %{public}s", key.c_str());
     }
     return true;
 }
