@@ -69,10 +69,10 @@ endif()
 INCLUDE_DIRECTORIES(BEFORE
         ${TOP_DIR}/3rdparty/testngpp2/include
         ${TOP_DIR}/demo/system_tests
-        ${TOP_DIR}/media_foundation/engine
-        ${TOP_DIR}/media_foundation/engine/include
-        ${TOP_DIR}/media_foundation/engine/scene/standard
-        ${TOP_DIR}/media_foundation/engine/plugin
+        ${TOP_DIR}/histreamer/engine
+        ${TOP_DIR}/histreamer/engine/include
+        ${TOP_DIR}/histreamer/engine/scene/standard
+        ${TOP_DIR}/histreamer/engine/plugin
         ${TOP_DIR}/3rdparty/ohos
         ${TOP_DIR}/3rdparty/debug)
 IF(MSVC)
@@ -82,14 +82,14 @@ ENDIF(MSVC)
 ###############################
 # Generate Test Suite cxx files
 
-SET(TEST_SUITES_DIR ${TOP_DIR}/media_foundation/test/scenetest/gen_testsuites)
+SET(TEST_SUITES_DIR ${TOP_DIR}/histreamer/test/scenetest/gen_testsuites)
 SET(TEST_GENERATOR ${TOP_DIR}/3rdparty/testngpp2/generator/testngppgen.py)
 SET(TEST_SUITE_PREFIX st_)
 
 SET(TESTSUITE_ENTRY ${TEST_SUITES_DIR}/AllTestSuites.cxx)
 SET(TESTSUITE_SRCS ${TESTSUITE_ENTRY})
 
-SET(UT_CASE_DIR ${TOP_DIR}/media_foundation/test/scenetest)
+SET(UT_CASE_DIR ${TOP_DIR}/histreamer/test/scenetest)
 file(GLOB_RECURSE UT_CASES_PATH
         ${UT_CASE_DIR}/*.h
         ./helper/media_data_source_imp.cpp
@@ -118,20 +118,20 @@ ENDFOREACH()
 ###############################
 # src files
 SET(TEST_PLUGIN_SRCS
-        ${TOP_DIR}/media_foundation/engine/plugin/core/plugin_register.cpp
-        ${TOP_DIR}/media_foundation/engine/plugin/core/muxer.cpp
-        ${TOP_DIR}/media_foundation/engine/plugin/core/source.cpp
-        ${TOP_DIR}/media_foundation/engine/plugin/core/demuxer.cpp
-        ${TOP_DIR}/media_foundation/engine/plugin/core/base.cpp
-        ${TOP_DIR}/media_foundation/engine/plugin/core/audio_sink.cpp
-        ${TOP_DIR}/media_foundation/engine/plugin/core/codec.cpp
-        ${TOP_DIR}/media_foundation/engine/plugin/core/video_sink.cpp
-        ${TOP_DIR}/media_foundation/engine/plugin/core/plugin_core_utils.cpp
-        ${TOP_DIR}/media_foundation/engine/plugin/core/plugin_wrapper.cpp
-        ${TOP_DIR}/media_foundation/engine/plugin/core/output_sink.cpp
-        ${TOP_DIR}/media_foundation/engine/foundation/osal/filesystem/file_system.cpp
-        ${TOP_DIR}/media_foundation/engine/foundation/osal/thread/mutex.cpp
-        ${TOP_DIR}/media_foundation/engine/foundation/osal/thread/scoped_lock.cpp)
+        ${TOP_DIR}/histreamer/engine/plugin/core/plugin_register.cpp
+        ${TOP_DIR}/histreamer/engine/plugin/core/muxer.cpp
+        ${TOP_DIR}/histreamer/engine/plugin/core/source.cpp
+        ${TOP_DIR}/histreamer/engine/plugin/core/demuxer.cpp
+        ${TOP_DIR}/histreamer/engine/plugin/core/base.cpp
+        ${TOP_DIR}/histreamer/engine/plugin/core/audio_sink.cpp
+        ${TOP_DIR}/histreamer/engine/plugin/core/codec.cpp
+        ${TOP_DIR}/histreamer/engine/plugin/core/video_sink.cpp
+        ${TOP_DIR}/histreamer/engine/plugin/core/plugin_core_utils.cpp
+        ${TOP_DIR}/histreamer/engine/plugin/core/plugin_wrapper.cpp
+        ${TOP_DIR}/histreamer/engine/plugin/core/output_sink.cpp
+        ${TOP_DIR}/histreamer/engine/foundation/osal/filesystem/file_system.cpp
+        ${TOP_DIR}/histreamer/engine/foundation/osal/thread/mutex.cpp
+        ${TOP_DIR}/histreamer/engine/foundation/osal/thread/scoped_lock.cpp)
 
 ###############################
 # dependencies
@@ -158,31 +158,31 @@ link_directories(
         ${z_lib_path}
 )
 
-file(GLOB OSAL_THREAD_SRCS ${TOP_DIR}/media_foundation/engine/foundation/osal/thread/*.cpp)
+file(GLOB OSAL_THREAD_SRCS ${TOP_DIR}/histreamer/engine/foundation/osal/thread/*.cpp)
 if (${OHOS_LITE})
     # only for lite stream source player
     set(TEST_HELPER_SRCS
-            ${TOP_DIR}/media_foundation/test/scenetest/helper/lite_player.cpp
-            ${TOP_DIR}/media_foundation/test/scenetest/helper/lite_stream_player.cpp
-            ${TOP_DIR}/media_foundation/test/scenetest/helper/lite_audio_recorder.cpp
+            ${TOP_DIR}/histreamer/test/scenetest/helper/lite_player.cpp
+            ${TOP_DIR}/histreamer/test/scenetest/helper/lite_stream_player.cpp
+            ${TOP_DIR}/histreamer/test/scenetest/helper/lite_audio_recorder.cpp
             ${OSAL_THREAD_SRCS}
-            ${TOP_DIR}/media_foundation/engine/scene/common/data_stream.cpp
-            ${TOP_DIR}/media_foundation/engine/scene/common/data_stream_impl.cpp
+            ${TOP_DIR}/histreamer/engine/scene/common/data_stream.cpp
+            ${TOP_DIR}/histreamer/engine/scene/common/data_stream_impl.cpp
             )
 else()
     set(TEST_HELPER_SRCS
-            ${TOP_DIR}/media_foundation/test/scenetest/helper/media_data_source_imp.cpp
-            ${TOP_DIR}/media_foundation/test/scenetest/helper/std_player.cpp
+            ${TOP_DIR}/histreamer/test/scenetest/helper/media_data_source_imp.cpp
+            ${TOP_DIR}/histreamer/test/scenetest/helper/std_player.cpp
             ${OSAL_THREAD_SRCS}
-            ${TOP_DIR}/media_foundation/engine/foundation/osal/utils/util.cpp
-            ${TOP_DIR}/media_foundation/test/scenetest/helper/std_audio_recorder.cpp
+            ${TOP_DIR}/histreamer/engine/foundation/osal/utils/util.cpp
+            ${TOP_DIR}/histreamer/test/scenetest/helper/std_audio_recorder.cpp
             )
 endif ()
 
 set(TEST_HELPER_SRCS
         ${TEST_HELPER_SRCS}
         ${TOP_DIR}/3rdparty/debug/crashdump/common/crash_handler_register.cpp
-        ${TOP_DIR}/media_foundation/test/scenetest/helper/main.cpp
+        ${TOP_DIR}/histreamer/test/scenetest/helper/main.cpp
         )
 
 ###############################
