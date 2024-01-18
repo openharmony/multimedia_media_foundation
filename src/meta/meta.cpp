@@ -348,7 +348,9 @@ bool Meta::ToParcel(MessageParcel &parcel) const
     }
     if (ret) {
         ret &= parcel.WriteInt32(metaSize);
-        ret &= parcel.Append(metaParcel);
+        if (metaSize != 0) {
+            ret &= parcel.Append(metaParcel);
+        }
     }
     return ret;
 }
