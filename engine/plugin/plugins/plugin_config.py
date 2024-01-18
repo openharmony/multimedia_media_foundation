@@ -39,21 +39,18 @@ def main(argv):
         static_declare += "PLUGIN_REGISTER_STATIC_DECLARE(%s);" % argv[i]
         static_register += "REGISTER_STATIC(%s, reg);" % argv[i]
         static_unregister += "UNREGISTER_STATIC(%s);" % argv[i]
-    infile = open(input_file, "r")
-    outfile = open(output_file, "w")
-    for line in infile:
-        if '@HISTREAMER_PLUGIN_STATIC_DECLARE@' in line:
-            outfile.write("".join(static_declare))
-        elif '@HISTREAMER_PLUGIN_REGISTER_STATIC@' in line:
-            outfile.write("(void)(reg);")
-            outfile.write("".join(static_register))
-        elif '@HISTREAMER_PLUGIN_UNREGISTER_STATIC@' in line:
-            outfile.write("".join(static_unregister))
-        else:
-            outfile.write(line)
-    infile.close()
-    outfile.close()
-
+    with open(input_file, "r") as infile:
+        with open(output_file, "w") as outfile:
+            for line in infile:
+                if '@HISTREAMER_PLUGIN_STATIC_DECLARE@' in line:
+                    outfile.write("".join(static_declare))
+                elif '@HISTREAMER_PLUGIN_REGISTER_STATIC@' in line:
+                    outfile.write("(void)(reg);")
+                    outfile.write("".join(static_register))
+                elif '@HISTREAMER_PLUGIN_UNREGISTER_STATIC@' in line:
+                    outfile.write("".join(static_unregister))
+                else:
+                    outfile.write(line)
 
 if __name__ == '__main__':
     sys.exit(main(sys.argv))
