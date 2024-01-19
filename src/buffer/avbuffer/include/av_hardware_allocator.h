@@ -32,6 +32,7 @@ public:
 
     MemoryFlag GetMemFlag();
     int32_t GetFileDescriptor();
+    bool GetIsSecure();
 
 private:
     AVHardwareAllocator();
@@ -41,7 +42,8 @@ private:
     int32_t capacity_;
     uint8_t *allocBase_;
     MemoryFlag memFlag_;
-    bool hasAllocated_;
+    bool isAllocated_;
+    bool isSecure_;
 };
 } // namespace Media
 } // namespace OHOS
