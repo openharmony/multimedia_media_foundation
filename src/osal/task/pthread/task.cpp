@@ -135,7 +135,7 @@ void Task::PauseAsync()
 
 void Task::RegisterJob(std::function<void()> job)
 {
-    MEDIA_LOG_D("task " PUBLIC_LOG_S " RegisterHandler called", name_.c_str());
+    MEDIA_LOG_I("task " PUBLIC_LOG_S " RegisterHandler called", name_.c_str());
     job_ = std::move(job);
 }
 
