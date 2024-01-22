@@ -51,15 +51,18 @@ Status Pipeline::Prepare()
 Status Pipeline::Start()
 {
     state_ = FilterState::RUNNING;
+    Status ret = Status::OK;
     SubmitJobOnce([&] {
         AutoLock lock(mutex_);
         for (auto it = filters_.begin(); it != filters_.end(); ++it) {
             auto rtv = (*it)->Start();
-            FALSE_RETURN_V(rtv == Status::OK, rtv);
+            if (rtv != Status::OK) {
+                ret = rtv;
+                return;
+            }
         }
-        return Status::OK;
     });
-    return Status::OK;
+    return ret;
 }
 
 Status Pipeline::Pause()
