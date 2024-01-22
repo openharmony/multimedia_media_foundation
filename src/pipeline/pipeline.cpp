@@ -58,7 +58,7 @@ Status Pipeline::Start()
             auto rtv = (*it)->Start();
             if (rtv != Status::OK) {
                 ret = rtv;
-                return ret;
+                return;
             }
         }
     });
