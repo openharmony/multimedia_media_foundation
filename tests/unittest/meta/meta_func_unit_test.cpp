@@ -392,7 +392,7 @@ HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_All_As_Int32_Using_ParcelPackage, Te
     for (auto item : testInt32Data) {
         int32_t valueIn = item.second;
         int32_t valueOut = 0;
-        GetMetaData(*metaOut, item.first, valueOut);
+        ASSERT_TRUE(GetMetaData(*metaOut, item.first, valueOut));
         std::cout <<  item.first << " , " << valueOut << " , " << valueIn << std::endl;
         EXPECT_EQ(valueOut, valueIn);
     }

@@ -26,26 +26,32 @@
 #ifdef MEDIA_OHOS
 #include "sys/mman.h"
 #endif
-
+#define HARDWARE_ALLOCATOR std::static_pointer_cast<AVHardwareAllocator>(allocator_)
 namespace OHOS {
 namespace Media {
 std::shared_ptr<AVAllocator> AVAllocatorFactory::CreateHardwareAllocator(int32_t fd, int32_t capacity,
-                                                                         MemoryFlag memFlag)
+                                                                         MemoryFlag memFlag, bool isSecure)
 {
     FALSE_RETURN_V_MSG_E(fd > 0, nullptr, "File descriptor is invalid");
     auto allocator = std::shared_ptr<AVHardwareAllocator>(new AVHardwareAllocator());
     allocator->fd_ = dup(fd);
     allocator->capacity_ = capacity;
     allocator->memFlag_ = memFlag;
+    allocator->isSecure_ = isSecure;
     return allocator;
 }
 
 AVHardwareAllocator::AVHardwareAllocator()
-    : fd_(-1), capacity_(-1), allocBase_(nullptr), memFlag_(MemoryFlag::MEMORY_READ_ONLY), hasAllocated_(false){};
+    : fd_(-1),
+      capacity_(-1),
+      allocBase_(nullptr),
+      memFlag_(MemoryFlag::MEMORY_READ_ONLY),
+      isAllocated_(false),
+      isSecure_(false){};
 
 AVHardwareAllocator::~AVHardwareAllocator()
 {
-    if (fd_ > 0 && !hasAllocated_) {
+    if (fd_ > 0 && (!isAllocated_ || isSecure_)) {
         (void)::close(fd_);
         fd_ = -1;
     }
@@ -54,17 +60,23 @@ AVHardwareAllocator::~AVHardwareAllocator()
 void *AVHardwareAllocator::Alloc(int32_t capacity)
 {
     (void)capacity;
+    if (isSecure_) {
+        return nullptr;
+    }
     Status ret = MapMemoryAddr();
     FALSE_RETURN_V_MSG_E(ret == Status::OK, nullptr, "Map dma buffer failed");
-    hasAllocated_ = true;
+    isAllocated_ = true;
     return reinterpret_cast<void *>(allocBase_);
 }
 
 bool AVHardwareAllocator::Free(void *ptr)
 {
 #ifdef MEDIA_OHOS
+    if (isSecure_) {
+        return true;
+    }
     FALSE_RETURN_V_MSG_E(static_cast<uint8_t *>(ptr) == allocBase_, false, "Mapped buffer not match");
-    FALSE_RETURN_V_MSG_E(hasAllocated_, false, "Never allocated memory by Alloc function of this allocator");
+    FALSE_RETURN_V_MSG_E(isAllocated_, false, "Never allocated memory by Alloc function of this allocator");
     if (allocBase_ != nullptr) {
         (void)::munmap(allocBase_, static_cast<size_t>(capacity_));
     }
@@ -91,6 +103,11 @@ MemoryFlag AVHardwareAllocator::GetMemFlag()
 int32_t AVHardwareAllocator::GetFileDescriptor()
 {
     return fd_;
+}
+
+bool AVHardwareAllocator::GetIsSecure()
+{
+    return isSecure_;
 }
 
 Status AVHardwareAllocator::MapMemoryAddr()
@@ -145,11 +162,12 @@ AVHardwareMemory::~AVHardwareMemory()
 
 Status AVHardwareMemory::Init()
 {
-    fd_ = std::static_pointer_cast<AVHardwareAllocator>(allocator_)->GetFileDescriptor();
-    memFlag_ = std::static_pointer_cast<AVHardwareAllocator>(allocator_)->GetMemFlag();
+    fd_ = HARDWARE_ALLOCATOR->GetFileDescriptor();
+    memFlag_ = HARDWARE_ALLOCATOR->GetMemFlag();
     base_ = static_cast<uint8_t *>(allocator_->Alloc(0));
 
-    FALSE_RETURN_V_MSG_E(base_ != nullptr, Status::ERROR_NO_MEMORY, "dma memory alloc failed");
+    FALSE_RETURN_V_MSG_E(base_ != nullptr || HARDWARE_ALLOCATOR->GetIsSecure(), Status::ERROR_NO_MEMORY,
+                         "dma memory alloc failed");
     return Status::OK;
 }
 
@@ -167,7 +185,7 @@ Status AVHardwareMemory::Init(MessageParcel &parcel)
         (void)::close(fd);
         return Status::ERROR_NO_MEMORY;
     }
-    fd_ = std::static_pointer_cast<AVHardwareAllocator>(allocator_)->GetFileDescriptor();
+    fd_ = HARDWARE_ALLOCATOR->GetFileDescriptor();
     (void)::close(fd);
 
     base_ = static_cast<uint8_t *>(allocator_->Alloc(0));
@@ -180,6 +198,7 @@ Status AVHardwareMemory::Init(MessageParcel &parcel)
 
 bool AVHardwareMemory::WriteToMessageParcel(MessageParcel &parcel)
 {
+    FALSE_RETURN_V_MSG_E(!HARDWARE_ALLOCATOR->GetIsSecure(), false, "AVHardwareAllocator is secure");
     bool ret = true;
 #ifdef MEDIA_OHOS
     MessageParcel bufferParcel;

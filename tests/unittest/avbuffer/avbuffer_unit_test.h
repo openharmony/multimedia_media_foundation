@@ -78,6 +78,7 @@ public:
 
 private:
     void CreateLocalHardwareMem();
+    void CreateLocalHardwareMemSecure();
     void CreateLocalSharedMem();
     void CreateLocalSurfaceMem();
     void CreateLocalVirtualMem();

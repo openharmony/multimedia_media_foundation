@@ -87,6 +87,21 @@ void AVBufferInnerUnitTest::CreateLocalHardwareMem()
     ASSERT_NE(nullptr, buffer_->memory_->GetAddr());
 }
 
+void AVBufferInnerUnitTest::CreateLocalHardwareMemSecure()
+{
+    // create loacal
+    DmabufHeapBuffer dmaBuffer = {.size = capacity_, .heapFlags = 0};
+    int32_t dmaHeapFd = HardwareHeapFactory::GetInstance().GetHardwareHeapFd();
+    DmabufHeapBufferAlloc(dmaHeapFd, &dmaBuffer);
+    dmaBufferLst_.push_back(dmaBuffer);
+
+    allocator_ = AVAllocatorFactory::CreateHardwareAllocator(dmaBuffer.fd, capacity_, memFlag_, true);
+    ASSERT_NE(nullptr, allocator_);
+    remoteBuffer_ = buffer_ = AVBuffer::CreateAVBuffer(allocator_, capacity_, align_);
+    ASSERT_NE(nullptr, buffer_);
+    ASSERT_EQ(nullptr, buffer_->memory_->GetAddr());
+}
+
 void AVBufferInnerUnitTest::CreateLocalHardwareMemByConfig()
 {
     // create loacal

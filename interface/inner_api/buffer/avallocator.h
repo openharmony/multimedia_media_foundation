@@ -104,7 +104,8 @@ public:
      * @return The allocator that allocate DMA buffer.
      * @since 4.1
      */
-    static std::shared_ptr<AVAllocator> CreateHardwareAllocator(int32_t fd, int32_t capacity, MemoryFlag memFlag);
+    static std::shared_ptr<AVAllocator> CreateHardwareAllocator(int32_t fd, int32_t capacity, MemoryFlag memFlag,
+                                                                bool isSecure = false);
 
 private:
     AVAllocatorFactory() = default;

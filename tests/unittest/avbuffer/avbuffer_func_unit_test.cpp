@@ -1702,6 +1702,22 @@ HWTEST_F(AVBufferInnerUnitTest, AVBuffer_HardwareMemory_GetFileDescriptor_002, T
 }
 
 /**
+ * @tc.name: AVBuffer_HardwareMemory_GetFileDescriptor_003
+ * @tc.desc: hardware memory get file descriptor
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferInnerUnitTest, AVBuffer_HardwareMemory_GetFileDescriptor_003, TestSize.Level1)
+{
+    capacity_ = MEMSIZE;
+    align_ = 0;
+    CreateLocalHardwareMemSecure();
+    ASSERT_FALSE((allocator_ == nullptr) || (buffer_ == nullptr) || (buffer_->memory_ == nullptr));
+    EXPECT_GT(buffer_->memory_->GetFileDescriptor(), 0);
+    MessageParcel parcel;
+    EXPECT_FALSE(buffer_->WriteToMessageParcel(parcel));
+}
+
+/**
  * @tc.name: AVBuffer_HardwareMemory_Reset_001
  * @tc.desc: hardware memory reset
  * @tc.type: FUNC

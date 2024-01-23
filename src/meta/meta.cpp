@@ -117,6 +117,7 @@ static std::map<TagType, std::pair<MetaSetterInt64Function, MetaGetterInt64Funct
 
 static std::vector<TagType> g_metadataBoolVector = {
     Tag::VIDEO_COLOR_RANGE,
+    Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE,
     Tag::VIDEO_REQUEST_I_FRAME,
     Tag::VIDEO_IS_HDR_VIVID,
     Tag::MEDIA_HAS_VIDEO,
