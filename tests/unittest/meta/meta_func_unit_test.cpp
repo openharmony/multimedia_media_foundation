@@ -569,6 +569,64 @@ HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_All_As_VectorUint8_Using_ParcelPacka
     }
 }
 
+void PrepareInMeta(std::shared_ptr<Meta>& inMeta)
+{
+    for (auto item : testVetcorInt8Data) {
+        std::vector<uint8_t> valueInVecInt8 = item.second;
+        inMeta->SetData(item.first, valueInVecInt8);
+    }
+    for (auto item : testFloatData) {
+        float valueInFloat = item.second;
+        inMeta->SetData(item.first, valueInFloat);
+    }
+    for (auto item : testDoubleData) {
+        double valueInDouble = item.second;
+        inMeta->SetData(item.first, valueInDouble);
+    }
+    for (auto item : testStringData) {
+        std::string valueInStr = item.second;
+        inMeta->SetData(item.first, valueInStr);
+    }
+    for (auto item : testInt32Data) {
+        int32_t valueInInt32 = item.second;
+        SetMetaData(*inMeta, item.first, valueInInt32);
+    }
+}
+
+void CheckOutMeta(std::shared_ptr<Meta>& outMeta)
+{
+    for (auto item : testInt32Data) {
+        int32_t valueInInt32 = item.second;
+        int32_t valueOutInt32 = 0;
+        GetMetaData(*outMeta, item.first, valueOutInt32);
+        EXPECT_EQ(valueOutInt32, valueInInt32);
+    }
+    for (auto item : testStringData) {
+        std::string valueInStr = item.second;
+        std::string valueOutStr = "String Value";
+        outMeta->GetData(item.first, valueOutStr);
+        EXPECT_EQ(valueOutStr, valueInStr);
+    }
+    for (auto item : testFloatData) {
+        float valueInFloat = item.second;
+        float valueOutFloat = 0.0f;
+        outMeta->GetData(item.first, valueOutFloat);
+        ASSERT_FLOAT_EQ(valueOutFloat, valueInFloat);
+    }
+    for (auto item : testDoubleData) {
+        double valueInDouble = item.second;
+        double valueOutDouble = 0.0;
+        outMeta->GetData(item.first, valueOutDouble);
+        ASSERT_DOUBLE_EQ(valueOutDouble, valueInDouble);
+    }
+    for (auto item : testVetcorInt8Data) {
+        std::vector<uint8_t> valueInVecInt8 = item.second;
+        std::vector<uint8_t> valueOutVecInt8;
+        outMeta->GetData(item.first, valueOutVecInt8);
+        EXPECT_EQ(valueOutVecInt8, valueInVecInt8);
+    }
+}
+
 /**
  * @tc.name: SetGet_MetaData_All_As_VectorUint8_Using_ParcelPackage
  * @tc.desc: SetGet_MetaData_All_As_VectorUint8_Using_ParcelPackage
@@ -576,58 +634,10 @@ HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_All_As_VectorUint8_Using_ParcelPacka
  */
 HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_All_As_Mix_Using_ParcelPackage, TestSize.Level1)
 {
-    for (auto item : testVetcorInt8Data) {
-        std::vector<uint8_t> valueInVecInt8 = item.second;
-        metaIn->SetData(item.first, valueInVecInt8);
-    }
-    for (auto item : testFloatData) {
-        float valueInFloat = item.second;
-        metaIn->SetData(item.first, valueInFloat);
-    }
-    for (auto item : testDoubleData) {
-        double valueInDouble = item.second;
-        metaIn->SetData(item.first, valueInDouble);
-    }
-    for (auto item : testStringData) {
-        std::string valueInStr = item.second;
-        metaIn->SetData(item.first, valueInStr);
-    }
-    for (auto item : testInt32Data) {
-        int32_t valueInInt32 = item.second;
-        SetMetaData(*metaIn, item.first, valueInInt32);
-    }
+    PrepareInMeta(metaIn);
     ASSERT_TRUE(metaIn->ToParcel(*parcel));
     ASSERT_TRUE(metaOut->FromParcel(*parcel));
-    for (auto item : testInt32Data) {
-        int32_t valueInInt32 = item.second;
-        int32_t valueOutInt32 = 0;
-        GetMetaData(*metaOut, item.first, valueOutInt32);
-        EXPECT_EQ(valueOutInt32, valueInInt32);
-    }
-    for (auto item : testStringData) {
-        std::string valueInStr = item.second;
-        std::string valueOutStr = "String Value";
-        metaOut->GetData(item.first, valueOutStr);
-        EXPECT_EQ(valueOutStr, valueInStr);
-    }
-    for (auto item : testFloatData) {
-        float valueInFloat = item.second;
-        float valueOutFloat = 0.0f;
-        metaOut->GetData(item.first, valueOutFloat);
-        ASSERT_FLOAT_EQ(valueOutFloat, valueInFloat);
-    }
-    for (auto item : testDoubleData) {
-        double valueInDouble = item.second;
-        double valueOutDouble = 0.0;
-        metaOut->GetData(item.first, valueOutDouble);
-        ASSERT_DOUBLE_EQ(valueOutDouble, valueInDouble);
-    }
-    for (auto item : testVetcorInt8Data) {
-        std::vector<uint8_t> valueInVecInt8 = item.second;
-        std::vector<uint8_t> valueOutVecInt8;
-        metaOut->GetData(item.first, valueOutVecInt8);
-        EXPECT_EQ(valueOutVecInt8, valueInVecInt8);
-    }
+    CheckOutMeta(metaOut);
 }
 
 /**
@@ -637,61 +647,13 @@ HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_All_As_Mix_Using_ParcelPackage, Test
  */
 HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_All_As_Mix_Using_AssignCopy, TestSize.Level1)
 {
-    for (auto item : testVetcorInt8Data) {
-        std::vector<uint8_t> valueInVecInt8 = item.second;
-        metaIn->SetData(item.first, valueInVecInt8);
-    }
-    for (auto item : testFloatData) {
-        float valueInFloat = item.second;
-        metaIn->SetData(item.first, valueInFloat);
-    }
-    for (auto item : testDoubleData) {
-        double valueInDouble = item.second;
-        metaIn->SetData(item.first, valueInDouble);
-    }
-    for (auto item : testStringData) {
-        std::string valueInStr = item.second;
-        metaIn->SetData(item.first, valueInStr);
-    }
-    for (auto item : testInt32Data) {
-        int32_t valueInInt32 = item.second;
-        SetMetaData(*metaIn, item.first, valueInInt32);
-    }
+    PrepareInMeta(metaIn);
     Meta metaCopy = std::move(*metaIn);
     for (auto item : testInt32Data) {
         int32_t valueOutInt32 = 0;
         ASSERT_FALSE(GetMetaData(*metaIn, item.first, valueOutInt32));
     }
-    for (auto item : testInt32Data) {
-        int32_t valueInInt32 = item.second;
-        int32_t valueOutInt32 = 0;
-        GetMetaData(metaCopy, item.first, valueOutInt32);
-        EXPECT_EQ(valueOutInt32, valueInInt32);
-    }
-    for (auto item : testStringData) {
-        std::string valueInStr = item.second;
-        std::string valueOutStr = "String Value";
-        metaCopy.GetData(item.first, valueOutStr);
-        EXPECT_EQ(valueOutStr, valueInStr);
-    }
-    for (auto item : testFloatData) {
-        float valueInFloat = item.second;
-        float valueOutFloat = 0.0f;
-        metaCopy.GetData(item.first, valueOutFloat);
-        ASSERT_FLOAT_EQ(valueOutFloat, valueInFloat);
-    }
-    for (auto item : testDoubleData) {
-        double valueInDouble = item.second;
-        double valueOutDouble = 0.0;
-        metaCopy.GetData(item.first, valueOutDouble);
-        ASSERT_DOUBLE_EQ(valueOutDouble, valueInDouble);
-    }
-    for (auto item : testVetcorInt8Data) {
-        std::vector<uint8_t> valueInVecInt8 = item.second;
-        std::vector<uint8_t> valueOutVecInt8;
-        metaCopy.GetData(item.first, valueOutVecInt8);
-        EXPECT_EQ(valueOutVecInt8, valueInVecInt8);
-    }
+    CheckOutMeta(metaOut);
 }
 
 /**
@@ -701,61 +663,13 @@ HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_All_As_Mix_Using_AssignCopy, TestSiz
  */
 HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_All_As_Mix_Using_SwapCopy, TestSize.Level1)
 {
-    for (auto item : testVetcorInt8Data) {
-        std::vector<uint8_t> valueInVecInt8 = item.second;
-        metaIn->SetData(item.first, valueInVecInt8);
-    }
-    for (auto item : testFloatData) {
-        float valueInFloat = item.second;
-        metaIn->SetData(item.first, valueInFloat);
-    }
-    for (auto item : testDoubleData) {
-        double valueInDouble = item.second;
-        metaIn->SetData(item.first, valueInDouble);
-    }
-    for (auto item : testStringData) {
-        std::string valueInStr = item.second;
-        metaIn->SetData(item.first, valueInStr);
-    }
-    for (auto item : testInt32Data) {
-        int32_t valueInInt32 = item.second;
-        SetMetaData(*metaIn, item.first, valueInInt32);
-    }
+    PrepareInMeta(metaIn);
     Meta metaCopy(std::move(*metaIn));
     for (auto item : testInt32Data) {
         int32_t valueOutInt32 = 0;
         ASSERT_FALSE(GetMetaData(*metaIn, item.first, valueOutInt32));
     }
-    for (auto item : testInt32Data) {
-        int32_t valueInInt32 = item.second;
-        int32_t valueOutInt32 = 0;
-        GetMetaData(metaCopy, item.first, valueOutInt32);
-        EXPECT_EQ(valueOutInt32, valueInInt32);
-    }
-    for (auto item : testStringData) {
-        std::string valueInStr = item.second;
-        std::string valueOutStr = "String Value";
-        metaCopy.GetData(item.first, valueOutStr);
-        EXPECT_EQ(valueOutStr, valueInStr);
-    }
-    for (auto item : testFloatData) {
-        float valueInFloat = item.second;
-        float valueOutFloat = 0.0f;
-        metaCopy.GetData(item.first, valueOutFloat);
-        ASSERT_FLOAT_EQ(valueOutFloat, valueInFloat);
-    }
-    for (auto item : testDoubleData) {
-        double valueInDouble = item.second;
-        double valueOutDouble = 0.0;
-        metaCopy.GetData(item.first, valueOutDouble);
-        ASSERT_DOUBLE_EQ(valueOutDouble, valueInDouble);
-    }
-    for (auto item : testVetcorInt8Data) {
-        std::vector<uint8_t> valueInVecInt8 = item.second;
-        std::vector<uint8_t> valueOutVecInt8;
-        metaCopy.GetData(item.first, valueOutVecInt8);
-        EXPECT_EQ(valueOutVecInt8, valueInVecInt8);
-    }
+    CheckOutMeta(metaOut);
 }
 
 /**
