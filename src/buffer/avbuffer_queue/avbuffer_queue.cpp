@@ -592,18 +592,12 @@ Status AVBufferQueueImpl::ReleaseBuffer(const std::shared_ptr<AVBuffer>& buffer)
 Status AVBufferQueueImpl::Clear()
 {
     MEDIA_LOG_E("AVBufferQueueImpl Clear");
-    // SetQueueSize(0);
     std::lock_guard<std::mutex> lockGuard(queueMutex_);
     dirtyBufferList_.clear();
     for (auto it = cachedBufferMap_.begin(); it != cachedBufferMap_.end(); it++) {
-        // DetachBuffer(it->first, false);
         if (it->second.state == AVBUFFER_STATE_PUSHED || it->second.state == AVBUFFER_STATE_RETURNED) {
             it->second.state = AVBUFFER_STATE_RELEASED;
             InsertFreeBufferInOrder(it->first);
-            // std::lock_guard<std::mutex> lockGuard(producerListenerMutex_);
-            // if (producerListener_ != nullptr) {
-            //     producerListener_->OnBufferAvailable();
-            // }
         }
     }
     requestCondition.notify_all();
