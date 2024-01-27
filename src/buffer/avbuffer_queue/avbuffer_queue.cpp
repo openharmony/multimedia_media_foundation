@@ -121,7 +121,7 @@ uint32_t AVBufferQueueImpl::GetQueueSize()
 
 Status AVBufferQueueImpl::SetQueueSize(uint32_t size)
 {
-    FALSE_RETURN_V(size > 0 && size <= AVBUFFER_QUEUE_MAX_QUEUE_SIZE && size != size_,
+    FALSE_RETURN_V(size >= 0 && size <= AVBUFFER_QUEUE_MAX_QUEUE_SIZE && size != size_,
                    Status::ERROR_INVALID_BUFFER_SIZE);
 
     if (size > size_) {
@@ -587,6 +587,21 @@ Status AVBufferQueueImpl::ReleaseBuffer(const std::shared_ptr<AVBuffer>& buffer)
     FALSE_RETURN_V(buffer != nullptr, Status::ERROR_NULL_POINT_BUFFER);
 
     return ReleaseBuffer(buffer->GetUniqueId());
+}
+
+Status AVBufferQueueImpl::Clear()
+{
+    MEDIA_LOG_E("AVBufferQueueImpl Clear");
+    std::lock_guard<std::mutex> lockGuard(queueMutex_);
+    dirtyBufferList_.clear();
+    for (auto it = cachedBufferMap_.begin(); it != cachedBufferMap_.end(); it++) {
+        if (it->second.state == AVBUFFER_STATE_PUSHED || it->second.state == AVBUFFER_STATE_RETURNED) {
+            it->second.state = AVBUFFER_STATE_RELEASED;
+            InsertFreeBufferInOrder(it->first);
+        }
+    }
+    requestCondition.notify_all();
+    return Status::OK;
 }
 
 Status AVBufferQueueImpl::SetBrokerListener(sptr<IBrokerListener>& listener)

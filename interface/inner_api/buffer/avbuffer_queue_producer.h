@@ -38,7 +38,7 @@ public:
 
     virtual Status SetBufferFilledListener(sptr<IBrokerListener>& listener) = 0;
     virtual Status SetBufferAvailableListener(sptr<IProducerListener>& listener) = 0;
-
+    virtual Status Clear() = 0;
     DECLARE_INTERFACE_DESCRIPTOR(u"Media.AVBufferQueueProducer");
 
 protected:

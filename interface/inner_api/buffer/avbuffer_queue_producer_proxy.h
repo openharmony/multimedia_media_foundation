@@ -39,7 +39,7 @@ public:
 
     Status SetBufferFilledListener(sptr<IBrokerListener>& listener) override = 0;
     Status SetBufferAvailableListener(sptr<IProducerListener>& listener) override = 0;
-
+    Status Clear() override = 0;
 protected:
     explicit AVBufferQueueProducerProxy(const sptr<IRemoteObject>& object);
 };

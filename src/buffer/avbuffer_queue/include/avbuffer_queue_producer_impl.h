@@ -41,7 +41,7 @@ public:
 
     Status SetBufferFilledListener(sptr<IBrokerListener>& listener) override = 0;
     Status SetBufferAvailableListener(sptr<IProducerListener>& listener) override = 0;
-
+    Status Clear() override = 0;
     virtual Status PushBuffer(uint64_t uniqueId, bool available) = 0;
     virtual Status ReturnBuffer(uint64_t uniqueId, bool available) = 0;
     virtual Status DetachBuffer(uint64_t uniqueId) = 0;
@@ -85,7 +85,7 @@ public:
 
     Status SetBufferFilledListener(sptr<IBrokerListener>& listener) override;
     Status SetBufferAvailableListener(sptr<IProducerListener>& listener) override;
-
+    Status Clear() override;
 protected:
     std::shared_ptr<AVBufferQueueImpl> bufferQueue_;
 
