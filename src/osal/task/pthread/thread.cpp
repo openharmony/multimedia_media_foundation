@@ -17,6 +17,7 @@
 
 #include "osal/task/thread.h"
 #include "common/log.h"
+#include "osal/task/autolock.h"
 
 namespace OHOS {
 namespace Media {
@@ -32,6 +33,7 @@ Thread::Thread(Thread&& other) noexcept
 Thread& Thread::operator=(Thread&& other) noexcept
 {
     if (this != &other) {
+        AutoLock lock(mutex_);
         id_ = other.id_;
         name_ = std::move(other.name_);
         priority_ = other.priority_;
@@ -42,6 +44,7 @@ Thread& Thread::operator=(Thread&& other) noexcept
 
 Thread::~Thread() noexcept
 {
+    AutoLock lock(mutex_);
     if (state_) {
         pthread_join(id_, nullptr);
     }
@@ -49,6 +52,7 @@ Thread::~Thread() noexcept
 
 bool Thread::HasThread() const noexcept
 {
+    AutoLock lock(mutex_);
     return state_ != nullptr;
 }
 
@@ -59,9 +63,12 @@ void Thread::SetName(const std::string& name)
 
 bool Thread::CreateThread(const std::function<void()>& func)
 {
-    state_ = std::make_unique<State>();
-    state_->func = func;
-    state_->name = name_;
+    {
+        AutoLock lock(mutex_);
+        state_ = std::make_unique<State>();
+        state_->func = func;
+        state_->name = name_;
+    }
     pthread_attr_t attr;
     pthread_attr_init(&attr);
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
@@ -76,12 +83,15 @@ bool Thread::CreateThread(const std::function<void()>& func)
     pthread_attr_setstacksize(&attr, THREAD_STACK_SIZE);
     MEDIA_LOG_I("thread stack size set to " PUBLIC_LOG_D32, THREAD_STACK_SIZE);
 #endif
-    int rtv = pthread_create(&id_, &attr, Thread::Run, state_.get());
+    int rtv = pthread_create(&id_, &attr, Thread::Run, this);
     if (rtv == 0) {
         MEDIA_LOG_I("thread " PUBLIC_LOG_S " create success", name_.c_str());
         SetNameInternal();
     } else {
-        state_.reset();
+        AutoLock lock(mutex_);
+        if (state_ != nullptr) {
+            state_.reset();
+        }
         MEDIA_LOG_E("thread create failed, name: " PUBLIC_LOG_S ", rtv: " PUBLIC_LOG_D32, name_.c_str(), rtv);
     }
     return rtv == 0;
@@ -89,7 +99,7 @@ bool Thread::CreateThread(const std::function<void()>& func)
 
 void Thread::SetNameInternal()
 {
-#ifdef SUPPORT_PTHREAD_NAME
+    AutoLock lock(mutex_);
     if (state_ && !name_.empty()) {
         constexpr int threadNameMaxSize = 15;
         if (name_.size() > threadNameMaxSize) {
@@ -99,17 +109,29 @@ void Thread::SetNameInternal()
         }
         pthread_setname_np(id_, name_.c_str());
     }
-#endif
 }
 
 void* Thread::Run(void* arg) // NOLINT: void*
 {
-    auto state = static_cast<State*>(arg);
-    if (state && state->func) {
-        const std::string name = state->name;
-        state->func();
-        MEDIA_LOG_W("Thread " PUBLIC_LOG_S " exited...", name.c_str());
+    std::function<void()> func;
+    std::string name;
+    {
+        auto currentThread = static_cast<Thread *>(arg);
+        AutoLock lock(currentThread->mutex_);
+        auto state = currentThread->state_.get();
+        if (state == nullptr) {
+            return nullptr;
+        }
+        func = state->func;
+        name = state->name;
     }
+    func();
+    {
+        auto currentThread = static_cast<Thread *>(arg);
+        AutoLock lock(currentThread->mutex_);
+        currentThread->state_ = nullptr;
+    }
+    MEDIA_LOG_W("Thread " PUBLIC_LOG_S " exited...", name.c_str());
     return nullptr;
 }
 } // namespace Media
