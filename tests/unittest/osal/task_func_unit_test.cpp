@@ -78,11 +78,11 @@ HWTEST_F(TaskInnerUnitTest, TaskPrintWhile, TestSize.Level1)
     task->RegisterJob([]() {
         bool runingState =true;
         int count = 0;
-        while(runingState){
+        while (runingState) {
             count++;
             MEDIA_LOG_I("task job TaskPrintWhile running at " PUBLIC_LOG_U32, count);
             sleep(1);
-            if (count > 30){
+            if (count > 30) {
                 runingState = false;
             }
         }
