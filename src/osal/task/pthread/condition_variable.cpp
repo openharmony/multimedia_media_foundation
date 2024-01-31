@@ -140,8 +140,7 @@ bool ConditionVariable::WaitFor(AutoLock& lock, int timeoutMs, std::function<boo
 #else
     clock_gettime(CLOCK_MONOTONIC, &timeout);
 #endif
-    timeout.tv_sec += timeoutMs / 1000;              // 1000
-    timeout.tv_nsec += (timeoutMs % 1000) * 1000000; // 1000 1000000
+    timeout = NsToTm(TmToNs(timeout) + timeoutMs * std::mega::num);
     int status = 0;
     while (!pred() && (status == 0)) {
         status = pthread_cond_timedwait(&cond_, &(lock.mutex_->nativeHandle_), &timeout);
