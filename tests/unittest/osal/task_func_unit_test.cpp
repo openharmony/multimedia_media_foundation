@@ -19,12 +19,14 @@
 #include <cstdlib>
 #include <string>
 #include <cmath>
+#include <chrono>
 #include <iostream>
 #include <sstream>
 #include "common/status.h"
 #include "securec.h"
 #define HST_LOG_TAG "Task"
 #include "osal/task/task.h"
+#include "osal/task/condition_variable.h"
 #include "cpp_ext/memory_ext.h"
 #include "common/log.h"
 
@@ -47,6 +49,11 @@ public:
     void TearDown(void);
 
     std::shared_ptr<Task> task = nullptr;
+    ConditionVariable cv;
+    std::shared_ptr<Task> task1 = nullptr;
+    std::shared_ptr<Task> task2 = nullptr;
+    Mutex mutex_;
+    std::atomic<bool> isStop_{false};
 };
 
 void TaskInnerUnitTest::SetUpTestCase(void) {}
@@ -59,6 +66,8 @@ void TaskInnerUnitTest::SetUp(void)
     const ::testing::TestInfo *testInfo_ = ::testing::UnitTest::GetInstance()->current_test_info();
     std::string testName = testInfo_->name();
     std::cout << testName << std::endl;
+    task1 = std::make_shared<Task>("workTask1");
+    task2 = std::make_shared<Task>("workTask2");
 }
 
 void TaskInnerUnitTest::TearDown(void)
@@ -80,9 +89,9 @@ HWTEST_F(TaskInnerUnitTest, TaskPrintWhile, TestSize.Level1)
         int count = 0;
         while (runingState) {
             count++;
-            MEDIA_LOG_I("task job TaskPrintWhile running at " PUBLIC_LOG_U32, count);
+            MEDIA_LOG_I("Task TaskPrintWhile running at " PUBLIC_LOG_U32, count);
             sleep(1);
-            if (count > 30) {
+            if (count > 30) { //30 second
                 runingState = false;
             }
         }
@@ -93,6 +102,65 @@ HWTEST_F(TaskInnerUnitTest, TaskPrintWhile, TestSize.Level1)
     sleep(10);
     task->Start();
     task->Stop();
+}
+
+/**
+ * @tc.name: WaitFor_Succ
+ * @tc.desc: WaitFor_Succ
+ * @tc.type: FUNC
+ */
+HWTEST_F(TaskInnerUnitTest, WaitFor_Succ, TestSize.Level1)
+{
+    AutoLock lock(mutex_);
+    task1->RegisterJob([]() {
+        bool runingState =true;
+        int count = 0;
+        while(runingState){
+            count++;
+            MEDIA_LOG_I("Task WaitFor_Succ running at " PUBLIC_LOG_U32, count);
+            sleep(1);
+            if (count > 10){ //10 second
+                runingState = false;
+            }
+        }
+    });
+    task1->Start();
+    int timeoutMs = 1000;
+    isStop_.store(true);
+    auto rtv = cv.WaitFor(lock, timeoutMs, [this] { return isStop_.load(); });
+    EXPECT_EQ(true, rtv);
+}
+
+/**
+ * @tc.name: WaitFor_Failed
+ * @tc.desc: WaitFor_Failed
+ * @tc.type: FUNC
+ */
+HWTEST_F(TaskInnerUnitTest, WaitFor_Failed, TestSize.Level1)
+{
+    AutoLock lock(mutex_);
+    task2->RegisterJob([]() {
+        bool runingState =true;
+        int count = 0;
+        while(runingState){
+            count++;
+            MEDIA_LOG_I("Task WaitFor_Failed running at " PUBLIC_LOG_U32, count);
+            sleep(1);
+            if (count > 10){ //10 second
+                runingState = false;
+            }
+        }
+    });
+    task2->Start();
+    int timeoutMs = 100;
+    isStop_.store(false);
+    auto start = std::chrono::high_resolution_clock::now();
+    auto rtv = cv.WaitFor(lock, timeoutMs, [this] { return isStop_.load(); });
+    auto end = std::chrono::high_resolution_clock::now();
+    int64_t diff = static_cast<int64_t>(static_cast<std::chrono::duration<double>>(end - start).count() * 1000);
+    EXPECT_EQ(false, rtv);
+    EXPECT_TRUE((std::abs(static_cast<int>(diff) - timeoutMs) < 20) || (diff < 5));
+    MEDIA_LOG_I("Wait Time Diff: " PUBLIC_LOG_D64, diff);
 }
 } // namespace MetaFuncUT
 } // namespace Media
