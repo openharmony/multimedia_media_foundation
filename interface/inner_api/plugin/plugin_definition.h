@@ -139,7 +139,7 @@ using PluginSnifferFunc = int (*)(const std::string& name, std::shared_ptr<DataS
  * @version 1.0
  */
 struct PluginDefBase {
-    uint32_t apiVersion; ///< Versions of different plugins. Different types of plugin have their own versions.
+    uint32_t apiVersion{0}; ///< Versions of different plugins. Different types of plugin have their own versions.
 
     PluginType pluginType = PluginType::INVALID_TYPE; ///< Describe the plugin type, e.g. 'source', 'codec'.
 
@@ -148,7 +148,7 @@ struct PluginDefBase {
 
     std::string description; ///< Detailed description of the plugin.
 
-    uint32_t rank;  ///< Plugin score. The plugin with a high score may be preferred. You can evaluate the
+    uint32_t rank{0};  ///< Plugin score. The plugin with a high score may be preferred. You can evaluate the
                     ///< plugin score in terms of performance, version support, and license. Range: 0 to 100.
 
     PluginDefBase()
