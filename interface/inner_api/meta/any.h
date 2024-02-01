@@ -829,9 +829,6 @@ ValueType AnyCast(const Any& other)
                   "any_cast<ValueType>(const any&) requires ValueType constructable from const "
                   "remove_cv_t<remove_reference_t<ValueType>>&");
     auto ptr = AnyCast<U>(&other);
-    if (ptr == nullptr) {
-        // throw BadAnyCast();
-    }
     return static_cast<ValueType>(*ptr);
 }
 
@@ -854,9 +851,6 @@ ValueType AnyCast(Any& other)
                   "any_cast<ValueType>(const any&) requires ValueType constructable from "
                   "remove_cv_t<remove_reference_t<ValueType>>&");
     auto ptr = AnyCast<U>(&other);
-    if (ptr == nullptr) {
-        // throw BadAnyCast();
-    }
     return static_cast<ValueType>(*ptr);
 }
 
@@ -879,9 +873,6 @@ ValueType AnyCast(Any&& other)
                   "any_cast<ValueType>(const any&) requires ValueType constructable from "
                   "remove_cv_t<remove_reference_t<ValueType>>");
     auto ptr = AnyCast<U>(&other);
-    if (ptr == nullptr) {
-        // throw BadAnyCast();
-    }
     return static_cast<ValueType>(std::move(*ptr));
 }
 
