@@ -391,7 +391,7 @@ HWTEST_F(TaskInnerUnitTest, WaitFor_Succ, TestSize.Level1)
     task01->RegisterJob([]() {
         bool runningState =true;
         int count = 0;
-        while(runningState){
+        while (runningState) {
             count++;
             MEDIA_LOG_I("Task WaitFor_Succ running at " PUBLIC_LOG_U32, count);
             sleep(1);
@@ -418,7 +418,7 @@ HWTEST_F(TaskInnerUnitTest, WaitFor_Failed, TestSize.Level1)
     task02->RegisterJob([]() {
         bool runningState =true;
         int count = 0;
-        while(runningState){
+        while (runningState) {
             count++;
             MEDIA_LOG_I("Task WaitFor_Failed running at " PUBLIC_LOG_U32, count);
             sleep(1);
