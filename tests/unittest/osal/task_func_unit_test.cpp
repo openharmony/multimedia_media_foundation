@@ -48,12 +48,22 @@ public:
 
     void TearDown(void);
 
-    std::shared_ptr<Task> task = nullptr;
     ConditionVariable cv;
     std::shared_ptr<Task> task1 = nullptr;
     std::shared_ptr<Task> task2 = nullptr;
+    std::shared_ptr<Task> task3 = nullptr;
+    std::shared_ptr<Task> task4 = nullptr;
+    std::shared_ptr<Task> task5 = nullptr;
+    std::shared_ptr<Task> task6 = nullptr;
+    std::shared_ptr<Task> task7 = nullptr;
+    std::shared_ptr<Task> task8 = nullptr;
+    std::shared_ptr<Task> task9 = nullptr;
+    std::shared_ptr<Task> task10 = nullptr;
+    std::shared_ptr<Task> task01 = nullptr;
+    std::shared_ptr<Task> task02 = nullptr;
     Mutex mutex_;
     std::atomic<bool> isStop_{false};
+    std::string modifyMsg_ = "";
 };
 
 void TaskInnerUnitTest::SetUpTestCase(void) {}
@@ -68,40 +78,306 @@ void TaskInnerUnitTest::SetUp(void)
     std::cout << testName << std::endl;
     task1 = std::make_shared<Task>("workTask1");
     task2 = std::make_shared<Task>("workTask2");
+    task3 = std::make_shared<Task>("workTask3");
+    task4 = std::make_shared<Task>("workTask4");
+    task5 = std::make_shared<Task>("workTask5");
+    task6 = std::make_shared<Task>("workTask6");
+    task7 = std::make_shared<Task>("workTask7");
+    task8 = std::make_shared<Task>("workTask8");
+    task9 = std::make_shared<Task>("workTask9");
+    task10 = std::make_shared<Task>("workTask10");
+    task01 = std::make_shared<Task>("workTask01");
+    task02 = std::make_shared<Task>("workTask02");
 }
 
 void TaskInnerUnitTest::TearDown(void)
 {
-    task = nullptr;
+    task1 = nullptr;
+    task1 = nullptr;
+    task2 = nullptr;
+    task3 = nullptr;
+    task4 = nullptr;
+    task5 = nullptr;
+    task6 = nullptr;
+    task7 = nullptr;
+    task8 = nullptr;
+    task9 = nullptr;
+    task10 = nullptr;
+    task01 = nullptr;
+    task02 = nullptr;
     std::cout << "[TearDown]: over!!!" << std::endl;
 }
 
 /**
- * @tc.name: TaskPrintWhile
- * @tc.desc: TaskPrintWhile
+ * @tc.name: TaskNotRunning
+ * @tc.desc: TaskNotRunning
  * @tc.type: FUNC
  */
-HWTEST_F(TaskInnerUnitTest, TaskPrintWhile, TestSize.Level1)
+HWTEST_F(TaskInnerUnitTest, TaskNotRunning, TestSize.Level1)
 {
-    task = std::make_shared<Task>(std::string("P1Line"));
-    task->RegisterJob([]() {
-        bool runingState =true;
+    bool rtv = task1->IsTaskRunning();
+    EXPECT_EQ(false, rtv);
+}
+
+/**
+ * @tc.name: TaskRegisterJobNotRunning
+ * @tc.desc: TaskRegisterJobNotRunning
+ * @tc.type: FUNC
+ */
+HWTEST_F(TaskInnerUnitTest, TaskRegisterJobNotRunning, TestSize.Level1)
+{
+    task2->RegisterJob([]() {
+        bool runningState =true;
         int count = 0;
-        while (runingState) {
+        while (runningState) {
             count++;
-            MEDIA_LOG_I("Task TaskPrintWhile running at " PUBLIC_LOG_U32, count);
+            MEDIA_LOG_I("Task TaskRegisterJobNotRunning running at " PUBLIC_LOG_U32, count);
             sleep(1);
-            if (count > 30) { //30 second
-                runingState = false;
+            if (count > 10) { //10 second
+                runningState = false;
             }
         }
     });
-    task->Start();
-    sleep(10);
-    task->Pause();
-    sleep(10);
-    task->Start();
-    task->Stop();
+    bool rtv = task2->IsTaskRunning();
+    EXPECT_EQ(false, rtv);
+}
+
+
+/**
+ * @tc.name: TaskRegisterJobRun
+ * @tc.desc: TaskRegisterJobRun
+ * @tc.type: FUNC
+ */
+HWTEST_F(TaskInnerUnitTest, TaskRegisterJobRun, TestSize.Level1)
+{
+    task3->RegisterJob([]() {
+        bool runningState =true;
+        int count = 0;
+        while (runningState) {
+            count++;
+            MEDIA_LOG_I("Task TaskRegisterJobRun running at " PUBLIC_LOG_U32, count);
+            sleep(1);
+            if (count > 10) { //10 second
+                runningState = false;
+            }
+        }
+    });
+    task3->Start();
+    sleep(1);
+    bool rtv = task3->IsTaskRunning();
+    EXPECT_EQ(true, rtv);
+}
+
+/**
+ * @tc.name: TaskRegisterJobPause
+ * @tc.desc: TaskRegisterJobPause
+ * @tc.type: FUNC
+ */
+HWTEST_F(TaskInnerUnitTest, TaskRegisterJobPause, TestSize.Level1)
+{
+    task4->RegisterJob([]() {
+        bool runningState =true;
+        int count = 0;
+        while (runningState) {
+            count++;
+            MEDIA_LOG_I("Task TaskRegisterJobPause running at " PUBLIC_LOG_U32, count);
+            sleep(1);
+            if (count > 10) { //10 second
+                runningState = false;
+            }
+        }
+    });
+    task4->Start();
+    task4->Pause();
+    sleep(1);
+    bool rtv = task4->IsTaskRunning();
+    EXPECT_EQ(false, rtv);
+    task4->Pause();
+    sleep(1);
+    rtv = task4->IsTaskRunning();
+    EXPECT_EQ(false, rtv);
+}
+
+/**
+ * @tc.name: TaskJobPauseResume
+ * @tc.desc: TaskJobPauseResume
+ * @tc.type: FUNC
+ */
+HWTEST_F(TaskInnerUnitTest, TaskJobPauseResume, TestSize.Level1)
+{
+    task5->RegisterJob([]() {
+        bool runningState =true;
+        int count = 0;
+        while (runningState) {
+            count++;
+            MEDIA_LOG_I("Task TaskJobPauseResume running at " PUBLIC_LOG_U32, count);
+            sleep(1);
+            if (count > 10) { //10 second
+                runningState = false;
+            }
+        }
+    });
+    task5->Start();
+    task5->Pause();
+    sleep(1);
+    bool rtv = task5->IsTaskRunning();
+    EXPECT_EQ(false, rtv);
+    task5->Start();
+    sleep(1);
+    rtv = task5->IsTaskRunning();
+    EXPECT_EQ(true, rtv);
+}
+
+
+/**
+ * @tc.name: TaskRegisterJobPauseAsync
+ * @tc.desc: TaskRegisterJobPauseAsync
+ * @tc.type: FUNC
+ */
+HWTEST_F(TaskInnerUnitTest, TaskRegisterJobPauseAsync, TestSize.Level1)
+{
+    task6->RegisterJob([]() {
+        bool runningState =true;
+        int count = 0;
+        while (runningState) {
+            count++;
+            MEDIA_LOG_I("Task TaskRegisterJobPauseAsync running at " PUBLIC_LOG_U32, count);
+            sleep(1);
+            if (count > 10) { //10 second
+                runningState = false;
+            }
+        }
+    });
+    task6->Start();
+    task6->PauseAsync();
+    sleep(1);
+    bool rtv = task6->IsTaskRunning();
+    EXPECT_EQ(false, rtv);
+    task6->PauseAsync();
+    sleep(1);
+    rtv = task6->IsTaskRunning();
+    EXPECT_EQ(false, rtv);
+}
+
+
+/**
+ * @tc.name: TaskRegisterJobStopAsync
+ * @tc.desc: TaskRegisterJobStopAsync
+ * @tc.type: FUNC
+ */
+HWTEST_F(TaskInnerUnitTest, TaskRegisterJobStopAsync, TestSize.Level1)
+{
+    task7->RegisterJob([]() {
+        bool runningState =true;
+        int count = 0;
+        while (runningState) {
+            count++;
+            MEDIA_LOG_I("Task TaskRegisterJobStopAsync running at " PUBLIC_LOG_U32, count);
+            sleep(1);
+            if (count > 10) { //10 second
+                runningState = false;
+            }
+        }
+    });
+    task7->Start();
+    sleep(1);
+    task7->StopAsync();
+    sleep(1);
+    bool rtv = task7->IsTaskRunning();
+    EXPECT_EQ(false, rtv);
+}
+
+/**
+ * @tc.name: TaskRegisterJobStop
+ * @tc.desc: TaskRegisterJobStop
+ * @tc.type: FUNC
+ */
+HWTEST_F(TaskInnerUnitTest, TaskRegisterJobStop, TestSize.Level1)
+{
+    task8->RegisterJob([]() {
+        bool runningState =true;
+        int count = 0;
+        while (runningState) {
+            count++;
+            MEDIA_LOG_I("Task TaskRegisterJobStop running at " PUBLIC_LOG_U32, count);
+            sleep(1);
+            if (count > 10) { //10 second
+                runningState = false;
+            }
+        }
+    });
+    task8->Start();
+    sleep(2);
+    task8->Stop();
+    sleep(1);
+    bool rtv = task8->IsTaskRunning();
+    EXPECT_EQ(false, rtv);
+}
+
+/**
+ * @tc.name: TaskRegisterJobStopResume
+ * @tc.desc: TaskRegisterJobStopResume
+ * @tc.type: FUNC
+ */
+HWTEST_F(TaskInnerUnitTest, TaskRegisterJobStopResume, TestSize.Level1)
+{
+    task9->RegisterJob([]() {
+        bool runningState =true;
+        int count = 0;
+        while (runningState) {
+            count++;
+            MEDIA_LOG_I("Task TaskRegisterJobStopResume running at " PUBLIC_LOG_U32, count);
+            sleep(1);
+            if (count > 10) { //10 second
+                runningState = false;
+            }
+        }
+    });
+    task9->Start();
+    sleep(2);
+    task9->Stop();
+    sleep(1);
+    task9->Start();
+    sleep(1);
+    bool rtv = task9->IsTaskRunning();
+    EXPECT_EQ(true, rtv);
+}
+
+/**
+ * @tc.name: TaskJobPauseStopResumeStart
+ * @tc.desc: TaskJobPauseStopResumeStart
+ * @tc.type: FUNC
+ */
+HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart, TestSize.Level1)
+{
+    task10->RegisterJob([this]() {
+        bool runningState =true;
+        int count = 0;
+        while (runningState) {
+            count++;
+            MEDIA_LOG_I("Task TaskJobPauseStopResumeStart running at " PUBLIC_LOG_U32, count);
+            sleep(1);
+            if (count > 5) { //5 second
+                this->modifyMsg_ = "middle";
+            }
+            if (count > 20) { //20 second
+                runningState = false;
+            }
+        }
+    });
+    task10->Start();
+    sleep(3);
+    task10->Pause();
+    sleep(2);
+    task10->Start();
+    sleep(2);
+    task10->Stop();
+    sleep(1);
+    EXPECT_EQ("middle", modifyMsg_);
+    task10->Start();
+    sleep(1);
+    bool rtv = task10->IsTaskRunning();
+    EXPECT_EQ(true, rtv);
 }
 
 /**
@@ -112,15 +388,15 @@ HWTEST_F(TaskInnerUnitTest, TaskPrintWhile, TestSize.Level1)
 HWTEST_F(TaskInnerUnitTest, WaitFor_Succ, TestSize.Level1)
 {
     AutoLock lock(mutex_);
-    task1->RegisterJob([]() {
-        bool runingState =true;
+    task01->RegisterJob([]() {
+        bool runningState =true;
         int count = 0;
-        while(runingState){
+        while(runningState){
             count++;
             MEDIA_LOG_I("Task WaitFor_Succ running at " PUBLIC_LOG_U32, count);
             sleep(1);
             if (count > 10){ //10 second
-                runingState = false;
+                runningState = false;
             }
         }
     });
@@ -139,15 +415,15 @@ HWTEST_F(TaskInnerUnitTest, WaitFor_Succ, TestSize.Level1)
 HWTEST_F(TaskInnerUnitTest, WaitFor_Failed, TestSize.Level1)
 {
     AutoLock lock(mutex_);
-    task2->RegisterJob([]() {
-        bool runingState =true;
+    task02->RegisterJob([]() {
+        bool runningState =true;
         int count = 0;
-        while(runingState){
+        while(runningState){
             count++;
             MEDIA_LOG_I("Task WaitFor_Failed running at " PUBLIC_LOG_U32, count);
             sleep(1);
             if (count > 10){ //10 second
-                runingState = false;
+                runningState = false;
             }
         }
     });
