@@ -324,7 +324,7 @@ void PluginRegister::RegisterDynamicPlugins()
     RegisterPluginsFromPath(HST_PLUGIN_PATH);
 }
 
-void PluginRegister::RegisterPluginsFromPath(const char* libDirPath)
+__attribute__((no_sanitize("cfi"))) void PluginRegister::RegisterPluginsFromPath(const char* libDirPath)
 {
 #ifdef DYNAMIC_PLUGINS
     static std::string libFileHead = "libmedia_plugin_";
