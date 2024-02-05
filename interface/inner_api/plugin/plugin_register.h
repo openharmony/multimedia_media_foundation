@@ -58,7 +58,7 @@ public:
 private:
     void RegisterStaticPlugins();
     void RegisterDynamicPlugins();
-    void RegisterPluginsFromPath(const char* libDirPath);
+    __attribute__((no_sanitize("cfi"))) void RegisterPluginsFromPath(const char* libDirPath);
     void UnregisterAllPlugins();
     void EraseRegisteredPluginsByLoader(const std::shared_ptr<PluginLoader>& loader);
 
