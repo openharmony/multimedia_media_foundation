@@ -54,7 +54,7 @@ void PlayListDownloader::DoOpen(const std::string& url)
     downloader_->Start();
 }
 
-bool PlayListDownloader::GetPlayListDownloadStatus()
+bool PlayListDownloader::GetPlayListDownloadStatus() const
 {
     return startedDownloadStatus_;
 }
