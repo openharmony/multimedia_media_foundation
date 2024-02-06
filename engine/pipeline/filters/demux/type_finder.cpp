@@ -35,7 +35,7 @@ std::string GetUriSuffix(const std::string& uri)
     return suffix;
 }
 
-bool IsPluginSupportedExtension(const Plugin::PluginInfo& pluginInfo, const std::string& extension)
+bool IsPluginSupportedExtension(Plugin::PluginInfo& pluginInfo, const std::string& extension)
 {
     if (pluginInfo.pluginType != Plugin::PluginType::DEMUXER) {
         return false;
