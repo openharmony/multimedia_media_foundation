@@ -330,6 +330,12 @@ __attribute__((no_sanitize("cfi"))) void PluginRegister::RegisterPluginsFromPath
     MEDIA_LOG_D("plugin path %{public}s", libDirPath);
     DIR* libDir = opendir(libDirPath);
     if (libDir) {
+        #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
+        static std::string fileSeparator = "\\";
+        #else
+        static std::string fileSeparator = "/";
+        #endif
+        static std::string libFileTail = HST_PLUGIN_FILE_TAIL;
         struct dirent* lib = nullptr;
         std::shared_ptr<PluginLoader> loader = nullptr;
         while ((lib = readdir(libDir))) {
