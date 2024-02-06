@@ -92,10 +92,9 @@ void DumpBufferToLog(const char* desc, const std::shared_ptr<Plugin::Buffer>& bu
     realDumpSize = std::min(realDumpSize, static_cast<size_t>(DUMP_BUFFER2LOG_SIZE)); // max DUMP_BUFFER2LOG_SIZE bytes
     char tmpStr[2 * DUMP_BUFFER2LOG_SIZE + 10] = {0}; // 字符串长度是打印的buffer长度的2倍 + 1 (字符串结束符)
     char* dstPtr = tmpStr;
-    int len;
     const uint8_t* p = buffer->GetMemory()->GetReadOnlyData();
     for (size_t i = 0; i < realDumpSize; i++) {
-        len = snprintf_s(dstPtr, 3, 2, "%02x", p[i]); // max write 3 bytes, string len 2
+        int len = snprintf_s(dstPtr, 3, 2, "%02x", p[i]); // max write 3 bytes, string len 2
         FALSE_RETURN_MSG(len > 0 && len <= 2, "snprintf_s returned unexpected value " PUBLIC_LOG_D32, len); // max len 2
         dstPtr += len;
     }
