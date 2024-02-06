@@ -514,7 +514,7 @@ HardwareHeapFactory &HardwareHeapFactory::GetInstance()
     return hwHeapInstance;
 }
 
-int32_t HardwareHeapFactory::GetHardwareHeapFd()
+int32_t HardwareHeapFactory::GetHardwareHeapFd() const
 {
     return dmaHeapFd_;
 }
