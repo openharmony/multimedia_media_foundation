@@ -125,7 +125,7 @@ private:
 class HardwareHeapFactory {
 public:
     static HardwareHeapFactory &GetInstance();
-    int32_t GetHardwareHeapFd();
+    int32_t GetHardwareHeapFd() const;
 
 private:
     HardwareHeapFactory();
