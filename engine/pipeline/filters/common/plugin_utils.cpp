@@ -487,7 +487,6 @@ std::string Meta2String(const Plugin::Meta& meta)
     char buffer[MAX_BUF_LEN + 1] = {0}; // one more is for \0
     int pos = 0;
     int32_t ret = 0;
-    std::string mime;
     RETURN_IF_SNPRI_FAILED(snprintf_truncated_s(buffer + pos, MAX_BUF_LEN - pos, "Meta{"), ret, {});
     pos += ret;
     bool needEtc = false;

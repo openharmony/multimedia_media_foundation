@@ -256,7 +256,6 @@ bool DataPacker::GetRange(uint32_t size, AVBufferPtr& bufferPtr)
     FALSE_RETURN_V(!que_.empty(), false);
 
     int32_t needCopySize = static_cast<int32_t>(size);
-    int32_t currCopySize = 0;
     int32_t index = 0;
     uint32_t lastBufferOffsetEnd = 0;
 
@@ -266,7 +265,7 @@ bool DataPacker::GetRange(uint32_t size, AVBufferPtr& bufferPtr)
     while (static_cast<uint32_t>(index) < que_.size()) {
         AVBufferPtr& buffer = que_[index];
         size_t bufferSize = GetBufferSize(buffer);
-        currCopySize = std::min(static_cast<int32_t>(bufferSize), needCopySize);
+        int32_t currCopySize = std::min(static_cast<int32_t>(bufferSize), needCopySize);
         currCopySize = CopyFirstBuffer(currCopySize, index, dstPtr, bufferPtr, 0);
         lastBufferOffsetEnd = currCopySize;
         dstPtr += currCopySize;
@@ -453,11 +452,10 @@ int32_t DataPacker::CopyFromSuccessiveBuffer(uint64_t prevOffset, uint64_t offse
 {
     size_t copySize;
     int32_t usedCount = 0;
-    uint64_t curOffsetEnd;
     prevOffset = prevOffset + GetBufferSize(que_[startIndex]);
     for (size_t i = startIndex + 1; i < que_.size(); ++i) {
         usedCount++;
-        curOffsetEnd = prevOffset + GetBufferSize(que_[i]);
+        uint64_t curOffsetEnd = prevOffset + GetBufferSize(que_[i]);
         if (curOffsetEnd >= offsetEnd) { // This buffer is enough
             NZERO_LOG(memcpy_s(dstPtr, needCopySize, GetBufferReadOnlyData(que_[i]), needCopySize));
             needCopySize = 0;

@@ -465,13 +465,13 @@ ErrorCode VideoSinkFilter::SetVideoSurface(sptr<Surface> surface)
 
 bool VideoSinkFilter::CheckBufferLatenessMayWait(AVBufferPtr buffer)
 {
-    bool tooLate = false;
     auto syncCenter = syncCenter_.lock();
     if (!syncCenter) {
         return false;
     }
     auto ct4Buffer = syncCenter->GetClockTime(buffer->pts);
     if (ct4Buffer != HST_TIME_NONE) {
+        bool tooLate = false;
         auto nowCt = syncCenter->GetClockTimeNow();
         uint64_t latency = 0;
         plugin_->GetLatency(latency);
