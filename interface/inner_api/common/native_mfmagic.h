@@ -24,6 +24,7 @@
 #define MF_MAGIC(a, b, c, d) (((a) << 24) + ((b) << 16) + ((c) << 8) + ((d) << 0))
 
 enum class MFMagic {
+    MFMAGIC_UNKNOWN = 0,
     MFMAGIC_AVBUFFER = MF_MAGIC('B', 'B', 'U', 'F'),
     MFMAGIC_FORMAT = MF_MAGIC('F', 'R', 'M', 'T'),
     MFMAGIC_SHARED_MEMORY = MF_MAGIC('S', 'M', 'E', 'M'),
@@ -37,7 +38,7 @@ struct MFObjectMagic : public OHOS::RefBase {
 
 struct OH_AVBuffer : public MFObjectMagic {
     explicit OH_AVBuffer(const std::shared_ptr<OHOS::Media::AVBuffer> &buf);
-    virtual ~OH_AVBuffer() = default;
+    virtual ~OH_AVBuffer();
     bool IsEqualBuffer(const std::shared_ptr<OHOS::Media::AVBuffer> &buf);
     std::shared_ptr<OHOS::Media::AVBuffer> buffer_;
     bool isUserCreated = false;
@@ -47,7 +48,7 @@ struct OH_AVMemory : public MFObjectMagic {
     explicit OH_AVMemory(const std::shared_ptr<OHOS::Media::AVSharedMemory> &mem);
     ~OH_AVMemory() override;
     bool IsEqualMemory(const std::shared_ptr<OHOS::Media::AVSharedMemory> &mem);
-    const std::shared_ptr<OHOS::Media::AVSharedMemory> memory_;
+    std::shared_ptr<OHOS::Media::AVSharedMemory> memory_;
     bool isUserCreated = false;
 };
 

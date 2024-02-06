@@ -254,8 +254,8 @@ bool AVMemory::SkipCommonFromMessageParcel(MessageParcel &parcel)
 
 bool AVMemory::WriteCommonToMessageParcel(MessageParcel &parcel)
 {
-    bool ret = true;
 #ifdef MEDIA_OHOS
+    bool ret = true;
     MessageParcel bufferParcel;
     ret = bufferParcel.WriteInt32(capacity_) && bufferParcel.WriteInt32(align_) && bufferParcel.WriteInt32(offset_) &&
           bufferParcel.WriteInt32(size_);
@@ -263,7 +263,7 @@ bool AVMemory::WriteCommonToMessageParcel(MessageParcel &parcel)
     size_t size = bufferParcel.GetDataSize();
     return ret && parcel.WriteUint64(static_cast<uint64_t>(size)) && parcel.Append(bufferParcel);
 #endif
-    return ret;
+    return true;
 }
 
 MemoryType AVMemory::GetMemoryType()
