@@ -57,11 +57,11 @@ void* HttpSourceAllocator::Alloc(size_t size)
 void HttpSourceAllocator::Free(void* ptr) // NOLINT: void*
 {
     if (ptr != nullptr) {
-        delete[](uint8_t*) ptr;
+        delete[]static_cast<uint8_t*>(ptr);
     }
 }
 
-HttpSourcePlugin::HttpSourcePlugin(const std::string name) noexcept
+HttpSourcePlugin::HttpSourcePlugin(const std::string& name) noexcept
     : SourcePlugin(std::move(name)),
       url_(""),
       certFile_(""),
