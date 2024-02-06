@@ -634,6 +634,9 @@ ErrorCode HiPlayerImpl::OnCallback(const FilterCallbackType& type, Filter* filte
     switch (type) {
         case FilterCallbackType::PORT_ADDED:
             ret = NewAudioPortFound(filter, parameter);
+            if (ret != ErrorCode::SUCCESS) {
+                return ret;
+            }
 #ifdef VIDEO_SUPPORT
             ret = NewVideoPortFound(filter, parameter);
 #endif
