@@ -141,7 +141,7 @@ Status WavDemuxerPlugin::ReadFrame(Buffer& outBuffer, int32_t timeOutMs)
 
 Status WavDemuxerPlugin::SeekTo(int32_t trackId, int64_t seekTime, SeekMode mode, int64_t& realSeekTime)
 {
-    if (fileSize_ <= 0 || seekable_ == Seekable::INVALID || seekable_ == Seekable::UNSEEKABLE) {
+    if (fileSize_ == 0 || seekable_ == Seekable::INVALID || seekable_ == Seekable::UNSEEKABLE) {
         return Status::ERROR_INVALID_OPERATION;
     }
     auto blockAlign = wavHeader_.bitsPerSample / 8 * wavHeader_.numChannels; // blockAlign = wavHeader_.blockAlign

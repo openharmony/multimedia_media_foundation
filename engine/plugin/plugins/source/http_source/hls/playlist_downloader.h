@@ -52,12 +52,12 @@ public:
     void Stop();
     void Start();
     void SetStatusCallback(StatusCallbackFunc cb);
-    bool GetPlayListDownloadStatus();
+    bool GetPlayListDownloadStatus() const;
 
 protected:
     bool SaveData(uint8_t* data, uint32_t len);
-    void OnDownloadStatus(DownloadStatus status, std::shared_ptr<Downloader>&,
-                          std::shared_ptr<DownloadRequest>& request);
+    static void OnDownloadStatus(DownloadStatus status, std::shared_ptr<Downloader>&,
+                            std::shared_ptr<DownloadRequest>& request);
     void DoOpen(const std::string& url);
 
 protected:

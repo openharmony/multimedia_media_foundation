@@ -43,7 +43,7 @@ public:
     Status Deinit() override;
 private:
     void InitCurlEnvironment(const std::string& url);
-    std::string UrlParse(const std::string& url) const;
+    static std::string UrlParse(const std::string& url);
 private:
     RxHeader rxHeader_;
     RxBody rxBody_;

@@ -452,7 +452,7 @@ Status AudioFfmpegDecoderPlugin::QueueInputBuffer(const std::shared_ptr<Buffer>&
         MEDIA_LOG_E("Decoder does not support fd buffer.");
         return Status::ERROR_INVALID_DATA;
     }
-    Status ret = Status::OK;
+    Status ret;
     {
         OSAL::ScopedLock lock(avMutex_);
         if (avCodecContext_ == nullptr) {

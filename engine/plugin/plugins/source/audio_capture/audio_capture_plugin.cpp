@@ -169,7 +169,7 @@ Status AudioCapturePlugin::Prepare()
     MEDIA_LOG_D("IN");
     AudioStandard::AudioEncodingType audioEncoding = AudioStandard::ENCODING_INVALID;
     auto supportedEncodingTypes = OHOS::AudioStandard::AudioCapturer::GetSupportedEncodingTypes();
-    for (auto& supportedEncodingType : supportedEncodingTypes) {
+    for (const auto& supportedEncodingType : supportedEncodingTypes) {
         if (supportedEncodingType == AudioStandard::ENCODING_PCM) {
             audioEncoding = AudioStandard::ENCODING_PCM;
             break;

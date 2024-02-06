@@ -313,7 +313,7 @@ Status Minimp3DemuxerPlugin::Init()
 {
     minimp3DemuxerImpl_ = MiniMp3GetOpt();
     AudioDemuxerMp3Open();
-    inIoBuffer_ = (uint8_t *)(malloc(inIoBufferSize_));
+    inIoBuffer_ = static_cast<uint8_t*>(malloc(inIoBufferSize_));
     if (inIoBuffer_ == nullptr) {
         MEDIA_LOG_E("inIoBuffer_ malloc failed");
         return Status::ERROR_NO_MEMORY;
@@ -487,7 +487,7 @@ Status Minimp3DemuxerPlugin::AudioDemuxerMp3Prepare(AudioDemuxerMp3Attr *mp3Demu
 
 int Minimp3DemuxerPlugin::AudioDemuxerMp3Process(uint8_t *buf, uint32_t len)
 {
-    if ((buf == nullptr) || (len < 0)) {
+    if (buf == nullptr) {
         MEDIA_LOG_E(PUBLIC_LOG_S " arg error", __func__);
         return AUDIO_DEMUXER_ERROR;
     }
@@ -619,7 +619,7 @@ int AudioDemuxerMp3IterateCallbackForProbe(void *userData, const uint8_t *frame,
 Status AudioDemuxerMp3Probe(AudioDemuxerMp3Attr* mp3DemuxerAttr, uint8_t* inputBuffer, uint32_t inputLength,
                             AudioDemuxerRst* mp3DemuxerRst)
 {
-    FALSE_RETURN_V_MSG_W(inputBuffer != nullptr && inputLength >= 0, Status::ERROR_INVALID_PARAMETER, "invalid parameter");
+    FALSE_RETURN_V_MSG_W(inputBuffer != nullptr, Status::ERROR_INVALID_PARAMETER, "invalid parameter");
     if (inputLength == 0) {
         return Status::ERROR_NOT_ENOUGH_DATA;
     }
