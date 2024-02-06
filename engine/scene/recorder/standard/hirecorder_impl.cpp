@@ -611,7 +611,7 @@ ErrorCode HiRecorderImpl::DoConfigureOther(const HstRecParam& param) const
     switch (param.stdParamType) {
         case RecorderPublicParamType::OUT_FD: {
             auto ptr = param.GetValPtr<OutFd>();
-            FALSE_RETURN_V_MSG_E(ptr != nullptr, ErrorCode::ERROR_INVALID_PARAMETER_VALUE,);
+            FALSE_RETURN_V(ptr != nullptr, ErrorCode::ERROR_INVALID_PARAMETER_VALUE);
             MediaSink mediaSink {Plugin::ProtocolType::FD};
             int32_t fd = ptr->fd;
 #ifndef WIN32
@@ -623,14 +623,14 @@ ErrorCode HiRecorderImpl::DoConfigureOther(const HstRecParam& param) const
         }
         case RecorderPublicParamType::MAX_DURATION: {
             auto ptr = param.GetValPtr<MaxDuration>();
-            FALSE_RETURN_V_MSG_E(ptr != nullptr, ErrorCode::ERROR_INVALID_PARAMETER_VALUE,);
+            FALSE_RETURN_V(ptr != nullptr, ErrorCode::ERROR_INVALID_PARAMETER_VALUE);
             int64_t hstTime = 0;
             Plugin::Sec2HstTime(ptr->duration, hstTime);
             return muxer_->SetMaxDuration(hstTime > 0 ? hstTime : 0);
         }
         case RecorderPublicParamType::MAX_SIZE: {
             auto ptr = param.GetValPtr<MaxFileSize>();
-            FALSE_RETURN_V_MSG_E(ptr != nullptr, ErrorCode::ERROR_INVALID_PARAMETER_VALUE,);
+            FALSE_RETURN_V(ptr != nullptr, ErrorCode::ERROR_INVALID_PARAMETER_VALUE);
             return muxer_->SetMaxSize(ptr->size > 0 ? ptr->size : 0);
         }
         case RecorderPublicParamType::VID_ORIENTATION_HINT:
