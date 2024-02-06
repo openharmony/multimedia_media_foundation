@@ -517,29 +517,29 @@ ErrorCode HiRecorderImpl::DoConfigureAudio(const HstRecParam& param) const
     switch (param.stdParamType) {
         case RecorderPublicParamType::AUD_SAMPLERATE: {
             auto ptr = param.GetValPtr<AudSampleRate>();
-            FALSE_RETURN_V_MSG_E(ptr != nullptr, ErrorCode::ERROR_INVALID_PARAMETER_VALUE,);
+            FALSE_RETURN_V(ptr != nullptr, ErrorCode::ERROR_INVALID_PARAMETER_VALUE);
             MEDIA_LOG_I("set sample rate : " PUBLIC_LOG_D32, ptr->sampleRate);
             return audioCapture_->SetParameter(static_cast<int32_t>(Plugin::Tag::AUDIO_SAMPLE_RATE),
                                                static_cast<uint32_t>(ptr->sampleRate));
         }
         case RecorderPublicParamType::AUD_CHANNEL: {
             auto ptr = param.GetValPtr<AudChannel>();
-            FALSE_RETURN_V_MSG_E(ptr != nullptr, ErrorCode::ERROR_INVALID_PARAMETER_VALUE,);
+            FALSE_RETURN_V(ptr != nullptr, ErrorCode::ERROR_INVALID_PARAMETER_VALUE);
             MEDIA_LOG_I("set channel : " PUBLIC_LOG_D32, ptr->channel);
             return audioCapture_->SetParameter(static_cast<int32_t>(Plugin::Tag::AUDIO_CHANNELS),
                                                static_cast<uint32_t>(ptr->channel));
         }
         case RecorderPublicParamType::AUD_BITRATE: {
             auto ptr = param.GetValPtr<AudBitRate>();
-            FALSE_RETURN_V_MSG_E(ptr != nullptr && static_cast<int32_t>(ptr->bitRate) > 0,
-                ErrorCode::ERROR_INVALID_PARAMETER_VALUE,);
+            FALSE_RETURN_V(ptr != nullptr && static_cast<int32_t>(ptr->bitRate) > 0,
+                ErrorCode::ERROR_INVALID_PARAMETER_VALUE);
             MEDIA_LOG_I("set bitRate : " PUBLIC_LOG_D32, ptr->bitRate);
             return audioCapture_->SetParameter(static_cast<int32_t>(Plugin::Tag::MEDIA_BITRATE),
                                                static_cast<int64_t>(ptr->bitRate));
         }
         case RecorderPublicParamType::AUD_ENC_FMT: {
             auto ptr = param.GetValPtr<AudEnc>();
-            FALSE_RETURN_V_MSG_E(ptr != nullptr, ErrorCode::ERROR_INVALID_PARAMETER_VALUE,);
+            FALSE_RETURN_V(ptr != nullptr, ErrorCode::ERROR_INVALID_PARAMETER_VALUE);
             auto encoderMeta = std::make_shared<Plugin::Meta>();
             if (!TransAudioEncoderFmt(ptr->encFmt, *encoderMeta)) {
                 return ErrorCode::ERROR_INVALID_PARAMETER_VALUE;
@@ -560,7 +560,7 @@ ErrorCode HiRecorderImpl::DoConfigureVideo(const HstRecParam& param) const
     switch (param.stdParamType) {
         case RecorderPublicParamType::VID_RECTANGLE: {
             auto ptr = param.GetValPtr<VidRectangle>();
-            FALSE_RETURN_V_MSG_E(ptr != nullptr, ErrorCode::ERROR_INVALID_PARAMETER_VALUE,);
+            FALSE_RETURN_V(ptr != nullptr, ErrorCode::ERROR_INVALID_PARAMETER_VALUE);
             auto ret = videoCapture_->SetParameter(static_cast<int32_t>(Plugin::Tag::VIDEO_WIDTH),
                                                    static_cast<uint32_t>(ptr->width));
             if (ret == ErrorCode::SUCCESS) {
@@ -571,25 +571,25 @@ ErrorCode HiRecorderImpl::DoConfigureVideo(const HstRecParam& param) const
         }
         case RecorderPublicParamType::VID_CAPTURERATE: {
             auto ptr = param.GetValPtr<CaptureRate>();
-            FALSE_RETURN_V_MSG_E(ptr != nullptr, ErrorCode::ERROR_INVALID_PARAMETER_VALUE,);
+            FALSE_RETURN_V(ptr != nullptr, ErrorCode::ERROR_INVALID_PARAMETER_VALUE);
             return videoCapture_->SetParameter(static_cast<int32_t>(Plugin::Tag::VIDEO_CAPTURE_RATE),
                                                static_cast<double>(ptr->capRate));
         }
         case RecorderPublicParamType::VID_BITRATE: {
             auto ptr = param.GetValPtr<VidBitRate>();
-            FALSE_RETURN_V_MSG_E(ptr != nullptr, ErrorCode::ERROR_INVALID_PARAMETER_VALUE,);
+            FALSE_RETURN_V(ptr != nullptr, ErrorCode::ERROR_INVALID_PARAMETER_VALUE);
             return videoCapture_->SetParameter(static_cast<int32_t>(Plugin::Tag::MEDIA_BITRATE),
                 static_cast<int64_t>((ptr->bitRate >= 0) ? ptr->bitRate : 0));
         }
         case RecorderPublicParamType::VID_FRAMERATE: {
             auto ptr = param.GetValPtr<VidFrameRate>();
-            FALSE_RETURN_V_MSG_E(ptr != nullptr, ErrorCode::ERROR_INVALID_PARAMETER_VALUE,);
+            FALSE_RETURN_V(ptr != nullptr, ErrorCode::ERROR_INVALID_PARAMETER_VALUE);
             return videoCapture_->SetParameter(static_cast<int32_t>(Plugin::Tag::VIDEO_FRAME_RATE),
                 static_cast<uint32_t>((ptr->frameRate >= 0) ? ptr->frameRate : 0));
         }
         case RecorderPublicParamType::VID_ENC_FMT: {
             auto ptr = param.GetValPtr<VidEnc>();
-            FALSE_RETURN_V_MSG_E(ptr != nullptr, ErrorCode::ERROR_INVALID_PARAMETER_VALUE,);
+            FALSE_RETURN_V(ptr != nullptr, ErrorCode::ERROR_INVALID_PARAMETER_VALUE);
             auto encoderMeta = std::make_shared<Plugin::Meta>();
             FALSE_RETURN_V(TransVideoEncoderFmt(ptr->encFmt, *encoderMeta),
                            ErrorCode::ERROR_INVALID_PARAMETER_VALUE);
