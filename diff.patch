@@ -1,0 +1,604 @@
+diff --git a/engine/plugin/core/plugin_register.cpp b/engine/plugin/core/plugin_register.cpp
+index 67e1d130..4bd97034 100644
+--- a/engine/plugin/core/plugin_register.cpp
++++ b/engine/plugin/core/plugin_register.cpp
+@@ -383,7 +383,7 @@ void PluginRegister::RegisterPluginsFromPath(const char* libDirPath)
+                 continue;
+             }
+             std::string libName = lib->d_name;
+-            if (libName.find(libFileHead) ||
++            if (libName.find(libFileHead) != std::string::npos ||
+                 libName.compare(libName.size() - libFileTail.size(), libFileTail.size(), libFileTail)) {
+                 continue;
+             }
+@@ -431,7 +431,7 @@ void PluginRegister::DeletePlugin(std::map<std::string, std::shared_ptr<PluginRe
+ }
+ void PluginRegister::EraseRegisteredPluginsByLoader(const std::shared_ptr<PluginLoader>& loader)
+ {
+-    for (auto& it : registerData_->registerTable) {
++    for (const auto& it : registerData_->registerTable) {
+         auto plugins = it.second;
+         for (auto info = plugins.begin(); info != plugins.end();) {
+             if (info->second->loader == loader) {
+diff --git a/engine/plugin/core/plugin_wrapper.cpp b/engine/plugin/core/plugin_wrapper.cpp
+index f0329ac7..b651a4a1 100644
+--- a/engine/plugin/core/plugin_wrapper.cpp
++++ b/engine/plugin/core/plugin_wrapper.cpp
+@@ -99,7 +99,7 @@ void ConvertToMediaInfoHelper(uint32_t pkgVersion, const MediaInfo& src, MediaIn
+         dest.globalMeta.SetData(global.first, global.second);
+     }
+     size_t streamSize = src.tracks.size();
+-    if (streamSize <= 0) {
++    if (streamSize == 0) {
+         return;
+     }
+     dest.trackMeta.resize(streamSize);
+diff --git a/engine/plugin/plugins/demuxer/minimp4_demuxer/minimp4_demuxer_plugin.cpp b/engine/plugin/plugins/demuxer/minimp4_demuxer/minimp4_demuxer_plugin.cpp
+index f68a9d1c..fcd2699c 100644
+--- a/engine/plugin/plugins/demuxer/minimp4_demuxer/minimp4_demuxer_plugin.cpp
++++ b/engine/plugin/plugins/demuxer/minimp4_demuxer/minimp4_demuxer_plugin.cpp
+@@ -52,8 +52,8 @@ MiniMP4DemuxerPlugin::MiniMP4DemuxerPlugin(std::string name)
+       ioContext_(),
+       fileSize_(0),
+       inIoBuffer_(nullptr),
+-      inIoBufferSize_(MEDIA_IO_SIZE),
+       ioDataRemainSize_(0),
++      inIoBufferSize_(MEDIA_IO_SIZE),
+       sampleIndex_(0)
+ {
+     (void)memset_s(&miniMP4_, sizeof(MP4D_demux_t), 0, sizeof(MP4D_demux_t));
+@@ -327,9 +327,8 @@ int MiniMP4DemuxerPlugin::ReadCallback(int64_t offset, void* buffer, size_t size
+             static_cast<uint32_t>(mp4Demuxer->ioContext_.offset));
+         mp4Demuxer->ioDataRemainSize_ = 0;
+         mp4Demuxer->ioContext_.offset = offset;
+-        Status status = Status::ERROR_UNKNOWN;
+         readDataSize = mp4Demuxer->inIoBufferSize_;
+-        status = mp4Demuxer->GetDataFromSource();
++        Status status = mp4Demuxer->GetDataFromSource();
+         if (status != Status::OK) {
+             return (int)status;
+         }
+@@ -342,7 +341,6 @@ int MiniMP4DemuxerPlugin::ReadCallback(int64_t offset, void* buffer, size_t size
+ 
+ Status MiniMP4DemuxerPlugin::ReadFrame(Buffer &outBuffer, int32_t timeOutMs)
+ {
+-    Status retResult = Status::OK;
+     std::shared_ptr<Memory> mp4FrameData;
+     if (sampleIndex_ >= miniMP4_.track->sample_count) {
+         (void)memset_s(inIoBuffer_, MEDIA_IO_SIZE, 0, MEDIA_IO_SIZE);
+@@ -371,7 +369,7 @@ Status MiniMP4DemuxerPlugin::ReadFrame(Buffer &outBuffer, int32_t timeOutMs)
+         ioDataRemainSize_ = 0;
+         ioContext_.offset = offset;
+     }
+-    retResult = GetDataFromSource();
++    Status retResult = GetDataFromSource();
+     if (retResult != Status::OK) {
+         return retResult;
+     }
+diff --git a/engine/plugin/plugins/demuxer/wav_demuxer/wav_demuxer_plugin.cpp b/engine/plugin/plugins/demuxer/wav_demuxer/wav_demuxer_plugin.cpp
+index 2d730706..53f4c526 100644
+--- a/engine/plugin/plugins/demuxer/wav_demuxer/wav_demuxer_plugin.cpp
++++ b/engine/plugin/plugins/demuxer/wav_demuxer/wav_demuxer_plugin.cpp
+@@ -141,7 +141,7 @@ Status WavDemuxerPlugin::ReadFrame(Buffer& outBuffer, int32_t timeOutMs)
+ 
+ Status WavDemuxerPlugin::SeekTo(int32_t trackId, int64_t seekTime, SeekMode mode, int64_t& realSeekTime)
+ {
+-    if (fileSize_ <= 0 || seekable_ == Seekable::INVALID || seekable_ == Seekable::UNSEEKABLE) {
++    if (fileSize_ == 0 || seekable_ == Seekable::INVALID || seekable_ == Seekable::UNSEEKABLE) {
+         return Status::ERROR_INVALID_OPERATION;
+     }
+     auto blockAlign = wavHeader_.bitsPerSample / 8 * wavHeader_.numChannels; // blockAlign = wavHeader_.blockAlign
+diff --git a/engine/plugin/plugins/ffmpeg_adapter/audio_decoder/audio_ffmpeg_decoder_plugin.cpp b/engine/plugin/plugins/ffmpeg_adapter/audio_decoder/audio_ffmpeg_decoder_plugin.cpp
+index 6d0112d1..527abda8 100644
+--- a/engine/plugin/plugins/ffmpeg_adapter/audio_decoder/audio_ffmpeg_decoder_plugin.cpp
++++ b/engine/plugin/plugins/ffmpeg_adapter/audio_decoder/audio_ffmpeg_decoder_plugin.cpp
+@@ -452,7 +452,7 @@ Status AudioFfmpegDecoderPlugin::QueueInputBuffer(const std::shared_ptr<Buffer>&
+         MEDIA_LOG_E("Decoder does not support fd buffer.");
+         return Status::ERROR_INVALID_DATA;
+     }
+-    Status ret = Status::OK;
++    Status ret;
+     {
+         OSAL::ScopedLock lock(avMutex_);
+         if (avCodecContext_ == nullptr) {
+diff --git a/engine/plugin/plugins/ffmpeg_adapter/audio_encoder/audio_ffmpeg_encoder_plugin.cpp b/engine/plugin/plugins/ffmpeg_adapter/audio_encoder/audio_ffmpeg_encoder_plugin.cpp
+index 5d1af9e9..bcb4433c 100644
+--- a/engine/plugin/plugins/ffmpeg_adapter/audio_encoder/audio_ffmpeg_encoder_plugin.cpp
++++ b/engine/plugin/plugins/ffmpeg_adapter/audio_encoder/audio_ffmpeg_encoder_plugin.cpp
+@@ -323,7 +323,7 @@ Status AudioFfmpegEncoderPlugin::QueueInputBuffer(const std::shared_ptr<Buffer>&
+         MEDIA_LOG_E("encoder does not support fd buffer");
+         return Status::ERROR_INVALID_DATA;
+     }
+-    Status ret = Status::OK;
++    Status ret;
+     {
+         OSAL::ScopedLock lock(avMutex_);
+         if (avCodecContext_ == nullptr) {
+diff --git a/engine/plugin/plugins/ffmpeg_adapter/utils/avc_config_data_parser.cpp b/engine/plugin/plugins/ffmpeg_adapter/utils/avc_config_data_parser.cpp
+index 49e4221c..3e1d52c0 100644
+--- a/engine/plugin/plugins/ffmpeg_adapter/utils/avc_config_data_parser.cpp
++++ b/engine/plugin/plugins/ffmpeg_adapter/utils/avc_config_data_parser.cpp
+@@ -42,16 +42,16 @@ AVCConfigDataParser::AVCConfigDataParser(const uint8_t* cfgData, const size_t cf
+     : bitReader_(cfgData, cfgDataSize),
+       cfgData_(cfgData),
+       cfgDataSize_(cfgDataSize),
++      nalUnitLen_(AVC_NAL_SIZE_LEN_4),
+       version_(1),
+       profile_(0),
+       profile_compat_(0),
+       level_(0),
+-      needAddFrameHeader_(false)
++      needAddFrameHeader_(false),
++      newCfgData_(nullptr),
++      newCfgDataSize_(0)
+ {
+     cfgSet.count = 0;
+-    newCfgData_ = nullptr;
+-    newCfgDataSize_ = 0;
+-    nalUnitLen_ = AVC_NAL_SIZE_LEN_4;
+ }
+ 
+ AVCConfigDataParser::~AVCConfigDataParser()
+@@ -99,7 +99,7 @@ bool AVCConfigDataParser::ParseConfigData()
+     return true;
+ }
+ 
+-bool AVCConfigDataParser::IsNeedAddFrameHeader()
++bool AVCConfigDataParser::IsNeedAddFrameHeader() const
+ {
+     return needAddFrameHeader_; // We can add this flag as specific header in newCfgData_, do it later
+ }
+diff --git a/engine/plugin/plugins/ffmpeg_adapter/utils/avc_config_data_parser.h b/engine/plugin/plugins/ffmpeg_adapter/utils/avc_config_data_parser.h
+index 1a6fd697..543010a2 100644
+--- a/engine/plugin/plugins/ffmpeg_adapter/utils/avc_config_data_parser.h
++++ b/engine/plugin/plugins/ffmpeg_adapter/utils/avc_config_data_parser.h
+@@ -36,7 +36,7 @@ public:
+     ~AVCConfigDataParser();
+ 
+     bool ParseConfigData();
+-    bool IsNeedAddFrameHeader();
++    bool IsNeedAddFrameHeader() const;
+     bool GetNewConfigData(std::shared_ptr<uint8_t>& newCfgData, size_t& newCfgDataSize);
+ 
+ private:
+diff --git a/engine/plugin/plugins/ffmpeg_adapter/video_decoder/video_ffmpeg_decoder_plugin.cpp b/engine/plugin/plugins/ffmpeg_adapter/video_decoder/video_ffmpeg_decoder_plugin.cpp
+index 0c007bd8..6c541e72 100644
+--- a/engine/plugin/plugins/ffmpeg_adapter/video_decoder/video_ffmpeg_decoder_plugin.cpp
++++ b/engine/plugin/plugins/ffmpeg_adapter/video_decoder/video_ffmpeg_decoder_plugin.cpp
+@@ -397,7 +397,7 @@ Status VideoFfmpegDecoderPlugin::Start()
+ 
+ Status VideoFfmpegDecoderPlugin::Stop()
+ {
+-    Status ret = Status::OK;
++    Status ret;
+     {
+         OSAL::ScopedLock l(avMutex_);
+         ret = CloseCodecContext();
+@@ -437,7 +437,7 @@ Status VideoFfmpegDecoderPlugin::QueueInputBuffer(const std::shared_ptr<Buffer>&
+         MEDIA_LOG_E("decoder does not support fd buffer");
+         return Status::ERROR_INVALID_DATA;
+     }
+-    Status ret = Status::OK;
++    Status ret;
+     {
+         OSAL::ScopedLock l(avMutex_);
+         ret = SendBufferLocked(inputBuffer);
+diff --git a/engine/plugin/plugins/ffmpeg_adapter/video_encoder/video_ffmpeg_encoder_plugin.cpp b/engine/plugin/plugins/ffmpeg_adapter/video_encoder/video_ffmpeg_encoder_plugin.cpp
+index e810fbc2..3d664487 100644
+--- a/engine/plugin/plugins/ffmpeg_adapter/video_encoder/video_ffmpeg_encoder_plugin.cpp
++++ b/engine/plugin/plugins/ffmpeg_adapter/video_encoder/video_ffmpeg_encoder_plugin.cpp
+@@ -341,7 +341,7 @@ Status VideoFfmpegEncoderPlugin::Start()
+ 
+ Status VideoFfmpegEncoderPlugin::Stop()
+ {
+-    Status ret = Status::OK;
++    Status ret;
+     {
+         OSAL::ScopedLock lock(avMutex_);
+         ret = CloseCodecContext();
+@@ -383,7 +383,7 @@ Status VideoFfmpegEncoderPlugin::QueueInputBuffer(const std::shared_ptr<Buffer>&
+     MEDIA_LOG_DD("queue input buffer");
+     FALSE_RETURN_V_MSG_E(!inputBuffer->IsEmpty() || (inputBuffer->flag & BUFFER_FLAG_EOS),
+         Status::ERROR_INVALID_DATA, "encoder does not support fd buffer");
+-    Status ret = Status::OK;
++    Status ret;
+     {
+         OSAL::ScopedLock lock(avMutex_);
+         ret = SendBufferLocked(inputBuffer);
+diff --git a/engine/plugin/plugins/minimp3_adapter/minimp3_decoder_plugin.cpp b/engine/plugin/plugins/minimp3_adapter/minimp3_decoder_plugin.cpp
+index a770d773..dcd730fa 100755
+--- a/engine/plugin/plugins/minimp3_adapter/minimp3_decoder_plugin.cpp
++++ b/engine/plugin/plugins/minimp3_adapter/minimp3_decoder_plugin.cpp
+@@ -214,7 +214,7 @@ Status Minimp3DecoderPlugin::AudioDecoderMp3Process(std::shared_ptr<Buffer> inBu
+     if (outData->GetCapacity() < probePcmLength) {
+         return Status::ERROR_UNKNOWN;
+     }
+-    int16_t *pcmPtr = (int16_t *)outData->GetWritableAddr(probePcmLength, 0);
++    int16_t *pcmPtr = static_cast<int16_t*>(outData->GetWritableAddr(probePcmLength, 0));
+     int sampleCount = minimp3DecoderImpl_.decoderFrame(&mp3DecoderAttr_.mp3DecoderHandle, inData->GetReadOnlyData(),
+                                                        inData->GetSize(), pcmPtr, &frameInfo);
+     outBuffer->pts = inBuffer->pts;
+diff --git a/engine/plugin/plugins/minimp3_adapter/minimp3_demuxer_plugin.cpp b/engine/plugin/plugins/minimp3_adapter/minimp3_demuxer_plugin.cpp
+index 3024cdf0..8d16ac97 100755
+--- a/engine/plugin/plugins/minimp3_adapter/minimp3_demuxer_plugin.cpp
++++ b/engine/plugin/plugins/minimp3_adapter/minimp3_demuxer_plugin.cpp
+@@ -313,7 +313,7 @@ Status Minimp3DemuxerPlugin::Init()
+ {
+     minimp3DemuxerImpl_ = MiniMp3GetOpt();
+     AudioDemuxerMp3Open();
+-    inIoBuffer_ = (uint8_t *)(malloc(inIoBufferSize_));
++    inIoBuffer_ = static_cast<uint8_t*>(malloc(inIoBufferSize_));
+     if (inIoBuffer_ == nullptr) {
+         MEDIA_LOG_E("inIoBuffer_ malloc failed");
+         return Status::ERROR_NO_MEMORY;
+@@ -487,7 +487,7 @@ Status Minimp3DemuxerPlugin::AudioDemuxerMp3Prepare(AudioDemuxerMp3Attr *mp3Demu
+ 
+ int Minimp3DemuxerPlugin::AudioDemuxerMp3Process(uint8_t *buf, uint32_t len)
+ {
+-    if ((buf == nullptr) || (len < 0)) {
++    if (buf == nullptr) {
+         MEDIA_LOG_E(PUBLIC_LOG_S " arg error", __func__);
+         return AUDIO_DEMUXER_ERROR;
+     }
+@@ -619,7 +619,7 @@ int AudioDemuxerMp3IterateCallbackForProbe(void *userData, const uint8_t *frame,
+ Status AudioDemuxerMp3Probe(AudioDemuxerMp3Attr* mp3DemuxerAttr, uint8_t* inputBuffer, uint32_t inputLength,
+                             AudioDemuxerRst* mp3DemuxerRst)
+ {
+-    FALSE_RETURN_V_MSG_W(inputBuffer != nullptr && inputLength >= 0, Status::ERROR_INVALID_PARAMETER, "invalid parameter");
++    FALSE_RETURN_V_MSG_W(inputBuffer != nullptr, Status::ERROR_INVALID_PARAMETER, "invalid parameter");
+     if (inputLength == 0) {
+         return Status::ERROR_NOT_ENOUGH_DATA;
+     }
+diff --git a/engine/plugin/plugins/sink/audio_server_sink/audio_server_sink_plugin.cpp b/engine/plugin/plugins/sink/audio_server_sink/audio_server_sink_plugin.cpp
+index f73e2b78..022dffd2 100644
+--- a/engine/plugin/plugins/sink/audio_server_sink/audio_server_sink_plugin.cpp
++++ b/engine/plugin/plugins/sink/audio_server_sink/audio_server_sink_plugin.cpp
+@@ -192,7 +192,7 @@ namespace AuSrSinkPlugin {
+ using namespace OHOS::Media::Plugin;
+ 
+ 
+-AudioServerSinkPlugin::AudioRendererCallbackImpl::AudioRendererCallbackImpl(Callback* cb, bool& isPaused)
++AudioServerSinkPlugin::AudioRendererCallbackImpl::AudioRendererCallbackImpl(Callback* cb, const bool& isPaused)
+     : callback_(cb), isPaused_(isPaused)
+ {
+ }
+@@ -736,7 +736,6 @@ Status AudioServerSinkPlugin::Write(const std::shared_ptr<Buffer>& input)
+     MEDIA_LOG_DD("write data size " PUBLIC_LOG_ZU, destLength);
+     while (isForcePaused_ && seekable_ == Seekable::SEEKABLE) {
+         OSAL::SleepFor(5); // 5ms
+-        continue;
+     }
+     int32_t ret = 0;
+     OSAL::ScopedLock lock(renderMutex_);
+diff --git a/engine/plugin/plugins/sink/audio_server_sink/audio_server_sink_plugin.h b/engine/plugin/plugins/sink/audio_server_sink/audio_server_sink_plugin.h
+index 7e5c7f2f..e266c0cb 100644
+--- a/engine/plugin/plugins/sink/audio_server_sink/audio_server_sink_plugin.h
++++ b/engine/plugin/plugins/sink/audio_server_sink/audio_server_sink_plugin.h
+@@ -114,7 +114,7 @@ public:
+ private:
+     class AudioRendererCallbackImpl : public OHOS::AudioStandard::AudioRendererCallback {
+     public:
+-        AudioRendererCallbackImpl(Callback* cb, bool& isPaused);
++        AudioRendererCallbackImpl(Callback* cb, const bool& isPaused);
+         void OnInterrupt(const OHOS::AudioStandard::InterruptEvent& interruptEvent) override;
+         void OnStateChange(const OHOS::AudioStandard::RendererState state,
+             const OHOS::AudioStandard::StateChangeCmdType cmdType) override;
+diff --git a/engine/plugin/plugins/sink/file_sink/file_fd_sink_plugin.cpp b/engine/plugin/plugins/sink/file_sink/file_fd_sink_plugin.cpp
+index 0f9bfff0..3224eaad 100644
+--- a/engine/plugin/plugins/sink/file_sink/file_fd_sink_plugin.cpp
++++ b/engine/plugin/plugins/sink/file_sink/file_fd_sink_plugin.cpp
+@@ -39,7 +39,6 @@ Status FileFdSinkRegister(const std::shared_ptr<Register>& reg)
+     definition.name = "file_fd_sink";
+     definition.description = "file fd sink";
+     definition.rank = 100; // 100
+-    definition.protocolType = ProtocolType::FD;
+     definition.creator = FileFdSinkPluginCreator;
+     return reg->AddPlugin(definition);
+ }
+diff --git a/engine/plugin/plugins/sink/sdl/video_sink/sdl_video_sink_plugin.cpp b/engine/plugin/plugins/sink/sdl/video_sink/sdl_video_sink_plugin.cpp
+index 5f706952..3c813e80 100644
+--- a/engine/plugin/plugins/sink/sdl/video_sink/sdl_video_sink_plugin.cpp
++++ b/engine/plugin/plugins/sink/sdl/video_sink/sdl_video_sink_plugin.cpp
+@@ -382,7 +382,6 @@ Status SdlVideoSinkPlugin::VideoImageDisaplay(const std::shared_ptr<Buffer>& inp
+         // do something
+     }
+     int32_t ySize = 0;
+-    int32_t uvSize = 0;
+     auto bufferMem = inputInfo->GetMemory();
+     auto ptr = bufferMem->GetReadOnlyData();
+     data[0] = ptr;
+@@ -394,6 +393,7 @@ Status SdlVideoSinkPlugin::VideoImageDisaplay(const std::shared_ptr<Buffer>& inp
+             MEDIA_LOG_E("Invalid video buffer, planes: " PUBLIC_LOG_U32, videoMeta->planes);
+             return Status::ERROR_INVALID_DATA;
+         }
++        int32_t uvSize = 0;
+         ret = UpdateYUVTexture(data, lineSize, videoMeta, ySize, uvSize);
+     } else if (IsFormatNV()) {
+         if (videoMeta->planes != 2) { // 2
+diff --git a/engine/plugin/plugins/source/audio_capture/audio_capture_plugin.cpp b/engine/plugin/plugins/source/audio_capture/audio_capture_plugin.cpp
+index 7566e6f6..6eb2a409 100644
+--- a/engine/plugin/plugins/source/audio_capture/audio_capture_plugin.cpp
++++ b/engine/plugin/plugins/source/audio_capture/audio_capture_plugin.cpp
+@@ -169,7 +169,7 @@ Status AudioCapturePlugin::Prepare()
+     MEDIA_LOG_D("IN");
+     AudioStandard::AudioEncodingType audioEncoding = AudioStandard::ENCODING_INVALID;
+     auto supportedEncodingTypes = OHOS::AudioStandard::AudioCapturer::GetSupportedEncodingTypes();
+-    for (auto& supportedEncodingType : supportedEncodingTypes) {
++    for (const auto& supportedEncodingType : supportedEncodingTypes) {
+         if (supportedEncodingType == AudioStandard::ENCODING_PCM) {
+             audioEncoding = AudioStandard::ENCODING_PCM;
+             break;
+diff --git a/engine/plugin/plugins/source/file_source/file_source_plugin.cpp b/engine/plugin/plugins/source/file_source/file_source_plugin.cpp
+index ae2268bb..fba67141 100644
+--- a/engine/plugin/plugins/source/file_source/file_source_plugin.cpp
++++ b/engine/plugin/plugins/source/file_source/file_source_plugin.cpp
+@@ -65,7 +65,7 @@ void* FileSourceAllocator::Alloc(size_t size)
+ void FileSourceAllocator::Free(void* ptr) // NOLINT: void*
+ {
+     if (ptr != nullptr) {
+-        delete[](uint8_t*) ptr;
++        delete[] static<uint8_t*>(ptr);
+     }
+ }
+ 
+diff --git a/engine/plugin/plugins/source/http_lite_source/http_lite_source_plugin.cpp b/engine/plugin/plugins/source/http_lite_source/http_lite_source_plugin.cpp
+index ddf94bce..47df0851 100755
+--- a/engine/plugin/plugins/source/http_lite_source/http_lite_source_plugin.cpp
++++ b/engine/plugin/plugins/source/http_lite_source/http_lite_source_plugin.cpp
+@@ -57,11 +57,11 @@ void* HttpSourceAllocator::Alloc(size_t size)
+ void HttpSourceAllocator::Free(void* ptr) // NOLINT: void*
+ {
+     if (ptr != nullptr) {
+-        delete[](uint8_t*) ptr;
++        delete[] static_cast<uint8_t*>(ptr);
+     }
+ }
+ 
+-HttpSourcePlugin::HttpSourcePlugin(const std::string name) noexcept
++HttpSourcePlugin::HttpSourcePlugin(const std::string& name) noexcept
+     : SourcePlugin(std::move(name)),
+       url_(""),
+       certFile_(""),
+diff --git a/engine/plugin/plugins/source/http_lite_source/http_lite_source_plugin.h b/engine/plugin/plugins/source/http_lite_source/http_lite_source_plugin.h
+index 4a6973fc..124a8289 100755
+--- a/engine/plugin/plugins/source/http_lite_source/http_lite_source_plugin.h
++++ b/engine/plugin/plugins/source/http_lite_source/http_lite_source_plugin.h
+@@ -35,7 +35,7 @@ public:
+ 
+ class HttpSourcePlugin : public SourcePlugin {
+ public:
+-    explicit HttpSourcePlugin(const std::string name) noexcept;
++    explicit HttpSourcePlugin(const std::string& name) noexcept;
+     ~HttpSourcePlugin();
+     Status Init() override;
+     Status Deinit() override;
+diff --git a/engine/plugin/plugins/source/http_source/download/downloader.cpp b/engine/plugin/plugins/source/http_source/download/downloader.cpp
+index 4cd5ef6b..22f6dd4f 100644
+--- a/engine/plugin/plugins/source/http_source/download/downloader.cpp
++++ b/engine/plugin/plugins/source/http_source/download/downloader.cpp
+@@ -74,17 +74,17 @@ bool DownloadRequest::IsEos() const
+     return isEos_;
+ }
+ 
+-int DownloadRequest::GetRetryTimes()
++int DownloadRequest::GetRetryTimes() const
+ {
+     return retryTimes_;
+ }
+ 
+-NetworkClientErrorCode DownloadRequest::GetClientError()
++NetworkClientErrorCode DownloadRequest::GetClientError() const
+ {
+     return clientError_;
+ }
+ 
+-NetworkServerErrorCode DownloadRequest::GetServerError()
++NetworkServerErrorCode DownloadRequest::GetServerError() const
+ {
+     return serverError_;
+ }
+@@ -114,7 +114,7 @@ double DownloadRequest::GetDuration()
+     return duration_;
+ }
+ 
+-Downloader::Downloader(std::string name) noexcept : name_(std::move(name))
++Downloader::Downloader(const std::string& name) noexcept : name_(std::move(name))
+ {
+     shouldStartNextRequest = true;
+ 
+diff --git a/engine/plugin/plugins/source/http_source/download/downloader.h b/engine/plugin/plugins/source/http_source/download/downloader.h
+index cd848cc3..0697f378 100644
+--- a/engine/plugin/plugins/source/http_source/download/downloader.h
++++ b/engine/plugin/plugins/source/http_source/download/downloader.h
+@@ -75,14 +75,14 @@ public:
+     void SaveHeader(const HeaderInfo* header);
+     bool IsChunked() const;
+     bool IsEos() const;
+-    int GetRetryTimes();
+-    NetworkClientErrorCode GetClientError();
+-    NetworkServerErrorCode GetServerError();
+-    bool IsSame(const std::shared_ptr<DownloadRequest>& other)
++    int GetRetryTimes() const;
++    NetworkClientErrorCode GetClientError() const;
++    NetworkServerErrorCode GetServerError() const;
++    bool IsSame(const std::shared_ptr<DownloadRequest>& other) const
+     {
+         return url_ == other->url_ && startPos_ == other->startPos_;
+     }
+-    std::string GetUrl()
++    std::string GetUrl() const
+     {
+         return url_;
+     }
+@@ -115,7 +115,7 @@ private:
+ 
+ class Downloader {
+ public:
+-    explicit Downloader(std::string name) noexcept;
++    explicit Downloader(const std::string& name) noexcept;
+     virtual ~Downloader();
+ 
+     bool Download(const std::shared_ptr<DownloadRequest>& request, int32_t waitMs);
+diff --git a/engine/plugin/plugins/source/http_source/download/http_curl_client.h b/engine/plugin/plugins/source/http_source/download/http_curl_client.h
+index 344f9c13..b248ff3c 100644
+--- a/engine/plugin/plugins/source/http_source/download/http_curl_client.h
++++ b/engine/plugin/plugins/source/http_source/download/http_curl_client.h
+@@ -43,7 +43,7 @@ public:
+     Status Deinit() override;
+ private:
+     void InitCurlEnvironment(const std::string& url);
+-    std::string UrlParse(const std::string& url) const;
++    static std::string UrlParse(const std::string& url) const;
+ private:
+     RxHeader rxHeader_;
+     RxBody rxBody_;
+diff --git a/engine/plugin/plugins/source/http_source/hls/hls_media_downloader.cpp b/engine/plugin/plugins/source/http_source/hls/hls_media_downloader.cpp
+index c0b44787..063dd11e 100644
+--- a/engine/plugin/plugins/source/http_source/hls/hls_media_downloader.cpp
++++ b/engine/plugin/plugins/source/http_source/hls/hls_media_downloader.cpp
+@@ -34,19 +34,15 @@ HlsMediaDownloader::HlsMediaDownloader() noexcept
+ {
+     buffer_ = std::make_shared<RingBuffer>(RING_BUFFER_SIZE);
+     buffer_->Init();
+-
+     downloader_ = std::make_shared<Downloader>("hlsMedia");
+-    downloadTask_ = std::make_shared<OSAL::Task>(std::string("FragmentDownload"));
+-    downloadTask_->RegisterHandler([this] { FragmentDownloadLoop(); });
+-
+-    playList_ = std::make_shared<BlockingQueue<PlayInfo>>("PlayList", 50); // 50
+-
+     dataSave_ =  [this] (uint8_t*&& data, uint32_t&& len) {
+         return SaveData(std::forward<decltype(data)>(data), std::forward<decltype(len)>(len));
+     };
+-
+     playListDownloader_ = std::make_shared<HlsPlayListDownloader>();
+     playListDownloader_->SetPlayListCallback(this);
++    downloadTask_ = std::make_shared<OSAL::Task>(std::string("FragmentDownload"));
++    downloadTask_->RegisterHandler([this] { FragmentDownloadLoop(); });
++    playList_ = std::make_shared<BlockingQueue<PlayInfo>>("PlayList", 50); // 50
+ }
+ 
+ void HlsMediaDownloader::FragmentDownloadLoop()
+diff --git a/engine/plugin/plugins/source/http_source/hls/m3u8.cpp b/engine/plugin/plugins/source/http_source/hls/m3u8.cpp
+index fd9183cb..2337eecc 100644
+--- a/engine/plugin/plugins/source/http_source/hls/m3u8.cpp
++++ b/engine/plugin/plugins/source/http_source/hls/m3u8.cpp
+@@ -176,7 +176,8 @@ M3U8VariantStream::M3U8VariantStream(std::string name, std::string uri, std::sha
+ {
+ }
+ 
+-M3U8MasterPlaylist::M3U8MasterPlaylist(std::string& playList, const std::string& uri)
++M3U8MasterPlaylist::M3U8MasterPlaylist(std::string& playList, const std::string& uri) : playList_(playList),
++                                                                                        uri_(uri)
+ {
+     playList_ = playList;
+     uri_ = uri;
+diff --git a/engine/plugin/plugins/source/http_source/hls/playlist_downloader.cpp b/engine/plugin/plugins/source/http_source/hls/playlist_downloader.cpp
+index 94025734..3e248259 100644
+--- a/engine/plugin/plugins/source/http_source/hls/playlist_downloader.cpp
++++ b/engine/plugin/plugins/source/http_source/hls/playlist_downloader.cpp
+@@ -23,6 +23,8 @@ namespace HttpPlugin {
+ PlayListDownloader::PlayListDownloader()
+ {
+     downloader_ = std::make_shared<Downloader>("hlsPlayList");
++    updateTask_ = std::make_shared<OSAL::Task>(std::string("FragmentListUpdate"));
++    updateTask_->RegisterHandler([this] { PlayListUpdateLoop(); });
+     dataSave_ = [this] (uint8_t*&& data, uint32_t&& len) {
+         return SaveData(std::forward<decltype(data)>(data), std::forward<decltype(len)>(len));
+     };
+@@ -32,8 +34,6 @@ PlayListDownloader::PlayListDownloader()
+         OnDownloadStatus(std::forward<decltype(status)>(status), downloader_,
+                          std::forward<decltype(request)>(request));
+     };
+-    updateTask_ = std::make_shared<OSAL::Task>(std::string("FragmentListUpdate"));
+-    updateTask_->RegisterHandler([this] { PlayListUpdateLoop(); });
+ }
+ 
+ PlayListDownloader::~PlayListDownloader()
+@@ -54,7 +54,7 @@ void PlayListDownloader::DoOpen(const std::string& url)
+     downloader_->Start();
+ }
+ 
+-bool PlayListDownloader::GetPlayListDownloadStatus()
++bool PlayListDownloader::GetPlayListDownloadStatus() const
+ {
+     return startedDownloadStatus_;
+ }
+@@ -67,7 +67,7 @@ bool PlayListDownloader::SaveData(uint8_t* data, uint32_t len)
+     return true;
+ }
+ 
+-void PlayListDownloader::OnDownloadStatus(DownloadStatus status, std::shared_ptr<Downloader>&,
++static void PlayListDownloader::OnDownloadStatus(DownloadStatus status, std::shared_ptr<Downloader>&,
+                                           std::shared_ptr<DownloadRequest>& request)
+ {
+     // This should not be called normally
+diff --git a/engine/plugin/plugins/source/http_source/hls/playlist_downloader.h b/engine/plugin/plugins/source/http_source/hls/playlist_downloader.h
+index 400aa190..350b2682 100644
+--- a/engine/plugin/plugins/source/http_source/hls/playlist_downloader.h
++++ b/engine/plugin/plugins/source/http_source/hls/playlist_downloader.h
+@@ -52,11 +52,11 @@ public:
+     void Stop();
+     void Start();
+     void SetStatusCallback(StatusCallbackFunc cb);
+-    bool GetPlayListDownloadStatus();
++    bool GetPlayListDownloadStatus() const;
+ 
+ protected:
+     bool SaveData(uint8_t* data, uint32_t len);
+-    void OnDownloadStatus(DownloadStatus status, std::shared_ptr<Downloader>&,
++    static void OnDownloadStatus(DownloadStatus status, std::shared_ptr<Downloader>&,
+                           std::shared_ptr<DownloadRequest>& request);
+     void DoOpen(const std::string& url);
+ 
+diff --git a/engine/plugin/plugins/source/http_source/http/http_media_downloader.cpp b/engine/plugin/plugins/source/http_source/http/http_media_downloader.cpp
+index ea7ecb2c..f925f43c 100644
+--- a/engine/plugin/plugins/source/http_source/http/http_media_downloader.cpp
++++ b/engine/plugin/plugins/source/http_source/http/http_media_downloader.cpp
+@@ -30,12 +30,10 @@ constexpr int WATER_LINE = 8192; //  WATER_LINE:8192
+ #endif
+ }
+ 
+-HttpMediaDownloader::HttpMediaDownloader() noexcept
++HttpMediaDownloader::HttpMediaDownloader() noexcept : buffer(std::make_shared<RingBuffer>(RING_BUFFER_SIZE)),
++                                                      downloader_(std::make_shared<Downloader>("http"))
+ {
+-    buffer_ = std::make_shared<RingBuffer>(RING_BUFFER_SIZE);
+     buffer_->Init();
+-
+-    downloader_ = std::make_shared<Downloader>("http");
+ }
+ 
+ HttpMediaDownloader::~HttpMediaDownloader()
+diff --git a/src/plugin/plugin_register.cpp b/src/plugin/plugin_register.cpp
+index 5c116d0f..e0a70cc0 100644
+--- a/src/plugin/plugin_register.cpp
++++ b/src/plugin/plugin_register.cpp
+@@ -327,13 +327,6 @@ void PluginRegister::RegisterDynamicPlugins()
+ __attribute__((no_sanitize("cfi"))) void PluginRegister::RegisterPluginsFromPath(const char* libDirPath)
+ {
+ #ifdef DYNAMIC_PLUGINS
+-    static std::string libFileHead = "libmedia_plugin_";
+-    #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
+-    static std::string fileSeparator = "\\";
+-    #else
+-    static std::string fileSeparator = "/";
+-    #endif
+-    static std::string libFileTail = HST_PLUGIN_FILE_TAIL;
+     MEDIA_LOG_D("plugin path %{public}s", libDirPath);
+     DIR* libDir = opendir(libDirPath);
+     if (libDir) {
+@@ -344,6 +337,13 @@ __attribute__((no_sanitize("cfi"))) void PluginRegister::RegisterPluginsFromPath
+                 continue;
+             }
+             MEDIA_LOG_D("plugin name %{public}s", lib->d_name);
++            static std::string libFileHead = "libmedia_plugin_";
++            #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
++            static std::string fileSeparator = "\\";
++            #else
++            static std::string fileSeparator = "/";
++            #endif
++            static std::string libFileTail = HST_PLUGIN_FILE_TAIL;
+             std::string libName = lib->d_name;
+             if (libName.find(libFileHead) ||
+                 libName.compare(libName.size() - libFileTail.size(), libFileTail.size(), libFileTail)) {

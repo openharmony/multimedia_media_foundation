@@ -341,7 +341,7 @@ Status VideoFfmpegEncoderPlugin::Start()
 
 Status VideoFfmpegEncoderPlugin::Stop()
 {
-    Status ret = Status::OK;
+    Status ret;
     {
         OSAL::ScopedLock lock(avMutex_);
         ret = CloseCodecContext();
@@ -383,7 +383,7 @@ Status VideoFfmpegEncoderPlugin::QueueInputBuffer(const std::shared_ptr<Buffer>&
     MEDIA_LOG_DD("queue input buffer");
     FALSE_RETURN_V_MSG_E(!inputBuffer->IsEmpty() || (inputBuffer->flag & BUFFER_FLAG_EOS),
         Status::ERROR_INVALID_DATA, "encoder does not support fd buffer");
-    Status ret = Status::OK;
+    Status ret;
     {
         OSAL::ScopedLock lock(avMutex_);
         ret = SendBufferLocked(inputBuffer);

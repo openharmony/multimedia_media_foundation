@@ -39,7 +39,6 @@ Status FileFdSinkRegister(const std::shared_ptr<Register>& reg)
     definition.name = "file_fd_sink";
     definition.description = "file fd sink";
     definition.rank = 100; // 100
-    definition.protocolType = ProtocolType::FD;
     definition.creator = FileFdSinkPluginCreator;
     return reg->AddPlugin(definition);
 }

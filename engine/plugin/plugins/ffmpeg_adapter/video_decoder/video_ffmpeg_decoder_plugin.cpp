@@ -397,7 +397,7 @@ Status VideoFfmpegDecoderPlugin::Start()
 
 Status VideoFfmpegDecoderPlugin::Stop()
 {
-    Status ret = Status::OK;
+    Status ret;
     {
         OSAL::ScopedLock l(avMutex_);
         ret = CloseCodecContext();
@@ -437,7 +437,7 @@ Status VideoFfmpegDecoderPlugin::QueueInputBuffer(const std::shared_ptr<Buffer>&
         MEDIA_LOG_E("decoder does not support fd buffer");
         return Status::ERROR_INVALID_DATA;
     }
-    Status ret = Status::OK;
+    Status ret;
     {
         OSAL::ScopedLock l(avMutex_);
         ret = SendBufferLocked(inputBuffer);

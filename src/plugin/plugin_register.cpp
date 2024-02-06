@@ -327,13 +327,6 @@ void PluginRegister::RegisterDynamicPlugins()
 __attribute__((no_sanitize("cfi"))) void PluginRegister::RegisterPluginsFromPath(const char* libDirPath)
 {
 #ifdef DYNAMIC_PLUGINS
-    static std::string libFileHead = "libmedia_plugin_";
-    #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
-    static std::string fileSeparator = "\\";
-    #else
-    static std::string fileSeparator = "/";
-    #endif
-    static std::string libFileTail = HST_PLUGIN_FILE_TAIL;
     MEDIA_LOG_D("plugin path %{public}s", libDirPath);
     DIR* libDir = opendir(libDirPath);
     if (libDir) {
@@ -344,6 +337,13 @@ __attribute__((no_sanitize("cfi"))) void PluginRegister::RegisterPluginsFromPath
                 continue;
             }
             MEDIA_LOG_D("plugin name %{public}s", lib->d_name);
+            static std::string libFileHead = "libmedia_plugin_";
+            #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
+            static std::string fileSeparator = "\\";
+            #else
+            static std::string fileSeparator = "/";
+            #endif
+            static std::string libFileTail = HST_PLUGIN_FILE_TAIL;
             std::string libName = lib->d_name;
             if (libName.find(libFileHead) ||
                 libName.compare(libName.size() - libFileTail.size(), libFileTail.size(), libFileTail)) {

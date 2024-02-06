@@ -75,14 +75,14 @@ public:
     void SaveHeader(const HeaderInfo* header);
     bool IsChunked() const;
     bool IsEos() const;
-    int GetRetryTimes();
-    NetworkClientErrorCode GetClientError();
-    NetworkServerErrorCode GetServerError();
-    bool IsSame(const std::shared_ptr<DownloadRequest>& other)
+    int GetRetryTimes() const;
+    NetworkClientErrorCode GetClientError() const;
+    NetworkServerErrorCode GetServerError() const;
+    bool IsSame(const std::shared_ptr<DownloadRequest>& other) const
     {
         return url_ == other->url_ && startPos_ == other->startPos_;
     }
-    std::string GetUrl()
+    std::string GetUrl() const
     {
         return url_;
     }
@@ -115,7 +115,7 @@ private:
 
 class Downloader {
 public:
-    explicit Downloader(std::string name) noexcept;
+    explicit Downloader(const std::string& name) noexcept;
     virtual ~Downloader();
 
     bool Download(const std::shared_ptr<DownloadRequest>& request, int32_t waitMs);

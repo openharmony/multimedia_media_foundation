@@ -42,16 +42,16 @@ AVCConfigDataParser::AVCConfigDataParser(const uint8_t* cfgData, const size_t cf
     : bitReader_(cfgData, cfgDataSize),
       cfgData_(cfgData),
       cfgDataSize_(cfgDataSize),
+      nalUnitLen_(AVC_NAL_SIZE_LEN_4),
       version_(1),
       profile_(0),
       profile_compat_(0),
       level_(0),
-      needAddFrameHeader_(false)
+      needAddFrameHeader_(false),
+      newCfgData_(nullptr),
+      newCfgDataSize_(0)
 {
     cfgSet.count = 0;
-    newCfgData_ = nullptr;
-    newCfgDataSize_ = 0;
-    nalUnitLen_ = AVC_NAL_SIZE_LEN_4;
 }
 
 AVCConfigDataParser::~AVCConfigDataParser()
@@ -99,7 +99,7 @@ bool AVCConfigDataParser::ParseConfigData()
     return true;
 }
 
-bool AVCConfigDataParser::IsNeedAddFrameHeader()
+bool AVCConfigDataParser::IsNeedAddFrameHeader() const
 {
     return needAddFrameHeader_; // We can add this flag as specific header in newCfgData_, do it later
 }

@@ -35,7 +35,7 @@ public:
 
 class HttpSourcePlugin : public SourcePlugin {
 public:
-    explicit HttpSourcePlugin(const std::string name) noexcept;
+    explicit HttpSourcePlugin(const std::string& name) noexcept;
     ~HttpSourcePlugin();
     Status Init() override;
     Status Deinit() override;
