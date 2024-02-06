@@ -34,6 +34,7 @@ OH_AVFormat::OH_AVFormat(const Format &fmt) : MFObjectMagic(MFMagic::MFMAGIC_FOR
 
 OH_AVFormat::~OH_AVFormat()
 {
+    magic_ = MFMagic::MFMAGIC_UNKNOWN;
     if (outString_ != nullptr) {
         free(outString_);
         outString_ = nullptr;
@@ -49,7 +50,10 @@ OH_AVMemory::OH_AVMemory(const std::shared_ptr<AVSharedMemory> &mem)
 {
 }
 
-OH_AVMemory::~OH_AVMemory() {}
+OH_AVMemory::~OH_AVMemory()
+{
+    magic_ = MFMagic::MFMAGIC_UNKNOWN;
+}
 
 bool OH_AVMemory::IsEqualMemory(const std::shared_ptr<AVSharedMemory> &mem)
 {
@@ -59,6 +63,11 @@ bool OH_AVMemory::IsEqualMemory(const std::shared_ptr<AVSharedMemory> &mem)
 OH_AVBuffer::OH_AVBuffer(const std::shared_ptr<OHOS::Media::AVBuffer> &buffer)
     : MFObjectMagic(MFMagic::MFMAGIC_AVBUFFER), buffer_(buffer)
 {
+}
+
+OH_AVBuffer::~OH_AVBuffer()
+{
+    magic_ = MFMagic::MFMAGIC_UNKNOWN;
 }
 
 bool OH_AVBuffer::IsEqualBuffer(const std::shared_ptr<OHOS::Media::AVBuffer> &buffer)
