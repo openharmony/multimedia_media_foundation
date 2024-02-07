@@ -132,8 +132,8 @@ void FileSystem::ClearFileContent(const std::string& fullPath)
 void FileSystem::RemoveFilesInDir(const std::string& path)
 {
     DIR *directory;
-    struct dirent *info;
     if ((directory = opendir(path.c_str())) != nullptr) {
+        struct dirent *info;
         while ((info = readdir(directory)) != nullptr) {
             if (strcmp(info->d_name, ".") == 0 || strcmp(info->d_name, "..") == 0) {
                 continue;

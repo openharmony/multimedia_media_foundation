@@ -505,8 +505,8 @@ ErrorCode DemuxerFilter::ReadFrame(AVBuffer& buffer, uint32_t& trackId)
 std::shared_ptr<Plugin::Meta> DemuxerFilter::GetTrackMeta(uint32_t trackId)
 {
     uint32_t streamTrackId = 0;
-    auto ret = false;
     for (auto meta : mediaMetaData_.trackMetas) {
+        auto ret = false;
         FALSE_LOG_MSG(ret = meta->Get<Plugin::Tag::TRACK_ID>(streamTrackId), "Get TRACK_ID failed.");
         if (ret && streamTrackId == trackId) {
             return meta;
