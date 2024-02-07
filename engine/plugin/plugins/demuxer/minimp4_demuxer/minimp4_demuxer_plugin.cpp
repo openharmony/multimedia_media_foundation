@@ -52,8 +52,8 @@ MiniMP4DemuxerPlugin::MiniMP4DemuxerPlugin(std::string name)
       ioContext_(),
       fileSize_(0),
       inIoBuffer_(nullptr),
-      inIoBufferSize_(MEDIA_IO_SIZE),
       ioDataRemainSize_(0),
+      inIoBufferSize_(MEDIA_IO_SIZE),
       sampleIndex_(0)
 {
     (void)memset_s(&miniMP4_, sizeof(MP4D_demux_t), 0, sizeof(MP4D_demux_t));
@@ -327,9 +327,8 @@ int MiniMP4DemuxerPlugin::ReadCallback(int64_t offset, void* buffer, size_t size
             static_cast<uint32_t>(mp4Demuxer->ioContext_.offset));
         mp4Demuxer->ioDataRemainSize_ = 0;
         mp4Demuxer->ioContext_.offset = offset;
-        Status status = Status::ERROR_UNKNOWN;
         readDataSize = mp4Demuxer->inIoBufferSize_;
-        status = mp4Demuxer->GetDataFromSource();
+        Status status = mp4Demuxer->GetDataFromSource();
         if (status != Status::OK) {
             return (int)status;
         }
@@ -342,7 +341,6 @@ int MiniMP4DemuxerPlugin::ReadCallback(int64_t offset, void* buffer, size_t size
 
 Status MiniMP4DemuxerPlugin::ReadFrame(Buffer &outBuffer, int32_t timeOutMs)
 {
-    Status retResult = Status::OK;
     std::shared_ptr<Memory> mp4FrameData;
     if (sampleIndex_ >= miniMP4_.track->sample_count) {
         (void)memset_s(inIoBuffer_, MEDIA_IO_SIZE, 0, MEDIA_IO_SIZE);
@@ -371,7 +369,7 @@ Status MiniMP4DemuxerPlugin::ReadFrame(Buffer &outBuffer, int32_t timeOutMs)
         ioDataRemainSize_ = 0;
         ioContext_.offset = offset;
     }
-    retResult = GetDataFromSource();
+    Status retResult = GetDataFromSource();
     if (retResult != Status::OK) {
         return retResult;
     }

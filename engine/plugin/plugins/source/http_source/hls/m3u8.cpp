@@ -176,10 +176,9 @@ M3U8VariantStream::M3U8VariantStream(std::string name, std::string uri, std::sha
 {
 }
 
-M3U8MasterPlaylist::M3U8MasterPlaylist(std::string& playList, const std::string& uri)
+M3U8MasterPlaylist::M3U8MasterPlaylist(std::string& playList, const std::string& uri) : uri_(uri),
+                                                                                        playList_(playList)
 {
-    playList_ = playList;
-    uri_ = uri;
     if (!StrHasPrefix(playList_, "#EXTM3U")) {
         MEDIA_LOG_I("playlist doesn't start with #EXTM3U " PUBLIC_LOG_S, uri.c_str());
     }

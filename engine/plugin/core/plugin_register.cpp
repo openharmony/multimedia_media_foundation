@@ -383,7 +383,7 @@ void PluginRegister::RegisterPluginsFromPath(const char* libDirPath)
                 continue;
             }
             std::string libName = lib->d_name;
-            if (libName.find(libFileHead) ||
+            if (libName.find(libFileHead) != std::string::npos ||
                 libName.compare(libName.size() - libFileTail.size(), libFileTail.size(), libFileTail)) {
                 continue;
             }
@@ -431,7 +431,7 @@ void PluginRegister::DeletePlugin(std::map<std::string, std::shared_ptr<PluginRe
 }
 void PluginRegister::EraseRegisteredPluginsByLoader(const std::shared_ptr<PluginLoader>& loader)
 {
-    for (auto& it : registerData_->registerTable) {
+    for (const auto& it : registerData_->registerTable) {
         auto plugins = it.second;
         for (auto info = plugins.begin(); info != plugins.end();) {
             if (info->second->loader == loader) {

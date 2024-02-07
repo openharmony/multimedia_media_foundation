@@ -34,19 +34,15 @@ HlsMediaDownloader::HlsMediaDownloader() noexcept
 {
     buffer_ = std::make_shared<RingBuffer>(RING_BUFFER_SIZE);
     buffer_->Init();
-
     downloader_ = std::make_shared<Downloader>("hlsMedia");
-    downloadTask_ = std::make_shared<OSAL::Task>(std::string("FragmentDownload"));
-    downloadTask_->RegisterHandler([this] { FragmentDownloadLoop(); });
-
-    playList_ = std::make_shared<BlockingQueue<PlayInfo>>("PlayList", 50); // 50
-
     dataSave_ =  [this] (uint8_t*&& data, uint32_t&& len) {
         return SaveData(std::forward<decltype(data)>(data), std::forward<decltype(len)>(len));
     };
-
     playListDownloader_ = std::make_shared<HlsPlayListDownloader>();
     playListDownloader_->SetPlayListCallback(this);
+    downloadTask_ = std::make_shared<OSAL::Task>(std::string("FragmentDownload"));
+    downloadTask_->RegisterHandler([this] { FragmentDownloadLoop(); });
+    playList_ = std::make_shared<BlockingQueue<PlayInfo>>("PlayList", 50); // 50
 }
 
 void HlsMediaDownloader::FragmentDownloadLoop()

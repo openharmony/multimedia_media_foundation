@@ -114,7 +114,7 @@ double DownloadRequest::GetDuration()
     return duration_;
 }
 
-Downloader::Downloader(std::string name) noexcept : name_(std::move(name))
+Downloader::Downloader(const std::string& name) noexcept : name_(std::move(name))
 {
     shouldStartNextRequest = true;
 
