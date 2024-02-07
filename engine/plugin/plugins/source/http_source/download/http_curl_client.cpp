@@ -104,7 +104,7 @@ void HttpCurlClient::InitCurlEnvironment(const std::string& url)
     curl_easy_setopt(easyHandle_, CURLOPT_TCP_KEEPINTVL, 5L); // 5 心跳
 }
 
-std::string HttpCurlClient::UrlParse(const std::string& url) const
+std::string HttpCurlClient::UrlParse(const std::string& url)
 {
     std::string s;
     std::regex_replace(std::back_inserter(s), url.begin(), url.end(), std::regex(" "), "%20");

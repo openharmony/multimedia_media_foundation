@@ -74,17 +74,17 @@ bool DownloadRequest::IsEos() const
     return isEos_;
 }
 
-int DownloadRequest::GetRetryTimes()
+int DownloadRequest::GetRetryTimes() const
 {
     return retryTimes_;
 }
 
-NetworkClientErrorCode DownloadRequest::GetClientError()
+NetworkClientErrorCode DownloadRequest::GetClientError() const
 {
     return clientError_;
 }
 
-NetworkServerErrorCode DownloadRequest::GetServerError()
+NetworkServerErrorCode DownloadRequest::GetServerError() const
 {
     return serverError_;
 }
@@ -114,7 +114,7 @@ double DownloadRequest::GetDuration()
     return duration_;
 }
 
-Downloader::Downloader(std::string name) noexcept : name_(std::move(name))
+Downloader::Downloader(const std::string& name) noexcept : name_(std::move(name))
 {
     shouldStartNextRequest = true;
 
