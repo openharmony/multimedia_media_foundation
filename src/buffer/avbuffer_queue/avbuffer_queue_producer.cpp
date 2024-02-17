@@ -79,6 +79,12 @@ Status AVBufferQueueProducerImpl::SetBufferFilledListener(sptr<IBrokerListener>&
     return bufferQueue_->SetBrokerListener(listener);
 }
 
+Status AVBufferQueueProducerImpl::Clear()
+{
+    return bufferQueue_->Clear();
+}
+
+
 Status AVBufferQueueProducerImpl::SetBufferAvailableListener(sptr<IProducerListener>& listener)
 {
     return bufferQueue_->SetProducerListener(listener);

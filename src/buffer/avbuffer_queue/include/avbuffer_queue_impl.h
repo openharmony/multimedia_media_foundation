@@ -66,6 +66,7 @@ public:
     uint32_t GetQueueSize() override;
     Status SetQueueSize(uint32_t size) override;
     bool IsBufferInQueue(const std::shared_ptr<AVBuffer>& buffer) override;
+    Status Clear() override;
 
     virtual Status RequestBuffer(std::shared_ptr<AVBuffer>& buffer,
                           const AVBufferConfig& config, int32_t timeoutMs);

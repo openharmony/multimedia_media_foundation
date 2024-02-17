@@ -56,7 +56,7 @@ public:
 
     Status SetBufferFilledListener(sptr<IBrokerListener>& listener) override;
     Status SetBufferAvailableListener(sptr<IProducerListener>& listener) override;
-
+    Status Clear() override;
 private:
     static inline BrokerDelegator<AVBufferQueueProducerProxyImpl> delegator_;
 };
@@ -182,6 +182,11 @@ Status AVBufferQueueProducerProxyImpl::SetBufferAvailableListener(sptr<IProducer
 
     ABQ_IPC_SEND_REQUEST(PRODUCER_SET_AVAILABLE_LISTENER);
 
+    return Status::OK;
+}
+
+Status AVBufferQueueProducerProxyImpl::Clear()
+{
     return Status::OK;
 }
 
