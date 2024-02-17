@@ -20,6 +20,7 @@
 #include <memory> // NOLINT
 #include <pthread.h>
 #include <string>
+#include "osal/task/mutex.h"
 
 namespace OHOS {
 namespace Media {
@@ -65,6 +66,7 @@ private:
     std::string name_;
     ThreadPriority priority_;
     std::unique_ptr<State> state_{};
+    mutable Mutex mutex_{};
 };
 } // namespace Media
 } // namespace OHOS
