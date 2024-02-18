@@ -61,14 +61,23 @@ void Task::Start()
 {
     MEDIA_LOG_I("task " PUBLIC_LOG_S " start called", name_.c_str());
     AutoLock lock(stateMutex_);
-    runningState_ = RunningState::STARTED;
+    if (loop_ && loop_->HasThread()) {
+        MEDIA_LOG_W("task " PUBLIC_LOG_S " has started", name_.c_str());
+        runningState_ = RunningState::STARTED;
+        syncCond_.NotifyAll();
+        return;
+    }
+
     if (!loop_) { // thread not exist
         loop_ = CppExt::make_unique<Thread>(ConvertPriorityType(priority_));
     }
-    if (!loop_->HasThread() && !loop_->CreateThread([this] { Run(); })) {
-        MEDIA_LOG_E("task " PUBLIC_LOG_S " create failed", name_.c_str());
-    } else {
+    
+    if (loop_->CreateThread([this] { Run(); })) {
+        MEDIA_LOG_I("task " PUBLIC_LOG_S " create success", name_.c_str());
+        runningState_ = RunningState::STARTED;
         syncCond_.NotifyAll();
+    } else {
+        MEDIA_LOG_E("task " PUBLIC_LOG_S " create failed", name_.c_str());
     }
 }
 

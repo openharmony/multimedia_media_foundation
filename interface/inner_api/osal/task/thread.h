@@ -67,6 +67,7 @@ private:
     ThreadPriority priority_;
     std::unique_ptr<State> state_{};
     mutable Mutex mutex_{};
+    std::atomic<bool> isExistThread_{false};
 };
 } // namespace Media
 } // namespace OHOS
