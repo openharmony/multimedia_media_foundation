@@ -77,7 +77,7 @@ private:
 
     const std::string name_;
     const TaskPriority priority_;
-    std::atomic<RunningState> runningState_{RunningState::PAUSED};
+    std::atomic<RunningState> runningState_{RunningState::STOPPED};
     std::function<void()> job_ = [this] { DoTask(); };
 #ifdef MEDIA_FOUNDATION_FFRT
     std::unique_ptr<ffrt::thread> loop_;
