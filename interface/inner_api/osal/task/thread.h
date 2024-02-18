@@ -52,6 +52,8 @@ public:
 
     bool CreateThread(const std::function<void()>& func);
 
+    bool IsRunningInSelf();
+
 private:
     struct State {
         virtual ~State() = default;

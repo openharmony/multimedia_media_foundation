@@ -75,6 +75,8 @@ private:
 
     void Run();
 
+    Mutex stateMutex_{};
+    ConditionVariable syncCond_{};
     const std::string name_;
     const TaskPriority priority_;
     std::atomic<RunningState> runningState_{RunningState::STOPPED};
@@ -84,8 +86,6 @@ private:
 #else
     std::unique_ptr<Thread> loop_;
 #endif
-    Mutex stateMutex_{};
-    ConditionVariable syncCond_{};
 };
 } // namespace Media
 } // namespace OHOS

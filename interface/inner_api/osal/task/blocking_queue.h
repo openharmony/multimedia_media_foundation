@@ -44,7 +44,7 @@ public:
     {
         return capacity_;
     }
-    size_t Empty()
+    bool Empty()
     {
         AutoLock lock(mutex_);
         return que_.empty();
