@@ -16,6 +16,7 @@
 #define HST_LOG_TAG "Filter"
 
 #include "filter/filter.h"
+#include "common/log.h"
 #include <algorithm>
 
 namespace OHOS {
@@ -26,81 +27,231 @@ Filter::Filter(std::string name, FilterType type)
 {
 }
 
+Filter::~Filter()
+{
+    nextFiltersMap_.clear();
+}
+
 void Filter::Init(const std::shared_ptr<EventReceiver>& receiver, const std::shared_ptr<FilterCallback>& callback)
 {
     receiver_ = receiver;
     callback_ = callback;
 }
 
+void Filter::ActiveAsyncMode()
+{
+    filterLoop_ = std::make_shared<FilterLoop>(name_, this);
+}
+
 Status Filter::Prepare()
 {
+    MEDIA_LOG_I("Filter::Prepare %{public}s", name_.c_str());
+    if (filterLoop_) {
+        filterLoop_->PrepareAsync();
+    }
     for (auto iter : nextFiltersMap_) {
         for (auto filter : iter.second) {
             filter->Prepare();
         }
+    }
+    if (!filterLoop_) {
+        ChangeState(FilterState::READY);
     }
     return Status::OK;
 }
 
 Status Filter::Start()
 {
+    MEDIA_LOG_I("Filter::Start %{public}s", name_.c_str());
+    if (filterLoop_) {
+        filterLoop_->StartAsync();
+    }
     for (auto iter : nextFiltersMap_) {
         for (auto filter : iter.second) {
             filter->Start();
         }
+    }
+    if (!filterLoop_) {
+        ChangeState(FilterState::RUNNING);
     }
     return Status::OK;
 }
 
 Status Filter::Pause()
 {
+    MEDIA_LOG_I("Filter::Pause %{public}s", name_.c_str());
+    if (filterLoop_) {
+        filterLoop_->PauseAsync();
+    }
     for (auto iter : nextFiltersMap_) {
         for (auto filter : iter.second) {
             filter->Pause();
         }
+    }
+    if (!filterLoop_) {
+        ChangeState(FilterState::PAUSED);
     }
     return Status::OK;
 }
 
 Status Filter::Resume()
 {
+    MEDIA_LOG_I("Filter::Resume %{public}s", name_.c_str());
+    if (filterLoop_) {
+        filterLoop_->ResumeAsync();
+    }
     for (auto iter : nextFiltersMap_) {
         for (auto filter : iter.second) {
             filter->Resume();
         }
+    }
+    if (!filterLoop_) {
+        ChangeState(FilterState::RUNNING);
     }
     return Status::OK;
 }
 
 Status Filter::Stop()
 {
+    MEDIA_LOG_I("Filter::Stop %{public}s", name_.c_str());
+    if (filterLoop_) {
+        filterLoop_->StopAsync();
+    }
     for (auto iter : nextFiltersMap_) {
         for (auto filter : iter.second) {
             filter->Stop();
         }
+    }
+    if (!filterLoop_) {
+        ChangeState(FilterState::STOPPED);
     }
     return Status::OK;
 }
 
 Status Filter::Flush()
 {
+    MEDIA_LOG_I("Filter::Flush %{public}s", name_.c_str());
+    if (filterLoop_) {
+        filterLoop_->FlushAsync();
+    }
     for (auto iter : nextFiltersMap_) {
         for (auto filter : iter.second) {
             filter->Flush();
         }
+    }
+    if (!filterLoop_) {
+        ChangeState(FilterState::FLUSHED);
     }
     return Status::OK;
 }
 
 Status Filter::Release()
 {
+    MEDIA_LOG_I("Filter::Release  %{public}s", name_.c_str());
+    if (filterLoop_) {
+        filterLoop_->ReleaseAsync();
+    }
     for (auto iter : nextFiltersMap_) {
         for (auto filter : iter.second) {
             filter->Release();
         }
     }
-    nextFiltersMap_.clear();
+    if (!filterLoop_) {
+        ChangeState(FilterState::RELEASED);
+    }
     return Status::OK;
+}
+
+Status Filter::ProcessInputBuffer(int arg, int64_t delay)
+{
+    if (filterLoop_) {
+        filterLoop_->ProcessInputBufferAsync(arg, delay);
+    }
+    return Status::OK;
+}
+
+Status Filter::ProcessOutputBuffer(int arg, int64_t delay)
+{
+    if (filterLoop_) {
+        filterLoop_->ProcessOutBufferAsync(arg, delay);
+    }
+    return Status::OK;
+}
+
+Status Filter::DoInit()
+{
+    return Status::OK;
+}
+
+Status Filter::DoPrepare()
+{
+    return Status::OK;
+}
+
+Status Filter::DoStart()
+{
+    return Status::OK;
+}
+
+Status Filter::DoPause()
+{
+    return Status::OK;
+}
+
+Status Filter::DoResume()
+{
+    return Status::OK;
+}
+
+Status Filter::DoStop()
+{
+    return Status::OK;
+}
+
+Status Filter::DoFlush()
+{
+    return Status::OK;
+}
+
+Status Filter::DoRelease()
+{
+    return Status::OK;
+}
+
+Status Filter::DoProcessInputBuffer(int arg, bool dropped)
+{
+    return Status::OK;
+}
+
+Status Filter::DoProcessOutputBuffer(int arg, bool dropped)
+{
+    return Status::OK;
+}
+
+// should only call in message queue;
+void Filter::ChangeState(FilterState state)
+{
+    MEDIA_LOG_I("Filter::ChangeState to %{public}d. %{public}s", state, name_.c_str());
+    AutoLock lock(stateMutex_);
+    curState_ = state;
+    cond_.NotifyOne();
+}
+
+bool Filter::WaitAllState(FilterState state)
+{
+    for (auto iter : nextFiltersMap_) {
+        for (auto filter : iter.second) {
+            if (!filter->WaitAllState(state)) {
+                return false;
+            }
+        }
+    }
+    AutoLock lock(stateMutex_);
+    if (curState_ == state) {
+        return true;
+    }
+    cond_.WaitFor(lock, 1000); // At most wait 1000ms
+    return curState_ == state;
 }
 
 void Filter::SetParameter(const std::shared_ptr<Meta>& meta)
@@ -135,6 +286,11 @@ FilterType Filter::GetFilterType()
 
 Status Filter::OnLinked(StreamType, const std::shared_ptr<Meta>&, const std::shared_ptr<FilterLinkCallback>&)
 {
+    if (filterLoop_) {
+        filterLoop_->InitAsync();
+    } else {
+        ChangeState(FilterState::INITIALIZED);
+    }
     return Status::OK;
 };
 
