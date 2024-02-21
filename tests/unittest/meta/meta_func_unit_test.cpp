@@ -593,7 +593,7 @@ void PrepareInMeta(std::shared_ptr<Meta>& inMeta)
     }
 }
 
-void CheckOutMeta(std::shared_ptr<Meta>& outMeta)
+void CheckOutMeta(const std::shared_ptr<Meta>& outMeta)
 {
     for (auto item : testInt32Data) {
         int32_t valueInInt32 = item.second;
@@ -653,7 +653,7 @@ HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_All_As_Mix_Using_AssignCopy, TestSiz
         int32_t valueOutInt32 = 0;
         ASSERT_FALSE(GetMetaData(*metaIn, item.first, valueOutInt32));
     }
-    CheckOutMeta(metaOut);
+    CheckOutMeta(make_shared<Meta>(metaCopy));
 }
 
 /**
@@ -669,7 +669,7 @@ HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_All_As_Mix_Using_SwapCopy, TestSize.
         int32_t valueOutInt32 = 0;
         ASSERT_FALSE(GetMetaData(*metaIn, item.first, valueOutInt32));
     }
-    CheckOutMeta(metaOut);
+    CheckOutMeta(make_shared<Meta>(metaCopy));
 }
 
 /**

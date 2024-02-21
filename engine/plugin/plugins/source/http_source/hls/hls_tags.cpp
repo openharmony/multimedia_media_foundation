@@ -236,7 +236,7 @@ std::string AttributesTag::ParseAttributeValue(std::istringstream &iss, std::ost
     return oss.str();
 }
 
-std::string AttributesTag::ParseAttributeName(std::istringstream& iss, std::ostringstream& oss) const
+std::string AttributesTag::ParseAttributeName(std::istringstream& iss, std::ostringstream& oss)
 {
     while (!iss.eof()) {
         char c = static_cast<char>(iss.peek());

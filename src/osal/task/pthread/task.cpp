@@ -71,7 +71,7 @@ void Task::Start()
     if (!loop_) { // thread not exist
         loop_ = CppExt::make_unique<Thread>(ConvertPriorityType(priority_));
     }
-    
+
     if (loop_->CreateThread([this] { Run(); })) {
         MEDIA_LOG_I("task " PUBLIC_LOG_S " create success", name_.c_str());
         runningState_ = RunningState::STARTED;

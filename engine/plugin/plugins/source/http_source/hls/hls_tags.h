@@ -106,8 +106,8 @@ protected:
     virtual void ParseAttributes(const std::string& field);
     std::list<std::shared_ptr<Attribute>> attributes;
 private:
-    std::string ParseAttributeName(std::istringstream& iss, std::ostringstream& oss) const;
-    std::string ParseAttributeValue(std::istringstream& iss, std::ostringstream& oss);
+    static std::string ParseAttributeName(std::istringstream& iss, std::ostringstream& oss);
+    static std::string ParseAttributeValue(std::istringstream& iss, std::ostringstream& oss);
 };
 
 class ValuesListTag : public AttributesTag {
