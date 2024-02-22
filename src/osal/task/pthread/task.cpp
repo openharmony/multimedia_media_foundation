@@ -53,16 +53,20 @@ Task::Task(std::string name, std::function<void()> job, TaskPriority priority)
 Task::~Task()
 {
     MEDIA_LOG_I("task " PUBLIC_LOG_S " dtor called", name_.c_str());
-    runningState_ = RunningState::STOPPED;
+    {
+        AutoLock lock(stateMutex_);
+        runningState_ = RunningState::STOPPED;
+    }
     syncCond_.NotifyAll();
 }
 
 void Task::Start()
 {
-    MEDIA_LOG_I("task " PUBLIC_LOG_S " start called", name_.c_str());
+    MEDIA_LOG_I("task " PUBLIC_LOG_S " Start called", name_.c_str());
     AutoLock lock(stateMutex_);
     if (loop_ && loop_->HasThread()) {
-        MEDIA_LOG_W("task " PUBLIC_LOG_S " has started", name_.c_str());
+        MEDIA_LOG_W("task " PUBLIC_LOG_S " has created, current state: " PUBLIC_LOG_D32,
+            name_.c_str(), runningState_.load());
         runningState_ = RunningState::STARTED;
         syncCond_.NotifyAll();
         return;
@@ -70,6 +74,7 @@ void Task::Start()
 
     if (!loop_) { // thread not exist
         loop_ = CppExt::make_unique<Thread>(ConvertPriorityType(priority_));
+        loop_->SetName(name_);
     }
 
     if (loop_->CreateThread([this] { Run(); })) {
@@ -83,34 +88,54 @@ void Task::Start()
 
 void Task::Stop()
 {
-    MEDIA_LOG_W("task " PUBLIC_LOG_S " stop entered, current state: " PUBLIC_LOG_D32,
-                name_.c_str(), runningState_.load());
     AutoLock lock(stateMutex_);
+    MEDIA_LOG_W("task " PUBLIC_LOG_S " Stop entered, current state: " PUBLIC_LOG_D32,
+        name_.c_str(), runningState_.load());
     if (runningState_.load() != RunningState::STOPPED) {
         runningState_ = RunningState::STOPPING;
-        syncCond_.NotifyAll();
-        syncCond_.Wait(lock, [this] { return runningState_.load() == RunningState::STOPPED; });
-        if (loop_ && loop_->HasThread()) {
-            loop_ = nullptr;
+        if (loop_ && !(loop_->IsRunningInSelf())) {
+            // There is no need to perform notification in task's self thread, as no call would wait for STOPPING state.
+            // Perform notification to accelerate stopping when the task is already in PAUSED state.
+            syncCond_.NotifyAll();
+            syncCond_.Wait(lock, [this] { return runningState_.load() == RunningState::STOPPED; });
+            if (loop_->HasThread()) {
+                loop_ = nullptr;
+            }
+            MEDIA_LOG_W("task " PUBLIC_LOG_S " Stop done", name_.c_str());
+        } else {
+            MEDIA_LOG_W("task " PUBLIC_LOG_S " can't use Task::Stop in self task, now replaced by Task::StopAsync",
+                name_.c_str());
         }
     }
-    MEDIA_LOG_W("task " PUBLIC_LOG_S " stop exited", name_.c_str());
 }
 
 void Task::StopAsync()
 {
-    MEDIA_LOG_D("task " PUBLIC_LOG_S " StopAsync called", name_.c_str());
-    AutoLock lock(stateMutex_);
-    if (runningState_.load() != RunningState::STOPPED) {
-        runningState_ = RunningState::STOPPING;
+    {
+        AutoLock lock(stateMutex_);
+        MEDIA_LOG_W("task " PUBLIC_LOG_S " StopAsync called, current state: " PUBLIC_LOG_D32,
+            name_.c_str(), runningState_.load());
+        if (runningState_.load() != RunningState::STOPPED) {
+            runningState_ = RunningState::STOPPING;
+        }
     }
+    // Perform notification to accelerate stopping when the task is already in PAUSED state.
+    syncCond_.NotifyAll();
 }
 
 void Task::Pause()
 {
     AutoLock lock(stateMutex_);
     RunningState state = runningState_.load();
-    MEDIA_LOG_I("task " PUBLIC_LOG_S " Pause called, running state = " PUBLIC_LOG_D32, name_.c_str(), state);
+    MEDIA_LOG_I("task " PUBLIC_LOG_S " Pause called, current state: " PUBLIC_LOG_D32, name_.c_str(), state);
+    if (loop_ && loop_->IsRunningInSelf()) {
+        if (state == RunningState::STARTED) {
+            runningState_ = RunningState::PAUSING;
+        }
+        MEDIA_LOG_W("task " PUBLIC_LOG_S " can't use Task::Pause in self task, now replaced by Task::PauseAsync",
+            name_.c_str());
+        return;
+    }
     switch (state) {
         case RunningState::STARTED: {
             runningState_ = RunningState::PAUSING;
@@ -124,7 +149,9 @@ void Task::Pause()
             break;
         }
         case RunningState::PAUSING: {
-            syncCond_.Wait(lock, [this] { return runningState_.load() == RunningState::PAUSED; });
+            syncCond_.Wait(lock, [this] {
+                return runningState_.load() == RunningState::PAUSED || runningState_.load() == RunningState::STOPPED;
+            });
             break;
         }
         default:
@@ -133,6 +160,9 @@ void Task::Pause()
     MEDIA_LOG_I("task " PUBLIC_LOG_S " Pause done.", name_.c_str());
 }
 
+
+// There is no need to perform notification, as no call would wait for PAUSING state.
+// If perform notification may cause unnecessasy running when the task is already in PAUSED state.
 void Task::PauseAsync()
 {
     MEDIA_LOG_I("task " PUBLIC_LOG_S " PauseAsync called", name_.c_str());
@@ -156,8 +186,8 @@ void Task::DoTask()
 void Task::Run()
 {
     for (;;) {
-        MEDIA_LOG_DD("task " PUBLIC_LOG_S " is running on state : " PUBLIC_LOG_D32,
-                     name_.c_str(), runningState_.load());
+        MEDIA_LOG_DD("task " PUBLIC_LOG_S " is running on state: " PUBLIC_LOG_D32,
+            name_.c_str(), runningState_.load());
         if (runningState_.load() == RunningState::STARTED) {
             job_();
         }

@@ -97,6 +97,13 @@ bool Thread::CreateThread(const std::function<void()>& func)
     return rtv == 0;
 }
 
+bool Thread::IsRunningInSelf()
+{
+    pthread_t tid = pthread_self();
+    AutoLock lock(mutex_);
+    return tid == id_;
+}
+
 void Thread::SetNameInternal()
 {
     AutoLock lock(mutex_);

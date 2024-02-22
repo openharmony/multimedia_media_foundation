@@ -44,14 +44,14 @@ public:
     size_t ReadBuffer(void* ptr, size_t readSize, int waitTimes = 0)
     {
         AutoLock lck(writeMutex_);
-        if (!isActive_) {
+        if (!isActive_ || !isReadBlockingAllowed_) {
             return 0;
         }
         auto available = tail_ - head_;
         while (waitTimes > 0 && available == 0) {
             MEDIA_LOG_DD("ReadBuffer wait , waitTimes is " PUBLIC_LOG_U64, waitTimes);
             writeCondition_.Wait(lck);
-            if (!isActive_) {
+            if (!isActive_ || !isReadBlockingAllowed_) {
                 return 0;
             }
             available = tail_ - head_;
@@ -70,7 +70,7 @@ public:
         mediaOffset_ += available;
         MEDIA_LOG_DD("ReadBuffer finish available is " PUBLIC_LOG_ZU ", mediaOffset_ " PUBLIC_LOG_U64, available,
             mediaOffset_);
-        writeCondition_.NotifyOne();
+        writeCondition_.NotifyAll();
         return available;
     }
 
@@ -96,7 +96,7 @@ public:
                            writeSize - (bufferSize_ - index));
         }
         tail_ += writeSize;
-        writeCondition_.NotifyOne();
+        writeCondition_.NotifyAll();
         return true;
     }
 
@@ -109,8 +109,17 @@ public:
                 head_ = 0;
                 tail_ = 0;
             }
-            writeCondition_.NotifyOne();
+            writeCondition_.NotifyAll();
         }
+    }
+
+    void SetReadBlocking(bool isReadBlockingAllowed)
+    {
+        {
+            AutoLock lck(writeMutex_);
+            isReadBlockingAllowed_ = isReadBlockingAllowed;
+        }
+        writeCondition_.NotifyAll();
     }
 
     size_t GetSize()
@@ -133,7 +142,7 @@ public:
         AutoLock lck(writeMutex_);
         head_ = 0;
         tail_ = 0;
-        writeCondition_.NotifyOne();
+        writeCondition_.NotifyAll();
     }
 
     bool Seek(uint64_t offset)
@@ -147,7 +156,7 @@ public:
             mediaOffset_ = offset;
             result = true;
         }
-        writeCondition_.NotifyOne();
+        writeCondition_.NotifyAll();
         return result;
     }
 private:
@@ -159,6 +168,7 @@ private:
     ConditionVariable writeCondition_ {};
     bool isActive_ {true};
     uint64_t mediaOffset_ {0};
+    bool isReadBlockingAllowed_ {true};
 };
 } // namespace Media
 } // namespace OHOS
