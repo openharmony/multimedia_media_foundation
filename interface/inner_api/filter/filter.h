@@ -22,6 +22,9 @@
 #include "meta/meta.h"
 #include "buffer/avbuffer_queue_producer.h"
 #include "common/event.h"
+#include "filter/filter_loop.h"
+#include "osal/task/mutex.h"
+#include "osal/task/condition_variable.h"
 
 namespace OHOS {
 namespace Media {
@@ -61,6 +64,10 @@ enum class FilterState {
     READY,       // Ready Event reported
     RUNNING,     // Start called
     PAUSED,      // Pause called
+    FLUSHED,     // Flush called, should only call after pause
+    STOPPED,     // Stop called
+    RELEASED,    // Release called
+    ERROR,       // State fail
 };
 
 enum class FilterCallBackCommand {
@@ -93,7 +100,7 @@ public:
 class Filter {
 public:
     explicit Filter(std::string name, FilterType type);
-    virtual ~Filter() = default;
+    virtual ~Filter();
     virtual void Init(const std::shared_ptr<EventReceiver>& receiver, const std::shared_ptr<FilterCallback>& callback);
 
     virtual Status Prepare();
@@ -109,6 +116,30 @@ public:
     virtual Status Flush();
 
     virtual Status Release();
+
+    virtual Status ProcessInputBuffer(int arg = 0, int64_t delay = 0);
+
+    virtual Status ProcessOutputBuffer(int arg = 0, int64_t delay = 0);
+
+    virtual Status DoInit();
+
+    virtual Status DoPrepare();
+
+    virtual Status DoStart();
+
+    virtual Status DoPause();
+
+    virtual Status DoResume();
+
+    virtual Status DoStop();
+
+    virtual Status DoFlush();
+
+    virtual Status DoRelease();
+
+    virtual Status DoProcessInputBuffer(int arg, bool dropped);
+
+    virtual Status DoProcessOutputBuffer(int arg, bool dropped);
 
     virtual void SetParameter(const std::shared_ptr<Meta>& meta);
 
@@ -130,15 +161,25 @@ public:
 
     virtual Status OnUnLinked(StreamType inType, const std::shared_ptr<FilterLinkCallback>& callback);
 
+    virtual void ChangeState(FilterState state);
+
+    virtual bool WaitAllState(FilterState state);
+
 protected:
+    void ActiveAsyncMode();
+
     std::string name_;
 
     std::shared_ptr<Meta> meta_;
 
     FilterType filterType_;
+    FilterState curState_;
 
     std::vector<StreamType> supportedInStreams_;
     std::vector<StreamType> supportedOutStreams_;
+
+    OHOS::Media::Mutex stateMutex_{};
+    OHOS::Media::ConditionVariable cond_{};
 
     std::map<StreamType, std::vector<std::shared_ptr<Filter>>> nextFiltersMap_;
 
@@ -147,7 +188,23 @@ protected:
     std::shared_ptr<FilterCallback> callback_;
 
     std::map<StreamType, std::vector<std::shared_ptr<FilterLinkCallback>>> linkCallbackMaps_;
+
+    std::shared_ptr<FilterLoop> filterLoop_;
 };
+
+enum FilterPlaybackCommand {
+    INIT = 0,
+    PREPARE,
+    START,
+    PAUSE,
+    RESUME,
+    STOP,
+    RELEASE,
+    FLUSH,
+    PROCESS_INPUT_BUFFER,
+    PROCESS_OUTPUT_BUFFER,
+};
+
 } // namespace Pipeline
 } // namespace Media
 } // namespace OHOS

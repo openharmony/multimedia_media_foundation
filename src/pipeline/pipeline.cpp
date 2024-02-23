@@ -43,6 +43,9 @@ Status Pipeline::Prepare()
             auto rtv = (*it)->Prepare();
             FALSE_RETURN_V(rtv == Status::OK, rtv);
         }
+        for (auto it = filters_.begin(); it != filters_.end(); ++it) {
+            (*it)->WaitAllState(FilterState::READY);
+        }
         return Status::OK;
     });
     return Status::OK;
@@ -60,6 +63,9 @@ Status Pipeline::Start()
                 ret = rtv;
                 return;
             }
+        }
+        for (auto it = filters_.begin(); it != filters_.end(); ++it) {
+            (*it)->WaitAllState(FilterState::RUNNING);
         }
     });
     return ret;
@@ -80,6 +86,9 @@ Status Pipeline::Pause()
             if ((*it)->Pause() != Status::OK) {
             }
         }
+        for (auto it = filters_.begin(); it != filters_.end(); ++it) {
+            (*it)->WaitAllState(FilterState::PAUSED);
+        }
         return Status::OK;
     });
     return Status::OK;
@@ -92,6 +101,9 @@ Status Pipeline::Resume()
         for (auto it = filters_.begin(); it != filters_.end(); ++it) {
             auto rtv = (*it)->Resume();
             FALSE_RETURN_V(rtv == Status::OK, rtv);
+        }
+        for (auto it = filters_.begin(); it != filters_.end(); ++it) {
+            (*it)->WaitAllState(FilterState::RUNNING);
         }
         state_ = FilterState::RUNNING;
         return Status::OK;
@@ -111,6 +123,9 @@ Status Pipeline::Stop()
             }
             auto rtv = (*it)->Stop();
             FALSE_RETURN_V(rtv == Status::OK, rtv);
+        }
+        for (auto it = filters_.begin(); it != filters_.end(); ++it) {
+            (*it)->WaitAllState(FilterState::STOPPED);
         }
         MEDIA_LOG_I("Stop finished, filter number: " PUBLIC_LOG_ZU, filters_.size());
         return Status::OK;
@@ -137,6 +152,9 @@ Status Pipeline::Release()
         AutoLock lock(mutex_);
         for (auto it = filters_.begin(); it != filters_.end(); ++it) {
             (*it)->Release();
+        }
+        for (auto it = filters_.begin(); it != filters_.end(); ++it) {
+            (*it)->WaitAllState(FilterState::RELEASED);
         }
         filters_.clear();
         return Status::OK;
@@ -180,6 +198,7 @@ Status Pipeline::RemoveHeadFilter(const std::shared_ptr<Filter>& filter)
             filters_.erase(it);
         }
         filter->Release();
+        filter->WaitAllState(FilterState::RELEASED);
         return Status::OK;
     });
     return Status::OK;
