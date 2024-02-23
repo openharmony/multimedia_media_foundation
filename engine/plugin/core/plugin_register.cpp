@@ -383,7 +383,7 @@ void PluginRegister::RegisterPluginsFromPath(const char* libDirPath)
                 continue;
             }
             std::string libName = lib->d_name;
-            if (libName.find(libFileHead) != std::string::npos ||
+            if (libName.find(libFileHead) ||
                 libName.compare(libName.size() - libFileTail.size(), libFileTail.size(), libFileTail)) {
                 continue;
             }
