@@ -46,7 +46,7 @@ static inline bool IsDiscreteAllowed(uint8_t flags)
 
 template<typename T>
 bool CapabilityValueCheck(CapabilityID key, std::pair<const Plugin::ValueType&, const Plugin::ValueType&> inVals,
-                          uint8_t flags, std::function<int(T,T)> cmpFunc, Plugin::ValueType& outValue);
+                          uint8_t flags, std::function<int(T, T)> cmpFunc, Plugin::ValueType& outValue);
 
 template <typename T>
 bool FixInvalDiscCapValCheck(CapabilityID key, const Plugin::ValueType& val1, const Plugin::ValueType& val2,
@@ -203,7 +203,7 @@ template <typename T>
 bool FDCapabilityCheck(const Plugin::FixedCapability<T>& v1, const Plugin::DiscreteCapability<T>& v2,
                        const std::function<int(T,T)>& cmpFunc, Plugin::ValueType& outValue)
 {
-    if (std::any_of(v2.begin(), v2.end(), [&v1, &cmpFunc](const T& tmp){return cmpFunc(tmp, v1) == 0;})) {
+    if (std::any_of(v2.begin(), v2.end(), [&v1, &cmpFunc](const T& tmp) {return cmpFunc(tmp, v1) == 0;})) {
         outValue = v1;
         return true;
     }
@@ -258,7 +258,7 @@ bool DDCapabilityCheck(const Plugin::DiscreteCapability<T>& v1, const Plugin::Di
 {
     Plugin::DiscreteCapability<T> tmpOut;
     for (const auto& cap1 : v1) {
-        if (std::any_of(v2.begin(), v2.end(), [&cap1, &cmpFunc](const T& tmp){return cmpFunc(cap1, tmp) == 0;})) {
+        if (std::any_of(v2.begin(), v2.end(), [&cap1, &cmpFunc](const T& tmp) {return cmpFunc(cap1, tmp) == 0;})) {
             tmpOut.emplace_back(cap1);
         }
     }
