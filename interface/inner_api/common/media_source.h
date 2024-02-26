@@ -67,7 +67,6 @@ public:
 
     const std::map<std::string, std::string> &GetSourceHeader() const;
 
-    //std::shared_ptr<DataConsumer> GetDataConsumer() const;
 #ifndef OHOS_LITE
     std::shared_ptr<IMediaDataSource> GetDataSrc() const;
 #endif
@@ -75,7 +74,6 @@ private:
     std::string uri_ {};
     SourceType type_ {};
     std::map<std::string, std::string> header_ {};
-    //std::shared_ptr<DataConsumer> dataConsumer_ {};
 #ifndef OHOS_LITE
     std::shared_ptr<IMediaDataSource> dataSrc_ {};
 #endif

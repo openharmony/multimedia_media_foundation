@@ -267,21 +267,21 @@ Plugin::Seekable MediaSourceFilter::GetSeekable() const
 }
 
 ErrorCode MediaSourceFilter::SeekToTime(int64_t offset) const
-{   
+{
     Status ret = plugin_->SeekToTime(offset);
     MEDIA_LOG_I("plugin_->SeekTo ret = " PUBLIC_LOG_D32, static_cast<int32_t>(ret));
     return ret == Status::OK ? ErrorCode::SUCCESS : ErrorCode::ERROR_UNKNOWN;
 }
 
 ErrorCode MediaSourceFilter::GetBitRates(std::vector<uint32_t>& bitRates) const
-{   
+{
     MEDIA_LOG_I("MediaSourceFilter::GetBitRates() enter.\n");
     Status ret = plugin_->GetBitRates(bitRates);
     return ret == Status::OK ? ErrorCode::SUCCESS : ErrorCode::ERROR_UNKNOWN;
 }
 
 ErrorCode MediaSourceFilter::SelectBitRate(uint32_t bitRate) const
-{   
+{
     Status ret = plugin_->SelectBitRate(bitRate);
     return ret == Status::OK ? ErrorCode::SUCCESS : ErrorCode::ERROR_UNKNOWN;
 }
@@ -435,7 +435,7 @@ ErrorCode MediaSourceFilter::FindPlugin(const std::shared_ptr<MediaSource>& sour
         auto val = info->extra[PLUGIN_INFO_EXTRA_PROTOCOL];
         if (Plugin::Any::IsSameTypeWith<std::vector<ProtocolType>>(val)) {
             auto supportProtocols = OHOS::Media::Plugin::AnyCast<std::vector<ProtocolType>>(val);
-            for(auto supportProtocol : supportProtocols){
+            for (auto supportProtocol : supportProtocols) {
                 if (g_protocolStringToType[protocol_] == supportProtocol &&
                     CreatePlugin(info, name, pluginManager) == ErrorCode::SUCCESS) {
                     MEDIA_LOG_I("supportProtocol:" PUBLIC_LOG_S " CreatePlugin " PUBLIC_LOG_S " success",
