@@ -93,7 +93,8 @@ private:
 
         Status InitMuxerInfo(std::shared_ptr<PluginRegInfo>& reg, const PluginDefBase& def);
 
-        __attribute__((no_sanitize("cfi"))) Status InitCodecInfo(std::shared_ptr<PluginRegInfo>& reg, const PluginDefBase& def);
+        __attribute__((no_sanitize("cfi"))) Status InitCodecInfo(std::shared_ptr<PluginRegInfo>& reg,
+            const PluginDefBase& def);
 
         Status InitAudioSinkInfo(std::shared_ptr<PluginRegInfo>& reg, const PluginDefBase& def);
 
