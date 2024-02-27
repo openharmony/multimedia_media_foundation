@@ -189,7 +189,7 @@ Status PluginRegister::RegisterImpl::InitMuxerInfo(std::shared_ptr<PluginRegInfo
     return Status::OK;
 }
 
-Status PluginRegister::RegisterImpl::InitCodecInfo(std::shared_ptr<PluginRegInfo>& reg, const PluginDefBase& def)
+__attribute__((no_sanitize("cfi"))) Status PluginRegister::RegisterImpl::InitCodecInfo(std::shared_ptr<PluginRegInfo>& reg, const PluginDefBase& def)
 {
     reg->creator = def.GetCreator();
     auto info = std::make_shared<PluginInfo>();
