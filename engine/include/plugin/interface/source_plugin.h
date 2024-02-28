@@ -118,7 +118,7 @@ struct SourcePlugin : public PluginBase {
      * @brief Get duration from current source
      * @return Execution status return
      */
-    virtual Status GetDuration(int64_t& duration) 
+    virtual Status GetDuration(int64_t& duration)
     {
         return Status::ERROR_UNIMPLEMENTED;
     }
@@ -127,17 +127,17 @@ struct SourcePlugin : public PluginBase {
      * @brief Get bitrates that current source supports
      * @return Execution status return
     */
-    virtual Status GetBitRates(std::vector<uint32_t>& bitRates) 
+    virtual Status GetBitRates(std::vector<uint32_t>& bitRates)
     {
         return Status::ERROR_UNIMPLEMENTED;
     }
     
     /**
-     * @brief Select bitrate for current source 
+     * @brief Select bitrate for current source
      * @param bitRate user selects a bitrate
      * @return Execution status return
     */
-    virtual Status SelectBitRate(uint32_t bitRate) 
+    virtual Status SelectBitRate(uint32_t bitRate)
     {
         return Status::ERROR_UNIMPLEMENTED;
     }
