@@ -252,14 +252,14 @@ void HttpSourcePlugin::CloseUri()
 }
 
 Status HttpSourcePlugin::GetDuration(int64_t& duration)
-{   
+{
     FALSE_RETURN_V(downloader_ != nullptr, Status::ERROR_NULL_POINTER);
     duration = downloader_->GetDuration();
     return Status::OK;
 }
 
 Status HttpSourcePlugin::GetBitRates(std::vector<uint32_t>& bitRates)
-{   
+{
     MEDIA_LOG_I("HttpSourcePlugin::GetBitRates() enter.\n");
     FALSE_RETURN_V(downloader_ != nullptr, Status::ERROR_NULL_POINTER);
     bitRates = downloader_->GetBitRates();

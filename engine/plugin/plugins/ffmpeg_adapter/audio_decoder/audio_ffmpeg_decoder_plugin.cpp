@@ -164,9 +164,8 @@ void UpdateOutCaps(const AVCodec* codec, CodecPluginDef& definition)
 {
     CapabilityBuilder capBuilder;
     capBuilder.SetMime(OHOS::Media::MEDIA_MIME_AUDIO_RAW);
-    switch(codec->id){
-        case AV_CODEC_ID_OPUS:
-        {
+    switch(codec->id) {
+        case AV_CODEC_ID_OPUS: {
             DiscreteCapability<AudioSampleFormat> values;
             values.push_back(ConvFf2PSampleFmt(AV_SAMPLE_FMT_FLTP));
             capBuilder.SetAudioSampleFormatList(values);

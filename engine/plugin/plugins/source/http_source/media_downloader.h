@@ -32,7 +32,7 @@ public:
     virtual void Pause() = 0;
     virtual void Resume() = 0;
     virtual bool Read(unsigned char* buff, unsigned int wantReadLength, unsigned int& realReadLength, bool& isEos) = 0;
-    virtual bool SeekToPos(int64_t offset) 
+    virtual bool SeekToPos(int64_t offset)
     {
         return 0;
     }
@@ -42,10 +42,10 @@ public:
     virtual void SetCallback(Callback* cb) = 0;
     virtual void SetStatusCallback(StatusCallbackFunc cb) = 0;
     virtual bool GetStartedStatus() = 0;
-    virtual bool SeekToTime(int64_t offset) 
+    virtual bool SeekToTime(int64_t offset)
     {
         return 0;
-    }	
+    }
     virtual std::vector<uint32_t> GetBitRates()
     {
         return {};

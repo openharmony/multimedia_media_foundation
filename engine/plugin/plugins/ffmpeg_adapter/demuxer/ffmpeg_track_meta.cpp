@@ -199,7 +199,7 @@ void ConvertAMRwbStreamToMetaInfo(const AVStream& avStream, const std::shared_pt
 }
 
 void ConvertOPUSStreamToMetaInfo(const AVStream& avStream, const std::shared_ptr<AVFormatContext>& avFormatContext,
-                                  const std::shared_ptr<AVCodecContext>& avCodecContext, Meta& meta)
+                                 const std::shared_ptr<AVCodecContext>& avCodecContext, Meta& meta)
 {
     meta.Set<Tag::MIME>(MEDIA_MIME_AUDIO_OPUS);
     ConvertCommonAudioStreamToMetaInfo(avStream, avFormatContext, avCodecContext, meta);

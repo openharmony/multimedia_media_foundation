@@ -60,7 +60,7 @@ private:
     bool delayReady {true};
 };
 } // namespace HttpPluginLite
-} // namespace Plugin 
-} // namespace Media 
+} // namespace Plugin
+} // namespace Media
 } // namespace OHOS
 #endif

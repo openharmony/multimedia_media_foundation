@@ -92,9 +92,9 @@ bool FindAvMetaNameByTag(Tag tag, std::string& metaName);
 
 void InsertMediaTag(Meta& meta, AVDictionaryEntry* tag);
 
-AudioAacProfile ConvAacProfileFromFfmpeg (int32_t ffmpegProfile);
+AudioAacProfile ConvAacProfileFromFfmpeg(int32_t ffmpegProfile);
 
-int32_t ConvAacProfileToFfmpeg (AudioAacProfile profile);
+int32_t ConvAacProfileToFfmpeg(AudioAacProfile profile);
 
 VideoPixelFormat ConvertPixelFormatFromFFmpeg(int32_t ffmpegPixelFormat);
 
@@ -104,7 +104,7 @@ bool IsYuvFormat(AVPixelFormat format);
 
 bool IsRgbFormat(AVPixelFormat format);
 
-VideoH264Profile ConvH264ProfileFromFfmpeg (int32_t ffmpegProfile);
+VideoH264Profile ConvH264ProfileFromFfmpeg(int32_t ffmpegProfile);
 
 int32_t ConvH264ProfileToFfmpeg(VideoH264Profile profile);
 } // namespace Ffmpeg

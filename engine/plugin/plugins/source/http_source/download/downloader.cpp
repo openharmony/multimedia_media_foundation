@@ -41,8 +41,8 @@ DownloadRequest::DownloadRequest(const std::string& url, DataSaveFunc saveData, 
     headerInfo_.contentLen = 0;
 }
 
-DownloadRequest::DownloadRequest(const std::string& url, double duration, DataSaveFunc saveData, StatusCallbackFunc statusCallback,
-                                 bool requestWholeFile)
+DownloadRequest::DownloadRequest(const std::string& url, double duration, DataSaveFunc saveData,
+                                 StatusCallbackFunc statusCallback, bool requestWholeFile)
     : url_(url), duration_(duration), saveData_(std::move(saveData)), statusCallback_(std::move(statusCallback)),
     requestWholeFile_(requestWholeFile)
 {
@@ -166,7 +166,7 @@ void Downloader::Pause()
 }
 
 void Downloader::Cancle()
-{   
+{
     requestQue_->SetActive(false, true);
     if (currentRequest_ != nullptr) {
         currentRequest_->Close();
@@ -197,7 +197,7 @@ void Downloader::Stop(bool isAsync)
     requestQue_->SetActive(false);
     if (currentRequest_ != nullptr) {
         currentRequest_->Close();
-        client_->Close(); 
+        client_->Close();
         shouldStartNextRequest = true;
     }
     if (isAsync) {
@@ -304,7 +304,8 @@ void Downloader::HttpDownloadLoop()
     }
 }
 
-void Downloader::HandleRetOK() {
+void Downloader::HandleRetOK()
+{
     if (currentRequest_->retryTimes_ > 0) {
         currentRequest_->retryTimes_ = 0;
     }
