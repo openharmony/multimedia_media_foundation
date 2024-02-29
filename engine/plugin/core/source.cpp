@@ -50,7 +50,7 @@ Status Source::SeekToPos(int64_t offset)
 
 Status Source::SeekToTime(int64_t offset)
 {
-	return source_->SeekToTime(offset);
+    return source_->SeekToTime(offset);
 }
 
 Status Source::GetDuration(int64_t& duration)

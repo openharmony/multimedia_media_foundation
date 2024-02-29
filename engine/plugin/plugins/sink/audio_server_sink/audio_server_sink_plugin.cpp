@@ -81,7 +81,7 @@ const std::pair<OHOS::AudioStandard::AudioChannel, uint32_t> g_auChannelsMap[] =
     {OHOS::AudioStandard::STEREO, 2},
 };
 
-bool SampleRateEnum2Num (OHOS::AudioStandard::AudioSamplingRate enumVal, uint32_t& numVal)
+bool SampleRateEnum2Num(OHOS::AudioStandard::AudioSamplingRate enumVal, uint32_t& numVal)
 {
     for (const auto& item : g_auSampleRateMap) {
         if (item.first == enumVal) {
@@ -93,7 +93,7 @@ bool SampleRateEnum2Num (OHOS::AudioStandard::AudioSamplingRate enumVal, uint32_
     return false;
 }
 
-bool SampleRateNum2Enum (uint32_t numVal, OHOS::AudioStandard::AudioSamplingRate& enumVal)
+bool SampleRateNum2Enum(uint32_t numVal, OHOS::AudioStandard::AudioSamplingRate& enumVal)
 {
     for (const auto& item : g_auSampleRateMap) {
         if (item.second == numVal) {

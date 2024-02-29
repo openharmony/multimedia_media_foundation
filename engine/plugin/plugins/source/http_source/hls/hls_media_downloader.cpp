@@ -27,7 +27,6 @@ namespace {
 constexpr int RING_BUFFER_SIZE = 5 * 48 * 1024;
 }
 
-// Description:
 //   hls manifest, m3u8 --- content get from m3u8 url, we get play list from the content
 //   fragment --- one item in play list, download media data according to the fragment address.
 HlsMediaDownloader::HlsMediaDownloader() noexcept
@@ -46,7 +45,7 @@ HlsMediaDownloader::HlsMediaDownloader() noexcept
 }
 
 void HlsMediaDownloader::FragmentDownloadLoop()
-{   
+{
     auto playInfo = playList_->Pop();
     std::string url = playInfo.url_;
     if (url.empty()) { // when monitor pause, playList_ set active false, it's empty
@@ -66,7 +65,8 @@ void HlsMediaDownloader::PutRequestIntoDownloader(const PlayInfo& playInfo)
         statusCallback_(status, downloader_, std::forward<decltype(request)>(request));
     };
     // TO DO: If the fragment file is too large, should not requestWholeFile.
-    downloadRequest_ = std::make_shared<DownloadRequest>(playInfo.url_, playInfo.duration_, dataSave_, realStatusCallback, true);
+    downloadRequest_ = std::make_shared<DownloadRequest>(playInfo.url_, playInfo.duration_, dataSave_,
+        realStatusCallback, true);
     // push request to back queue for seek
     backPlayList_.push_back(downloadRequest_);
     downloader_->Download(downloadRequest_, -1); // -1
@@ -119,7 +119,7 @@ bool HlsMediaDownloader::Read(unsigned char* buff, unsigned int wantReadLength,
 }
 
 bool HlsMediaDownloader::SeekToTime(int64_t offset)
-{   
+{
     FALSE_RETURN_V(buffer_ != nullptr, false);
     MEDIA_LOG_I("Seek: buffer size " PUBLIC_LOG_ZU ", offset " PUBLIC_LOG_D32, buffer_->GetSize(), offset);
     if (buffer_->Seek(offset)) {
@@ -140,8 +140,8 @@ size_t HlsMediaDownloader::GetContentLength() const
 }
 
 int64_t HlsMediaDownloader::GetDuration() const
-{   
-    MEDIA_LOG_I("GetDuration " PUBLIC_LOG_D64 , playListDownloader_->GetDuration());
+{
+    MEDIA_LOG_I("GetDuration " PUBLIC_LOG_D64, playListDownloader_->GetDuration());
     return playListDownloader_->GetDuration();
 }
 
@@ -156,7 +156,7 @@ void HlsMediaDownloader::SetCallback(Callback* cb)
 }
 
 void HlsMediaDownloader::OnPlayListChanged(const std::vector<PlayInfo>& playList)
-{   
+{
     for (auto& fragment : playList) {
         playList_->Push(fragment);
     }
@@ -180,12 +180,12 @@ void HlsMediaDownloader::SetStatusCallback(StatusCallbackFunc cb)
 }
 
 std::vector<uint32_t> HlsMediaDownloader::GetBitRates()
-{   
+{
     return playListDownloader_->GetBitRates();
 }
 
 bool HlsMediaDownloader::SelectBitRate(uint32_t bitRate)
-{   
+{
     if (playListDownloader_->IsBitrateSame(bitRate)) {
         return 0;
     }
@@ -209,19 +209,20 @@ bool HlsMediaDownloader::SelectBitRate(uint32_t bitRate)
 }
 
 void HlsMediaDownloader::FindSeekRequest(int64_t offset)
-{   
+{
     int64_t totalDuration = 0;
     for (const auto &item : backPlayList_) {
         int64_t hstTime;
         Plugin::Sec2HstTime(item->GetDuration(), hstTime);
         totalDuration += Plugin::HstTime2Ns(hstTime);
-        if (offset < totalDuration) {   
+        if (offset < totalDuration) {
             PlayInfo playInfo;
             playInfo.url_ = item->GetUrl();
             playInfo.duration_ = item->GetDuration();
-            MEDIA_LOG_I("FindSeekRequest  url_" PUBLIC_LOG_S " totalDuration " PUBLIC_LOG_D64, playInfo.url_.c_str(), totalDuration);
+            MEDIA_LOG_I("FindSeekRequest  url_" PUBLIC_LOG_S " totalDuration " PUBLIC_LOG_D64, playInfo.url_.c_str(),
+                totalDuration);
             PutRequestIntoDownloader(playInfo);
-        } 
+        }
     }
 }
 

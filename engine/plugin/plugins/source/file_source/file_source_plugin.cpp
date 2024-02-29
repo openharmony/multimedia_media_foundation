@@ -262,7 +262,7 @@ Status FileSourcePlugin::CheckFileStat()
         MEDIA_LOG_E(PUBLIC_LOG_S " is directory", fileName_.c_str());
         return Status::ERROR_UNSUPPORTED_FORMAT;
     }
-    if (S_ISSOCK(fileStat.st_mode)){
+    if (S_ISSOCK(fileStat.st_mode)) {
         MEDIA_LOG_E(PUBLIC_LOG_S " is a socket", fileName_.c_str());
         return Status::ERROR_UNSUPPORTED_FORMAT;
     }

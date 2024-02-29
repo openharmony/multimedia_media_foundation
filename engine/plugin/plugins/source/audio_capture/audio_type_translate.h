@@ -25,8 +25,8 @@ namespace OHOS {
 namespace Media {
 namespace Plugin {
 namespace AuCapturePlugin {
-bool SampleRateEnum2Num (OHOS::AudioStandard::AudioSamplingRate enumVal, uint32_t& numVal);
-bool SampleRateNum2Enum (uint32_t numVal, OHOS::AudioStandard::AudioSamplingRate& enumVal);
+bool SampleRateEnum2Num(OHOS::AudioStandard::AudioSamplingRate enumVal, uint32_t& numVal);
+bool SampleRateNum2Enum(uint32_t numVal, OHOS::AudioStandard::AudioSamplingRate& enumVal);
 
 bool SampleFmt2PluginFmt(OHOS::AudioStandard::AudioSampleFormat aFmt, AudioSampleFormat& pFmt);
 bool PluginFmt2SampleFmt(AudioSampleFormat pFmt, OHOS::AudioStandard::AudioSampleFormat& aFmt);

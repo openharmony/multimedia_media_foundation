@@ -64,13 +64,12 @@ int64_t HlsPlayListDownloader::GetDuration() const
 }
 
 Seekable HlsPlayListDownloader::GetSeekable() const
-{   
-    
+{
     // need wait master_ not null
-    while (true) {   
+    while (true) {
         if (master_ && master_->isSimple_) {
             break;
-        }       
+        }
         OSAL::SleepFor(1);
     }
     return master_->bLive_ ? Seekable::UNSEEKABLE : Seekable::SEEKABLE;
@@ -91,7 +90,7 @@ void HlsPlayListDownloader::NotifyListChange()
 }
 
 void HlsPlayListDownloader::ParseManifest()
-{   
+{
     if (!master_) {
         master_ = std::make_shared<M3U8MasterPlaylist>(playList_, url_);
         currentVariant_ = master_->defaultVariant_;
@@ -103,11 +102,11 @@ void HlsPlayListDownloader::ParseManifest()
         }
         updateTask_->Start();
     } else {
-        if (master_->isSimple_) {   
+        if (master_->isSimple_) {
             bool ret = currentVariant_->m3u8_->Update(playList_);
             if (ret) {
-               NotifyListChange();
-            }            
+                NotifyListChange();
+            }
         } else {
             currentVariant_ = master_->defaultVariant_;
             bool ret = currentVariant_->m3u8_->Update(playList_);
@@ -117,20 +116,20 @@ void HlsPlayListDownloader::ParseManifest()
                 NotifyListChange();
             }
         }
-    }   
+    }
 }
 
 void HlsPlayListDownloader::SelectBitRate(uint32_t bitRate)
-{   
+{
     for (const auto &item : master_->variants_) {
-        if (item->bandWidth_ == bitRate) {   
+        if (item->bandWidth_ == bitRate) {
             currentVariant_ = item;
             break;
         }
     }
 }
 
-bool HlsPlayListDownloader::IsBitrateSame(uint32_t bitRate) 
+bool HlsPlayListDownloader::IsBitrateSame(uint32_t bitRate)
 {
     if (bitRate == currentVariant_->bandWidth_) {
         return true;
@@ -142,7 +141,7 @@ std::vector<uint32_t> HlsPlayListDownloader::GetBitRates()
 {
     std::vector<uint32_t> bitRates;
     for (const auto &item : master_->variants_) {
-        if (item->bandWidth_) {   
+        if (item->bandWidth_) {
             bitRates.push_back(item->bandWidth_);
         }
     }
