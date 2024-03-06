@@ -161,6 +161,60 @@ public:
     static constexpr const char VIDEO_ENCODE_QUALITY[] =
         "quality"; ///<  key for the desired encoding quality,  this key is only supported for encoders that are
                    ///<  configured in constant quality mode
+    static constexpr const char VIDEO_TEMPORAL_LEVEL_SACLE[] =
+        "video_temporal_level_scale"; ///< bool, an optional key describing the temporal level scale mode. This is an
+                                     ///< optional parameter that applies only to encoder. The associated value is an
+                                     ///< bool (true or false): true is enabled, false is closed. The default
+                                     ///< value is false. It used in configure
+    static constexpr const char VIDEO_TEMPORAL_GOP_SIZE[] =
+        "video_temporal_gop_size"; ///< int32_t, temporal group of picture size. It used in configure
+    static constexpr const char VIDEO_TEMPORAL_GOP_REFERENCE_MODE[] =
+        "video_temporal_gop_reference_mode"; ///< int32_t, see {link @TemporalGopReferenceMode}, temporal group of picture
+                                            ///< reference mode. It used in configure
+    static constexpr const char VIDEO_LTR_FRAME_NUM[] =
+        "video_ltr_frame_num"; ///< int32_t, config long term reference frame number. It used in configure
+    static constexpr const char VIDEO_MARK_LTR[] =
+        "video_mark_ltr"; ///< bool, mark long term reference. It use with frame
+    static constexpr const char VIDEO_MARK_SUCCESS[] =
+        "video_mark_success"; ///< bool, mark long term reference success. It use with frame
+    static constexpr const char VIDEO_FRAME_POC[] =
+        "video_frame_poc"; ///< int32_t, the poc value of mark long term reference. It use with frame
+    static constexpr const char VIDEO_USE_LTR[] =
+        "video_use_ltr"; ///< int32_t, set the poc value of mark long term reference. It use with frame
+    static constexpr const char VIDEO_CROP_TOP[] =
+        "video_crop_top"; ///< int32_t, describing the top-coordinate (y) of the crop rectangle. This is the top-most
+                          ///< row included in the crop frame, where row indices start at 0
+    static constexpr const char VIDEO_CROP_BOTTOM[] =
+        "video_crop_bottom"; ///< int32_t, describing the bottom-coordinate (y) of the crop rectangle. This is the
+                             ///< bottom-most row included in the crop frame, where row indices start at 0
+    static constexpr const char VIDEO_CROP_LEFT[] =
+        "video_crop_left"; ///< describing the left-coordinate (x) of the crop rectangle. This is the left-most column
+                           ///< included in the crop frame, where column indices start at 0
+    static constexpr const char VIDEO_CROP_RIGHT[] =
+        "video_crop_right"; ///< describing the right-coordinate (x) of the crop rectangle. This is the right-most
+                            ///< column included in the crop frame, where column indices start at 0
+    static constexpr const char VIDEO_SLICE_HEIGHT[] =
+        "video_slice_height"; ///< int32_t, describing the plane height of a multi-planar (YUV) video buffer
+                              ///< layout. Slice height (or plane height/vertical stride) is the number of rows that
+                              ///< must be skipped to get from the top of the Y plane to the top of the U plane in the
+                              ///< buffer. In essence the offset of the U plane is sliceHeight * stride. The height
+                              ///< of the U/V planes can be calculated based on the color format, though it is generally
+                              ///< undefined and depends on the device and release
+    static constexpr const char VIDEO_LOW_LATENCY[] =
+        "video_low_latency"; ///< bool, an optional key describing the low latency decoding mode. This is an optional
+                             ///< parameter that applies only to decoders. If enabled, the decoder doesn't hold input
+                             ///< and output data more than required by the codec standards. The associated value is an
+                             ///< bool (true or false): true is enabled, false is closed.
+                             ///< The default value is false.
+    static constexpr const char VIDEO_QP_MAX[] =
+        "video_qp_max"; ///< int32_t, describing the maximum Quantization Parameter allowed for encoding video.
+                        ///< It use with frame
+    static constexpr const char VIDEO_QP_MIN[] =
+        "video_qp_min"; ///< int32_t, describing the minimum Quantization Parameter allowed for encoding video.
+                        ///< It use with frame
+    static constexpr const char VIDEO_ENABLE_ENCODE_SURFACE_INPUT_CALLBACK[] =
+        "video_enable_encode_surface_input_callback"; ///< bool, the associated value is an bool (true or false): true
+                                                      ///< is enabled, false is closed.
 
     /* -------------------- video specific tag -------------------- */
     static constexpr const char VIDEO_H264_PROFILE[] = "video.h264.profile"; ///< @see VideoH264Profile
@@ -181,6 +235,16 @@ public:
 
     /* -------------------- drm tag -------------------- */
     static constexpr const char DRM_CENC_INFO[] = "drm_cenc_info"; ///< drm cenc info
+
+    /* -------------------- avcapability tag -------------------- */
+    static constexpr const char FEATURE_VIDEO_TEMPORAL_LEVEL_SACLE[] =
+        "feature_video_temporal_level_scale"; ///< The key for querying feature of video temporal level scale
+    static constexpr const char FEATURE_VIDEO_LONG_TERM_REFERENCE[] =
+        "feature_video_long_term_reference"; ///< The key for querying feature of long term reference
+    static constexpr const char FEATURE_VIDEO_LOW_LATENCY[] =
+        "feature_video_low_latency"; ///< The key for querying video low latency
+    static constexpr const char VIDEO_MAX_LTR_FRAME_NUM[] =
+        "video_max_ltr_frame_num"; ///< int32_t, the key for querying the maximum long term reference number
 };
 
 using TagTypeCharSeq = const char *;

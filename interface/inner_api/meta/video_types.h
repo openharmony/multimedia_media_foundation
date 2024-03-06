@@ -281,6 +281,15 @@ enum MPEG4Level : int32_t {
     MPEG4_LEVEL_4A = 6,
     MPEG4_LEVEL_5 = 7,
 };
+/**
+ * @enum Temporal group of picture reference mode.
+ *
+ * @since 5.0
+ */
+enum class TemporalGopReferenceMode {
+    ADJACENT_REFERENCE_MODE =1;
+    JUMP_REFERENCE_MODE = 2;
+}
 } // namespace Plugins
 } // namespace Media
 } // namespace OHOS

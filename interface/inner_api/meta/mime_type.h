@@ -28,6 +28,7 @@ public:
     static constexpr const char VIDEO_MPEG4[] = "video/mp4v-es";
     static constexpr const char VIDEO_VP8[] = "video/x-vnd.on2.vp8";
     static constexpr const char VIDEO_VP9[] = "video/x-vnd.on2.vp9";
+    static constexpr const char VIDEO_VCC[] = "video/vcc";
 
     static constexpr const char AUDIO_AMR_NB[] = "audio/3gpp";
     static constexpr const char AUDIO_AMR_WB[] = "audio/amr-wb";
