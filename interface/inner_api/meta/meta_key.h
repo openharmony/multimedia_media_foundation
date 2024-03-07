@@ -188,11 +188,11 @@ public:
         "video_crop_bottom"; ///< int32_t, describing the bottom-coordinate (y) of the crop rectangle. This is the
                              ///< bottom-most row included in the crop frame, where row indices start at 0
     static constexpr const char VIDEO_CROP_LEFT[] =
-        "video_crop_left"; ///< describing the left-coordinate (x) of the crop rectangle. This is the left-most column
-                           ///< included in the crop frame, where column indices start at 0
+        "video_crop_left"; ///<  int32_t, describing the left-coordinate (x) of the crop rectangle. This is the left-most
+                           ///<  column included in the crop frame, where column indices start at 0
     static constexpr const char VIDEO_CROP_RIGHT[] =
-        "video_crop_right"; ///< describing the right-coordinate (x) of the crop rectangle. This is the right-most
-                            ///< column included in the crop frame, where column indices start at 0
+        "video_crop_right"; ///<  int32_t, describing the right-coordinate (x) of the crop rectangle. This is the
+                            ///<  right-most column included in the crop frame, where column indices start at 0
     static constexpr const char VIDEO_SLICE_HEIGHT[] =
         "video_slice_height"; ///< int32_t, describing the plane height of a multi-planar (YUV) video buffer
                               ///< layout. Slice height (or plane height/vertical stride) is the number of rows that
@@ -232,19 +232,19 @@ public:
     static constexpr const char USER_SHARED_MEMORY_FD[] =
         "user.shared.memory.fd";                                               ///< std::string : The shared memory fd
     static constexpr const char USER_PUSH_DATA_TIME[] = "user.push.data.time"; ///< The user push data time
+    static constexpr const char VIDEO_MAX_LTR_FRAME_NUM[] =
+        "video_max_ltr_frame_num"; ///< int32_t, the key for querying the maximum long term reference number
 
     /* -------------------- drm tag -------------------- */
     static constexpr const char DRM_CENC_INFO[] = "drm_cenc_info"; ///< drm cenc info
 
     /* -------------------- avcapability tag -------------------- */
     static constexpr const char FEATURE_VIDEO_TEMPORAL_LEVEL_SACLE[] =
-        "feature_video_temporal_level_scale"; ///< The key for querying feature of video temporal level scale
+        "feature_video_temporal_level_scale"; ///< std::string : The key for querying feature of video temporal level scale
     static constexpr const char FEATURE_VIDEO_LONG_TERM_REFERENCE[] =
-        "feature_video_long_term_reference"; ///< The key for querying feature of long term reference
+        "feature_video_long_term_reference"; ///< std::string : The key for querying feature of long term reference
     static constexpr const char FEATURE_VIDEO_LOW_LATENCY[] =
-        "feature_video_low_latency"; ///< The key for querying video low latency
-    static constexpr const char VIDEO_MAX_LTR_FRAME_NUM[] =
-        "video_max_ltr_frame_num"; ///< int32_t, the key for querying the maximum long term reference number
+        "feature_video_low_latency"; ///< std::string : The key for querying video low latency
 };
 
 using TagTypeCharSeq = const char *;

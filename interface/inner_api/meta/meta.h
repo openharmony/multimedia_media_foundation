@@ -256,7 +256,10 @@ public:
         tagCharSeq == Tag::MEDIA_LYRICS or
         tagCharSeq == Tag::MEDIA_CREATION_TIME or
         tagCharSeq == Tag::MEDIA_CODEC_NAME or
-        tagCharSeq == Tag::PROCESS_NAME, std::string, ValueType::STRING);
+        tagCharSeq == Tag::PROCESS_NAME or
+        tagCharSeq == Tag::FEATURE_VIDEO_TEMPORAL_LEVEL_SACLE or
+        tagCharSeq == Tag::FEATURE_VIDEO_LONG_TERM_REFERENCE or
+        tagCharSeq == Tag::FEATURE_VIDEO_LOW_LATENCY, std::string, ValueType::STRING);
 
     Meta &operator=(const Meta &other)
     {
