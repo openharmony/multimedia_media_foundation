@@ -35,6 +35,8 @@ enum struct PluginEventType : int32_t {
     EVENT_CHANNEL_OPEN_FAIL,
     EVENT_CHANNEL_CLOSED,
     SOURCE_DRM_INFO_UPDATE,
+    BUFFERING_START,
+    BUFFERING_END,
 };
 
 enum class NetworkClientErrorCode : int32_t {

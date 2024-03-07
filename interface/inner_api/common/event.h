@@ -43,6 +43,8 @@ enum struct EventType : uint32_t {
     EVENT_AUDIO_FIRST_FRAME,
     EVENT_AUDIO_DEVICE_CHANGE,
     EVENT_AUDIO_SERVICE_DIED,
+    BUFFERING_START,
+    BUFFERING_END,
 };
 
 struct Event {
