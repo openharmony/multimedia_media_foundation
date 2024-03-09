@@ -176,7 +176,7 @@ Status Filter::ProcessInputBuffer(int arg, int64_t delayUs)
     if (filterLoop_) {
         filterLoop_->ProcessInputBufferAsync(arg, delayUs);
     } else {
-        OSAL::SleepFor(delayUs / 1000);
+        OSAL::SleepFor(delayUs / 1000); // us to ms
         DoProcessInputBuffer(arg, false);
     }
     return Status::OK;
@@ -187,7 +187,7 @@ Status Filter::ProcessOutputBuffer(int arg, int64_t delayUs)
     if (filterLoop_) {
         filterLoop_->ProcessOutBufferAsync(arg, delayUs);
     } else {
-        OSAL::SleepFor(delayUs / 1000);
+        OSAL::SleepFor(delayUs / 1000); // us to ms
         DoProcessOutputBuffer(arg, false);
     }
     return Status::OK;
@@ -264,7 +264,7 @@ bool Filter::WaitAllState(FilterState state)
     }
     if (filterLoop_) {
         AutoLock lock(stateMutex_);
-        bool res = cond_.WaitFor(lock, 1000, [this, state](){ return curState_ == state; }); // At most wait 1000ms
+        bool res = cond_.WaitFor(lock, 1000, [this, state]() { return curState_ == state; }); // At most wait 1000ms
         MEDIA_LOG_D("Filter::WaitAllState res %{public}d. %{public}s", res, name_.c_str());
         return res;
     }
