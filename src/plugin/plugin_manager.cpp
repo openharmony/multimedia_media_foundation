@@ -39,7 +39,8 @@ std::shared_ptr<PluginInfo> PluginManager::GetPluginInfo(PluginType type, const 
     return {};
 }
 
-int32_t PluginManager::Sniffer(const std::string& name, std::shared_ptr<DataSource> source)
+__attribute__((no_sanitize("cfi"))) int32_t PluginManager::Sniffer(
+    const std::string& name, std::shared_ptr<DataSource> source)
 {
     if (!source) {
         return 0;
