@@ -29,14 +29,12 @@ namespace Pipeline {
 Pipeline::~Pipeline() {}
 void Pipeline::Init(const std::shared_ptr<EventReceiver>& receiver, const std::shared_ptr<FilterCallback>& callback)
 {
-    state_ = FilterState::INITIALIZED;
     eventReceiver_ = receiver;
     filterCallback_ = callback;
 }
 
 Status Pipeline::Prepare()
 {
-    state_ = FilterState::PREPARING;
     SubmitJobOnce([&] {
         AutoLock lock(mutex_);
         for (auto it = filters_.begin(); it != filters_.end(); ++it) {
@@ -53,7 +51,6 @@ Status Pipeline::Prepare()
 
 Status Pipeline::Start()
 {
-    state_ = FilterState::RUNNING;
     Status ret = Status::OK;
     SubmitJobOnce([&] {
         AutoLock lock(mutex_);
@@ -73,13 +70,6 @@ Status Pipeline::Start()
 
 Status Pipeline::Pause()
 {
-    if (state_ == FilterState::PAUSED) {
-        return Status::OK;
-    }
-    if (state_ != FilterState::READY && state_ != FilterState::RUNNING) {
-        return Status::ERROR_UNKNOWN;
-    }
-    state_ = FilterState::PAUSED;
     SubmitJobOnce([&] {
         AutoLock lock(mutex_);
         for (auto it = filters_.begin(); it != filters_.end(); ++it) {
@@ -105,7 +95,6 @@ Status Pipeline::Resume()
         for (auto it = filters_.begin(); it != filters_.end(); ++it) {
             (*it)->WaitAllState(FilterState::RUNNING);
         }
-        state_ = FilterState::RUNNING;
         return Status::OK;
     });
     return Status::OK;
@@ -113,7 +102,6 @@ Status Pipeline::Resume()
 
 Status Pipeline::Stop()
 {
-    state_ = FilterState::INITIALIZED;
     SubmitJobOnce([&] {
         AutoLock lock(mutex_);
         for (auto it = filters_.begin(); it != filters_.end(); ++it) {
@@ -147,7 +135,6 @@ Status Pipeline::Flush()
 
 Status Pipeline::Release()
 {
-    state_ = FilterState::CREATED;
     SubmitJobOnce([&] {
         AutoLock lock(mutex_);
         for (auto it = filters_.begin(); it != filters_.end(); ++it) {
