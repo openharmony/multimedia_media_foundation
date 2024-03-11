@@ -51,7 +51,7 @@ public:
         return CreatePlugin<T, U>(name, PluginType::GENERIC_PLUGIN);
     }
 
-    int32_t Sniffer(const std::string& name, std::shared_ptr<DataSource> source);
+    __attribute__((no_sanitize("cfi"))) int32_t Sniffer(const std::string& name, std::shared_ptr<DataSource> source);
 
     void RegisterGenericPlugin(const GenericPluginDef& pluginDef);
 
