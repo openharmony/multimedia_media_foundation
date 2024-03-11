@@ -63,7 +63,6 @@ public:
 
     void OnEvent(const Event& event) override;
 private:
-    FilterState state_ {FilterState::CREATED};
     Mutex mutex_ {};
     std::vector<std::shared_ptr<Filter>> filters_ {};
     std::shared_ptr<EventReceiver> eventReceiver_ {nullptr};
