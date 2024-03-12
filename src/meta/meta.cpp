@@ -217,7 +217,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_CHROMA_LOCATION, defaultChromaLocation},
     {Tag::MEDIA_FILE_TYPE, defaultFileType},
     {Tag::VIDEO_ENCODE_BITRATE_MODE, defaultVideoEncodeBitrateMode},
-    {Tag::VIDEO_TEMPORAL_GOP_REFERENCE_MODE, defaultTemporalGopReferenceMode},
+    {Tag::VIDEO_ENCODER_TEMPORAL_GOP_REFERENCE_MODE, defaultTemporalGopReferenceMode},
 
     // Int32
     {Tag::APP_UID, defaultInt32},
@@ -260,7 +260,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_STRIDE, defaultInt32},
     {Tag::VIDEO_DISPLAY_WIDTH, defaultInt32},
     {Tag::VIDEO_DISPLAY_HEIGHT, defaultInt32},
-    {Tag::VIDEO_TEMPORAL_GOP_SIZE, defaultInt32},
+    {Tag::VIDEO_ENCODER_TEMPORAL_GOP_SIZE, defaultInt32},
     {Tag::VIDEO_LTR_FRAME_NUM, defaultInt32},
     {Tag::VIDEO_FRAME_POC, defaultInt32},
     {Tag::VIDEO_USE_LTR, defaultInt32},
@@ -271,7 +271,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_SLICE_HEIGHT, defaultInt32},
     {Tag::VIDEO_QP_MAX, defaultInt32},
     {Tag::VIDEO_QP_MIN, defaultInt32},
-    {Tag::VIDEO_MAX_LTR_FRAME_NUM, defaultInt32},
+    {Tag::FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_RATE_NUM, defaultInt32},
     // String
     {Tag::MIME_TYPE, defaultString},
     {Tag::MEDIA_FILE_URI, defaultString},
@@ -295,9 +295,9 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::MEDIA_CODEC_NAME, defaultString},
     {Tag::PROCESS_NAME, defaultString},
     {Tag::MEDIA_CREATION_TIME, defaultString},
-    {Tag::FEATURE_VIDEO_TEMPORAL_LEVEL_SACLE, defaultString},
-    {Tag::FEATURE_VIDEO_LONG_TERM_REFERENCE, defaultString},
-    {Tag::FEATURE_VIDEO_LOW_LATENCY, defaultString},
+    {Tag::FEATURE_VIDEO_ENCODER_TEMPORAL_LEVEL_SCALE, defaultString},
+    {Tag::FEATURE_VIDEO_ENCODER_LONG_TERM_REFERENCE, defaultString},
+    {Tag::FEATURE_VIDEO_ENCODER_LOW_LATENCY, defaultString},
     // Float
     {Tag::MEDIA_LATITUDE, defaultFloat},
     {Tag::MEDIA_LONGITUDE, defaultFloat},
@@ -312,7 +312,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::MEDIA_HAS_AUDIO, defaultBool},
     {Tag::MEDIA_END_OF_STREAM, defaultBool},
     {Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE, defaultBool},
-    {Tag::VIDEO_TEMPORAL_LEVEL_SACLE, defaultBool},
+    {Tag::VIDEO_ENCODER_ENABLE_TEMPORAL_LEVEL_SCALE, defaultBool},
     {Tag::VIDEO_MARK_LTR, defaultBool},
     {Tag::VIDEO_MARK_SUCCESS, defaultBool},
     {Tag::VIDEO_LOW_LATENCY, defaultBool},
