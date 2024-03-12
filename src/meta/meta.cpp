@@ -271,7 +271,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_SLICE_HEIGHT, defaultInt32},
     {Tag::VIDEO_ENCODER_QP_MAX, defaultInt32},
     {Tag::VIDEO_ENCODER_QP_MIN, defaultInt32},
-    {Tag::FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_RATE_NUM, defaultInt32},
+    {Tag::FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_NUM, defaultInt32},
     // String
     {Tag::MIME_TYPE, defaultString},
     {Tag::MEDIA_FILE_URI, defaultString},

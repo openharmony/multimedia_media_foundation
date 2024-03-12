@@ -360,7 +360,7 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::VIDEO_SLICE_HEIGHT, 19},
     {Tag::VIDEO_ENCODER_QP_MAX, 20},
     {Tag::VIDEO_ENCODER_QP_MIN, 21},
-    {Tag::FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_RATE_NUM, 22},
+    {Tag::FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_NUM, 22},
     {Tag::SRC_INPUT_TYPE, static_cast<int32_t>(Plugins::SrcInputType::AUD_ES)},
     {Tag::AUDIO_SAMPLE_FORMAT, static_cast<int32_t>(Plugins::AudioSampleFormat::SAMPLE_S16LE)},
     {Tag::VIDEO_PIXEL_FORMAT, static_cast<int32_t>(Plugins::VideoPixelFormat::YUV411P)},
