@@ -172,16 +172,16 @@ public:
     static constexpr const char VIDEO_ENCODER_TEMPORAL_GOP_REFERENCE_MODE[] =
         "video_encoder_temporal_gop_reference_mode"; ///< int32_t, see {link @TemporalGopReferenceMode}, temporal group
                                                      ///< of picture reference mode. It used in configure
-    static constexpr const char VIDEO_LTR_FRAME_NUM[] =
-        "video_ltr_frame_num"; ///< int32_t, config long term reference frame number. It used in configure
-    static constexpr const char VIDEO_MARK_LTR[] =
-        "video_mark_ltr"; ///< bool, mark long term reference. It use with frame
-    static constexpr const char VIDEO_MARK_SUCCESS[] =
-        "video_mark_success"; ///< bool, mark long term reference success. It use with frame
+    static constexpr const char VIDEO_ENCODER_LTR_FRAME_NUM[] =
+        "video_encoder_ltr_frame_num"; ///< int32_t, config long term reference frame number. It used in configure
+    static constexpr const char VIDEO_ENCODER_MARK_LTR[] =
+        "video_encoder_mark_ltr"; ///< bool, true:mark long term reference. It use with frame
+    static constexpr const char VIDEO_IS_LTR[] =
+        "video_is_ltr"; ///< bool, true:indicates that is long term reference. It use with frame
     static constexpr const char VIDEO_FRAME_POC[] =
         "video_frame_poc"; ///< int32_t, the poc value of mark long term reference. It use with frame
-    static constexpr const char VIDEO_USE_LTR[] =
-        "video_use_ltr"; ///< int32_t, set the poc value of mark long term reference. It use with frame
+    static constexpr const char VIDEO_ENCODER_USE_LTR[] =
+        "video_encoder_use_ltr"; ///< int32_t, set the poc value of mark long term reference. It use with frame
     static constexpr const char VIDEO_CROP_TOP[] =
         "video_crop_top"; ///< int32_t, describing the top-coordinate (y) of the crop rectangle. This is the top-most
                           ///< row included in the crop frame, where row indices start at 0
@@ -201,18 +201,18 @@ public:
                               ///< buffer. In essence the offset of the U plane is sliceHeight * stride. The height
                               ///< of the U/V planes can be calculated based on the color format, though it is generally
                               ///< undefined and depends on the device and release
-    static constexpr const char VIDEO_LOW_LATENCY[] =
-        "video_low_latency"; ///< bool, an optional key describing the low latency decoding mode. This is an optional
-                             ///< parameter that applies only to decoders. If enabled, the decoder doesn't hold input
-                             ///< and output data more than required by the codec standards. The associated value is an
-                             ///< bool (true or false): true is enabled, false is closed.
-                             ///< The default value is false.
-    static constexpr const char VIDEO_QP_MAX[] =
-        "video_qp_max"; ///< int32_t, describing the maximum Quantization Parameter allowed for encoding video.
-                        ///< It use with frame
-    static constexpr const char VIDEO_QP_MIN[] =
-        "video_qp_min"; ///< int32_t, describing the minimum Quantization Parameter allowed for encoding video.
-                        ///< It use with frame
+    static constexpr const char VIDEO_ENABLE_LOW_LATENCY[] =
+        "video_enable_low_latency"; ///< bool, an optional key describing the low latency decoding mode. This is an
+                                    ///< optional parameter that applies only to decoders. If enabled, the decoder
+                                    ///< doesn't hold input and output data more than required by the codec standards.
+                                    ///< The associated value is an bool (true or false): true is enabled, false is
+                                    ///< closed. The default value is false
+    static constexpr const char VIDEO_ENCODER_QP_MAX[] =
+        "video_encoder_qp_max"; ///< int32_t, describing the maximum Quantization Parameter allowed for encoding video.
+                                ///< It use with frame
+    static constexpr const char VIDEO_ENCODER_QP_MIN[] =
+        "video_encoder_qp_min"; ///< int32_t, describing the minimum Quantization Parameter allowed for encoding video.
+                                ///< It use with frame
     static constexpr const char VIDEO_ENABLE_ENCODE_SURFACE_INPUT_CALLBACK[] =
         "video_enable_encode_surface_input_callback"; ///< bool, the associated value is an bool (true or false): true
                                                       ///< is enabled, false is closed.
@@ -233,9 +233,6 @@ public:
     static constexpr const char USER_SHARED_MEMORY_FD[] =
         "user.shared.memory.fd";                                               ///< std::string : The shared memory fd
     static constexpr const char USER_PUSH_DATA_TIME[] = "user.push.data.time"; ///< The user push data time
-    static constexpr const char FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_RATE_NUM[] =
-        "feature_property_video_encoder_max_ltr_frame_rate_num"; ///< int32_t, the key for querying the maximum long
-                                                                 ///< term reference number
 
     /* -------------------- drm tag -------------------- */
     static constexpr const char DRM_CENC_INFO[] = "drm_cenc_info"; ///< drm cenc info
@@ -247,8 +244,11 @@ public:
     static constexpr const char FEATURE_VIDEO_ENCODER_LONG_TERM_REFERENCE[] =
         "feature_video_encoder_long_term_reference"; ///< std::string : The key for querying feature of long term
                                                      ///< reference
-    static constexpr const char FEATURE_VIDEO_ENCODER_LOW_LATENCY[] =
-        "feature_video_encoder_low_latency"; ///< std::string : The key for querying video low latency
+    static constexpr const char FEATURE_VIDEO_LOW_LATENCY[] =
+        "feature_video_low_latency"; ///< std::string : The key for querying video low latency
+    static constexpr const char FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_NUM[] =
+        "feature_property_video_encoder_max_ltr_frame_num"; ///< int32_t, the key for querying the maximum long
+                                                            ///< term reference number
 };
 
 using TagTypeCharSeq = const char *;

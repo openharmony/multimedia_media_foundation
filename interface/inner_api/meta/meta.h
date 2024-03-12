@@ -153,8 +153,8 @@ public:
         tagCharSeq == Tag::MEDIA_END_OF_STREAM or
         tagCharSeq == Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE or
         tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_TEMPORAL_LEVEL_SCALE or
-        tagCharSeq == Tag::VIDEO_MARK_SUCCESS or
-        tagCharSeq == Tag::VIDEO_LOW_LATENCY or
+        tagCharSeq == Tag::VIDEO_IS_LTR or
+        tagCharSeq == Tag::VIDEO_ENABLE_LOW_LATENCY or
         tagCharSeq == Tag::VIDEO_ENABLE_ENCODE_SURFACE_INPUT_CALLBACK, bool, ValueType::BOOL);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_H265_PROFILE, Plugins::HEVCProfile, ValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_H265_LEVEL, Plugins::HEVCLevel, ValueType::INT32_T);
@@ -204,17 +204,17 @@ public:
         tagCharSeq == Tag::VIDEO_DISPLAY_HEIGHT or
         tagCharSeq == Tag::OH_MD_KEY_AUDIO_OBJECT_NUMBER or
         tagCharSeq == Tag::VIDEO_ENCODER_TEMPORAL_GOP_SIZE or
-        tagCharSeq == Tag::VIDEO_LTR_FRAME_NUM or
-        tagCharSeq == Tag::VIDEO_MARK_LTR or
+        tagCharSeq == Tag::VIDEO_ENCODER_LTR_FRAME_NUM or
+        tagCharSeq == Tag::VIDEO_ENCODER_MARK_LTR or
         tagCharSeq == Tag::VIDEO_FRAME_POC or
-        tagCharSeq == Tag::VIDEO_USE_LTR or
+        tagCharSeq == Tag::VIDEO_ENCODER_USE_LTR or
         tagCharSeq == Tag::VIDEO_CROP_TOP or
         tagCharSeq == Tag::VIDEO_CROP_BOTTOM or
         tagCharSeq == Tag::VIDEO_CROP_LEFT or
         tagCharSeq == Tag::VIDEO_CROP_RIGHT or
         tagCharSeq == Tag::VIDEO_SLICE_HEIGHT or
-        tagCharSeq == Tag::VIDEO_QP_MAX or
-        tagCharSeq == Tag::VIDEO_QP_MIN or
+        tagCharSeq == Tag::VIDEO_ENCODER_QP_MAX or
+        tagCharSeq == Tag::VIDEO_ENCODER_QP_MIN or
         tagCharSeq == Tag::FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_RATE_NUM, int32_t, ValueType::INT32_T);
 
     DEFINE_INSERT_GET_FUNC(
@@ -259,7 +259,7 @@ public:
         tagCharSeq == Tag::PROCESS_NAME or
         tagCharSeq == Tag::FEATURE_VIDEO_ENCODER_TEMPORAL_LEVEL_SCALE or
         tagCharSeq == Tag::FEATURE_VIDEO_ENCODER_LONG_TERM_REFERENCE or
-        tagCharSeq == Tag::FEATURE_VIDEO_ENCODER_LOW_LATENCY, std::string, ValueType::STRING);
+        tagCharSeq == Tag::FEATURE_VIDEO_LOW_LATENCY, std::string, ValueType::STRING);
 
     Meta &operator=(const Meta &other)
     {
