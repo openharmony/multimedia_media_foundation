@@ -16,6 +16,7 @@
 #define HST_LOG_TAG "Filter"
 
 #include "filter/filter.h"
+#include "osal/utils/util.h"
 #include "common/log.h"
 #include <algorithm>
 
@@ -48,6 +49,8 @@ Status Filter::Prepare()
     MEDIA_LOG_I("Filter::Prepare %{public}s", name_.c_str());
     if (filterLoop_) {
         filterLoop_->PrepareAsync();
+    } else {
+        DoPrepare();
     }
     for (auto iter : nextFiltersMap_) {
         for (auto filter : iter.second) {
@@ -72,6 +75,7 @@ Status Filter::Start()
         }
     }
     if (!filterLoop_) {
+        DoStart();
         ChangeState(FilterState::RUNNING);
     }
     return Status::OK;
@@ -89,6 +93,7 @@ Status Filter::Pause()
         }
     }
     if (!filterLoop_) {
+        DoPause();
         ChangeState(FilterState::PAUSED);
     }
     return Status::OK;
@@ -106,6 +111,7 @@ Status Filter::Resume()
         }
     }
     if (!filterLoop_) {
+        DoResume();
         ChangeState(FilterState::RUNNING);
     }
     return Status::OK;
@@ -123,6 +129,7 @@ Status Filter::Stop()
         }
     }
     if (!filterLoop_) {
+        DoStop();
         ChangeState(FilterState::STOPPED);
     }
     return Status::OK;
@@ -140,6 +147,7 @@ Status Filter::Flush()
         }
     }
     if (!filterLoop_) {
+        DoFlush();
         ChangeState(FilterState::FLUSHED);
     }
     return Status::OK;
@@ -157,23 +165,30 @@ Status Filter::Release()
         }
     }
     if (!filterLoop_) {
+        DoRelease();
         ChangeState(FilterState::RELEASED);
     }
     return Status::OK;
 }
 
-Status Filter::ProcessInputBuffer(int arg, int64_t delay)
+Status Filter::ProcessInputBuffer(int arg, int64_t delayUs)
 {
     if (filterLoop_) {
-        filterLoop_->ProcessInputBufferAsync(arg, delay);
+        filterLoop_->ProcessInputBufferAsync(arg, delayUs);
+    } else {
+        OSAL::SleepFor(delayUs / 1000);
+        DoProcessInputBuffer(arg, false);
     }
     return Status::OK;
 }
 
-Status Filter::ProcessOutputBuffer(int arg, int64_t delay)
+Status Filter::ProcessOutputBuffer(int arg, int64_t delayUs)
 {
     if (filterLoop_) {
-        filterLoop_->ProcessOutBufferAsync(arg, delay);
+        filterLoop_->ProcessOutBufferAsync(arg, delayUs);
+    } else {
+        OSAL::SleepFor(delayUs / 1000);
+        DoProcessOutputBuffer(arg, false);
     }
     return Status::OK;
 }
@@ -239,6 +254,7 @@ void Filter::ChangeState(FilterState state)
 
 bool Filter::WaitAllState(FilterState state)
 {
+    MEDIA_LOG_D("Filter::WaitAllState to %{public}d. %{public}s", state, name_.c_str());
     for (auto iter : nextFiltersMap_) {
         for (auto filter : iter.second) {
             if (!filter->WaitAllState(state)) {
@@ -246,12 +262,13 @@ bool Filter::WaitAllState(FilterState state)
             }
         }
     }
-    AutoLock lock(stateMutex_);
-    if (curState_ == state) {
-        return true;
+    if (filterLoop_) {
+        AutoLock lock(stateMutex_);
+        bool res = cond_.WaitFor(lock, 1000, [this, state](){ return curState_ == state; }); // At most wait 1000ms
+        MEDIA_LOG_D("Filter::WaitAllState res %{public}d. %{public}s", res, name_.c_str());
+        return res;
     }
-    cond_.WaitFor(lock, 1000); // At most wait 1000ms
-    return curState_ == state;
+    return true;
 }
 
 void Filter::SetParameter(const std::shared_ptr<Meta>& meta)
@@ -289,6 +306,7 @@ Status Filter::OnLinked(StreamType, const std::shared_ptr<Meta>&, const std::sha
     if (filterLoop_) {
         filterLoop_->InitAsync();
     } else {
+        DoInit();
         ChangeState(FilterState::INITIALIZED);
     }
     return Status::OK;
