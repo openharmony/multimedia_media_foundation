@@ -161,7 +161,7 @@ public:
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_CHROMA_LOCATION,
         Plugins::ChromaLocation, ValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_ENCODER_TEMPORAL_GOP_REFERENCE_MODE,
-        Plugins::TemporalGopReferenceMode, ValueType::INT32_T);
+                           Plugins::TemporalGopReferenceMode, ValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::APP_UID or
         tagCharSeq == Tag::APP_PID or
         tagCharSeq == Tag::APP_TOKEN_ID or
@@ -204,7 +204,8 @@ public:
         tagCharSeq == Tag::VIDEO_DISPLAY_HEIGHT or
         tagCharSeq == Tag::OH_MD_KEY_AUDIO_OBJECT_NUMBER, int32_t, ValueType::INT32_T);
 
-    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_ENCODER_TEMPORAL_GOP_SIZE or
+    DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::VIDEO_ENCODER_TEMPORAL_GOP_SIZE or
         tagCharSeq == Tag::VIDEO_ENCODER_LTR_FRAME_NUM or
         tagCharSeq == Tag::VIDEO_ENCODER_MARK_LTR or
         tagCharSeq == Tag::VIDEO_FRAME_POC or
