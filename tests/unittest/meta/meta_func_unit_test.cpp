@@ -349,6 +349,18 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::VIDEO_STRIDE, 17},
     {Tag::VIDEO_DISPLAY_WIDTH, 19},
     {Tag::VIDEO_DISPLAY_HEIGHT, 23},
+    {Tag::VIDEO_ENCODER_TEMPORAL_GOP_SIZE, 11},
+    {Tag::VIDEO_ENCODER_LTR_FRAME_NUM, 12},
+    {Tag::VIDEO_FRAME_POC, 13},
+    {Tag::VIDEO_ENCODER_USE_LTR, 14},
+    {Tag::VIDEO_CROP_TOP, 15},
+    {Tag::VIDEO_CROP_BOTTOM, 16},
+    {Tag::VIDEO_CROP_LEFT, 17},
+    {Tag::VIDEO_CROP_RIGHT, 18},
+    {Tag::VIDEO_SLICE_HEIGHT, 19},
+    {Tag::VIDEO_ENCODER_QP_MAX, 20},
+    {Tag::VIDEO_ENCODER_QP_MIN, 21},
+    {Tag::FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_NUM, 22},
     {Tag::SRC_INPUT_TYPE, static_cast<int32_t>(Plugins::SrcInputType::AUD_ES)},
     {Tag::AUDIO_SAMPLE_FORMAT, static_cast<int32_t>(Plugins::AudioSampleFormat::SAMPLE_S16LE)},
     {Tag::VIDEO_PIXEL_FORMAT, static_cast<int32_t>(Plugins::VideoPixelFormat::YUV411P)},
@@ -363,6 +375,8 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::VIDEO_CHROMA_LOCATION, static_cast<int32_t>(Plugins::ChromaLocation::BOTTOM)},
     {Tag::MEDIA_FILE_TYPE, static_cast<int32_t>(Plugins::FileType::AMR)},
     {Tag::VIDEO_ENCODE_BITRATE_MODE, static_cast<int32_t>(Plugins::VideoEncodeBitrateMode::CBR)},
+    {Tag::VIDEO_ENCODER_TEMPORAL_GOP_REFERENCE_MODE,
+     static_cast<int32_t>(Plugins::TemporalGopReferenceMode::JUMP_REFERENCE_MODE)},
     // UINT8_T
     {Tag::AUDIO_AAC_PROFILE, static_cast<int32_t>(Plugins::AudioAacProfile::ELD)},
     {Tag::AUDIO_AAC_STREAM_FORMAT, static_cast<int32_t>(Plugins::AudioAacStreamFormat::ADIF)},
@@ -373,8 +387,12 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::MEDIA_HAS_AUDIO, 0},
     {Tag::MEDIA_END_OF_STREAM, 1},
     {Tag::VIDEO_IS_HDR_VIVID, 1},
-    {Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE, 1}
-};
+    {Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE, 1},
+    {Tag::VIDEO_ENCODER_ENABLE_TEMPORAL_LEVEL_SCALE, 1},
+    {Tag::VIDEO_ENCODER_MARK_LTR, 1},
+    {Tag::VIDEO_IS_LTR, 1},
+    {Tag::VIDEO_ENABLE_LOW_LATENCY, 1},
+    {Tag::VIDEO_ENABLE_ENCODE_SURFACE_INPUT_CALLBACK, 1}};
 
 /**
  * @tc.name: SetGet_MetaData_All_As_Int32_Using_Parcel
@@ -513,6 +531,9 @@ map<TagType, std::string> testStringData = {
     {Tag::MEDIA_CODEC_NAME, "String MEDIA_CODEC_NAME"},
     {Tag::PROCESS_NAME, "String PROCESS_NAME"},
     {Tag::MEDIA_CREATION_TIME, "String MEDIA_CREATION_TIME"},
+    {Tag::FEATURE_VIDEO_ENCODER_TEMPORAL_LEVEL_SCALE, "FEATURE_VIDEO_ENCODER_TEMPORAL_LEVEL_SCALE"},
+    {Tag::FEATURE_VIDEO_ENCODER_LONG_TERM_REFERENCE, "FEATURE_VIDEO_ENCODER_LONG_TERM_REFERENCE"},
+    {Tag::FEATURE_VIDEO_LOW_LATENCY, "FEATURE_VIDEO_LOW_LATENCY"},
 };
 
 /**

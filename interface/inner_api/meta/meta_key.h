@@ -49,7 +49,7 @@ public:
     static constexpr const char VIDEO_SCALE_TYPE[] = "scale_type"; ///< VideoScaleType, video scale type
     static constexpr const char INPUT_MEMORY_TYPE[] = "regular.input.memory.type";   ///< MemoryType
     static constexpr const char OUTPUT_MEMORY_TYPE[] = "regular.output.memory.type"; ///< MemoryType
-    static constexpr const char PROCESS_NAME[] = "process_name"; ///< string, process name
+    static constexpr const char PROCESS_NAME[] = "process_name";                     ///< string, process name
 
     /* -------------------- media tag -------------------- */
     static constexpr const char MIME_TYPE[] = "codec_mime";            ///< @see MimeType
@@ -128,9 +128,9 @@ public:
         "identification_header";                                              ///< Key for vorbis identification header
     static constexpr const char AUDIO_VORBIS_SETUP_HEADER[] = "setup_header"; ///< Key for vorbis setup header
     static constexpr const char OH_MD_KEY_AUDIO_OBJECT_NUMBER[] =
-        "audio_object_number_key";                                            ///< Key for audio object number
+        "audio_object_number_key"; ///< Key for audio object number
     static constexpr const char OH_MD_KEY_AUDIO_VIVID_METADATA[] =
-        "audio_vivid_metadata_key";                                           ///< Key for audio vivid metadata
+        "audio_vivid_metadata_key"; ///< Key for audio vivid metadata
 
     /* -------------------- video universal tag -------------------- */
     static constexpr const char VIDEO_WIDTH[] = "width";                               ///< video width
@@ -151,8 +151,8 @@ public:
     static constexpr const char VIDEO_DISPLAY_WIDTH[] = "display_width";               ///< int32_t, video display width
     static constexpr const char VIDEO_DISPLAY_HEIGHT[] = "display_height"; ///< int32_t, video display height
     static constexpr const char VIDEO_FRAME_RATE_ADAPTIVE_MODE[] =
-        "frame_rate_adaptive_mode"; ///< bool, video is framerate adaptive mode
-    static constexpr const char VIDEO_DELAY[] = "video_delay";                         ///< video delay
+        "frame_rate_adaptive_mode";                            ///< bool, video is framerate adaptive mode
+    static constexpr const char VIDEO_DELAY[] = "video_delay"; ///< video delay
     static constexpr const char VIDEO_I_FRAME_INTERVAL[] = "i_frame_interval"; ///< Key for the interval of key frame.
     static constexpr const char VIDEO_REQUEST_I_FRAME[] =
         "req_i_frame"; ///<  Key for the request a I-Frame immediately.
@@ -161,6 +161,61 @@ public:
     static constexpr const char VIDEO_ENCODE_QUALITY[] =
         "quality"; ///<  key for the desired encoding quality,  this key is only supported for encoders that are
                    ///<  configured in constant quality mode
+    static constexpr const char VIDEO_ENCODER_ENABLE_TEMPORAL_LEVEL_SCALE[] =
+        "video_encoder_enable_temporal_level_scale"; ///< bool, an optional key describing the temporal level scale
+                                                     ///< mode. This is an optional parameter that applies only to
+                                                     ///< encoder. The associated value is an bool (true or false): true
+                                                     ///< is enabled, false is closed. The default value is false. It
+                                                     ///< used in configure
+    static constexpr const char VIDEO_ENCODER_TEMPORAL_GOP_SIZE[] =
+        "video_encoder_temporal_gop_size"; ///< int32_t, temporal group of picture size. It used in configure
+    static constexpr const char VIDEO_ENCODER_TEMPORAL_GOP_REFERENCE_MODE[] =
+        "video_encoder_temporal_gop_reference_mode"; ///< int32_t, see {link @TemporalGopReferenceMode}, temporal group
+                                                     ///< of picture reference mode. It used in configure
+    static constexpr const char VIDEO_ENCODER_LTR_FRAME_NUM[] =
+        "video_encoder_ltr_frame_num"; ///< int32_t, config long term reference frame number. It used in configure
+    static constexpr const char VIDEO_ENCODER_MARK_LTR[] =
+        "video_encoder_mark_ltr"; ///< bool, true:mark long term reference. It use with frame
+    static constexpr const char VIDEO_IS_LTR[] =
+        "video_is_ltr"; ///< bool, true:indicates that is long term reference. It use with frame
+    static constexpr const char VIDEO_FRAME_POC[] =
+        "video_frame_poc"; ///< int32_t, the poc value of mark long term reference. It use with frame
+    static constexpr const char VIDEO_ENCODER_USE_LTR[] =
+        "video_encoder_use_ltr"; ///< int32_t, set the poc value of mark long term reference. It use with frame
+    static constexpr const char VIDEO_CROP_TOP[] =
+        "video_crop_top"; ///< int32_t, describing the top-coordinate (y) of the crop rectangle. This is the top-most
+                          ///< row included in the crop frame, where row indices start at 0
+    static constexpr const char VIDEO_CROP_BOTTOM[] =
+        "video_crop_bottom"; ///< int32_t, describing the bottom-coordinate (y) of the crop rectangle. This is the
+                             ///< bottom-most row included in the crop frame, where row indices start at 0
+    static constexpr const char VIDEO_CROP_LEFT[] =
+        "video_crop_left"; ///<  int32_t, describing the left-coordinate (x) of the crop rectangle. This is the
+                           ///<  left-most column included in the crop frame, where column indices start at 0
+    static constexpr const char VIDEO_CROP_RIGHT[] =
+        "video_crop_right"; ///<  int32_t, describing the right-coordinate (x) of the crop rectangle. This is the
+                            ///<  right-most column included in the crop frame, where column indices start at 0
+    static constexpr const char VIDEO_SLICE_HEIGHT[] =
+        "video_slice_height"; ///< int32_t, describing the plane height of a multi-planar (YUV) video buffer
+                              ///< layout. Slice height (or plane height/vertical stride) is the number of rows that
+                              ///< must be skipped to get from the top of the Y plane to the top of the U plane in the
+                              ///< buffer. In essence the offset of the U plane is sliceHeight * stride. The height
+                              ///< of the U/V planes can be calculated based on the color format, though it is generally
+                              ///< undefined and depends on the device and release
+    static constexpr const char VIDEO_ENABLE_LOW_LATENCY[] =
+        "video_enable_low_latency"; ///< bool, an optional key describing the low latency decoding mode. This is an
+                                    ///< optional parameter that applies only to decoders. If enabled, the decoder
+                                    ///< doesn't hold input and output data more than required by the codec standards.
+                                    ///< The associated value is an bool (true or false): true is enabled, false is
+                                    ///< closed. The default value is false
+    static constexpr const char VIDEO_ENCODER_QP_MAX[] =
+        "video_encoder_qp_max"; ///< int32_t, describing the maximum Quantization Parameter allowed for encoding video.
+                                ///< It use with frame
+    static constexpr const char VIDEO_ENCODER_QP_MIN[] =
+        "video_encoder_qp_min"; ///< int32_t, describing the minimum Quantization Parameter allowed for encoding video.
+                                ///< It use with frame
+    static constexpr const char VIDEO_ENABLE_ENCODE_SURFACE_INPUT_CALLBACK[] =
+        "video_enable_encode_surface_input_callback"; ///< bool, the associated value is an bool (true or false): true
+                                                      ///< is enabled, false is closed.
 
     /* -------------------- video specific tag -------------------- */
     static constexpr const char VIDEO_H264_PROFILE[] = "video.h264.profile"; ///< @see VideoH264Profile
@@ -181,6 +236,19 @@ public:
 
     /* -------------------- drm tag -------------------- */
     static constexpr const char DRM_CENC_INFO[] = "drm_cenc_info"; ///< drm cenc info
+
+    /* -------------------- avcapability tag -------------------- */
+    static constexpr const char FEATURE_VIDEO_ENCODER_TEMPORAL_LEVEL_SCALE[] =
+        "feature_video_encoder_temporal_level_scale"; ///< std::string : The key for querying feature of video temporal
+                                                      ///< level scale
+    static constexpr const char FEATURE_VIDEO_ENCODER_LONG_TERM_REFERENCE[] =
+        "feature_video_encoder_long_term_reference"; ///< std::string : The key for querying feature of long term
+                                                     ///< reference
+    static constexpr const char FEATURE_VIDEO_LOW_LATENCY[] =
+        "feature_video_low_latency"; ///< std::string : The key for querying video low latency
+    static constexpr const char FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_NUM[] =
+        "feature_property_video_encoder_max_ltr_frame_num"; ///< int32_t, the key for querying the maximum long
+                                                            ///< term reference number
 };
 
 using TagTypeCharSeq = const char *;
