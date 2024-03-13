@@ -115,6 +115,7 @@ Status Pipeline::Stop()
         for (auto it = filters_.begin(); it != filters_.end(); ++it) {
             (*it)->WaitAllState(FilterState::STOPPED);
         }
+        filters_.clear();
         MEDIA_LOG_I("Stop finished, filter number: " PUBLIC_LOG_ZU, filters_.size());
         return Status::OK;
     });
