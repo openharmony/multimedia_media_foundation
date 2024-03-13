@@ -82,7 +82,6 @@ if (hst_is_standard_sys) {
       "hilog:libhilog",
     ]
 
-    innerapi_tags = [ "ndk" ]
     output_extension = "so"
     subsystem_name = "multimedia"
     part_name = "media_foundation"
