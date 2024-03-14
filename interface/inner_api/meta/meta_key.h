@@ -174,14 +174,15 @@ public:
                                                      ///< of picture reference mode. It used in configure
     static constexpr const char VIDEO_ENCODER_LTR_FRAME_NUM[] =
         "video_encoder_ltr_frame_num"; ///< int32_t, config long term reference frame number. It used in configure
-    static constexpr const char VIDEO_ENCODER_MARK_LTR[] =
-        "video_encoder_mark_ltr"; ///< bool, true:mark long term reference. It use with frame
-    static constexpr const char VIDEO_IS_LTR[] =
-        "video_is_ltr"; ///< bool, true:indicates that is long term reference. It use with frame
-    static constexpr const char VIDEO_FRAME_POC[] =
-        "video_frame_poc"; ///< int32_t, the poc value of mark long term reference. It use with frame
-    static constexpr const char VIDEO_ENCODER_USE_LTR[] =
-        "video_encoder_use_ltr"; ///< int32_t, set the poc value of mark long term reference. It use with frame
+    static constexpr const char VIDEO_ENCODER_PER_FRAME_MARK_LTR[] =
+        "video_encoder_per_frame_mark_ltr"; ///< bool, true:mark long term reference. It use with frame
+    static constexpr const char VIDEO_PER_FRAME_IS_LTR[] =
+        "video_per_frame_is_ltr"; ///< bool, true:indicates that is long term reference. It use with frame
+    static constexpr const char VIDEO_PER_FRAME_POC[] =
+        "video_per_frame_poc"; ///< int32_t, the poc value of mark long term reference. It use with frame
+    static constexpr const char VIDEO_ENCODER_PER_FRAME_USE_LTR[] =
+        "video_encoder_per_frame_use_ltr"; ///< int32_t, set the poc value of mark long term reference.
+                                           ///< It use with frame
     static constexpr const char VIDEO_CROP_TOP[] =
         "video_crop_top"; ///< int32_t, describing the top-coordinate (y) of the crop rectangle. This is the top-most
                           ///< row included in the crop frame, where row indices start at 0
@@ -213,8 +214,8 @@ public:
     static constexpr const char VIDEO_ENCODER_QP_MIN[] =
         "video_encoder_qp_min"; ///< int32_t, describing the minimum Quantization Parameter allowed for encoding video.
                                 ///< It use with frame
-    static constexpr const char VIDEO_ENABLE_ENCODE_SURFACE_INPUT_CALLBACK[] =
-        "video_enable_encode_surface_input_callback"; ///< bool, the associated value is an bool (true or false): true
+    static constexpr const char VIDEO_ENABLE_ENCODER_SURFACE_INPUT_CALLBACK[] =
+        "video_enable_encoder_surface_input_callback"; ///< bool, the associated value is an bool (true or false): true
                                                       ///< is enabled, false is closed.
 
     /* -------------------- video specific tag -------------------- */
@@ -238,14 +239,6 @@ public:
     static constexpr const char DRM_CENC_INFO[] = "drm_cenc_info"; ///< drm cenc info
 
     /* -------------------- avcapability tag -------------------- */
-    static constexpr const char FEATURE_VIDEO_ENCODER_TEMPORAL_LEVEL_SCALE[] =
-        "feature_video_encoder_temporal_level_scale"; ///< std::string : The key for querying feature of video temporal
-                                                      ///< level scale
-    static constexpr const char FEATURE_VIDEO_ENCODER_LONG_TERM_REFERENCE[] =
-        "feature_video_encoder_long_term_reference"; ///< std::string : The key for querying feature of long term
-                                                     ///< reference
-    static constexpr const char FEATURE_VIDEO_LOW_LATENCY[] =
-        "feature_video_low_latency"; ///< std::string : The key for querying video low latency
     static constexpr const char FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_NUM[] =
         "feature_property_video_encoder_max_ltr_frame_num"; ///< int32_t, the key for querying the maximum long
                                                             ///< term reference number
