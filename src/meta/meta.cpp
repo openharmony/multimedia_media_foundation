@@ -313,7 +313,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_ENCODER_PER_FRAME_MARK_LTR, defaultBool},
     {Tag::VIDEO_PER_FRAME_IS_LTR, defaultBool},
     {Tag::VIDEO_ENABLE_LOW_LATENCY, defaultBool},
-    {Tag::VIDEO_ENABLE_ENCODER_SURFACE_INPUT_CALLBACK, defaultBool},
+    {Tag::VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK, defaultBool},
     // Int64
     {Tag::MEDIA_FILE_SIZE, defaultUInt64},
     {Tag::MEDIA_POSITION, defaultUInt64},

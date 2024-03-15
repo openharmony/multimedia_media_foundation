@@ -392,7 +392,7 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::VIDEO_ENCODER_PER_FRAME_MARK_LTR, 1},
     {Tag::VIDEO_PER_FRAME_IS_LTR, 1},
     {Tag::VIDEO_ENABLE_LOW_LATENCY, 1},
-    {Tag::VIDEO_ENABLE_ENCODER_SURFACE_INPUT_CALLBACK, 1}};
+    {Tag::VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK, 1}};
 
 /**
  * @tc.name: SetGet_MetaData_All_As_Int32_Using_Parcel

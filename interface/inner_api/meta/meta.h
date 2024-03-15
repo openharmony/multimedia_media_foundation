@@ -155,7 +155,7 @@ public:
         tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_TEMPORAL_LEVEL_SCALE or
         tagCharSeq == Tag::VIDEO_PER_FRAME_IS_LTR or
         tagCharSeq == Tag::VIDEO_ENABLE_LOW_LATENCY or
-        tagCharSeq == Tag::VIDEO_ENABLE_ENCODER_SURFACE_INPUT_CALLBACK, bool, ValueType::BOOL);
+        tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK, bool, ValueType::BOOL);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_H265_PROFILE, Plugins::HEVCProfile, ValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_H265_LEVEL, Plugins::HEVCLevel, ValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_CHROMA_LOCATION,
@@ -258,7 +258,7 @@ public:
         tagCharSeq == Tag::MEDIA_LYRICS or
         tagCharSeq == Tag::MEDIA_CREATION_TIME or
         tagCharSeq == Tag::MEDIA_CODEC_NAME or
-        tagCharSeq == Tag::PROCESS_NAME or, std::string, ValueType::STRING);
+        tagCharSeq == Tag::PROCESS_NAME, std::string, ValueType::STRING);
 
     Meta &operator=(const Meta &other)
     {

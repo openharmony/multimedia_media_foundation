@@ -214,8 +214,8 @@ public:
     static constexpr const char VIDEO_ENCODER_QP_MIN[] =
         "video_encoder_qp_min"; ///< int32_t, describing the minimum Quantization Parameter allowed for encoding video.
                                 ///< It use with frame
-    static constexpr const char VIDEO_ENABLE_ENCODER_SURFACE_INPUT_CALLBACK[] =
-        "video_enable_encoder_surface_input_callback"; ///< bool, the associated value is an bool (true or false): true
+    static constexpr const char VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK[] =
+        "video_encoder_enable_surface_input_callback"; ///< bool, the associated value is an bool (true or false): true
                                                       ///< is enabled, false is closed.
 
     /* -------------------- video specific tag -------------------- */
