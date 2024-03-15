@@ -40,6 +40,7 @@ public:
     static constexpr const char AUDIO_RAW[] = "audio/raw";
     static constexpr const char AUDIO_G711MU[] = "audio/g711mu";
     static constexpr const char AUDIO_AVS3DA[] = "audio/av3a";
+    static constexpr const char AUDIO_L2HC_AI[] = "audio/l2hc-ai";
 
     static constexpr const char IMAGE_JPG[] = "image/jpeg";
     static constexpr const char IMAGE_PNG[] = "image/png";
