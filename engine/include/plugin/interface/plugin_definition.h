@@ -58,6 +58,7 @@ enum struct LicenseType : uint8_t {
     LGPL,      ///< The GNU Lesser General Public License
     GPL,       ///< The GNU General Public License
     CC0,       ///< The Creative Commons Zero v1.0 Universal
+    VENDOR,    ///< Offered by Vendor
     UNKNOWN,   ///< Unknown License
 };
 
