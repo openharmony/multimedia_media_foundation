@@ -29,19 +29,23 @@ extern "C" {
  */
 typedef enum OH_AVCodecBufferFlags {
     AVCODEC_BUFFER_FLAGS_NONE = 0,
-    /* Indicates that the Buffer is an End-of-Stream frame */
+    /** Indicates that the Buffer is an End-of-Stream frame */
     AVCODEC_BUFFER_FLAGS_EOS = 1 << 0,
-    /* Indicates that the Buffer contains keyframes */
+    /** Indicates that the Buffer contains keyframes */
     AVCODEC_BUFFER_FLAGS_SYNC_FRAME = 1 << 1,
-    /* Indicates that the data contained in the Buffer is only part of a frame */
+    /** Indicates that the data contained in the Buffer is only part of a frame */
     AVCODEC_BUFFER_FLAGS_INCOMPLETE_FRAME = 1 << 2,
-    /* Indicates that the Buffer contains Codec-Specific-Data */
+    /** Indicates that the Buffer contains Codec-Specific-Data */
     AVCODEC_BUFFER_FLAGS_CODEC_DATA = 1 << 3,
-    /* Flag is used to discard packets which are required to maintain valid decoder state but are not required
-       for output and should be dropped after decoding */
+    /** Flag is used to discard packets which are required to maintain valid decoder state but are not required
+     *  for output and should be dropped after decoding
+     *  @since 12
+     */
     AVCODEC_BUFFER_FLAG_DISCRAD = 1 << 4,
-    /* Flag is used to indicate packets that contain frames that can be discarded by the decoder,
-       I.e. Non-reference frames */
+    /** Flag is used to indicate packets that contain frames that can be discarded by the decoder,
+     *  I.e. Non-reference frames
+     *  @since 12
+     */
     AVCODEC_BUFFER_FLAG_DISPOSABLE = 1 << 5,
 } OH_AVCodecBufferFlags;
 
@@ -51,13 +55,13 @@ typedef enum OH_AVCodecBufferFlags {
  * @since 9
  */
 typedef struct OH_AVCodecBufferAttr {
-    /* Presentation timestamp of this Buffer in microseconds */
+    /** Presentation timestamp of this Buffer in microseconds */
     int64_t pts;
-    /* The size of the data contained in the Buffer in bytes */
+    /** The size of the data contained in the Buffer in bytes */
     int32_t size;
-    /* The starting offset of valid data in this Buffer */
+    /** The starting offset of valid data in this Buffer */
     int32_t offset;
-    /* The flags this Buffer has, which is also a combination of multiple {@link OH_AVCodecBufferFlags}. */
+    /** The flags this Buffer has, which is also a combination of multiple {@link OH_AVCodecBufferFlags}. */
     uint32_t flags;
 } OH_AVCodecBufferAttr;
 
