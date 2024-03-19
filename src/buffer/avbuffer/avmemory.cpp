@@ -30,7 +30,8 @@ uint64_t GetUniqueId()
 {
 #ifdef MEDIA_OHOS
     using namespace std::chrono;
-    static const uint64_t startTime = time_point_cast<seconds>(system_clock::now()).time_since_epoch().count();
+    static const uint64_t startTime =
+        static_cast<uint64_t>(time_point_cast<seconds>(system_clock::now()).time_since_epoch().count());
     static const uint16_t processId = static_cast<uint16_t>(getpid());
 #else
     static const uint64_t startTime = 0;
@@ -356,12 +357,12 @@ int32_t AVMemory::Read(uint8_t *out, int32_t readSize, int32_t position)
     uint8_t *addr = GetAddr();
     FALSE_RETURN_V_MSG_E(addr != nullptr, 0, "Base buffer is nullptr");
     int32_t start = 0;
-    size_t maxLength = size_;
+    int32_t maxLength = size_;
     if (position > INVALID_POSITION) {
         start = std::min(position, size_);
         maxLength = size_ - start;
     }
-    int32_t length = std::min(static_cast<size_t>(readSize), maxLength);
+    int32_t length = std::min(readSize, maxLength);
     FALSE_RETURN_V_MSG_E((length + start) <= capacity_, 0,
                          "Read out of bounds, length:%{public}d, start:%{public}d, capacity:%{public}d", length, start,
                          capacity_);

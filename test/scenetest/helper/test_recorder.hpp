@@ -30,15 +30,15 @@ public:
                                int32_t bitRate,
                                AudioSourceType sourceType = AudioSourceType::AUDIO_MIC,
                                AudioCodecFormat encodeType = AudioCodecFormat::AAC_LC,
-                               OutputFormatType outputFormat = OutputFormatType::FORMAT_M4A) :
-                               pcmPath_(std::move(pcmPath)),
-                               sampleRate_(sampleRate),
-                               channel_(channel),
-                               bitRate_(bitRate),
-                               sourceType_(sourceType),
-                               encodeType_(encodeType),
-                               outputFormat_(outputFormat)
-                               {}
+                               OutputFormatType outputFormat = OutputFormatType::FORMAT_M4A)
+        :pcmPath_(std::move(pcmPath)),
+        sampleRate_(sampleRate),
+        channel_(channel),
+        bitRate_(bitRate),
+        sourceType_(sourceType),
+        encodeType_(encodeType),
+        outputFormat_(outputFormat)
+    {}
 public:
     void UseOutFd(int32_t fdUri)
     {

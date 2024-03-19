@@ -12,6 +12,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#ifndef HISTREAMER_TEST_SINGLE_VIDEO_PLAYER_FAST_2_H
+#define HISTREAMER_TEST_SINGLE_VIDEO_PLAYER_FAST_2_H
+
 #include <chrono>
 #include <fcntl.h>
 #ifndef WIN32
@@ -448,3 +451,5 @@ FIXTURE(dataDrivenSingleVideoPlayerTestFast2)
         ASSERT_EQ(0, player->Release());
     }
 };
+
+#endif //HISTREAMER_TEST_SINGLE_VIDEO_PLAYER_FAST_2_H

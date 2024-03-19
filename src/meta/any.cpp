@@ -57,25 +57,25 @@ bool Any::BaseTypesToParcel(const Any *operand, MessageParcel &parcel) noexcept
     bool ret = parcel.WriteInt32(static_cast<int32_t>(iter->second));
     switch (iter->second) {
         case Meta::ValueType::BOOL:
-            ret &= parcel.WriteBool(*AnyCast<bool>(operand));
+            ret = ret && parcel.WriteBool(*AnyCast<bool>(operand));
             break;
         case Meta::ValueType::INT32_T:
-            ret &= parcel.WriteInt32(*AnyCast<int32_t>(operand));
+            ret = ret && parcel.WriteInt32(*AnyCast<int32_t>(operand));
             break;
         case Meta::ValueType::INT64_T:
-            ret &= parcel.WriteInt64(*AnyCast<int64_t>(operand));
+            ret = ret && parcel.WriteInt64(*AnyCast<int64_t>(operand));
             break;
         case Meta::ValueType::FLOAT:
-            ret &= parcel.WriteFloat(*AnyCast<float>(operand));
+            ret = ret && parcel.WriteFloat(*AnyCast<float>(operand));
             break;
         case Meta::ValueType::DOUBLE:
-            ret &= parcel.WriteDouble(*AnyCast<double>(operand));
+            ret = ret && parcel.WriteDouble(*AnyCast<double>(operand));
             break;
         case Meta::ValueType::STRING:
-            ret &= parcel.WriteString(*AnyCast<std::string>(operand));
+            ret = ret && parcel.WriteString(*AnyCast<std::string>(operand));
             break;
         case Meta::ValueType::VECTOR_UINT8:
-            ret &= parcel.WriteUInt8Vector(*AnyCast<std::vector<uint8_t>>(operand));
+            ret = ret && parcel.WriteUInt8Vector(*AnyCast<std::vector<uint8_t>>(operand));
             break;
         default: {
             parcel.WriteInt32(static_cast<int32_t>(Meta::ValueType::INVALID_TYPE));

@@ -12,6 +12,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#ifndef HISTREAMER_TEST_SINGLE_PLAYER_SLOW_2_H
+#define HISTREAMER_TEST_SINGLE_PLAYER_SLOW_2_H
+
 #include <chrono>
 #include <thread>
 #include "testngpp/testngpp.hpp"
@@ -367,3 +370,5 @@ FIXTURE(dataDrivenSinglePlayerTestSlow2)
         }
     }
 };
+
+#endif //HISTREAMER_TEST_SINGLE_PLAYER_SLOW_2_H
