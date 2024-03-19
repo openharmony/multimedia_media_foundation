@@ -219,9 +219,10 @@ public:
                               ///< undefined and depends on the device and release.
     static constexpr const char VIDEO_ENABLE_LOW_LATENCY[] =
         "video_enable_low_latency"; ///< bool, key to enable the low latency mode, true is enabled, false
-                                    ///< otherwise. If enabled, the video encoder or video decoder doesn't hold input and
-                                    ///< output data more than required by the codec standards. This is an optional key
-                                    ///< that applies only to video encoder or video decoder. It is used in configure.
+                                    ///< otherwise. If enabled, the video encoder or video decoder doesn't hold input
+                                    ///< and output data more than required by the codec standards. This is an optional
+                                    ///< key that applies only to video encoder or video decoder. It is used in
+                                    ///< configure.
     static constexpr const char VIDEO_ENCODER_QP_MAX[] =
         "video_encoder_qp_max"; ///< int32_t, key for describing the maximum Quantization Parameter allowed for video
                                 ///< encoder. It is used in configure or takes effect immediately with the frame.
