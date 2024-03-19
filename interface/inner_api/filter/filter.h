@@ -86,7 +86,7 @@ public:
 class FilterCallback {
 public:
     virtual ~FilterCallback() = default;
-    virtual void OnCallback(const std::shared_ptr<Filter>& filter, FilterCallBackCommand cmd, StreamType outType) = 0;
+    virtual Status OnCallback(const std::shared_ptr<Filter>& filter, FilterCallBackCommand cmd, StreamType outType) = 0;
 };
 
 class FilterLinkCallback {
@@ -163,7 +163,11 @@ public:
 
     virtual void ChangeState(FilterState state);
 
-    virtual bool WaitAllState(FilterState state);
+    virtual Status WaitAllState(FilterState state);
+
+    virtual void SetErrCode(Status errCode);
+
+    virtual Status GetErrCode();
 
 protected:
     void ActiveAsyncMode();
@@ -190,6 +194,8 @@ protected:
     std::map<StreamType, std::vector<std::shared_ptr<FilterLinkCallback>>> linkCallbackMaps_;
 
     std::shared_ptr<FilterLoop> filterLoop_;
+
+    Status errCode_ = Status::OK;
 };
 
 enum FilterPlaybackCommand {
