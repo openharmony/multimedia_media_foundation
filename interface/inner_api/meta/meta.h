@@ -51,7 +51,7 @@ extern Any GetDefaultAnyValue(const TagType& tag);
     class ValueInfo {                                        \
         public:                                              \
             typedef int32_t type;                            \
-    };
+    }
 
 #define DEFINE_INSERT_GET_FUNC(condition, Any, eValueType)   \
     template<TagTypeCharSeq tagCharSeq>                      \
@@ -109,7 +109,7 @@ public:
         STRING
     };
 
-    DECLARE_INFO_CLASS
+    DECLARE_INFO_CLASS;
 
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::SRC_INPUT_TYPE, Plugins::SrcInputType, ValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::MEDIA_CODEC_CONFIG or

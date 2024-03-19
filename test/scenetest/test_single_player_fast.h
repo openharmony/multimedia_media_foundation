@@ -178,7 +178,7 @@ FIXTURE(DataDrivenSinglePlayerTestFast)
     }
 
     // @test(data="longMusicUrls", tags=fast)
-    PTEST((std::string url), Can pause,then seek,then play,final stop)
+    PTEST((std::string url), Can pause, then seek, then play, final stop)
     {
         int64_t seekPos {5000};
         int64_t currentMS {0};

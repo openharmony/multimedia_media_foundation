@@ -93,7 +93,7 @@ Status AVSharedMemoryExt::Init()
     FALSE_RETURN_V_MSG_E(fd_ > 0, Status::ERROR_NO_MEMORY, "Alloc AVSharedMemoryExt failed");
 
     uintptr_t addrBase = reinterpret_cast<uintptr_t>(base_);
-    offset_ = static_cast<size_t>(AlignUp(addrBase, static_cast<uintptr_t>(offset_)) - addrBase);
+    offset_ = static_cast<int32_t>(AlignUp(addrBase, static_cast<uintptr_t>(offset_)) - addrBase);
 
     return Status::OK;
 }

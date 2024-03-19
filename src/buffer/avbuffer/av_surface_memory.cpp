@@ -83,7 +83,7 @@ Status AVSurfaceMemory::Init()
 {
     surfaceBuffer_ = sptr<SurfaceBuffer>(static_cast<SurfaceBuffer *>(allocator_->Alloc(0)));
     FALSE_RETURN_V_MSG_E(surfaceBuffer_ != nullptr, Status::ERROR_NO_MEMORY, "surfaceBuffer_ alloc failed");
-    capacity_ = surfaceBuffer_->GetSize();
+    capacity_ = static_cast<int32_t>(surfaceBuffer_->GetSize());
 
     return Status::OK;
 }
@@ -102,7 +102,7 @@ Status AVSurfaceMemory::InitSurfaceBuffer(MessageParcel &parcel)
     GSError ret = surfaceBuffer_->ReadFromMessageParcel(parcel);
     FALSE_RETURN_V_MSG_E(ret == GSERROR_OK, Status::ERROR_INVALID_OPERATION, "Read message parcel failed! %{public}s",
                          GSErrorStr(ret).c_str());
-    capacity_ = surfaceBuffer_->GetSize();
+    capacity_ = static_cast<int32_t>(surfaceBuffer_->GetSize());
 
     return Status::OK;
 }
@@ -110,7 +110,7 @@ Status AVSurfaceMemory::InitSurfaceBuffer(MessageParcel &parcel)
 Status AVSurfaceMemory::InitSurfaceBuffer(sptr<SurfaceBuffer> surfaceBuffer)
 {
     surfaceBuffer_ = surfaceBuffer;
-    capacity_ = surfaceBuffer_->GetSize();
+    capacity_ = static_cast<int32_t>(surfaceBuffer_->GetSize());
 
     return Status::OK;
 }

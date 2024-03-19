@@ -138,6 +138,7 @@ int32_t AVBufferQueueProducerStub::OnSetBufferFilledListener(
 {
     auto listenerObject = arguments.ReadRemoteObject();
     sptr<IBrokerListener> listener = iface_cast<IBrokerListener>(listenerObject);
+    FALSE_RETURN_V_MSG_E(listener != nullptr, IPC_STUB_ERR, "listener is nullptr!");
 
     auto ret = SetBufferFilledListener(listener);
     reply.WriteInt32(static_cast<int32_t>(ret));
@@ -150,6 +151,7 @@ int32_t AVBufferQueueProducerStub::OnSetBufferAvailableListener(
 {
     auto listenerObject = arguments.ReadRemoteObject();
     sptr<IProducerListener> listener = iface_cast<IProducerListener>(listenerObject);
+    FALSE_RETURN_V_MSG_E(listener != nullptr, IPC_STUB_ERR, "listener is nullptr!");
     auto ret = SetBufferAvailableListener(listener);
     reply.WriteInt32(static_cast<int32_t>(ret));
 

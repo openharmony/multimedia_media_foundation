@@ -12,6 +12,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#ifndef HISTREAMER_TEST_SINGLE_AUDIO_RECORDER_FAST_AUDIO_FUNCTION_H
+#define HISTREAMER_TEST_SINGLE_AUDIO_RECORDER_FAST_AUDIO_FUNCTION_H
+
 #include <chrono>
 #include <fcntl.h>
 #ifndef WIN32
@@ -380,3 +383,5 @@ FIXTURE(dataDrivenSingleAudioRecorderTestFastAudioFunction)
         ASSERT_EQ(0, close(fd));
     }
 };
+
+#endif //HISTREAMER_TEST_SINGLE_AUDIO_RECORDER_FAST_AUDIO_FUNCTION_H

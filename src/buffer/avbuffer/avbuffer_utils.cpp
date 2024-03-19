@@ -61,7 +61,7 @@ bool MarshallingConfig(MessageParcel &parcel, const AVBufferConfig &config)
                WriteSurfaceBufferConfig(configParcel, *(config.surfaceBufferConfig)) &&
                configParcel.WriteInt32(config.capacity) && configParcel.WriteInt32(config.dmaFd);
     if (ret) {
-        ret &= parcel.Append(configParcel);
+        ret = ret && parcel.Append(configParcel);
     }
     return ret;
 #else
@@ -72,7 +72,7 @@ bool MarshallingConfig(MessageParcel &parcel, const AVBufferConfig &config)
 bool UnmarshallingConfig(MessageParcel &parcel, AVBufferConfig &config)
 {
 #ifdef MEDIA_OHOS
-    config.size = parcel.ReadUint32();
+    config.size = static_cast<int32_t>(parcel.ReadUint32());
     config.align = parcel.ReadInt32();
     config.memoryType = static_cast<MemoryType>(parcel.ReadUint8());
     config.memoryFlag = static_cast<MemoryFlag>(parcel.ReadUint8());

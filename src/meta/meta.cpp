@@ -359,17 +359,17 @@ bool Meta::ToParcel(MessageParcel &parcel) const
     bool ret = true;
     for (auto it = begin(); it != end(); ++it) {
         ++metaSize;
-        ret &= metaParcel.WriteString(it->first);
-        ret &= it->second.ToParcel(metaParcel);
+        ret = ret && metaParcel.WriteString(it->first);
+        ret = ret && it->second.ToParcel(metaParcel);
         if (!ret) {
             MEDIA_LOG_E("fail to Marshalling Key: " PUBLIC_LOG_S, it->first.c_str());
             return false;
         }
     }
     if (ret) {
-        ret &= parcel.WriteInt32(metaSize);
+        ret = ret && parcel.WriteInt32(metaSize);
         if (metaSize != 0) {
-            ret &= parcel.Append(metaParcel);
+            ret = ret && parcel.Append(metaParcel);
         }
     }
     return ret;

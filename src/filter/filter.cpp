@@ -264,7 +264,9 @@ bool Filter::WaitAllState(FilterState state)
     }
     if (filterLoop_) {
         AutoLock lock(stateMutex_);
-        bool res = cond_.WaitFor(lock, 1000, [this, state]() { return curState_ == state; }); // At most wait 1000ms
+        bool res = cond_.WaitFor(lock, 1000, [this, state]() {
+             return curState_ == state;
+        }); // At most wait 1000ms
         MEDIA_LOG_D("Filter::WaitAllState res %{public}d. %{public}s", res, name_.c_str());
         return res;
     }

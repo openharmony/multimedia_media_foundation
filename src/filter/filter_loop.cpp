@@ -133,7 +133,7 @@ void FilterLoop::MainLoop()
 {
     MEDIA_LOG_I("MainLoop begin");
     constexpr uint32_t nameSizeMax = 15;
-    pthread_setname_np(pthread_self(), name_.substr(0, nameSizeMax).c_str());  
+    pthread_setname_np(pthread_self(), name_.substr(0, nameSizeMax).c_str());
     while (true) {
         MsgInfo info;
         {
@@ -160,7 +160,7 @@ void FilterLoop::MainLoop()
                 MsgInfo commandInfo = commandQueue_.begin()->second;
                 TimeUs dataTime = dataQueue_.begin()->first;
                 MsgInfo dataInfo = dataQueue_.begin()->second;
-                // pause and stop command should be handle top priority 
+                // pause and stop command should be handle top priority
                 if (commandTime <= nowUs && (commandInfo.what == FilterPlaybackCommand::PAUSE
                     || commandInfo.what == FilterPlaybackCommand::RELEASE)) {
                     processUs = commandTime;
