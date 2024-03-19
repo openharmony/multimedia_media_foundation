@@ -203,17 +203,21 @@ void FilterLoop::HandleMessage(const MsgInfo &info)
 {
     switch (info.what) {
         case Pipeline::FilterPlaybackCommand::INIT: {
-            if (filter_->DoInit() == Status::OK) {
+            auto doInitRet = filter_->DoInit();
+            if (doInitRet == Status::OK) {
                 filter_->ChangeState(FilterState::INITIALIZED);
             } else {
+                filter_->SetErrCode(doInitRet);
                 filter_->ChangeState(FilterState::ERROR);
             }
             break;
         }
         case Pipeline::FilterPlaybackCommand::PREPARE: {
-            if (filter_->DoPrepare() == Status::OK) {
+            auto doPrepareRet = filter_->DoPrepare();
+            if (doPrepareRet == Status::OK) {
                 filter_->ChangeState(FilterState::READY);
             } else {
+                filter_->SetErrCode(doPrepareRet);
                 filter_->ChangeState(FilterState::ERROR);
             }
             break;

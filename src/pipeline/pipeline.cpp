@@ -35,18 +35,25 @@ void Pipeline::Init(const std::shared_ptr<EventReceiver>& receiver, const std::s
 
 Status Pipeline::Prepare()
 {
+    Status ret = Status::OK;
     SubmitJobOnce([&] {
         AutoLock lock(mutex_);
         for (auto it = filters_.begin(); it != filters_.end(); ++it) {
             auto rtv = (*it)->Prepare();
-            FALSE_RETURN_V(rtv == Status::OK, rtv);
+            if (rtv != Status::OK) {
+                ret = rtv;
+                return;
+            }
         }
         for (auto it = filters_.begin(); it != filters_.end(); ++it) {
-            (*it)->WaitAllState(FilterState::READY);
+            Status readyRet = (*it)->WaitAllState(FilterState::READY);
+            if (readyRet != Status::OK) {
+                ret = readyRet;
+                return;
+            }
         }
-        return Status::OK;
     });
-    return Status::OK;
+    return ret;
 }
 
 Status Pipeline::Start()

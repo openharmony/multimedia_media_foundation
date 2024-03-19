@@ -50,7 +50,10 @@ Status Filter::Prepare()
     if (filterLoop_) {
         filterLoop_->PrepareAsync();
     } else {
-        DoPrepare();
+        Status ret = DoPrepare();
+        if (ret != Status::OK) {
+            return ret;
+        }
     }
     for (auto iter : nextFiltersMap_) {
         for (auto filter : iter.second) {
@@ -252,25 +255,35 @@ void Filter::ChangeState(FilterState state)
     cond_.NotifyOne();
 }
 
-bool Filter::WaitAllState(FilterState state)
+void Filter::SetErrCode(Status errCode)
+{
+    errCode_ = errCode;
+}
+
+Status Filter::GetErrCode()
+{
+    return errCode_;
+}
+
+Status Filter::WaitAllState(FilterState state)
 {
     MEDIA_LOG_D("Filter::WaitAllState to %{public}d. %{public}s", state, name_.c_str());
     for (auto iter : nextFiltersMap_) {
         for (auto filter : iter.second) {
-            if (!filter->WaitAllState(state)) {
-                return false;
+            if (filter->WaitAllState(state) != Status::OK) {
+                return filter->GetErrCode();
             }
         }
     }
     if (filterLoop_) {
         AutoLock lock(stateMutex_);
         bool res = cond_.WaitFor(lock, 1000, [this, state]() {
-             return curState_ == state;
+             return curState_ == state || curState_ == FilterState::ERROR;
         }); // At most wait 1000ms
         MEDIA_LOG_D("Filter::WaitAllState res %{public}d. %{public}s", res, name_.c_str());
-        return res;
+        return GetErrCode();
     }
-    return true;
+    return GetErrCode();
 }
 
 void Filter::SetParameter(const std::shared_ptr<Meta>& meta)
@@ -308,7 +321,10 @@ Status Filter::OnLinked(StreamType, const std::shared_ptr<Meta>&, const std::sha
     if (filterLoop_) {
         filterLoop_->InitAsync();
     } else {
-        DoInit();
+        Status ret = DoInit();
+        if (ret != Status::OK) {
+            return ret;
+        }
         ChangeState(FilterState::INITIALIZED);
     }
     return Status::OK;
