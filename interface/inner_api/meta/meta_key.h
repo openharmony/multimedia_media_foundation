@@ -162,61 +162,76 @@ public:
         "quality"; ///<  key for the desired encoding quality,  this key is only supported for encoders that are
                    ///<  configured in constant quality mode
     static constexpr const char VIDEO_ENCODER_ENABLE_TEMPORAL_LEVEL_SCALE[] =
-        "video_encoder_enable_temporal_level_scale"; ///< bool, an optional key describing the temporal level scale
-                                                     ///< mode. This is an optional parameter that applies only to
-                                                     ///< encoder. The associated value is an bool (true or false): true
-                                                     ///< is enabled, false is closed. The default value is false. It
-                                                     ///< used in configure
+        "video_encoder_enable_temporal_level_scale"; ///< bool, key for enable the temporal level scale mode,
+                                                     ///< true is enabled, false otherwise. The default value is false.
+                                                     ///< This is an optional key that applies only to video encoder. It
+                                                     ///< is used in configure.
     static constexpr const char VIDEO_ENCODER_TEMPORAL_GOP_SIZE[] =
-        "video_encoder_temporal_gop_size"; ///< int32_t, temporal group of picture size. It used in configure
+        "video_encoder_temporal_gop_size"; ///< int32_t, key for describing the temporal group of picture size, It takes
+                                           ///< effect only when temporal level scale is enable. This is an optional key
+                                           ///< that applies only to video encoder. It is used in configure.
     static constexpr const char VIDEO_ENCODER_TEMPORAL_GOP_REFERENCE_MODE[] =
-        "video_encoder_temporal_gop_reference_mode"; ///< int32_t, see {link @TemporalGopReferenceMode}, temporal group
-                                                     ///< of picture reference mode. It used in configure
+        "video_encoder_temporal_gop_reference_mode"; ///< int32_t, key for describing the reference mode in temporal
+                                                     ///< group of picture, see enum {@link TemporalGopReferenceMode}.It
+                                                     ///< takes effect only when temporal level sacle is enabled. This
+                                                     ///< is an optional key that applies only to video encoder. It is
+                                                     ///< used in configure.
     static constexpr const char VIDEO_ENCODER_LTR_FRAME_NUM[] =
-        "video_encoder_ltr_frame_num"; ///< int32_t, config long term reference frame number. It used in configure
+        "video_encoder_ltr_frame_num"; ///< int32_t, key for describing the number of used long-term reference frames,
+                                       ///< must be within the supported range. To get supported range, you should query
+                                       ///< wthether the capability is supported. This is an optional key that applies
+                                       ///< only to video encoder. It is used in configure.
     static constexpr const char VIDEO_ENCODER_PER_FRAME_MARK_LTR[] =
-        "video_encoder_per_frame_mark_ltr"; ///< bool, true:mark long term reference. It use with frame
-    static constexpr const char VIDEO_PER_FRAME_IS_LTR[] =
-        "video_per_frame_is_ltr"; ///< bool, true:indicates that is long term reference. It use with frame
-    static constexpr const char VIDEO_PER_FRAME_POC[] =
-        "video_per_frame_poc"; ///< int32_t, the poc value of mark long term reference. It use with frame
+        "video_encoder_per_frame_mark_ltr"; ///< bool, key for describing mark this frame as a long term reference
+                                            ///< frame, true is mark, false otherwise. It takes effect only when the
+                                            ///< number of used long term reference frames is configured. This is an
+                                            ///< optional key that applies only to video encoder input loop. It takes
+                                            ///< effect immediately.
     static constexpr const char VIDEO_ENCODER_PER_FRAME_USE_LTR[] =
-        "video_encoder_per_frame_use_ltr"; ///< int32_t, set the poc value of mark long term reference.
-                                           ///< It use with frame
+        "video_encoder_per_frame_use_ltr"; ///< int32_t, key for describing the long term reference frame poc referenced
+                                           ///< by this frame. This is an optional key that applies only to video
+                                           ///< encoder input loop. It takes effect immediately.
+    static constexpr const char VIDEO_PER_FRAME_IS_LTR[] =
+        "video_per_frame_is_ltr"; ///< bool, key for indicating this frame is a long-term reference frame, true is LTR,
+                                  ///< false otherwise. This is an optional key that applies only to video encoder
+                                  ///< output loop. It indicates the attribute of the frame.
+    static constexpr const char VIDEO_PER_FRAME_POC[] =
+        "video_per_frame_poc"; ///< int32_t, key for describing the frame poc. This is an optional key that applies only
+                               ///< to video encoder output loop. It indicates the attribute of the frame.
     static constexpr const char VIDEO_CROP_TOP[] =
         "video_crop_top"; ///< int32_t, describing the top-coordinate (y) of the crop rectangle. This is the top-most
-                          ///< row included in the crop frame, where row indices start at 0
+                          ///< row included in the crop frame, where row indices start at 0.
     static constexpr const char VIDEO_CROP_BOTTOM[] =
         "video_crop_bottom"; ///< int32_t, describing the bottom-coordinate (y) of the crop rectangle. This is the
-                             ///< bottom-most row included in the crop frame, where row indices start at 0
+                             ///< bottom-most row included in the crop frame, where row indices start at 0.
     static constexpr const char VIDEO_CROP_LEFT[] =
         "video_crop_left"; ///<  int32_t, describing the left-coordinate (x) of the crop rectangle. This is the
-                           ///<  left-most column included in the crop frame, where column indices start at 0
+                           ///<  left-most column included in the crop frame, where column indices start at 0.
     static constexpr const char VIDEO_CROP_RIGHT[] =
         "video_crop_right"; ///<  int32_t, describing the right-coordinate (x) of the crop rectangle. This is the
-                            ///<  right-most column included in the crop frame, where column indices start at 0
+                            ///<  right-most column included in the crop frame, where column indices start at 0.
     static constexpr const char VIDEO_SLICE_HEIGHT[] =
         "video_slice_height"; ///< int32_t, describing the plane height of a multi-planar (YUV) video buffer
                               ///< layout. Slice height (or plane height/vertical stride) is the number of rows that
                               ///< must be skipped to get from the top of the Y plane to the top of the U plane in the
                               ///< buffer. In essence the offset of the U plane is sliceHeight * stride. The height
                               ///< of the U/V planes can be calculated based on the color format, though it is generally
-                              ///< undefined and depends on the device and release
+                              ///< undefined and depends on the device and release.
     static constexpr const char VIDEO_ENABLE_LOW_LATENCY[] =
-        "video_enable_low_latency"; ///< bool, an optional key describing the low latency decoding mode. This is an
-                                    ///< optional parameter that applies only to decoders. If enabled, the decoder
-                                    ///< doesn't hold input and output data more than required by the codec standards.
-                                    ///< The associated value is an bool (true or false): true is enabled, false is
-                                    ///< closed. The default value is false
+        "video_enable_low_latency"; ///< bool, key to enable the low latency mode, true is enabled, false
+                                    ///< otherwise. If enabled, the video encoder or video decoder doesn't hold input
+                                    ///< and output data more than required by the codec standards. This is an optional
+                                    ///< key that applies only to video encoder or video decoder. It is used in
+                                    ///< configure.
     static constexpr const char VIDEO_ENCODER_QP_MAX[] =
-        "video_encoder_qp_max"; ///< int32_t, describing the maximum Quantization Parameter allowed for encoding video.
-                                ///< It use with frame
+        "video_encoder_qp_max"; ///< int32_t, key for describing the maximum Quantization Parameter allowed for video
+                                ///< encoder. It is used in configure or takes effect immediately with the frame.
     static constexpr const char VIDEO_ENCODER_QP_MIN[] =
-        "video_encoder_qp_min"; ///< int32_t, describing the minimum Quantization Parameter allowed for encoding video.
-                                ///< It use with frame
+        "video_encoder_qp_min"; ///< int32_t, key for describing the minimum Quantization Parameter allowed for video
+                                ///< encoder. It is used in configure or takes effect immediately with the frame.
     static constexpr const char VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK[] =
         "video_encoder_enable_surface_input_callback"; ///< bool, the associated value is an bool (true or false): true
-                                                      ///< is enabled, false is closed.
+                                                       ///< is enabled, false is closed.
 
     /* -------------------- video specific tag -------------------- */
     static constexpr const char VIDEO_H264_PROFILE[] = "video.h264.profile"; ///< @see VideoH264Profile
