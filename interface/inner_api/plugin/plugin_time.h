@@ -48,7 +48,7 @@ inline int32_t HstTime2Us32(int64_t hTime)
     if (INT32_MAX < ms ||  INT32_MIN > ms) { // overflow
         return INT32_MAX;
     }
-    return std::static_cast<int32_t>(ms);
+    return static_cast<int32_t>(ms);
 }
 
 inline bool Us2HstTime (int64_t us, int64_t& hTime)
