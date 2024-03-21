@@ -42,6 +42,15 @@ inline int64_t HstTime2Us(int64_t hTime)
     return hTime / HST_USECOND;
 }
 
+inline int32_t HstTime2Us32(int64_t hTime)
+{
+    int64_t ms = hTime / HST_USECOND;
+    if (INT32_MAX < ms ||  INT32_MIN > ms) { // overflow
+        return INT32_MAX;
+    }
+    return static_cast<int32_t>(ms);
+}
+
 inline bool Us2HstTime (int64_t us, int64_t& hTime)
 {
     if (INT64_MAX / HST_USECOND < us || INT64_MIN / HST_USECOND > us) { // overflow
