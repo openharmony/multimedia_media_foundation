@@ -55,9 +55,12 @@ if (hst_is_standard_sys) {
   }
 
   ohos_shared_library("native_media_core") {
+    stack_protector_ret = true
     install_enable = true
 
     sanitize = {
+      ubsan = true
+      boundary_sanitize = true
       cfi = true
       cfi_cross_dso = true
       debug = false

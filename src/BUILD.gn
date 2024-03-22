@@ -63,6 +63,7 @@ if (hst_is_standard_sys) {
   }
 
   ohos_shared_library("media_foundation") {
+    stack_protector_ret = true
     install_enable = true
 
     public_configs = [ ":media_foundation_public_config" ]
@@ -76,6 +77,8 @@ if (hst_is_standard_sys) {
     ]
 
     sanitize = {
+      ubsan = true
+      boundary_sanitize = true
       cfi = true
       cfi_cross_dso = true
       debug = false
