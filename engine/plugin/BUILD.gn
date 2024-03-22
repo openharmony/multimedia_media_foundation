@@ -240,7 +240,7 @@ ohos_source_set("histreamer_plugin_core") {
       public_deps += [ "//third_party/bounds_checking_function:libsec_shared" ]
     }
   } else {
-    if (target_cpu == "arm64") {
+    if (target_cpu == "arm64" || is_emulator) {
       hst_plugin_path = "\"/system/lib64/media/histreamer_plugins\""
     } else {
       hst_plugin_path = "\"/system/lib/media/histreamer_plugins\""
