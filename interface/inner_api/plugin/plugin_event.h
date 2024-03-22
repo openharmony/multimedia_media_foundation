@@ -37,6 +37,7 @@ enum struct PluginEventType : int32_t {
     SOURCE_DRM_INFO_UPDATE,
     BUFFERING_START,
     BUFFERING_END,
+    VIDEO_SIZE_CHANGE,
 };
 
 enum class NetworkClientErrorCode : int32_t {
