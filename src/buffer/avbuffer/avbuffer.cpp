@@ -241,9 +241,9 @@ bool AVBuffer::ReadFromMessageParcel(MessageParcel &parcel, bool isSurfaceBuffer
     int64_t dts = 0;
     int64_t duration = 0;
     uint32_t flag = 0;
-    auto meta = std::make_shared<Meta>();
+    Meta meta;
     bool ret = parcel.ReadUint64(uid) && parcel.ReadInt64(pts) && parcel.ReadInt64(dts) && parcel.ReadInt64(duration) &&
-               parcel.ReadUint32(flag) && meta->FromParcel(parcel);
+               parcel.ReadUint32(flag) && meta.FromParcel(parcel);
     FALSE_RETURN_V_MSG_E(ret, false, "Unmarshalling buffer info failed");
 
     if (memory_ != nullptr) {
@@ -260,7 +260,10 @@ bool AVBuffer::ReadFromMessageParcel(MessageParcel &parcel, bool isSurfaceBuffer
     dts_ = dts;
     duration_ = duration;
     flag_ = flag;
-    meta_ = meta;
+    if (meta_ == nullptr) {
+        meta_ = std::make_shared<Meta>();
+    }
+    *meta_ = std::move(meta);
 #endif
     return true;
 }
