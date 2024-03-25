@@ -45,6 +45,13 @@ enum class SourceType : int32_t {
     SOURCE_TYPE_STREAM,
 };
 
+typedef struct PlayStrategy {
+    uint32_t width;
+    uint32_t height;
+    uint32_t duration;
+    bool preferHDR;
+}
+
 class MediaSource {
 public:
     /// Construct an a specified URI.
@@ -66,6 +73,10 @@ public:
     const std::string &GetSourceUri() const;
 
     const std::map<std::string, std::string> &GetSourceHeader() const;
+
+    void SetPlayStrategy(PlayStrategy* playStrategy);
+
+    PlayStrategy* GetPlayStrategy() const;
 
     //std::shared_ptr<DataConsumer> GetDataConsumer() const;
 #ifndef OHOS_LITE
