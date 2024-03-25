@@ -398,7 +398,7 @@ Status AVBufferQueueImpl::PushBuffer(const std::shared_ptr<AVBuffer>& buffer, bo
     return PushBuffer(buffer->GetUniqueId(), available);
 }
 
-Status AVBufferQueueImpl::ReturnBuffer(uint64_t uniqueId, bool available)
+Status __attribute__((no_sanitize("cfi"))) AVBufferQueueImpl::ReturnBuffer(uint64_t uniqueId, bool available)
 {
     {
         std::lock_guard<std::mutex> lockGuard(queueMutex_);
