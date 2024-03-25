@@ -86,6 +86,7 @@ private:
     std::string uri_ {};
     SourceType type_ {};
     std::map<std::string, std::string> header_ {};
+    PlayStrategy* playStrategy_ {nullptr};
     //std::shared_ptr<DataConsumer> dataConsumer_ {};
 #ifndef OHOS_LITE
     std::shared_ptr<IMediaDataSource> dataSrc_ {};
