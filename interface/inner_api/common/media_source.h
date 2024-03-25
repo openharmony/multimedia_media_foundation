@@ -50,7 +50,7 @@ typedef struct PlayStrategy {
     uint32_t height;
     uint32_t duration;
     bool preferHDR;
-}
+} PlayStrategy;
 
 class MediaSource {
 public:
