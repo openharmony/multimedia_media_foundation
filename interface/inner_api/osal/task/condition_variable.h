@@ -31,7 +31,7 @@ public:
 
     ConditionVariable operator=(const ConditionVariable& other) = delete;
 
-    void NotifyOne() noexcept;
+    void __attribute__((no_sanitize("cfi"))) NotifyOne() noexcept;
 
     void NotifyAll() noexcept;
 
