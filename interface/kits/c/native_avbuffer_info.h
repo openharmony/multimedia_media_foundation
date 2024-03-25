@@ -41,7 +41,7 @@ typedef enum OH_AVCodecBufferFlags {
      *  for output and should be dropped after decoding.
      * @since 12
      */
-    AVCODEC_BUFFER_FLAG_DISCRAD = 1 << 4,
+    AVCODEC_BUFFER_FLAG_DISCARD = 1 << 4,
     /** Flag is used to indicate packets that contain frames that can be discarded by the decoder,
      *  I.e. Non-reference frames.
      * @since 12
