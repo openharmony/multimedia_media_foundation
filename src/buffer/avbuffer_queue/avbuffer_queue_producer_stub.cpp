@@ -31,6 +31,7 @@ AVBufferQueueProducerStub::AVBufferQueueProducerStub()
     stubFuncMap_[PRODUCER_ATTACH_BUFFER] = &AVBufferQueueProducerStub::OnAttachBuffer;
     stubFuncMap_[PRODUCER_DETACH_BUFFER] = &AVBufferQueueProducerStub::OnDetachBuffer;
     stubFuncMap_[PRODUCER_SET_FILLED_LISTENER] = &AVBufferQueueProducerStub::OnSetBufferFilledListener;
+    stubFuncMap_[PRODUCER_REMOVE_FILLED_LISTENER] = &AVBufferQueueProducerStub::OnRemoveBufferFilledListener;
     stubFuncMap_[PRODUCER_SET_AVAILABLE_LISTENER] = &AVBufferQueueProducerStub::OnSetBufferAvailableListener;
 }
 
@@ -143,6 +144,18 @@ int32_t AVBufferQueueProducerStub::OnSetBufferFilledListener(
     auto ret = SetBufferFilledListener(listener);
     reply.WriteInt32(static_cast<int32_t>(ret));
 
+    return 0;
+}
+
+int32_t AVBufferQueueProducerStub::OnRemoveBufferFilledListener(
+    MessageParcel& arguments, MessageParcel& reply, MessageOption& option)
+{
+    auto listenerObject = arguments.ReadRemoteObject();
+    sptr<IBrokerListener> listener = iface_cast<IBrokerListener>(listenerObject);
+ 
+    auto ret = RemoveBufferFilledListener(listener);
+    reply.WriteInt32(static_cast<int32_t>(ret));
+ 
     return 0;
 }
 

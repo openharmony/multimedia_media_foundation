@@ -37,6 +37,7 @@ public:
     virtual Status DetachBuffer(const std::shared_ptr<AVBuffer>& outBuffer) = 0;
 
     virtual Status SetBufferFilledListener(sptr<IBrokerListener>& listener) = 0;
+    virtual Status RemoveBufferFilledListener(sptr<IBrokerListener>& listener) = 0;
     virtual Status SetBufferAvailableListener(sptr<IProducerListener>& listener) = 0;
     virtual Status Clear() = 0;
     DECLARE_INTERFACE_DESCRIPTOR(u"Media.AVBufferQueueProducer");
@@ -51,7 +52,8 @@ protected:
         PRODUCER_ATTACH_BUFFER = 5,
         PRODUCER_DETACH_BUFFER = 6,
         PRODUCER_SET_FILLED_LISTENER = 7,
-        PRODUCER_SET_AVAILABLE_LISTENER = 8
+        PRODUCER_REMOVE_FILLED_LISTENER = 8,
+        PRODUCER_SET_AVAILABLE_LISTENER = 9
     };
 };
 

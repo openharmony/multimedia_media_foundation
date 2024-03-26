@@ -91,6 +91,7 @@ enum struct SeekMode : uint32_t {
     SEEK_PREVIOUS_SYNC,     ///> sync to keyframes before the time point.
     SEEK_CLOSEST_SYNC,      ///> sync to closest keyframes.
     SEEK_CLOSEST,           ///> seek to frames closest the time point.
+    SEEK_CLOSEST_INNER,     ///> seek to frames closest the time point for inner accurate seek.
 };
 
 /**

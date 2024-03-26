@@ -133,10 +133,11 @@ Status AVBufferQueueSurfaceWrapper::CancelBuffer(uint64_t uniqueId)
 
 Status AVBufferQueueSurfaceWrapper::PushBuffer(uint64_t uniqueId, bool available)
 {
-    if (brokerListener_ != nullptr) {
+    auto listener = brokerListeners_.back();
+    if (listener != nullptr) {
         std::lock_guard<std::mutex> lockGuard(brokerListenerMutex_);
-        if (brokerListener_ != nullptr) {
-            brokerListener_->OnBufferFilled(cachedBufferMap_[uniqueId]);
+        if (listener != nullptr) {
+            listener->OnBufferFilled(cachedBufferMap_[uniqueId]);
             return Status::OK;
         }
     }
@@ -234,7 +235,19 @@ Status AVBufferQueueSurfaceWrapper::ReleaseBuffer(const std::shared_ptr<AVBuffer
 Status AVBufferQueueSurfaceWrapper::SetBrokerListener(sptr<IBrokerListener>& listener)
 {
     std::lock_guard<std::mutex> lockGuard(producerListenerMutex_);
-    brokerListener_ = listener;
+    brokerListeners_.push_back(listener);
+    return Status::OK;
+}
+
+Status AVBufferQueueSurfaceWrapper::RemoveBrokerListener(sptr<IBrokerListener>& listener)
+{
+    std::lock_guard<std::mutex> lockGuard(producerListenerMutex_);
+    if (listener == brokerListeners_.back()) {
+        MEDIA_LOG_I("RemoveBrokerListener success.");
+        brokerListeners_.pop_back();
+    } else {
+        MEDIA_LOG_E("removed item is not the back one.");
+    }
     return Status::OK;
 }
 

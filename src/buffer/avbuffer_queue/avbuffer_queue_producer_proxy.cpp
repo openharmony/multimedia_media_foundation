@@ -55,6 +55,7 @@ public:
     Status DetachBuffer(const std::shared_ptr<AVBuffer>& outBuffer) override;
 
     Status SetBufferFilledListener(sptr<IBrokerListener>& listener) override;
+    Status RemoveBufferFilledListener(sptr<IBrokerListener>& listener) override;
     Status SetBufferAvailableListener(sptr<IProducerListener>& listener) override;
     Status Clear() override;
 private:
@@ -171,6 +172,17 @@ Status AVBufferQueueProducerProxyImpl::SetBufferFilledListener(sptr<IBrokerListe
 
     ABQ_IPC_SEND_REQUEST(PRODUCER_SET_FILLED_LISTENER);
 
+    return Status::OK;
+}
+
+Status AVBufferQueueProducerProxyImpl::RemoveBufferFilledListener(sptr<IBrokerListener>& listener)
+{
+    ABQ_IPC_DEFINE_VARIABLES;
+ 
+    arguments.WriteRemoteObject(listener->AsObject());
+ 
+    ABQ_IPC_SEND_REQUEST(PRODUCER_REMOVE_FILLED_LISTENER);
+ 
     return Status::OK;
 }
 
