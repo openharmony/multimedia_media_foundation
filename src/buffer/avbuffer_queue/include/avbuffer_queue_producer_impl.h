@@ -40,6 +40,7 @@ public:
     Status DetachBuffer(const std::shared_ptr<AVBuffer>& outBuffer) override = 0;
 
     Status SetBufferFilledListener(sptr<IBrokerListener>& listener) override = 0;
+    Status RemoveBufferFilledListener(sptr<IBrokerListener>& listener) override = 0;
     Status SetBufferAvailableListener(sptr<IProducerListener>& listener) override = 0;
     Status Clear() override = 0;
     virtual Status PushBuffer(uint64_t uniqueId, bool available) = 0;
@@ -62,6 +63,7 @@ private:
     int32_t OnDetachBuffer(MessageParcel& arguments, MessageParcel& reply, MessageOption& option);
 
     int32_t OnSetBufferFilledListener(MessageParcel& arguments, MessageParcel& reply, MessageOption& option);
+    int32_t OnRemoveBufferFilledListener(MessageParcel& arguments, MessageParcel& reply, MessageOption& option);
     int32_t OnSetBufferAvailableListener(MessageParcel& arguments, MessageParcel& reply, MessageOption& option);
 };
 
@@ -84,6 +86,7 @@ public:
     Status DetachBuffer(const std::shared_ptr<AVBuffer>& buffer) override;
 
     Status SetBufferFilledListener(sptr<IBrokerListener>& listener) override;
+    Status RemoveBufferFilledListener(sptr<IBrokerListener>& listener) override;
     Status SetBufferAvailableListener(sptr<IProducerListener>& listener) override;
     Status Clear() override;
 protected:

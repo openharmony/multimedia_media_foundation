@@ -382,8 +382,8 @@ Status AVBufferQueueImpl::PushBuffer(uint64_t uniqueId, bool available)
 
     if (available) {
         std::lock_guard<std::mutex> lockGuard(brokerListenerMutex_);
-        if (brokerListener_ != nullptr) {
-            brokerListener_->OnBufferFilled(buffer);
+        if (!brokerListeners_.empty() && brokerListeners_.back() != nullptr) {
+            brokerListeners_.back()->OnBufferFilled(buffer);
             return Status::OK;
         }
     }
@@ -607,8 +607,19 @@ Status AVBufferQueueImpl::Clear()
 Status AVBufferQueueImpl::SetBrokerListener(sptr<IBrokerListener>& listener)
 {
     std::lock_guard<std::mutex> lockGuard(brokerListenerMutex_);
-    brokerListener_ = listener;
+    brokerListeners_.push_back(listener);
+    return Status::OK;
+}
 
+Status AVBufferQueueImpl::RemoveBrokerListener(sptr<IBrokerListener>& listener)
+{
+    std::lock_guard<std::mutex> lockGuard(brokerListenerMutex_);
+    if (listener == brokerListeners_.back()) {
+        brokerListeners_.pop_back();
+        MEDIA_LOG_I("RemoveBrokerListener success, size: %{public}d", brokerListeners_.size());
+    } else {
+        MEDIA_LOG_E("removed item is not the back one.");
+    }
     return Status::OK;
 }
 

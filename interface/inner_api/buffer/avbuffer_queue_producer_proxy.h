@@ -38,6 +38,7 @@ public:
     Status DetachBuffer(const std::shared_ptr<AVBuffer>& outBuffer) override = 0;
 
     Status SetBufferFilledListener(sptr<IBrokerListener>& listener) override = 0;
+    Status RemoveBufferFilledListener(sptr<IBrokerListener>& listener) override = 0;
     Status SetBufferAvailableListener(sptr<IProducerListener>& listener) override = 0;
     Status Clear() override = 0;
 protected:

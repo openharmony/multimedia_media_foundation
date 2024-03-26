@@ -83,6 +83,7 @@ public:
     virtual Status ReleaseBuffer(const std::shared_ptr<AVBuffer>& buffer);
 
     virtual Status SetBrokerListener(sptr<IBrokerListener>& listener);
+    virtual Status RemoveBrokerListener(sptr<IBrokerListener>& listener);
     virtual Status SetProducerListener(sptr<IProducerListener>& listener);
     virtual Status SetConsumerListener(sptr<IConsumerListener>& listener);
 
@@ -92,7 +93,7 @@ protected:
     std::mutex producerCreatorMutex_;
     std::mutex consumerCreatorMutex_;
 
-    sptr<IBrokerListener> brokerListener_;
+    std::vector<sptr<IBrokerListener>> brokerListeners_;
     sptr<IProducerListener> producerListener_;
     sptr<IConsumerListener> consumerListener_;
 
@@ -172,6 +173,7 @@ public:
     Status ReleaseBuffer(const std::shared_ptr<AVBuffer>& buffer) override;
 
     Status SetBrokerListener(sptr<IBrokerListener>& listener) override;
+    Status RemoveBrokerListener(sptr<IBrokerListener>& listener) override;
     Status SetProducerListener(sptr<IProducerListener>& listener) override;
     Status SetConsumerListener(sptr<IConsumerListener>& listener) override;
 
