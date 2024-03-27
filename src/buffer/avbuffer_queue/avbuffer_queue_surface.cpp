@@ -133,6 +133,7 @@ Status AVBufferQueueSurfaceWrapper::CancelBuffer(uint64_t uniqueId)
 
 Status AVBufferQueueSurfaceWrapper::PushBuffer(uint64_t uniqueId, bool available)
 {
+    FALSE_RETURN_V(!brokerListeners_.empty(), Status::ERROR_INVALID_DATA);
     auto listener = brokerListeners_.back();
     if (listener != nullptr) {
         std::lock_guard<std::mutex> lockGuard(brokerListenerMutex_);
@@ -242,7 +243,7 @@ Status AVBufferQueueSurfaceWrapper::SetBrokerListener(sptr<IBrokerListener>& lis
 Status AVBufferQueueSurfaceWrapper::RemoveBrokerListener(sptr<IBrokerListener>& listener)
 {
     std::lock_guard<std::mutex> lockGuard(producerListenerMutex_);
-    if (listener == brokerListeners_.back()) {
+    if (!brokerListeners_.empty() && listener == brokerListeners_.back()) {
         MEDIA_LOG_I("RemoveBrokerListener success.");
         brokerListeners_.pop_back();
     } else {
