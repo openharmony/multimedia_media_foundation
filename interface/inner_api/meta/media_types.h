@@ -147,6 +147,7 @@ enum class FileType : int32_t {
     OGG = 205,
     M4A = 206,
     WAV = 207,
+    APE = 208,
 };
 
 /**
