@@ -51,6 +51,16 @@ const std::map<std::string, std::string> &MediaSource::GetSourceHeader() const
     return header_;
 }
 
+void MediaSource::SetPlayStrategy(PlayStrategy* playStrategy)
+{
+    playStrategy_ = playStrategy;
+}
+
+PlayStrategy* MediaSource::GetPlayStrategy() const
+{
+    return playStrategy_;
+}
+
 #ifndef OHOS_LITE
 std::shared_ptr<IMediaDataSource> MediaSource::GetDataSrc() const
 {
