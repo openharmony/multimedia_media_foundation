@@ -614,7 +614,7 @@ Status AVBufferQueueImpl::SetBrokerListener(sptr<IBrokerListener>& listener)
 Status AVBufferQueueImpl::RemoveBrokerListener(sptr<IBrokerListener>& listener)
 {
     std::lock_guard<std::mutex> lockGuard(brokerListenerMutex_);
-    if (listener == brokerListeners_.back()) {
+    if (!brokerListeners_.empty() && listener == brokerListeners_.back()) {
         brokerListeners_.pop_back();
         MEDIA_LOG_I("RemoveBrokerListener success, size: %{public}d", brokerListeners_.size());
     } else {
