@@ -41,27 +41,27 @@ typedef enum OH_AVCodecBufferFlags {
      *  for output and should be dropped after decoding.
      * @since 12
      */
-    AVCODEC_BUFFER_FLAG_DISCARD = 1 << 4,
+    AVCODEC_BUFFER_FLAGS_DISCARD = 1 << 4,
     /** Flag is used to indicate packets that contain frames that can be discarded by the decoder,
      *  I.e. Non-reference frames.
      * @since 12
      */
-    AVCODEC_BUFFER_FLAG_DISPOSABLE = 1 << 5,
+    AVCODEC_BUFFER_FLAGS_DISPOSABLE = 1 << 5,
 } OH_AVCodecBufferFlags;
 
 /**
- * @brief Define the Buffer description information of OH_AVCodec.
+ * @brief Define the Buffer description information of OH_AVCodec
  * @syscap SystemCapability.Multimedia.Media.Core
  * @since 9
  */
 typedef struct OH_AVCodecBufferAttr {
-    /** Presentation timestamp of this Buffer in microseconds. */
+    /* Presentation timestamp of this Buffer in microseconds */
     int64_t pts;
-    /** The size of the data contained in the Buffer in bytes. */
+    /* The size of the data contained in the Buffer in bytes */
     int32_t size;
-    /** The starting offset of valid data in this Buffer. */
+    /* The starting offset of valid data in this Buffer */
     int32_t offset;
-    /** The flags this Buffer has, which is also a combination of multiple {@link OH_AVCodecBufferFlags}. */
+    /* The flags this Buffer has, which is also a combination of multiple {@link OH_AVCodecBufferFlags}. */
     uint32_t flags;
 } OH_AVCodecBufferAttr;
 
