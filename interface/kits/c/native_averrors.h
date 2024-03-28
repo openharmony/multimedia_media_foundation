@@ -67,6 +67,10 @@ typedef enum OH_AVErrCode {
      */
     AV_ERR_UNSUPPORT = 9,
     /**
+     * decrypt failed.
+     */
+    AV_ERR_DECRYPT_FAILED = 10,
+    /**
      * extend err start.
      */
     AV_ERR_EXTEND_START = 100,
