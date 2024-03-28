@@ -376,7 +376,7 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::MEDIA_FILE_TYPE, static_cast<int32_t>(Plugins::FileType::AMR)},
     {Tag::VIDEO_ENCODE_BITRATE_MODE, static_cast<int32_t>(Plugins::VideoEncodeBitrateMode::CBR)},
     {Tag::VIDEO_ENCODER_TEMPORAL_GOP_REFERENCE_MODE,
-     static_cast<int32_t>(Plugins::TemporalGopReferenceMode::JUMP_REFERENCE_MODE)},
+     static_cast<int32_t>(Plugins::TemporalGopReferenceMode::JUMP_REFERENCE)},
     // UINT8_T
     {Tag::AUDIO_AAC_PROFILE, static_cast<int32_t>(Plugins::AudioAacProfile::ELD)},
     {Tag::AUDIO_AAC_STREAM_FORMAT, static_cast<int32_t>(Plugins::AudioAacStreamFormat::ADIF)},

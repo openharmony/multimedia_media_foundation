@@ -287,8 +287,8 @@ enum MPEG4Level : int32_t {
  * @since 5.0
  */
 enum class TemporalGopReferenceMode : int32_t {
-    ADJACENT_REFERENCE_MODE = 0,
-    JUMP_REFERENCE_MODE = 1,
+    ADJACENT_REFERENCE = 0,
+    JUMP_REFERENCE = 1,
 };
 } // namespace Plugins
 } // namespace Media
