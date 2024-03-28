@@ -152,7 +152,7 @@ public:
         tagCharSeq == Tag::MEDIA_HAS_AUDIO or
         tagCharSeq == Tag::MEDIA_END_OF_STREAM or
         tagCharSeq == Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE or
-        tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_TEMPORAL_LEVEL_SCALE or
+        tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_TEMPORAL_SCALABILITY or
         tagCharSeq == Tag::VIDEO_PER_FRAME_IS_LTR or
         tagCharSeq == Tag::VIDEO_ENABLE_LOW_LATENCY or
         tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK, bool, ValueType::BOOL);
@@ -206,7 +206,7 @@ public:
 
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::VIDEO_ENCODER_TEMPORAL_GOP_SIZE or
-        tagCharSeq == Tag::VIDEO_ENCODER_LTR_FRAME_NUM or
+        tagCharSeq == Tag::VIDEO_ENCODER_LTR_FRAME_COUNT or
         tagCharSeq == Tag::VIDEO_ENCODER_PER_FRAME_MARK_LTR or
         tagCharSeq == Tag::VIDEO_PER_FRAME_POC or
         tagCharSeq == Tag::VIDEO_ENCODER_PER_FRAME_USE_LTR or
@@ -217,7 +217,7 @@ public:
         tagCharSeq == Tag::VIDEO_SLICE_HEIGHT or
         tagCharSeq == Tag::VIDEO_ENCODER_QP_MAX or
         tagCharSeq == Tag::VIDEO_ENCODER_QP_MIN or
-        tagCharSeq == Tag::FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_NUM, int32_t, ValueType::INT32_T);
+        tagCharSeq == Tag::FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_COUNT, int32_t, ValueType::INT32_T);
 
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::APP_FULL_TOKEN_ID or

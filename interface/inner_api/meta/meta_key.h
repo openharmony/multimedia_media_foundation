@@ -161,8 +161,8 @@ public:
     static constexpr const char VIDEO_ENCODE_QUALITY[] =
         "quality"; ///<  key for the desired encoding quality,  this key is only supported for encoders that are
                    ///<  configured in constant quality mode
-    static constexpr const char VIDEO_ENCODER_ENABLE_TEMPORAL_LEVEL_SCALE[] =
-        "video_encoder_enable_temporal_level_scale"; ///< bool, key for enable the temporal level scale mode,
+    static constexpr const char VIDEO_ENCODER_ENABLE_TEMPORAL_SCALABILITY[] =
+        "video_encoder_enable_temporal_scalability"; ///< bool, key for enable the temporal scalability mode,
                                                      ///< true is enabled, false otherwise. The default value is false.
                                                      ///< This is an optional key that applies only to video encoder. It
                                                      ///< is used in configure.
@@ -176,15 +176,15 @@ public:
                                                      ///< takes effect only when temporal level sacle is enabled. This
                                                      ///< is an optional key that applies only to video encoder. It is
                                                      ///< used in configure.
-    static constexpr const char VIDEO_ENCODER_LTR_FRAME_NUM[] =
-        "video_encoder_ltr_frame_num"; ///< int32_t, key for describing the number of used long-term reference frames,
+    static constexpr const char VIDEO_ENCODER_LTR_FRAME_COUNT[] =
+        "video_encoder_ltr_frame_count"; ///< int32_t, key for describing the count of used long-term reference frames,
                                        ///< must be within the supported range. To get supported range, you should query
                                        ///< wthether the capability is supported. This is an optional key that applies
                                        ///< only to video encoder. It is used in configure.
     static constexpr const char VIDEO_ENCODER_PER_FRAME_MARK_LTR[] =
         "video_encoder_per_frame_mark_ltr"; ///< bool, key for describing mark this frame as a long term reference
                                             ///< frame, true is mark, false otherwise. It takes effect only when the
-                                            ///< number of used long term reference frames is configured. This is an
+                                            ///< count of used long term reference frames is configured. This is an
                                             ///< optional key that applies only to video encoder input loop. It takes
                                             ///< effect immediately.
     static constexpr const char VIDEO_ENCODER_PER_FRAME_USE_LTR[] =
@@ -224,11 +224,13 @@ public:
                                     ///< key that applies only to video encoder or video decoder. It is used in
                                     ///< configure.
     static constexpr const char VIDEO_ENCODER_QP_MAX[] =
-        "video_encoder_qp_max"; ///< int32_t, key for describing the maximum Quantization Parameter allowed for video
-                                ///< encoder. It is used in configure or takes effect immediately with the frame.
+        "video_encoder_qp_max"; ///< int32_t, key for describing the maximum quantization parameter allowed for video
+                                ///< encoder. It is used in configure/setparameter or takes effect immediately with the
+                                ///< frame.
     static constexpr const char VIDEO_ENCODER_QP_MIN[] =
-        "video_encoder_qp_min"; ///< int32_t, key for describing the minimum Quantization Parameter allowed for video
-                                ///< encoder. It is used in configure or takes effect immediately with the frame.
+        "video_encoder_qp_min"; ///< int32_t, key for describing the minimum quantization parameter allowed for video
+                                ///< encoder. It is used in configure/setparameter or takes effect immediately with the
+                                ///< frame.
     static constexpr const char VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK[] =
         "video_encoder_enable_surface_input_callback"; ///< bool, the associated value is an bool (true or false): true
                                                        ///< is enabled, false is closed.
@@ -254,9 +256,9 @@ public:
     static constexpr const char DRM_CENC_INFO[] = "drm_cenc_info"; ///< drm cenc info
 
     /* -------------------- avcapability tag -------------------- */
-    static constexpr const char FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_NUM[] =
-        "feature_property_video_encoder_max_ltr_frame_num"; ///< int32_t, the key for querying the maximum long
-                                                            ///< term reference number
+    static constexpr const char FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_COUNT[] =
+        "feature_property_video_encoder_max_ltr_frame_count"; ///< int32_t, the key for querying the maximum long
+                                                            ///< term reference count
 };
 
 using TagTypeCharSeq = const char *;
