@@ -33,7 +33,7 @@ inline std::string HstGetFileName(const std::string& file)
 
 #ifdef MEDIA_OHOS
 #ifndef LOG_DOMAIN
-#define LOG_DOMAIN 0xD002B00
+#define LOG_DOMAIN 0xD002B0A
 #endif
 #ifndef LOG_TAG
 #define LOG_TAG "HiStreamer"
