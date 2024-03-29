@@ -27,7 +27,8 @@ config("hst_plugin_intf_config") {
     "//foundation/multimedia/media_foundation/engine/scene/standard",
   ]
   if (hst_is_lite_sys) {
-    include_dirs += [ "//foundation/multimedia/media_utils_lite/interfaces/kits" ]
+    include_dirs +=
+        [ "//foundation/multimedia/media_utils_lite/interfaces/kits" ]
   } else {
     include_dirs += [
       "//foundation/multimedia/media_foundation/engine/scene/standard",

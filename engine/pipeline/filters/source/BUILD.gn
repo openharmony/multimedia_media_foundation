@@ -39,8 +39,8 @@ ohos_source_set("audio_capture_filter") {
   if (hst_is_standard_sys) {
     external_deps = [
       "graphic_surface:surface",
-      "ipc:ipc_single",
       "hilog:libhilog",
+      "ipc:ipc_single",
     ]
   }
 }
@@ -60,8 +60,8 @@ ohos_source_set("media_source_filter") {
   if (hst_is_standard_sys) {
     external_deps = [
       "graphic_surface:surface",
-      "ipc:ipc_single",
       "hilog:libhilog",
+      "ipc:ipc_single",
     ]
   }
 }
@@ -81,8 +81,8 @@ ohos_source_set("video_capture_filter") {
   if (hst_is_standard_sys) {
     external_deps = [
       "graphic_surface:surface",
-      "ipc:ipc_single",
       "hilog:libhilog",
+      "ipc:ipc_single",
     ]
   }
 }
