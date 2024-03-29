@@ -41,7 +41,6 @@ ohos_source_set("httpsource") {
     "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
     "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",
   ]
-  external_deps = [ "hilog:libhilog" ]
   if (hst_is_lite_sys) {
     if (hst_is_mini_sys) {
       public_deps += [ "//third_party/curl:libcurl_static" ]
@@ -50,7 +49,10 @@ ohos_source_set("httpsource") {
     }
   } else {
     public_deps += [ "//third_party/curl:curl_shared" ]
-    external_deps += [ "graphic_surface:surface" ]
+    external_deps = [
+      "graphic_surface:surface",
+      "hilog:libhilog",
+    ]
   }
 }
 

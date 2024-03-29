@@ -48,12 +48,12 @@ ohos_source_set("std_plugin_codec_adapter") {
     "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
     "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",
   ]
-  external_deps = [
-    "hdf_core:libpub_utils",
-    "hilog:libhilog"
-  ]
+  external_deps = [ "hdf_core:libpub_utils" ]
   if (!hst_is_lite_sys) {
-    external_deps += [ "graphic_surface:surface" ]
+    external_deps += [
+      "graphic_surface:surface",
+      "hilog:libhilog",
+    ]
   }
   public_configs = [
     ":plugin_codec_adapter_config",

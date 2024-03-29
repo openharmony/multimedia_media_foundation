@@ -31,11 +31,11 @@ ohos_source_set("demuxer_filter") {
     "../../../foundation:histreamer_foundation",
     "../../../pipeline:histreamer_base",
   ]
-  external_deps = [ "hilog:libhilog" ]
   if (hst_is_standard_sys) {
     external_deps += [
       "graphic_surface:surface",
       "ipc:ipc_single",
+      "hilog:libhilog",
     ]
   }
 }

@@ -58,9 +58,11 @@ ohos_source_set("ffmpeg_adapter_common") {
     "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
     "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",
   ]
-  external_deps += [ "hilog:libhilog" ]
   if (!hst_is_lite_sys) {
-    external_deps = [ "graphic_surface:surface" ]
+    external_deps = [
+      "graphic_surface:surface",
+      "hilog:libhilog",
+    ]
   }
   if (hst_is_lite_sys) {
     print("histreamer audio encoder plugin only supports standard system")
@@ -81,9 +83,11 @@ ohos_source_set("ffmpeg_audio_decoders") {
     "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
     "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",
   ]
-  external_deps = [ "hilog:libhilog" ]
   if (!hst_is_lite_sys) {
-    external_deps += [ "graphic_surface:surface" ]
+    external_deps = [
+      "graphic_surface:surface",
+      "hilog:libhilog",
+    ]
   }
   if (hst_is_lite_sys) {
     # deps on lite
@@ -111,9 +115,11 @@ ohos_source_set("ffmpeg_demuxers") {
     "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
     "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",
   ]
-  external_deps = [ "hilog:libhilog" ]
   if (!hst_is_lite_sys) {
-    external_deps += [ "graphic_surface:surface" ]
+    external_deps = [
+      "graphic_surface:surface",
+      "hilog:libhilog",
+    ]
   }
 
   if (hst_is_lite_sys) {
@@ -139,9 +145,11 @@ ohos_source_set("ffmpeg_audio_encoders") {
     "//foundation/multimedia/media_foundation/engine/plugin:histreamer_ffmpeg_convert",
     "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",
   ]
-  external_deps = [ "hilog:libhilog" ]
   if (!hst_is_lite_sys) {
-    external_deps += [ "graphic_surface:surface" ]
+    external_deps += [
+      "graphic_surface:surface",
+      "hilog:libhilog",
+    ]
   }
   if (hst_is_lite_sys) {
     print("histreamer audio encoder plugin only supports standard system")
@@ -163,9 +171,11 @@ ohos_source_set("ffmpeg_video_decoders") {
     "//foundation/multimedia/media_foundation/engine/plugin:histreamer_ffmpeg_convert",
     "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",
   ]
-  external_deps = [ "hilog:libhilog" ]
   if (!hst_is_lite_sys) {
-    external_deps += [ "graphic_surface:surface" ]
+    external_deps += [
+      "graphic_surface:surface",
+      "hilog:libhilog",
+    ]
   }
   if (hst_is_lite_sys) {
     print("histreamer video decoder plugin only supports standard system")
@@ -189,9 +199,11 @@ ohos_source_set("ffmpeg_video_encoders") {
     "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
     "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",
   ]
-  external_deps = [ "hilog:libhilog" ]
   if (!hst_is_lite_sys) {
-    external_deps += [ "graphic_surface:surface" ]
+    external_deps = [
+      "graphic_surface:surface",
+      "hilog:libhilog",
+    ]
   }
   if (hst_is_lite_sys) {
     print("histreamer video encoder plugin only supports standard system")
@@ -215,9 +227,11 @@ ohos_source_set("ffmpeg_muxers") {
     "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
     "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",
   ]
-  external_deps = [ "hilog:libhilog" ]
   if (!hst_is_lite_sys) {
-    external_deps += [ "graphic_surface:surface" ]
+    external_deps = [
+      "graphic_surface:surface",
+      "hilog:libhilog",
+    ]
   }
   if (hst_is_lite_sys) {
     print("histreamer ffmpeg muxer plugin only supports standard system")

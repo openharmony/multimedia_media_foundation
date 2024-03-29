@@ -27,8 +27,7 @@ config("hst_plugin_intf_config") {
     "//foundation/multimedia/media_foundation/engine/scene/standard",
   ]
   if (hst_is_lite_sys) {
-    include_dirs +=
-        [ "//foundation/multimedia/media_utils_lite/interfaces/kits" ]
+    include_dirs += [ "//foundation/multimedia/media_utils_lite/interfaces/kits" ]
   } else {
     include_dirs += [
       "//foundation/multimedia/media_foundation/engine/scene/standard",
@@ -57,7 +56,6 @@ if (hst_is_lite_sys) {
       ":hst_plugin_intf_config",
       "//foundation/multimedia/media_foundation:histreamer_presets",
     ]
-    external_deps = [ "hilog:libhilog" ]
     if (hst_is_mini_sys) {
       public_deps = [ "//third_party/bounds_checking_function:libsec_static" ]
     } else {
