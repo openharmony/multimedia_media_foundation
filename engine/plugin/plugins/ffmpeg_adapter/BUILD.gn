@@ -146,7 +146,7 @@ ohos_source_set("ffmpeg_audio_encoders") {
     "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",
   ]
   if (!hst_is_lite_sys) {
-    external_deps += [
+    external_deps = [
       "graphic_surface:surface",
       "hilog:libhilog",
     ]
@@ -172,7 +172,7 @@ ohos_source_set("ffmpeg_video_decoders") {
     "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",
   ]
   if (!hst_is_lite_sys) {
-    external_deps += [
+    external_deps = [
       "graphic_surface:surface",
       "hilog:libhilog",
     ]

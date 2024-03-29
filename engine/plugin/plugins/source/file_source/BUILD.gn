@@ -51,7 +51,7 @@ ohos_source_set("filefdsource") {
     "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",
   ]
   if (hst_is_standard_sys) {
-    external_deps += [
+    external_deps = [
       "graphic_surface:surface",
       "hilog:libhilog",
     ]

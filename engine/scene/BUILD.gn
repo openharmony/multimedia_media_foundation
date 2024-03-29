@@ -32,6 +32,7 @@ ohos_source_set("std_engine_factory") {
       "graphic_2d:color_manager",
       "graphic_surface:surface",
       "init:libbegetutil",
+      "hilog:libhilog",
     ]
     if (media_foundation_enable_recorder) {
       deps += [ "recorder:histreamer_recorder" ]
@@ -57,6 +58,8 @@ ohos_source_set("scene_common") {
     "common/data_stream_impl.cpp",
     "common/media_stat_stub.cpp",
   ]
-  public_configs =
-      [ "//foundation/multimedia/media_foundation:histreamer_presets" ]
+  public_configs = [ "//foundation/multimedia/media_foundation:histreamer_presets" ]
+  if (hst_is_standard_sys) {
+    external_deps = [ "hilog:libhilog" ]
+  }
 }
