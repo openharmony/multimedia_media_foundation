@@ -27,6 +27,7 @@ if (hst_is_lite_sys) {
       "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
       "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",
     ]
+    external_deps = [ "hilog:libhilog" ]
     if (hst_is_mini_sys) {
       target_type = "static_library"
     } else {

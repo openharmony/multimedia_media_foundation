@@ -31,6 +31,7 @@ ohos_source_set("streamsource") {
   if (hst_is_lite_sys) {
     public_deps += [ "//foundation/multimedia/media_utils_lite:media_common" ]
   }
+  external_deps = [ "hilog:libhilog" ]
 }
 
 if (hst_is_lite_sys) {

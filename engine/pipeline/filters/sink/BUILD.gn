@@ -33,8 +33,9 @@ ohos_source_set("media_synchronous_sink") {
     "../../../foundation:histreamer_foundation",
     "../../../pipeline:histreamer_base",
   ]
+  external_deps = [ "hilog:libhilog" ]
   if (hst_is_standard_sys) {
-    external_deps = [
+    external_deps += [
       "graphic_surface:surface",
       "ipc:ipc_single",
     ]
@@ -47,8 +48,9 @@ ohos_source_set("audio_sink_filter") {
   sources = [ "audio_sink/audio_sink_filter.cpp" ]
   public_configs = [ "../../../../:histreamer_presets" ]
   public_deps = [ ":media_synchronous_sink" ]
+  external_deps = [ "hilog:libhilog" ]
   if (hst_is_standard_sys) {
-    external_deps = [
+    external_deps += [
       "graphic_surface:surface",
       "ipc:ipc_single",
     ]
@@ -61,8 +63,9 @@ ohos_source_set("video_sink_filter") {
   sources = [ "video_sink/video_sink_filter.cpp" ]
   public_configs = [ "../../../../:histreamer_presets" ]
   public_deps = [ ":media_synchronous_sink" ]
+  external_deps = [ "hilog:libhilog" ]
   if (hst_is_standard_sys) {
-    external_deps = [
+    external_deps += [
       "graphic_surface:surface",
       "ipc:ipc_single",
     ]
@@ -81,8 +84,9 @@ ohos_source_set("output_sink_filter") {
     "../../../foundation:histreamer_foundation",
     "../../../pipeline:histreamer_base",
   ]
+  external_deps = [ "hilog:libhilog" ]
   if (hst_is_standard_sys) {
-    external_deps = [
+    external_deps += [
       "graphic_surface:surface",
       "ipc:ipc_single",
     ]

@@ -46,6 +46,7 @@ if (hst_is_mini_sys) {
       "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
       "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",
     ]
+    external_deps = [ "hilog:libhilog" ]
   }
 } else {
   ohos_shared_library("histreamer_plugin_Minimp3Demuxer") {

@@ -36,6 +36,7 @@ ohos_source_set("histreamer_pipeline_base") {
     "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
     "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_core",
   ]
+  external_deps += [ "hilog:libhilog" ]
   if (hst_is_standard_sys) {
     external_deps = [
       "graphic_surface:surface",
@@ -66,6 +67,7 @@ if (hst_is_lite_sys) {
     }
     sources = []
     deps = [ ":histreamer_pipeline_base" ]
+    external_deps = [ "hilog:libhilog" ]
   }
 } else {
   import("//build/ohos.gni")
@@ -104,6 +106,7 @@ if (hst_is_lite_sys) {
     }
     sources = []
     deps = [ "filters/codec:codec_filters" ]
+    external_deps = [ "hilog:libhilog" ]
   }
 } else {
   import("//build/ohos.gni")
@@ -138,6 +141,7 @@ ohos_source_set("histreamer_pipeline") {
     "filters/source:audio_capture_filter",
     "filters/source:media_source_filter",
   ]
+  external_deps = [ "hilog:libhilog" ]
   if (media_foundation_enable_video) {
     public_deps += [ "filters/sink:video_sink_filter" ]
     if (media_foundation_enable_recorder) {
@@ -156,6 +160,7 @@ if (hst_is_lite_sys) {
     }
     sources = []
     deps = [ ":histreamer_pipeline" ]
+    external_deps = [ "hilog:libhilog" ]
   }
 } else {
   import("//build/ohos.gni")
