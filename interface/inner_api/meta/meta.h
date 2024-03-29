@@ -69,6 +69,13 @@ extern Any GetDefaultAnyValue(const TagType& tag);
                                                              \
     template<TagTypeCharSeq tagCharSeq>                      \
     inline typename std::enable_if<(condition), bool>::type  \
+    Set(std::nullptr_t)                                      \
+    {                                                        \
+        return false;                                        \
+    }                                                        \
+                                                             \
+    template<TagTypeCharSeq tagCharSeq>                      \
+    inline typename std::enable_if<(condition), bool>::type  \
     Get(Any& value) const                                    \
     {                                                        \
         TagType tag = tagCharSeq;                            \
@@ -334,6 +341,9 @@ public:
     template <typename T>
     void SetData(TagTypeCharSeq tag, const T& value)
     {
+        if (tag == nullptr) {
+            return;
+        }
         map_[tag] = value;
     }
 
@@ -347,6 +357,9 @@ public:
     template <int N>
     void SetData(TagTypeCharSeq tag, char const (&value)[N])
     {
+        if (tag == nullptr) {
+            return;
+        }
         std::string strValue = value;
         map_[tag] = std::move(strValue);
     }
