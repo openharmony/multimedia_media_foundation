@@ -18,7 +18,7 @@
 
 #include <cstdint> // NOLINT: using int32_t in this file
 #include <string>
-#include "../meta/any.h"
+#include "meta/any.h"
 
 namespace OHOS {
 namespace Media {

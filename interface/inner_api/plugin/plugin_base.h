@@ -20,7 +20,7 @@
 #include "plugin_event.h"
 #include "meta/meta_key.h"
 #include "meta/media_types.h"
-#include "../meta/meta.h"
+#include "meta/meta.h"
 #include "common/status.h"
 
 namespace OHOS {

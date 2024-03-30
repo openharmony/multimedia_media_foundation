@@ -53,7 +53,7 @@ if (hst_is_lite_sys) {
       public_deps = [ "//third_party/bounds_checking_function:libsec_static" ]
     } else {
       deps += [ "//base/hiviewdfx/hilog_lite/frameworks/featured:hilog_shared" ]
-      public_deps = [ "//third_party/bounds_checking_function:libsec_shared" ]
+      public_external_deps = [ "bounds_checking_function:libsec_shared" ]
     }
 
     if (defined(config_ohos_histreamer_stack_size) &&
@@ -84,8 +84,8 @@ if (hst_is_lite_sys) {
       "//foundation/multimedia/media_foundation:histreamer_presets",
     ]
     public_deps = [ "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_intf" ]
-    deps = [ "//third_party/bounds_checking_function:libsec_shared" ]
     external_deps = [
+      "bounds_checking_function:libsec_shared",
       "graphic_surface:surface",
       "hilog:libhilog",
       "hitrace:hitrace_meter",

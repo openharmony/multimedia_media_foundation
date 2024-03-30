@@ -19,7 +19,7 @@
 #include <fstream>
 #include <thread>
 #include "gtest/gtest.h"
-#include "../helper/test_player.hpp"
+#include "scenetest/helper/test_player.hpp"
 #include "foundation/log.h"
 #include "foundation/osal/filesystem/file_system.h"
 #include "i_engine_factory.h"
