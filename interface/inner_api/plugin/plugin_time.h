@@ -87,6 +87,11 @@ inline bool Sec2HstTime (int64_t sec, int64_t& hTime)
     hTime = sec * HST_SECOND;
     return true;
 }
+
+inline int64_t Us2Ms(int64_t us)
+{
+    return us / HST_USECOND;
+}
 } // Plugins
 } // Media
 } // OHOS
