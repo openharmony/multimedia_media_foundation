@@ -779,8 +779,8 @@ HWTEST_F(MetaInnerUnitTest, SetGet_Data_DrmStruct_Using_Parcel, TestSize.Level1)
     drmCencInfoIn->firstEncryptOffset = 0;
     drmCencInfoIn->subSampleNum = 1;
     for (uint32_t i = 0; i < drmCencInfoIn->subSampleNum; i++) {
-        drmCencInfoIn->subSample[i].clearHeaderLen = 0x10;
-        drmCencInfoIn->subSample[i].payLoadLen = 0;
+        drmCencInfoIn->subSamples[i].clearHeaderLen = 0x10;
+        drmCencInfoIn->subSamples[i].payLoadLen = 0;
     }
     std::vector<uint8_t> drmCencVecIn((uint8_t *)drmCencInfoIn,
         ((uint8_t *)drmCencInfoIn) + sizeof(Plugins::MetaDrmCencInfo));
