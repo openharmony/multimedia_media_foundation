@@ -95,6 +95,45 @@ HWTEST_F(MetaInnerUnitTest, SetGet_Int32, TestSize.Level1)
 }
 
 /**
+ * @tc.name: SetGet_null
+ * @tc.desc: SetGet_null
+ * @tc.type: FUNC
+ */
+HWTEST_F(MetaInnerUnitTest, SetGet_null, TestSize.Level1)
+{
+    bool valueOut = false;
+    bool valueIn = true;
+    bool ret = metaIn->Set<Tag::VIDEO_COLOR_RANGE>(nullptr);
+    EXPECT_EQ(ret, false);
+    ret &= metaIn->Set<Tag::MEDIA_TITLE>(nullptr);
+    EXPECT_EQ(ret, false);
+    ret &= metaIn->Set<Tag::USER_PUSH_DATA_TIME>(nullptr);
+    EXPECT_EQ(ret, false);
+    ret &= metaIn->Set<Tag::VIDEO_CROP_LEFT>(nullptr);
+    EXPECT_EQ(ret, false);
+    ret &= metaIn->Set<Tag::VIDEO_BIT_STREAM_FORMAT>(nullptr);
+    EXPECT_EQ(ret, false);
+    ret &= metaIn->Set<Tag::MEDIA_FILE_TYPE>(nullptr);
+    metaIn->Get<Tag::VIDEO_COLOR_RANGE>(valueOut);
+    EXPECT_NE(valueOut, valueIn);
+    EXPECT_EQ(ret, false);
+}
+
+/**
+ * @tc.name: SetGet_Bool
+ * @tc.desc: SetGet_Bool
+ * @tc.type: FUNC
+ */
+HWTEST_F(MetaInnerUnitTest, SetGet_Bool, TestSize.Level1)
+{
+    bool valueOut = false;
+    bool valueIn = true;
+    metaIn->Set<Tag::VIDEO_COLOR_RANGE>(valueIn);
+    metaIn->Get<Tag::VIDEO_COLOR_RANGE>(valueOut);
+    EXPECT_EQ(valueOut, valueIn);
+}
+
+/**
  * @tc.name: SetGet_Double
  * @tc.desc: SetGet_Double
  * @tc.type: FUNC
@@ -379,24 +418,48 @@ map<TagType, int32_t> testInt32Data = {
      static_cast<int32_t>(Plugins::TemporalGopReferenceMode::JUMP_REFERENCE)},
     // UINT8_T
     {Tag::AUDIO_AAC_PROFILE, static_cast<int32_t>(Plugins::AudioAacProfile::ELD)},
-    {Tag::AUDIO_AAC_STREAM_FORMAT, static_cast<int32_t>(Plugins::AudioAacStreamFormat::ADIF)},
+    {Tag::AUDIO_AAC_STREAM_FORMAT, static_cast<int32_t>(Plugins::AudioAacStreamFormat::ADIF)}};
+
+    map<TagType, bool> testBoolData = {
     // Bool
-    {Tag::VIDEO_COLOR_RANGE, 1},
-    {Tag::VIDEO_REQUEST_I_FRAME, 0},
-    {Tag::MEDIA_HAS_VIDEO, 1},
-    {Tag::MEDIA_HAS_AUDIO, 0},
-    {Tag::MEDIA_END_OF_STREAM, 1},
-    {Tag::VIDEO_IS_HDR_VIVID, 1},
-    {Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE, 1},
-    {Tag::VIDEO_ENCODER_ENABLE_TEMPORAL_SCALABILITY, 1},
-    {Tag::VIDEO_ENCODER_PER_FRAME_MARK_LTR, 1},
-    {Tag::VIDEO_PER_FRAME_IS_LTR, 1},
-    {Tag::VIDEO_ENABLE_LOW_LATENCY, 1},
-    {Tag::VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK, 1}};
+    {Tag::VIDEO_COLOR_RANGE, true},
+    {Tag::VIDEO_REQUEST_I_FRAME, false},
+    {Tag::MEDIA_HAS_VIDEO, true},
+    {Tag::MEDIA_HAS_AUDIO, false},
+    {Tag::MEDIA_END_OF_STREAM, true},
+    {Tag::VIDEO_IS_HDR_VIVID, true},
+    {Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE, true},
+    {Tag::VIDEO_ENCODER_ENABLE_TEMPORAL_SCALABILITY, true},
+    {Tag::VIDEO_ENCODER_PER_FRAME_MARK_LTR, true},
+    {Tag::VIDEO_PER_FRAME_IS_LTR, true},
+    {Tag::VIDEO_ENABLE_LOW_LATENCY, true},
+    {Tag::VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK, true}};
 
 /**
- * @tc.name: SetGet_MetaData_All_As_Int32_Using_Parcel
- * @tc.desc: SetGet_MetaData_All_As_Int32_Using_Parcel
+ * @tc.name: SetGet_MetaData_All_As_Bool_Using_ParcelPackage
+ * @tc.desc: SetGet_MetaData_All_As_Bool_Using_ParcelPackage
+ * @tc.type: FUNC
+ */
+HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_All_As_Bool_Using_ParcelPackage, TestSize.Level1)
+{
+    for (auto item : testBoolData) {
+        int32_t valueIn = item.second;
+        SetMetaData(*metaIn, item.first, valueIn);
+    }
+    ASSERT_TRUE(metaIn->ToParcel(*parcel));
+    ASSERT_TRUE(metaOut->FromParcel(*parcel));
+    for (auto item : testBoolData) {
+        int32_t valueIn = item.second;
+        int32_t valueOut = 0;
+        ASSERT_TRUE(GetMetaData(*metaOut, item.first, valueOut));
+        std::cout <<  item.first << " , " << valueOut << " , " << valueIn << std::endl;
+        EXPECT_EQ(valueOut, valueIn);
+    }
+}
+
+/**
+ * @tc.name: SetGet_MetaData_All_As_Int32_Using_ParcelPackage
+ * @tc.desc: SetGet_MetaData_All_As_Int32_Using_ParcelPackage
  * @tc.type: FUNC
  */
 HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_All_As_Int32_Using_ParcelPackage, TestSize.Level1)
@@ -716,8 +779,8 @@ HWTEST_F(MetaInnerUnitTest, SetGet_Data_DrmStruct_Using_Parcel, TestSize.Level1)
     drmCencInfoIn->firstEncryptOffset = 0;
     drmCencInfoIn->subSampleNum = 1;
     for (uint32_t i = 0; i < drmCencInfoIn->subSampleNum; i++) {
-        drmCencInfoIn->subSample[i].clearHeaderLen = 0x10;
-        drmCencInfoIn->subSample[i].payLoadLen = 0;
+        drmCencInfoIn->subSamples[i].clearHeaderLen = 0x10;
+        drmCencInfoIn->subSamples[i].payLoadLen = 0;
     }
     std::vector<uint8_t> drmCencVecIn((uint8_t *)drmCencInfoIn,
         ((uint8_t *)drmCencInfoIn) + sizeof(Plugins::MetaDrmCencInfo));

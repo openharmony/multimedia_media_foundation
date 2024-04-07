@@ -259,6 +259,13 @@ enum struct MetaDrmCencAlgorithm : uint32_t {
     META_DRM_ALG_CENC_SM4_CTR,
 };
 
+enum struct MetaDrmCencInfoMode : uint32_t {
+    /* key/iv/subsample set. */
+    META_DRM_CENC_INFO_KEY_IV_SUBSAMPLES_SET = 0x0,
+    /* key/iv/subsample not set. */
+    META_DRM_CENC_INFO_KEY_IV_SUBSAMPLES_NOT_SET = 0x1,
+};
+
 struct _MetaDrmSubSample {
     uint32_t clearHeaderLen;
     uint32_t payLoadLen;
@@ -271,19 +278,16 @@ struct _MetaDrmCencInfo {
     uint32_t keyIdLen;
     uint8_t iv[META_DRM_IV_SIZE];
     uint32_t ivLen;
-    uint32_t isAmbiguity;
     uint32_t encryptBlocks;
     uint32_t skipBlocks;
     uint32_t firstEncryptOffset;
-    MetaDrmSubSample subSample[META_DRM_MAX_SUB_SAMPLE_NUM];
+    MetaDrmSubSample subSamples[META_DRM_MAX_SUB_SAMPLE_NUM];
     uint32_t subSampleNum;
+    MetaDrmCencInfoMode mode;
 };
 typedef struct _MetaDrmCencInfo MetaDrmCencInfo;
 
 struct _MetaDrmInfo {
-    MetaDrmCencAlgorithm algo;
-    uint32_t encryptBlocks;
-    uint32_t skipBlocks;
     uint32_t uuidLen;
     uint8_t uuid[META_DRM_MAX_DRM_UUID_LEN];
     uint32_t psshLen;
