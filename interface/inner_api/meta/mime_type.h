@@ -49,7 +49,7 @@ public:
 
     static constexpr const char MEDIA_MP4[] = "media/mp4";
     static constexpr const char MEDIA_M4A[] = "media/m4a";
-    static constexpr const char MEDIA_M4A[] = "media/amr";
+    static constexpr const char MEDIA_AMR[] = "media/amr";
 };
 } // namespace Plugins
 } // namespace Media
