@@ -163,7 +163,7 @@
               },
               {
                 "type": "so",
-                "name": "//foundation/multimedia/media_foundation/src/capi:capi_packages",
+                "name": "//foundation/multimedia/media_foundation/src/capi:native_media_core",
                 "header": {
                   "header_files": [
                     "native_avbuffer_info.h",
