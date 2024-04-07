@@ -60,7 +60,7 @@ if (hst_is_lite_sys) {
     if (hst_is_mini_sys) {
       public_deps = [ "//third_party/bounds_checking_function:libsec_static" ]
     } else {
-      public_deps = [ "//third_party/bounds_checking_function:libsec_shared" ]
+      public_external_deps = [ "bounds_checking_function:libsec_shared" ]
     }
   }
 } else {
@@ -76,7 +76,8 @@ if (hst_is_lite_sys) {
       ":hst_plugin_intf_config",
       "//foundation/multimedia/media_foundation:histreamer_presets",
     ]
-    deps = [ "//third_party/bounds_checking_function:libsec_shared" ]
+    public_external_deps = [ "player_framework:media_client" ]
+    external_deps = [ "bounds_checking_function:libsec_shared" ]
     if (media_foundation_enable_video) {
       sources += [
         "common/share_allocator.cpp",
@@ -84,7 +85,7 @@ if (hst_is_lite_sys) {
         "common/surface_allocator.cpp",
         "common/surface_memory.cpp",
       ]
-      external_deps = [
+      external_deps += [
         "c_utils:utils",
         "graphic_surface:surface",
         "graphic_surface:sync_fence",
@@ -160,6 +161,7 @@ ohos_source_set("ffmpeg_convert") {
     "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
     "//foundation/multimedia/media_foundation/engine/pipeline:histreamer_base",
   ]
+
   if (hst_is_standard_sys) {
     public_deps += [ "//third_party/ffmpeg:libohosffmpeg" ]
     external_deps = [ "hilog:libhilog" ]
@@ -232,12 +234,14 @@ ohos_source_set("histreamer_plugin_core") {
       "HST_PLUGIN_PATH=\"/usr/lib\"",
       "HST_PLUGIN_FILE_TAIL=\".so\"",
     ]
-    include_dirs +=
-        [ "//foundation/multimedia/media_utils_lite/interfaces/kits" ]
+    include_dirs += [
+      "//foundation/multimedia/media_utils_lite/interfaces/kits",
+      "//drivers/peripheral/display/interfaces/include",
+    ]
     if (hst_is_mini_sys) {
       public_deps += [ "//third_party/bounds_checking_function:libsec_static" ]
     } else {
-      public_deps += [ "//third_party/bounds_checking_function:libsec_shared" ]
+      public_external_deps = [ "bounds_checking_function:libsec_shared" ]
     }
   } else {
     if (target_cpu == "arm64" || is_emulator) {
@@ -249,17 +253,13 @@ ohos_source_set("histreamer_plugin_core") {
       "HST_PLUGIN_PATH=${hst_plugin_path}",
       "HST_PLUGIN_FILE_TAIL=\".z.so\"",
     ]
-    include_dirs += [
-      "//commonlibrary/c_utils/base/include",
-      "//foundation/graphic/graphic_surface/surface/include",
-      "//foundation/graphic/graphic_2d/interfaces/inner_api/",
-      "//foundation/multimedia/player_framework/interfaces/inner_api/native",
-      "//drivers/peripheral/display/interfaces/include",
-    ]
-    deps = [ "//third_party/bounds_checking_function:libsec_shared" ]
+    include_dirs += [ "//foundation/graphic/graphic_2d/interfaces/inner_api/" ]
     external_deps = [
+      "bounds_checking_function:libsec_shared",
+      "c_utils:utilsbase",
       "graphic_surface:surface",
       "ipc:ipc_single",
+      "player_framework:media_client",
     ]
   }
 }

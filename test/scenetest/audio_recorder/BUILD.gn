@@ -25,7 +25,10 @@ histreamer_unittest_cflags = [
 #################################################################################################################
 ohos_unittest("histreamer_audio_recorder_test") {
   module_out_path = module_output_path
-  include_dirs = [ "$histreamer_root_dir/engine" ]
+  include_dirs = [
+    "$histreamer_root_dir/engine",
+    "$histreamer_root_dir/test",
+  ]
   cflags = histreamer_unittest_cflags
   defines = []
   defines += player_framework_defines

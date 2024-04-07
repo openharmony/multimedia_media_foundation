@@ -48,26 +48,28 @@
         "rom": "622KB",
         "ram": "",
         "deps": {
-            "third_party": [
-                "ffmpeg",
-                "bounds_checking_function",
-                "curl"
-            ],
-            "components": [
-                "hilog",
-                "hilog_lite",
-                "hitrace",
-                "audio_framework",
-                "drivers_peripheral_codec",
-                "graphic_2d",
-                "graphic_surface",
-                "hdf_core",
-                "c_utils",
-                "init",
-                "player_framework",
-                "ipc",
-                "ffrt"
-            ]
+          "third_party": [
+            "curl",
+            "ffmpeg"
+          ],
+          "components": [
+              "hilog",
+              "hilog_lite",
+              "hitrace",
+              "audio_framework",
+              "drivers_peripheral_codec",
+              "graphic_2d",
+              "graphic_surface",
+              "hdf_core",
+              "c_utils",
+              "init",
+              "player_framework",
+              "ipc",
+              "ffrt",
+              "ffmpeg",
+              "bounds_checking_function",
+              "pulseaudio"
+          ]
         },
         "build": {
             "sub_component": [

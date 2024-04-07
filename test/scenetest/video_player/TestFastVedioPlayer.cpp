@@ -19,7 +19,7 @@
 #include <cmath>
 #include <thread>
 #include "foundation/log.h"
-#include "../helper/test_player.hpp"
+#include "scenetest/helper/test_player.hpp"
 
 #ifndef WIN32
 #include <sys/types.h>

@@ -26,6 +26,7 @@ histreamer_unittest_cflags = [
 ohos_unittest("histreamer_audio_player_test") {
   module_out_path = module_output_path
   include_dirs = [
+    "$histreamer_root_dir/test",
     "$histreamer_root_dir/engine",
     "$histreamer_root_dir/engine/scene/player",
   ]
