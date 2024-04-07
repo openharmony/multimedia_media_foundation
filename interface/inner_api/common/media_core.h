@@ -73,6 +73,7 @@ enum MediaServiceErrCode : ErrCode {
     MSERR_DATA_SOURCE_OBTAIN_MEM_ERROR,               // media data source get mem failed.
     MSERR_DATA_SOURCE_ERROR_UNKNOWN,                  // media data source error unknow.
     MSERR_AUD_INTERRUPT,                              // audio interrupted.
+    MSERR_USER_NO_PERMISSION,                         // user permission denied (AccessToken).
     MSERR_EXTEND_START      = MS_ERR_OFFSET + 0xF000, // extend err start.
 };
 
