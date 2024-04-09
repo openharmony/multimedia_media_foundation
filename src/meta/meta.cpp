@@ -384,7 +384,8 @@ Any GetDefaultAnyValue(const TagType &tag, AnyValueType type)
     return iter->second;
 }
 
-AnyValueType Meta::GetValueType(const TagType& key) const {
+AnyValueType Meta::GetValueType(const TagType& key) const
+{
     auto iter = map_.find(key);
     if (iter != map_.end()) {
         if (Any::IsSameTypeWith<int32_t>(iter->second)) {

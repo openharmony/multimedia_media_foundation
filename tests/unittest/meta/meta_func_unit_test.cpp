@@ -872,7 +872,7 @@ HWTEST_F(MetaInnerUnitTest, GetValueType_Data_Int32_And_UInt32, TestSize.Level1)
     uint32_t valueOutTwo = 0;
     uint32_t valueInTwo = 141;
     metaIn->SetData(key, valueInTwo);
-    AnyValueType type = metaIn->GetValueType(key);
+    type = metaIn->GetValueType(key);
     ASSERT_TRUE(type == AnyValueType::UINT32_T);
     metaIn->GetData(key, valueOutTwo);
     EXPECT_EQ(valueOutTwo, valueInTwo);
@@ -897,7 +897,7 @@ HWTEST_F(MetaInnerUnitTest, GetValueType_Data_Int64_And_UInt64, TestSize.Level1)
     uint64_t valueOutTwo = 0;
     uint64_t valueInTwo = 141;
     metaIn->SetData(key, valueInTwo);
-    AnyValueType type = metaIn->GetValueType(key);
+    type = metaIn->GetValueType(key);
     ASSERT_TRUE(type == AnyValueType::UINT64_T);
     metaIn->GetData(key, valueOutTwo);
     EXPECT_EQ(valueOutTwo, valueInTwo);
