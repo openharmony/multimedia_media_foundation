@@ -374,7 +374,12 @@ Any GetDefaultAnyValue(const TagType &tag, AnyValueType type)
 {
     auto iter = g_metadataDefaultValueMap.find(tag);
     if (iter == g_metadataDefaultValueMap.end()) {
-        return g_ValueTypeDefaultValueMap[type]; //INVALID_TYPE Default String
+        auto typeIter = g_ValueTypeDefaultValueMap.find(type);
+        if (typeIter != g_ValueTypeDefaultValueMap.end()) {
+            return typeIter->second;
+        } else {
+            return defaultString; //Default String type
+        }
     }
     return iter->second;
 }
@@ -406,7 +411,7 @@ AnyValueType Meta::GetValueType(const TagType& key) const {
             return AnyValueType::UINT64_T;
         } else {
             auto iter = g_metadataGetterSetterInt64Map.find(key);
-            if (iter == g_metadataGetterSetterInt64Map.end) {
+            if (iter == g_metadataGetterSetterInt64Map.end()) {
                 return AnyValueType::INT32_T;
             } else {
                 return AnyValueType::INT64_T;
