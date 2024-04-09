@@ -23,7 +23,7 @@
  *
  * 1. In meta_key.h, Add a Tag.
  * 2. In meta.h, Register Tag key Value mapping.
- *    Example: DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::TAGNAME, TAGTYPE, MetaValueType::VALUETYPE)
+ *    Example: DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::TAGNAME, TAGTYPE, AnyValueType::VALUETYPE)
  * 3. In meta.cpp, Register default value to g_metadataDefaultValueMap ({Tag::TAGNAME, defaultTAGTYPE}).
  * 4. In order to support Enum/Bool Value Getter Setter from AVFormat,
  *    In meta.cpp, Register Tag key getter setter function mapping.
@@ -346,19 +346,19 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::DRM_CENC_INFO, defaultVectorUInt8}
 };
 
-static std::map<MetaValueType, const Any &> g_ValueTypeDefaultValueMap = {
-    {MetaValueType::INVALID_TYPE, defaultString},
-    {MetaValueType::BOOL, defaultBool},
-    {MetaValueType::UINT8_T, defaultUInt8},
-    {MetaValueType::INT32_T, defaultInt32},
-    {MetaValueType::UINT32_T, defaultUInt32},
-    {MetaValueType::INT64_T, defaultInt64},
-    {MetaValueType::UINT64_T, defaultUInt64},
-    {MetaValueType::FLOAT, defaultFloat},
-    {MetaValueType::DOUBLE, defaultDouble},
-    {MetaValueType::VECTOR_UINT8, defaultVectorUInt8},
-    {MetaValueType::VECTOR_UINT32, defaultVectorUInt32},
-    {MetaValueType::STRING, defaultString},
+static std::map<AnyValueType, const Any &> g_ValueTypeDefaultValueMap = {
+    {AnyValueType::INVALID_TYPE, defaultString},
+    {AnyValueType::BOOL, defaultBool},
+    {AnyValueType::UINT8_T, defaultUInt8},
+    {AnyValueType::INT32_T, defaultInt32},
+    {AnyValueType::UINT32_T, defaultUInt32},
+    {AnyValueType::INT64_T, defaultInt64},
+    {AnyValueType::UINT64_T, defaultUInt64},
+    {AnyValueType::FLOAT, defaultFloat},
+    {AnyValueType::DOUBLE, defaultDouble},
+    {AnyValueType::VECTOR_UINT8, defaultVectorUInt8},
+    {AnyValueType::VECTOR_UINT32, defaultVectorUInt32},
+    {AnyValueType::STRING, defaultString},
 };
 
 Any GetDefaultAnyValue(const TagType& tag)
@@ -370,7 +370,7 @@ Any GetDefaultAnyValue(const TagType& tag)
     return iter->second;
 }
 
-Any Meta::GetDefaultAnyValue(const TagType &tag, MetaValueType type)
+Any GetDefaultAnyValue(const TagType &tag, AnyValueType type)
 {
     auto iter = g_metadataDefaultValueMap.find(tag);
     if (iter == g_metadataDefaultValueMap.end()) {
@@ -379,38 +379,41 @@ Any Meta::GetDefaultAnyValue(const TagType &tag, MetaValueType type)
     return iter->second;
 }
 
-MetaValueType Meta::GetValueType(const TagType& key) const {
+AnyValueType Meta::GetValueType(const TagType& key) const {
     auto iter = map_.find(key);
     if (iter != map_.end()) {
         if (Any::IsSameTypeWith<int32_t>(iter->second)) {
-            return MetaValueType::INT32_T;
+            return AnyValueType::INT32_T;
         } else if (Any::IsSameTypeWith<bool>(iter->second)) {
-            return MetaValueType::BOOL;
+            return AnyValueType::BOOL;
         } else if (Any::IsSameTypeWith<uint8_t>(iter->second)) {
-            return MetaValueType::UINT8_T;
+            return AnyValueType::UINT8_T;
         } else if (Any::IsSameTypeWith<uint32_t>(iter->second)) {
-            return MetaValueType::UINT32_T;
+            return AnyValueType::UINT32_T;
         } else if (Any::IsSameTypeWith<int64_t>(iter->second)) {
-            return MetaValueType::INT64_T;
+            return AnyValueType::INT64_T;
         } else if (Any::IsSameTypeWith<float>(iter->second)) {
-            return MetaValueType::FLOAT;
+            return AnyValueType::FLOAT;
         } else if (Any::IsSameTypeWith<double>(iter->second)) {
-            return MetaValueType::DOUBLE;
+            return AnyValueType::DOUBLE;
         } else if (Any::IsSameTypeWith<std::vector<uint8_t>>(iter->second)) {
-            return MetaValueType::VECTOR_UINT8;
+            return AnyValueType::VECTOR_UINT8;
         } else if (Any::IsSameTypeWith<std::vector<uint32_t>>(iter->second)) {
-            return MetaValueType::VECTOR_UINT32;
+            return AnyValueType::VECTOR_UINT32;
         } else if (Any::IsSameTypeWith<std::string>(iter->second)) {
-            return MetaValueType::STRING;
+            return AnyValueType::STRING;
         } else if (Any::IsSameTypeWith<uint64_t>(iter->second)) {
-            return MetaValueType::UINT64_T;
+            return AnyValueType::UINT64_T;
         } else {
-            int64_t valueTemp;
-            bool isLongValue = GetMetaData(this, std::string(key), valueTemp);
-            return isLongValue ? MetaValueType::INT64_T : MetaValueType::INT32_T;
+            auto iter = g_metadataGetterSetterInt64Map.find(key);
+            if (iter == g_metadataGetterSetterInt64Map.end) {
+                return AnyValueType::INT32_T;
+            } else {
+                return AnyValueType::INT64_T;
+            }
         }
     }
-    return MetaValueType::INVALID_TYPE;
+    return AnyValueType::INVALID_TYPE;
 }
 
 bool Meta::ToParcel(MessageParcel &parcel) const
@@ -448,7 +451,7 @@ bool Meta::FromParcel(MessageParcel &parcel)
 
     for (int32_t index = 0; index < size; index++) {
         std::string key = parcel.ReadString();
-        MetaValueType type = static_cast<MetaValueType>(parcel.ReadInt32());
+        AnyValueType type = static_cast<AnyValueType>(parcel.ReadInt32());
         Any value = GetDefaultAnyValue(key, type); //Init Default Value
         if (value.FromParcel(parcel)) {
             map_[key] = value;

@@ -96,6 +96,21 @@ struct IsValidCast {
 } // namespace
 namespace OHOS {
 namespace Media {
+
+enum struct AnyValueType : int32_t {
+    INVALID_TYPE = 1,
+    BOOL,
+    UINT8_T,
+    INT32_T,
+    UINT32_T,
+    INT64_T,
+    UINT64_T,
+    FLOAT,
+    DOUBLE,
+    VECTOR_UINT8,
+    VECTOR_UINT32,
+    STRING
+};
 /**
  * @brief BadAnyCast exception, which is thrown when error occurs in AnyCast
  *
