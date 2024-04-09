@@ -72,6 +72,7 @@ enum class OutputFormat : uint32_t {
     MPEG_4 = 2,
     M4A = 6,
     AMR = 8,
+    MP3 = 9,
 };
 
 struct Location {

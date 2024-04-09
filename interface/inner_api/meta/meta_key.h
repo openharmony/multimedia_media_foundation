@@ -107,7 +107,7 @@ public:
     static constexpr const char AUDIO_OUTPUT_CHANNELS[] = "audio.output.channels";    ///< sink output channel num
     static constexpr const char AUDIO_OUTPUT_CHANNEL_LAYOUT[] =
         "audio.output.channel.layout"; ///< @see AudioChannelLayout, sink output channel layout
-    static constexpr const char AUDIO_COMPRESSION_LEVEL[] = "compression_level";         ///< compression level
+    static constexpr const char AUDIO_COMPRESSION_LEVEL[] = "audio_compression_level";         ///< compression level
     static constexpr const char AUDIO_MAX_INPUT_SIZE[] = "audio.max.input.size";         ///< max input size
     static constexpr const char AUDIO_MAX_OUTPUT_SIZE[] = "audio.max.output.size";       ///< max output size
     static constexpr const char AUDIO_BITS_PER_CODED_SAMPLE[] = "bits_per_coded_sample"; ///< bits per coded sample
