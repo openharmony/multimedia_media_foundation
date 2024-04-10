@@ -68,7 +68,9 @@
               "ffrt",
               "ffmpeg",
               "bounds_checking_function",
-              "pulseaudio"
+              "pulseaudio",
+              "hisysevent",
+              "window_manager"
           ]
         },
         "build": {
