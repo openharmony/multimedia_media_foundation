@@ -31,7 +31,6 @@ namespace Media {
 enum struct Status : int32_t {
     END_OF_STREAM = 1,         ///< Read source when end of stream
     OK = 0,                    ///< The execution result is correct.
-    PREPARE_BEFORE_START_END = 100,  ///< prepare before start end.
     NO_ERROR = OK,             ///< Same as Status::OK
     ERROR_UNKNOWN = -1,        ///< An unknown error occurred.
     ERROR_PLUGIN_ALREADY_EXISTS = -2, ///< The plugin already exists, usually occurs when in plugin registered.
