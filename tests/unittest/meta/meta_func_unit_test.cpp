@@ -824,7 +824,7 @@ HWTEST_F(MetaInnerUnitTest, SetGet_self_Data_String_Using_Parcel, TestSize.Level
  * @tc.desc: SetGet_self_Data_float_Using_Parcel
  * @tc.type: FUNC
  */
-HWTEST_F(MetaInnerUnitTest, SetGet_self_Data_String_Using_Parcel, TestSize.Level1)
+HWTEST_F(MetaInnerUnitTest, SetGet_self_Data_float_Using_Parcel, TestSize.Level1)
 {
     float valueOut = 0.0f;
     float valueIn = 1.01f;
