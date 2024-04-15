@@ -137,6 +137,7 @@ HWTEST_F(TaskInnerUnitTest, TaskRegisterJobNotRunning, TestSize.Level1)
                 runningState = false;
             }
         }
+        return 0;
     });
     bool rtv = task2->IsTaskRunning();
     EXPECT_EQ(false, rtv);
@@ -161,6 +162,7 @@ HWTEST_F(TaskInnerUnitTest, TaskRegisterJobRun, TestSize.Level1)
                 runningState = false;
             }
         }
+        return 0;
     });
     task3->Start();
     sleep(1);
@@ -186,6 +188,7 @@ HWTEST_F(TaskInnerUnitTest, TaskRegisterJobPause, TestSize.Level1)
                 runningState = false;
             }
         }
+        return 0;
     });
     task4->Start();
     task4->Pause();
@@ -216,6 +219,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseResume, TestSize.Level1)
                 runningState = false;
             }
         }
+        return 0;
     });
     task5->Start();
     task5->Pause();
@@ -247,6 +251,7 @@ HWTEST_F(TaskInnerUnitTest, TaskRegisterJobPauseAsync, TestSize.Level1)
                 runningState = false;
             }
         }
+        return 0;
     });
     task6->Start();
     task6->PauseAsync();
@@ -278,6 +283,7 @@ HWTEST_F(TaskInnerUnitTest, TaskRegisterJobStopAsync, TestSize.Level1)
                 runningState = false;
             }
         }
+        return 0;
     });
     task7->Start();
     sleep(1);
@@ -305,6 +311,7 @@ HWTEST_F(TaskInnerUnitTest, TaskRegisterJobStop, TestSize.Level1)
                 runningState = false;
             }
         }
+        return 0;
     });
     task8->Start();
     sleep(2);
@@ -332,6 +339,7 @@ HWTEST_F(TaskInnerUnitTest, TaskRegisterJobStopResume, TestSize.Level1)
                 runningState = false;
             }
         }
+        return 0;
     });
     task9->Start();
     sleep(2);
@@ -364,6 +372,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart, TestSize.Level1)
                 runningState = false;
             }
         }
+        return 0;
     });
     task10->Start();
     sleep(3);
@@ -399,6 +408,7 @@ HWTEST_F(TaskInnerUnitTest, WaitFor_Succ, TestSize.Level1)
                 runningState = false;
             }
         }
+        return 0;
     });
     task1->Start();
     int timeoutMs = 1000;
@@ -426,6 +436,7 @@ HWTEST_F(TaskInnerUnitTest, WaitFor_Failed, TestSize.Level1)
                 runningState = false;
             }
         }
+        return 0;
     });
     task2->Start();
     int timeoutMs = 100;

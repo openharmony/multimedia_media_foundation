@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2023 Huawei Device Co., Ltd.
+ * Copyright (c) 2021-2024 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -16,16 +16,8 @@
 #ifndef HISTREAMER_FOUNDATION_OSAL_TASK_H
 #define HISTREAMER_FOUNDATION_OSAL_TASK_H
 
-#include <atomic>
 #include <functional>
 #include <string>
-
-#include "osal/task/condition_variable.h"
-#include "osal/task/mutex.h"
-
-#ifndef MEDIA_FOUNDATION_FFRT
-    #include "osal/task/thread.h"
-#endif
 
 namespace OHOS {
 namespace Media {
@@ -38,13 +30,19 @@ enum class TaskPriority : int {
     HIGHEST,
 };
 
-class TaskNative;
+enum class TaskType : int {
+    GLOBAL,
+    VIDEO,
+    AUDIO,
+    SINGLETON,
+};
+
+class TaskInner;
 
 class Task {
 public:
-    explicit Task(std::string name, TaskPriority priority = TaskPriority::HIGH);
-
-    explicit Task(std::string name, std::function<void()> job, TaskPriority priority = TaskPriority::HIGH);
+    explicit Task(std::string name, std::string groupId = "", TaskType type = TaskType::SINGLETON,
+        TaskPriority priority = TaskPriority::NORMAL, bool singleLoop = true);
 
     virtual ~Task();
 
@@ -58,35 +56,19 @@ public:
 
     virtual void PauseAsync();
 
-    virtual void DoTask();
+    virtual void RegisterJob(const std::function<int64_t()>& job);
 
-    void RegisterJob(std::function<void()> job);
+    virtual void SubmitJobOnce(const std::function<void()>& job, int64_t delayUs = 0, bool wait = false);
 
-    bool IsTaskRunning() { return runningState_ == RunningState::STARTED; }
+    virtual void SubmitJob(const std::function<void()>& job, int64_t delayUs = 0, bool wait = false);
 
+    virtual bool IsTaskRunning();
+
+    static void SleepInTask(unsigned ms);
 private:
-    enum class RunningState {
-        STARTED,
-        PAUSING,
-        PAUSED,
-        STOPPING,
-        STOPPED,
-    };
-
-    void Run();
-
-    Mutex stateMutex_{};
-    ConditionVariable syncCond_{};
-    const std::string name_;
-    const TaskPriority priority_;
-    std::atomic<RunningState> runningState_{RunningState::STOPPED};
-    std::function<void()> job_ = [this] { DoTask(); };
-#ifdef MEDIA_FOUNDATION_FFRT
-    std::unique_ptr<ffrt::thread> loop_;
-#else
-    std::unique_ptr<Thread> loop_;
-#endif
+    std::shared_ptr<TaskInner> taskInner_;
 };
 } // namespace Media
 } // namespace OHOS
 #endif // HISTREAMER_FOUNDATION_OSAL_TASK_H
+

@@ -314,7 +314,7 @@ Status AVBufferQueueImpl::RequestBuffer(
         if (ret == Status::OK) {
             return RequestReuseBuffer(buffer, configCopy);
         }
-        FALSE_RETURN_V(GetCachedBufferCount() < GetQueueSize(), Status::ERROR_NO_FREE_BUFFER);
+        if (GetCachedBufferCount() >= GetQueueSize()) return Status::ERROR_NO_FREE_BUFFER;
     }
 
     NOK_RETURN(AllocBuffer(buffer, configCopy));

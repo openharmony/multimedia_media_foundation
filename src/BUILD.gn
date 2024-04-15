@@ -133,6 +133,7 @@ if (hst_is_standard_sys) {
         "$histreamer_root_dir/src/osal/task/pthread/condition_variable.cpp",
         "$histreamer_root_dir/src/osal/task/pthread/jobutils.cpp",
         "$histreamer_root_dir/src/osal/task/pthread/mutex.cpp",
+        "$histreamer_root_dir/src/osal/task/pthread/pipeline_threadpool.cpp",
         "$histreamer_root_dir/src/osal/task/pthread/task.cpp",
         "$histreamer_root_dir/src/osal/task/pthread/thread.cpp",
       ]
@@ -141,7 +142,6 @@ if (hst_is_standard_sys) {
     sources += [
       "$histreamer_root_dir/src/filter/filter.cpp",
       "$histreamer_root_dir/src/filter/filter_factory.cpp",
-      "$histreamer_root_dir/src/filter/filter_loop.cpp",
       "$histreamer_root_dir/src/pipeline/pipeline.cpp",
     ]
 

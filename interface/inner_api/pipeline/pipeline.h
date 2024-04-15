@@ -32,7 +32,8 @@ class Pipeline : public EventReceiver {
 public:
     ~Pipeline();
 
-    void Init(const std::shared_ptr<EventReceiver>& receiver, const std::shared_ptr<FilterCallback>& callback);
+    void Init(const std::shared_ptr<EventReceiver>& receiver,
+        const std::shared_ptr<FilterCallback>& callback, std::string playerId);
 
     Status Prepare();
 
@@ -62,7 +63,10 @@ public:
                          const std::vector<std::shared_ptr<Filter>>& filters, StreamType type);
 
     void OnEvent(const Event& event) override;
+
+    static int32_t GetNextPipelineId();
 private:
+    std::string playerId_;
     Mutex mutex_ {};
     std::vector<std::shared_ptr<Filter>> filters_ {};
     std::shared_ptr<EventReceiver> eventReceiver_ {nullptr};
