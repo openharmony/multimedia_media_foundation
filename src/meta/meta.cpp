@@ -392,10 +392,6 @@ AnyValueType Meta::GetValueType(const TagType& key) const
             return AnyValueType::INT32_T;
         } else if (Any::IsSameTypeWith<bool>(iter->second)) {
             return AnyValueType::BOOL;
-        } else if (Any::IsSameTypeWith<uint8_t>(iter->second)) {
-            return AnyValueType::UINT8_T;
-        } else if (Any::IsSameTypeWith<uint32_t>(iter->second)) {
-            return AnyValueType::UINT32_T;
         } else if (Any::IsSameTypeWith<int64_t>(iter->second)) {
             return AnyValueType::INT64_T;
         } else if (Any::IsSameTypeWith<float>(iter->second)) {
@@ -404,12 +400,8 @@ AnyValueType Meta::GetValueType(const TagType& key) const
             return AnyValueType::DOUBLE;
         } else if (Any::IsSameTypeWith<std::vector<uint8_t>>(iter->second)) {
             return AnyValueType::VECTOR_UINT8;
-        } else if (Any::IsSameTypeWith<std::vector<uint32_t>>(iter->second)) {
-            return AnyValueType::VECTOR_UINT32;
         } else if (Any::IsSameTypeWith<std::string>(iter->second)) {
             return AnyValueType::STRING;
-        } else if (Any::IsSameTypeWith<uint64_t>(iter->second)) {
-            return AnyValueType::UINT64_T;
         } else {
             auto iter = g_metadataGetterSetterInt64Map.find(key);
             if (iter == g_metadataGetterSetterInt64Map.end()) {
