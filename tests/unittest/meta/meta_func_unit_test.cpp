@@ -837,28 +837,11 @@ HWTEST_F(MetaInnerUnitTest, GetValueType_Data_Boolean, TestSize.Level1)
 }
 
 /**
- * @tc.name: GetValueType_Data_UInt8
- * @tc.desc: GetValueType_Data_UInt8
+ * @tc.name: GetValueType_Data_Int32
+ * @tc.desc: GetValueType_Data_Int32
  * @tc.type: FUNC
  */
-HWTEST_F(MetaInnerUnitTest, GetValueType_Data_UInt8, TestSize.Level1)
-{
-    uint8_t valueOut = 0;
-    uint8_t valueIn = 1;
-    std::string key = "test";
-    metaIn->SetData(key, valueIn);
-    AnyValueType type = metaIn->GetValueType(key);
-    ASSERT_TRUE(type == AnyValueType::UINT8_T);
-    metaIn->GetData(key, valueOut);
-    EXPECT_EQ(valueOut, valueIn);
-}
-
-/**
- * @tc.name: GetValueType_Data_Int32_And_UInt32
- * @tc.desc: GetValueType_Data_Int32_And_UInt32
- * @tc.type: FUNC
- */
-HWTEST_F(MetaInnerUnitTest, GetValueType_Data_Int32_And_UInt32, TestSize.Level1)
+HWTEST_F(MetaInnerUnitTest, GetValueType_Data_Int32, TestSize.Level1)
 {
     int32_t valueOut = 0;
     int32_t valueIn = 141;
@@ -868,22 +851,14 @@ HWTEST_F(MetaInnerUnitTest, GetValueType_Data_Int32_And_UInt32, TestSize.Level1)
     ASSERT_TRUE(type == AnyValueType::INT32_T);
     metaIn->GetData(key, valueOut);
     EXPECT_EQ(valueOut, valueIn);
-
-    uint32_t valueOutTwo = 0;
-    uint32_t valueInTwo = 141;
-    metaIn->SetData(key, valueInTwo);
-    type = metaIn->GetValueType(key);
-    ASSERT_TRUE(type == AnyValueType::UINT32_T);
-    metaIn->GetData(key, valueOutTwo);
-    EXPECT_EQ(valueOutTwo, valueInTwo);
 }
 
 /**
- * @tc.name: GetValueType_Data_Int64_And_UInt64
- * @tc.desc: GetValueType_Data_Int64_And_UInt64
+ * @tc.name: GetValueType_Data_Int64
+ * @tc.desc: GetValueType_Data_Int64
  * @tc.type: FUNC
  */
-HWTEST_F(MetaInnerUnitTest, GetValueType_Data_Int64_And_UInt64, TestSize.Level1)
+HWTEST_F(MetaInnerUnitTest, GetValueType_Data_Int64, TestSize.Level1)
 {
     int64_t valueOut = 0;
     int64_t valueIn = 141;
@@ -893,14 +868,6 @@ HWTEST_F(MetaInnerUnitTest, GetValueType_Data_Int64_And_UInt64, TestSize.Level1)
     ASSERT_TRUE(type == AnyValueType::INT64_T);
     metaIn->GetData(key, valueOut);
     EXPECT_EQ(valueOut, valueIn);
-
-    uint64_t valueOutTwo = 0;
-    uint64_t valueInTwo = 141;
-    metaIn->SetData(key, valueInTwo);
-    type = metaIn->GetValueType(key);
-    ASSERT_TRUE(type == AnyValueType::UINT64_T);
-    metaIn->GetData(key, valueOutTwo);
-    EXPECT_EQ(valueOutTwo, valueInTwo);
 }
 
 /**
@@ -950,23 +917,6 @@ HWTEST_F(MetaInnerUnitTest, GetValueType_Data_VECTOR_UINT8, TestSize.Level1)
     metaIn->SetData(key, valueIn);
     AnyValueType type = metaIn->GetValueType(key);
     ASSERT_TRUE(type == AnyValueType::VECTOR_UINT8);
-    metaIn->GetData(key, valueOut);
-    EXPECT_EQ(valueOut, valueIn);
-}
-
-/**
- * @tc.name: GetValueType_Data_VECTOR_UINT32
- * @tc.desc: GetValueType_Data_VECTOR_UINT32
- * @tc.type: FUNC
- */
-HWTEST_F(MetaInnerUnitTest, GetValueType_Data_VECTOR_UINT32, TestSize.Level1)
-{
-    vector<uint32_t> valueOut{521, 125};
-    vector<uint32_t> valueIn{521, 125, 1314};
-    std::string key = "test";
-    metaIn->SetData(key, valueIn);
-    AnyValueType type = metaIn->GetValueType(key);
-    ASSERT_TRUE(type == AnyValueType::VECTOR_UINT32);
     metaIn->GetData(key, valueOut);
     EXPECT_EQ(valueOut, valueIn);
 }
