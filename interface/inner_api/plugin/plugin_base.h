@@ -26,6 +26,9 @@
 namespace OHOS {
 namespace Media {
 namespace Plugins {
+
+struct PluginBase;
+
 enum class ErrorType {
     PLUGIN_ERROR,
     ALGO_ERROR,
@@ -218,6 +221,11 @@ struct PluginBase {
     {
         (void)cb;
         return Status::OK;
+    }
+
+    virtual int GetScore()
+    {
+        return 0;
     }
 
 protected:
