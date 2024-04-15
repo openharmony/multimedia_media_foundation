@@ -820,6 +820,23 @@ HWTEST_F(MetaInnerUnitTest, SetGet_self_Data_String_Using_Parcel, TestSize.Level
 }
 
 /**
+ * @tc.name: SetGet_self_Data_float_Using_Parcel
+ * @tc.desc: SetGet_self_Data_float_Using_Parcel
+ * @tc.type: FUNC
+ */
+HWTEST_F(MetaInnerUnitTest, SetGet_self_Data_String_Using_Parcel, TestSize.Level1)
+{
+    float valueOut = 0.0f;
+    float valueIn = 1.01f;
+    std::string key = "myself";
+    metaIn->SetData(key, valueIn);
+    ASSERT_TRUE(metaIn->ToParcel(*parcel));
+    ASSERT_TRUE(metaOut->FromParcel(*parcel));
+    metaOut->GetData(key, valueOut);
+    EXPECT_EQ(valueOut, valueIn);
+}
+
+/**
  * @tc.name: GetValueType_Data_Boolean
  * @tc.desc: GetValueType_Data_Boolean
  * @tc.type: FUNC
