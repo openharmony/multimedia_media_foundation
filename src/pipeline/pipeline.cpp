@@ -67,6 +67,31 @@ Status Pipeline::Prepare()
     return ret;
 }
 
+Status Pipeline::PrepareFrame(bool renderFirstFrame)
+{
+    MEDIA_LOG_I("PrepareFrame enter.");
+    Status ret = Status::OK;
+    SubmitJobOnce([&] {
+        AutoLock lock(mutex_);
+        for (auto it = filters_.begin(); it != filters_.end(); ++it) {
+            auto rtv = (*it)->PrepareFrame(renderFirstFrame);
+            if (rtv != Status::OK) {
+                ret = rtv;
+                return;
+            }
+        }
+        for (auto it = filters_.begin(); it != filters_.end(); ++it) {
+            Status waitRet = (*it)->WaitPrepareFrame();
+            if (waitRet != Status::OK) {
+                ret = waitRet;
+                return;
+            }
+        }
+    });
+    MEDIA_LOG_I("PrepareFrame done ret = %{public}d", ret);
+    return ret;
+}
+
 Status Pipeline::Start()
 {
     MEDIA_LOG_I("Start enter.");

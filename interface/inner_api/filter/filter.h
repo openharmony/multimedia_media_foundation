@@ -106,6 +106,10 @@ public:
 
     virtual Status Prepare() final;
 
+    virtual Status PrepareFrame(bool renderFirstFrame);
+
+    virtual Status WaitPrepareFrame();
+
     virtual Status Start() final;
 
     virtual Status Pause() final;

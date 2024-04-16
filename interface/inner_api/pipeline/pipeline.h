@@ -37,6 +37,8 @@ public:
 
     Status Prepare();
 
+    Status PrepareFrame(bool renderFirstFrame);
+
     Status Start();
 
     Status Pause();
