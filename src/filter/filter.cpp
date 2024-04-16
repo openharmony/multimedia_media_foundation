@@ -101,6 +101,34 @@ Status Filter::PrepareDone()
     return ret;
 }
 
+Status Filter::PrepareFrame(bool renderFirstFrame)
+{
+    MEDIA_LOG_I("Filter::PrepareFrame %{public}s", name_.c_str());
+    for (auto iter : nextFiltersMap_) {
+        for (auto filter : iter.second) {
+            auto ret = filter->PrepareFrame(renderFirstFrame);
+            if (ret != Status::OK) {
+                return ret;
+            }
+        }
+    }
+    return Status::OK;
+}
+
+Status Filter::WaitPrepareFrame()
+{
+    MEDIA_LOG_I("Filter::WaitPrepareFrame %{public}s", name_.c_str());
+    for (auto iter : nextFiltersMap_) {
+        for (auto filter : iter.second) {
+            auto ret = filter->WaitPrepareFrame();
+            if (ret != Status::OK) {
+                return ret;
+            }
+        }
+    }
+    return Status::OK;
+}
+
 Status Filter::Start()
 {
     MEDIA_LOG_I("Filter::Start %{public}s, prevState:%{public}d", name_.c_str(), curState_);
