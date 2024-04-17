@@ -48,10 +48,7 @@
         "rom": "622KB",
         "ram": "",
         "deps": {
-          "third_party": [
-            "curl",
-            "ffmpeg"
-          ],
+          "third_party": ["curl"],
           "components": [
               "hilog",
               "hilog_lite",
@@ -70,7 +67,8 @@
               "bounds_checking_function",
               "pulseaudio",
               "hisysevent",
-              "window_manager"
+              "window_manager",
+              "ffmpeg"
           ]
         },
         "build": {

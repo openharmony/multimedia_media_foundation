@@ -36,7 +36,6 @@ config("hst_plugin_intf_config") {
     ]
     if (media_foundation_enable_video) {
       include_dirs += [
-        "//commonlibrary/c_utils/base/include",
         "//drivers/peripheral/display/interfaces/include",
         "//foundation/graphic/graphic_surface/surface/include",
         "//foundation/graphic/graphic_2d/interfaces/inner_api/",
@@ -57,10 +56,11 @@ if (hst_is_lite_sys) {
       ":hst_plugin_intf_config",
       "//foundation/multimedia/media_foundation:histreamer_presets",
     ]
+    public_external_deps = [ "c_utils:utils" ]
     if (hst_is_mini_sys) {
       public_deps = [ "//third_party/bounds_checking_function:libsec_static" ]
     } else {
-      public_external_deps = [ "bounds_checking_function:libsec_shared" ]
+      public_external_deps += [ "bounds_checking_function:libsec_shared" ]
     }
   }
 } else {
@@ -76,7 +76,10 @@ if (hst_is_lite_sys) {
       ":hst_plugin_intf_config",
       "//foundation/multimedia/media_foundation:histreamer_presets",
     ]
-    public_external_deps = [ "player_framework:media_client" ]
+    public_external_deps = [
+      "c_utils:utils",
+      "player_framework:media_client",
+    ]
     external_deps = [ "bounds_checking_function:libsec_shared" ]
     if (media_foundation_enable_video) {
       sources += [
@@ -163,7 +166,7 @@ ohos_source_set("ffmpeg_convert") {
   ]
 
   if (hst_is_standard_sys) {
-    public_deps += [ "//third_party/ffmpeg:libohosffmpeg" ]
+    public_external_deps = [ "ffmpeg:libohosffmpeg" ]
     external_deps = [ "hilog:libhilog" ]
   }
 }
