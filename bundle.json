@@ -70,7 +70,8 @@
               "bounds_checking_function",
               "pulseaudio",
               "hisysevent",
-              "window_manager"
+              "window_manager",
+              "ffmpeg"
           ]
         },
         "build": {

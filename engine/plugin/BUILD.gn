@@ -163,7 +163,7 @@ ohos_source_set("ffmpeg_convert") {
   ]
 
   if (hst_is_standard_sys) {
-    public_deps += [ "//third_party/ffmpeg:libohosffmpeg" ]
+    public_external_deps = [ "ffmpeg:libohosffmpeg" ]
     external_deps = [ "hilog:libhilog" ]
   }
 }
