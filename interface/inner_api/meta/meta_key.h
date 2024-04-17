@@ -259,6 +259,12 @@ public:
     static constexpr const char FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_COUNT[] =
         "feature_property_video_encoder_max_ltr_frame_count"; ///< int32_t, the key for querying the maximum long
                                                             ///< term reference count
+    
+    /* -------------------- AVCodec tag -------------------- */
+    static constexpr const char AV_CODEC_FORWARD_CALLER_PID[]           = "av_codec_forward_caller_pid";
+    static constexpr const char AV_CODEC_FORWARD_CALLER_PROCESS_NAME[]  = "av_codec_forward_caller_process_name";
+    static constexpr const char AV_CODEC_CALLER_PID[]                   = "av_codec_caller_pid";
+    static constexpr const char AV_CODEC_CALLER_PROCESS_NAME[]          = "av_codec_caller_process_name";
 };
 
 using TagTypeCharSeq = const char *;
