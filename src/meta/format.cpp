@@ -139,34 +139,57 @@ Format &Format::operator=(Format &&rhs) noexcept
 
 bool Format::PutIntValue(const std::string_view &key, int32_t value)
 {
+    auto type = GetValueType(key);
+    FALSE_RETURN_V_MSG_E(type == FORMAT_TYPE_INT32 || type == FORMAT_TYPE_NONE, false,
+        "Key type does not match int, key: %{public}s", key.data());
+
     return SetMetaData(*meta_, std::string(key), value);
 }
 
 bool Format::PutLongValue(const std::string_view &key, int64_t value)
 {
+    auto type = GetValueType(key);
+    FALSE_RETURN_V_MSG_E(type == FORMAT_TYPE_INT64 || type == FORMAT_TYPE_NONE, false,
+        "Key type does not match long, key: %{public}s", key.data());
+
     return SetMetaData(*meta_, std::string(key), value);
 }
 
 bool Format::PutFloatValue(const std::string_view &key, float value)
 {
+    auto type = GetValueType(key);
+    FALSE_RETURN_V_MSG_E(type == FORMAT_TYPE_FLOAT || type == FORMAT_TYPE_NONE, false,
+        "Key type does not match float, key: %{public}s", key.data());
+
     meta_->SetData(std::string(key), value);
     return true;
 }
 
 bool Format::PutDoubleValue(const std::string_view &key, double value)
 {
+    auto type = GetValueType(key);
+    FALSE_RETURN_V_MSG_E(type == FORMAT_TYPE_DOUBLE || type == FORMAT_TYPE_NONE, false,
+        "Key type does not match double, key: %{public}s", key.data());
+
     meta_->SetData(std::string(key), value);
     return true;
 }
 
 bool Format::PutStringValue(const std::string_view &key, const std::string_view &value)
 {
+    auto type = GetValueType(key);
+    FALSE_RETURN_V_MSG_E(type == FORMAT_TYPE_STRING || type == FORMAT_TYPE_NONE, false,
+        "Key type does not match string, key: %{public}s", key.data());
+
     meta_->SetData(std::string(key), std::string(value));
     return true;
 }
 
 bool Format::PutBuffer(const std::string_view &key, const uint8_t *addr, size_t size)
 {
+    auto type = GetValueType(key);
+    FALSE_RETURN_V_MSG_E(type == FORMAT_TYPE_ADDR || type == FORMAT_TYPE_NONE, false,
+        "Key type does not match buffer, key: %{public}s", key.data());
     FALSE_RETURN_V_MSG_E(addr != nullptr, false, "PutBuffer error, addr is nullptr");
     FALSE_RETURN_V_MSG_E(size <= BUFFER_SIZE_MAX, false, "PutBuffer input size failed. Key: " PUBLIC_LOG_S, key.data());
 
