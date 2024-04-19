@@ -263,10 +263,15 @@ void AVBufferQueueImpl::DeleteCachedBufferById(uint64_t uniqueId)
 
 Status AVBufferQueueImpl::CheckConfig(const AVBufferConfig& config)
 {
-    FALSE_RETURN_V(config.memoryType != MemoryType::UNKNOWN_MEMORY, Status::ERROR_UNEXPECTED_MEMORY_TYPE);
+    if (config.memoryType == MemoryType::UNKNOWN_MEMORY) {
+        MEDIA_LOG_D("config.memoryType != MemoryType::UNKNOWN_MEMORY");
+        return Status::ERROR_UNEXPECTED_MEMORY_TYPE;
+    }
     // memoryType_初始化之后将无法改变。
-    FALSE_RETURN_V(memoryType_ == MemoryType::UNKNOWN_MEMORY || config.memoryType == memoryType_,
-                   Status::ERROR_UNEXPECTED_MEMORY_TYPE);
+    if (memoryType_ != MemoryType::UNKNOWN_MEMORY && config.memoryType != memoryType_) {
+        MEDIA_LOG_D("memoryType_ != MemoryType::UNKNOWN_MEMORY && config.memoryType != memoryType_");
+        return Status::ERROR_UNEXPECTED_MEMORY_TYPE;
+    }
     memoryType_ = config.memoryType;
     return Status::OK;
 }
@@ -297,7 +302,11 @@ Status AVBufferQueueImpl::RequestBuffer(
 
     // check param
     std::unique_lock<std::mutex> lock(queueMutex_);
-    NOK_RETURN(CheckConfig(configCopy));
+    auto res = CheckConfig(configCopy) != Status::OK;
+    if (res != Status::OK) {
+        MEDIA_LOG_D("CheckConfig not OK, code %{public}d", static_cast<int32_t>(res));
+        return res;
+    }
 
     // dequeue from free list
     auto ret = PopFromFreeBufferList(buffer, configCopy);

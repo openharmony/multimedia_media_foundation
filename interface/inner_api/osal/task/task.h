@@ -65,6 +65,12 @@ public:
     virtual bool IsTaskRunning();
 
     static void SleepInTask(unsigned ms);
+
+    virtual void SetEnableStateChangeLog(bool enable) {
+        if (taskInner_ != nullptr) {
+            taskInner_->SetEnableStateChangeLog(enable);
+        }
+    }
 private:
     std::shared_ptr<TaskInner> taskInner_;
 };

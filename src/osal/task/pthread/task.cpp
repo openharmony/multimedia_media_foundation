@@ -136,7 +136,7 @@ TaskInner::~TaskInner()
 
 void TaskInner::Start()
 {
-    MEDIA_LOG_I("task " PUBLIC_LOG_S " Start called", name_.c_str());
+    MEDIA_LOG_I_FALSE_D(enableSPLog_, "task " PUBLIC_LOG_S " Start called", name_.c_str());
     pipelineThread_->LockJobState();
     AutoLock lock(stateMutex_);
     runningState_ = RunningState::STARTED;
@@ -146,7 +146,7 @@ void TaskInner::Start()
         UpdateTop();
     }
     pipelineThread_->UnLockJobState(true);
-    MEDIA_LOG_I("task " PUBLIC_LOG_S " Start done", name_.c_str());
+    MEDIA_LOG_I_FALSE_D(enableSPLog_, "task " PUBLIC_LOG_S " Start done", name_.c_str());
 }
 
 void TaskInner::Stop()
@@ -196,17 +196,17 @@ void TaskInner::Pause()
     if (pipelineThread_->IsRunningInSelf()) {
         RunningState state = runningState_.load();
         if (state == RunningState::STARTED) {
-            MEDIA_LOG_I("task " PUBLIC_LOG_S " Pause done in self task", name_.c_str());
+            MEDIA_LOG_I_FALSE_D(enableSPLog_, "task " PUBLIC_LOG_S " Pause done in self task", name_.c_str());
             runningState_ = RunningState::PAUSED;
             topProcessUs_ = -1;
             return;
         } else {
-            MEDIA_LOG_I("task " PUBLIC_LOG_S " Pause skip in self task, curret State: " PUBLIC_LOG_D32,
+            MEDIA_LOG_I_FALSE_D(enableSPLog_, "task " PUBLIC_LOG_S " Pause skip in self task, curret State: " PUBLIC_LOG_D32,
                 name_.c_str(), state);
             return;
         }
     }
-    MEDIA_LOG_I("task " PUBLIC_LOG_S " Pause called", name_.c_str());
+    MEDIA_LOG_I_FALSE_D(enableSPLog_, "task " PUBLIC_LOG_S " Pause called", name_.c_str());
     pipelineThread_->LockJobState();
     AutoLock lock(stateMutex_);
     RunningState state = runningState_.load();
@@ -218,7 +218,7 @@ void TaskInner::Pause()
     runningState_ = RunningState::PAUSED;
     topProcessUs_ = -1;
     pipelineThread_->UnLockJobState(true);
-    MEDIA_LOG_I("task " PUBLIC_LOG_S " Pause done.", name_.c_str());
+    MEDIA_LOG_I_FALSE_D(enableSPLog_, "task " PUBLIC_LOG_S " Pause done.", name_.c_str());
 }
 
 // There is no need to perform notification, as no call would wait for PAUSING state.
@@ -228,17 +228,17 @@ void TaskInner::PauseAsync()
     if (pipelineThread_->IsRunningInSelf()) {
         RunningState state = runningState_.load();
         if (state == RunningState::STARTED) {
-            MEDIA_LOG_I("task " PUBLIC_LOG_S " PauseAsync done in self task", name_.c_str());
+            MEDIA_LOG_I_FALSE_D(enableSPLog_, "task " PUBLIC_LOG_S " PauseAsync done in self task", name_.c_str());
             runningState_ = RunningState::PAUSED;
             topProcessUs_ = -1;
             return;
         } else {
-            MEDIA_LOG_I("task " PUBLIC_LOG_S " PauseAsync skip in self task, curretState:%{public}d",
+            MEDIA_LOG_I_FALSE_D(enableSPLog_, "task " PUBLIC_LOG_S " PauseAsync skip in self task, curretState:%{public}d",
                 name_.c_str(), state);
             return;
         }
     }
-    MEDIA_LOG_I("task " PUBLIC_LOG_S " PauseAsync called", name_.c_str());
+    MEDIA_LOG_I_FALSE_D(enableSPLog_, "task " PUBLIC_LOG_S " PauseAsync called", name_.c_str());
     pipelineThread_->LockJobState();
     AutoLock lock(stateMutex_);
     bool stateChanged = false;
