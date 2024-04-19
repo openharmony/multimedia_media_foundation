@@ -80,15 +80,15 @@ inline std::string HstGetFileName(const std::string& file)
 		    HstGetFileName(std::string(__FILE__)).c_str(), __LINE__, ##args);                                          \
     } while (0)
 
-#define HST_DECORATOR_HILOG_WITH_LEVEL_JUDGE(op1, op2, con, fmt, args...)                                              \
-    do {                                                                                                               \
-        if (!con) {                                                                                                    \
-            op2(LOG_CORE, "(" PUBLIC_LOG_S ", " PUBLIC_LOG_D32 "): " fmt,                                              \
-        HstGetFileName(std::string(__FILE__)).c_str(), __LINE__, ##args);                                              \
-        } else {                                                                                                       \
-            op1(LOG_CORE, "(" PUBLIC_LOG_S ", " PUBLIC_LOG_D32 "): " fmt,                                              \
-		        HstGetFileName(std::string(__FILE__)).c_str(), __LINE__, ##args);                                      \
-        }                                                                                                              \
+#define HST_DECORATOR_HILOG_WITH_LEVEL_JUDGE(op1, op2, con, fmt, args...)                   \
+    do {                                                                                    \
+        if (!con) {                                                                         \
+            op2(LOG_CORE, "(" PUBLIC_LOG_S ", " PUBLIC_LOG_D32 "): " fmt,                   \
+        HstGetFileName(std::string(__FILE__)).c_str(), __LINE__, ##args);                   \
+        } else {                                                                            \
+            op1(LOG_CORE, "(" PUBLIC_LOG_S ", " PUBLIC_LOG_D32 "): " fmt,                   \
+		        HstGetFileName(std::string(__FILE__)).c_str(), __LINE__, ##args);           \
+        }                                                                                   \
     } while (0)
 #endif
 
@@ -97,7 +97,7 @@ inline std::string HstGetFileName(const std::string& file)
 #define MEDIA_LOG_W(fmt, ...) HST_DECORATOR_HILOG(HILOG_WARN, fmt, ##__VA_ARGS__)
 #define MEDIA_LOG_E(fmt, ...) HST_DECORATOR_HILOG(HILOG_ERROR, fmt, ##__VA_ARGS__)
 #define MEDIA_LOG_F(fmt, ...) HST_DECORATOR_HILOG(HILOG_FATAL, fmt, ##__VA_ARGS__)
-#define MEDIA_LOG_I_FALSE_D(con, fmt, ...)                                                                                 \
+#define MEDIA_LOG_I_FALSE_D(con, fmt, ...)                                                  \
     HST_DECORATOR_HILOG_WITH_LEVEL_JUDGE(HILOG_INFO, HILOG_DEBUG, con, fmt, ##__VA_ARGS__)
 #endif
 

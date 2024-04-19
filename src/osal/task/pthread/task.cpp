@@ -203,13 +203,14 @@ void TaskInner::Pause()
     if (pipelineThread_->IsRunningInSelf()) {
         RunningState state = runningState_.load();
         if (state == RunningState::STARTED) {
-            MEDIA_LOG_I_FALSE_D(isStateLogEnabled_.load(), "task " PUBLIC_LOG_S " Pause done in self task", name_.c_str());
+            MEDIA_LOG_I_FALSE_D(isStateLogEnabled_.load(),
+                "task " PUBLIC_LOG_S " Pause done in self task", name_.c_str());
             runningState_ = RunningState::PAUSED;
             topProcessUs_ = -1;
             return;
         } else {
-            MEDIA_LOG_I_FALSE_D(isStateLogEnabled_.load(), "task " PUBLIC_LOG_S " Pause skip in self task, curret State: " PUBLIC_LOG_D32,
-                name_.c_str(), state);
+            MEDIA_LOG_I_FALSE_D(isStateLogEnabled_.load(),
+                "task " PUBLIC_LOG_S " Pause skip in self task, curret State: " PUBLIC_LOG_D32, name_.c_str(), state);
             return;
         }
     }
@@ -235,13 +236,14 @@ void TaskInner::PauseAsync()
     if (pipelineThread_->IsRunningInSelf()) {
         RunningState state = runningState_.load();
         if (state == RunningState::STARTED) {
-            MEDIA_LOG_I_FALSE_D(isStateLogEnabled_.load(), "task " PUBLIC_LOG_S " PauseAsync done in self task", name_.c_str());
+            MEDIA_LOG_I_FALSE_D(isStateLogEnabled_.load(),
+                "task " PUBLIC_LOG_S " PauseAsync done in self task", name_.c_str());
             runningState_ = RunningState::PAUSED;
             topProcessUs_ = -1;
             return;
         } else {
-            MEDIA_LOG_I_FALSE_D(isStateLogEnabled_.load(), "task " PUBLIC_LOG_S " PauseAsync skip in self task, curretState:%{public}d",
-                name_.c_str(), state);
+            MEDIA_LOG_I_FALSE_D(isStateLogEnabled_.load(),
+                "task " PUBLIC_LOG_S " PauseAsync skip in self task, curretState:%{public}d", name_.c_str(), state);
             return;
         }
     }
