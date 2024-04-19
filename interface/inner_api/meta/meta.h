@@ -27,6 +27,7 @@
 #endif
 
 #include <map>
+#include <optional>
 #include "meta/meta_key.h"
 #include "meta/audio_types.h"
 #include "meta/media_types.h"
@@ -99,6 +100,14 @@ using MapIt = std::map<TagType, Any>::const_iterator;
  * @example GetDefaultAnyValue("media.file.type");
  */
 extern Any GetDefaultAnyValue(const TagType& tag);
+/**
+ * @brief GetDefaultAnyValueOpt used for Application to get Any type default value from Meta Object.
+ * @implNote In order to get Predefined default Any value from Meta Object.
+ * We use metadataDefaultValueMap to get the right getDefaultVal function.
+ * @return Returns Any type default value of optional, returns <b>std::nullopt</b> if no match.
+ * @example GetDefaultAnyValueOpt("media.file.type");
+ */
+extern std::optional<Any> GetDefaultAnyValueOpt(const TagType& tag);
 /**
  * @brief GetDefaultAnyValue used for Application to get Any type default value.
  * @implNote Return Predefined default Any value by tag, if notexist then find default Any value by type,

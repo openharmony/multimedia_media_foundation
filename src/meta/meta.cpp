@@ -117,10 +117,7 @@ static std::map<TagType, std::pair<MetaSetterInt64Function, MetaGetterInt64Funct
 };
 
 static std::vector<TagType> g_metadataBoolVector = {
-    Tag::VIDEO_COLOR_RANGE,
     Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE,
-    Tag::VIDEO_REQUEST_I_FRAME,
-    Tag::VIDEO_IS_HDR_VIVID,
     Tag::MEDIA_HAS_VIDEO,
     Tag::MEDIA_HAS_AUDIO,
     Tag::MEDIA_END_OF_STREAM
@@ -184,22 +181,22 @@ static Any defaultFloat = 0.0f;
 static Any defaultDouble = (double)0.0;
 static Any defaultBool = (bool) false;
 static Any defaultSrcInputType = SrcInputType::UNKNOWN;
-static Any defaultAudioSampleFormat = AudioSampleFormat::INVALID_WIDTH;
-static Any defaultVideoPixelFormat = VideoPixelFormat::UNKNOWN;
-static Any defaultMediaType = MediaType::UNKNOWN;
+static Any defaultAudioSampleFormat = static_cast<int32_t>(AudioSampleFormat::INVALID_WIDTH);
+static Any defaultVideoPixelFormat = static_cast<int32_t>(VideoPixelFormat::UNKNOWN);
+static Any defaultMediaType = static_cast<int32_t>(MediaType::UNKNOWN);
 static Any defaultVideoH264Profile = VideoH264Profile::UNKNOWN;
-static Any defaultVideoRotation = VideoRotation::VIDEO_ROTATION_0;
-static Any defaultColorPrimary = ColorPrimary::BT2020;
-static Any defaultTransferCharacteristic = TransferCharacteristic::BT1361;
-static Any defaultMatrixCoefficient = MatrixCoefficient::BT2020_CL;
-static Any defaultHEVCProfile = HEVCProfile::HEVC_PROFILE_UNKNOW;
+static Any defaultVideoRotation = static_cast<int32_t>(VideoRotation::VIDEO_ROTATION_0);
+static Any defaultColorPrimary = static_cast<int32_t>(ColorPrimary::BT2020);
+static Any defaultTransferCharacteristic = static_cast<int32_t>(TransferCharacteristic::BT1361);
+static Any defaultMatrixCoefficient = static_cast<int32_t>(MatrixCoefficient::BT2020_CL);
+static Any defaultHEVCProfile = static_cast<int32_t>(HEVCProfile::HEVC_PROFILE_UNKNOW);
 static Any defaultHEVCLevel = HEVCLevel::HEVC_LEVEL_UNKNOW;
 static Any defaultChromaLocation = ChromaLocation::BOTTOM;
 static Any defaultFileType = FileType::UNKNOW;
-static Any defaultVideoEncodeBitrateMode = VideoEncodeBitrateMode::CBR;
-static Any defaultTemporalGopReferenceMode = TemporalGopReferenceMode::ADJACENT_REFERENCE;
+static Any defaultVideoEncodeBitrateMode = static_cast<int32_t>(VideoEncodeBitrateMode::CBR);
+static Any defaultTemporalGopReferenceMode = static_cast<int32_t>(TemporalGopReferenceMode::ADJACENT_REFERENCE);
 
-static Any defaultAudioChannelLayout = AudioChannelLayout::UNKNOWN;
+static Any defaultAudioChannelLayout = static_cast<int64_t>(AudioChannelLayout::UNKNOWN);
 static Any defaultAudioAacProfile = AudioAacProfile::ELD;
 static Any defaultAudioAacStreamFormat = AudioAacStreamFormat::ADIF;
 static Any defaultVectorUInt8 = std::vector<uint8_t>();
@@ -275,6 +272,14 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_ENCODER_QP_MAX, defaultInt32},
     {Tag::VIDEO_ENCODER_QP_MIN, defaultInt32},
     {Tag::FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_COUNT, defaultInt32},
+    {Tag::VIDEO_IS_HDR_VIVID, defaultInt32},
+    {Tag::VIDEO_COLOR_RANGE, defaultInt32},
+    {Tag::VIDEO_REQUEST_I_FRAME, defaultInt32},
+    {Tag::VIDEO_ENCODER_ENABLE_TEMPORAL_SCALABILITY, defaultInt32},
+    {Tag::VIDEO_ENCODER_PER_FRAME_MARK_LTR, defaultInt32},
+    {Tag::VIDEO_PER_FRAME_IS_LTR, defaultInt32},
+    {Tag::VIDEO_ENABLE_LOW_LATENCY, defaultInt32},
+    {Tag::OH_MD_KEY_AUDIO_OBJECT_NUMBER, defaultInt32},
     // String
     {Tag::MIME_TYPE, defaultString},
     {Tag::MEDIA_FILE_URI, defaultString},
@@ -305,17 +310,10 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_CAPTURE_RATE, defaultDouble},
     {Tag::VIDEO_FRAME_RATE, defaultDouble},
     // Bool
-    {Tag::VIDEO_COLOR_RANGE, defaultBool},
-    {Tag::VIDEO_REQUEST_I_FRAME, defaultBool},
-    {Tag::VIDEO_IS_HDR_VIVID, defaultBool},
     {Tag::MEDIA_HAS_VIDEO, defaultBool},
     {Tag::MEDIA_HAS_AUDIO, defaultBool},
     {Tag::MEDIA_END_OF_STREAM, defaultBool},
     {Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE, defaultBool},
-    {Tag::VIDEO_ENCODER_ENABLE_TEMPORAL_SCALABILITY, defaultBool},
-    {Tag::VIDEO_ENCODER_PER_FRAME_MARK_LTR, defaultBool},
-    {Tag::VIDEO_PER_FRAME_IS_LTR, defaultBool},
-    {Tag::VIDEO_ENABLE_LOW_LATENCY, defaultBool},
     {Tag::VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK, defaultBool},
     // Int64
     {Tag::MEDIA_FILE_SIZE, defaultUInt64},
@@ -340,6 +338,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::MEDIA_COVER, defaultVectorUInt8},
     {Tag::AUDIO_VORBIS_IDENTIFICATION_HEADER, defaultVectorUInt8},
     {Tag::AUDIO_VORBIS_SETUP_HEADER, defaultVectorUInt8},
+    {Tag::OH_MD_KEY_AUDIO_VIVID_METADATA, defaultVectorUInt8},
     // vector<Plugins::VideoBitStreamFormat>
     {Tag::VIDEO_BIT_STREAM_FORMAT, defaultVectorVideoBitStreamFormat},
     // vector<uint8_t>
@@ -366,6 +365,15 @@ Any GetDefaultAnyValue(const TagType& tag)
     auto iter = g_metadataDefaultValueMap.find(tag);
     if (iter == g_metadataDefaultValueMap.end()) {
         return defaultString; //Default String type
+    }
+    return iter->second;
+}
+
+std::optional<Any> GetDefaultAnyValueOpt(const TagType &tag)
+{
+    auto iter = g_metadataDefaultValueMap.find(tag);
+    if (iter == g_metadataDefaultValueMap.end()) {
+        return std::nullopt;
     }
     return iter->second;
 }
