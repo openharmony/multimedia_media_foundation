@@ -64,7 +64,7 @@ public:
 
     virtual bool IsTaskRunning() { return runningState_ == RunningState::STARTED; }
 
-    virtual void SetEnableStateChangeLog(bool enable) { enableSPLog_ = enable; }
+    void SetEnableStateChangeLog(bool enable) { enableSPLog_ = enable; }
 
     int64_t NextJobUs();
 
@@ -87,7 +87,7 @@ private:
     int64_t topProcessUs_ {-1};
     bool topIsJob_;
     std::shared_ptr<PipeLineThread> pipelineThread_;
-    std::atomic<bool> enableSPLog_{true};
+    std::atomic<bool> isStateLogEnabled_{true};
 #ifdef MEDIA_FOUNDATION_FFRT
     void DoJob(const std::function<void()>& job);
     std::shared_ptr<ffrt::queue> jobQueue_;
