@@ -64,7 +64,7 @@ public:
 
     virtual bool IsTaskRunning() { return runningState_ == RunningState::STARTED; }
 
-    void SetEnableStateChangeLog(bool enable) { enableSPLog_ = enable; }
+    void SetEnableStateChangeLog(bool enable) { isStateLogEnabled_ = enable; }
 
     int64_t NextJobUs();
 
