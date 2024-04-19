@@ -81,7 +81,7 @@ inline std::string HstGetFileName(const std::string& file)
     } while (0)
 
 #define HST_DECORATOR_HILOG_WITH_LEVEL_JUDGE(op1, op2, con, fmt, args...)                                              \
-    do {                                                                                                               \                    
+    do {                                                                                                               \
         if (!con) {                                                                                                    \
             op2(LOG_CORE, "(" PUBLIC_LOG_S ", " PUBLIC_LOG_D32 "): " fmt,                                              \
         HstGetFileName(std::string(__FILE__)).c_str(), __LINE__, ##args);                                              \
