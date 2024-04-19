@@ -33,6 +33,13 @@ void Task::SleepInTask(unsigned ms)
     OSAL::SleepFor(ms);
 }
 
+void Task::SetEnableStateChangeLog(bool enable)
+{
+    if (taskInner_ != nullptr) {
+        taskInner_->SetEnableStateChangeLog(enable);
+    }
+}
+
 static int64_t GetNowUs()
 {
     auto now = std::chrono::steady_clock::now();
