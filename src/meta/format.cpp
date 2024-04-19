@@ -157,6 +157,7 @@ bool Format::PutLongValue(const std::string_view &key, int64_t value)
     }
     return SetMetaData(*meta_, std::string(key), value);
 }
+
 bool Format::PutFloatValue(const std::string_view &key, float value)
 {
     auto defaultValue = GetDefaultAnyValueOpt(key.data());
