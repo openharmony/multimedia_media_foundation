@@ -141,7 +141,8 @@ bool Format::PutIntValue(const std::string_view &key, int32_t value)
 {
     auto defaultValue = GetDefaultAnyValueOpt(key.data());
     if (defaultValue != std::nullopt) {
-        auto isSameType = Any::IsSameTypeWith<int32_t>(defaultValue.value());
+        auto isSameType =
+            Any::IsSameTypeWith<int32_t>(defaultValue.value()) || IsIntEnum(key.data());
         FALSE_RETURN_V_MSG_E(isSameType, false, "Key type does not match int32, key: %{public}s", key.data());
     }
 
@@ -152,7 +153,8 @@ bool Format::PutLongValue(const std::string_view &key, int64_t value)
 {
     auto defaultValue = GetDefaultAnyValueOpt(key.data());
     if (defaultValue != std::nullopt) {
-        auto isSameType = Any::IsSameTypeWith<int64_t>(defaultValue.value());
+        auto isSameType =
+            Any::IsSameTypeWith<int64_t>(defaultValue.value()) || IsLongEnum(key.data());
         FALSE_RETURN_V_MSG_E(isSameType, false, "Key type does not match int64, key: %{public}s", key.data());
     }
     return SetMetaData(*meta_, std::string(key), value);

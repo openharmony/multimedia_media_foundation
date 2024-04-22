@@ -84,6 +84,7 @@ DEFINE_METADATA_SETTER_GETTER_FUNC(HEVCLevel, int32_t)
 DEFINE_METADATA_SETTER_GETTER_FUNC(ChromaLocation, int32_t)
 DEFINE_METADATA_SETTER_GETTER_FUNC(FileType, int32_t)
 DEFINE_METADATA_SETTER_GETTER_FUNC(VideoEncodeBitrateMode, int32_t)
+DEFINE_METADATA_SETTER_GETTER_FUNC(TemporalGopReferenceMode, int32_t)
 
 DEFINE_METADATA_SETTER_GETTER_FUNC(AudioChannelLayout, int64_t)
 
@@ -106,7 +107,8 @@ static std::map<TagType, std::pair<MetaSetterFunction, MetaGetterFunction>> g_me
     DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_H265_LEVEL, HEVCLevel),
     DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_CHROMA_LOCATION, ChromaLocation),
     DEFINE_METADATA_SETTER_GETTER(Tag::MEDIA_FILE_TYPE, FileType),
-    DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_ENCODE_BITRATE_MODE, VideoEncodeBitrateMode)
+    DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_ENCODE_BITRATE_MODE, VideoEncodeBitrateMode),
+    DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_ENCODER_TEMPORAL_GOP_REFERENCE_MODE, TemporalGopReferenceMode),
 };
 
 using  MetaSetterInt64Function = std::function<bool(Meta&, const TagType&, int64_t&)>;
@@ -145,10 +147,13 @@ bool GetMetaData(const Meta& meta, const TagType& tag, int32_t& value)
             bool valueBool = false;
             FALSE_RETURN_V(meta.GetData(tag, valueBool), false);
             value = valueBool ? 1 : 0;
+            MEDIA_LOG_I("GetMetaData 1");
             return true;
         }
+        MEDIA_LOG_I("GetMetaData 2");
         return meta.GetData(tag, value);
     }
+    MEDIA_LOG_I("GetMetaData 3");
     return iter->second.second(meta, tag, value);
 }
 
@@ -171,6 +176,22 @@ bool GetMetaData(const Meta& meta, const TagType& tag, int64_t& value)
     return iter->second.second(meta, tag, value);
 }
 
+bool IsIntEnum(const TagType &tag)
+{
+    if (g_metadataGetterSetterMap.find(tag) != g_metadataGetterSetterMap.end()) {
+        return true;
+    }
+    return false;
+}
+
+bool IsLongEnum(const TagType &tag)
+{
+    if (g_metadataGetterSetterInt64Map.find(tag) != g_metadataGetterSetterInt64Map.end()) {
+        return true;
+    }
+    return false;
+}
+
 static Any defaultString = std::string();
 static Any defaultUInt8 = (uint8_t)0;
 static Any defaultInt32 = (int32_t)0;
@@ -181,22 +202,22 @@ static Any defaultFloat = 0.0f;
 static Any defaultDouble = (double)0.0;
 static Any defaultBool = (bool) false;
 static Any defaultSrcInputType = SrcInputType::UNKNOWN;
-static Any defaultAudioSampleFormat = static_cast<int32_t>(AudioSampleFormat::INVALID_WIDTH);
-static Any defaultVideoPixelFormat = static_cast<int32_t>(VideoPixelFormat::UNKNOWN);
-static Any defaultMediaType = static_cast<int32_t>(MediaType::UNKNOWN);
+static Any defaultAudioSampleFormat = AudioSampleFormat::INVALID_WIDTH;
+static Any defaultVideoPixelFormat = VideoPixelFormat::UNKNOWN;
+static Any defaultMediaType = MediaType::UNKNOWN;
 static Any defaultVideoH264Profile = VideoH264Profile::UNKNOWN;
-static Any defaultVideoRotation = static_cast<int32_t>(VideoRotation::VIDEO_ROTATION_0);
-static Any defaultColorPrimary = static_cast<int32_t>(ColorPrimary::BT2020);
-static Any defaultTransferCharacteristic = static_cast<int32_t>(TransferCharacteristic::BT1361);
-static Any defaultMatrixCoefficient = static_cast<int32_t>(MatrixCoefficient::BT2020_CL);
-static Any defaultHEVCProfile = static_cast<int32_t>(HEVCProfile::HEVC_PROFILE_UNKNOW);
+static Any defaultVideoRotation = VideoRotation::VIDEO_ROTATION_0;
+static Any defaultColorPrimary = ColorPrimary::BT2020;
+static Any defaultTransferCharacteristic = TransferCharacteristic::BT1361;
+static Any defaultMatrixCoefficient = MatrixCoefficient::BT2020_CL;
+static Any defaultHEVCProfile = HEVCProfile::HEVC_PROFILE_UNKNOW;
 static Any defaultHEVCLevel = HEVCLevel::HEVC_LEVEL_UNKNOW;
 static Any defaultChromaLocation = ChromaLocation::BOTTOM;
 static Any defaultFileType = FileType::UNKNOW;
-static Any defaultVideoEncodeBitrateMode = static_cast<int32_t>(VideoEncodeBitrateMode::CBR);
-static Any defaultTemporalGopReferenceMode = static_cast<int32_t>(TemporalGopReferenceMode::ADJACENT_REFERENCE);
+static Any defaultVideoEncodeBitrateMode = VideoEncodeBitrateMode::CBR;
+static Any defaultTemporalGopReferenceMode = TemporalGopReferenceMode::ADJACENT_REFERENCE;
 
-static Any defaultAudioChannelLayout = static_cast<int64_t>(AudioChannelLayout::UNKNOWN);
+static Any defaultAudioChannelLayout = AudioChannelLayout::UNKNOWN;
 static Any defaultAudioAacProfile = AudioAacProfile::ELD;
 static Any defaultAudioAacStreamFormat = AudioAacStreamFormat::ADIF;
 static Any defaultVectorUInt8 = std::vector<uint8_t>();

@@ -475,6 +475,26 @@ bool SetMetaData(Meta& meta, const TagType& tag, int64_t value);
  * @example OHOS::Media::GetMetaData(meta, "audio.aac.profile", value);
  */
 bool GetMetaData(const Meta& meta, const TagType& tag, int64_t& value);
+
+/**
+ * @brief IsIntEnum only used for Application interface OH_AVFormat to judge key's value type is int32_t or not.
+ * @implNote In order to get value(Enum type) from Meta Object, should use correct Enum type to get value from Any
+ * object. We use metadataGetterSetterMap to get the value type.
+ * @return Returns operator status, <b>True</b> if the key's value type is int32_t.
+ * returns <b>False</b> otherwise.
+ * @example OHOS::Media::IsIntEnum("audio.aac.profile");
+ */
+bool IsIntEnum(const TagType& tag);
+
+/**
+ * @brief IsIntEnum only used for Application interface OH_AVFormat to judge key's value type is int64_t or not.
+ * @implNote In order to get value(Enum type) from Meta Object, should use correct Enum type to get value from Any
+ * object. We use metadataGetterSetterMap to get the value type.
+ * @return Returns operator status, <b>True</b> if the key's value type is int64_t.
+ * returns <b>False</b> otherwise.
+ * @example OHOS::Media::IsIntEnum("audio.aac.profile");
+ */
+bool IsLongEnum(const TagType& tag);
 } // namespace Media
 } // namespace OHOS
 #endif // MEDIA_FOUNDATION_META_H
