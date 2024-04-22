@@ -17,6 +17,7 @@
 #define MEDIA_DATA_SOURCE_H_
 
 #include "buffer/avsharedmemory.h"
+#include "buffer/avbuffer.h"
 
 namespace OHOS {
 namespace Media {
@@ -66,6 +67,32 @@ public:
     // This interface has been deprecated
     virtual int32_t ReadAt(uint32_t length, const std::shared_ptr<AVSharedMemory> &mem) = 0;
 };
+
+class IAudioDataSource {
+public:
+    virtual ~IAudioDataSource() = default;
+
+    /**
+     * @brief Player use ReadAt to tell user the desired file position and length.(length is number of Bytes)
+     * Then usr filled the mem, and return the actual length of mem.
+     * @param mem The stream mem need to fill. see avsharedmemory.h.
+     * @param length The stream length player want to get.
+     * @param pos The stream pos player want get start.
+     * The length of the filled memory must match the actual length returned.
+     * @return The actual length of stream mem filled, if failed or no mem return MediaDataSourceError.
+     */
+    virtual int32_t ReadAt(std::shared_ptr<AVBuffer> buffer, uint32_t length) = 0;
+
+    /**
+     * @brief Get the total size of the stream.
+     * If the user does not know the length of the stream, size should be assigned -1,
+     * player will use the datasource not seekable.
+     * @param size Total size of the stream. If no size set -1.
+     * @return MSERR_OK if ok; others if failed. see media_errors.h
+     */
+    virtual int32_t GetSize(int64_t& size) = 0;
+};
+
 } // namespace Media
 } // namespace OHOS
 #endif // MEDIA_DATA_SOURCE_H_
