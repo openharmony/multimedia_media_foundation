@@ -39,9 +39,9 @@ void Filter::Init(const std::shared_ptr<EventReceiver>& receiver, const std::sha
     callback_ = callback;
 }
 
-void Filter::LinkPipeLine(std::string playerId)
+void Filter::LinkPipeLine(const std::string& groupId)
 {
-    playerId_ = playerId;
+    groupId_ = groupId;
     if (asyncMode_) {
         TaskType taskType;
         switch (filterType_) {
@@ -58,7 +58,7 @@ void Filter::LinkPipeLine(std::string playerId)
                 taskType = TaskType::SINGLETON;
                 break;
         }
-        filterTask_ = std::make_unique<Task>(name_, playerId_, taskType, TaskPriority::HIGH, false);
+        filterTask_ = std::make_unique<Task>(name_, groupId_, taskType, TaskPriority::HIGH, false);
         filterTask_->SubmitJobOnce([this] {
            DoInitAfterLink();
            ChangeState(FilterState::INITIALIZED);
@@ -89,7 +89,6 @@ Status Filter::PrepareDone()
     Status ret = DoPrepare();
     SetErrCode(ret);
     if (ret != Status::OK) {
-        ChangeState(FilterState::ERROR);
         return ret;
     }
     for (auto iter : nextFiltersMap_) {
@@ -106,13 +105,14 @@ Status Filter::PrepareFrame(bool renderFirstFrame)
     MEDIA_LOG_I("Filter::PrepareFrame %{public}s", name_.c_str());
     for (auto iter : nextFiltersMap_) {
         for (auto filter : iter.second) {
-            auto ret = filter->PrepareFrame(renderFirstFrame);
-            if (ret != Status::OK) {
-                return ret;
+            auto rtv = filter->PrepareFrame(renderFirstFrame);
+            if (rtv != Status::OK) {
+                return rtv;
             }
         }
     }
-    return Status::OK;
+    auto ret = DoPrepareFrame(renderFirstFrame);
+    return ret;
 }
 
 Status Filter::WaitPrepareFrame()
@@ -133,13 +133,6 @@ Status Filter::Start()
 {
     MEDIA_LOG_I("Filter::Start %{public}s, prevState:%{public}d", name_.c_str(), curState_);
     if (filterTask_) {
-        if (curState_ == FilterState::RUNNING) {
-            return Status::OK;
-        }
-        if (curState_ != FilterState::READY && curState_ != FilterState::PAUSED && curState_ != FilterState::STOPPED) {
-            ChangeState(FilterState::ERROR);
-            return Status::ERROR_INVALID_OPERATION;
-        }
         filterTask_->SubmitJobOnce([this] {
             if (StartDone() == Status::OK) {
                 filterTask_->Start();
@@ -199,13 +192,6 @@ Status Filter::Resume()
 {
     MEDIA_LOG_I("Filter::Resume %{public}s, prevState:%{public}d", name_.c_str(), curState_);
     if (filterTask_) {
-        if (curState_ == FilterState::RUNNING) {
-            return Status::OK;
-        }
-        if (curState_ != FilterState::READY && curState_ != FilterState::PAUSED && curState_ != FilterState::STOPPED) {
-            ChangeState(FilterState::ERROR);
-            return Status::ERROR_INVALID_OPERATION;
-        }
         filterTask_->SubmitJobOnce([this]() {
             if (ResumeDone() == Status::OK) {
                 filterTask_->Start();
@@ -289,9 +275,6 @@ Status Filter::Release()
 {
     MEDIA_LOG_I("Filter::Release  %{public}s, prevState:%{public}d", name_.c_str(), curState_);
     if (filterTask_) {
-        if (curState_ == FilterState::RELEASED) {
-            return Status::OK;
-        }
         filterTask_->SubmitJobOnce([this]() {
             ReleaseDone();
         });
@@ -357,6 +340,11 @@ Status Filter::DoInitAfterLink()
 }
 
 Status Filter::DoPrepare()
+{
+    return Status::OK;
+}
+
+Status Filter::DoPrepareFrame(bool renderFirstFrame)
 {
     return Status::OK;
 }

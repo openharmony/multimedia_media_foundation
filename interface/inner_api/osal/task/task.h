@@ -41,7 +41,7 @@ class TaskInner;
 
 class Task {
 public:
-    explicit Task(std::string name, std::string groupId = "", TaskType type = TaskType::SINGLETON,
+    explicit Task(const std::string& name, const std::string& groupId = "", TaskType type = TaskType::SINGLETON,
         TaskPriority priority = TaskPriority::NORMAL, bool singleLoop = true);
 
     virtual ~Task();
