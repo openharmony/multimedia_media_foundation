@@ -119,7 +119,10 @@ static std::map<TagType, std::pair<MetaSetterInt64Function, MetaGetterInt64Funct
 };
 
 static std::vector<TagType> g_metadataBoolVector = {
+    Tag::VIDEO_COLOR_RANGE,
     Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE,
+    Tag::VIDEO_REQUEST_I_FRAME,
+    Tag::VIDEO_IS_HDR_VIVID,
     Tag::MEDIA_HAS_VIDEO,
     Tag::MEDIA_HAS_AUDIO,
     Tag::MEDIA_END_OF_STREAM
@@ -175,18 +178,12 @@ bool GetMetaData(const Meta& meta, const TagType& tag, int64_t& value)
 
 bool IsIntEnum(const TagType &tag)
 {
-    if (g_metadataGetterSetterMap.find(tag) != g_metadataGetterSetterMap.end()) {
-        return true;
-    }
-    return false;
+    return (g_metadataGetterSetterMap.find(tag) != g_metadataGetterSetterMap.end());
 }
 
 bool IsLongEnum(const TagType &tag)
 {
-    if (g_metadataGetterSetterInt64Map.find(tag) != g_metadataGetterSetterInt64Map.end()) {
-        return true;
-    }
-    return false;
+    return g_metadataGetterSetterInt64Map.find(tag) != g_metadataGetterSetterInt64Map.end();
 }
 
 static Any defaultString = std::string();
@@ -290,13 +287,6 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_ENCODER_QP_MAX, defaultInt32},
     {Tag::VIDEO_ENCODER_QP_MIN, defaultInt32},
     {Tag::FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_COUNT, defaultInt32},
-    {Tag::VIDEO_IS_HDR_VIVID, defaultInt32},
-    {Tag::VIDEO_COLOR_RANGE, defaultInt32},
-    {Tag::VIDEO_REQUEST_I_FRAME, defaultInt32},
-    {Tag::VIDEO_ENCODER_ENABLE_TEMPORAL_SCALABILITY, defaultInt32},
-    {Tag::VIDEO_ENCODER_PER_FRAME_MARK_LTR, defaultInt32},
-    {Tag::VIDEO_PER_FRAME_IS_LTR, defaultInt32},
-    {Tag::VIDEO_ENABLE_LOW_LATENCY, defaultInt32},
     {Tag::OH_MD_KEY_AUDIO_OBJECT_NUMBER, defaultInt32},
     {Tag::AV_CODEC_CALLER_PID, defaultInt32},
     {Tag::AV_CODEC_FORWARD_CALLER_PID, defaultInt32},
@@ -333,10 +323,17 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_CAPTURE_RATE, defaultDouble},
     {Tag::VIDEO_FRAME_RATE, defaultDouble},
     // Bool
+    {Tag::VIDEO_COLOR_RANGE, defaultBool},
+    {Tag::VIDEO_REQUEST_I_FRAME, defaultBool},
+    {Tag::VIDEO_IS_HDR_VIVID, defaultBool},
     {Tag::MEDIA_HAS_VIDEO, defaultBool},
     {Tag::MEDIA_HAS_AUDIO, defaultBool},
     {Tag::MEDIA_END_OF_STREAM, defaultBool},
     {Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE, defaultBool},
+    {Tag::VIDEO_ENCODER_ENABLE_TEMPORAL_SCALABILITY, defaultBool},
+    {Tag::VIDEO_ENCODER_PER_FRAME_MARK_LTR, defaultBool},
+    {Tag::VIDEO_PER_FRAME_IS_LTR, defaultBool},
+    {Tag::VIDEO_ENABLE_LOW_LATENCY, defaultBool},
     {Tag::VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK, defaultBool},
     {Tag::VIDEO_BUFFER_CAN_DROP, defaultBool},
     // Int64

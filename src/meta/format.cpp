@@ -142,7 +142,8 @@ bool Format::PutIntValue(const std::string_view &key, int32_t value)
     auto defaultValue = GetDefaultAnyValueOpt(key.data());
     if (defaultValue != std::nullopt) {
         auto isSameType =
-            Any::IsSameTypeWith<int32_t>(defaultValue.value()) || IsIntEnum(key.data());
+            Any::IsSameTypeWith<int32_t>(defaultValue.value()) ||
+            Any::IsSameTypeWith<bool>(defaultValue.value()) || IsIntEnum(key.data());
         FALSE_RETURN_V_MSG_E(isSameType, false, "Key's value type does not match int32, key: %{public}s", key.data());
     }
 
