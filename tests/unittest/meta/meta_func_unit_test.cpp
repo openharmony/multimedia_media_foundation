@@ -400,6 +400,7 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::VIDEO_ENCODER_QP_MAX, 20},
     {Tag::VIDEO_ENCODER_QP_MIN, 21},
     {Tag::FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_COUNT, 22},
+    {Tag::VIDEO_DECODER_RATE_UPPER_LIMIT, 120},
     {Tag::SRC_INPUT_TYPE, static_cast<int32_t>(Plugins::SrcInputType::AUD_ES)},
     {Tag::AUDIO_SAMPLE_FORMAT, static_cast<int32_t>(Plugins::AudioSampleFormat::SAMPLE_S16LE)},
     {Tag::VIDEO_PIXEL_FORMAT, static_cast<int32_t>(Plugins::VideoPixelFormat::YUV411P)},
@@ -433,7 +434,8 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::VIDEO_ENCODER_PER_FRAME_MARK_LTR, true},
     {Tag::VIDEO_PER_FRAME_IS_LTR, true},
     {Tag::VIDEO_ENABLE_LOW_LATENCY, true},
-    {Tag::VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK, true}};
+    {Tag::VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK, true},
+    {Tag::VIDEO_BUFFER_CAN_DROP, true}};
 
 /**
  * @tc.name: SetGet_MetaData_All_As_Bool_Using_ParcelPackage

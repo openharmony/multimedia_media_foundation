@@ -38,7 +38,8 @@ namespace Media {
 
 class TaskInner : public std::enable_shared_from_this<TaskInner> {
 public:
-    explicit TaskInner(std::string name, std::string groupId, TaskType type, TaskPriority priority, bool singleLoop);
+    explicit TaskInner(const std::string& name, const std::string& groupId, TaskType type,
+        TaskPriority priority, bool singleLoop);
 
     virtual ~TaskInner();
 
@@ -64,9 +65,13 @@ public:
 
     virtual bool IsTaskRunning() { return runningState_ == RunningState::STARTED; }
 
+    void SetEnableStateChangeLog(bool enable) { isStateLogEnabled_ = enable; }
+
     int64_t NextJobUs();
 
     void HandleJob();
+
+    static void SleepInTask(unsigned ms);
 
 private:
     enum class RunningState : int {
@@ -85,6 +90,7 @@ private:
     int64_t topProcessUs_ {-1};
     bool topIsJob_;
     std::shared_ptr<PipeLineThread> pipelineThread_;
+    std::atomic<bool> isStateLogEnabled_{true};
 #ifdef MEDIA_FOUNDATION_FFRT
     void DoJob(const std::function<void()>& job);
     std::shared_ptr<ffrt::queue> jobQueue_;
