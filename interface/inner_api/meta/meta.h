@@ -181,6 +181,7 @@ public:
         tagCharSeq == Tag::VIDEO_PER_FRAME_IS_LTR or
         tagCharSeq == Tag::VIDEO_ENABLE_LOW_LATENCY or
         tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK, bool, AnyValueType::BOOL);
+    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_BUFFER_CAN_DROP, bool, AnyValueType::BOOL);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_H265_PROFILE, Plugins::HEVCProfile, AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_H265_LEVEL, Plugins::HEVCLevel, AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_CHROMA_LOCATION,
@@ -243,6 +244,7 @@ public:
         tagCharSeq == Tag::VIDEO_ENCODER_QP_MAX or
         tagCharSeq == Tag::VIDEO_ENCODER_QP_MIN or
         tagCharSeq == Tag::FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_COUNT, int32_t, AnyValueType::INT32_T);
+    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_DECODER_RATE_UPPER_LIMIT, int32_t, AnyValueType::INT32_T);
 
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::APP_FULL_TOKEN_ID or

@@ -234,6 +234,11 @@ public:
     static constexpr const char VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK[] =
         "video_encoder_enable_surface_input_callback"; ///< bool, the associated value is an bool (true or false): true
                                                        ///< is enabled, false is closed.
+    static constexpr const char VIDEO_DECODER_RATE_UPPER_LIMIT[] =
+        "video_decoder_rate_upper_limit"; ///< int32_t, key for upper rate limit of video decoder performance.
+    static constexpr const char VIDEO_BUFFER_CAN_DROP[] =
+        "video_buffer_can_drop"; ///< bool, key to describe that encoded video buffer can be dropped or not befor
+                                 ///< sent to decoder in video playing.
 
     /* -------------------- video specific tag -------------------- */
     static constexpr const char VIDEO_H264_PROFILE[] = "video.h264.profile"; ///< @see VideoH264Profile

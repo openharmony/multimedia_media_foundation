@@ -103,7 +103,7 @@ public:
     virtual ~Filter();
     virtual void Init(const std::shared_ptr<EventReceiver>& receiver, const std::shared_ptr<FilterCallback>& callback);
 
-    virtual void LinkPipeLine(std::string playerId) final;
+    virtual void LinkPipeLine(const std::string& groupId) final;
 
     virtual Status Prepare() final;
 
@@ -132,6 +132,8 @@ public:
     virtual Status DoInitAfterLink();
 
     virtual Status DoPrepare();
+
+    virtual Status DoPrepareFrame(bool renderFirstFrame);
 
     virtual Status DoStart();
 
@@ -219,7 +221,7 @@ protected:
 
     int64_t jobIdxBase_ = 0;
 
-    std::string playerId_;
+    std::string groupId_;
 
     bool asyncMode_;
 };

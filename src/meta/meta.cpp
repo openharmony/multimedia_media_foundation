@@ -298,6 +298,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_PER_FRAME_IS_LTR, defaultInt32},
     {Tag::VIDEO_ENABLE_LOW_LATENCY, defaultInt32},
     {Tag::OH_MD_KEY_AUDIO_OBJECT_NUMBER, defaultInt32},
+    {Tag::VIDEO_DECODER_RATE_UPPER_LIMIT, defaultInt32},
     // String
     {Tag::MIME_TYPE, defaultString},
     {Tag::MEDIA_FILE_URI, defaultString},
@@ -333,6 +334,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::MEDIA_END_OF_STREAM, defaultBool},
     {Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE, defaultBool},
     {Tag::VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK, defaultBool},
+    {Tag::VIDEO_BUFFER_CAN_DROP, defaultBool},
     // Int64
     {Tag::MEDIA_FILE_SIZE, defaultUInt64},
     {Tag::MEDIA_POSITION, defaultUInt64},
