@@ -27,6 +27,7 @@
 #endif
 
 #include <map>
+#include <optional>
 #include "meta/meta_key.h"
 #include "meta/audio_types.h"
 #include "meta/media_types.h"
@@ -99,6 +100,14 @@ using MapIt = std::map<TagType, Any>::const_iterator;
  * @example GetDefaultAnyValue("media.file.type");
  */
 extern Any GetDefaultAnyValue(const TagType& tag);
+/**
+ * @brief GetDefaultAnyValueOpt used for Application to get Any type default value from Meta Object.
+ * @implNote In order to get Predefined default Any value from Meta Object.
+ * We use metadataDefaultValueMap to get the right getDefaultVal function.
+ * @return Returns Any type default value of optional, returns <b>std::nullopt</b> if no match.
+ * @example GetDefaultAnyValueOpt("media.file.type");
+ */
+extern std::optional<Any> GetDefaultAnyValueOpt(const TagType& tag);
 /**
  * @brief GetDefaultAnyValue used for Application to get Any type default value.
  * @implNote Return Predefined default Any value by tag, if notexist then find default Any value by type,
@@ -468,6 +477,26 @@ bool SetMetaData(Meta& meta, const TagType& tag, int64_t value);
  * @example OHOS::Media::GetMetaData(meta, "audio.aac.profile", value);
  */
 bool GetMetaData(const Meta& meta, const TagType& tag, int64_t& value);
+
+/**
+ * @brief IsIntEnum only used for Application interface OH_AVFormat to judge key's value type is int32_t or not.
+ * @implNote In order to get value(Enum type) from Meta Object, should use correct Enum type to get value from Any
+ * object. We use metadataGetterSetterMap to get the value type.
+ * @return Returns operator status, <b>True</b> if the key's value type is int32_t.
+ * returns <b>False</b> otherwise.
+ * @example OHOS::Media::IsIntEnum("audio.aac.profile");
+ */
+bool IsIntEnum(const TagType& tag);
+
+/**
+ * @brief IsIntEnum only used for Application interface OH_AVFormat to judge key's value type is int64_t or not.
+ * @implNote In order to get value(Enum type) from Meta Object, should use correct Enum type to get value from Any
+ * object. We use metadataGetterSetterMap to get the value type.
+ * @return Returns operator status, <b>True</b> if the key's value type is int64_t.
+ * returns <b>False</b> otherwise.
+ * @example OHOS::Media::IsIntEnum("audio.aac.profile");
+ */
+bool IsLongEnum(const TagType& tag);
 } // namespace Media
 } // namespace OHOS
 #endif // MEDIA_FOUNDATION_META_H

@@ -84,6 +84,7 @@ DEFINE_METADATA_SETTER_GETTER_FUNC(HEVCLevel, int32_t)
 DEFINE_METADATA_SETTER_GETTER_FUNC(ChromaLocation, int32_t)
 DEFINE_METADATA_SETTER_GETTER_FUNC(FileType, int32_t)
 DEFINE_METADATA_SETTER_GETTER_FUNC(VideoEncodeBitrateMode, int32_t)
+DEFINE_METADATA_SETTER_GETTER_FUNC(TemporalGopReferenceMode, int32_t)
 
 DEFINE_METADATA_SETTER_GETTER_FUNC(AudioChannelLayout, int64_t)
 
@@ -106,7 +107,8 @@ static std::map<TagType, std::pair<MetaSetterFunction, MetaGetterFunction>> g_me
     DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_H265_LEVEL, HEVCLevel),
     DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_CHROMA_LOCATION, ChromaLocation),
     DEFINE_METADATA_SETTER_GETTER(Tag::MEDIA_FILE_TYPE, FileType),
-    DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_ENCODE_BITRATE_MODE, VideoEncodeBitrateMode)
+    DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_ENCODE_BITRATE_MODE, VideoEncodeBitrateMode),
+    DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_ENCODER_TEMPORAL_GOP_REFERENCE_MODE, TemporalGopReferenceMode),
 };
 
 using  MetaSetterInt64Function = std::function<bool(Meta&, const TagType&, int64_t&)>;
@@ -172,6 +174,16 @@ bool GetMetaData(const Meta& meta, const TagType& tag, int64_t& value)
         return meta.GetData(tag, value);
     }
     return iter->second.second(meta, tag, value);
+}
+
+bool IsIntEnum(const TagType &tag)
+{
+    return (g_metadataGetterSetterMap.find(tag) != g_metadataGetterSetterMap.end());
+}
+
+bool IsLongEnum(const TagType &tag)
+{
+    return g_metadataGetterSetterInt64Map.find(tag) != g_metadataGetterSetterInt64Map.end();
 }
 
 static Any defaultString = std::string();
@@ -275,6 +287,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_ENCODER_QP_MAX, defaultInt32},
     {Tag::VIDEO_ENCODER_QP_MIN, defaultInt32},
     {Tag::FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_COUNT, defaultInt32},
+    {Tag::OH_MD_KEY_AUDIO_OBJECT_NUMBER, defaultInt32},
     {Tag::AV_CODEC_CALLER_PID, defaultInt32},
     {Tag::AV_CODEC_FORWARD_CALLER_PID, defaultInt32},
     {Tag::VIDEO_DECODER_RATE_UPPER_LIMIT, defaultInt32},
@@ -346,6 +359,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::MEDIA_COVER, defaultVectorUInt8},
     {Tag::AUDIO_VORBIS_IDENTIFICATION_HEADER, defaultVectorUInt8},
     {Tag::AUDIO_VORBIS_SETUP_HEADER, defaultVectorUInt8},
+    {Tag::OH_MD_KEY_AUDIO_VIVID_METADATA, defaultVectorUInt8},
     // vector<Plugins::VideoBitStreamFormat>
     {Tag::VIDEO_BIT_STREAM_FORMAT, defaultVectorVideoBitStreamFormat},
     // vector<uint8_t>
@@ -372,6 +386,15 @@ Any GetDefaultAnyValue(const TagType& tag)
     auto iter = g_metadataDefaultValueMap.find(tag);
     if (iter == g_metadataDefaultValueMap.end()) {
         return defaultString; //Default String type
+    }
+    return iter->second;
+}
+
+std::optional<Any> GetDefaultAnyValueOpt(const TagType &tag)
+{
+    auto iter = g_metadataDefaultValueMap.find(tag);
+    if (iter == g_metadataDefaultValueMap.end()) {
+        return std::nullopt;
     }
     return iter->second;
 }
