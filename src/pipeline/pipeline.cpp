@@ -37,11 +37,11 @@ Pipeline::~Pipeline()
 }
 
 void Pipeline::Init(const std::shared_ptr<EventReceiver>& receiver, const std::shared_ptr<FilterCallback>& callback,
-    std::string playerId)
+    const std::string& groupId)
 {
     eventReceiver_ = receiver;
     filterCallback_ = callback;
-    playerId_ = playerId;
+    groupId_ = groupId;
 }
 
 Status Pipeline::Prepare()
@@ -230,7 +230,7 @@ Status Pipeline::AddHeadFilters(std::vector<std::shared_ptr<Filter>> filtersIn)
         }
         if (!matched) {
             filtersToAdd.push_back(filterIn);
-            filterIn->LinkPipeLine(playerId_);
+            filterIn->LinkPipeLine(groupId_);
         }
     }
     if (filtersToAdd.empty()) {
@@ -264,7 +264,7 @@ Status Pipeline::LinkFilters(const std::shared_ptr<Filter> &preFilter,
 {
     for (auto nextFilter : nextFilters) {
         auto ret = preFilter->LinkNext(nextFilter, type);
-        nextFilter->LinkPipeLine(playerId_);
+        nextFilter->LinkPipeLine(groupId_);
         FALSE_RETURN_V(ret == Status::OK, ret);
     }
     return Status::OK;

@@ -33,7 +33,7 @@ public:
     ~Pipeline();
 
     void Init(const std::shared_ptr<EventReceiver>& receiver,
-        const std::shared_ptr<FilterCallback>& callback, std::string playerId);
+        const std::shared_ptr<FilterCallback>& callback, const std::string& groupId);
 
     Status Prepare();
 
@@ -68,7 +68,7 @@ public:
 
     static int32_t GetNextPipelineId();
 private:
-    std::string playerId_;
+    std::string groupId_;
     Mutex mutex_ {};
     std::vector<std::shared_ptr<Filter>> filters_ {};
     std::shared_ptr<EventReceiver> eventReceiver_ {nullptr};
