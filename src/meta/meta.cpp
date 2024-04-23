@@ -147,13 +147,10 @@ bool GetMetaData(const Meta& meta, const TagType& tag, int32_t& value)
             bool valueBool = false;
             FALSE_RETURN_V(meta.GetData(tag, valueBool), false);
             value = valueBool ? 1 : 0;
-            MEDIA_LOG_I("GetMetaData 1");
             return true;
         }
-        MEDIA_LOG_I("GetMetaData 2");
         return meta.GetData(tag, value);
     }
-    MEDIA_LOG_I("GetMetaData 3");
     return iter->second.second(meta, tag, value);
 }
 
