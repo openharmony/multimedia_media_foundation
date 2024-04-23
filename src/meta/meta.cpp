@@ -275,6 +275,8 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_ENCODER_QP_MAX, defaultInt32},
     {Tag::VIDEO_ENCODER_QP_MIN, defaultInt32},
     {Tag::FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_COUNT, defaultInt32},
+    {Tag::AV_CODEC_CALLER_PID, defaultInt32},
+    {Tag::AV_CODEC_FORWARD_CALLER_PID, defaultInt32},
     {Tag::VIDEO_DECODER_RATE_UPPER_LIMIT, defaultInt32},
     // String
     {Tag::MIME_TYPE, defaultString},
@@ -299,6 +301,8 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::MEDIA_CODEC_NAME, defaultString},
     {Tag::PROCESS_NAME, defaultString},
     {Tag::MEDIA_CREATION_TIME, defaultString},
+    {Tag::AV_CODEC_CALLER_PROCESS_NAME, defaultString},
+    {Tag::AV_CODEC_FORWARD_CALLER_PROCESS_NAME, defaultString},
     // Float
     {Tag::MEDIA_LATITUDE, defaultFloat},
     {Tag::MEDIA_LONGITUDE, defaultFloat},
