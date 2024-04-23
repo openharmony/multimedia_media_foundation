@@ -261,8 +261,13 @@ public:
                                                             ///< term reference count
     
     /* -------------------- AVCodec tag -------------------- */
+    // Pid is int32_t and process name is string, to describe AVCodec's forward caller info.
+    // For example, camera recording, forward caller is camera.
     static constexpr const char AV_CODEC_FORWARD_CALLER_PID[]           = "av_codec_forward_caller_pid";
     static constexpr const char AV_CODEC_FORWARD_CALLER_PROCESS_NAME[]  = "av_codec_forward_caller_process_name";
+
+    // Pid is int32_t and process name is string, to describe AVCodec's caller info.
+    // For example, camera recording, caller is media_service.
     static constexpr const char AV_CODEC_CALLER_PID[]                   = "av_codec_caller_pid";
     static constexpr const char AV_CODEC_CALLER_PROCESS_NAME[]          = "av_codec_caller_process_name";
 };
