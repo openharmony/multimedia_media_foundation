@@ -435,7 +435,7 @@ ErrorCode MediaSourceFilter::FindPlugin(const std::shared_ptr<MediaSource>& sour
         auto val = info->extra[PLUGIN_INFO_EXTRA_PROTOCOL];
         if (Plugin::Any::IsSameTypeWith<std::vector<ProtocolType>>(val)) {
             auto supportProtocols = OHOS::Media::Plugin::AnyCast<std::vector<ProtocolType>>(val);
-            for(auto supportProtocol : supportProtocols) {
+            for (auto supportProtocol : supportProtocols) {
                 if (g_protocolStringToType[protocol_] == supportProtocol &&
                     CreatePlugin(info, name, pluginManager) == ErrorCode::SUCCESS) {
                     MEDIA_LOG_I("supportProtocol:" PUBLIC_LOG_S " CreatePlugin " PUBLIC_LOG_S " success",
