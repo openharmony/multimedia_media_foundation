@@ -356,13 +356,13 @@ int32_t AVMemory::Read(uint8_t *out, int32_t readSize, int32_t position)
     FALSE_RETURN_V_MSG_E((GetMemoryFlag() & MemoryFlag::MEMORY_READ_ONLY) != 0, 0, "Lack read permission");
     uint8_t *addr = GetAddr();
     FALSE_RETURN_V_MSG_E(addr != nullptr, 0, "Base buffer is nullptr");
-    int32_t start = 0;
-    int32_t maxLength = size_;
+    uint32_t start = 0;
+    uint32_t maxLength = size_;
     if (position > INVALID_POSITION) {
         start = std::min(position, size_);
         maxLength = size_ - start;
     }
-    int32_t length = std::min(readSize, maxLength);
+    uint32_t length = std::min(readSize, maxLength);
     FALSE_RETURN_V_MSG_E((length + start) <= capacity_, 0,
                          "Read out of bounds, length:%{public}d, start:%{public}d, capacity:%{public}d", length, start,
                          capacity_);

@@ -36,7 +36,7 @@ static const std::map<EventType, const char*> g_EventTypeMap = {
 const char* GetEventName(EventType type)
 {
     auto it = g_EventTypeMap.find(type);
-    if( it!= g_EventTypeMap.end()) {
+    if(it != g_EventTypeMap.end()) {
         return it->second;
     }
     return "Unknow event";
