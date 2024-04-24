@@ -362,7 +362,7 @@ int32_t AVMemory::Read(uint8_t *out, int32_t readSize, int32_t position)
         start = std::min(position, size_);
         maxLength = size_ - start;
     }
-    uint32_t length = std::min(readSize, maxLength);
+    int32_t length = std::min(readSize, maxLength);
     FALSE_RETURN_V_MSG_E((length + start) <= capacity_, 0,
                          "Read out of bounds, length:%{public}d, start:%{public}d, capacity:%{public}d", length, start,
                          capacity_);
