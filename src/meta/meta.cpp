@@ -289,7 +289,9 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_COUNT, defaultInt32},
     {Tag::OH_MD_KEY_AUDIO_OBJECT_NUMBER, defaultInt32},
     {Tag::AV_CODEC_CALLER_PID, defaultInt32},
+    {Tag::AV_CODEC_CALLER_UID, defaultInt32},
     {Tag::AV_CODEC_FORWARD_CALLER_PID, defaultInt32},
+    {Tag::AV_CODEC_FORWARD_CALLER_UID, defaultInt32},
     {Tag::VIDEO_DECODER_RATE_UPPER_LIMIT, defaultInt32},
     // String
     {Tag::MIME_TYPE, defaultString},
