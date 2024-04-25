@@ -125,6 +125,7 @@ static std::vector<TagType> g_metadataBoolVector = {
     Tag::VIDEO_IS_HDR_VIVID,
     Tag::MEDIA_HAS_VIDEO,
     Tag::MEDIA_HAS_AUDIO,
+    Tag::MEDIA_HAS_SUBTITLE,
     Tag::MEDIA_END_OF_STREAM
 };
 
@@ -328,6 +329,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_IS_HDR_VIVID, defaultBool},
     {Tag::MEDIA_HAS_VIDEO, defaultBool},
     {Tag::MEDIA_HAS_AUDIO, defaultBool},
+    {Tag::MEDIA_HAS_SUBTITLE, defaultBool},
     {Tag::MEDIA_END_OF_STREAM, defaultBool},
     {Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE, defaultBool},
     {Tag::VIDEO_ENCODER_ENABLE_TEMPORAL_SCALABILITY, defaultBool},

@@ -90,6 +90,7 @@ public:
     static constexpr const char MEDIA_STREAM_TYPE[] = "media.stream.type";     ///< stream type of track data
     static constexpr const char MEDIA_HAS_VIDEO[] = "has_video";               ///< has video track in file
     static constexpr const char MEDIA_HAS_AUDIO[] = "has_audio";               ///< has audio track in file
+    static constexpr const char MEDIA_HAS_SUBTITLE[] = "has_subtitle";         ///< has subtitle track in file
     static constexpr const char MEDIA_COVER[] = "cover";                       ///< cover in file
     static constexpr const char MEDIA_PROTOCOL_TYPE[] = "media.protocol.type"; ///< Source protocol type
     static constexpr const char MEDIA_PROFILE[] = "codec_profile";             ///< codec profile, Compatible 4.0
