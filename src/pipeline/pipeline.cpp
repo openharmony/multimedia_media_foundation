@@ -25,7 +25,7 @@
 namespace OHOS {
 namespace Media {
 namespace Pipeline {
-static std::atomic<int32_t> pipeLineId = 0;
+static std::atomic<uint16_t> pipeLineId = 0;
 
 int32_t Pipeline::GetNextPipelineId()
 {
@@ -191,12 +191,14 @@ Status Pipeline::Stop()
 
 Status Pipeline::Flush()
 {
+    MEDIA_LOG_I("Flush enter.");
     SubmitJobOnce([&] {
         AutoLock lock(mutex_);
         for (auto it = filters_.begin(); it != filters_.end(); ++it) {
             (*it)->Flush();
         }
     });
+    MEDIA_LOG_I("Flush end.");
     return Status::OK;
 }
 
