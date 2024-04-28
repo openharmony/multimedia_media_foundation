@@ -23,8 +23,8 @@
 namespace OHOS {
 namespace Media {
 namespace Pipeline {
-Filter::Filter(std::string name, FilterType type, bool asyncMode)
-    : name_(std::move(name)), filterType_(std::move(type)), asyncMode_(asyncMode)
+Filter::Filter(std::string name, FilterType type, bool isAsyncMode)
+    : name_(std::move(name)), filterType_(type), isAsyncMode_(isAsyncMode)
 {
 }
 
@@ -42,7 +42,7 @@ void Filter::Init(const std::shared_ptr<EventReceiver>& receiver, const std::sha
 void Filter::LinkPipeLine(const std::string& groupId)
 {
     groupId_ = groupId;
-    if (asyncMode_) {
+    if (isAsyncMode_) {
         TaskType taskType;
         switch (filterType_) {
             case FilterType::FILTERTYPE_VENC:
@@ -250,25 +250,13 @@ Status Filter::StopDone()
 Status Filter::Flush()
 {
     MEDIA_LOG_I("Filter::Flush %{public}s, prevState:%{public}d", name_.c_str(), curState_);
-    if (filterTask_) {
-        filterTask_->SubmitJobOnce([this]() {
-            DoFlush();
-            jobIdxBase_ = jobIdx_;
-        }, 0, true);
-        for (auto iter : nextFiltersMap_) {
-            for (auto filter : iter.second) {
-                filter->Flush();
-            }
+    for (auto iter : nextFiltersMap_) {
+        for (auto filter : iter.second) {
+            filter->Flush();
         }
-    } else {
-        for (auto iter : nextFiltersMap_) {
-            for (auto filter : iter.second) {
-                filter->Flush();
-            }
-        }
-        return DoFlush();
     }
-    return Status::OK;
+    jobIdxBase_ = jobIdx_;
+    return DoFlush();
 }
 
 Status Filter::Release()

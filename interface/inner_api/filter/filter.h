@@ -223,7 +223,7 @@ protected:
 
     std::string groupId_;
 
-    bool asyncMode_;
+    bool isAsyncMode_;
 };
 
 enum FilterPlaybackCommand {
