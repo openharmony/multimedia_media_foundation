@@ -410,7 +410,7 @@ HWTEST_F(TaskInnerUnitTest, WaitFor_Succ, TestSize.Level1)
         }
         return 0;
     });
-    task1->Start();
+    task01->Start();
     int timeoutMs = 1000;
     isStop_.store(true);
     auto rtv = cv.WaitFor(lock, timeoutMs, [this] { return isStop_.load(); });
@@ -438,7 +438,7 @@ HWTEST_F(TaskInnerUnitTest, WaitFor_Failed, TestSize.Level1)
         }
         return 0;
     });
-    task2->Start();
+    task02->Start();
     int timeoutMs = 100;
     isStop_.store(false);
     auto start = std::chrono::high_resolution_clock::now();
