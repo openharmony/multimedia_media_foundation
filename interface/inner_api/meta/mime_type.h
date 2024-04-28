@@ -51,6 +51,8 @@ public:
     static constexpr const char MEDIA_M4A[] = "media/m4a";
     static constexpr const char MEDIA_AMR[] = "media/amr";
     static constexpr const char MEDIA_MP3[] = "media/mp3";
+
+    static constexpr const char TEXT_SUBRIP[] = "application/x-subrip";
 };
 } // namespace Plugins
 } // namespace Media

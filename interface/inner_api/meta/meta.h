@@ -175,6 +175,7 @@ public:
         tagCharSeq == Tag::VIDEO_IS_HDR_VIVID or
         tagCharSeq == Tag::MEDIA_HAS_VIDEO or
         tagCharSeq == Tag::MEDIA_HAS_AUDIO or
+        tagCharSeq == Tag::MEDIA_HAS_SUBTITLE or
         tagCharSeq == Tag::MEDIA_END_OF_STREAM or
         tagCharSeq == Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE or
         tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_TEMPORAL_SCALABILITY or
