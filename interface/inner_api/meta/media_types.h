@@ -197,37 +197,6 @@ enum struct PluginType : int32_t {
 };
 
 /**
- * @enum Sub plugin Type.
- *
- * @since 1.0
- * @version 1.0
- */
-enum struct SubPluginType : int32_t {
-    INVALID_TYPE = -1, ///< Invalid plugin
-    FILE_FD_SOURCE = 1,
-    FILE_SOURCE = 2,
-    HTTP_SOURCE = 3,
-    DATA_STREAM_SOURCE = 4,
-
-    FFMPEG_DEMUXER = 5,
-
-    FFMPEG_AUDIO_DECODER = 6,
-    G711MU_AUDIO_DECODER = 7,
-    OPUS_AUDIO_DECODER = 8,
-    AUDIO_VIVID_DECODER = 9,
-    LBVC_AUDIO_DECODER = 15,
-
-    DEFAULT_AUDIO_SINK = 10,
-
-    FFMPEG_MUXER = 11,
-
-    FFMPEG_AUDIO_ENCODER = 12,
-    G711MU_AUDIO_ENCODER = 13,
-    OPUS_AUDIO_ENCODER = 14,
-    LBVC_AUDIO_ENCODER = 16,
-};
-
-/**
  * @enum Plugin running state.
  *
  * @since 1.0
