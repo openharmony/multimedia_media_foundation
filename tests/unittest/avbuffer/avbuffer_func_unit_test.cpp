@@ -255,7 +255,7 @@ HWTEST_F(AVBufferInnerUnitTest, AVBuffer_Config_007, TestSize.Level1)
     config1.size = MEMSIZE;
     AVBufferConfig config2;
     config2 = std::move(config1);
-    EXPECT_EQ(config2.size(), MEMSIZE);
+    EXPECT_EQ(config2.size, MEMSIZE);
 }
 
 /**
