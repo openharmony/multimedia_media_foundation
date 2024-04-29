@@ -119,7 +119,6 @@ HWTEST(FFmpegDemuxerTrackMetaTest, test_ffmpetrack_meta, TestSize.Level1)
 
     avStream.codecpar = new AVCodecParameters();
     avStream.codecpar->codec_id = AV_CODEC_ID_PCM_S16LE;
-    avStream.index_entries = new AVIndexEntry();
 
     const shared_ptr<AVFormatContext> avFormatContextPtr = make_shared<AVFormatContext>();
     const shared_ptr<AVCodecContext> avCodecContextPtr = make_shared<AVCodecContext>();
@@ -146,7 +145,6 @@ HWTEST(FFmpegDemuxerTrackMetaTest, test_ffmpetrack_meta, TestSize.Level1)
     EXPECT_EQ(mimeType, MEDIA_MIME_AUDIO_APE);
 
     delete avStream.codecpar;
-    delete avStream.index_entries;
 }
 }
 }
