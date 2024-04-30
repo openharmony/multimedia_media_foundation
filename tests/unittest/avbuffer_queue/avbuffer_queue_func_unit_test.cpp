@@ -140,11 +140,11 @@ HWTEST_F(AVBufferQueueInnerUnitTest, DeleteBuffersTest, TestSize.Level1)
     avBufferQueueImpl_->InsertFreeBufferInOrder(buffer1->GetUniqueId());
     avBufferQueueImpl_->InsertFreeBufferInOrder(buffer2->GetUniqueId());
     avBufferQueueImpl_->DeleteBuffers(count);
-    ASSERT_EQ(AVBufferQueueImpl->GetQueueSize(), 0);
+    ASSERT_EQ(avBufferQueueImpl_->GetQueueSize(), 0);
 
     count = 0;
     avBufferQueueImpl_->DeleteBuffers(count);
-    ASSERT_EQ(AVBufferQueueImpl->GetQueueSize(), 0);
+    ASSERT_EQ(avBufferQueueImpl_->GetQueueSize(), 0);
 }
 
 /**
@@ -242,7 +242,7 @@ HWTEST_F(AVBufferQueueInnerUnitTest, PushBufferTest_004, TestSize.Level1)
     std::shared_ptr<AVBuffer> buffer = AVBuffer::CreateAVBuffer(config);
     ASSERT_NE(nullptr, buffer);
     EXPECT_EQ(avBufferQueueImpl_->AllocBuffer(buffer, config), Status::OK);
-    EXPECT_EQ(avBufferQueueImpl_->DeleteBuffers(1), Status::OK);
+    avBufferQueueImpl_->DeleteBuffers(1);
     EXPECT_EQ(avBufferQueueImpl_->PushBuffer(buffer, true), Status::OK);
 }
 
@@ -261,7 +261,7 @@ HWTEST_F(AVBufferQueueInnerUnitTest, PushBufferTest_005, TestSize.Level1)
     ASSERT_NE(nullptr, buffer);
     EXPECT_EQ(avBufferQueueImpl_->AllocBuffer(buffer, config), Status::OK);
     EXPECT_EQ(avBufferQueueImpl_->RequestReuseBuffer(buffer, config), Status::OK);
-    sptr<IBrokerListener> listener = std::make_shared<BrokerListener>();
+    sptr<IBrokerListener> listener = new BrokerListener();
     avBufferQueueImpl_->SetBrokerListener(listener);
     EXPECT_EQ(avBufferQueueImpl_->PushBuffer(buffer, true), Status::OK);
 }
@@ -318,7 +318,7 @@ HWTEST_F(AVBufferQueueInnerUnitTest, ReturnBufferTest, TestSize.Level1)
     EXPECT_EQ(avBufferQueueImpl_->AllocBuffer(buffer, config), Status::OK);
     EXPECT_EQ(avBufferQueueImpl_->RequestReuseBuffer(buffer, config), Status::OK);
     EXPECT_EQ(avBufferQueueImpl_->PushBuffer(buffer, true), Status::OK);
-    EXPECT_EQ(avBufferQueueImpl_->DeleteBuffers(buffer->GetUniqueId()), Status::OK);
+    avBufferQueueImpl_->DeleteBuffers(buffer->GetUniqueId());
     EXPECT_EQ(avBufferQueueImpl_->ReturnBuffer(buffer->GetUniqueId(), true), Status::ERROR_INVALID_BUFFER_ID);
 }
 } // namespace AVBufferQueueFuncUT
