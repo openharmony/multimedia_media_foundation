@@ -42,7 +42,6 @@ config("plugin_ffmpeg_adapter_config") {
   include_dirs = [
     "//foundation/multimedia/media_foundation/engine/include/",
     "//foundation/multimedia/media_foundation/engine/plugin/",
-    "//third_party/ffmpeg",
   ]
 }
 
@@ -66,6 +65,7 @@ ohos_source_set("ffmpeg_adapter_common") {
   }
   if (hst_is_lite_sys) {
     print("histreamer audio encoder plugin only supports standard system")
+    include_dirs = [ "//third_party/ffmpeg" ]
   } else {
     public_external_deps = [ "ffmpeg:libohosffmpeg" ]
   }
@@ -90,6 +90,7 @@ ohos_source_set("ffmpeg_audio_decoders") {
     ]
   }
   if (hst_is_lite_sys) {
+    include_dirs = [ "//third_party/ffmpeg" ]
     # deps on lite
   } else {
     public_external_deps = [ "ffmpeg:libohosffmpeg" ]
@@ -123,6 +124,7 @@ ohos_source_set("ffmpeg_demuxers") {
   }
 
   if (hst_is_lite_sys) {
+    include_dirs = [ "//third_party/ffmpeg" ]
     # deps on lite
   } else {
     public_external_deps = [ "ffmpeg:libohosffmpeg" ]
@@ -152,6 +154,7 @@ ohos_source_set("ffmpeg_audio_encoders") {
     ]
   }
   if (hst_is_lite_sys) {
+    include_dirs = [ "//third_party/ffmpeg" ]
     print("histreamer audio encoder plugin only supports standard system")
   } else {
     public_external_deps = [ "ffmpeg:libohosffmpeg" ]
@@ -178,6 +181,7 @@ ohos_source_set("ffmpeg_video_decoders") {
     ]
   }
   if (hst_is_lite_sys) {
+    include_dirs = [ "//third_party/ffmpeg" ]
     print("histreamer video decoder plugin only supports standard system")
   } else {
     public_external_deps = [ "ffmpeg:libohosffmpeg" ]
@@ -206,6 +210,7 @@ ohos_source_set("ffmpeg_video_encoders") {
     ]
   }
   if (hst_is_lite_sys) {
+    include_dirs = [ "//third_party/ffmpeg" ]
     print("histreamer video encoder plugin only supports standard system")
   } else {
     public_external_deps = [ "ffmpeg:libohosffmpeg" ]
@@ -234,6 +239,7 @@ ohos_source_set("ffmpeg_muxers") {
     ]
   }
   if (hst_is_lite_sys) {
+    include_dirs = [ "//third_party/ffmpeg" ]
     print("histreamer ffmpeg muxer plugin only supports standard system")
   } else {
     public_external_deps = [ "ffmpeg:libohosffmpeg" ]

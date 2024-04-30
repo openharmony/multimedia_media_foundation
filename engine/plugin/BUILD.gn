@@ -38,9 +38,7 @@ config("hst_plugin_intf_config") {
       include_dirs += [
         "//commonlibrary/c_utils/base/include",
         "//drivers/peripheral/display/interfaces/include",
-        "//foundation/graphic/graphic_surface/surface/include",
         "//foundation/graphic/graphic_2d/interfaces/inner_api/",
-        "//foundation/graphic/graphic_2d/utils/sync_fence/export",
       ]
     }
   }
@@ -79,6 +77,10 @@ if (hst_is_lite_sys) {
     public_external_deps = [ "player_framework:media_client" ]
     external_deps = [ "bounds_checking_function:libsec_shared" ]
     if (media_foundation_enable_video) {
+      public_external_deps += [
+        "graphic_2d:sync_fence",
+        "graphic_surface:surface",
+      ]
       sources += [
         "common/share_allocator.cpp",
         "common/share_memory.cpp",
@@ -87,7 +89,6 @@ if (hst_is_lite_sys) {
       ]
       external_deps += [
         "c_utils:utils",
-        "graphic_surface:surface",
         "graphic_surface:sync_fence",
         "hilog:libhilog",
         "ipc:ipc_single",
