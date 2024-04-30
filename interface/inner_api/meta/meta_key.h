@@ -260,6 +260,15 @@ public:
 
     /* -------------------- drm tag -------------------- */
     static constexpr const char DRM_CENC_INFO[] = "drm_cenc_info"; ///< drm cenc info
+    static constexpr const char DRM_APP_NAME[] = "APP_NAME"; ///< drm app name
+    static constexpr const char DRM_INSTANCE_ID[] = "INSTANCE_ID"; ///< drm instance id
+    static constexpr const char DRM_DECRYPT_AVG_SIZE[] = "DECRYPT_AVG_SIZE"; ///< drm decrypt avg size
+    static constexpr const char DRM_DECRYPT_AVG_DURATION[] = "DECRYPT_AVG_DURATION"; ///< drm decrypt avg duration
+    static constexpr const char DRM_DECRYPT_MAX_SIZE[] = "DECRYPT_MAX_SIZE"; ///< drm decrypt max size
+    static constexpr const char DRM_DECRYPT_MAX_DURATION[] = "DECRYPT_MAX_DURATION"; ///< drm decrypt max duration
+    static constexpr const char DRM_DECRYPT_TIMES[] = "DECRYPT_TIMES"; ///< drm decrypt times
+    static constexpr const char DRM_ERROR_CODE[] = "ERROR_CODE"; ///< drm error code
+    static constexpr const char DRM_ERROR_MESG[] = "ERROR_MESG"; ///< drm error message
 
     /* -------------------- avcapability tag -------------------- */
     static constexpr const char FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_COUNT[] =

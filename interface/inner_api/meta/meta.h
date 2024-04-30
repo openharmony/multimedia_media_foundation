@@ -232,7 +232,8 @@ public:
         tagCharSeq == Tag::VIDEO_STRIDE or
         tagCharSeq == Tag::VIDEO_DISPLAY_WIDTH or
         tagCharSeq == Tag::VIDEO_DISPLAY_HEIGHT or
-        tagCharSeq == Tag::OH_MD_KEY_AUDIO_OBJECT_NUMBER, int32_t, AnyValueType::INT32_T);
+        tagCharSeq == Tag::OH_MD_KEY_AUDIO_OBJECT_NUMBER or
+        tagCharSeq == Tag::DRM_ERROR_CODE, int32_t, AnyValueType::INT32_T);
 
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::VIDEO_ENCODER_TEMPORAL_GOP_SIZE or
@@ -271,6 +272,12 @@ public:
         tagCharSeq == Tag::VIDEO_CAPTURE_RATE, double, AnyValueType::DOUBLE);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::MEDIA_FILE_TYPE, Plugins::FileType, AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::DRM_DECRYPT_AVG_SIZE or
+        tagCharSeq == Tag::DRM_DECRYPT_AVG_DURATION or
+        tagCharSeq == Tag::DRM_DECRYPT_MAX_SIZE or
+        tagCharSeq == Tag::DRM_DECRYPT_MAX_DURATION or
+        tagCharSeq == Tag::DRM_DECRYPT_TIMES, uint32_t, AnyValueType::UINT32_T);
+    DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::MIME_TYPE or
         tagCharSeq == Tag::MEDIA_FILE_URI or
         tagCharSeq == Tag::MEDIA_TITLE or
@@ -294,7 +301,10 @@ public:
         tagCharSeq == Tag::MEDIA_CODEC_NAME or
         tagCharSeq == Tag::PROCESS_NAME or
         tagCharSeq == Tag::SCREEN_CAPTURE_ERR_MSG or
-        tagCharSeq == Tag::SCREEN_CAPTURE_VIDEO_RESOLUTION, std::string, AnyValueType::STRING);
+        tagCharSeq == Tag::SCREEN_CAPTURE_VIDEO_RESOLUTION or
+        tagCharSeq == Tag::DRM_APP_NAME or
+        tagCharSeq == Tag::DRM_INSTANCE_ID or
+        tagCharSeq == Tag::DRM_ERROR_MESG, std::string, AnyValueType::STRING);
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::SCREEN_CAPTURE_AV_TYPE or
         tagCharSeq == Tag::SCREEN_CAPTURE_DATA_TYPE or
