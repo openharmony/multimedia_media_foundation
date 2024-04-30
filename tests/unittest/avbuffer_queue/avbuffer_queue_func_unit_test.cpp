@@ -49,7 +49,7 @@ public:
     void OnBufferFilled(std::shared_ptr<AVBuffer> &avBuffer) override {
         ASSERT_NE(avBuffer, nullptr);
     }
-}
+};
 
 void AVBufferQueueInnerUnitTest::SetUpTestCase(void) {}
 
@@ -129,12 +129,12 @@ HWTEST_F(AVBufferQueueInnerUnitTest, DeleteBuffersTest, TestSize.Level1)
     std::shared_ptr<AVBuffer> buffer1 = AVBuffer::CreateAVBuffer(config);
     EXPECT_EQ(avBufferQueueImpl_->AllocBuffer(buffer1, config), Status::OK);
     EXPECT_EQ(avBufferQueueImpl_->RequestReuseBuffer(buffer1, config), Status::OK);
-    EXPECT_EQ(avBufferQueueImpl_->PushBuffer(buffer1, config), Status::OK);
+    EXPECT_EQ(avBufferQueueImpl_->PushBuffer(buffer1, true), Status::OK);
     config.capacity = 20;
     std::shared_ptr<AVBuffer> buffer2 = AVBuffer::CreateAVBuffer(config);
     EXPECT_EQ(avBufferQueueImpl_->AllocBuffer(buffer2, config), Status::OK);
     EXPECT_EQ(avBufferQueueImpl_->RequestReuseBuffer(buffer2, config), Status::OK);
-    EXPECT_EQ(avBufferQueueImpl_->PushBuffer(buffer2, config), Status::OK);
+    EXPECT_EQ(avBufferQueueImpl_->PushBuffer(buffer2, true), Status::OK);
 
     uint32_t count = 10;
     avBufferQueueImpl_->InsertFreeBufferInOrder(buffer1->GetUniqueId());
@@ -190,7 +190,7 @@ HWTEST_F(AVBufferQueueInnerUnitTest, PushBufferTest_001, TestSize.Level1)
     std::shared_ptr<AVBuffer> buffer = AVBuffer::CreateAVBuffer(config);
     EXPECT_EQ(avBufferQueueImpl_->AllocBuffer(buffer, config), Status::OK);
 
-    EXPECT_EQ(avBufferQueueImpl_->RequestBuffer(buffer, config), Status::OK);
+    EXPECT_EQ(avBufferQueueImpl_->RequestReuseBuffer(buffer, config), Status::OK);
     EXPECT_EQ(avBufferQueueImpl_->PushBuffer(buffer, true), Status::ERROR_INVALID_BUFFER_SIZE);
 }
 
@@ -224,7 +224,7 @@ HWTEST_F(AVBufferQueueInnerUnitTest, PushBufferTest_003, TestSize.Level1)
     std::shared_ptr<AVBuffer> buffer = AVBuffer::CreateAVBuffer(config);
     ASSERT_NE(nullptr, buffer);
     EXPECT_EQ(avBufferQueueImpl_->AllocBuffer(buffer, config), Status::OK);
-    EXPECT_EQ(avBufferQueueImpl_->RequestBuffer(buffer, config), Status::OK);
+    EXPECT_EQ(avBufferQueueImpl_->RequestReuseBuffer(buffer, config), Status::OK);
     EXPECT_EQ(avBufferQueueImpl_->PushBuffer(buffer, true), Status::ERROR_INVALID_BUFFER_SIZE);
 }
 
@@ -260,7 +260,7 @@ HWTEST_F(AVBufferQueueInnerUnitTest, PushBufferTest_005, TestSize.Level1)
     std::shared_ptr<AVBuffer> buffer = AVBuffer::CreateAVBuffer(config);
     ASSERT_NE(nullptr, buffer);
     EXPECT_EQ(avBufferQueueImpl_->AllocBuffer(buffer, config), Status::OK);
-    EXPECT_EQ(avBufferQueueImpl_->RequestBuffer(buffer, config), Status::OK);
+    EXPECT_EQ(avBufferQueueImpl_->RequestReuseBuffer(buffer, config), Status::OK);
     sptr<IBrokerListener> listener = std::make_shared<BrokerListener>();
     avBufferQueueImpl_->SetBrokerListener(listener);
     EXPECT_EQ(avBufferQueueImpl_->PushBuffer(buffer, true), Status::OK);
@@ -280,7 +280,7 @@ HWTEST_F(AVBufferQueueInnerUnitTest, PushBufferTest_006, TestSize.Level1)
     std::shared_ptr<AVBuffer> buffer = AVBuffer::CreateAVBuffer(config);
     ASSERT_NE(nullptr, buffer);
     EXPECT_EQ(avBufferQueueImpl_->AllocBuffer(buffer, config), Status::OK);
-    EXPECT_EQ(avBufferQueueImpl_->RequestBuffer(buffer, config), Status::OK);
+    EXPECT_EQ(avBufferQueueImpl_->RequestReuseBuffer(buffer, config), Status::OK);
     sptr<IBrokerListener> listener = std::make_shared<BrokerListener>();
     avBufferQueueImpl_->SetBrokerListener(listener);
     EXPECT_EQ(avBufferQueueImpl_->PushBuffer(buffer, false), Status::OK);
@@ -308,7 +308,7 @@ HWTEST_F(AVBufferQueueInnerUnitTest, ReturnBufferTest, TestSize.Level1)
 
     buffer = AVBuffer::CreateAVBuffer(config);
     EXPECT_EQ(avBufferQueueImpl_->AllocBuffer(buffer, config), Status::OK);
-    EXPECT_EQ(avBufferQueueImpl_->RequestBuffer(buffer, config), Status::OK);
+    EXPECT_EQ(avBufferQueueImpl_->RequestReuseBuffer(buffer, config), Status::OK);
     EXPECT_EQ(avBufferQueueImpl_->PushBuffer(buffer, true), Status::OK);
     EXPECT_EQ(avBufferQueueImpl_->ReturnBuffer(buffer, true), Status::ERROR_INVALID_BUFFER_ID);
 
@@ -316,7 +316,7 @@ HWTEST_F(AVBufferQueueInnerUnitTest, ReturnBufferTest, TestSize.Level1)
 
     buffer = AVBuffer::CreateAVBuffer(config);
     EXPECT_EQ(avBufferQueueImpl_->AllocBuffer(buffer, config), Status::OK);
-    EXPECT_EQ(avBufferQueueImpl_->RequestBuffer(buffer, config), Status::OK);
+    EXPECT_EQ(avBufferQueueImpl_->RequestReuseBuffer(buffer, config), Status::OK);
     EXPECT_EQ(avBufferQueueImpl_->PushBuffer(buffer, true), Status::OK);
     EXPECT_EQ(avBufferQueueImpl_->DeleteBuffers(buffer->GetUniqueId()), Status::OK);
     EXPECT_EQ(avBufferQueueImpl_->ReturnBuffer(buffer->GetUniqueId(), true), Status::ERROR_INVALID_BUFFER_ID);
