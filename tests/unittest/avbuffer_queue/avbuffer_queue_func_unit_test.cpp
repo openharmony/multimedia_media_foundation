@@ -281,7 +281,7 @@ HWTEST_F(AVBufferQueueInnerUnitTest, PushBufferTest_006, TestSize.Level1)
     ASSERT_NE(nullptr, buffer);
     EXPECT_EQ(avBufferQueueImpl_->AllocBuffer(buffer, config), Status::OK);
     EXPECT_EQ(avBufferQueueImpl_->RequestReuseBuffer(buffer, config), Status::OK);
-    sptr<IBrokerListener> listener = std::make_shared<BrokerListener>();
+    sptr<IBrokerListener> listener = new BrokerListener();
     avBufferQueueImpl_->SetBrokerListener(listener);
     EXPECT_EQ(avBufferQueueImpl_->PushBuffer(buffer, false), Status::OK);
 }
