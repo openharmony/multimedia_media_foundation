@@ -401,6 +401,9 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::VIDEO_ENCODER_QP_MIN, 21},
     {Tag::FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_COUNT, 22},
     {Tag::VIDEO_DECODER_RATE_UPPER_LIMIT, 120},
+    {Tag::SCREEN_CAPTURE_ERR_CODE, 3},
+    {Tag::SCREEN_CAPTURE_DURATION, 5},
+    {Tag::SCREEN_CAPTURE_START_LATENCY, 7},
     {Tag::SRC_INPUT_TYPE, static_cast<int32_t>(Plugins::SrcInputType::AUD_ES)},
     {Tag::AUDIO_SAMPLE_FORMAT, static_cast<int32_t>(Plugins::AudioSampleFormat::SAMPLE_S16LE)},
     {Tag::VIDEO_PIXEL_FORMAT, static_cast<int32_t>(Plugins::VideoPixelFormat::YUV411P)},
@@ -423,6 +426,9 @@ map<TagType, int32_t> testInt32Data = {
 
     map<TagType, bool> testBoolData = {
     // Bool
+    {Tag::SCREEN_CAPTURE_USER_AGREE, true},
+    {Tag::SCREEN_CAPTURE_REQURE_MIC, false},
+    {Tag::SCREEN_CAPTURE_ENABLE_MIC, true},
     {Tag::VIDEO_COLOR_RANGE, true},
     {Tag::VIDEO_REQUEST_I_FRAME, false},
     {Tag::MEDIA_HAS_VIDEO, true},
@@ -596,6 +602,8 @@ map<TagType, std::string> testStringData = {
     {Tag::MEDIA_CODEC_NAME, "String MEDIA_CODEC_NAME"},
     {Tag::PROCESS_NAME, "String PROCESS_NAME"},
     {Tag::MEDIA_CREATION_TIME, "String MEDIA_CREATION_TIME"},
+    {Tag::SCREEN_CAPTURE_ERR_MSG, "String SCREEN_CAPTURE_ERR_MSG"},
+    {Tag::SCREEN_CAPTURE_VIDEO_RESOLUTION, "String SCREEN_CAPTURE_VIDEO_RESOLUTION"},
 };
 
 /**

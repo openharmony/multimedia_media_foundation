@@ -278,6 +278,18 @@ public:
     static constexpr const char AV_CODEC_CALLER_PID[]                   = "av_codec_caller_pid";
     static constexpr const char AV_CODEC_CALLER_UID[]                   = "av_codec_caller_uid";
     static constexpr const char AV_CODEC_CALLER_PROCESS_NAME[]          = "av_codec_caller_process_name";
+/* -------------------- screen captrue tag -------------------- */
+    static constexpr const char SCREEN_CAPTURE_ERR_CODE[] = "errCode";
+    static constexpr const char SCREEN_CAPTURE_ERR_MSG[] = "errMsg";
+    static constexpr const char SCREEN_CAPTURE_DURATION[] = "captureDuration";
+    static constexpr const char SCREEN_CAPTURE_AV_TYPE[] = "avType";
+    static constexpr const char SCREEN_CAPTURE_DATA_TYPE[] = "dataType";
+    static constexpr const char SCREEN_CAPTURE_USER_AGREE[] = "userAgree";
+    static constexpr const char SCREEN_CAPTURE_REQURE_MIC[] = "requireMic";
+    static constexpr const char SCREEN_CAPTURE_ENABLE_MIC[] = "enableMic";
+    static constexpr const char SCREEN_CAPTURE_VIDEO_RESOLUTION[] = "videoResolution";
+    static constexpr const char SCREEN_CAPTURE_STOP_REASON[] = "stopReason";
+    static constexpr const char SCREEN_CAPTURE_START_LATENCY[] = "startLatency";
 };
 
 using TagTypeCharSeq = const char *;
