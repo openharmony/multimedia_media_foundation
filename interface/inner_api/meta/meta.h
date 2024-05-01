@@ -181,7 +181,10 @@ public:
         tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_TEMPORAL_SCALABILITY or
         tagCharSeq == Tag::VIDEO_PER_FRAME_IS_LTR or
         tagCharSeq == Tag::VIDEO_ENABLE_LOW_LATENCY or
-        tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK, bool, AnyValueType::BOOL);
+        tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK or
+        tagCharSeq == Tag::SCREEN_CAPTURE_USER_AGREE or
+        tagCharSeq == Tag::SCREEN_CAPTURE_REQURE_MIC or
+        tagCharSeq == Tag::SCREEN_CAPTURE_ENABLE_MIC, bool, AnyValueType::BOOL);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_BUFFER_CAN_DROP, bool, AnyValueType::BOOL);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_H265_PROFILE, Plugins::HEVCProfile, AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_H265_LEVEL, Plugins::HEVCLevel, AnyValueType::INT32_T);
@@ -244,7 +247,10 @@ public:
         tagCharSeq == Tag::VIDEO_SLICE_HEIGHT or
         tagCharSeq == Tag::VIDEO_ENCODER_QP_MAX or
         tagCharSeq == Tag::VIDEO_ENCODER_QP_MIN or
-        tagCharSeq == Tag::FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_COUNT, int32_t, AnyValueType::INT32_T);
+        tagCharSeq == Tag::FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_COUNT or
+        tagCharSeq == Tag::SCREEN_CAPTURE_ERR_CODE or
+        tagCharSeq == Tag::SCREEN_CAPTURE_DURATION or
+        tagCharSeq == Tag::SCREEN_CAPTURE_START_LATENCY, int32_t, AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_DECODER_RATE_UPPER_LIMIT, int32_t, AnyValueType::INT32_T);
 
     DEFINE_INSERT_GET_FUNC(
@@ -286,7 +292,13 @@ public:
         tagCharSeq == Tag::MEDIA_LYRICS or
         tagCharSeq == Tag::MEDIA_CREATION_TIME or
         tagCharSeq == Tag::MEDIA_CODEC_NAME or
-        tagCharSeq == Tag::PROCESS_NAME, std::string, AnyValueType::STRING);
+        tagCharSeq == Tag::PROCESS_NAME or
+        tagCharSeq == Tag::SCREEN_CAPTURE_ERR_MSG or
+        tagCharSeq == Tag::SCREEN_CAPTURE_VIDEO_RESOLUTION, std::string, AnyValueType::STRING);
+    DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::SCREEN_CAPTURE_AV_TYPE or
+        tagCharSeq == Tag::SCREEN_CAPTURE_DATA_TYPE or
+        tagCharSeq == Tag::SCREEN_CAPTURE_STOP_REASON, uint8_t, AnyValueType::UINT8_T);
 
     Meta &operator=(const Meta &other)
     {

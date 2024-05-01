@@ -234,7 +234,10 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::MEDIA_FILE_TYPE, defaultFileType},
     {Tag::VIDEO_ENCODE_BITRATE_MODE, defaultVideoEncodeBitrateMode},
     {Tag::VIDEO_ENCODER_TEMPORAL_GOP_REFERENCE_MODE, defaultTemporalGopReferenceMode},
-
+    // Uint_8
+    {Tag::SCREEN_CAPTURE_AV_TYPE, defaultUInt8},
+    {Tag::SCREEN_CAPTURE_DATA_TYPE, defaultUInt8},
+    {Tag::SCREEN_CAPTURE_STOP_REASON, defaultUInt8},
     // Int32
     {Tag::APP_UID, defaultInt32},
     {Tag::APP_PID, defaultInt32},
@@ -294,6 +297,9 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::AV_CODEC_FORWARD_CALLER_PID, defaultInt32},
     {Tag::AV_CODEC_FORWARD_CALLER_UID, defaultInt32},
     {Tag::VIDEO_DECODER_RATE_UPPER_LIMIT, defaultInt32},
+    {Tag::SCREEN_CAPTURE_ERR_CODE, defaultInt32},
+    {Tag::SCREEN_CAPTURE_DURATION, defaultInt32},
+    {Tag::SCREEN_CAPTURE_START_LATENCY, defaultInt32},
     // String
     {Tag::MIME_TYPE, defaultString},
     {Tag::MEDIA_FILE_URI, defaultString},
@@ -319,6 +325,8 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::MEDIA_CREATION_TIME, defaultString},
     {Tag::AV_CODEC_CALLER_PROCESS_NAME, defaultString},
     {Tag::AV_CODEC_FORWARD_CALLER_PROCESS_NAME, defaultString},
+    {Tag::SCREEN_CAPTURE_ERR_MSG, defaultString},
+    {Tag::SCREEN_CAPTURE_VIDEO_RESOLUTION, defaultString},
     // Float
     {Tag::MEDIA_LATITUDE, defaultFloat},
     {Tag::MEDIA_LONGITUDE, defaultFloat},
@@ -340,6 +348,9 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_ENABLE_LOW_LATENCY, defaultBool},
     {Tag::VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK, defaultBool},
     {Tag::VIDEO_BUFFER_CAN_DROP, defaultBool},
+    {Tag::SCREEN_CAPTURE_USER_AGREE, defaultBool},
+    {Tag::SCREEN_CAPTURE_REQURE_MIC, defaultBool},
+    {Tag::SCREEN_CAPTURE_ENABLE_MIC, defaultBool},
     // Int64
     {Tag::MEDIA_FILE_SIZE, defaultUInt64},
     {Tag::MEDIA_POSITION, defaultUInt64},
@@ -367,7 +378,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     // vector<Plugins::VideoBitStreamFormat>
     {Tag::VIDEO_BIT_STREAM_FORMAT, defaultVectorVideoBitStreamFormat},
     // vector<uint8_t>
-    {Tag::DRM_CENC_INFO, defaultVectorUInt8}
+    {Tag::DRM_CENC_INFO, defaultVectorUInt8},
 };
 
 static std::map<AnyValueType, const Any &> g_ValueTypeDefaultValueMap = {
