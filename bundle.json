@@ -58,6 +58,7 @@
               "hitrace",
               "audio_framework",
               "drivers_peripheral_codec",
+              "drivers_peripheral_display",
               "graphic_2d",
               "graphic_surface",
               "hdf_core",
@@ -71,7 +72,8 @@
               "pulseaudio",
               "hisysevent",
               "window_manager",
-              "ffmpeg"
+              "ffmpeg",
+              "curl"
           ]
         },
         "build": {
