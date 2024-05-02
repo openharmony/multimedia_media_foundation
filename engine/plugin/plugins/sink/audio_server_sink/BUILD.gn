@@ -25,7 +25,6 @@ if (hst_is_standard_sys) {
     include_dirs = [
       "//foundation/multimedia/media_foundation/engine/include/",
       "//foundation/multimedia/media_foundation/engine/plugin/",
-      "//third_party/ffmpeg",
     ]
     sources = [ "audio_server_sink_plugin.cpp" ]
     public_configs =
@@ -41,6 +40,7 @@ if (hst_is_standard_sys) {
     ]
 
     external_deps = [
+      "ffmpeg:libohosffmpeg",
       "graphic_surface:surface",
       "hilog:libhilog",
     ]

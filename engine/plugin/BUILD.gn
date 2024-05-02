@@ -30,17 +30,8 @@ config("hst_plugin_intf_config") {
     include_dirs +=
         [ "//foundation/multimedia/media_utils_lite/interfaces/kits" ]
   } else {
-    include_dirs += [
-      "//foundation/multimedia/media_foundation/engine/scene/standard",
-      "//foundation/multimedia/player_framework/interfaces/inner_api/native",
-    ]
-    if (media_foundation_enable_video) {
-      include_dirs += [
-        "//commonlibrary/c_utils/base/include",
-        "//drivers/peripheral/display/interfaces/include",
-        "//foundation/graphic/graphic_2d/interfaces/inner_api/",
-      ]
-    }
+    include_dirs +=
+        [ "//foundation/multimedia/media_foundation/engine/scene/standard" ]
   }
 }
 
@@ -78,6 +69,8 @@ if (hst_is_lite_sys) {
     external_deps = [ "bounds_checking_function:libsec_shared" ]
     if (media_foundation_enable_video) {
       public_external_deps += [
+        "c_utils:utilsbase",
+        "drivers_peripheral_display:hdi_gralloc_client",
         "graphic_2d:sync_fence",
         "graphic_surface:surface",
       ]
@@ -111,7 +104,6 @@ ohos_source_set("plugin_base") {
 
 config("histreamer_plugin_base_external_config") {
   include_dirs = [
-    "//foundation/graphic/graphic_2d/interfaces/inner_api/",
     "//foundation/multimedia/media_foundation/engine",
     "//foundation/multimedia/media_foundation/engine/include",
     "//foundation/multimedia/media_foundation/engine/include/plugin/common",
@@ -151,10 +143,7 @@ if (hst_is_lite_sys) {
 ohos_source_set("ffmpeg_convert") {
   subsystem_name = "multimedia"
   part_name = "media_foundation"
-  include_dirs = [
-    "//foundation/multimedia/media_foundation/engine/include",
-    "//third_party/ffmpeg",
-  ]
+  include_dirs = [ "//foundation/multimedia/media_foundation/engine/include" ]
   sources = [ "convert/ffmpeg_convert.cpp" ]
   public_configs =
       [ "//foundation/multimedia/media_foundation:histreamer_presets" ]
@@ -166,6 +155,8 @@ ohos_source_set("ffmpeg_convert") {
   if (hst_is_standard_sys) {
     public_external_deps = [ "ffmpeg:libohosffmpeg" ]
     external_deps = [ "hilog:libhilog" ]
+  } else {
+    include_dirs += [ "//third_party/ffmpeg" ]
   }
 }
 
@@ -185,12 +176,12 @@ if (hst_is_lite_sys) {
   ohos_shared_library("histreamer_ffmpeg_convert") {
     subsystem_name = "multimedia"
     part_name = "media_foundation"
-    include_dirs = [
-      "//foundation/multimedia/media_foundation/engine/include",
-      "//third_party/ffmpeg",
-    ]
+    include_dirs = [ "//foundation/multimedia/media_foundation/engine/include" ]
     deps = [ ":ffmpeg_convert" ]
-    external_deps = [ "hilog:libhilog" ]
+    external_deps = [
+      "ffmpeg:libohosffmpeg",
+      "hilog:libhilog",
+    ]
     sanitize = {
       cfi = true
       cfi_cross_dso = true
@@ -254,7 +245,6 @@ ohos_source_set("histreamer_plugin_core") {
       "HST_PLUGIN_PATH=${hst_plugin_path}",
       "HST_PLUGIN_FILE_TAIL=\".z.so\"",
     ]
-    include_dirs += [ "//foundation/graphic/graphic_2d/interfaces/inner_api/" ]
     external_deps = [
       "bounds_checking_function:libsec_shared",
       "c_utils:utilsbase",

@@ -53,7 +53,6 @@ config("histreamer_base_external_config") {
     "//foundation/multimedia/media_foundation/engine/include/plugin/core",
     "//foundation/multimedia/media_foundation/engine/include/plugin/factory",
     "//foundation/multimedia/media_foundation/engine/include/plugin/interface",
-    "//foundation/multimedia/player_framework/interfaces/inner_api/native",
   ]
 }
 
@@ -74,6 +73,7 @@ if (hst_is_lite_sys) {
     subsystem_name = "multimedia"
     part_name = "media_foundation"
     public_configs = [ ":histreamer_base_external_config" ]
+    public_external_deps = [ "player_framework:media_client" ]
     deps = [ ":histreamer_pipeline_base" ]
     external_deps = [ "hilog:libhilog" ]
     sanitize = {
