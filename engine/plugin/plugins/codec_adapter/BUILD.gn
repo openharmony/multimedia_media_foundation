@@ -22,14 +22,7 @@ group("plugin_codec_adapter") {
 }
 
 config("plugin_codec_adapter_config") {
-  include_dirs = [
-    "//drivers/peripheral/base/",
-    "//drivers/peripheral/codec/hal/include/",
-    "//drivers/peripheral/codec/interfaces/include/",
-    "//drivers/peripheral/display/interfaces/include/",
-    "//foundation/multimedia/media_foundation/engine/include/",
-    "//third_party/openmax/api/1.1.2/",
-  ]
+  include_dirs = [ "//foundation/multimedia/media_foundation/engine/include/" ]
 }
 
 ohos_source_set("std_plugin_codec_adapter") {
@@ -58,6 +51,11 @@ ohos_source_set("std_plugin_codec_adapter") {
   public_configs = [
     ":plugin_codec_adapter_config",
     "//foundation/multimedia/media_foundation:histreamer_presets",
+  ]
+  public_external_deps = [
+    "drivers_peripheral_codec:libcodec_client",
+    "drivers_peripheral_display:hdi_gralloc_client",
+    "openmax:libopenmax_static",
   ]
 }
 

@@ -24,25 +24,22 @@ if (hst_is_standard_sys) {
   ohos_shared_library("histreamer_plugin_StdAudioCapture") {
     subsystem_name = "multimedia"
     part_name = "media_foundation"
-    include_dirs = [
-      "//foundation/multimedia/audio_framework/interfaces/inner_api/native/audiocommon/include",
-      "//foundation/multimedia/media_foundation/engine/include",
-    ]
+    include_dirs = [ "//foundation/multimedia/media_foundation/engine/include" ]
     sources = [
       "audio_capture_plugin.cpp",
       "audio_type_translate.cpp",
     ]
-    public_configs = [
-      "//foundation/multimedia/media_foundation:histreamer_presets",
-      "//foundation/multimedia/audio_framework/frameworks/native/audiocapturer:audio_capturer_config",
-    ]
+    public_configs =
+        [ "//foundation/multimedia/media_foundation:histreamer_presets" ]
+
+    public_external_deps = [ "audio_framework:audio_capturer" ]
     public_deps = [
       "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
       "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",
     ]
 
     external_deps = [
-      "audio_framework:audio_capturer",
+      "audio_framework:audio_client",
       "c_utils:utilsbase",
       "graphic_surface:surface",
       "hilog:libhilog",

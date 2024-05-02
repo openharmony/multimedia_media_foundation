@@ -35,17 +35,15 @@ ohos_source_set("std_video_surface_sink") {
   if (hst_is_lite_sys) {
     print("std video surface sink plugin is not available on lite systems")
   } else {
-    include_dirs = [
-      "//drivers/peripheral/display/interfaces/include",
-      "//foundation/graphic/graphic_2d/utils/sync_fence/export",
-      "//foundation/multimedia/media_foundation/engine/include",
-    ]
+    include_dirs = [ "//foundation/multimedia/media_foundation/engine/include" ]
     deps = []
     external_deps = [
       "bounds_checking_function:libsec_shared",
       "c_utils:utils",
       "c_utils:utilsbase",
+      "drivers_peripheral_display:hdi_gralloc_client",
       "graphic_2d:libgraphic_utils",
+      "graphic_2d:sync_fence",
       "graphic_surface:surface",
       "graphic_surface:sync_fence",
       "hilog:libhilog",
