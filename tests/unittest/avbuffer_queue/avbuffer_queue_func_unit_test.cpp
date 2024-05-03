@@ -42,11 +42,13 @@ class BrokerListener : public IBrokerListener {
 public:
     explicit BrokerListener() {}
 
-    sptr<IRemoteObject> AsObject() override {
+    sptr<IRemoteObject> AsObject() override
+    {
         return nullptr;
     }
 
-    void OnBufferFilled(std::shared_ptr<AVBuffer> &avBuffer) override {
+    void OnBufferFilled(std::shared_ptr<AVBuffer> &avBuffer) override
+    {
         ASSERT_NE(avBuffer, nullptr);
     }
 };
