@@ -325,9 +325,10 @@ HWTEST_F(AVBufferQueueInnerUnitTest, ReturnBufferTest, TestSize.Level1)
 
     buffer = AVBuffer::CreateAVBuffer(config);
     EXPECT_EQ(avBufferQueueImpl_->AllocBuffer(buffer, config), Status::OK);
+    buffer->memory_->SetSize(config.size);
     EXPECT_EQ(avBufferQueueImpl_->RequestReuseBuffer(buffer, config), Status::OK);
     EXPECT_EQ(avBufferQueueImpl_->PushBuffer(buffer, true), Status::OK);
-    EXPECT_EQ(avBufferQueueImpl_->ReturnBuffer(buffer, true), Status::ERROR_INVALID_BUFFER_ID);
+    EXPECT_EQ(avBufferQueueImpl_->ReturnBuffer(buffer, true), Status::ERROR_INVALID_BUFFER_STATE);
 
     EXPECT_EQ(avBufferQueueImpl_->ReturnBuffer(2, true), Status::ERROR_INVALID_BUFFER_ID);
 
