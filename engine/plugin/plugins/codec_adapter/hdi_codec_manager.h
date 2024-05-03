@@ -18,7 +18,7 @@
 #include "codec_manager.h"
 #include <unordered_map>
 #include "codec_component_manager.h"
-#include "../../hal/include/codec_callback_type_stub.h"
+#include "codec_callback_type_stub.h"
 #include "codec_omx_ext.h"
 
 namespace OHOS {

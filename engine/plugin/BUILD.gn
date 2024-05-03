@@ -104,7 +104,6 @@ ohos_source_set("plugin_base") {
 
 config("histreamer_plugin_base_external_config") {
   include_dirs = [
-    "//foundation/graphic/graphic_2d/interfaces/inner_api/",
     "//foundation/multimedia/media_foundation/engine",
     "//foundation/multimedia/media_foundation/engine/include",
     "//foundation/multimedia/media_foundation/engine/include/plugin/common",
@@ -246,7 +245,6 @@ ohos_source_set("histreamer_plugin_core") {
       "HST_PLUGIN_PATH=${hst_plugin_path}",
       "HST_PLUGIN_FILE_TAIL=\".z.so\"",
     ]
-    include_dirs += [ "//foundation/graphic/graphic_2d/interfaces/inner_api/" ]
     external_deps = [
       "bounds_checking_function:libsec_shared",
       "c_utils:utilsbase",
