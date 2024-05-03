@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Huawei Device Co., Ltd.
+ * Copyright (C) 2024 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -57,7 +57,7 @@ class ConsumerListener : public IConsumerListener {
 public:
     explicit ConsumerListener() {}
 
-    void OnBufferdAvailable() override {}
+    void OnBufferAvailable() override {}
 };
 
 void AVBufferQueueInnerUnitTest::SetUpTestCase(void) {}
@@ -311,12 +311,12 @@ HWTEST_F(AVBufferQueueInnerUnitTest, ReturnBufferTest, TestSize.Level1)
     config.size = 1;
     config.capacity = 1;
     config.memoryType = MemoryType::VIRTUAL_MEMORY;
-    avBufferQueueImpl_->setConsumerListener(listener);
+    avBufferQueueImpl_->SetConsumerListener(listener);
     std::shared_ptr<AVBuffer> buffer = AVBuffer::CreateAVBuffer(config);
     ASSERT_NE(nullptr, buffer);
     EXPECT_EQ(avBufferQueueImpl_->AllocBuffer(buffer, config), Status::OK);
     buffer->memory_->SetSize(config.size);
-    EXPECT_EQ(avBufferQueueImpl_->RequestReuseBuffewr(buffer, config), Status::OK);
+    EXPECT_EQ(avBufferQueueImpl_->RequestReuseBuffer(buffer, config), Status::OK);
     EXPECT_EQ(avBufferQueueImpl_->PushBuffer(buffer, true), Status::OK);
     EXPECT_EQ(avBufferQueueImpl_->AcquireBuffer(buffer), Status::OK);
 
