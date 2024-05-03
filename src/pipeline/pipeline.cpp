@@ -25,7 +25,7 @@
 namespace OHOS {
 namespace Media {
 namespace Pipeline {
-static std::atomic<int32_t> pipeLineId = 0;
+static std::atomic<uint16_t> pipeLineId = 0;
 
 int32_t Pipeline::GetNextPipelineId()
 {
@@ -37,11 +37,11 @@ Pipeline::~Pipeline()
 }
 
 void Pipeline::Init(const std::shared_ptr<EventReceiver>& receiver, const std::shared_ptr<FilterCallback>& callback,
-    std::string playerId)
+    const std::string& groupId)
 {
     eventReceiver_ = receiver;
     filterCallback_ = callback;
-    playerId_ = playerId;
+    groupId_ = groupId;
 }
 
 Status Pipeline::Prepare()
@@ -191,12 +191,14 @@ Status Pipeline::Stop()
 
 Status Pipeline::Flush()
 {
+    MEDIA_LOG_I("Flush enter.");
     SubmitJobOnce([&] {
         AutoLock lock(mutex_);
         for (auto it = filters_.begin(); it != filters_.end(); ++it) {
             (*it)->Flush();
         }
     });
+    MEDIA_LOG_I("Flush end.");
     return Status::OK;
 }
 
@@ -230,7 +232,7 @@ Status Pipeline::AddHeadFilters(std::vector<std::shared_ptr<Filter>> filtersIn)
         }
         if (!matched) {
             filtersToAdd.push_back(filterIn);
-            filterIn->LinkPipeLine(playerId_);
+            filterIn->LinkPipeLine(groupId_);
         }
     }
     if (filtersToAdd.empty()) {
@@ -264,7 +266,7 @@ Status Pipeline::LinkFilters(const std::shared_ptr<Filter> &preFilter,
 {
     for (auto nextFilter : nextFilters) {
         auto ret = preFilter->LinkNext(nextFilter, type);
-        nextFilter->LinkPipeLine(playerId_);
+        nextFilter->LinkPipeLine(groupId_);
         FALSE_RETURN_V(ret == Status::OK, ret);
     }
     return Status::OK;

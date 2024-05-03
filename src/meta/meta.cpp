@@ -84,6 +84,7 @@ DEFINE_METADATA_SETTER_GETTER_FUNC(HEVCLevel, int32_t)
 DEFINE_METADATA_SETTER_GETTER_FUNC(ChromaLocation, int32_t)
 DEFINE_METADATA_SETTER_GETTER_FUNC(FileType, int32_t)
 DEFINE_METADATA_SETTER_GETTER_FUNC(VideoEncodeBitrateMode, int32_t)
+DEFINE_METADATA_SETTER_GETTER_FUNC(TemporalGopReferenceMode, int32_t)
 
 DEFINE_METADATA_SETTER_GETTER_FUNC(AudioChannelLayout, int64_t)
 
@@ -106,7 +107,8 @@ static std::map<TagType, std::pair<MetaSetterFunction, MetaGetterFunction>> g_me
     DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_H265_LEVEL, HEVCLevel),
     DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_CHROMA_LOCATION, ChromaLocation),
     DEFINE_METADATA_SETTER_GETTER(Tag::MEDIA_FILE_TYPE, FileType),
-    DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_ENCODE_BITRATE_MODE, VideoEncodeBitrateMode)
+    DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_ENCODE_BITRATE_MODE, VideoEncodeBitrateMode),
+    DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_ENCODER_TEMPORAL_GOP_REFERENCE_MODE, TemporalGopReferenceMode),
 };
 
 using  MetaSetterInt64Function = std::function<bool(Meta&, const TagType&, int64_t&)>;
@@ -123,6 +125,7 @@ static std::vector<TagType> g_metadataBoolVector = {
     Tag::VIDEO_IS_HDR_VIVID,
     Tag::MEDIA_HAS_VIDEO,
     Tag::MEDIA_HAS_AUDIO,
+    Tag::MEDIA_HAS_SUBTITLE,
     Tag::MEDIA_END_OF_STREAM
 };
 
@@ -174,6 +177,16 @@ bool GetMetaData(const Meta& meta, const TagType& tag, int64_t& value)
     return iter->second.second(meta, tag, value);
 }
 
+bool IsIntEnum(const TagType &tag)
+{
+    return (g_metadataGetterSetterMap.find(tag) != g_metadataGetterSetterMap.end());
+}
+
+bool IsLongEnum(const TagType &tag)
+{
+    return g_metadataGetterSetterInt64Map.find(tag) != g_metadataGetterSetterInt64Map.end();
+}
+
 static Any defaultString = std::string();
 static Any defaultUInt8 = (uint8_t)0;
 static Any defaultInt32 = (int32_t)0;
@@ -221,7 +234,10 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::MEDIA_FILE_TYPE, defaultFileType},
     {Tag::VIDEO_ENCODE_BITRATE_MODE, defaultVideoEncodeBitrateMode},
     {Tag::VIDEO_ENCODER_TEMPORAL_GOP_REFERENCE_MODE, defaultTemporalGopReferenceMode},
-
+    // Uint_8
+    {Tag::SCREEN_CAPTURE_AV_TYPE, defaultUInt8},
+    {Tag::SCREEN_CAPTURE_DATA_TYPE, defaultUInt8},
+    {Tag::SCREEN_CAPTURE_STOP_REASON, defaultUInt8},
     // Int32
     {Tag::APP_UID, defaultInt32},
     {Tag::APP_PID, defaultInt32},
@@ -275,6 +291,15 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_ENCODER_QP_MAX, defaultInt32},
     {Tag::VIDEO_ENCODER_QP_MIN, defaultInt32},
     {Tag::FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_COUNT, defaultInt32},
+    {Tag::OH_MD_KEY_AUDIO_OBJECT_NUMBER, defaultInt32},
+    {Tag::AV_CODEC_CALLER_PID, defaultInt32},
+    {Tag::AV_CODEC_CALLER_UID, defaultInt32},
+    {Tag::AV_CODEC_FORWARD_CALLER_PID, defaultInt32},
+    {Tag::AV_CODEC_FORWARD_CALLER_UID, defaultInt32},
+    {Tag::VIDEO_DECODER_RATE_UPPER_LIMIT, defaultInt32},
+    {Tag::SCREEN_CAPTURE_ERR_CODE, defaultInt32},
+    {Tag::SCREEN_CAPTURE_DURATION, defaultInt32},
+    {Tag::SCREEN_CAPTURE_START_LATENCY, defaultInt32},
     // String
     {Tag::MIME_TYPE, defaultString},
     {Tag::MEDIA_FILE_URI, defaultString},
@@ -298,6 +323,10 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::MEDIA_CODEC_NAME, defaultString},
     {Tag::PROCESS_NAME, defaultString},
     {Tag::MEDIA_CREATION_TIME, defaultString},
+    {Tag::AV_CODEC_CALLER_PROCESS_NAME, defaultString},
+    {Tag::AV_CODEC_FORWARD_CALLER_PROCESS_NAME, defaultString},
+    {Tag::SCREEN_CAPTURE_ERR_MSG, defaultString},
+    {Tag::SCREEN_CAPTURE_VIDEO_RESOLUTION, defaultString},
     // Float
     {Tag::MEDIA_LATITUDE, defaultFloat},
     {Tag::MEDIA_LONGITUDE, defaultFloat},
@@ -310,6 +339,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_IS_HDR_VIVID, defaultBool},
     {Tag::MEDIA_HAS_VIDEO, defaultBool},
     {Tag::MEDIA_HAS_AUDIO, defaultBool},
+    {Tag::MEDIA_HAS_SUBTITLE, defaultBool},
     {Tag::MEDIA_END_OF_STREAM, defaultBool},
     {Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE, defaultBool},
     {Tag::VIDEO_ENCODER_ENABLE_TEMPORAL_SCALABILITY, defaultBool},
@@ -317,6 +347,10 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_PER_FRAME_IS_LTR, defaultBool},
     {Tag::VIDEO_ENABLE_LOW_LATENCY, defaultBool},
     {Tag::VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK, defaultBool},
+    {Tag::VIDEO_BUFFER_CAN_DROP, defaultBool},
+    {Tag::SCREEN_CAPTURE_USER_AGREE, defaultBool},
+    {Tag::SCREEN_CAPTURE_REQURE_MIC, defaultBool},
+    {Tag::SCREEN_CAPTURE_ENABLE_MIC, defaultBool},
     // Int64
     {Tag::MEDIA_FILE_SIZE, defaultUInt64},
     {Tag::MEDIA_POSITION, defaultUInt64},
@@ -340,10 +374,11 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::MEDIA_COVER, defaultVectorUInt8},
     {Tag::AUDIO_VORBIS_IDENTIFICATION_HEADER, defaultVectorUInt8},
     {Tag::AUDIO_VORBIS_SETUP_HEADER, defaultVectorUInt8},
+    {Tag::OH_MD_KEY_AUDIO_VIVID_METADATA, defaultVectorUInt8},
     // vector<Plugins::VideoBitStreamFormat>
     {Tag::VIDEO_BIT_STREAM_FORMAT, defaultVectorVideoBitStreamFormat},
     // vector<uint8_t>
-    {Tag::DRM_CENC_INFO, defaultVectorUInt8}
+    {Tag::DRM_CENC_INFO, defaultVectorUInt8},
 };
 
 static std::map<AnyValueType, const Any &> g_ValueTypeDefaultValueMap = {
@@ -366,6 +401,15 @@ Any GetDefaultAnyValue(const TagType& tag)
     auto iter = g_metadataDefaultValueMap.find(tag);
     if (iter == g_metadataDefaultValueMap.end()) {
         return defaultString; //Default String type
+    }
+    return iter->second;
+}
+
+std::optional<Any> GetDefaultAnyValueOpt(const TagType &tag)
+{
+    auto iter = g_metadataDefaultValueMap.find(tag);
+    if (iter == g_metadataDefaultValueMap.end()) {
+        return std::nullopt;
     }
     return iter->second;
 }

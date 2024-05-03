@@ -27,6 +27,7 @@
 #endif
 
 #include <map>
+#include <optional>
 #include "meta/meta_key.h"
 #include "meta/audio_types.h"
 #include "meta/media_types.h"
@@ -100,6 +101,14 @@ using MapIt = std::map<TagType, Any>::const_iterator;
  */
 extern Any GetDefaultAnyValue(const TagType& tag);
 /**
+ * @brief GetDefaultAnyValueOpt used for Application to get Any type default value from Meta Object.
+ * @implNote In order to get Predefined default Any value from Meta Object.
+ * We use metadataDefaultValueMap to get the right getDefaultVal function.
+ * @return Returns Any type default value of optional, returns <b>std::nullopt</b> if no match.
+ * @example GetDefaultAnyValueOpt("media.file.type");
+ */
+extern std::optional<Any> GetDefaultAnyValueOpt(const TagType& tag);
+/**
  * @brief GetDefaultAnyValue used for Application to get Any type default value.
  * @implNote Return Predefined default Any value by tag, if notexist then find default Any value by type,
  * if type not defined return Any(string).
@@ -166,12 +175,17 @@ public:
         tagCharSeq == Tag::VIDEO_IS_HDR_VIVID or
         tagCharSeq == Tag::MEDIA_HAS_VIDEO or
         tagCharSeq == Tag::MEDIA_HAS_AUDIO or
+        tagCharSeq == Tag::MEDIA_HAS_SUBTITLE or
         tagCharSeq == Tag::MEDIA_END_OF_STREAM or
         tagCharSeq == Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE or
         tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_TEMPORAL_SCALABILITY or
         tagCharSeq == Tag::VIDEO_PER_FRAME_IS_LTR or
         tagCharSeq == Tag::VIDEO_ENABLE_LOW_LATENCY or
-        tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK, bool, AnyValueType::BOOL);
+        tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK or
+        tagCharSeq == Tag::SCREEN_CAPTURE_USER_AGREE or
+        tagCharSeq == Tag::SCREEN_CAPTURE_REQURE_MIC or
+        tagCharSeq == Tag::SCREEN_CAPTURE_ENABLE_MIC, bool, AnyValueType::BOOL);
+    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_BUFFER_CAN_DROP, bool, AnyValueType::BOOL);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_H265_PROFILE, Plugins::HEVCProfile, AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_H265_LEVEL, Plugins::HEVCLevel, AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_CHROMA_LOCATION,
@@ -233,7 +247,11 @@ public:
         tagCharSeq == Tag::VIDEO_SLICE_HEIGHT or
         tagCharSeq == Tag::VIDEO_ENCODER_QP_MAX or
         tagCharSeq == Tag::VIDEO_ENCODER_QP_MIN or
-        tagCharSeq == Tag::FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_COUNT, int32_t, AnyValueType::INT32_T);
+        tagCharSeq == Tag::FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_COUNT or
+        tagCharSeq == Tag::SCREEN_CAPTURE_ERR_CODE or
+        tagCharSeq == Tag::SCREEN_CAPTURE_DURATION or
+        tagCharSeq == Tag::SCREEN_CAPTURE_START_LATENCY, int32_t, AnyValueType::INT32_T);
+    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_DECODER_RATE_UPPER_LIMIT, int32_t, AnyValueType::INT32_T);
 
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::APP_FULL_TOKEN_ID or
@@ -274,7 +292,13 @@ public:
         tagCharSeq == Tag::MEDIA_LYRICS or
         tagCharSeq == Tag::MEDIA_CREATION_TIME or
         tagCharSeq == Tag::MEDIA_CODEC_NAME or
-        tagCharSeq == Tag::PROCESS_NAME, std::string, AnyValueType::STRING);
+        tagCharSeq == Tag::PROCESS_NAME or
+        tagCharSeq == Tag::SCREEN_CAPTURE_ERR_MSG or
+        tagCharSeq == Tag::SCREEN_CAPTURE_VIDEO_RESOLUTION, std::string, AnyValueType::STRING);
+    DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::SCREEN_CAPTURE_AV_TYPE or
+        tagCharSeq == Tag::SCREEN_CAPTURE_DATA_TYPE or
+        tagCharSeq == Tag::SCREEN_CAPTURE_STOP_REASON, uint8_t, AnyValueType::UINT8_T);
 
     Meta &operator=(const Meta &other)
     {
@@ -466,6 +490,26 @@ bool SetMetaData(Meta& meta, const TagType& tag, int64_t value);
  * @example OHOS::Media::GetMetaData(meta, "audio.aac.profile", value);
  */
 bool GetMetaData(const Meta& meta, const TagType& tag, int64_t& value);
+
+/**
+ * @brief IsIntEnum only used for Application interface OH_AVFormat to judge key's value type is int32_t or not.
+ * @implNote In order to get value(Enum type) from Meta Object, should use correct Enum type to get value from Any
+ * object. We use metadataGetterSetterMap to get the value type.
+ * @return Returns operator status, <b>True</b> if the key's value type is int32_t.
+ * returns <b>False</b> otherwise.
+ * @example OHOS::Media::IsIntEnum("audio.aac.profile");
+ */
+bool IsIntEnum(const TagType& tag);
+
+/**
+ * @brief IsIntEnum only used for Application interface OH_AVFormat to judge key's value type is int64_t or not.
+ * @implNote In order to get value(Enum type) from Meta Object, should use correct Enum type to get value from Any
+ * object. We use metadataGetterSetterMap to get the value type.
+ * @return Returns operator status, <b>True</b> if the key's value type is int64_t.
+ * returns <b>False</b> otherwise.
+ * @example OHOS::Media::IsIntEnum("audio.aac.profile");
+ */
+bool IsLongEnum(const TagType& tag);
 } // namespace Media
 } // namespace OHOS
 #endif // MEDIA_FOUNDATION_META_H

@@ -245,6 +245,20 @@ HWTEST_F(AVBufferInnerUnitTest, AVBuffer_Config_006, TestSize.Level1)
 }
 
 /**
+ * @tc.name: AVBuffer_Config_007
+ * @tc.desc: Overriding assignment operator test01
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferInnerUnitTest, AVBuffer_Config_007, TestSize.Level1)
+{
+    AVBufferConfig config1;
+    config1.size = MEMSIZE;
+    AVBufferConfig config2;
+    config2 = std::move(config1);
+    EXPECT_EQ(config2.size, MEMSIZE);
+}
+
+/**
  * @tc.name: AVBuffer_CreateWithInvalid_001
  * @tc.desc: create memory with invalid parcel
  * @tc.type: FUNC

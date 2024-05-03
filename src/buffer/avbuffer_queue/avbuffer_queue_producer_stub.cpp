@@ -152,6 +152,7 @@ int32_t AVBufferQueueProducerStub::OnRemoveBufferFilledListener(
 {
     auto listenerObject = arguments.ReadRemoteObject();
     sptr<IBrokerListener> listener = iface_cast<IBrokerListener>(listenerObject);
+    FALSE_RETURN_V_MSG_E(listener != nullptr, IPC_STUB_ERR, "listener is nullptr!");
  
     auto ret = RemoveBufferFilledListener(listener);
     reply.WriteInt32(static_cast<int32_t>(ret));

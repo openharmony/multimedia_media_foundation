@@ -26,18 +26,11 @@
 namespace OHOS {
 namespace Media {
 
-static int32_t SINGLETON_TASK_ID = 0;
+static std::atomic<int32_t> singletonTaskId = 0;
 
-void Task::SleepInTask(unsigned ms)
+void TaskInner::SleepInTask(unsigned ms)
 {
     OSAL::SleepFor(ms);
-}
-
-void Task::SetEnableStateChangeLog(bool enable)
-{
-    if (taskInner_ != nullptr) {
-        taskInner_->SetEnableStateChangeLog(enable);
-    }
 }
 
 static int64_t GetNowUs()
@@ -46,72 +39,15 @@ static int64_t GetNowUs()
     return std::chrono::duration_cast<std::chrono::microseconds>(now.time_since_epoch()).count();
 }
 
-Task::Task(std::string name, std::string groupId, TaskType type, TaskPriority priority, bool singleLoop)
-    : taskInner_(std::make_shared<TaskInner>(name, groupId, type, priority, singleLoop))
-{
-    taskInner_->Init();
-}
-
-Task::~Task()
-{
-    taskInner_->DeInit();
-}
-
-void Task::Start()
-{
-    taskInner_->Start();
-}
-
-void Task::Stop()
-{
-    taskInner_->Stop();
-}
-
-void Task::StopAsync()
-{
-    taskInner_->StopAsync();
-}
-
-void Task::Pause()
-{
-    taskInner_->Pause();
-}
-
-void Task::PauseAsync()
-{
-    taskInner_->PauseAsync();
-}
-
-void Task::RegisterJob(const std::function<int64_t()>& job)
-{
-    taskInner_->RegisterJob(job);
-}
-
-void Task::SubmitJobOnce(const std::function<void()>& job, int64_t delayUs, bool wait)
-{
-    taskInner_->SubmitJobOnce(job, delayUs, wait);
-}
-
-void Task::SubmitJob(const std::function<void()>& job, int64_t delayUs, bool wait)
-{
-    taskInner_->SubmitJob(job, delayUs, wait);
-}
-
-bool Task::IsTaskRunning()
-{
-    return taskInner_->IsTaskRunning();
-}
-
-TaskInner::TaskInner(std::string name, std::string groupId, TaskType type, TaskPriority priority, bool singleLoop)
+TaskInner::TaskInner(const std::string& name, const std::string& groupId, TaskType type, TaskPriority priority,
+    bool singleLoop)
     : name_(std::move(name)), runningState_(RunningState::PAUSED), singleLoop_(singleLoop)
 {
     MEDIA_LOG_I("task " PUBLIC_LOG_S " groupId:" PUBLIC_LOG_S " type:%{public}d ctor called",
         name_.c_str(), groupId.c_str(), type);
     if (type == TaskType::SINGLETON) {
-        std::string newName = name_ + std::to_string(++SINGLETON_TASK_ID);
+        std::string newName = name_ + std::to_string(++singletonTaskId);
         pipelineThread_ = PipeLineThreadPool::GetInstance().FindThread(newName, type, priority);
-    } else if (type == TaskType::GLOBAL) {
-        pipelineThread_ = PipeLineThreadPool::GetInstance().FindThread("OS_GLOBAL", type, TaskPriority::NORMAL);
     } else {
         pipelineThread_ = PipeLineThreadPool::GetInstance().FindThread(groupId, type, priority);
     }
@@ -329,7 +265,9 @@ void TaskInner::HandleJob()
         AutoLock lock(jobMutex_);
         stateMutex_.unlock();
         int64_t nextDelay = job_();
-        topProcessUs_ = GetNowUs() + nextDelay;
+        if (topProcessUs_ != -1) {
+            topProcessUs_ = GetNowUs() + nextDelay;
+        }
     } else {
         std::function<void()> nextJob;
         stateMutex_.lock();

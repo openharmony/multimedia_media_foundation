@@ -150,6 +150,7 @@ enum class FileType : int32_t {
     M4A = 206,
     WAV = 207,
     APE = 208,
+    SRT = 301,
 };
 
 /**

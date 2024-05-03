@@ -32,6 +32,9 @@ enum MediaServiceErrCode : ErrCode {
     MSERR_INVALID_OPERATION = MS_ERR_OFFSET + ENOSYS, // opertation not be permitted
     MSERR_INVALID_VAL       = MS_ERR_OFFSET + EINVAL, // invalid argument
     MSERR_UNKNOWN           = MS_ERR_OFFSET + 0x200,  // unkown error.
+    MSERR_MANDATORY_PARAMETER_UNSPECIFIED,            // mandatory parameters are left unspecified
+    MSERR_INCORRECT_PARAMETER_TYPE,                   // Incorrect parameter types
+    MSERR_PARAMETER_VERIFICATION_FAILED,              // Parameter verification failed
     MSERR_SERVICE_DIED,                               // media service died
     MSERR_CREATE_REC_ENGINE_FAILED,                   // create recorder engine failed.
     MSERR_CREATE_PLAYER_ENGINE_FAILED,                // create player engine failed.

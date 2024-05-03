@@ -38,7 +38,8 @@ namespace Media {
 
 class TaskInner : public std::enable_shared_from_this<TaskInner> {
 public:
-    explicit TaskInner(std::string name, std::string groupId, TaskType type, TaskPriority priority, bool singleLoop);
+    explicit TaskInner(const std::string& name, const std::string& groupId, TaskType type,
+        TaskPriority priority, bool singleLoop);
 
     virtual ~TaskInner();
 
@@ -69,6 +70,8 @@ public:
     int64_t NextJobUs();
 
     void HandleJob();
+
+    static void SleepInTask(unsigned ms);
 
 private:
     enum class RunningState : int {
