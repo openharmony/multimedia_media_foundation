@@ -300,6 +300,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::SCREEN_CAPTURE_ERR_CODE, defaultInt32},
     {Tag::SCREEN_CAPTURE_DURATION, defaultInt32},
     {Tag::SCREEN_CAPTURE_START_LATENCY, defaultInt32},
+    {Tag::DRM_ERROR_CODE, defaultInt32},
     // String
     {Tag::MIME_TYPE, defaultString},
     {Tag::MEDIA_FILE_URI, defaultString},
@@ -327,6 +328,9 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::AV_CODEC_FORWARD_CALLER_PROCESS_NAME, defaultString},
     {Tag::SCREEN_CAPTURE_ERR_MSG, defaultString},
     {Tag::SCREEN_CAPTURE_VIDEO_RESOLUTION, defaultString},
+    {Tag::DRM_APP_NAME, defaultString},
+    {Tag::DRM_INSTANCE_ID, defaultString},
+    {Tag::DRM_ERROR_MESG, defaultString},
     // Float
     {Tag::MEDIA_LATITUDE, defaultFloat},
     {Tag::MEDIA_LONGITUDE, defaultFloat},
@@ -379,6 +383,12 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_BIT_STREAM_FORMAT, defaultVectorVideoBitStreamFormat},
     // vector<uint8_t>
     {Tag::DRM_CENC_INFO, defaultVectorUInt8},
+    // Uint32
+    {Tag::DRM_DECRYPT_AVG_SIZE, defaultUInt32},
+    {Tag::DRM_DECRYPT_AVG_DURATION, defaultUInt32},
+    {Tag::DRM_DECRYPT_MAX_SIZE, defaultUInt32},
+    {Tag::DRM_DECRYPT_MAX_DURATION, defaultUInt32},
+    {Tag::DRM_DECRYPT_TIMES, defaultUInt32}
 };
 
 static std::map<AnyValueType, const Any &> g_ValueTypeDefaultValueMap = {

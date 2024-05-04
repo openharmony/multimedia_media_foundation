@@ -404,6 +404,7 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::SCREEN_CAPTURE_ERR_CODE, 3},
     {Tag::SCREEN_CAPTURE_DURATION, 5},
     {Tag::SCREEN_CAPTURE_START_LATENCY, 7},
+    {Tag::DRM_ERROR_CODE, 28},
     {Tag::SRC_INPUT_TYPE, static_cast<int32_t>(Plugins::SrcInputType::AUD_ES)},
     {Tag::AUDIO_SAMPLE_FORMAT, static_cast<int32_t>(Plugins::AudioSampleFormat::SAMPLE_S16LE)},
     {Tag::VIDEO_PIXEL_FORMAT, static_cast<int32_t>(Plugins::VideoPixelFormat::YUV411P)},
@@ -604,6 +605,9 @@ map<TagType, std::string> testStringData = {
     {Tag::MEDIA_CREATION_TIME, "String MEDIA_CREATION_TIME"},
     {Tag::SCREEN_CAPTURE_ERR_MSG, "String SCREEN_CAPTURE_ERR_MSG"},
     {Tag::SCREEN_CAPTURE_VIDEO_RESOLUTION, "String SCREEN_CAPTURE_VIDEO_RESOLUTION"},
+    {Tag::DRM_APP_NAME, "String DRM_APP_NAME"},
+    {Tag::DRM_INSTANCE_ID, "String DRM_INSTANCE_ID"},
+    {Tag::DRM_ERROR_MESG, "String DRM_ERROR_MESG"},
 };
 
 /**
