@@ -316,7 +316,10 @@ Status AVBufferQueueImpl::RequestBuffer(
 
     // check queue size
     if (GetCachedBufferCount() >= GetQueueSize()) {
-        FALSE_RETURN_V(wait_for(lock, timeoutMs), Status::ERROR_WAIT_TIMEOUT);
+        if (!wait_for(lock, timeoutMs)) {
+            MEDIA_LOG_D("FALSE_RETURN_V wait_for(lock, timeoutMs)");
+            return Status::ERROR_WAIT_TIMEOUT;
+        }
 
         // 被条件唤醒后，再次尝试从freeBufferList中取buffer
         ret = PopFromFreeBufferList(buffer, configCopy);
@@ -525,7 +528,7 @@ Status AVBufferQueueImpl::DetachBuffer(uint64_t uniqueId, bool force)
         } else if (ele.state == AVBUFFER_STATE_ACQUIRED) {
             MEDIA_LOG_D("detach buffer(%llu) on state acquired", uniqueId);
         } else {
-            MEDIA_LOG_W("can not detach buffer(%llu) on state(%d)", uniqueId, ele.state);
+            MEDIA_LOG_W("cant detachBuffer %llu on state %d", uniqueId, ele.state);
             return Status::ERROR_INVALID_BUFFER_STATE;
         }
     }
@@ -600,7 +603,7 @@ Status AVBufferQueueImpl::ReleaseBuffer(const std::shared_ptr<AVBuffer>& buffer)
 
 Status AVBufferQueueImpl::Clear()
 {
-    MEDIA_LOG_E("AVBufferQueueImpl Clear");
+    MEDIA_LOG_D("AVBufferQueueImpl Clear");
     std::lock_guard<std::mutex> lockGuard(queueMutex_);
     dirtyBufferList_.clear();
     for (auto it = cachedBufferMap_.begin(); it != cachedBufferMap_.end(); it++) {
