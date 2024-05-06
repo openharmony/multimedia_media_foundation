@@ -97,7 +97,6 @@ if (hst_is_lite_sys) {
       "-FS",
       "-O2",
       "-D_FORTIFY_SOURCE=2",
-      "-fvisibility=hidden",
       "-Wformat=2",
       "-Wdate-time",
       "-Werror",
