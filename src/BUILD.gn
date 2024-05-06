@@ -147,9 +147,7 @@ if (hst_is_standard_sys) {
     sources += [
       "$histreamer_root_dir/src/plugin/plugin_buffer.cpp",
       "$histreamer_root_dir/src/plugin/plugin_loader.cpp",
-      "$histreamer_root_dir/src/plugin/plugin_loader_v2.cpp",
       "$histreamer_root_dir/src/plugin/plugin_manager.cpp",
-      "$histreamer_root_dir/src/plugin/plugin_manager_v2.cpp",
       "$histreamer_root_dir/src/plugin/plugin_register.cpp",
     ]
 
