@@ -263,10 +263,15 @@ void AVBufferQueueImpl::DeleteCachedBufferById(uint64_t uniqueId)
 
 Status AVBufferQueueImpl::CheckConfig(const AVBufferConfig& config)
 {
-    FALSE_RETURN_V(config.memoryType != MemoryType::UNKNOWN_MEMORY, Status::ERROR_UNEXPECTED_MEMORY_TYPE);
+    if (config.memoryType == MemoryType::UNKNOWN_MEMORY) {
+        MEDIA_LOG_D("config.memoryType != MemoryType::UNKNOWN_MEMORY");
+        return Status::ERROR_UNEXPECTED_MEMORY_TYPE;
+    }
     // memoryType_初始化之后将无法改变。
-    FALSE_RETURN_V(memoryType_ == MemoryType::UNKNOWN_MEMORY || config.memoryType == memoryType_,
-                   Status::ERROR_UNEXPECTED_MEMORY_TYPE);
+    if (memoryType_ != MemoryType::UNKNOWN_MEMORY && config.memoryType != memoryType_) {
+        MEDIA_LOG_D("memoryType_ != MemoryType::UNKNOWN_MEMORY && config.memoryType != memoryType_");
+        return Status::ERROR_UNEXPECTED_MEMORY_TYPE;
+    }
     memoryType_ = config.memoryType;
     return Status::OK;
 }
@@ -297,7 +302,11 @@ Status AVBufferQueueImpl::RequestBuffer(
 
     // check param
     std::unique_lock<std::mutex> lock(queueMutex_);
-    NOK_RETURN(CheckConfig(configCopy));
+    auto res = CheckConfig(configCopy);
+    if (res != Status::OK) {
+        MEDIA_LOG_D("CheckConfig not OK, code %{public}d", static_cast<int32_t>(res));
+        return res;
+    }
 
     // dequeue from free list
     auto ret = PopFromFreeBufferList(buffer, configCopy);
@@ -307,14 +316,17 @@ Status AVBufferQueueImpl::RequestBuffer(
 
     // check queue size
     if (GetCachedBufferCount() >= GetQueueSize()) {
-        FALSE_RETURN_V(wait_for(lock, timeoutMs), Status::ERROR_WAIT_TIMEOUT);
+        if (!wait_for(lock, timeoutMs)) {
+            MEDIA_LOG_D("FALSE_RETURN_V wait_for(lock, timeoutMs)");
+            return Status::ERROR_WAIT_TIMEOUT;
+        }
 
         // 被条件唤醒后，再次尝试从freeBufferList中取buffer
         ret = PopFromFreeBufferList(buffer, configCopy);
         if (ret == Status::OK) {
             return RequestReuseBuffer(buffer, configCopy);
         }
-        FALSE_RETURN_V(GetCachedBufferCount() < GetQueueSize(), Status::ERROR_NO_FREE_BUFFER);
+        if (GetCachedBufferCount() >= GetQueueSize()) return Status::ERROR_NO_FREE_BUFFER;
     }
 
     NOK_RETURN(AllocBuffer(buffer, configCopy));
@@ -516,7 +528,7 @@ Status AVBufferQueueImpl::DetachBuffer(uint64_t uniqueId, bool force)
         } else if (ele.state == AVBUFFER_STATE_ACQUIRED) {
             MEDIA_LOG_D("detach buffer(%llu) on state acquired", uniqueId);
         } else {
-            MEDIA_LOG_W("can not detach buffer(%llu) on state(%d)", uniqueId, ele.state);
+            MEDIA_LOG_W("cant detachBuffer %llu on state %d", uniqueId, ele.state);
             return Status::ERROR_INVALID_BUFFER_STATE;
         }
     }
@@ -591,7 +603,7 @@ Status AVBufferQueueImpl::ReleaseBuffer(const std::shared_ptr<AVBuffer>& buffer)
 
 Status AVBufferQueueImpl::Clear()
 {
-    MEDIA_LOG_E("AVBufferQueueImpl Clear");
+    MEDIA_LOG_D("AVBufferQueueImpl Clear");
     std::lock_guard<std::mutex> lockGuard(queueMutex_);
     dirtyBufferList_.clear();
     for (auto it = cachedBufferMap_.begin(); it != cachedBufferMap_.end(); it++) {

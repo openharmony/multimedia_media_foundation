@@ -22,7 +22,6 @@ if (hst_is_standard_sys) {
       "$histreamer_root_dir/interface/inner_api/buffer",
       "$histreamer_root_dir/interface/inner_api/common",
       "$histreamer_root_dir/interface/inner_api/meta",
-      "$histreamer_root_dir/../../graphic/graphic_surface/interface/inner_api/surface",
     ]
   }
 
@@ -42,7 +41,6 @@ if (hst_is_standard_sys) {
       "$histreamer_root_dir/src/buffer/avbuffer/include",
       "$histreamer_root_dir/src/buffer/avbuffer_queue/include",
       "$histreamer_root_dir/src/capi/common",
-      "$histreamer_root_dir/../../graphic/graphic_2d/utils/sync_fence/export",
     ]
 
     cflags = [
@@ -117,6 +115,7 @@ if (hst_is_standard_sys) {
 
     sources += [
       "$histreamer_root_dir/src/osal/filesystem/file_system.cpp",
+      "$histreamer_root_dir/src/osal/task/task.cpp",
       "$histreamer_root_dir/src/osal/utils/steady_clock.cpp",
       "$histreamer_root_dir/src/osal/utils/util.cpp",
     ]
@@ -133,7 +132,8 @@ if (hst_is_standard_sys) {
         "$histreamer_root_dir/src/osal/task/pthread/condition_variable.cpp",
         "$histreamer_root_dir/src/osal/task/pthread/jobutils.cpp",
         "$histreamer_root_dir/src/osal/task/pthread/mutex.cpp",
-        "$histreamer_root_dir/src/osal/task/pthread/task.cpp",
+        "$histreamer_root_dir/src/osal/task/pthread/pipeline_threadpool.cpp",
+        "$histreamer_root_dir/src/osal/task/pthread/taskInner.cpp",
         "$histreamer_root_dir/src/osal/task/pthread/thread.cpp",
       ]
     }
@@ -141,7 +141,6 @@ if (hst_is_standard_sys) {
     sources += [
       "$histreamer_root_dir/src/filter/filter.cpp",
       "$histreamer_root_dir/src/filter/filter_factory.cpp",
-      "$histreamer_root_dir/src/filter/filter_loop.cpp",
       "$histreamer_root_dir/src/pipeline/pipeline.cpp",
     ]
 
@@ -159,12 +158,13 @@ if (hst_is_standard_sys) {
       "c_utils:utils",
       "ffmpeg:libohosffmpeg",
       "graphic_2d:libgraphic_utils",
-      "graphic_surface:surface",
       "graphic_surface:sync_fence",
       "hilog:libhilog",
       "hitrace:hitrace_meter",
       "ipc:ipc_core",
     ]
+
+    public_external_deps = [ "graphic_surface:surface" ]
 
     if (media_foundation_enable_ffrt) {
       external_deps += [ "ffrt:libffrt" ]

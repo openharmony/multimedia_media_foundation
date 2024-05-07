@@ -32,8 +32,6 @@ if (hst_is_standard_sys) {
   }
 
   config("media_foundation_capi_config") {
-    include_dirs =
-        [ "$histreamer_root_dir/../../graphic/graphic_surface/surface/include" ]
     cflags = [
       "-fno-exceptions",
       "-Wall",

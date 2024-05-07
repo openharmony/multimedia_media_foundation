@@ -1,0 +1,227 @@
+# Copyright (c) 2024 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//foundation/multimedia/media_foundation/config.gni")
+
+if (hst_is_lite_sys) {
+  group("media_monitor_packages") {
+    deps = []
+  }
+} else {
+  group("media_monitor_packages") {
+    deps = [
+      ":media_monitor",
+      ":media_monitor_common",
+      ":media_monitor_init",
+      "sa_profile:media_monitor_sa_profile",
+    ]
+  }
+}
+
+if (hst_is_lite_sys) {
+  group("media_monitor_public_config") {
+    deps = []
+  }
+} else {
+  config("media_monitor_public_config") {
+    include_dirs = [
+      "common/include",
+      "client/include",
+      "../../interface/inner_api/common/",
+    ]
+    defines = [ "MEDIA_OHOS" ]
+  }
+}
+
+if (hst_is_lite_sys) {
+  group("media_monitor_init") {
+    deps = []
+  }
+} else {
+  ohos_prebuilt_etc("media_monitor_init") {
+    source = "etc/media_monitor.cfg"
+    relative_install_dir = "init"
+    part_name = "media_foundation"
+    subsystem_name = "multimedia"
+  }
+}
+
+if (hst_is_lite_sys) {
+  group("media_monitor_common") {
+    deps = []
+  }
+} else {
+  ohos_shared_library("media_monitor_common") {
+    sanitize = {
+      ubsan = true
+      boundary_sanitize = true
+      cfi = true
+      cfi_cross_dso = true
+      debug = false
+      integer_overflow = true
+    }
+
+    public_configs = [ ":media_monitor_public_config" ]
+
+    install_enable = true
+
+    include_dirs = [
+      "common/include",
+      "../../interface/inner_api/common/",
+    ]
+
+    sources = [
+      "common/src/event_bean.cpp",
+      "common/src/monitor_utils.cpp",
+    ]
+
+    cflags = [
+      "-std=c++17",
+      "-fno-rtti",
+      "-fexceptions",
+      "-Wall",
+      "-fno-common",
+      "-fstack-protector-strong",
+      "-Wshadow",
+      "-FPIC",
+      "-FS",
+      "-O2",
+      "-D_FORTIFY_SOURCE=2",
+      "-Wformat=2",
+      "-Wdate-time",
+      "-Werror",
+      "-Wextra",
+      "-Wimplicit-fallthrough",
+      "-Wsign-compare",
+      "-Wunused-parameter",
+      "-Dprivate=public",
+      "-Dprotected=public",
+    ]
+
+    deps = []
+
+    external_deps = [
+      "c_utils:utils",
+      "hilog:libhilog",
+      "hisysevent:libhisysevent",
+      "ipc:ipc_single",
+      "samgr:samgr_proxy",
+    ]
+
+    subsystem_name = "multimedia"
+    part_name = "media_foundation"
+    innerapi_tags = [ "platformsdk" ]
+  }
+}
+
+if (hst_is_lite_sys) {
+  group("media_monitor") {
+    deps = []
+  }
+} else {
+  ohos_shared_library("media_monitor") {
+    stack_protector_ret = true
+    sanitize = {
+      ubsan = true
+      boundary_sanitize = true
+      cfi = true
+      cfi_cross_dso = true
+      debug = false
+      integer_overflow = true
+    }
+    install_enable = true
+
+    deps = [ ":media_monitor_common" ]
+
+    sources = [
+      "server/src/audio_memo.cpp",
+      "server/src/event_aggregate.cpp",
+      "server/src/media_event_base_writer.cpp",
+      "server/src/media_monitor_policy.cpp",
+      "server/src/media_monitor_service.cpp",
+      "server/src/media_monitor_stub.cpp",
+    ]
+
+    configs = []
+
+    include_dirs = [
+      "client/include",
+      "server/include",
+      "common/include",
+      "../../interface/inner_api/common/",
+    ]
+
+    external_deps = [
+      "access_token:libaccesstoken_sdk",
+      "audio_framework:audio_client",
+      "c_utils:utils",
+      "hicollie:libhicollie",
+      "hilog:libhilog",
+      "hisysevent:libhisysevent",
+      "ipc:ipc_single",
+      "safwk:system_ability_fwk",
+      "samgr:samgr_proxy",
+    ]
+
+    subsystem_name = "multimedia"
+    part_name = "media_foundation"
+  }
+}
+
+if (hst_is_lite_sys) {
+  group("media_monitor_client") {
+    deps = []
+  }
+} else {
+  ohos_shared_library("media_monitor_client") {
+    sanitize = {
+      ubsan = true
+      boundary_sanitize = true
+      cfi = true
+      cfi_cross_dso = true
+      debug = false
+      integer_overflow = true
+    }
+
+    public_configs = [ ":media_monitor_public_config" ]
+
+    install_enable = true
+
+    sources = [
+      "client/src/media_monitor_client.cpp",
+      "client/src/media_monitor_manager.cpp",
+    ]
+
+    include_dirs = [
+      "client/include",
+      "server/include",
+      "common/include",
+      "../../interface/inner_api/common/",
+    ]
+
+    deps = [ ":media_monitor_common" ]
+
+    external_deps = [
+      "c_utils:utils",
+      "eventhandler:libeventhandler",
+      "hilog:libhilog",
+      "init:libbegetutil",
+      "ipc:ipc_single",
+      "samgr:samgr_proxy",
+    ]
+
+    subsystem_name = "multimedia"
+    innerapi_tags = [ "platformsdk" ]
+    part_name = "media_foundation"
+  }
+}

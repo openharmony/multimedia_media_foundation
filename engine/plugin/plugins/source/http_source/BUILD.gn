@@ -19,10 +19,7 @@ group("plugin_http_source") {
 ohos_source_set("httpsource") {
   subsystem_name = "multimedia"
   part_name = "media_foundation"
-  include_dirs = [
-    "//third_party/curl/include",
-    "//foundation/multimedia/media_foundation/engine/include",
-  ]
+  include_dirs = [ "//foundation/multimedia/media_foundation/engine/include" ]
   sources = [
     "download/downloader.cpp",
     "download/http_curl_client.cpp",
@@ -42,13 +39,14 @@ ohos_source_set("httpsource") {
     "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",
   ]
   if (hst_is_lite_sys) {
+    include_dirs += [ "//third_party/curl/include" ]
     if (hst_is_mini_sys) {
       public_deps += [ "//third_party/curl:libcurl_static" ]
     } else {
       public_deps += [ "//third_party/curl:libcurl_shared" ]
     }
   } else {
-    public_deps += [ "//third_party/curl:curl_shared" ]
+    public_external_deps = [ "curl:curl_shared" ]
     external_deps = [
       "graphic_surface:surface",
       "hilog:libhilog",

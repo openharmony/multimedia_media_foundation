@@ -16,13 +16,14 @@
 #include "meta/meta.h"
 #include <functional>
 #include "common/log.h"
+#include "meta.h"
 
 /**
  * Steps of Adding New Tag
  *
  * 1. In meta_key.h, Add a Tag.
  * 2. In meta.h, Register Tag key Value mapping.
- *    Example: DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::TAGNAME, TAGTYPE, ValueType::VALUETYPE)
+ *    Example: DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::TAGNAME, TAGTYPE, AnyValueType::VALUETYPE)
  * 3. In meta.cpp, Register default value to g_metadataDefaultValueMap ({Tag::TAGNAME, defaultTAGTYPE}).
  * 4. In order to support Enum/Bool Value Getter Setter from AVFormat,
  *    In meta.cpp, Register Tag key getter setter function mapping.
@@ -83,6 +84,7 @@ DEFINE_METADATA_SETTER_GETTER_FUNC(HEVCLevel, int32_t)
 DEFINE_METADATA_SETTER_GETTER_FUNC(ChromaLocation, int32_t)
 DEFINE_METADATA_SETTER_GETTER_FUNC(FileType, int32_t)
 DEFINE_METADATA_SETTER_GETTER_FUNC(VideoEncodeBitrateMode, int32_t)
+DEFINE_METADATA_SETTER_GETTER_FUNC(TemporalGopReferenceMode, int32_t)
 
 DEFINE_METADATA_SETTER_GETTER_FUNC(AudioChannelLayout, int64_t)
 
@@ -105,7 +107,8 @@ static std::map<TagType, std::pair<MetaSetterFunction, MetaGetterFunction>> g_me
     DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_H265_LEVEL, HEVCLevel),
     DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_CHROMA_LOCATION, ChromaLocation),
     DEFINE_METADATA_SETTER_GETTER(Tag::MEDIA_FILE_TYPE, FileType),
-    DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_ENCODE_BITRATE_MODE, VideoEncodeBitrateMode)
+    DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_ENCODE_BITRATE_MODE, VideoEncodeBitrateMode),
+    DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_ENCODER_TEMPORAL_GOP_REFERENCE_MODE, TemporalGopReferenceMode),
 };
 
 using  MetaSetterInt64Function = std::function<bool(Meta&, const TagType&, int64_t&)>;
@@ -122,6 +125,7 @@ static std::vector<TagType> g_metadataBoolVector = {
     Tag::VIDEO_IS_HDR_VIVID,
     Tag::MEDIA_HAS_VIDEO,
     Tag::MEDIA_HAS_AUDIO,
+    Tag::MEDIA_HAS_SUBTITLE,
     Tag::MEDIA_END_OF_STREAM
 };
 
@@ -173,9 +177,20 @@ bool GetMetaData(const Meta& meta, const TagType& tag, int64_t& value)
     return iter->second.second(meta, tag, value);
 }
 
+bool IsIntEnum(const TagType &tag)
+{
+    return (g_metadataGetterSetterMap.find(tag) != g_metadataGetterSetterMap.end());
+}
+
+bool IsLongEnum(const TagType &tag)
+{
+    return g_metadataGetterSetterInt64Map.find(tag) != g_metadataGetterSetterInt64Map.end();
+}
+
 static Any defaultString = std::string();
 static Any defaultUInt8 = (uint8_t)0;
 static Any defaultInt32 = (int32_t)0;
+static Any defaultUInt32 = (uint32_t)0;
 static Any defaultInt64 = (int64_t)0;
 static Any defaultUInt64 = (uint64_t)0;
 static Any defaultFloat = 0.0f;
@@ -201,6 +216,7 @@ static Any defaultAudioChannelLayout = AudioChannelLayout::UNKNOWN;
 static Any defaultAudioAacProfile = AudioAacProfile::ELD;
 static Any defaultAudioAacStreamFormat = AudioAacStreamFormat::ADIF;
 static Any defaultVectorUInt8 = std::vector<uint8_t>();
+static Any defaultVectorUInt32 = std::vector<uint32_t>();
 static Any defaultVectorVideoBitStreamFormat = std::vector<VideoBitStreamFormat>();
 static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::SRC_INPUT_TYPE, defaultSrcInputType},
@@ -218,7 +234,10 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::MEDIA_FILE_TYPE, defaultFileType},
     {Tag::VIDEO_ENCODE_BITRATE_MODE, defaultVideoEncodeBitrateMode},
     {Tag::VIDEO_ENCODER_TEMPORAL_GOP_REFERENCE_MODE, defaultTemporalGopReferenceMode},
-
+    // Uint_8
+    {Tag::SCREEN_CAPTURE_AV_TYPE, defaultUInt8},
+    {Tag::SCREEN_CAPTURE_DATA_TYPE, defaultUInt8},
+    {Tag::SCREEN_CAPTURE_STOP_REASON, defaultUInt8},
     // Int32
     {Tag::APP_UID, defaultInt32},
     {Tag::APP_PID, defaultInt32},
@@ -272,6 +291,16 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_ENCODER_QP_MAX, defaultInt32},
     {Tag::VIDEO_ENCODER_QP_MIN, defaultInt32},
     {Tag::FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_COUNT, defaultInt32},
+    {Tag::OH_MD_KEY_AUDIO_OBJECT_NUMBER, defaultInt32},
+    {Tag::AV_CODEC_CALLER_PID, defaultInt32},
+    {Tag::AV_CODEC_CALLER_UID, defaultInt32},
+    {Tag::AV_CODEC_FORWARD_CALLER_PID, defaultInt32},
+    {Tag::AV_CODEC_FORWARD_CALLER_UID, defaultInt32},
+    {Tag::VIDEO_DECODER_RATE_UPPER_LIMIT, defaultInt32},
+    {Tag::SCREEN_CAPTURE_ERR_CODE, defaultInt32},
+    {Tag::SCREEN_CAPTURE_DURATION, defaultInt32},
+    {Tag::SCREEN_CAPTURE_START_LATENCY, defaultInt32},
+    {Tag::DRM_ERROR_CODE, defaultInt32},
     // String
     {Tag::MIME_TYPE, defaultString},
     {Tag::MEDIA_FILE_URI, defaultString},
@@ -295,6 +324,13 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::MEDIA_CODEC_NAME, defaultString},
     {Tag::PROCESS_NAME, defaultString},
     {Tag::MEDIA_CREATION_TIME, defaultString},
+    {Tag::AV_CODEC_CALLER_PROCESS_NAME, defaultString},
+    {Tag::AV_CODEC_FORWARD_CALLER_PROCESS_NAME, defaultString},
+    {Tag::SCREEN_CAPTURE_ERR_MSG, defaultString},
+    {Tag::SCREEN_CAPTURE_VIDEO_RESOLUTION, defaultString},
+    {Tag::DRM_APP_NAME, defaultString},
+    {Tag::DRM_INSTANCE_ID, defaultString},
+    {Tag::DRM_ERROR_MESG, defaultString},
     // Float
     {Tag::MEDIA_LATITUDE, defaultFloat},
     {Tag::MEDIA_LONGITUDE, defaultFloat},
@@ -307,6 +343,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_IS_HDR_VIVID, defaultBool},
     {Tag::MEDIA_HAS_VIDEO, defaultBool},
     {Tag::MEDIA_HAS_AUDIO, defaultBool},
+    {Tag::MEDIA_HAS_SUBTITLE, defaultBool},
     {Tag::MEDIA_END_OF_STREAM, defaultBool},
     {Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE, defaultBool},
     {Tag::VIDEO_ENCODER_ENABLE_TEMPORAL_SCALABILITY, defaultBool},
@@ -314,7 +351,11 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_PER_FRAME_IS_LTR, defaultBool},
     {Tag::VIDEO_ENABLE_LOW_LATENCY, defaultBool},
     {Tag::VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK, defaultBool},
+    {Tag::VIDEO_BUFFER_CAN_DROP, defaultBool},
     {Tag::AUDIO_RENDER_SET_FLAG, defaultBool},
+    {Tag::SCREEN_CAPTURE_USER_AGREE, defaultBool},
+    {Tag::SCREEN_CAPTURE_REQURE_MIC, defaultBool},
+    {Tag::SCREEN_CAPTURE_ENABLE_MIC, defaultBool},
     // Int64
     {Tag::MEDIA_FILE_SIZE, defaultUInt64},
     {Tag::MEDIA_POSITION, defaultUInt64},
@@ -338,10 +379,32 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::MEDIA_COVER, defaultVectorUInt8},
     {Tag::AUDIO_VORBIS_IDENTIFICATION_HEADER, defaultVectorUInt8},
     {Tag::AUDIO_VORBIS_SETUP_HEADER, defaultVectorUInt8},
+    {Tag::OH_MD_KEY_AUDIO_VIVID_METADATA, defaultVectorUInt8},
     // vector<Plugins::VideoBitStreamFormat>
     {Tag::VIDEO_BIT_STREAM_FORMAT, defaultVectorVideoBitStreamFormat},
     // vector<uint8_t>
-    {Tag::DRM_CENC_INFO, defaultVectorUInt8}
+    {Tag::DRM_CENC_INFO, defaultVectorUInt8},
+    // Uint32
+    {Tag::DRM_DECRYPT_AVG_SIZE, defaultUInt32},
+    {Tag::DRM_DECRYPT_AVG_DURATION, defaultUInt32},
+    {Tag::DRM_DECRYPT_MAX_SIZE, defaultUInt32},
+    {Tag::DRM_DECRYPT_MAX_DURATION, defaultUInt32},
+    {Tag::DRM_DECRYPT_TIMES, defaultUInt32}
+};
+
+static std::map<AnyValueType, const Any &> g_ValueTypeDefaultValueMap = {
+    {AnyValueType::INVALID_TYPE, defaultString},
+    {AnyValueType::BOOL, defaultBool},
+    {AnyValueType::UINT8_T, defaultUInt8},
+    {AnyValueType::INT32_T, defaultInt32},
+    {AnyValueType::UINT32_T, defaultUInt32},
+    {AnyValueType::INT64_T, defaultInt64},
+    {AnyValueType::UINT64_T, defaultUInt64},
+    {AnyValueType::FLOAT, defaultFloat},
+    {AnyValueType::DOUBLE, defaultDouble},
+    {AnyValueType::VECTOR_UINT8, defaultVectorUInt8},
+    {AnyValueType::VECTOR_UINT32, defaultVectorUInt32},
+    {AnyValueType::STRING, defaultString},
 };
 
 Any GetDefaultAnyValue(const TagType& tag)
@@ -353,17 +416,71 @@ Any GetDefaultAnyValue(const TagType& tag)
     return iter->second;
 }
 
+std::optional<Any> GetDefaultAnyValueOpt(const TagType &tag)
+{
+    auto iter = g_metadataDefaultValueMap.find(tag);
+    if (iter == g_metadataDefaultValueMap.end()) {
+        return std::nullopt;
+    }
+    return iter->second;
+}
+
+Any GetDefaultAnyValue(const TagType &tag, AnyValueType type)
+{
+    auto iter = g_metadataDefaultValueMap.find(tag);
+    if (iter == g_metadataDefaultValueMap.end()) {
+        auto typeIter = g_ValueTypeDefaultValueMap.find(type);
+        if (typeIter != g_ValueTypeDefaultValueMap.end()) {
+            return typeIter->second;
+        } else {
+            return defaultString; //Default String type
+        }
+    }
+    return iter->second;
+}
+
+AnyValueType Meta::GetValueType(const TagType& key) const
+{
+    auto iter = map_.find(key);
+    if (iter != map_.end()) {
+        if (Any::IsSameTypeWith<int32_t>(iter->second)) {
+            return AnyValueType::INT32_T;
+        } else if (Any::IsSameTypeWith<bool>(iter->second)) {
+            return AnyValueType::BOOL;
+        } else if (Any::IsSameTypeWith<int64_t>(iter->second)) {
+            return AnyValueType::INT64_T;
+        } else if (Any::IsSameTypeWith<float>(iter->second)) {
+            return AnyValueType::FLOAT;
+        } else if (Any::IsSameTypeWith<double>(iter->second)) {
+            return AnyValueType::DOUBLE;
+        } else if (Any::IsSameTypeWith<std::vector<uint8_t>>(iter->second)) {
+            return AnyValueType::VECTOR_UINT8;
+        } else if (Any::IsSameTypeWith<std::string>(iter->second)) {
+            return AnyValueType::STRING;
+        } else {
+            auto iter = g_metadataGetterSetterInt64Map.find(key);
+            if (iter == g_metadataGetterSetterInt64Map.end()) {
+                return AnyValueType::INT32_T;
+            } else {
+                return AnyValueType::INT64_T;
+            }
+        }
+    }
+    return AnyValueType::INVALID_TYPE;
+}
+
 bool Meta::ToParcel(MessageParcel &parcel) const
 {
     MessageParcel metaParcel;
     int32_t metaSize = 0;
     bool ret = true;
-    for (auto it = begin(); it != end(); ++it) {
+    for (auto iter = begin(); iter != end(); ++iter) {
         ++metaSize;
-        ret = ret && metaParcel.WriteString(it->first);
-        ret = ret && it->second.ToParcel(metaParcel);
+        ret &= metaParcel.WriteString(iter->first);
+        ret &= metaParcel.WriteInt32(static_cast<int32_t>(GetValueType(iter->first)));
+        ret &= iter->second.ToParcel(metaParcel);
         if (!ret) {
-            MEDIA_LOG_E("fail to Marshalling Key: " PUBLIC_LOG_S, it->first.c_str());
+            MEDIA_LOG_E("fail to Marshalling Key: " PUBLIC_LOG_S, iter->first.c_str());
             return false;
         }
     }
@@ -384,10 +501,11 @@ bool Meta::FromParcel(MessageParcel &parcel)
         MEDIA_LOG_E("fail to Unmarshalling size: %{public}d", size);
         return false;
     }
-    
+
     for (int32_t index = 0; index < size; index++) {
         std::string key = parcel.ReadString();
-        Any value = GetDefaultAnyValue(key); //Init Default Value
+        AnyValueType type = static_cast<AnyValueType>(parcel.ReadInt32());
+        Any value = GetDefaultAnyValue(key, type); //Init Default Value
         if (value.FromParcel(parcel)) {
             map_[key] = value;
         } else {

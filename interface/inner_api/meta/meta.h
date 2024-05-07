@@ -27,6 +27,7 @@
 #endif
 
 #include <map>
+#include <optional>
 #include "meta/meta_key.h"
 #include "meta/audio_types.h"
 #include "meta/media_types.h"
@@ -37,15 +38,6 @@
 
 namespace OHOS {
 namespace Media {
-/**
- * @brief GetDefaultAnyValue used for Application to get Any type default value from Meta Object.
- * @implNote In order to get default Any value from Meta Object.
- * We use metadataDefaultValueMap to get the right getDefaultVal function.
- * @return Returns Any type default value, returns <b>Any(string())</b> if no match.
- * @example GetDefaultAnyValue("media.file.type");
- */
-extern Any GetDefaultAnyValue(const TagType& tag);
-
 #define DECLARE_INFO_CLASS                                   \
     template<TagTypeCharSeq tagCharSeq, class Enable = void> \
     class ValueInfo {                                        \
@@ -92,13 +84,39 @@ extern Any GetDefaultAnyValue(const TagType& tag);
             typedef Any type;                                \
     };                                                       \
     template<TagTypeCharSeq tagCharSeq>                      \
-    inline typename std::enable_if<condition, ValueType>::type \
+    inline typename std::enable_if<condition, AnyValueType>::type \
     GetValueType()                                           \
     {                                                        \
         return eValueType;                                   \
     }
 
 using MapIt = std::map<TagType, Any>::const_iterator;
+
+/**
+ * @brief GetDefaultAnyValue used for Application to get Any type default value from Meta Object.
+ * @implNote In order to get Predefined default Any value from Meta Object.
+ * We use metadataDefaultValueMap to get the right getDefaultVal function.
+ * @return Returns Any type default value, returns <b>Any(string())</b> if no match.
+ * @example GetDefaultAnyValue("media.file.type");
+ */
+extern Any GetDefaultAnyValue(const TagType& tag);
+/**
+ * @brief GetDefaultAnyValueOpt used for Application to get Any type default value from Meta Object.
+ * @implNote In order to get Predefined default Any value from Meta Object.
+ * We use metadataDefaultValueMap to get the right getDefaultVal function.
+ * @return Returns Any type default value of optional, returns <b>std::nullopt</b> if no match.
+ * @example GetDefaultAnyValueOpt("media.file.type");
+ */
+extern std::optional<Any> GetDefaultAnyValueOpt(const TagType& tag);
+/**
+ * @brief GetDefaultAnyValue used for Application to get Any type default value.
+ * @implNote Return Predefined default Any value by tag, if notexist then find default Any value by type,
+ * if type not defined return Any(string).
+ * We use metadataDefaultValueMap and g_ValueTypeDefaultValueMapto get the right getDefaultVal function.
+ * @return Returns Any type default value, returns <b>Any(AnyValueType())</b> if no match.
+ * @example GetDefaultAnyValue("media.file.type", AnyValueType::INT32_T);
+ */
+extern Any GetDefaultAnyValue(const TagType& tag, AnyValueType type);
 class Meta {
 public:
     enum struct ValueType : int32_t {
@@ -118,7 +136,7 @@ public:
 
     DECLARE_INFO_CLASS;
 
-    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::SRC_INPUT_TYPE, Plugins::SrcInputType, ValueType::INT32_T);
+    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::SRC_INPUT_TYPE, Plugins::SrcInputType, AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::MEDIA_CODEC_CONFIG or
                            tagCharSeq == Tag::MEDIA_COVER or
                            tagCharSeq == Tag::AUDIO_VIVID_METADATA or
@@ -126,50 +144,56 @@ public:
                            tagCharSeq == Tag::AUDIO_VORBIS_SETUP_HEADER or
                            tagCharSeq == Tag::OH_MD_KEY_AUDIO_VIVID_METADATA or
                            tagCharSeq == Tag::DRM_CENC_INFO,
-                           std::vector<uint8_t>, ValueType::VECTOR_UINT8);
+                           std::vector<uint8_t>, AnyValueType::VECTOR_UINT8);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_CHANNEL_LAYOUT or
                            tagCharSeq == Tag::AUDIO_OUTPUT_CHANNEL_LAYOUT,
-                           Plugins::AudioChannelLayout, ValueType::INT64_T);
+                           Plugins::AudioChannelLayout, AnyValueType::INT64_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_SAMPLE_FORMAT, Plugins::AudioSampleFormat,
-                           ValueType::INT32_T);
-    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_AAC_PROFILE, Plugins::AudioAacProfile, ValueType::UINT8_T);
+                           AnyValueType::INT32_T);
+    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_AAC_PROFILE, Plugins::AudioAacProfile, AnyValueType::UINT8_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_AAC_STREAM_FORMAT, Plugins::AudioAacStreamFormat,
-                           ValueType::UINT8_T);
+                           AnyValueType::UINT8_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_PIXEL_FORMAT, Plugins::VideoPixelFormat,
-                           ValueType::INT32_T);
+                           AnyValueType::INT32_T);
 //    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::MEDIA_SEEKABLE), Plugins::Seekable);
-    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::MEDIA_TYPE, Plugins::MediaType, ValueType::INT32_T);
+    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::MEDIA_TYPE, Plugins::MediaType, AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_BIT_STREAM_FORMAT, std::vector<Plugins::VideoBitStreamFormat>,
-                           ValueType::VECTOR_UINT32);
+                           AnyValueType::VECTOR_UINT32);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_H264_PROFILE, Plugins::VideoH264Profile,
-                           ValueType::INT32_T);
-    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_ROTATION, Plugins::VideoRotation, ValueType::INT32_T);
+                           AnyValueType::INT32_T);
+    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_ROTATION, Plugins::VideoRotation, AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_COLOR_PRIMARIES, Plugins::ColorPrimary,
-                           ValueType::INT32_T);
+                           AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_COLOR_TRC, Plugins::TransferCharacteristic,
-                           ValueType::INT32_T);
+                           AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_COLOR_MATRIX_COEFF, Plugins::MatrixCoefficient,
-                           ValueType::INT32_T);
+                           AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_ENCODE_BITRATE_MODE,
-        Plugins::VideoEncodeBitrateMode, ValueType::INT32_T);
+        Plugins::VideoEncodeBitrateMode, AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_COLOR_RANGE or 
         tagCharSeq == Tag::VIDEO_REQUEST_I_FRAME or
         tagCharSeq == Tag::VIDEO_IS_HDR_VIVID or
         tagCharSeq == Tag::MEDIA_HAS_VIDEO or
         tagCharSeq == Tag::MEDIA_HAS_AUDIO or
+        tagCharSeq == Tag::MEDIA_HAS_SUBTITLE or
         tagCharSeq == Tag::MEDIA_END_OF_STREAM or
         tagCharSeq == Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE or
         tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_TEMPORAL_SCALABILITY or
         tagCharSeq == Tag::VIDEO_PER_FRAME_IS_LTR or
         tagCharSeq == Tag::VIDEO_ENABLE_LOW_LATENCY or
-        tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK, bool, ValueType::BOOL);
+        tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK or
+        tagCharSeq == Tag::SCREEN_CAPTURE_USER_AGREE or
+        tagCharSeq == Tag::SCREEN_CAPTURE_REQURE_MIC or
+        tagCharSeq == Tag::SCREEN_CAPTURE_ENABLE_MIC, bool, AnyValueType::BOOL);
+    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_BUFFER_CAN_DROP, bool, AnyValueType::BOOL);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_RENDER_SET_FLAG, bool, ValueType::BOOL);
-    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_H265_PROFILE, Plugins::HEVCProfile, ValueType::INT32_T);
-    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_H265_LEVEL, Plugins::HEVCLevel, ValueType::INT32_T);
+    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_H265_PROFILE, Plugins::HEVCProfile, AnyValueType::INT32_T);
+    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_H265_LEVEL, Plugins::HEVCLevel, AnyValueType::INT32_T);
+
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_CHROMA_LOCATION,
-        Plugins::ChromaLocation, ValueType::INT32_T);
+        Plugins::ChromaLocation, AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_ENCODER_TEMPORAL_GOP_REFERENCE_MODE,
-                           Plugins::TemporalGopReferenceMode, ValueType::INT32_T);
+                           Plugins::TemporalGopReferenceMode, AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::APP_UID or
         tagCharSeq == Tag::APP_PID or
         tagCharSeq == Tag::APP_TOKEN_ID or
@@ -210,7 +234,8 @@ public:
         tagCharSeq == Tag::VIDEO_STRIDE or
         tagCharSeq == Tag::VIDEO_DISPLAY_WIDTH or
         tagCharSeq == Tag::VIDEO_DISPLAY_HEIGHT or
-        tagCharSeq == Tag::OH_MD_KEY_AUDIO_OBJECT_NUMBER, int32_t, ValueType::INT32_T);
+        tagCharSeq == Tag::OH_MD_KEY_AUDIO_OBJECT_NUMBER or
+        tagCharSeq == Tag::DRM_ERROR_CODE, int32_t, AnyValueType::INT32_T);
 
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::VIDEO_ENCODER_TEMPORAL_GOP_SIZE or
@@ -225,7 +250,11 @@ public:
         tagCharSeq == Tag::VIDEO_SLICE_HEIGHT or
         tagCharSeq == Tag::VIDEO_ENCODER_QP_MAX or
         tagCharSeq == Tag::VIDEO_ENCODER_QP_MIN or
-        tagCharSeq == Tag::FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_COUNT, int32_t, ValueType::INT32_T);
+        tagCharSeq == Tag::FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_COUNT or
+        tagCharSeq == Tag::SCREEN_CAPTURE_ERR_CODE or
+        tagCharSeq == Tag::SCREEN_CAPTURE_DURATION or
+        tagCharSeq == Tag::SCREEN_CAPTURE_START_LATENCY, int32_t, AnyValueType::INT32_T);
+    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_DECODER_RATE_UPPER_LIMIT, int32_t, AnyValueType::INT32_T);
 
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::APP_FULL_TOKEN_ID or
@@ -236,14 +265,20 @@ public:
         tagCharSeq == Tag::USER_PUSH_DATA_TIME or
         tagCharSeq == Tag::MEDIA_FILE_SIZE or
         tagCharSeq == Tag::MEDIA_POSITION or
-        tagCharSeq == Tag::MEDIA_TIME_STAMP, int64_t, ValueType::INT64_T);
+        tagCharSeq == Tag::MEDIA_TIME_STAMP, int64_t, AnyValueType::INT64_T);
 
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::MEDIA_LATITUDE or
-        tagCharSeq == Tag::MEDIA_LONGITUDE, float, ValueType::FLOAT);
+        tagCharSeq == Tag::MEDIA_LONGITUDE, float, AnyValueType::FLOAT);
 
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_FRAME_RATE or
-        tagCharSeq == Tag::VIDEO_CAPTURE_RATE, double, ValueType::DOUBLE);
-    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::MEDIA_FILE_TYPE, Plugins::FileType, ValueType::INT32_T);
+        tagCharSeq == Tag::VIDEO_CAPTURE_RATE, double, AnyValueType::DOUBLE);
+    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::MEDIA_FILE_TYPE, Plugins::FileType, AnyValueType::INT32_T);
+    DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::DRM_DECRYPT_AVG_SIZE or
+        tagCharSeq == Tag::DRM_DECRYPT_AVG_DURATION or
+        tagCharSeq == Tag::DRM_DECRYPT_MAX_SIZE or
+        tagCharSeq == Tag::DRM_DECRYPT_MAX_DURATION or
+        tagCharSeq == Tag::DRM_DECRYPT_TIMES, uint32_t, AnyValueType::UINT32_T);
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::MIME_TYPE or
         tagCharSeq == Tag::MEDIA_FILE_URI or
@@ -266,7 +301,16 @@ public:
         tagCharSeq == Tag::MEDIA_LYRICS or
         tagCharSeq == Tag::MEDIA_CREATION_TIME or
         tagCharSeq == Tag::MEDIA_CODEC_NAME or
-        tagCharSeq == Tag::PROCESS_NAME, std::string, ValueType::STRING);
+        tagCharSeq == Tag::PROCESS_NAME or
+        tagCharSeq == Tag::SCREEN_CAPTURE_ERR_MSG or
+        tagCharSeq == Tag::SCREEN_CAPTURE_VIDEO_RESOLUTION or
+        tagCharSeq == Tag::DRM_APP_NAME or
+        tagCharSeq == Tag::DRM_INSTANCE_ID or
+        tagCharSeq == Tag::DRM_ERROR_MESG, std::string, AnyValueType::STRING);
+    DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::SCREEN_CAPTURE_AV_TYPE or
+        tagCharSeq == Tag::SCREEN_CAPTURE_DATA_TYPE or
+        tagCharSeq == Tag::SCREEN_CAPTURE_STOP_REASON, uint8_t, AnyValueType::UINT8_T);
 
     Meta &operator=(const Meta &other)
     {
@@ -412,6 +456,7 @@ public:
         }
     }
 
+    AnyValueType GetValueType(const TagType& key) const;
     bool ToParcel(MessageParcel &parcel) const;
     bool FromParcel(MessageParcel &parcel);
 
@@ -457,6 +502,26 @@ bool SetMetaData(Meta& meta, const TagType& tag, int64_t value);
  * @example OHOS::Media::GetMetaData(meta, "audio.aac.profile", value);
  */
 bool GetMetaData(const Meta& meta, const TagType& tag, int64_t& value);
+
+/**
+ * @brief IsIntEnum only used for Application interface OH_AVFormat to judge key's value type is int32_t or not.
+ * @implNote In order to get value(Enum type) from Meta Object, should use correct Enum type to get value from Any
+ * object. We use metadataGetterSetterMap to get the value type.
+ * @return Returns operator status, <b>True</b> if the key's value type is int32_t.
+ * returns <b>False</b> otherwise.
+ * @example OHOS::Media::IsIntEnum("audio.aac.profile");
+ */
+bool IsIntEnum(const TagType& tag);
+
+/**
+ * @brief IsIntEnum only used for Application interface OH_AVFormat to judge key's value type is int64_t or not.
+ * @implNote In order to get value(Enum type) from Meta Object, should use correct Enum type to get value from Any
+ * object. We use metadataGetterSetterMap to get the value type.
+ * @return Returns operator status, <b>True</b> if the key's value type is int64_t.
+ * returns <b>False</b> otherwise.
+ * @example OHOS::Media::IsIntEnum("audio.aac.profile");
+ */
+bool IsLongEnum(const TagType& tag);
 } // namespace Media
 } // namespace OHOS
 #endif // MEDIA_FOUNDATION_META_H

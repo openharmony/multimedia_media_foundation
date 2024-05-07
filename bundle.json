@@ -47,6 +47,7 @@
         ],
         "rom": "622KB",
         "ram": "",
+        "hisysevent_config": [ "//foundation/multimedia/audio_framework/hisysevent.yaml" ],
         "deps": {
           "third_party": [
             "curl",
@@ -58,6 +59,7 @@
               "hitrace",
               "audio_framework",
               "drivers_peripheral_codec",
+              "drivers_peripheral_display",
               "graphic_2d",
               "graphic_surface",
               "hdf_core",
@@ -70,13 +72,32 @@
               "bounds_checking_function",
               "pulseaudio",
               "hisysevent",
-              "window_manager"
+              "window_manager",
+              "ffmpeg",
+              "curl",
+              "access_token",
+              "safwk",
+              "samgr",
+              "c_utils",
+              "hicollie",
+              "eventhandler"
           ]
         },
         "build": {
+            "group_type": {
+              "base_group": [
+              ],
+              "fwk_group": [
+              ],
+              "service_group": [
+                "//foundation/multimedia/media_foundation/services/media_monitor/sa_profile:media_monitor_sa_profile",
+                "//foundation/multimedia/media_foundation/services/media_monitor:media_monitor_packages"
+              ]
+            },
             "sub_component": [
                 "//foundation/multimedia/media_foundation:histreamer",
-                "//foundation/multimedia/media_foundation:media_foundation"
+                "//foundation/multimedia/media_foundation:media_foundation",
+                "//foundation/multimedia/media_foundation/services/media_monitor:media_monitor_packages"
             ],
             "inner_kits": [
               {
@@ -177,6 +198,27 @@
                     "native_avmemory.h"
                   ],
                   "header_base": "//foundation/multimedia/media_foundation/interface/kits/c"
+                }
+              },
+              {
+                "type": "so",
+                "name": "//foundation/multimedia/media_foundation/services/media_monitor:media_monitor_client",
+                "header": {
+                  "header_files": [
+                    "media_monitor_manager.h"
+                  ],
+                  "header_base": "//foundation/multimedia/media_foundation/services/media_monitor/client/include"
+                }
+              },
+              {
+                "type": "so",
+                "name": "//foundation/multimedia/media_foundation/services/media_monitor:media_monitor_common",
+                "header": {
+                  "header_files": [
+                    "event_bean.h",
+                    "media_monitor_info.h"
+                  ],
+                  "header_base": "//foundation/multimedia/media_foundation/services/media_monitor/common/include"
                 }
               }
             ],

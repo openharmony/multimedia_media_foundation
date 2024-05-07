@@ -22,93 +22,149 @@
 #include "osal/task/jobutils.h"
 #include "common/log.h"
 #include "osal/utils/hitrace_utils.h"
-
 namespace OHOS {
 namespace Media {
 namespace Pipeline {
-Pipeline::~Pipeline() {}
-void Pipeline::Init(const std::shared_ptr<EventReceiver>& receiver, const std::shared_ptr<FilterCallback>& callback)
+static std::atomic<uint16_t> pipeLineId = 0;
+
+int32_t Pipeline::GetNextPipelineId()
+{
+    return pipeLineId++;
+}
+
+Pipeline::~Pipeline()
+{
+}
+
+void Pipeline::Init(const std::shared_ptr<EventReceiver>& receiver, const std::shared_ptr<FilterCallback>& callback,
+    const std::string& groupId)
 {
     eventReceiver_ = receiver;
     filterCallback_ = callback;
+    groupId_ = groupId;
 }
 
 Status Pipeline::Prepare()
 {
+    MEDIA_LOG_I("Prepare enter.");
     Status ret = Status::OK;
     SubmitJobOnce([&] {
         AutoLock lock(mutex_);
         for (auto it = filters_.begin(); it != filters_.end(); ++it) {
-            auto rtv = (*it)->Prepare();
+            ret = (*it)->Prepare();
+            if (ret != Status::OK) {
+                return;
+            }
+        }
+        for (auto it = filters_.begin(); it != filters_.end(); ++it) {
+            ret = (*it)->WaitAllState(FilterState::READY);
+            if (ret != Status::OK) {
+                return;
+            }
+        }
+    });
+    MEDIA_LOG_I("Prepare done ret = %{public}d", ret);
+    return ret;
+}
+
+Status Pipeline::PrepareFrame(bool renderFirstFrame)
+{
+    MEDIA_LOG_I("PrepareFrame enter.");
+    Status ret = Status::OK;
+    SubmitJobOnce([&] {
+        AutoLock lock(mutex_);
+        for (auto it = filters_.begin(); it != filters_.end(); ++it) {
+            auto rtv = (*it)->PrepareFrame(renderFirstFrame);
             if (rtv != Status::OK) {
                 ret = rtv;
                 return;
             }
         }
         for (auto it = filters_.begin(); it != filters_.end(); ++it) {
-            Status readyRet = (*it)->WaitAllState(FilterState::READY);
-            if (readyRet != Status::OK) {
-                ret = readyRet;
+            Status waitRet = (*it)->WaitPrepareFrame();
+            if (waitRet != Status::OK) {
+                ret = waitRet;
                 return;
             }
         }
     });
+    MEDIA_LOG_I("PrepareFrame done ret = %{public}d", ret);
     return ret;
 }
 
 Status Pipeline::Start()
 {
+    MEDIA_LOG_I("Start enter.");
     Status ret = Status::OK;
     SubmitJobOnce([&] {
         AutoLock lock(mutex_);
         for (auto it = filters_.begin(); it != filters_.end(); ++it) {
-            auto rtv = (*it)->Start();
-            if (rtv != Status::OK) {
-                ret = rtv;
+            ret = (*it)->Start();
+            if (ret != Status::OK) {
                 return;
             }
         }
         for (auto it = filters_.begin(); it != filters_.end(); ++it) {
-            (*it)->WaitAllState(FilterState::RUNNING);
+            ret = (*it)->WaitAllState(FilterState::RUNNING);
+            if (ret != Status::OK) {
+                return;
+            }
         }
     });
+    MEDIA_LOG_I("Start done ret = %{public}d", ret);
     return ret;
 }
 
 Status Pipeline::Pause()
 {
+    MEDIA_LOG_I("Pause enter.");
+    Status ret = Status::OK;
     SubmitJobOnce([&] {
         AutoLock lock(mutex_);
         for (auto it = filters_.begin(); it != filters_.end(); ++it) {
-            if ((*it)->Pause() != Status::OK) {
+            auto rtv = (*it)->Pause();
+            if (rtv != Status::OK) {
+                ret = rtv;
             }
         }
         for (auto it = filters_.begin(); it != filters_.end(); ++it) {
-            (*it)->WaitAllState(FilterState::PAUSED);
+            auto rtv = (*it)->WaitAllState(FilterState::PAUSED);
+            if (rtv != Status::OK) {
+                ret = rtv;
+            }
         }
-        return Status::OK;
     });
-    return Status::OK;
+    MEDIA_LOG_I("Pause done ret = %{public}d", ret);
+    return ret;
 }
 
 Status Pipeline::Resume()
 {
+    MEDIA_LOG_I("Resume enter.");
+    Status ret = Status::OK;
     SubmitJobOnce([&] {
         AutoLock lock(mutex_);
         for (auto it = filters_.begin(); it != filters_.end(); ++it) {
-            auto rtv = (*it)->Resume();
-            FALSE_RETURN_V(rtv == Status::OK, rtv);
+            ret = (*it)->Resume();
+            if (ret != Status::OK) {
+                return;
+            }
         }
         for (auto it = filters_.begin(); it != filters_.end(); ++it) {
-            (*it)->WaitAllState(FilterState::RUNNING);
+            ret = (*it)->WaitAllState(FilterState::RUNNING);
+            if (ret != Status::OK) {
+                return;
+            }
         }
-        return Status::OK;
     });
-    return Status::OK;
+    MEDIA_LOG_I("Resume done ret = %{public}d", ret);
+    return ret;
 }
 
 Status Pipeline::Stop()
 {
+    MEDIA_LOG_I("Stop enter.");
+    Status ret = Status::OK;
     SubmitJobOnce([&] {
         AutoLock lock(mutex_);
         for (auto it = filters_.begin(); it != filters_.end(); ++it) {
@@ -117,32 +173,38 @@ Status Pipeline::Stop()
                 continue;
             }
             auto rtv = (*it)->Stop();
-            FALSE_RETURN_V(rtv == Status::OK, rtv);
+            if (rtv != Status::OK) {
+                ret = rtv;
+            }
         }
         for (auto it = filters_.begin(); it != filters_.end(); ++it) {
-            (*it)->WaitAllState(FilterState::STOPPED);
+            auto rtv = (*it)->WaitAllState(FilterState::STOPPED);
+            if (rtv != Status::OK) {
+                ret = rtv;
+            }
         }
         filters_.clear();
-        MEDIA_LOG_I("Stop finished, filter number: " PUBLIC_LOG_ZU, filters_.size());
-        return Status::OK;
     });
-    return Status::OK;
+    MEDIA_LOG_I("Stop done ret = %{public}d", ret);
+    return ret;
 }
 
 Status Pipeline::Flush()
 {
+    MEDIA_LOG_I("Flush enter.");
     SubmitJobOnce([&] {
         AutoLock lock(mutex_);
         for (auto it = filters_.begin(); it != filters_.end(); ++it) {
             (*it)->Flush();
         }
-        return Status::OK;
     });
+    MEDIA_LOG_I("Flush end.");
     return Status::OK;
 }
 
 Status Pipeline::Release()
 {
+    MEDIA_LOG_I("Release enter.");
     SubmitJobOnce([&] {
         AutoLock lock(mutex_);
         for (auto it = filters_.begin(); it != filters_.end(); ++it) {
@@ -152,8 +214,8 @@ Status Pipeline::Release()
             (*it)->WaitAllState(FilterState::RELEASED);
         }
         filters_.clear();
-        return Status::OK;
     });
+    MEDIA_LOG_I("Stop done.");
     return Status::OK;
 }
 
@@ -170,6 +232,7 @@ Status Pipeline::AddHeadFilters(std::vector<std::shared_ptr<Filter>> filtersIn)
         }
         if (!matched) {
             filtersToAdd.push_back(filterIn);
+            filterIn->LinkPipeLine(groupId_);
         }
     }
     if (filtersToAdd.empty()) {
@@ -192,8 +255,6 @@ Status Pipeline::RemoveHeadFilter(const std::shared_ptr<Filter>& filter)
         if (it != filters_.end()) {
             filters_.erase(it);
         }
-        filter->Release();
-        filter->WaitAllState(FilterState::RELEASED);
         return Status::OK;
     });
     return Status::OK;
@@ -205,6 +266,7 @@ Status Pipeline::LinkFilters(const std::shared_ptr<Filter> &preFilter,
 {
     for (auto nextFilter : nextFilters) {
         auto ret = preFilter->LinkNext(nextFilter, type);
+        nextFilter->LinkPipeLine(groupId_);
         FALSE_RETURN_V(ret == Status::OK, ret);
     }
     return Status::OK;

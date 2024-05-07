@@ -22,9 +22,9 @@
 #include "meta/meta.h"
 #include "buffer/avbuffer_queue_producer.h"
 #include "common/event.h"
-#include "filter/filter_loop.h"
 #include "osal/task/mutex.h"
 #include "osal/task/condition_variable.h"
+#include "osal/task/task.h"
 
 namespace OHOS {
 namespace Media {
@@ -43,6 +43,7 @@ enum class FilterType {
     FILTERTYPE_ASINK,
     FILTERTYPE_FSINK,
     AUDIO_CAPTURE,
+    AUDIO_DATA_SOURCE,
     VIDEO_CAPTURE,
     FILTERTYPE_MAX,
 };
@@ -64,7 +65,6 @@ enum class FilterState {
     READY,       // Ready Event reported
     RUNNING,     // Start called
     PAUSED,      // Pause called
-    FLUSHED,     // Flush called, should only call after pause
     STOPPED,     // Stop called
     RELEASED,    // Release called
     ERROR,       // State fail
@@ -99,31 +99,41 @@ public:
 
 class Filter {
 public:
-    explicit Filter(std::string name, FilterType type);
+    explicit Filter(std::string name, FilterType type, bool asyncMode = false);
     virtual ~Filter();
     virtual void Init(const std::shared_ptr<EventReceiver>& receiver, const std::shared_ptr<FilterCallback>& callback);
 
-    virtual Status Prepare();
+    virtual void LinkPipeLine(const std::string& groupId) final;
 
-    virtual Status Start();
+    virtual Status Prepare() final;
 
-    virtual Status Pause();
+    virtual Status PrepareFrame(bool renderFirstFrame);
 
-    virtual Status Resume();
+    virtual Status WaitPrepareFrame();
 
-    virtual Status Stop();
+    virtual Status Start() final;
 
-    virtual Status Flush();
+    virtual Status Pause() final;
 
-    virtual Status Release();
+    virtual Status Resume() final;
 
-    virtual Status ProcessInputBuffer(int arg = 0, int64_t delay = 0);
+    virtual Status Stop() final;
 
-    virtual Status ProcessOutputBuffer(int arg = 0, int64_t delay = 0);
+    virtual Status Flush() final;
 
-    virtual Status DoInit();
+    virtual Status Release() final;
+
+    virtual Status ProcessInputBuffer(int sendArg = 0, int64_t delayUs = 0) final;
+
+    virtual Status ProcessOutputBuffer(int sendArg = 0, int64_t delayUs = 0) final;
+
+    virtual Status WaitAllState(FilterState state) final;
+
+    virtual Status DoInitAfterLink();
 
     virtual Status DoPrepare();
+
+    virtual Status DoPrepareFrame(bool renderFirstFrame);
 
     virtual Status DoStart();
 
@@ -137,9 +147,9 @@ public:
 
     virtual Status DoRelease();
 
-    virtual Status DoProcessInputBuffer(int arg, bool dropped);
+    virtual Status DoProcessInputBuffer(int recvArg, bool dropFrame);
 
-    virtual Status DoProcessOutputBuffer(int arg, bool dropped);
+    virtual Status DoProcessOutputBuffer(int recvArg, bool dropFrame);
 
     virtual void SetParameter(const std::shared_ptr<Meta>& meta);
 
@@ -163,14 +173,22 @@ public:
 
     virtual void ChangeState(FilterState state);
 
-    virtual Status WaitAllState(FilterState state);
-
     virtual void SetErrCode(Status errCode);
 
     virtual Status GetErrCode();
 
 protected:
-    void ActiveAsyncMode();
+    virtual Status PrepareDone() final;
+
+    virtual Status StartDone() final;
+
+    virtual Status PauseDone() final;
+
+    virtual Status ResumeDone() final;
+
+    virtual Status StopDone() final;
+
+    virtual Status ReleaseDone() final;
 
     std::string name_;
 
@@ -193,9 +211,19 @@ protected:
 
     std::map<StreamType, std::vector<std::shared_ptr<FilterLinkCallback>>> linkCallbackMaps_;
 
-    std::shared_ptr<FilterLoop> filterLoop_;
-
     Status errCode_ = Status::OK;
+
+    std::unique_ptr<Task> filterTask_;
+
+    int64_t jobIdx_ = 0;
+
+    int64_t processIdx_ = 0;
+
+    int64_t jobIdxBase_ = 0;
+
+    std::string groupId_;
+
+    bool isAsyncMode_;
 };
 
 enum FilterPlaybackCommand {

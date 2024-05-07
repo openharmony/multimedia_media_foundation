@@ -400,6 +400,11 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::VIDEO_ENCODER_QP_MAX, 20},
     {Tag::VIDEO_ENCODER_QP_MIN, 21},
     {Tag::FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_COUNT, 22},
+    {Tag::VIDEO_DECODER_RATE_UPPER_LIMIT, 120},
+    {Tag::SCREEN_CAPTURE_ERR_CODE, 3},
+    {Tag::SCREEN_CAPTURE_DURATION, 5},
+    {Tag::SCREEN_CAPTURE_START_LATENCY, 7},
+    {Tag::DRM_ERROR_CODE, 28},
     {Tag::SRC_INPUT_TYPE, static_cast<int32_t>(Plugins::SrcInputType::AUD_ES)},
     {Tag::AUDIO_SAMPLE_FORMAT, static_cast<int32_t>(Plugins::AudioSampleFormat::SAMPLE_S16LE)},
     {Tag::VIDEO_PIXEL_FORMAT, static_cast<int32_t>(Plugins::VideoPixelFormat::YUV411P)},
@@ -422,6 +427,9 @@ map<TagType, int32_t> testInt32Data = {
 
     map<TagType, bool> testBoolData = {
     // Bool
+    {Tag::SCREEN_CAPTURE_USER_AGREE, true},
+    {Tag::SCREEN_CAPTURE_REQURE_MIC, false},
+    {Tag::SCREEN_CAPTURE_ENABLE_MIC, true},
     {Tag::VIDEO_COLOR_RANGE, true},
     {Tag::VIDEO_REQUEST_I_FRAME, false},
     {Tag::MEDIA_HAS_VIDEO, true},
@@ -433,8 +441,10 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::VIDEO_ENCODER_PER_FRAME_MARK_LTR, true},
     {Tag::VIDEO_PER_FRAME_IS_LTR, true},
     {Tag::VIDEO_ENABLE_LOW_LATENCY, true},
-    {Tag::VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK, true}};
-    {Tag::AUDIO_RENDER_SET_FLAG, true}};
+    {Tag::VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK, true},
+    {Tag::AUDIO_RENDER_SET_FLAG, true},
+    {Tag::VIDEO_BUFFER_CAN_DROP, true}};
+
 
 /**
  * @tc.name: SetGet_MetaData_All_As_Bool_Using_ParcelPackage
@@ -595,6 +605,11 @@ map<TagType, std::string> testStringData = {
     {Tag::MEDIA_CODEC_NAME, "String MEDIA_CODEC_NAME"},
     {Tag::PROCESS_NAME, "String PROCESS_NAME"},
     {Tag::MEDIA_CREATION_TIME, "String MEDIA_CREATION_TIME"},
+    {Tag::SCREEN_CAPTURE_ERR_MSG, "String SCREEN_CAPTURE_ERR_MSG"},
+    {Tag::SCREEN_CAPTURE_VIDEO_RESOLUTION, "String SCREEN_CAPTURE_VIDEO_RESOLUTION"},
+    {Tag::DRM_APP_NAME, "String DRM_APP_NAME"},
+    {Tag::DRM_INSTANCE_ID, "String DRM_INSTANCE_ID"},
+    {Tag::DRM_ERROR_MESG, "String DRM_ERROR_MESG"},
 };
 
 /**
@@ -801,6 +816,142 @@ HWTEST_F(MetaInnerUnitTest, SetGet_Data_DrmStruct_Using_Parcel, TestSize.Level1)
 
     EXPECT_EQ(drmCencInfoIn->keyIdLen, drmCencInfoOut->keyIdLen);
     free(drmCencInfoIn);
+}
+
+/**
+ * @tc.name: SetGet_self_Data_String_Using_Parcel
+ * @tc.desc: SetGet_self_Data_String_Using_Parcel
+ * @tc.type: FUNC
+ */
+HWTEST_F(MetaInnerUnitTest, SetGet_self_Data_String_Using_Parcel, TestSize.Level1)
+{
+    std::string valueOut = "123";
+    std::string valueIn = "123abc";
+    std::string key = "myself";
+    metaIn->SetData(key, valueIn);
+    ASSERT_TRUE(metaIn->ToParcel(*parcel));
+    ASSERT_TRUE(metaOut->FromParcel(*parcel));
+    metaOut->GetData(key, valueOut);
+    EXPECT_EQ(valueOut, valueIn);
+}
+
+/**
+ * @tc.name: SetGet_self_Data_float_Using_Parcel
+ * @tc.desc: SetGet_self_Data_float_Using_Parcel
+ * @tc.type: FUNC
+ */
+HWTEST_F(MetaInnerUnitTest, SetGet_self_Data_float_Using_Parcel, TestSize.Level1)
+{
+    float valueOut = 0.0f;
+    float valueIn = 1.01f;
+    std::string key = "myself";
+    metaIn->SetData(key, valueIn);
+    ASSERT_TRUE(metaIn->ToParcel(*parcel));
+    ASSERT_TRUE(metaOut->FromParcel(*parcel));
+    metaOut->GetData(key, valueOut);
+    EXPECT_EQ(valueOut, valueIn);
+}
+
+/**
+ * @tc.name: GetValueType_Data_Boolean
+ * @tc.desc: GetValueType_Data_Boolean
+ * @tc.type: FUNC
+ */
+HWTEST_F(MetaInnerUnitTest, GetValueType_Data_Boolean, TestSize.Level1)
+{
+    bool valueOut = true;
+    bool valueIn = false;
+    std::string key = "test";
+    metaIn->SetData(key, valueIn);
+    AnyValueType type = metaIn->GetValueType(key);
+    ASSERT_TRUE(type == AnyValueType::BOOL);
+    metaIn->GetData(key, valueOut);
+    EXPECT_EQ(valueOut, valueIn);
+}
+
+/**
+ * @tc.name: GetValueType_Data_Int32
+ * @tc.desc: GetValueType_Data_Int32
+ * @tc.type: FUNC
+ */
+HWTEST_F(MetaInnerUnitTest, GetValueType_Data_Int32, TestSize.Level1)
+{
+    int32_t valueOut = 0;
+    int32_t valueIn = 141;
+    std::string key = "test";
+    metaIn->SetData(key, valueIn);
+    AnyValueType type = metaIn->GetValueType(key);
+    ASSERT_TRUE(type == AnyValueType::INT32_T);
+    metaIn->GetData(key, valueOut);
+    EXPECT_EQ(valueOut, valueIn);
+}
+
+/**
+ * @tc.name: GetValueType_Data_Int64
+ * @tc.desc: GetValueType_Data_Int64
+ * @tc.type: FUNC
+ */
+HWTEST_F(MetaInnerUnitTest, GetValueType_Data_Int64, TestSize.Level1)
+{
+    int64_t valueOut = 0;
+    int64_t valueIn = 141;
+    std::string key = "test";
+    metaIn->SetData(key, valueIn);
+    AnyValueType type = metaIn->GetValueType(key);
+    ASSERT_TRUE(type == AnyValueType::INT64_T);
+    metaIn->GetData(key, valueOut);
+    EXPECT_EQ(valueOut, valueIn);
+}
+
+/**
+ * @tc.name: GetValueType_Data_FLOAT
+ * @tc.desc: GetValueType_Data_FLOAT
+ * @tc.type: FUNC
+ */
+HWTEST_F(MetaInnerUnitTest, GetValueType_Data_FLOAT, TestSize.Level1)
+{
+    float valueOut = 0;
+    float valueIn = 1.01;
+    std::string key = "test";
+    metaIn->SetData(key, valueIn);
+    AnyValueType type = metaIn->GetValueType(key);
+    ASSERT_TRUE(type == AnyValueType::FLOAT);
+    metaIn->GetData(key, valueOut);
+    EXPECT_EQ(valueOut, valueIn);
+}
+
+/**
+ * @tc.name: GetValueType_Data_DOUBLE
+ * @tc.desc: GetValueType_Data_DOUBLE
+ * @tc.type: FUNC
+ */
+HWTEST_F(MetaInnerUnitTest, GetValueType_Data_DOUBLE, TestSize.Level1)
+{
+    double valueOut = 0;
+    double valueIn = 1.01;
+    std::string key = "test";
+    metaIn->SetData(key, valueIn);
+    AnyValueType type = metaIn->GetValueType(key);
+    ASSERT_TRUE(type == AnyValueType::DOUBLE);
+    metaIn->GetData(key, valueOut);
+    EXPECT_EQ(valueOut, valueIn);
+}
+
+/**
+ * @tc.name: GetValueType_Data_VECTOR_UINT8
+ * @tc.desc: GetValueType_Data_VECTOR_UINT8
+ * @tc.type: FUNC
+ */
+HWTEST_F(MetaInnerUnitTest, GetValueType_Data_VECTOR_UINT8, TestSize.Level1)
+{
+    vector<uint8_t> valueOut{1, 2, 3};
+    vector<uint8_t> valueIn{1, 2, 3, 4};
+    std::string key = "test";
+    metaIn->SetData(key, valueIn);
+    AnyValueType type = metaIn->GetValueType(key);
+    ASSERT_TRUE(type == AnyValueType::VECTOR_UINT8);
+    metaIn->GetData(key, valueOut);
+    EXPECT_EQ(valueOut, valueIn);
 }
 } // namespace MetaFuncUT
 } // namespace Media

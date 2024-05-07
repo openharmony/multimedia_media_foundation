@@ -253,8 +253,8 @@ bool AVBuffer::ReadFromMessageParcel(MessageParcel &parcel, bool isSurfaceBuffer
         FALSE_RETURN_V_MSG_E(ret, false, "Update memory info failed");
     } else if (uid != 0) {
         memory_ = AVMemory::CreateAVMemory(parcel, false);
-        memory_->uid_ = uid;
         FALSE_RETURN_V_MSG_E(memory_ != nullptr, false, "Create memory failed");
+        memory_->uid_ = uid;
     }
     pts_ = pts;
     dts_ = dts;

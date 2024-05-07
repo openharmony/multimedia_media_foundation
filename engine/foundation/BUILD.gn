@@ -21,9 +21,6 @@ config("histreamer_foundation_config") {
       "//foundation/multimedia/media_utils_lite/interfaces/kits",
       "//base/hiviewdfx/hilog_lite/interfaces/native/innerkits",
     ]
-  } else {
-    include_dirs +=
-        [ "//base/hiviewdfx/hilog/interfaces/native/innerkits/include" ]
   }
 }
 
@@ -65,7 +62,6 @@ if (hst_is_lite_sys) {
   ohos_source_set("histreamer_foundation") {
     subsystem_name = "multimedia"
     part_name = "media_foundation"
-    include_dirs = [ "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter" ]
     sources = [
       "osal/filesystem/file_system.cpp",
       "osal/thread/condition_variable.cpp",

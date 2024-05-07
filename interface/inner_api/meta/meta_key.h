@@ -91,6 +91,7 @@ public:
     static constexpr const char MEDIA_STREAM_TYPE[] = "media.stream.type";     ///< stream type of track data
     static constexpr const char MEDIA_HAS_VIDEO[] = "has_video";               ///< has video track in file
     static constexpr const char MEDIA_HAS_AUDIO[] = "has_audio";               ///< has audio track in file
+    static constexpr const char MEDIA_HAS_SUBTITLE[] = "has_subtitle";         ///< has subtitle track in file
     static constexpr const char MEDIA_COVER[] = "cover";                       ///< cover in file
     static constexpr const char MEDIA_PROTOCOL_TYPE[] = "media.protocol.type"; ///< Source protocol type
     static constexpr const char MEDIA_PROFILE[] = "codec_profile";             ///< codec profile, Compatible 4.0
@@ -235,6 +236,11 @@ public:
     static constexpr const char VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK[] =
         "video_encoder_enable_surface_input_callback"; ///< bool, the associated value is an bool (true or false): true
                                                        ///< is enabled, false is closed.
+    static constexpr const char VIDEO_DECODER_RATE_UPPER_LIMIT[] =
+        "video_decoder_rate_upper_limit"; ///< int32_t, key for upper rate limit of video decoder performance.
+    static constexpr const char VIDEO_BUFFER_CAN_DROP[] =
+        "video_buffer_can_drop"; ///< bool, key to describe that encoded video buffer can be dropped or not befor
+                                 ///< sent to decoder in video playing.
 
     /* -------------------- video specific tag -------------------- */
     static constexpr const char VIDEO_H264_PROFILE[] = "video.h264.profile"; ///< @see VideoH264Profile
@@ -255,11 +261,45 @@ public:
 
     /* -------------------- drm tag -------------------- */
     static constexpr const char DRM_CENC_INFO[] = "drm_cenc_info"; ///< drm cenc info
+    static constexpr const char DRM_APP_NAME[] = "APP_NAME"; ///< drm app name
+    static constexpr const char DRM_INSTANCE_ID[] = "INSTANCE_ID"; ///< drm instance id
+    static constexpr const char DRM_DECRYPT_AVG_SIZE[] = "DECRYPT_AVG_SIZE"; ///< drm decrypt avg size
+    static constexpr const char DRM_DECRYPT_AVG_DURATION[] = "DECRYPT_AVG_DURATION"; ///< drm decrypt avg duration
+    static constexpr const char DRM_DECRYPT_MAX_SIZE[] = "DECRYPT_MAX_SIZE"; ///< drm decrypt max size
+    static constexpr const char DRM_DECRYPT_MAX_DURATION[] = "DECRYPT_MAX_DURATION"; ///< drm decrypt max duration
+    static constexpr const char DRM_DECRYPT_TIMES[] = "DECRYPT_TIMES"; ///< drm decrypt times
+    static constexpr const char DRM_ERROR_CODE[] = "ERROR_CODE"; ///< drm error code
+    static constexpr const char DRM_ERROR_MESG[] = "ERROR_MESG"; ///< drm error message
 
     /* -------------------- avcapability tag -------------------- */
     static constexpr const char FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_COUNT[] =
         "feature_property_video_encoder_max_ltr_frame_count"; ///< int32_t, the key for querying the maximum long
                                                             ///< term reference count
+    
+    /* -------------------- AVCodec tag -------------------- */
+    // Pid is int32_t and process name is string, to describe AVCodec's forward caller info.
+    // For example, camera recording, forward caller is camera.
+    static constexpr const char AV_CODEC_FORWARD_CALLER_PID[]           = "av_codec_forward_caller_pid";
+    static constexpr const char AV_CODEC_FORWARD_CALLER_UID[]           = "av_codec_forward_caller_uid";
+    static constexpr const char AV_CODEC_FORWARD_CALLER_PROCESS_NAME[]  = "av_codec_forward_caller_process_name";
+
+    // Pid is int32_t and process name is string, to describe AVCodec's caller info.
+    // For example, camera recording, caller is media_service.
+    static constexpr const char AV_CODEC_CALLER_PID[]                   = "av_codec_caller_pid";
+    static constexpr const char AV_CODEC_CALLER_UID[]                   = "av_codec_caller_uid";
+    static constexpr const char AV_CODEC_CALLER_PROCESS_NAME[]          = "av_codec_caller_process_name";
+/* -------------------- screen captrue tag -------------------- */
+    static constexpr const char SCREEN_CAPTURE_ERR_CODE[] = "errCode";
+    static constexpr const char SCREEN_CAPTURE_ERR_MSG[] = "errMsg";
+    static constexpr const char SCREEN_CAPTURE_DURATION[] = "captureDuration";
+    static constexpr const char SCREEN_CAPTURE_AV_TYPE[] = "avType";
+    static constexpr const char SCREEN_CAPTURE_DATA_TYPE[] = "dataType";
+    static constexpr const char SCREEN_CAPTURE_USER_AGREE[] = "userAgree";
+    static constexpr const char SCREEN_CAPTURE_REQURE_MIC[] = "requireMic";
+    static constexpr const char SCREEN_CAPTURE_ENABLE_MIC[] = "enableMic";
+    static constexpr const char SCREEN_CAPTURE_VIDEO_RESOLUTION[] = "videoResolution";
+    static constexpr const char SCREEN_CAPTURE_STOP_REASON[] = "stopReason";
+    static constexpr const char SCREEN_CAPTURE_START_LATENCY[] = "startLatency";
 };
 
 using TagTypeCharSeq = const char *;
