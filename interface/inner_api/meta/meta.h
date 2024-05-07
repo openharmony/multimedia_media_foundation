@@ -163,6 +163,7 @@ public:
         tagCharSeq == Tag::VIDEO_PER_FRAME_IS_LTR or
         tagCharSeq == Tag::VIDEO_ENABLE_LOW_LATENCY or
         tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK, bool, ValueType::BOOL);
+    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_RENDER_SET_FLAG, bool, ValueType::BOOL);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_H265_PROFILE, Plugins::HEVCProfile, ValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_H265_LEVEL, Plugins::HEVCLevel, ValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_CHROMA_LOCATION,

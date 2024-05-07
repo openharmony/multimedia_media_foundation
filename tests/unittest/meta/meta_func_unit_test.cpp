@@ -434,6 +434,7 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::VIDEO_PER_FRAME_IS_LTR, true},
     {Tag::VIDEO_ENABLE_LOW_LATENCY, true},
     {Tag::VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK, true}};
+    {Tag::AUDIO_RENDER_SET_FLAG, true}};
 
 /**
  * @tc.name: SetGet_MetaData_All_As_Bool_Using_ParcelPackage

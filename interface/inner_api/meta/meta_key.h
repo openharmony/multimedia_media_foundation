@@ -50,7 +50,8 @@ public:
     static constexpr const char INPUT_MEMORY_TYPE[] = "regular.input.memory.type";   ///< MemoryType
     static constexpr const char OUTPUT_MEMORY_TYPE[] = "regular.output.memory.type"; ///< MemoryType
     static constexpr const char PROCESS_NAME[] = "process_name";                     ///< string, process name
-
+    static constexpr const char AUDIO_RENDER_SET_FLAG[] =
+        "regular.audio.render.set.flag"; ///< bool, audio render set flag
     /* -------------------- media tag -------------------- */
     static constexpr const char MIME_TYPE[] = "codec_mime";            ///< @see MimeType
     static constexpr const char MEDIA_CODEC_NAME[] = "codec_name";     ///< codec name
