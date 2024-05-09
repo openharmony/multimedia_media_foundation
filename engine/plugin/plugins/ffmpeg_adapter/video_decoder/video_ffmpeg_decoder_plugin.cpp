@@ -289,7 +289,7 @@ void VideoFfmpegDecoderPlugin::SetCodecExtraData()
 
 Status VideoFfmpegDecoderPlugin::OpenCodecContext()
 {
-    AVCodec* vdec = avcodec_find_decoder(avCodecContext_->codec_id);
+    const AVCodec* vdec = avcodec_find_decoder(avCodecContext_->codec_id);
     if (vdec == nullptr) {
         MEDIA_LOG_E("Codec: " PUBLIC_LOG_D32 " is not found", static_cast<int32_t>(avCodecContext_->codec_id));
         DeinitCodecContext();
