@@ -352,6 +352,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_ENABLE_LOW_LATENCY, defaultBool},
     {Tag::VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK, defaultBool},
     {Tag::VIDEO_BUFFER_CAN_DROP, defaultBool},
+    {Tag::AUDIO_RENDER_SET_FLAG, defaultBool},
     {Tag::SCREEN_CAPTURE_USER_AGREE, defaultBool},
     {Tag::SCREEN_CAPTURE_REQURE_MIC, defaultBool},
     {Tag::SCREEN_CAPTURE_ENABLE_MIC, defaultBool},
