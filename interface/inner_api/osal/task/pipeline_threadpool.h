@@ -34,6 +34,7 @@ class TaskInner;
 class PipeLineThread {
 public:
     PipeLineThread(std::string name, TaskType type, TaskPriority priority);
+    ~PipeLineThread();
     void Run();
     void AddTask(std::shared_ptr<TaskInner> task);
     void RemoveTask(std::shared_ptr<TaskInner> task);
@@ -49,8 +50,8 @@ private:
     std::unique_ptr<Thread> loop_;
     Mutex mutex_;
     ConditionVariable syncCond_;
-    bool threadExiting_;
-    bool threadExit_;
+    std::atomic<bool> threadExiting_;
+    std::atomic<bool> threadExit_;
 };
 
 class PipeLineThreadPool {

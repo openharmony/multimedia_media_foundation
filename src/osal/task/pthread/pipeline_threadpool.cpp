@@ -24,8 +24,10 @@
 
 namespace OHOS {
 namespace Media {
-
-static int64_t ADJUST_US = 500;
+namespace {
+    constexpr int64_t ADJUST_US = 500;
+    constexpr int64_t US_PER_MS = 1000;
+}
 
 static ThreadPriority ConvertPriorityType(TaskPriority priority)
 {
@@ -115,20 +117,37 @@ PipeLineThread::PipeLineThread(std::string name, TaskType type, TaskPriority pri
     }
 }
 
+PipeLineThread::~PipeLineThread()
+{
+    Exit();
+}
+
 void PipeLineThread::Exit()
 {
     AutoLock lock(mutex_);
+    if (threadExit_.load()) {
+        return;
+    }
     threadExiting_ = true;
     syncCond_.NotifyAll();
-    syncCond_.Wait(lock, [this] { return threadExit_;});
+
+    // trigger to quit thread in current running thread, must not wait,
+    // or else the current thread will be suspended and can not quit.
+    if (IsRunningInSelf()) {
+        return;
+    }
+    syncCond_.Wait(lock, [this] { return threadExit_.load(); });
 }
 
 void PipeLineThread::Run()
 {
-    while (!threadExiting_) {
+    while (true) {
         std::shared_ptr<TaskInner> nextTask;
         {
             AutoLock lock(mutex_);
+            if (threadExiting_.load()) {
+                break;
+            }
             int64_t nextJobUs = INT64_MAX;
             for (auto task: taskList_) {
                 int64_t taskJobUs = task->NextJobUs();
@@ -146,7 +165,7 @@ void PipeLineThread::Run()
             }
             int64_t nowUs = GetNowUs();
             if (nextJobUs > (nowUs + ADJUST_US)) {
-                syncCond_.WaitFor(lock, (nextJobUs - nowUs + ADJUST_US) / 1000);
+                syncCond_.WaitFor(lock, (nextJobUs - nowUs + ADJUST_US) / US_PER_MS);
                 continue;
             }
         }
