@@ -188,6 +188,7 @@ bool IsLongEnum(const TagType &tag)
 }
 
 static Any defaultString = std::string();
+static Any defaultInt8 = (int8_t)0;
 static Any defaultUInt8 = (uint8_t)0;
 static Any defaultInt32 = (int32_t)0;
 static Any defaultUInt32 = (uint32_t)0;
@@ -234,6 +235,8 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::MEDIA_FILE_TYPE, defaultFileType},
     {Tag::VIDEO_ENCODE_BITRATE_MODE, defaultVideoEncodeBitrateMode},
     {Tag::VIDEO_ENCODER_TEMPORAL_GOP_REFERENCE_MODE, defaultTemporalGopReferenceMode},
+    // Int8
+    {Tag::RECORDER_HDR_TYPE, defaultInt8},
     // Uint_8
     {Tag::SCREEN_CAPTURE_AV_TYPE, defaultUInt8},
     {Tag::SCREEN_CAPTURE_DATA_TYPE, defaultUInt8},
@@ -301,6 +304,13 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::SCREEN_CAPTURE_DURATION, defaultInt32},
     {Tag::SCREEN_CAPTURE_START_LATENCY, defaultInt32},
     {Tag::DRM_ERROR_CODE, defaultInt32},
+    {Tag::RECORDER_ERR_CODE, defaultInt32},
+    {Tag::RECORDER_DURATION, defaultInt32},
+    {Tag::RECORDER_VIDEO_BITRATE, defaultInt32},
+    {Tag::RECORDER_AUDIO_SAMPLE_RATE, defaultInt32},
+    {Tag::RECORDER_AUDIO_CHANNEL_COUNT, defaultInt32},
+    {Tag::RECORDER_AUDIO_BITRATE, defaultInt32},
+    {Tag::RECORDER_START_LATENCY, defaultInt32},
     // String
     {Tag::MIME_TYPE, defaultString},
     {Tag::MEDIA_FILE_URI, defaultString},
@@ -331,6 +341,11 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::DRM_APP_NAME, defaultString},
     {Tag::DRM_INSTANCE_ID, defaultString},
     {Tag::DRM_ERROR_MESG, defaultString},
+    {Tag::RECORDER_ERR_MSG, defaultString},
+    {Tag::RECORDER_CONTAINER_MIME, defaultString},
+    {Tag::RECORDER_VIDEO_MIME, defaultString},
+    {Tag::RECORDER_VIDEO_RESOLUTION, defaultString},
+    {Tag::RECORDER_AUDIO_MIME, defaultString},
     // Float
     {Tag::MEDIA_LATITUDE, defaultFloat},
     {Tag::MEDIA_LONGITUDE, defaultFloat},

@@ -122,6 +122,7 @@ public:
     enum struct ValueType : int32_t {
         INVALID_TYPE = 1,
         BOOL,
+        INT8_T,
         UINT8_T,
         INT32_T,
         UINT32_T,
@@ -253,7 +254,14 @@ public:
         tagCharSeq == Tag::FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_COUNT or
         tagCharSeq == Tag::SCREEN_CAPTURE_ERR_CODE or
         tagCharSeq == Tag::SCREEN_CAPTURE_DURATION or
-        tagCharSeq == Tag::SCREEN_CAPTURE_START_LATENCY, int32_t, AnyValueType::INT32_T);
+        tagCharSeq == Tag::SCREEN_CAPTURE_START_LATENCY or
+        tagCharSeq == Tag::RECORDER_ERR_CODE or
+        tagCharSeq == Tag::RECORDER_DURATION or
+        tagCharSeq == Tag::RECORDER_VIDEO_BITRATE or
+        tagCharSeq == Tag::RECORDER_AUDIO_SAMPLE_RATE or
+        tagCharSeq == Tag::RECORDER_AUDIO_CHANNEL_COUNT or
+        tagCharSeq == Tag::RECORDER_AUDIO_BITRATE or
+        tagCharSeq == Tag::RECORDER_START_LATENCY, int32_t, AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_DECODER_RATE_UPPER_LIMIT, int32_t, AnyValueType::INT32_T);
 
     DEFINE_INSERT_GET_FUNC(
@@ -306,7 +314,14 @@ public:
         tagCharSeq == Tag::SCREEN_CAPTURE_VIDEO_RESOLUTION or
         tagCharSeq == Tag::DRM_APP_NAME or
         tagCharSeq == Tag::DRM_INSTANCE_ID or
-        tagCharSeq == Tag::DRM_ERROR_MESG, std::string, AnyValueType::STRING);
+        tagCharSeq == Tag::DRM_ERROR_MESG or
+        tagCharSeq == Tag::RECORDER_ERR_MSG or
+        tagCharSeq == Tag::RECORDER_CONTAINER_MIME or
+        tagCharSeq == Tag::RECORDER_VIDEO_MIME or
+        tagCharSeq == Tag::RECORDER_VIDEO_RESOLUTION or
+        tagCharSeq == Tag::RECORDER_AUDIO_MIME, std::string, AnyValueType::STRING);
+    DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::RECORDER_HDR_TYPE, int8_t, AnyValueType::INT8_T);
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::SCREEN_CAPTURE_AV_TYPE or
         tagCharSeq == Tag::SCREEN_CAPTURE_DATA_TYPE or

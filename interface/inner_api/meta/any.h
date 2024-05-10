@@ -100,6 +100,7 @@ namespace Media {
 enum struct AnyValueType : int32_t {
     INVALID_TYPE = 1,
     BOOL,
+    INT8_T,
     UINT8_T,
     INT32_T,
     UINT32_T,
