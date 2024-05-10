@@ -300,6 +300,21 @@ public:
     static constexpr const char SCREEN_CAPTURE_VIDEO_RESOLUTION[] = "videoResolution";
     static constexpr const char SCREEN_CAPTURE_STOP_REASON[] = "stopReason";
     static constexpr const char SCREEN_CAPTURE_START_LATENCY[] = "startLatency";
+
+/* -------------------- recorder tag -------------------- */
+    static constexpr const char RECORDER_ERR_CODE[] = "errCode";
+    static constexpr const char RECORDER_ERR_MSG[] = "errMsg";
+    static constexpr const char RECORDER_DURATION[] = "recordDuration";
+    static constexpr const char RECORDER_CONTAINER_MIME[] = "containerMime";
+    static constexpr const char RECORDER_VIDEO_MIME[] = "videoMime";
+    static constexpr const char RECORDER_VIDEO_RESOLUTION[] = "videoResolution";
+    static constexpr const char RECORDER_VIDEO_BITRATE[] = "videoBitrate";
+    static constexpr const char RECORDER_HDR_TYPE[] = "hdrType";
+    static constexpr const char RECORDER_AUDIO_MIME[] = "audioMime";
+    static constexpr const char RECORDER_AUDIO_SAMPLE_RATE[] = "audioSampleRate";
+    static constexpr const char RECORDER_AUDIO_CHANNEL_COUNT[] = "audioChannelCount";
+    static constexpr const char RECORDER_AUDIO_BITRATE[] = "audioBitrate";
+    static constexpr const char RECORDER_START_LATENCY[] = "startLatency";
 };
 
 using TagTypeCharSeq = const char *;
