@@ -14,6 +14,7 @@
  */
 
 #include "common/media_source.h"
+#include "common/log.h"
 #include <type_traits>
 
 namespace OHOS {
@@ -28,12 +29,14 @@ MediaSource::MediaSource(std::string uri)
 MediaSource::MediaSource(std::shared_ptr<IMediaDataSource> dataSrc)
     :type_(SourceType::SOURCE_TYPE_STREAM), dataSrc_(std::move(dataSrc))
 {
+    MEDIA_LOG_I("MediaSource ctor called dataSrc");
 }
 #endif
 
 MediaSource::MediaSource(std::string uri, std::map<std::string, std::string> header)
     : uri_(std::move(uri)), header_(std::move(header))
 {
+    MEDIA_LOG_I("MediaSource ctor called header");
 }
 
 SourceType MediaSource::GetSourceType() const
@@ -53,6 +56,8 @@ const std::map<std::string, std::string> &MediaSource::GetSourceHeader() const
 
 void MediaSource::SetPlayStrategy(PlayStrategy* playStrategy)
 {
+    MEDIA_LOG_I("SetPlayStrategy width: %{public}d, height: %{public}d, duration: %{public}d, preferHDR: %{public}d",
+        playStrategy->width, playStrategy->height, playStrategy->duration, playStrategy->preferHDR);
     playStrategy_ = playStrategy;
 }
 

@@ -39,6 +39,7 @@ Pipeline::~Pipeline()
 void Pipeline::Init(const std::shared_ptr<EventReceiver>& receiver, const std::shared_ptr<FilterCallback>& callback,
     const std::string& groupId)
 {
+    MEDIA_LOG_I("Pipeline::Init");
     eventReceiver_ = receiver;
     filterCallback_ = callback;
     groupId_ = groupId;

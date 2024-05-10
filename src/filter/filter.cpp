@@ -294,6 +294,7 @@ Status Filter::ReleaseDone()
 
 Status Filter::ProcessInputBuffer(int sendArg, int64_t delayUs)
 {
+    MEDIA_LOG_D("Filter::ProcessInputBuffer  %{public}s", name_.c_str());
     if (filterTask_) {
         jobIdx_++;
         filterTask_->SubmitJob([this, sendArg]() {
@@ -309,6 +310,7 @@ Status Filter::ProcessInputBuffer(int sendArg, int64_t delayUs)
 
 Status Filter::ProcessOutputBuffer(int sendArg, int64_t delayUs)
 {
+    MEDIA_LOG_D("Filter::ProcessOutputBuffer  %{public}s", name_.c_str());
     if (filterTask_) {
         jobIdx_++;
         filterTask_->SubmitJob([this, sendArg]() {
@@ -324,6 +326,7 @@ Status Filter::ProcessOutputBuffer(int sendArg, int64_t delayUs)
 
 Status Filter::DoInitAfterLink()
 {
+    MEDIA_LOG_I("Filter::DoInitAfterLink");
     return Status::OK;
 }
 
