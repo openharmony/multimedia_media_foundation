@@ -151,10 +151,20 @@ public:
         MEDIA_LOG_I("Seek: buffer size " PUBLIC_LOG_ZU ", offset " PUBLIC_LOG_U64
                     ", mediaOffset_ " PUBLIC_LOG_U64, GetSize(), offset, mediaOffset_);
         bool result = false;
-        if (offset >= mediaOffset_ && offset - mediaOffset_ < GetSize()) {
+        if (offset >= mediaOffset_ && offset - mediaOffset_ < GetSize()) { // Backward seek
             head_ += offset - mediaOffset_;
             mediaOffset_ = offset;
             result = true;
+        } else if (offset < mediaOffset_) { // Forward seek
+            uint64_t minOffset = tail_ > bufferSize_ ? tail_ - bufferSize_ : 0; // Forward seek minmun offset
+            if (mediaOffset_ - offset < head_ - minOffset) { // Forward seek interavl
+                MEDIA_LOG_I("Forward seek, buffer size " PUBLIC_LOG_ZU ", offset " PUBLIC_LOG_U64
+                    ", mediaOffset_ " PUBLIC_LOG_U64 ", minOffset " PUBLIC_LOG_U64, GetSize(),
+                    offset, mediaOffset_, minOffset);
+                head_ -= (mediaOffset_ - offset);
+                mediaOffset_ = offset;
+                result = true;
+            }
         }
         writeCondition_.NotifyAll();
         return result;
