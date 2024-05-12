@@ -116,6 +116,7 @@ if (hst_is_standard_sys) {
     sources += [
       "$histreamer_root_dir/src/osal/filesystem/file_system.cpp",
       "$histreamer_root_dir/src/osal/task/task.cpp",
+      "$histreamer_root_dir/src/osal/utils/dump_buffer.cpp",
       "$histreamer_root_dir/src/osal/utils/steady_clock.cpp",
       "$histreamer_root_dir/src/osal/utils/util.cpp",
     ]
@@ -161,6 +162,7 @@ if (hst_is_standard_sys) {
       "graphic_surface:sync_fence",
       "hilog:libhilog",
       "hitrace:hitrace_meter",
+      "init:libbegetutil",
       "ipc:ipc_core",
     ]
 
