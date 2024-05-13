@@ -14,6 +14,7 @@
  */
 
 #define HST_LOG_TAG "Filter"
+#define MEDIA_PIPELINE
 
 #include "filter/filter.h"
 #include "osal/utils/util.h"
@@ -71,7 +72,7 @@ void Filter::LinkPipeLine(const std::string& groupId)
 
 Status Filter::Prepare()
 {
-    MEDIA_LOG_I("Filter::Prepare %{public}s, prevState:%{public}d", name_.c_str(), curState_);
+    MEDIA_LOG_D("Prepare %{public}s, pState:%{public}d", name_.c_str(), curState_);
     if (filterTask_) {
         filterTask_->SubmitJobOnce([this] {
             PrepareDone();
@@ -84,7 +85,7 @@ Status Filter::Prepare()
 
 Status Filter::PrepareDone()
 {
-    MEDIA_LOG_I("Filter::Prepare enter %{public}s", name_.c_str());
+    MEDIA_LOG_I("Prepare in %{public}s", name_.c_str());
     // next filters maybe added in DoPrepare, so we must DoPrepare first
     Status ret = DoPrepare();
     SetErrCode(ret);
@@ -131,7 +132,7 @@ Status Filter::WaitPrepareFrame()
 
 Status Filter::Start()
 {
-    MEDIA_LOG_I("Filter::Start %{public}s, prevState:%{public}d", name_.c_str(), curState_);
+    MEDIA_LOG_D("Start %{public}s, pState:%{public}d", name_.c_str(), curState_);
     if (filterTask_) {
         filterTask_->SubmitJobOnce([this] {
             if (StartDone() == Status::OK) {
@@ -156,7 +157,7 @@ Status Filter::Start()
 
 Status Filter::StartDone()
 {
-    MEDIA_LOG_E("Filter::Start enter %{public}s", name_.c_str());
+    MEDIA_LOG_I("Start in %{public}s", name_.c_str());
     Status ret = DoStart();
     SetErrCode(ret);
     ChangeState(ret == Status::OK ? FilterState::RUNNING : FilterState::ERROR);
@@ -165,7 +166,7 @@ Status Filter::StartDone()
 
 Status Filter::Pause()
 {
-    MEDIA_LOG_I("Filter::Pause %{public}s, prevState:%{public}d", name_.c_str(), curState_);
+    MEDIA_LOG_D("Pause %{public}s, pState:%{public}d", name_.c_str(), curState_);
     // In offload case, we need pause to interrupt audio_sink_plugin write function,  so do not use filterTask_
     auto ret = PauseDone();
     if (filterTask_) {
@@ -181,7 +182,7 @@ Status Filter::Pause()
 
 Status Filter::PauseDone()
 {
-    MEDIA_LOG_I("Filter::Pause enter %{public}s", name_.c_str());
+    MEDIA_LOG_I("Pause in %{public}s", name_.c_str());
     Status ret = DoPause();
     SetErrCode(ret);
     ChangeState(ret == Status::OK ? FilterState::PAUSED : FilterState::ERROR);
@@ -190,7 +191,7 @@ Status Filter::PauseDone()
 
 Status Filter::Resume()
 {
-    MEDIA_LOG_I("Filter::Resume %{public}s, prevState:%{public}d", name_.c_str(), curState_);
+    MEDIA_LOG_D("Resume %{public}s, pState:%{public}d", name_.c_str(), curState_);
     if (filterTask_) {
         filterTask_->SubmitJobOnce([this]() {
             if (ResumeDone() == Status::OK) {
@@ -215,7 +216,7 @@ Status Filter::Resume()
 
 Status Filter::ResumeDone()
 {
-    MEDIA_LOG_I("Filter::Resume enter %{public}s", name_.c_str());
+    MEDIA_LOG_I("Resume in %{public}s", name_.c_str());
     Status ret = DoResume();
     SetErrCode(ret);
     ChangeState(ret == Status::OK ? FilterState::RUNNING : FilterState::ERROR);
@@ -224,7 +225,7 @@ Status Filter::ResumeDone()
 
 Status Filter::Stop()
 {
-    MEDIA_LOG_I("Filter::Stop %{public}s, prevState:%{public}d", name_.c_str(), curState_);
+    MEDIA_LOG_D("Stop %{public}s, pState:%{public}d", name_.c_str(), curState_);
     // In offload case, we need stop to interrupt audio_sink_plugin write function,  so do not use filterTask_
     auto ret = StopDone();
     if (filterTask_) {
@@ -240,7 +241,7 @@ Status Filter::Stop()
 
 Status Filter::StopDone()
 {
-    MEDIA_LOG_I("Filter::Stop enter %{public}s", name_.c_str());
+    MEDIA_LOG_I("Stop in %{public}s", name_.c_str());
     Status ret = DoStop();
     SetErrCode(ret);
     ChangeState(ret == Status::OK ? FilterState::STOPPED : FilterState::ERROR);
@@ -249,7 +250,7 @@ Status Filter::StopDone()
 
 Status Filter::Flush()
 {
-    MEDIA_LOG_I("Filter::Flush %{public}s, prevState:%{public}d", name_.c_str(), curState_);
+    MEDIA_LOG_D("Flush %{public}s, pState:%{public}d", name_.c_str(), curState_);
     for (auto iter : nextFiltersMap_) {
         for (auto filter : iter.second) {
             filter->Flush();
@@ -261,7 +262,7 @@ Status Filter::Flush()
 
 Status Filter::Release()
 {
-    MEDIA_LOG_I("Filter::Release  %{public}s, prevState:%{public}d", name_.c_str(), curState_);
+    MEDIA_LOG_D("Release %{public}s, pState:%{public}d", name_.c_str(), curState_);
     if (filterTask_) {
         filterTask_->SubmitJobOnce([this]() {
             ReleaseDone();
@@ -284,7 +285,7 @@ Status Filter::Release()
 
 Status Filter::ReleaseDone()
 {
-    MEDIA_LOG_I("Filter::Release enter %{public}s", name_.c_str());
+    MEDIA_LOG_I("Release in %{public}s", name_.c_str());
     Status ret = DoRelease();
     SetErrCode(ret);
     ChangeState(ret == Status::OK ? FilterState::RELEASED : FilterState::ERROR);
@@ -383,7 +384,7 @@ Status Filter::DoProcessOutputBuffer(int recvArg, bool dropFrame)
 // should only call in this cpp
 void Filter::ChangeState(FilterState state)
 {
-    MEDIA_LOG_I("Filter::ChangeState to %{public}d. %{public}s", state, name_.c_str());
+    MEDIA_LOG_I("%{public}s > %{public}d", name_.c_str(), state);
     AutoLock lock(stateMutex_);
     curState_ = state;
     cond_.NotifyOne();
