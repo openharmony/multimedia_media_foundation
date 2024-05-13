@@ -151,17 +151,23 @@ public:
         MEDIA_LOG_I("Seek: buffer size " PUBLIC_LOG_ZU ", offset " PUBLIC_LOG_U64
                     ", mediaOffset_ " PUBLIC_LOG_U64, GetSize(), offset, mediaOffset_);
         bool result = false;
-        if (offset >= mediaOffset_ && offset - mediaOffset_ < GetSize()) { // Backward seek
+        // case1: seek forward success without dropping data already downloaded
+        if (offset >= mediaOffset_ && (offset - mediaOffset_ < GetSize())) {
             head_ += offset - mediaOffset_;
             mediaOffset_ = offset;
             result = true;
-        } else if (offset < mediaOffset_) { // Forward seek
-            uint64_t minOffset = tail_ > bufferSize_ ? tail_ - bufferSize_ : 0; // Forward seek minmun offset
-            if (mediaOffset_ - offset < head_ - minOffset) { // Forward seek interavl
-                MEDIA_LOG_I("Forward seek, buffer size " PUBLIC_LOG_ZU ", offset " PUBLIC_LOG_U64
-                    ", mediaOffset_ " PUBLIC_LOG_U64 ", minOffset " PUBLIC_LOG_U64, GetSize(),
-                    offset, mediaOffset_, minOffset);
-                head_ -= (mediaOffset_ - offset);
+        } else if (offset < mediaOffset_ &&
+            (mediaOffset_ - offset <= bufferSize_ - GetSize())) { // case2: seek backward
+            size_t minPosition = tail_ > bufferSize_ ? tail_ - bufferSize_ : 0;
+            size_t maxInterval = head_ - minPosition;
+            size_t interval = static_cast<size_t>(mediaOffset_ - offset);
+            // Seek backward success without dropping data already downloaded
+            if (interval <= maxInterval) {
+                MEDIA_LOG_I("Seek backward success, size:" PUBLIC_LOG_ZU ", head:" PUBLIC_LOG_ZU ", tail:" PUBLIC_LOG_ZU
+                    ", minPosition:" PUBLIC_LOG_ZU ", maxInterval:" PUBLIC_LOG_ZU ", interval:" PUBLIC_LOG_ZU
+                    ", target offset:" PUBLIC_LOG_U64 ", current offset:" PUBLIC_LOG_U64,
+                    GetSize(), head_, tail_, minPosition, maxInterval, interval, offset, mediaOffset_);
+                head_ -= interval;
                 mediaOffset_ = offset;
                 result = true;
             }
