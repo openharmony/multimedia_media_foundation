@@ -32,6 +32,22 @@ inline std::string HstGetFileName(const std::string& file)
 #endif
 
 #ifdef MEDIA_OHOS
+#ifdef MEDIA_ATOMIC_ABILITY
+#undef LOG_DOMAIN
+#define LOG_DOMAIN 0xD002B0B
+#endif
+#ifdef MEDIA_PLUGIN
+#undef LOG_DOMAIN
+#define LOG_DOMAIN 0xD002B0C
+#endif
+#ifdef MEDIA_PIPELINE
+#undef LOG_DOMAIN
+#define LOG_DOMAIN 0xD002B0D
+#endif
+#ifdef MEDIA_TASK_THREAD
+#undef LOG_DOMAIN
+#define LOG_DOMAIN 0xD002B0E
+#endif
 #ifndef LOG_DOMAIN
 #define LOG_DOMAIN 0xD002B0A
 #endif
@@ -80,6 +96,11 @@ inline std::string HstGetFileName(const std::string& file)
 		    HstGetFileName(std::string(__FILE__)).c_str(), __LINE__, ##args);                                          \
     } while (0)
 
+#define HST_DECORATOR_HILOG_TAG(op, fmt, args...)                                                   \
+    do {                                                                                            \
+        op(LOG_CORE, "[" PUBLIC_LOG_S "]:" fmt, HST_LOG_TAG, ##args);                               \
+    } while (0)
+
 #define HST_DECORATOR_HILOG_WITH_LEVEL_JUDGE(op1, op2, con, fmt, args...)                   \
     do {                                                                                    \
         if (!con) {                                                                         \
@@ -99,6 +120,37 @@ inline std::string HstGetFileName(const std::string& file)
 #define MEDIA_LOG_F(fmt, ...) HST_DECORATOR_HILOG(HILOG_FATAL, fmt, ##__VA_ARGS__)
 #define MEDIA_LOG_I_FALSE_D(con, fmt, ...)                                                  \
     HST_DECORATOR_HILOG_WITH_LEVEL_JUDGE(HILOG_INFO, HILOG_DEBUG, con, fmt, ##__VA_ARGS__)
+
+#define HST_DECORATOR_HILOG_T_WITH_LEVEL_JUDGE(op1, op2, con, fmt, args...)                 \
+    do {                                                                                    \
+        if (!con) {                                                                         \
+            op2(LOG_CORE, "[" PUBLIC_LOG_S "]:" fmt, HST_LOG_TAG, ##args);                  \
+        } else {                                                                            \
+            op1(LOG_CORE, "[" PUBLIC_LOG_S "]:" fmt, HST_LOG_TAG, ##args);                  \
+        }                                                                                   \
+    } while (0)
+
+#define MEDIA_LOG_D_T(fmt, ...) HST_DECORATOR_HILOG_TAG(HILOG_DEBUG, fmt, ##__VA_ARGS__)
+#define MEDIA_LOG_I_T(fmt, ...) HST_DECORATOR_HILOG_TAG(HILOG_INFO, fmt, ##__VA_ARGS__)
+#define MEDIA_LOG_W_T(fmt, ...) HST_DECORATOR_HILOG_TAG(HILOG_WARN, fmt, ##__VA_ARGS__)
+#define MEDIA_LOG_E_T(fmt, ...) HST_DECORATOR_HILOG_TAG(HILOG_ERROR, fmt, ##__VA_ARGS__)
+#define MEDIA_LOG_F_T(fmt, ...) HST_DECORATOR_HILOG_TAG(HILOG_FATAL, fmt, ##__VA_ARGS__)
+#define MEDIA_LOG_I_FALSE_D_T(con, fmt, ...)                                                  \
+    HST_DECORATOR_HILOG_T_WITH_LEVEL_JUDGE(HILOG_INFO, HILOG_DEBUG, con, fmt, ##__VA_ARGS__)
+
+#define MEDIA_LOG_LIMIT(op, frequency, fmt, ...)                            \
+    do {                                                                    \
+        static uint64_t currentTimes = 0;                                   \
+        if (currentTimes++ % ((uint32_t)(frequency)) != 0) {                \
+            break;                                                          \
+        }                                                                   \
+        op(fmt,  ##__VA_ARGS__);                                            \
+    } while (0)
+
+#define MEDIA_LOGE_LIMIT(frequency, fmt, ...) MEDIA_LOG_LIMIT(MEDIA_LOG_E, frequency, fmt, ##__VA_ARGS__)
+#define MEDIA_LOGW_LIMIT(frequency, fmt, ...) MEDIA_LOG_LIMIT(MEDIA_LOG_W, frequency, fmt, ##__VA_ARGS__)
+#define MEDIA_LOGI_LIMIT(frequency, fmt, ...) MEDIA_LOG_LIMIT(MEDIA_LOG_I, frequency, fmt, ##__VA_ARGS__)
+#define MEDIA_LOGD_LIMIT(frequency, fmt, ...) MEDIA_LOG_LIMIT(MEDIA_LOG_D, frequency, fmt, ##__VA_ARGS__)
 #endif
 
 

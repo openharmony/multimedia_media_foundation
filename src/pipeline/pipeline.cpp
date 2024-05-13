@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+#define MEDIA_PIPELINE
 #define HST_LOG_TAG "Pipeline"
 
 #include <queue>
