@@ -141,10 +141,9 @@ inline std::string HstGetFileName(const std::string& file)
 #define MEDIA_LOG_LIMIT(op, frequency, fmt, ...)                            \
     do {                                                                    \
         static uint64_t currentTimes = 0;                                   \
-        if (currentTimes++ % ((uint32_t)(frequency)) != 0) {                \
-            break;                                                          \
+        if (currentTimes++ % ((uint32_t)(frequency)) == 0) {                \
+            op(fmt,  ##__VA_ARGS__);                                        \
         }                                                                   \
-        op(fmt,  ##__VA_ARGS__);                                            \
     } while (0)
 
 #define MEDIA_LOGE_LIMIT(frequency, fmt, ...) MEDIA_LOG_LIMIT(MEDIA_LOG_E, frequency, fmt, ##__VA_ARGS__)
