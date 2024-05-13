@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#define TASK_THREAD
+#define MEDIA_TASK_THREAD
 #define HST_LOG_TAG "Task"
 #include "osal/task/task.h"
 #include "osal/task/taskInner.h"
