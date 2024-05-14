@@ -26,6 +26,7 @@
 #include <iosfwd>
 #include <memory>
 #include "plugin/plugin_buffer.h"
+#include "buffer/avbuffer.h"
 
 namespace OHOS {
 namespace Media {
@@ -48,7 +49,7 @@ namespace Media {
 #define DUMP_BUFFER2FILE_PREPARE()
 #define DUMP_BUFFER2FILE_END()
 #endif
-
+#define DUMP_FILE_DIR "/data/media/pipelinedump/"
 #define DUMP_BUFFER2LOG_SIZE 10 // Dump first 10 bytes of buffer.
 #if DUMP_BUFFER2LOG_ENABLE
 #define DUMP_BUFFER2LOG(desc, buffer, offset) \
@@ -57,7 +58,8 @@ namespace Media {
 #define DUMP_BUFFER2LOG(desc, buffer, offset)
 #endif
 
-void DumpBufferToFile(const std::string& fileName, const std::shared_ptr<Plugins::Buffer>& buffer);
+void DumpAVBufferToFile(const std::string para, const std::string& fileName,
+    const std::shared_ptr<AVBuffer>& buffer);
 void PrepareDumpDir();
 void EndDumpFile();
 void DumpBufferToLog(const char* desc, const std::shared_ptr<Plugins::Buffer>& buffer, uint64_t offset,
