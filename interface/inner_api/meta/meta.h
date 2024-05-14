@@ -262,7 +262,9 @@ public:
         tagCharSeq == Tag::RECORDER_AUDIO_CHANNEL_COUNT or
         tagCharSeq == Tag::RECORDER_AUDIO_BITRATE or
         tagCharSeq == Tag::RECORDER_START_LATENCY, int32_t, AnyValueType::INT32_T);
-    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_DECODER_RATE_UPPER_LIMIT, int32_t, AnyValueType::INT32_T);
+    DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::VIDEO_DECODER_RATE_UPPER_LIMIT or
+        tagCharSeq == Tag::VIDEO_ENCODER_QP_AVERAGE or , int32_t, AnyValueType::INT32_T);
 
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::APP_FULL_TOKEN_ID or
@@ -279,7 +281,8 @@ public:
         tagCharSeq == Tag::MEDIA_LONGITUDE, float, AnyValueType::FLOAT);
 
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_FRAME_RATE or
-        tagCharSeq == Tag::VIDEO_CAPTURE_RATE, double, AnyValueType::DOUBLE);
+        tagCharSeq == Tag::VIDEO_CAPTURE_RATE or
+        tagCharSeq == Tag::VIDEO_ENCODER_MSE, double, AnyValueType::DOUBLE);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::MEDIA_FILE_TYPE, Plugins::FileType, AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::DRM_DECRYPT_AVG_SIZE or
