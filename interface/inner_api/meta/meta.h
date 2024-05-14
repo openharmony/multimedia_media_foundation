@@ -264,7 +264,7 @@ public:
         tagCharSeq == Tag::RECORDER_START_LATENCY, int32_t, AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::VIDEO_DECODER_RATE_UPPER_LIMIT or
-        tagCharSeq == Tag::VIDEO_ENCODER_QP_AVERAGE or , int32_t, AnyValueType::INT32_T);
+        tagCharSeq == Tag::VIDEO_ENCODER_QP_AVERAGE, int32_t, AnyValueType::INT32_T);
 
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::APP_FULL_TOKEN_ID or
