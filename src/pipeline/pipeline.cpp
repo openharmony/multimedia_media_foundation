@@ -257,6 +257,8 @@ Status Pipeline::RemoveHeadFilter(const std::shared_ptr<Filter>& filter)
         if (it != filters_.end()) {
             filters_.erase(it);
         }
+        filter->Release();
+        filter->WaitAllState(FilterState::RELEASED);
         return Status::OK;
     });
     return Status::OK;
