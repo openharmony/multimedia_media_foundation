@@ -127,6 +127,16 @@ public:
         return (tail_ - head_);
     }
 
+    size_t GetHead()
+    {
+        return head_;
+    }
+
+    size_t GetTail()
+    {
+        return tail_;
+    }
+
     uint64_t GetMediaOffset()
     {
         return mediaOffset_;
@@ -144,7 +154,16 @@ public:
         tail_ = 0;
         writeCondition_.NotifyAll();
     }
-
+	
+    void SetTail(size_t clearTail)
+    {
+        AutoLock lck(writeMutex_);
+        if (clearTail >= 0 && clearTail >= head_) {
+            tail_ = clearTail;
+        }
+        writeCondition_.NotifyAll();
+    }
+	
     bool Seek(uint64_t offset)
     {
         AutoLock lck(writeMutex_);
@@ -171,6 +190,20 @@ public:
                 mediaOffset_ = offset;
                 result = true;
             }
+        }
+        writeCondition_.NotifyAll();
+        return result;
+    }
+
+	bool SetHead(size_t seekHead)
+    {
+        AutoLock lck(writeMutex_);
+        MEDIA_LOG_I("Seek: current head " PUBLIC_LOG_U64 ", to head " PUBLIC_LOG_U64, head_, seekHead);
+        bool result = false;
+        if (seekHead >= head_ && seekHead <= tail_) {
+            mediaOffset_ += (seekHead - head_);
+	    head_ = seekHead;
+            result = true;
         }
         writeCondition_.NotifyAll();
         return result;

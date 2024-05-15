@@ -79,6 +79,9 @@ public:
     /// no memory in the buffer.
     bool IsEmpty();
 
+    /// next buffer stream index(dash)
+    int32_t streamID;
+
     /// track index.
     uint32_t trackID;
 
