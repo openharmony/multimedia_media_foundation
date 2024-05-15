@@ -195,14 +195,14 @@ public:
         return result;
     }
 
-	bool SetHead(size_t seekHead)
+    bool SetHead(size_t seekHead)
     {
         AutoLock lck(writeMutex_);
         MEDIA_LOG_I("Seek: current head " PUBLIC_LOG_U64 ", to head " PUBLIC_LOG_U64, head_, seekHead);
         bool result = false;
         if (seekHead >= head_ && seekHead <= tail_) {
             mediaOffset_ += (seekHead - head_);
-	    head_ = seekHead;
+            head_ = seekHead;
             result = true;
         }
         writeCondition_.NotifyAll();
