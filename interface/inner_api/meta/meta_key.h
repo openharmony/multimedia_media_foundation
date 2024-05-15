@@ -241,6 +241,14 @@ public:
     static constexpr const char VIDEO_BUFFER_CAN_DROP[] =
         "video_buffer_can_drop"; ///< bool, key to describe that encoded video buffer can be dropped or not befor
                                  ///< sent to decoder in video playing.
+    static constexpr const char VIDEO_ENCODER_QP_AVERAGE[] =
+        "video_encoder_qp_average"; ///< int32_t, key for describing the video frame averge quantization parameter.
+                                    ///< This is a part of a video encoder statistics export feature. This value is
+                                    ///< emitted from video encoder for a video frame.
+    static constexpr const char VIDEO_ENCODER_MSE[] =
+        "video_encoder_mse"; ///< double, key for describing video frame mean squared error. This is a part of a video
+                             ///< encoder statistics export feature. This value is emitted from video encoder for a
+                             ///< video frame.
 
     /* -------------------- video specific tag -------------------- */
     static constexpr const char VIDEO_H264_PROFILE[] = "video.h264.profile"; ///< @see VideoH264Profile

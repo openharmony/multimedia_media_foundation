@@ -245,6 +245,10 @@ enum AVCLevel : int32_t {
     AVC_LEVEL_42 = 13,
     AVC_LEVEL_5 = 14,
     AVC_LEVEL_51 = 15,
+    AVC_LEVEL_52 = 16,
+    AVC_LEVEL_6 = 17,
+    AVC_LEVEL_61 = 18,
+    AVC_LEVEL_62 = 19,
 };
 
 enum HEVCLevel : int32_t {

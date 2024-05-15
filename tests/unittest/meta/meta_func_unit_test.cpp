@@ -401,6 +401,7 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::VIDEO_ENCODER_QP_MIN, 21},
     {Tag::FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_COUNT, 22},
     {Tag::VIDEO_DECODER_RATE_UPPER_LIMIT, 120},
+    {Tag::VIDEO_ENCODER_QP_AVERAGE, 4},
     {Tag::SCREEN_CAPTURE_ERR_CODE, 3},
     {Tag::SCREEN_CAPTURE_DURATION, 5},
     {Tag::SCREEN_CAPTURE_START_LATENCY, 7},
@@ -564,7 +565,8 @@ HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_All_As_Float_Using_ParcelPackage, Te
 map<TagType, double> testDoubleData = {
     // Double
     {Tag::VIDEO_FRAME_RATE, 1.01},
-    {Tag::VIDEO_CAPTURE_RATE, 1.02}
+    {Tag::VIDEO_CAPTURE_RATE, 1.02},
+    {Tag::VIDEO_ENCODER_MSE, 29.01}
 };
 
 /**
