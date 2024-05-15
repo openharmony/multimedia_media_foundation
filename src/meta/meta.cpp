@@ -311,6 +311,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::RECORDER_AUDIO_CHANNEL_COUNT, defaultInt32},
     {Tag::RECORDER_AUDIO_BITRATE, defaultInt32},
     {Tag::RECORDER_START_LATENCY, defaultInt32},
+    {Tag::VIDEO_ENCODER_QP_AVERAGE, defaultInt32},
     // String
     {Tag::MIME_TYPE, defaultString},
     {Tag::MEDIA_FILE_URI, defaultString},
@@ -352,6 +353,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     // Double
     {Tag::VIDEO_CAPTURE_RATE, defaultDouble},
     {Tag::VIDEO_FRAME_RATE, defaultDouble},
+    {Tag::VIDEO_ENCODER_MSE, defaultDouble},
     // Bool
     {Tag::VIDEO_COLOR_RANGE, defaultBool},
     {Tag::VIDEO_REQUEST_I_FRAME, defaultBool},
