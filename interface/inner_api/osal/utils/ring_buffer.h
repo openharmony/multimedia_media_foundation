@@ -127,12 +127,12 @@ public:
         return (tail_ - head_);
     }
 
-    size_t GetHead()
+    inline size_t GetHead()
     {
         return head_;
     }
 
-    size_t GetTail()
+    inline size_t GetTail()
     {
         return tail_;
     }
@@ -155,12 +155,12 @@ public:
         writeCondition_.NotifyAll();
     }
 	
-    void SetTail(size_t clearTail)
+    void SetTail(size_t newTail)
     {
         AutoLock lck(writeMutex_);
-        MEDIA_LOG_I("SetTail: current tail " PUBLIC_LOG_ZU ", to tail " PUBLIC_LOG_ZU, tail_, clearTail);
-        if (clearTail >= 0 && clearTail >= head_) {
-            tail_ = clearTail;
+        MEDIA_LOG_I("SetTail: current tail " PUBLIC_LOG_ZU ", to tail " PUBLIC_LOG_ZU, tail_, newTail);
+        if (newTail >= 0 && newTail >= head_) {
+            tail_ = newTail;
         }
         writeCondition_.NotifyAll();
     }
@@ -196,14 +196,14 @@ public:
         return result;
     }
 
-    bool SetHead(size_t seekHead)
+    bool SetHead(size_t newHead)
     {
         AutoLock lck(writeMutex_);
-        MEDIA_LOG_I("SetHead: current head " PUBLIC_LOG_ZU ", to head " PUBLIC_LOG_ZU, head_, seekHead);
+        MEDIA_LOG_I("SetHead: current head " PUBLIC_LOG_ZU ", to head " PUBLIC_LOG_ZU, head_, newHead);
         bool result = false;
-        if (seekHead >= head_ && seekHead <= tail_) {
-            mediaOffset_ += (seekHead - head_);
-            head_ = seekHead;
+        if (newHead >= head_ && newHead <= tail_) {
+            mediaOffset_ += (newHead - head_);
+            head_ = newHead;
             result = true;
         }
         writeCondition_.NotifyAll();
