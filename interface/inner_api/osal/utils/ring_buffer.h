@@ -158,6 +158,7 @@ public:
     void SetTail(size_t clearTail)
     {
         AutoLock lck(writeMutex_);
+        MEDIA_LOG_I("SetTail: current tail " PUBLIC_LOG_ZU ", to tail " PUBLIC_LOG_ZU, tail_, clearTail);
         if (clearTail >= 0 && clearTail >= head_) {
             tail_ = clearTail;
         }
@@ -198,7 +199,7 @@ public:
     bool SetHead(size_t seekHead)
     {
         AutoLock lck(writeMutex_);
-        MEDIA_LOG_I("Seek: current head " PUBLIC_LOG_U64 ", to head " PUBLIC_LOG_U64, head_, seekHead);
+        MEDIA_LOG_I("SetHead: current head " PUBLIC_LOG_ZU ", to head " PUBLIC_LOG_ZU, head_, seekHead);
         bool result = false;
         if (seekHead >= head_ && seekHead <= tail_) {
             mediaOffset_ += (seekHead - head_);
