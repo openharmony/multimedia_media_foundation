@@ -132,7 +132,7 @@ public:
         DOUBLE,
         VECTOR_UINT8,
         VECTOR_UINT32,
-        STRING
+        STRING,
     };
 
     DECLARE_INFO_CLASS;
@@ -185,7 +185,8 @@ public:
         tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK or
         tagCharSeq == Tag::SCREEN_CAPTURE_USER_AGREE or
         tagCharSeq == Tag::SCREEN_CAPTURE_REQURE_MIC or
-        tagCharSeq == Tag::SCREEN_CAPTURE_ENABLE_MIC, bool, AnyValueType::BOOL);
+        tagCharSeq == Tag::SCREEN_CAPTURE_ENABLE_MIC or
+        tagCharSeq == Tag::AV_PLAYER_IS_DRM_PROTECTED, bool, AnyValueType::BOOL);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_BUFFER_CAN_DROP, bool, AnyValueType::BOOL);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_RENDER_SET_FLAG, bool, ValueType::BOOL);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_H265_PROFILE, Plugins::HEVCProfile, AnyValueType::INT32_T);
@@ -264,7 +265,21 @@ public:
         tagCharSeq == Tag::RECORDER_START_LATENCY, int32_t, AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::VIDEO_DECODER_RATE_UPPER_LIMIT or
-        tagCharSeq == Tag::VIDEO_ENCODER_QP_AVERAGE, int32_t, AnyValueType::INT32_T);
+        tagCharSeq == Tag::VIDEO_ENCODER_QP_AVERAGE or
+        tagCharSeq == Tag::AV_PLAYER_ERR_CODE or
+        tagCharSeq == Tag::AV_PLAYER_PLAY_DURATION or
+        tagCharSeq == Tag::AV_PLAYER_SOURCE_TYPE or
+        tagCharSeq == Tag::AV_PLAYER_AVG_DOWNLOAD_RATE or
+        tagCharSeq == Tag::AV_PLAYER_VIDEO_BITRATE or
+        tagCharSeq == Tag::AV_PLAYER_AUDIO_BITRATE or
+        tagCharSeq == Tag::AV_PLAYER_START_LATENCY or
+        tagCharSeq == Tag::AV_PLAYER_AVG_DOWNLOAD_SPEED or
+        tagCharSeq == Tag::AV_PLAYER_MAX_SEEK_LATENCY or
+        tagCharSeq == Tag::AV_PLAYER_MAX_ACCURATE_SEEK_LATENCY or
+        tagCharSeq == Tag::AV_PLAYER_LAG_TIMES or
+        tagCharSeq == Tag::AV_PLAYER_MAX_LAG_DURATION or
+        tagCharSeq == Tag::AV_PLAYER_AVG_LAG_DURATION or
+        tagCharSeq == Tag::AV_PLAYER_MAX_SURFACESWAP_LATENCY, int32_t, AnyValueType::INT32_T);
 
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::APP_FULL_TOKEN_ID or
@@ -278,7 +293,8 @@ public:
         tagCharSeq == Tag::MEDIA_TIME_STAMP, int64_t, AnyValueType::INT64_T);
 
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::MEDIA_LATITUDE or
-        tagCharSeq == Tag::MEDIA_LONGITUDE, float, AnyValueType::FLOAT);
+        tagCharSeq == Tag::MEDIA_LONGITUDE or
+        tagCharSeq == Tag::AV_PLAYER_VIDEO_FRAMERATE, float, AnyValueType::FLOAT);
 
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_FRAME_RATE or
         tagCharSeq == Tag::VIDEO_CAPTURE_RATE or
@@ -322,13 +338,22 @@ public:
         tagCharSeq == Tag::RECORDER_CONTAINER_MIME or
         tagCharSeq == Tag::RECORDER_VIDEO_MIME or
         tagCharSeq == Tag::RECORDER_VIDEO_RESOLUTION or
-        tagCharSeq == Tag::RECORDER_AUDIO_MIME, std::string, AnyValueType::STRING);
+        tagCharSeq == Tag::RECORDER_AUDIO_MIME or
+        tagCharSeq == Tag::AV_PLAYER_ERR_MSG or
+        tagCharSeq == Tag::AV_PLAYER_CONTAINER_MIME or
+        tagCharSeq == Tag::AV_PLAYER_VIDEO_MIME or
+        tagCharSeq == Tag::AV_PLAYER_VIDEO_RESOLUTION or
+        tagCharSeq == Tag::AV_PLAYER_AUDIO_MIME, std::string, AnyValueType::STRING);
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::RECORDER_HDR_TYPE, int8_t, AnyValueType::INT8_T);
+
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::SCREEN_CAPTURE_AV_TYPE or
         tagCharSeq == Tag::SCREEN_CAPTURE_DATA_TYPE or
         tagCharSeq == Tag::SCREEN_CAPTURE_STOP_REASON, uint8_t, AnyValueType::UINT8_T);
+    DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::AV_PLAYER_VIDEO_BITDEPTH or
+        tagCharSeq == Tag::AV_PLAYER_HDR_TYPE, int8_t, AnyValueType::INT8_T);
 
     Meta &operator=(const Meta &other)
     {
