@@ -157,10 +157,12 @@ public:
 	
     void SetTail(size_t newTail)
     {
-        AutoLock lck(writeMutex_);
-        MEDIA_LOG_I("SetTail: current tail " PUBLIC_LOG_ZU ", to tail " PUBLIC_LOG_ZU, tail_, newTail);
-        if (newTail >= 0 && newTail >= head_) {
-            tail_ = newTail;
+        {
+            AutoLock lck(writeMutex_);
+            MEDIA_LOG_I("SetTail: current tail " PUBLIC_LOG_ZU ", to tail " PUBLIC_LOG_ZU, tail_, newTail);
+            if (newTail >= 0 && newTail >= head_) {
+                tail_ = newTail;
+            }
         }
         writeCondition_.NotifyAll();
     }
@@ -198,13 +200,15 @@ public:
 
     bool SetHead(size_t newHead)
     {
-        AutoLock lck(writeMutex_);
-        MEDIA_LOG_I("SetHead: current head " PUBLIC_LOG_ZU ", to head " PUBLIC_LOG_ZU, head_, newHead);
-        bool result = false;
-        if (newHead >= head_ && newHead <= tail_) {
-            mediaOffset_ += (newHead - head_);
-            head_ = newHead;
-            result = true;
+        {
+            AutoLock lck(writeMutex_);
+            MEDIA_LOG_I("SetHead: current head " PUBLIC_LOG_ZU ", to head " PUBLIC_LOG_ZU, head_, newHead);
+            bool result = false;
+            if (newHead >= head_ && newHead <= tail_) {
+                mediaOffset_ += (newHead - head_);
+                head_ = newHead;
+                result = true;
+            }
         }
         writeCondition_.NotifyAll();
         return result;
