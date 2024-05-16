@@ -200,10 +200,10 @@ public:
 
     bool SetHead(size_t newHead)
     {
+        bool result = false;
         {
             AutoLock lck(writeMutex_);
             MEDIA_LOG_I("SetHead: current head " PUBLIC_LOG_ZU ", to head " PUBLIC_LOG_ZU, head_, newHead);
-            bool result = false;
             if (newHead >= head_ && newHead <= tail_) {
                 mediaOffset_ += (newHead - head_);
                 head_ = newHead;
