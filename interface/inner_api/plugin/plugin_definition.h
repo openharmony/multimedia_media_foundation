@@ -124,6 +124,10 @@ struct DataSource {
      * @return  Seekable status
      */
     virtual Seekable GetSeekable() = 0;
+
+    virtual int32_t GetStreamID() = 0;
+
+    virtual bool IsDash() = 0;
 };
 
 /// Plugin create function. All plugins must implement this function.
