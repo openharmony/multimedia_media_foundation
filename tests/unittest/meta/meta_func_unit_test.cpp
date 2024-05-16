@@ -412,7 +412,20 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::RECORDER_AUDIO_SAMPLE_RATE, 4},
     {Tag::RECORDER_AUDIO_CHANNEL_COUNT, 3},
     {Tag::RECORDER_AUDIO_BITRATE, 6},
-    {Tag::RECORDER_START_LATENCY, 7},
+    {Tag::AV_PLAYER_ERR_CODE, 1},
+    {Tag::AV_PLAYER_PLAY_DURATION, 2},
+    {Tag::AV_PLAYER_SOURCE_TYPE, 3},
+    {Tag::AV_PLAYER_AVG_DOWNLOAD_RATE, 4},
+    {Tag::AV_PLAYER_VIDEO_BITRATE, 5},
+    {Tag::AV_PLAYER_AUDIO_BITRATE, 6},
+    {Tag::AV_PLAYER_START_LATENCY, 7},
+    {Tag::AV_PLAYER_AVG_DOWNLOAD_SPEED, 8},
+    {Tag::AV_PLAYER_MAX_SEEK_LATENCY, 9},
+    {Tag::AV_PLAYER_MAX_ACCURATE_SEEK_LATENCY, 10},
+    {Tag::AV_PLAYER_LAG_TIMES, 11},
+    {Tag::AV_PLAYER_MAX_LAG_DURATION, 12},
+    {Tag::AV_PLAYER_MAX_SURFACESWAP_LATENCY, 13},
+    {Tag::AV_PLAYER_LAG_TIMES, 14},
     {Tag::SRC_INPUT_TYPE, static_cast<int32_t>(Plugins::SrcInputType::AUD_ES)},
     {Tag::AUDIO_SAMPLE_FORMAT, static_cast<int32_t>(Plugins::AudioSampleFormat::SAMPLE_S16LE)},
     {Tag::VIDEO_PIXEL_FORMAT, static_cast<int32_t>(Plugins::VideoPixelFormat::YUV411P)},
@@ -438,6 +451,7 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::SCREEN_CAPTURE_USER_AGREE, true},
     {Tag::SCREEN_CAPTURE_REQURE_MIC, false},
     {Tag::SCREEN_CAPTURE_ENABLE_MIC, true},
+    {Tag::AV_PLAYER_IS_DRM_PROTECTED, true},
     {Tag::VIDEO_COLOR_RANGE, true},
     {Tag::VIDEO_REQUEST_I_FRAME, false},
     {Tag::MEDIA_HAS_VIDEO, true},
@@ -538,7 +552,8 @@ HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_All_As_Int64_Using_ParcelPackage, Te
 map<TagType, float> testFloatData = {
     // Float
     {Tag::MEDIA_LATITUDE, 1.01f},
-    {Tag::MEDIA_LONGITUDE, 1.02f}
+    {Tag::MEDIA_LONGITUDE, 1.02f},
+    {Tag::AV_PLAYER_VIDEO_FRAMERATE, 1.03f}
 };
 
 /**
@@ -624,6 +639,11 @@ map<TagType, std::string> testStringData = {
     {Tag::RECORDER_VIDEO_MIME, "String RECORDER_VIDEO_MIME"},
     {Tag::RECORDER_VIDEO_RESOLUTION, "String RECORDER_VIDEO_RESOLUTION"},
     {Tag::RECORDER_AUDIO_MIME, "String RECORDER_AUDIO_MIME"},
+    {Tag::AV_PLAYER_ERR_MSG, "String AV_PLAYER_ERR_MSG"},
+    {Tag::AV_PLAYER_CONTAINER_MIME, "String AV_PLAYER_CONTAINER_MIME"},
+    {Tag::AV_PLAYER_VIDEO_MIME, "String AV_PLAYER_VIDEO_MIME"},
+    {Tag::AV_PLAYER_VIDEO_RESOLUTION, "String AV_PLAYER_VIDEO_RESOLUTION"},
+    {Tag::AV_PLAYER_AUDIO_MIME, "String AV_PLAYER_AUDIO_MIME"},
 };
 
 /**

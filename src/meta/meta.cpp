@@ -311,6 +311,20 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::RECORDER_AUDIO_CHANNEL_COUNT, defaultInt32},
     {Tag::RECORDER_AUDIO_BITRATE, defaultInt32},
     {Tag::RECORDER_START_LATENCY, defaultInt32},
+    {Tag::AV_PLAYER_ERR_CODE, defaultInt32},
+    {Tag::AV_PLAYER_PLAY_DURATION, defaultInt32},
+    {Tag::AV_PLAYER_SOURCE_TYPE, defaultInt32},
+    {Tag::AV_PLAYER_AVG_DOWNLOAD_RATE, defaultInt32},
+    {Tag::AV_PLAYER_VIDEO_BITRATE, defaultInt32},
+    {Tag::AV_PLAYER_AUDIO_BITRATE, defaultInt32},
+    {Tag::AV_PLAYER_START_LATENCY, defaultInt32},
+    {Tag::AV_PLAYER_AVG_DOWNLOAD_SPEED, defaultInt32},
+    {Tag::AV_PLAYER_MAX_SEEK_LATENCY, defaultInt32},
+    {Tag::AV_PLAYER_MAX_ACCURATE_SEEK_LATENCY, defaultInt32},
+    {Tag::AV_PLAYER_LAG_TIMES, defaultInt32},
+    {Tag::AV_PLAYER_MAX_LAG_DURATION, defaultInt32},
+    {Tag::AV_PLAYER_AVG_LAG_DURATION, defaultInt32},
+    {Tag::AV_PLAYER_MAX_SURFACESWAP_LATENCY, defaultInt32},
     // String
     {Tag::MIME_TYPE, defaultString},
     {Tag::MEDIA_FILE_URI, defaultString},
@@ -346,9 +360,15 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::RECORDER_VIDEO_MIME, defaultString},
     {Tag::RECORDER_VIDEO_RESOLUTION, defaultString},
     {Tag::RECORDER_AUDIO_MIME, defaultString},
+    {Tag::AV_PLAYER_ERR_MSG, defaultString},
+    {Tag::AV_PLAYER_CONTAINER_MIME, defaultString},
+    {Tag::AV_PLAYER_VIDEO_MIME, defaultString},
+    {Tag::AV_PLAYER_VIDEO_RESOLUTION, defaultString},
+    {Tag::AV_PLAYER_AUDIO_MIME, defaultString},
     // Float
     {Tag::MEDIA_LATITUDE, defaultFloat},
     {Tag::MEDIA_LONGITUDE, defaultFloat},
+    {Tag::AV_PLAYER_VIDEO_FRAMERATE, defaultFloat},
     // Double
     {Tag::VIDEO_CAPTURE_RATE, defaultDouble},
     {Tag::VIDEO_FRAME_RATE, defaultDouble},
@@ -371,6 +391,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::SCREEN_CAPTURE_USER_AGREE, defaultBool},
     {Tag::SCREEN_CAPTURE_REQURE_MIC, defaultBool},
     {Tag::SCREEN_CAPTURE_ENABLE_MIC, defaultBool},
+    {Tag::AV_PLAYER_IS_DRM_PROTECTED, defaultBool},
     // Int64
     {Tag::MEDIA_FILE_SIZE, defaultUInt64},
     {Tag::MEDIA_POSITION, defaultUInt64},
@@ -404,7 +425,10 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::DRM_DECRYPT_AVG_DURATION, defaultUInt32},
     {Tag::DRM_DECRYPT_MAX_SIZE, defaultUInt32},
     {Tag::DRM_DECRYPT_MAX_DURATION, defaultUInt32},
-    {Tag::DRM_DECRYPT_TIMES, defaultUInt32}
+    {Tag::DRM_DECRYPT_TIMES, defaultUInt32},
+    //int8
+    {Tag::AV_PLAYER_VIDEO_BITDEPTH, defaultInt8},
+    {Tag::AV_PLAYER_HDR_TYPE, defaultInt8},
 };
 
 static std::map<AnyValueType, const Any &> g_ValueTypeDefaultValueMap = {

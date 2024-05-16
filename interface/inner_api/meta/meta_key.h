@@ -323,6 +323,30 @@ public:
     static constexpr const char RECORDER_AUDIO_CHANNEL_COUNT[] = "audioChannelCount";
     static constexpr const char RECORDER_AUDIO_BITRATE[] = "audioBitrate";
     static constexpr const char RECORDER_START_LATENCY[] = "startLatency";
+/* -------------------- av player tag -------------------- */
+    static constexpr const char AV_PLAYER_ERR_CODE[] = "av_player_errCode";
+    static constexpr const char AV_PLAYER_ERR_MSG[] = "av_player_errMsg";
+    static constexpr const char AV_PLAYER_PLAY_DURATION[] = "av_player_play_duration";
+    static constexpr const char AV_PLAYER_SOURCE_TYPE[] = "av_player_source_type";
+    static constexpr const char AV_PLAYER_AVG_DOWNLOAD_RATE[] = "av_player_avg_download_rate";
+    static constexpr const char AV_PLAYER_CONTAINER_MIME[] = "av_player_container_mime";
+    static constexpr const char AV_PLAYER_VIDEO_MIME[] = "av_player_video_mime";
+    static constexpr const char AV_PLAYER_VIDEO_RESOLUTION[] = "av_player_video_resolution";
+    static constexpr const char AV_PLAYER_VIDEO_FRAMERATE[] = "av_player_video_framerate";
+    static constexpr const char AV_PLAYER_VIDEO_BITDEPTH[] = "av_player_video_bitdepth";
+    static constexpr const char AV_PLAYER_VIDEO_BITRATE[] = "av_player_video_bitrate";
+    static constexpr const char AV_PLAYER_HDR_TYPE[] = "av_player_hdr_type";
+    static constexpr const char AV_PLAYER_AUDIO_MIME[] = "av_player_audio_mime";
+    static constexpr const char AV_PLAYER_AUDIO_BITRATE[] = "av_player_audio_bitrate";
+    static constexpr const char AV_PLAYER_IS_DRM_PROTECTED[] = "av_player_is_drm_protected";
+    static constexpr const char AV_PLAYER_START_LATENCY[] = "av_player_start_latency";
+    static constexpr const char AV_PLAYER_AVG_DOWNLOAD_SPEED[] = "av_player_avg_download_speed";
+    static constexpr const char AV_PLAYER_MAX_SEEK_LATENCY[] = "av_player_max_seek_latency";
+    static constexpr const char AV_PLAYER_MAX_ACCURATE_SEEK_LATENCY[] = "av_player_max_accurate_seek_latency";
+    static constexpr const char AV_PLAYER_LAG_TIMES[] = "av_player_lag_times";
+    static constexpr const char AV_PLAYER_MAX_LAG_DURATION[] = "av_player_max_lag_duration";
+    static constexpr const char AV_PLAYER_AVG_LAG_DURATION[] = "av_player_avg_lag_duration";
+    static constexpr const char AV_PLAYER_MAX_SURFACESWAP_LATENCY[] = "av_player_max_surfaceswap_latency";
 };
 
 using TagTypeCharSeq = const char *;
