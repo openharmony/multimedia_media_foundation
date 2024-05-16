@@ -80,7 +80,8 @@
               "samgr",
               "c_utils",
               "hicollie",
-              "eventhandler"
+              "eventhandler",
+              "bundle_framework"
           ]
         },
         "build": {

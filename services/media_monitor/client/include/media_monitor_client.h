@@ -31,7 +31,7 @@ public:
 
     void WriteLogMsg(std::shared_ptr<EventBean> &bean)  override;
 
-    void GetAudioRouteMsg(std::map<PerferredType,
+    int32_t GetAudioRouteMsg(std::map<PerferredType,
         std::shared_ptr<MonitorDeviceInfo>> &perferredDevices) override;
 
 private:

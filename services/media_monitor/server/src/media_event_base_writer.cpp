@@ -21,8 +21,6 @@ namespace OHOS {
 namespace Media {
 namespace MediaMonitor {
 
-static constexpr int INITAL_VALUE = 1;
-
 void MediaEventBaseWriter::WriteHeasetChange(std::shared_ptr<EventBean> &bean)
 {
     MEDIA_LOG_D("Write heaset change");
@@ -127,8 +125,8 @@ void MediaEventBaseWriter::WriteStreamExhastedError(std::shared_ptr<EventBean> &
         MEDIA_LOG_E("eventBean is nullptr");
         return;
     }
-    HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "AUDIO_SERVER_STARTUP_ERROR",
-        HiviewDFX::HiSysEvent::EventType::FAULT,
+    HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "AUDIO_STREAM_EXHAUSTED_STATS",
+        HiviewDFX::HiSysEvent::EventType::STATISTIC,
         "DUBIOUS_APP", bean->GetStringValue("DUBIOUS_APP"),
         "TIMES", static_cast<uint32_t>(bean->GetIntValue("TIMES")));
 }
@@ -141,7 +139,7 @@ void MediaEventBaseWriter::WriteStreamCreateError(std::shared_ptr<EventBean> &be
         return;
     }
     HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "AUDIO_STREAM_CREATE_ERROR_STATS",
-        HiviewDFX::HiSysEvent::EventType::FAULT,
+        HiviewDFX::HiSysEvent::EventType::STATISTIC,
         "APP_NAME", bean->GetStringValue("APP_NAME"),
         "IS_PLAYBACK", static_cast<bool>(bean->GetIntValue("IS_PLAYBACK")),
         "STREAM_TYPE", static_cast<uint>(bean->GetIntValue("STREAM_TYPE")),
@@ -160,7 +158,7 @@ void MediaEventBaseWriter::WriteBackgoundSilentPlayback(std::shared_ptr<EventBea
         HiviewDFX::HiSysEvent::EventType::STATISTIC,
         "APP_NAME", bean->GetStringValue("APP_NAME"),
         "APP_VERSION_CODE", static_cast<uint32_t>(bean->GetIntValue("APP_VERSION_CODE")),
-        "TIMES", INITAL_VALUE);
+        "TIMES", static_cast<uint32_t>(bean->GetIntValue("TIMES")));
 }
 
 void MediaEventBaseWriter::WriteSetForceDevice(std::shared_ptr<EventBean> &bean)
@@ -178,22 +176,6 @@ void MediaEventBaseWriter::WriteSetForceDevice(std::shared_ptr<EventBean> &bean)
         "STREAM_TYPE", static_cast<uint>(bean->GetIntValue("STREAM_TYPE")));
 }
 
-void MediaEventBaseWriter::WriteRouteChange(std::shared_ptr<EventBean> &bean)
-{
-    MEDIA_LOG_D("Write route change");
-    if (bean == nullptr) {
-        MEDIA_LOG_E("eventBean is nullptr");
-        return;
-    }
-    HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "ROUTE_CHANGE",
-        HiviewDFX::HiSysEvent::EventType::BEHAVIOR,
-        "REASON", bean->GetIntValue("REASON"),
-        "TIMESTAMP", bean->GetUint64Value("TIMESTAMP"),
-        "PREVIOUS_DEVICE", bean->GetIntValue("PREVIOUS_DEVICE"),
-        "CURRENT_DEVICE", bean->GetIntValue("CURRENT_DEVICE"),
-        "APP_NAME", bean->GetStringValue("APP_NAME"));
-}
-
 void MediaEventBaseWriter::WriteDeviceStatistic(std::shared_ptr<EventBean> &bean)
 {
     MEDIA_LOG_D("Write device statistic duration");
@@ -202,11 +184,11 @@ void MediaEventBaseWriter::WriteDeviceStatistic(std::shared_ptr<EventBean> &bean
         return;
     }
     HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "AUDIO_DEVICE_UTILIZATION_STATS",
-        HiviewDFX::HiSysEvent::EventType::BEHAVIOR,
+        HiviewDFX::HiSysEvent::EventType::STATISTIC,
         "IS_PLAYBACK", static_cast<bool>(bean->GetIntValue("IS_PLAYBACK")),
         "DEVICE_TYPE", static_cast<uint>(bean->GetIntValue("DEVICE_TYPE")),
         "STREAM_TYPE", static_cast<uint>(bean->GetIntValue("STREAM_TYPE")),
-        "DURATION", static_cast<uint32_t>(bean->GetIntValue("DURATION")));
+        "DURATION", static_cast<uint32_t>(bean->GetUint64Value("DURATION")));
 }
 
 void MediaEventBaseWriter::WriteBtUsageStatistic(std::shared_ptr<EventBean> &bean)
@@ -217,11 +199,11 @@ void MediaEventBaseWriter::WriteBtUsageStatistic(std::shared_ptr<EventBean> &bea
         return;
     }
     HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "BT_UTILIZATION_STATS",
-        HiviewDFX::HiSysEvent::EventType::BEHAVIOR,
+        HiviewDFX::HiSysEvent::EventType::STATISTIC,
         "IS_PLAYBACK", static_cast<bool>(bean->GetIntValue("IS_PLAYBACK")),
         "BT_TYPE", static_cast<uint>(bean->GetIntValue("BT_TYPE")),
         "STREAM_TYPE", static_cast<uint>(bean->GetIntValue("STREAM_TYPE")),
-        "DURATION", static_cast<uint32_t>(bean->GetIntValue("DURATION")));
+        "DURATION", static_cast<uint32_t>(bean->GetUint64Value("DURATION")));
 }
 
 void MediaEventBaseWriter::WriteStreamStatistic(std::shared_ptr<EventBean> &bean)
@@ -231,14 +213,14 @@ void MediaEventBaseWriter::WriteStreamStatistic(std::shared_ptr<EventBean> &bean
         MEDIA_LOG_E("eventBean is nullptr");
         return;
     }
-    HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "AUDIO_STREAM_UTILIZATION_STATS",
-        HiviewDFX::HiSysEvent::EventType::BEHAVIOR,
+    HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "STREAM_UTILIZATION_STATS",
+        HiviewDFX::HiSysEvent::EventType::STATISTIC,
         "IS_PLAYBACK", static_cast<bool>(bean->GetIntValue("IS_PLAYBACK")),
         "PIPE_TYPE", static_cast<uint>(bean->GetIntValue("PIPE_TYPE")),
         "STREAM_TYPE", static_cast<uint>(bean->GetIntValue("STREAM_TYPE")),
         "SAMPLE_RATE", static_cast<uint>(bean->GetIntValue("SAMPLE_RATE")),
         "APP_NAME", bean->GetStringValue("APP_NAME"),
-        "DURATION", static_cast<uint32_t>(bean->GetIntValue("DURATION")));
+        "DURATION", static_cast<uint32_t>(bean->GetUint64Value("DURATION")));
 }
 
 void MediaEventBaseWriter::WriteUnderrunStatistic(std::shared_ptr<EventBean> &bean)
@@ -248,8 +230,8 @@ void MediaEventBaseWriter::WriteUnderrunStatistic(std::shared_ptr<EventBean> &be
         MEDIA_LOG_E("eventBean is nullptr");
         return;
     }
-    HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "PERFORMANCE_UNDERRUN_STATISTIC",
-        HiviewDFX::HiSysEvent::EventType::BEHAVIOR,
+    HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "PERFORMANCE_UNDER_OVERRUN_STATS",
+        HiviewDFX::HiSysEvent::EventType::STATISTIC,
         "IS_PLAYBACK", static_cast<bool>(bean->GetIntValue("IS_PLAYBACK")),
         "STREAM_TYPE", static_cast<uint>(bean->GetIntValue("STREAM_TYPE")),
         "PIPE_TYPE", static_cast<uint>(bean->GetIntValue("PIPE_TYPE")),
@@ -311,10 +293,10 @@ void MediaEventBaseWriter::WriteMutedCapture(std::shared_ptr<EventBean> &bean)
         return;
     }
     HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "MUTED_CAPTURE_STATS",
-        HiviewDFX::HiSysEvent::EventType::BEHAVIOR,
+        HiviewDFX::HiSysEvent::EventType::STATISTIC,
         "STREAM_TYPE", static_cast<uint>(bean->GetIntValue("STREAM_TYPE")),
         "DEVICE_TYPE", static_cast<uint>(bean->GetIntValue("DEVICE_TYPE")),
-        "DURATION", static_cast<uint32_t>(bean->GetIntValue("DURATION")));
+        "DURATION", static_cast<uint32_t>(bean->GetUint64Value("DURATION")));
 }
 
 void MediaEventBaseWriter::WritePlaybackVolume(std::shared_ptr<EventBean> &bean)
@@ -325,11 +307,11 @@ void MediaEventBaseWriter::WritePlaybackVolume(std::shared_ptr<EventBean> &bean)
         return;
     }
     HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "PLAYBACK_VOLUME_STATS",
-        HiviewDFX::HiSysEvent::EventType::BEHAVIOR,
+        HiviewDFX::HiSysEvent::EventType::STATISTIC,
         "LEVEL", static_cast<uint>(bean->GetIntValue("LEVEL")),
         "STREAM_TYPE", static_cast<uint>(bean->GetIntValue("STREAM_TYPE")),
         "DEVICE_TYPE", static_cast<uint>(bean->GetIntValue("DEVICE_TYPE")),
-        "DURATION", static_cast<uint32_t>(bean->GetIntValue("DURATION")));
+        "DURATION", static_cast<uint32_t>(bean->GetUint64Value("DURATION")));
 }
 } // namespace MediaMonitor
 } // namespace Media

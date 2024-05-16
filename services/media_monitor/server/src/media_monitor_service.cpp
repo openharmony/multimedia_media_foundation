@@ -45,9 +45,12 @@ void MediaMonitorService::OnDump()
 int32_t MediaMonitorService::Dump(int32_t fd, const std::vector<std::u16string> &args)
 {
     MEDIA_LOG_I("MediaMonitorService Dump");
-    (void)fd;
-    (void)args;
-    return 0;
+    std::string dumpString = "------------------MediaMonitor------------------\n";
+
+    eventAggregate_.WriteInfo(fd, dumpString);
+    audioMemo_.WriteInfo(fd, dumpString);
+    write(fd, dumpString.c_str(), dumpString.size());
+    return SUCCESS;
 }
 
 void MediaMonitorService::OnStart()
@@ -103,8 +106,8 @@ void MediaMonitorService::MessageLoopFunc()
             break;
         }
         std::shared_ptr<EventBean> msg;
-        unique_lock<mutex> lock(signal_->messageMutex_);
         {
+            unique_lock<mutex> lock(signal_->messageMutex_);
             signal_->messageCond_.wait(lock, [this]() { return signal_->messageQueue_.size() > 0; });
             if (!signal_->isRunning_.load()) {
                 break;
@@ -145,11 +148,11 @@ void MediaMonitorService::AddMessageToQueue(std::shared_ptr<EventBean> &message)
     signal_->messageCond_.notify_all();
 }
 
-void MediaMonitorService::GetAudioRouteMsg(std::map<PerferredType,
+int32_t MediaMonitorService::GetAudioRouteMsg(std::map<PerferredType,
     std::shared_ptr<MonitorDeviceInfo>> &perferredDevices)
 {
     MEDIA_LOG_D("MediaMonitorService GetAudioRouteMsg");
-    audioMemo_.GetAudioRouteMsg(perferredDevices);
+    return audioMemo_.GetAudioRouteMsg(perferredDevices);
 }
 
 } // namespace MediaMonitor

@@ -37,11 +37,16 @@ public:
     ~AudioMemo() = default;
 
     void UpdataRouteInfo(std::shared_ptr<EventBean> &bean);
-    void GetAudioRouteMsg(std::map<PerferredType, std::shared_ptr<MonitorDeviceInfo>> &perferredDevices);
+    int32_t GetAudioRouteMsg(std::map<PerferredType, std::shared_ptr<MonitorDeviceInfo>> &perferredDevices);
+
+    void WriteInfo(int32_t fd, std::string &dumpString);
 private:
     PerferredType GetPerferredType(std::shared_ptr<EventBean> &bean);
     PerferredType GetPerferredRenderType(int32_t streamUsage);
     PerferredType GetPerferredCaptureType(int32_t AudioScene);
+
+    std::string GetPerferredNameFromType(const PerferredType &type);
+
     std::mutex perferredDeviceMutex_;
     std::map<PerferredType, std::shared_ptr<MonitorDeviceInfo>> perferredDevices_;
 };
