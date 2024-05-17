@@ -452,6 +452,7 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::SCREEN_CAPTURE_REQURE_MIC, false},
     {Tag::SCREEN_CAPTURE_ENABLE_MIC, true},
     {Tag::AV_PLAYER_IS_DRM_PROTECTED, true},
+    {Tag::AV_PLAYER_DOWNLOAD_TIME_OUT, true},
     {Tag::VIDEO_COLOR_RANGE, true},
     {Tag::VIDEO_REQUEST_I_FRAME, false},
     {Tag::MEDIA_HAS_VIDEO, true},
