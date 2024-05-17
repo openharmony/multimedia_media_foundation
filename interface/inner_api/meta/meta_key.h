@@ -347,6 +347,8 @@ public:
     static constexpr const char AV_PLAYER_MAX_LAG_DURATION[] = "av_player_max_lag_duration";
     static constexpr const char AV_PLAYER_AVG_LAG_DURATION[] = "av_player_avg_lag_duration";
     static constexpr const char AV_PLAYER_MAX_SURFACESWAP_LATENCY[] = "av_player_max_surfaceswap_latency";
+    static constexpr const char AV_PLAYER_DOWNLOAD_TOTAL_BITS[] = "av_player_totol_download_bits";
+    static constexpr const char AV_PLAYER_DOWNLOAD_TIME_OUT[] = "av_player_download_time_out";
 };
 
 using TagTypeCharSeq = const char *;

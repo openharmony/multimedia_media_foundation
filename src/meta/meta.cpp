@@ -394,9 +394,11 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::SCREEN_CAPTURE_REQURE_MIC, defaultBool},
     {Tag::SCREEN_CAPTURE_ENABLE_MIC, defaultBool},
     {Tag::AV_PLAYER_IS_DRM_PROTECTED, defaultBool},
+    {Tag::AV_PLAYER_DOWNLOAD_TIME_OUT, defaultBool},
     // Int64
     {Tag::MEDIA_FILE_SIZE, defaultUInt64},
     {Tag::MEDIA_POSITION, defaultUInt64},
+    {Tag::AV_PLAYER_DOWNLOAD_TOTAL_BITS, defaultUInt64},
     {Tag::APP_FULL_TOKEN_ID, defaultInt64},
     {Tag::MEDIA_DURATION, defaultInt64},
     {Tag::MEDIA_BITRATE, defaultInt64},

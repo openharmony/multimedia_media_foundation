@@ -186,7 +186,8 @@ public:
         tagCharSeq == Tag::SCREEN_CAPTURE_USER_AGREE or
         tagCharSeq == Tag::SCREEN_CAPTURE_REQURE_MIC or
         tagCharSeq == Tag::SCREEN_CAPTURE_ENABLE_MIC or
-        tagCharSeq == Tag::AV_PLAYER_IS_DRM_PROTECTED, bool, AnyValueType::BOOL);
+        tagCharSeq == Tag::AV_PLAYER_IS_DRM_PROTECTED or
+        tagCharSeq == Tag::AV_PLAYER_DOWNLOAD_TIME_OUT, bool, AnyValueType::BOOL);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_BUFFER_CAN_DROP, bool, AnyValueType::BOOL);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_RENDER_SET_FLAG, bool, ValueType::BOOL);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_H265_PROFILE, Plugins::HEVCProfile, AnyValueType::INT32_T);
@@ -291,6 +292,9 @@ public:
         tagCharSeq == Tag::MEDIA_FILE_SIZE or
         tagCharSeq == Tag::MEDIA_POSITION or
         tagCharSeq == Tag::MEDIA_TIME_STAMP, int64_t, AnyValueType::INT64_T);
+
+    DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::AV_PLAYER_DOWNLOAD_TOTAL_BITS, uint64_t, AnyValueType::UINT64_T);
 
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::MEDIA_LATITUDE or
         tagCharSeq == Tag::MEDIA_LONGITUDE or

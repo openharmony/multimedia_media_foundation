@@ -52,6 +52,13 @@ typedef struct PlayStrategy {
     bool preferHDR;
 } PlayStrategy;
 
+typedef struct DownloadInfo {
+    int32_t avgDownloadRate;
+    int32_t avgDownloadSpeed;
+    uint64_t totalDownLoadBits;
+    bool isTimeOut;
+} DownloadInfo;
+
 class MediaSource {
 public:
     /// Construct an a specified URI.
