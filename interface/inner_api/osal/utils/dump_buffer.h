@@ -58,7 +58,7 @@ namespace Media {
 #define DUMP_BUFFER2LOG(desc, buffer, offset)
 #endif
 
-void DumpAVBufferToFile(const std::string para, const std::string& fileName,
+void DumpAVBufferToFile(const std::string& para, const std::string& fileName,
     const std::shared_ptr<AVBuffer>& buffer);
 void PrepareDumpDir();
 void EndDumpFile();
