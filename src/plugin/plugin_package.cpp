@@ -40,10 +40,8 @@ bool PluginPackage::LoadPluginPackage(std::string packageName)
     UnregisterFunc unregisterFunc = nullptr;
     MEDIA_LOG_I("dlopen registerFuncName " PUBLIC_LOG_S
         ", unregisterFuncName: " PUBLIC_LOG_S, registerFuncName.c_str(), unregisterFuncName.c_str());
-
     registerFunc = (RegisterFunc)(::dlsym(soHandler_, registerFuncName.c_str()));
     unregisterFunc = (UnregisterFunc)(::dlsym(soHandler_, unregisterFuncName.c_str()));
-
     if (registerFunc && unregisterFunc) {
         registerFunc(shared_from_this());
         return true;

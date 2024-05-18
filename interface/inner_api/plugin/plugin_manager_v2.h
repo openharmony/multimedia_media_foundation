@@ -40,7 +40,6 @@ public:
 private:
     PluginManagerV2();
     std::shared_ptr<CachedPluginPackage> cachedPluginPackage_;
-
 };
 } // namespace Plugins
 } // namespace Media

@@ -29,7 +29,8 @@ public:
     bool LoadPluginPackage(std::string packageName);
     bool UnLoadPluginPackage();
     Status AddPlugin(const PluginDefBase& def);
-    Status AddPackage(const PackageDef& def) {
+    Status AddPackage(const PackageDef& def)
+    {
         return Status::OK;
     }
     std::vector<std::shared_ptr<PluginDefBase>> GetAllPlugins();
@@ -38,7 +39,6 @@ private:
     std::vector<std::shared_ptr<PluginDefBase>> pluginDefList_;
     std::string packageName_;
     void* soHandler_;
-
 };
 } // namespace Plugins
 } // namespace Media

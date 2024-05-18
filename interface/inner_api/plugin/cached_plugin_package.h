@@ -32,7 +32,6 @@ public:
 
 private:
     std::vector<std::shared_ptr<PluginPackage>> pluginPackageList_;
-
 };
 } // namespace Plugins
 } // namespace Media
