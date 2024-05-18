@@ -150,6 +150,10 @@ if (hst_is_standard_sys) {
       "$histreamer_root_dir/src/plugin/plugin_loader.cpp",
       "$histreamer_root_dir/src/plugin/plugin_manager.cpp",
       "$histreamer_root_dir/src/plugin/plugin_register.cpp",
+      "$histreamer_root_dir/src/plugin/plugin_list.cpp",
+      "$histreamer_root_dir/src/plugin/plugin_package.cpp",
+      "$histreamer_root_dir/src/plugin/plugin_manager_v2.cpp",
+      "$histreamer_root_dir/src/plugin/cached_plugin_package.cpp",
     ]
 
     public_deps = []
