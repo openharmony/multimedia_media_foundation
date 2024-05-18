@@ -59,6 +59,11 @@ typedef struct DownloadInfo {
     bool isTimeOut;
 } DownloadInfo;
 
+class AVMimeTypes {
+public:
+    static constexpr std::string_view APPLICATION_M3U8 = "application/m3u8";
+};
+
 class MediaSource {
 public:
     /// Construct an a specified URI.
@@ -85,12 +90,17 @@ public:
 
     PlayStrategy* GetPlayStrategy() const;
 
+    void SetMimeType(const std::string& mimeType);
+
+    std::string GetMimeType() const;
+
     //std::shared_ptr<DataConsumer> GetDataConsumer() const;
 #ifndef OHOS_LITE
     std::shared_ptr<IMediaDataSource> GetDataSrc() const;
 #endif
 private:
     std::string uri_ {};
+    std::string mimeType_ {};
     SourceType type_ {};
     std::map<std::string, std::string> header_ {};
     PlayStrategy* playStrategy_ {nullptr};
