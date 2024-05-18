@@ -377,32 +377,18 @@ void EventAggregate::AddToVolumeVector(std::shared_ptr<EventBean> &bean, uint64_
         }
         return false;
     };
-    bool isInVolumeMap = false;
     auto it = std::find_if(volumeVector_.begin(), volumeVector_.end(), isExist);
     if (it != volumeVector_.end()) {
-        uint64_t curruntTime = TimeUtils::GetCurSec();
-        if ((*it)->GetIntValue("DEVICE_TYPE") == UNINITIALIZED) {
-            (*it)->UpdateIntMap("DEVICE_TYPE", bean->GetIntValue("DEVICETYPE"));
-        } else {
-            (*it)->Add("DEVICE_TYPE",  bean->GetIntValue("DEVICETYPE"));
-        }
-        if ((*it)->GetIntValue("STREAM_TYPE") == UNINITIALIZED) {
-            (*it)->UpdateIntMap("STREAM_TYPE", bean->GetIntValue("STREAM_TYPE"));
-        } else {
-            (*it)->Add("STREAM_TYPE",  bean->GetIntValue("STREAM_TYPE"));
-        }
-        (*it)->Add("START_TIME", curruntTime);
-        isInVolumeMap = true;
+        MEDIA_LOG_D("The current volume already exists, do not add it again");
+        return;
     }
-    if (!isInVolumeMap) {
-        std::shared_ptr<EventBean> volumeBean = std::make_shared<EventBean>();
-        volumeBean->Add("STREAMID", bean->GetIntValue("STREAMID"));
-        volumeBean->Add("STREAM_TYPE", bean->GetIntValue("STREAM_TYPE"));
-        volumeBean->Add("DEVICE_TYPE", bean->GetIntValue("DEVICETYPE"));
-        volumeBean->Add("LEVEL", systemVol_);
-        volumeBean->Add("START_TIME", curruntTime);
-        volumeVector_.push_back(volumeBean);
-    }
+    std::shared_ptr<EventBean> volumeBean = std::make_shared<EventBean>();
+    volumeBean->Add("STREAMID", bean->GetIntValue("STREAMID"));
+    volumeBean->Add("STREAM_TYPE", bean->GetIntValue("STREAM_TYPE"));
+    volumeBean->Add("DEVICE_TYPE", bean->GetIntValue("DEVICETYPE"));
+    volumeBean->Add("LEVEL", systemVol_);
+    volumeBean->Add("START_TIME", TimeUtils::GetCurSec());
+    volumeVector_.push_back(volumeBean);
 }
 
 void EventAggregate::HandleDeviceUsage(std::shared_ptr<EventBean> &bean)
@@ -541,34 +527,24 @@ void EventAggregate::HandleVolumeChange(std::shared_ptr<EventBean> &bean)
     }
     auto isExist = [&bean](const std::shared_ptr<EventBean> &volumeBean) {
         if (bean->GetIntValue("STREAMID") == volumeBean->GetIntValue("STREAMID") &&
-            bean->GetIntValue("DEVICETYPE") == volumeBean->GetIntValue("DEVICE_TYPE") &&
             bean->GetIntValue("SYSVOLUME") != volumeBean->GetIntValue("LEVEL")) {
             MEDIA_LOG_D("Find the existing volume vector");
             return true;
         }
         return false;
     };
-    bool isInVolumeMap = false;
     auto it = std::find_if(volumeVector_.begin(), volumeVector_.end(), isExist);
     if (it != volumeVector_.end()) {
-        (*it)->UpdateIntMap("LEVEL", bean->GetIntValue("SYSVOLUME"));
         if ((*it)->GetUint64Value("START_TIME") >= 0) {
             int64_t duration = TimeUtils::GetCurSec() - (*it)->GetUint64Value("START_TIME");
-            if (duration > 0 && duration > NEED_INCREASE_FREQUENCY) {
+            if (duration > 0 && duration > NEED_INCREASE_FREQUENCY &&
+                (*it)->GetIntValue("LEVEL") != UNINITIALIZED) {
                 (*it)->Add("DURATION", static_cast<uint64_t>(duration));
                 mediaMonitorPolicy_.HandleVolumeToEventVector(*it);
                 mediaMonitorPolicy_.WhetherToHiSysEvent();
             }
+            (*it)->UpdateIntMap("LEVEL", bean->GetIntValue("SYSVOLUME"));
         }
-        isInVolumeMap = true;
-    }
-    if (!isInVolumeMap) {
-        std::shared_ptr<EventBean> volumeBean = std::make_shared<EventBean>();
-        volumeBean->Add("STREAMID", bean->GetIntValue("STREAMID"));
-        volumeBean->Add("STREAM_TYPE", UNINITIALIZED);
-        volumeBean->Add("DEVICE_TYPE", bean->GetIntValue("DEVICETYPE"));
-        volumeBean->Add("LEVEL", bean->GetIntValue("SYSVOLUME"));
-        volumeVector_.push_back(volumeBean);
     }
     // Record volume for stream state 2->5->2
     systemVol_ = bean->GetIntValue("SYSVOLUME");
