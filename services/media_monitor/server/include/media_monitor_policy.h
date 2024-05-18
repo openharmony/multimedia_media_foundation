@@ -56,6 +56,7 @@ public:
     void HandleUnderrunToEventVector(std::shared_ptr<EventBean> &bean);
     void HandleCaptureMutedToEventVector(std::shared_ptr<EventBean> &bean);
     void HandleVolumeToEventVector(std::shared_ptr<EventBean> &bean);
+    void HandStreamPropertyToEventVector(std::shared_ptr<EventBean> &streamProperty);
 
     void WhetherToHiSysEvent();
     void WriteInfo(int32_t fd, std::string &dumpString);

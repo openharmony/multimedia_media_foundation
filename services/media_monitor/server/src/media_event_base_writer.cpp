@@ -105,6 +105,18 @@ void MediaEventBaseWriter::WriteLoadConfigError(std::shared_ptr<EventBean> &bean
         "CATEGORY", static_cast<uint16_t>(bean->GetIntValue("CATEGORY")));
 }
 
+void MediaEventBaseWriter::WriteLoadEffectEngineError(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Write load effect engine error");
+    if (bean == nullptr) {
+        MEDIA_LOG_E("eventBean is nullptr");
+        return;
+    }
+    HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "LOAD_EFFECT_ENGINE_ERROR",
+        HiviewDFX::HiSysEvent::EventType::FAULT,
+        "ENGINE_TYPE", static_cast<uint16_t>(bean->GetIntValue("ENGINE_TYPE")));
+}
+
 void MediaEventBaseWriter::WriteAudioStartupError(std::shared_ptr<EventBean> &bean)
 {
     MEDIA_LOG_D("Write audio startup error");
@@ -220,6 +232,25 @@ void MediaEventBaseWriter::WriteStreamStatistic(std::shared_ptr<EventBean> &bean
         "STREAM_TYPE", static_cast<uint>(bean->GetIntValue("STREAM_TYPE")),
         "SAMPLE_RATE", static_cast<uint>(bean->GetIntValue("SAMPLE_RATE")),
         "APP_NAME", bean->GetStringValue("APP_NAME"),
+        "EFFECT_CHAIN", static_cast<uint>(bean->GetIntValue("EFFECT_CHAIN")),
+        "DURATION", static_cast<uint32_t>(bean->GetUint64Value("DURATION")));
+}
+
+void MediaEventBaseWriter::WriteStreamPropertyStatistic(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Write stream property statistic duration");
+    if (bean == nullptr) {
+        MEDIA_LOG_E("eventBean is nullptr");
+        return;
+    }
+
+    HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "STREAM_PROPERTY_STATS",
+        HiviewDFX::HiSysEvent::EventType::STATISTIC,
+        "IS_PLAYBACK", static_cast<bool>(bean->GetIntValue("IS_PLAYBACK")),
+        "STREAM_TYPE", static_cast<uint>(bean->GetIntValue("STREAM_TYPE")),
+        "APP_NAME", bean->GetStringValue("APP_NAME"),
+        "ENCODING_TYPE", static_cast<uint>(bean->GetIntValue("ENCODING_TYPE")),
+        "CHANNEL_LAYOUT", static_cast<uint64_t>(bean->GetUint64Value("CHANNEL_LAYOUT")),
         "DURATION", static_cast<uint32_t>(bean->GetUint64Value("DURATION")));
 }
 

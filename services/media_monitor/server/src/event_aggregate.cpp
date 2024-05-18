@@ -87,6 +87,9 @@ void EventAggregate::WriteEvent(std::shared_ptr<EventBean> &bean)
         case AUDIO_SERVICE_STARTUP_ERROR:
             mediaMonitorPolicy_.WriteEvent(bean->GetEventId(), bean);
             break;
+        case LOAD_EFFECT_ENGINE_ERROR:
+            mediaMonitorPolicy_.WriteEvent(bean->GetEventId(), bean);
+            break;
         default:
             UpdateAggregateEventList(bean);
             break;
@@ -239,6 +242,7 @@ void EventAggregate::HandleStreamChangeEvent(std::shared_ptr<EventBean> &bean)
         bean->Add("APP_NAME", bundleInfo.name);
         AddToDeviceUsage(bean, curruntTime);
         AddToStreamUsage(bean, curruntTime);
+        AddToStreamPropertyVector(bean, curruntTime);
         AddToCaptureMuteUsage(bean, curruntTime);
         AddToVolumeVector(bean, curruntTime);
     } else if (bean->GetIntValue("STATE") == AudioStandard::State::STOPPED ||
@@ -251,6 +255,7 @@ void EventAggregate::HandleStreamChangeEvent(std::shared_ptr<EventBean> &bean)
         HandleStreamUsage(bean);
         HandleCaptureMuted(bean);
         HandleStreamChangeForVolume(bean);
+        HandleStreamPropertyStats(bean);
     }
     mediaMonitorPolicy_.WriteEvent(bean->GetEventId(), bean);
 }
@@ -326,8 +331,40 @@ void EventAggregate::AddToStreamUsage(std::shared_ptr<EventBean> &bean, uint64_t
     streamUsageBean->Add("SAMPLE_RATE", bean->GetIntValue("SAMPLE_RATE"));
     streamUsageBean->Add("APP_NAME", bean->GetStringValue("APP_NAME"));
     streamUsageBean->Add("STATE", bean->GetIntValue("STATE"));
+    streamUsageBean->Add("EFFECT_CHAIN", bean->GetIntValue("EFFECT_CHAIN"));
     streamUsageBean->Add("START_TIME", curruntTime);
     streamUsageVector_.push_back(streamUsageBean);
+}
+
+void EventAggregate::AddToStreamPropertyVector(std::shared_ptr<EventBean> &bean, uint64_t curruntTime)
+{
+    MEDIA_LOG_D("Add to stream prorerty vector from stream change event");
+    auto isExist = [&bean](const std::shared_ptr<EventBean> &eventBean) {
+        if (bean->GetUint64Value("CHANNEL_LAYOUT") == eventBean->GetUint64Value("CHANNEL_LAYOUT") &&
+            bean->GetIntValue("UID") == eventBean->GetIntValue("UID") &&
+            bean->GetIntValue("ENCODING_TYPE") == eventBean->GetIntValue("ENCODING_TYPE") &&
+            bean->GetIntValue("STREAM_TYPE") == eventBean->GetIntValue("STREAM_TYPE") &&
+            bean->GetIntValue("ISOUTPUT") == eventBean->GetIntValue("IS_PLAYBACK")) {
+            MEDIA_LOG_D("Find the existing stream property");
+            return true;
+        }
+        return false;
+    };
+    auto it = std::find_if(streamPropertyVector_.begin(), streamPropertyVector_.end(), isExist);
+    if (it != streamPropertyVector_.end()) {
+        MEDIA_LOG_D("The current stream property already exists, do not add it again");
+        return;
+    }
+    std::shared_ptr<EventBean> streamPropertyBean = std::make_shared<EventBean>();
+    streamPropertyBean->Add("ENCODING_TYPE", bean->GetIntValue("ENCODING_TYPE"));
+    streamPropertyBean->Add("UID", bean->GetIntValue("UID"));
+    streamPropertyBean->Add("STREAM_TYPE", bean->GetIntValue("STREAM_TYPE"));
+    streamPropertyBean->Add("IS_PLAYBACK", bean->GetIntValue("ISOUTPUT"));
+    streamPropertyBean->Add("CHANNEL_LAYOUT", bean->GetUint64Value("CHANNEL_LAYOUT"));
+    streamPropertyBean->Add("APP_NAME", bean->GetStringValue("APP_NAME"));
+    streamPropertyBean->Add("STATE", bean->GetIntValue("STATE"));
+    streamPropertyBean->Add("START_TIME", curruntTime);
+    streamPropertyVector_.push_back(streamPropertyBean);
 }
 
 void EventAggregate::AddToCaptureMuteUsage(std::shared_ptr<EventBean> &bean, uint64_t curruntTime)
@@ -462,6 +499,32 @@ void EventAggregate::HandleStreamUsage(std::shared_ptr<EventBean> &bean)
             mediaMonitorPolicy_.WhetherToHiSysEvent();
         }
         streamUsageVector_.erase(it);
+    }
+}
+
+void EventAggregate::HandleStreamPropertyStats(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Handle stream property stats");
+    auto isExist = [&bean](const std::shared_ptr<EventBean> &streamPropertyBean) {
+        if (bean->GetUint64Value("CHANNEL_LAYOUT") == streamPropertyBean->GetUint64Value("CHANNEL_LAYOUT") &&
+            bean->GetIntValue("UID") == streamPropertyBean->GetIntValue("UID") &&
+            bean->GetIntValue("ENCODING_TYPE") == streamPropertyBean->GetIntValue("ENCODING_TYPE") &&
+            bean->GetIntValue("STREAM_TYPE") == streamPropertyBean->GetIntValue("STREAM_TYPE") &&
+            bean->GetIntValue("ISOUTPUT") == streamPropertyBean->GetIntValue("IS_PLAYBACK")) {
+            MEDIA_LOG_D("Find the existing stream property");
+            return true;
+        }
+        return false;
+    };
+    auto it = std::find_if(streamPropertyVector_.begin(), streamPropertyVector_.end(), isExist);
+    if (it != streamPropertyVector_.end()) {
+        int64_t duration = TimeUtils::GetCurSec() - (*it)->GetUint64Value("START_TIME");
+        if (duration > 0 && duration > NEED_INCREASE_FREQUENCY) {
+            (*it)->Add("DURATION", static_cast<uint64_t>(duration));
+            mediaMonitorPolicy_.HandStreamPropertyToEventVector(*it);
+            mediaMonitorPolicy_.WhetherToHiSysEvent();
+        }
+        streamPropertyVector_.erase(it);
     }
 }
 

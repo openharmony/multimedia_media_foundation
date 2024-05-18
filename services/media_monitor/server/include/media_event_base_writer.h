@@ -34,6 +34,7 @@ public:
     ~MediaEventBaseWriter() = default;
 
     void WriteLoadConfigError(std::shared_ptr<EventBean> &bean);
+    void WriteLoadEffectEngineError(std::shared_ptr<EventBean> &bean);
     void WriteAudioStartupError(std::shared_ptr<EventBean> &bean);
     void WriteStreamExhastedError(std::shared_ptr<EventBean> &bean);
     void WriteStreamCreateError(std::shared_ptr<EventBean> &bean);
@@ -52,6 +53,7 @@ public:
     void WriteFocusMigrate(std::shared_ptr<EventBean> &bean);
     void WriteMutedCapture(std::shared_ptr<EventBean> &bean);
     void WritePlaybackVolume(std::shared_ptr<EventBean> &bean);
+    void WriteStreamPropertyStatistic(std::shared_ptr<EventBean> &bean);
 };
 
 } // namespace MediaMonitor
