@@ -28,6 +28,12 @@ namespace OHOS {
 namespace Media {
 namespace MediaMonitor {
 
+enum DeviceChangeEvent {
+    FOR_DEVICE_EVENT = 0,
+    FOR_CAPTURE_MUTE_EVENT,
+    FOR_VOLUME_CHANGE_EVENT
+};
+
 class EventAggregate {
 public:
     static EventAggregate& GetEventAggregate()
@@ -41,15 +47,49 @@ public:
 
     void WriteEvent(std::shared_ptr<EventBean> &bean);
 
+    void WriteInfo(int32_t fd, std::string &dumpString);
+
 private:
     void UpdateAggregateEventList(std::shared_ptr<EventBean> &bean);
     void HandleDeviceChangeEvent(std::shared_ptr<EventBean> &bean);
     void HandleStreamChangeEvent(std::shared_ptr<EventBean> &bean);
-    void HandleVolumeChange(std::shared_ptr<EventBean> &bean);
+
+    void HandleStreamExhaustedErrorEvent(std::shared_ptr<EventBean> &bean);
+    void HandleStreamCreateErrorEvent(std::shared_ptr<EventBean> &bean);
     void HandleBackgroundSilentPlayback(std::shared_ptr<EventBean> &bean);
+    void HandleUnderrunStatistic(std::shared_ptr<EventBean> &bean);
+    void HandleForceUseDevice(std::shared_ptr<EventBean> &bean);
+    void HandleCaptureMutedStatusChange(std::shared_ptr<EventBean> &bean);
+    void HandleVolumeChange(std::shared_ptr<EventBean> &bean);
+
+    void HandleCaptureMuted(std::shared_ptr<EventBean> &bean);
+    void HandleDeviceUsage(std::shared_ptr<EventBean> &bean);
+    void HandleStreamUsage(std::shared_ptr<EventBean> &bean);
+    void HandleStreamChangeForVolume(std::shared_ptr<EventBean> &bean);
+    void HandlePipeChange(std::shared_ptr<EventBean> &bean);
+    void HandleFocusMigrate(std::shared_ptr<EventBean> &bean);
+
+    void AddToDeviceUsage(std::shared_ptr<EventBean> &bean, uint64_t curruntTime);
+    void AddToStreamUsage(std::shared_ptr<EventBean> &bean, uint64_t curruntTime);
+    void AddToCaptureMuteUsage(std::shared_ptr<EventBean> &bean, uint64_t curruntTime);
+    void AddToVolumeVector(std::shared_ptr<EventBean> &bean, uint64_t curruntTime);
+
+    void HandleDeviceChangeForDeviceUsage(std::shared_ptr<EventBean> &bean);
+    void HandleDeviceChangeForCaptureMuted(std::shared_ptr<EventBean> &bean);
+    void HandleDeviceChangeForVolume(std::shared_ptr<EventBean> &bean);
+    void HandleDeviceChangeForDuration(const DeviceChangeEvent &event,
+        std::shared_ptr<EventBean> &bean, std::shared_ptr<EventBean> &beanInVector);
 
     AudioMemo& audioMemo_;
     MediaMonitorPolicy& mediaMonitorPolicy_;
+
+    std::vector<std::shared_ptr<EventBean>> deviceUsageVector_;
+    std::vector<std::shared_ptr<EventBean>> streamUsageVector_;
+    std::vector<std::shared_ptr<EventBean>> captureMutedVector_;
+    std::vector<std::shared_ptr<EventBean>> volumeVector_;
+
+    // Record volume for stream state 2->5->2
+    int32_t systemVol_ = -1;
 };
 } // namespace MediaMonitor
 } // namespace Media

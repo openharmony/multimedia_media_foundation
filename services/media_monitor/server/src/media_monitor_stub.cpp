@@ -45,7 +45,7 @@ void MediaMonitorStub::HandleGetAudioRouteMsg(MessageParcel &data, MessageParcel
 {
     std::map<PerferredType, std::shared_ptr<MonitorDeviceInfo>> perferredDevices;
 
-    GetAudioRouteMsg(perferredDevices);
+    int32_t ret = GetAudioRouteMsg(perferredDevices);
 
     int32_t mapSize = perferredDevices.size();
     reply.WriteInt32(mapSize);
@@ -55,7 +55,9 @@ void MediaMonitorStub::HandleGetAudioRouteMsg(MessageParcel &data, MessageParcel
         reply.WriteString(it.second->deviceName_);
         reply.WriteString(it.second->address_);
         reply.WriteInt32(it.second->deviceCategory_);
+        reply.WriteInt32(it.second->usageOrSourceType_);
     }
+    reply.WriteInt32(ret);
 }
 } // namespace MediaMonitor
 } // namespace Media

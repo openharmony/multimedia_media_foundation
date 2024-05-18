@@ -44,6 +44,30 @@ if (hst_is_lite_sys) {
 }
 
 if (hst_is_lite_sys) {
+  group("media_monitor.para") {
+    deps = []
+  }
+} else {
+  ohos_prebuilt_etc("media_monitor.para") {
+    source = "etc/media_monitor.para"
+    part_name = "media_foundation"
+    module_install_dir = "etc/param"
+  }
+}
+
+if (hst_is_lite_sys) {
+  group("media_monitor.para.dac") {
+    deps = []
+  }
+} else {
+  ohos_prebuilt_etc("media_monitor.para.dac") {
+    source = "etc/media_monitor.para.dac"
+    part_name = "media_foundation"
+    module_install_dir = "etc/param"
+  }
+}
+
+if (hst_is_lite_sys) {
   group("media_monitor_init") {
     deps = []
   }
@@ -141,7 +165,11 @@ if (hst_is_lite_sys) {
     }
     install_enable = true
 
-    deps = [ ":media_monitor_common" ]
+    deps = [
+      ":media_monitor.para",
+      ":media_monitor.para.dac",
+      ":media_monitor_common",
+    ]
 
     sources = [
       "server/src/audio_memo.cpp",
@@ -164,10 +192,13 @@ if (hst_is_lite_sys) {
     external_deps = [
       "access_token:libaccesstoken_sdk",
       "audio_framework:audio_client",
+      "bundle_framework:appexecfwk_base",
+      "bundle_framework:appexecfwk_core",
       "c_utils:utils",
       "hicollie:libhicollie",
       "hilog:libhilog",
       "hisysevent:libhisysevent",
+      "init:libbegetutil",
       "ipc:ipc_single",
       "safwk:system_ability_fwk",
       "samgr:samgr_proxy",

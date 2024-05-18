@@ -16,8 +16,13 @@
 #ifndef MEDIA_MONITOR_POLICY_H
 #define MEDIA_MONITOR_POLICY_H
 
+#include <thread>
+#include <chrono>
+#include <atomic>
 #include <map>
+#include <vector>
 #include "event_bean.h"
+#include "monitor_utils.h"
 #include "media_event_base_writer.h"
 
 namespace OHOS {
@@ -32,9 +37,8 @@ public:
         return mediaMonitorPolicy;
     }
 
-    MediaMonitorPolicy()
-        : mediaEventBaseWriter_(MediaEventBaseWriter::GetMediaEventBaseWriter()) {}
-    ~MediaMonitorPolicy() = default;
+    MediaMonitorPolicy();
+    ~MediaMonitorPolicy();
 
     void WriteEvent(EventId eventId, std::shared_ptr<EventBean> &bean);
 
@@ -42,8 +46,41 @@ public:
     void WriteFaultEvent(EventId eventId, std::shared_ptr<EventBean> &bean);
     void WriteAggregationEvent(EventId eventId, std::shared_ptr<EventBean> &bean);
 
+    void HandDeviceUsageToEventVector(std::shared_ptr<EventBean> &deviceUsage);
+    void HandStreamUsageToEventVector(std::shared_ptr<EventBean> &streamUsage);
+    void HandBtUsageToEventVector(std::shared_ptr<EventBean> &btUsage);
+    void AddToEventVector(std::shared_ptr<EventBean> &bean);
+    void HandleExhaustedToEventVector(const std::string &appName);
+    void HandleCreateErrorToEventVector(std::shared_ptr<EventBean> &bean);
+    void HandleSilentPlaybackToEventVector(std::shared_ptr<EventBean> &bean);
+    void HandleUnderrunToEventVector(std::shared_ptr<EventBean> &bean);
+    void HandleCaptureMutedToEventVector(std::shared_ptr<EventBean> &bean);
+    void HandleVolumeToEventVector(std::shared_ptr<EventBean> &bean);
+
+    void WhetherToHiSysEvent();
+    void WriteInfo(int32_t fd, std::string &dumpString);
+
 private:
+    static constexpr int32_t DEFAULT_AGGREGATION_FREQUENCY = 1000;
+    static constexpr int32_t DEFAULT_AGGREGATION_TIME = 24 * 60;
+
+    void ReadParameter();
+    void StartTimeThread();
+    void StopTimeThread();
+    void TimeFunc();
+    void HandleToHiSysEvent();
+
+    uint64_t curruntTime_ = 0;
+    std::unique_ptr<std::thread> timeThread_ = nullptr;
+    std::atomic_bool startThread_ = true;
+
     MediaEventBaseWriter& mediaEventBaseWriter_;
+
+    std::mutex eventVectorMutex_;
+    std::vector<std::shared_ptr<EventBean>> eventVector_;
+
+    int32_t aggregationFrequency_ = DEFAULT_AGGREGATION_FREQUENCY;
+    int32_t aggregationTime_ = DEFAULT_AGGREGATION_TIME;
 };
 
 } // namespace MediaMonitor

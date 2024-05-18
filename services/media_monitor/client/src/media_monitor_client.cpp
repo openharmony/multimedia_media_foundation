@@ -40,15 +40,17 @@ void MediaMonitorClient::WriteLogMsg(std::shared_ptr<EventBean> &bean)
         static_cast<uint32_t>(MediaMonitorInterfaceCode::WRITE_LOG_MSG), data, reply, option);
 }
 
-void MediaMonitorClient::GetAudioRouteMsg(std::map<PerferredType, std::shared_ptr<MonitorDeviceInfo>> &perferredDevices)
+int32_t MediaMonitorClient::GetAudioRouteMsg(std::map<PerferredType,
+    std::shared_ptr<MonitorDeviceInfo>> &perferredDevices)
 {
     MessageParcel data;
     MessageParcel reply;
-    MessageOption option(MessageOption::TF_ASYNC);
+    MessageOption option;
 
     data.WriteInterfaceToken(GetDescriptor());
-    Remote()->SendRequest(
+    int32_t error = Remote()->SendRequest(
         static_cast<uint32_t>(MediaMonitorInterfaceCode::GET_AUDIO_ROUTE_MSG), data, reply, option);
+    FALSE_RETURN_V_MSG_E(error == ERR_NONE, error, "get Audio Route failed");
 
     int32_t mapSize = reply.ReadInt32();
     for (int32_t index = 0; index < mapSize; index++) {
@@ -58,8 +60,10 @@ void MediaMonitorClient::GetAudioRouteMsg(std::map<PerferredType, std::shared_pt
         deviceInfo->deviceName_ = reply.ReadString();
         deviceInfo->address_ = reply.ReadString();
         deviceInfo->deviceCategory_ = reply.ReadInt32();
+        deviceInfo->usageOrSourceType_ = reply.ReadInt32();
         perferredDevices.emplace(perferredType, deviceInfo);
     }
+    return reply.ReadInt32();
 }
 } // namespace MediaMonitor
 } // namespace Media

@@ -41,7 +41,7 @@ public:
      *
      * @param perferredDevices MonitorDeviceInfo map
      */
-    virtual void GetAudioRouteMsg(std::map<PerferredType,
+    virtual int32_t GetAudioRouteMsg(std::map<PerferredType,
         std::shared_ptr<MonitorDeviceInfo>> &perferredDevices) = 0;
 
 public:

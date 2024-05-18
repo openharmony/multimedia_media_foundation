@@ -18,6 +18,7 @@
 #include "audio_stream_info.h"
 #include "audio_source_type.h"
 #include "audio_info.h"
+#include "monitor_error.h"
 
 namespace OHOS {
 namespace Media {
@@ -39,25 +40,28 @@ void AudioMemo::UpdataRouteInfo(std::shared_ptr<EventBean> &bean)
             iter->second->deviceType_ = bean->GetIntValue("DEVICE_TYPE");
             iter->second->deviceName_ = bean->GetIntValue("DEVICE_NAME");
             iter->second->address_ = bean->GetIntValue("ADDRESS");
-            iter->second->deviceCategory_ = bean->GetIntValue("CATEGORY");
+            iter->second->deviceCategory_ = bean->GetIntValue("BT_TYPE");
+            iter->second->usageOrSourceType_ = bean->GetIntValue("STREAM_TYPE");
             isInDeviceMap = true;
         }
     }
-    if (isInDeviceMap) {
+    if (!isInDeviceMap) {
         std::shared_ptr<MonitorDeviceInfo> deviceInfo = std::make_shared<MonitorDeviceInfo>();
         deviceInfo->deviceType_ = bean->GetIntValue("DEVICE_TYPE");
         deviceInfo->deviceName_ = bean->GetIntValue("DEVICE_NAME");
         deviceInfo->address_ = bean->GetIntValue("ADDRESS");
-        deviceInfo->deviceCategory_ = bean->GetIntValue("CATEGORY");
+        deviceInfo->deviceCategory_ = bean->GetIntValue("BT_TYPE");
+        deviceInfo->usageOrSourceType_ = bean->GetIntValue("STREAM_TYPE");
         perferredDevices_.emplace(perferredType, deviceInfo);
     }
 }
 
-void AudioMemo::GetAudioRouteMsg(std::map<PerferredType, std::shared_ptr<MonitorDeviceInfo>> &perferredDevices)
+int32_t AudioMemo::GetAudioRouteMsg(std::map<PerferredType, std::shared_ptr<MonitorDeviceInfo>> &perferredDevices)
 {
     MEDIA_LOG_D("Begin get perferred device");
     std::lock_guard<std::mutex> lockEventMap(perferredDeviceMutex_);
     perferredDevices = perferredDevices_;
+    return SUCCESS;
 }
 
 PerferredType AudioMemo::GetPerferredType(std::shared_ptr<EventBean> &bean)
@@ -90,6 +94,46 @@ PerferredType AudioMemo::GetPerferredCaptureType(int32_t audioScene)
         return RECORD_CAPTURE;
     }
 }
+
+void AudioMemo::WriteInfo(int32_t fd, std::string &dumpString)
+{
+    if (fd != -1) {
+        std::lock_guard<std::mutex> lockEventMap(perferredDeviceMutex_);
+        if (perferredDevices_.size() == 0) {
+            dumpString += "No preferred device set.\n";
+            return;
+        }
+        dumpString += "Perferred Device\n";
+        for (auto &it : perferredDevices_) {
+            dumpString += "    perferred type: " + GetPerferredNameFromType(it.first) + "\n";
+            dumpString += "    device type: " + std::to_string(it.second->deviceType_) + "\n";
+            dumpString += "\n";
+        }
+    }
+}
+
+std::string AudioMemo::GetPerferredNameFromType(const PerferredType &type)
+{
+    std::string perferredName = "";
+    switch (type) {
+        case CALL_RENDER:
+            perferredName = "call render";
+            break;
+        case MEDIA_RENDER:
+            perferredName = "media render";
+            break;
+        case CALL_CAPTURE:
+            perferredName = "call capture";
+            break;
+        case RECORD_CAPTURE:
+            perferredName = "record capture";
+            break;
+        default:
+            break;
+    }
+    return perferredName;
+}
+
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS

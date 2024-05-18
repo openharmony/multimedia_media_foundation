@@ -195,7 +195,7 @@ std::string EventBean::GetStringValue(const std::string &key)
     if (stringMap_.find(key) != stringMap_.end()) {
         return stringMap_.find(key)->second;
     } else {
-        return "";
+        return "UNKNOWN";
     }
 }
 

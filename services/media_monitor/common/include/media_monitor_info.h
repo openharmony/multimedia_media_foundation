@@ -36,7 +36,7 @@ enum EventId {
     AUDIO_STREAM_CREATE_ERROR_STATS = 3,
     // AGGREGATION_EVENT
     BACKGROUND_SILENT_PLAYBACK = 4,
-    AUDIO_STREAM_UTILIZATION_STATS = 5,
+    STREAM_UTILIZATION_STATS = 5,
     AUDIO_DEVICE_UTILIZATION_STATS = 6,
     BT_UTILIZATION_STATS = 7,
     PERFORMANCE_UNDER_OVERRUN_STATS = 8,
@@ -68,6 +68,7 @@ struct MonitorDeviceInfo {
     std::string deviceName_ = "";
     std::string address_ = "";
     int32_t deviceCategory_ = -1;
+    int32_t usageOrSourceType_ = -1;
 };
 
 enum RendererState {
