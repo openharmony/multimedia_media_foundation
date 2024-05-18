@@ -41,10 +41,10 @@ void DumpAVBufferToFile(const std::string& para, const std::string& fileName, co
         return;
     }
     size_t bufferSize = buffer->memory_->GetSize();
-    FALSE_RETURN(bufferSize != 0);
+    FALSE_RETURN((bufferSize != 0) || (buffer->memory_->GetAddr() == nullptr));
     std::string mode = para + "b+";
     FILE* dumpFile = std::fopen(std::string(DUMP_FILE_DIR + fileName).c_str(), mode.c_str());
-    if (dumpFile == nullptr || buffer->memory_->GetAddr() == nullptr) {
+    if (dumpFile == nullptr) {
         MEDIA_LOG_E("dump buffer to file failed.");
         return;
     }
