@@ -73,12 +73,14 @@ private:
     void AddToStreamUsage(std::shared_ptr<EventBean> &bean, uint64_t curruntTime);
     void AddToCaptureMuteUsage(std::shared_ptr<EventBean> &bean, uint64_t curruntTime);
     void AddToVolumeVector(std::shared_ptr<EventBean> &bean, uint64_t curruntTime);
+    void AddToStreamPropertyVector(std::shared_ptr<EventBean> &bean, uint64_t curruntTime);
 
     void HandleDeviceChangeForDeviceUsage(std::shared_ptr<EventBean> &bean);
     void HandleDeviceChangeForCaptureMuted(std::shared_ptr<EventBean> &bean);
     void HandleDeviceChangeForVolume(std::shared_ptr<EventBean> &bean);
     void HandleDeviceChangeForDuration(const DeviceChangeEvent &event,
         std::shared_ptr<EventBean> &bean, std::shared_ptr<EventBean> &beanInVector);
+    void HandleStreamPropertyStats(std::shared_ptr<EventBean> &bean);
 
     AudioMemo& audioMemo_;
     MediaMonitorPolicy& mediaMonitorPolicy_;
@@ -87,6 +89,7 @@ private:
     std::vector<std::shared_ptr<EventBean>> streamUsageVector_;
     std::vector<std::shared_ptr<EventBean>> captureMutedVector_;
     std::vector<std::shared_ptr<EventBean>> volumeVector_;
+    std::vector<std::shared_ptr<EventBean>> streamPropertyVector_;
 
     // Record volume for stream state 2->5->2
     int32_t systemVol_ = -1;
