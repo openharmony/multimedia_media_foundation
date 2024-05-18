@@ -22,49 +22,37 @@
 #include "parameter.h"
 #include "osal/filesystem/file_system.h"
 
+namespace {
+    constexpr size_t DUMP_DATA_UNIT = 1; // data unit is 1 byte
+}
+
 namespace OHOS {
 namespace Media {
 std::map<std::string, FILE*> allDumpFileFds;
-void DumpAVBufferToFile(const std::string para, const std::string& fileName, const std::shared_ptr<AVBuffer>& buffer)
+void DumpAVBufferToFile(const std::string& para, const std::string& fileName, const std::shared_ptr<AVBuffer>& buffer)
 {
-    std::string dumpPara = para;
-    if (dumpPara.empty()) {
-        MEDIA_LOG_I("dumpPara is empty.");
+    MEDIA_LOG_D("dump avbuffer to %{public}s", fileName.c_str());
+    if (buffer == nullptr || buffer->memory_ == nullptr) {
+        MEDIA_LOG_E("buffer or memory is nullptr.");
         return;
     }
-    if (buffer == nullptr) {
-        MEDIA_LOG_I("buffer is nullptr.");
-        return;
-    }
-    if (buffer->memory_ == nullptr) {
-        MEDIA_LOG_I("memory is nullptr.");
+    if ((para != "w" && para != "a") || fileName.empty()) {
+        MEDIA_LOG_E("para or fileName is invalid.");
         return;
     }
     size_t bufferSize = buffer->memory_->GetSize();
     FALSE_RETURN(bufferSize != 0);
-    if (dumpPara != "w" && dumpPara != "a") {
-        MEDIA_LOG_I("dumpPara is invalid.");
+    std::string mode = para + "b+";
+    FILE* dumpFile = std::fopen(std::string(DUMP_FILE_DIR + fileName).c_str(), mode.c_str());
+    if (dumpFile == nullptr || buffer->memory_->GetAddr() == nullptr) {
+        MEDIA_LOG_E("dump buffer to file failed.");
         return;
     }
-    std::string mode = dumpPara + "b+";
-    auto iter = allDumpFileFds.find(fileName);
-    if (!FileSystem::IsExists(DUMP_FILE_DIR + fileName) || iter == allDumpFileFds.end()
-        || allDumpFileFds.find(fileName)->second == nullptr) {
-        allDumpFileFds.insert({fileName, std::fopen(std::string(DUMP_FILE_DIR + fileName).c_str(), mode.c_str())});
-    }
-    if (buffer->memory_->GetAddr() == nullptr) {
-        MEDIA_LOG_I("dump buffer data is null.");
-        return;
-    }
-    if (allDumpFileFds.find(fileName)->second == nullptr) {
-        MEDIA_LOG_I("dump file is null.");
-        return;
-    }
-    int ret = fwrite(reinterpret_cast<const char*>(buffer->memory_->GetAddr()),
-        1, bufferSize, allDumpFileFds.find(fileName)->second);
+    int ret = fwrite(reinterpret_cast<const char*>(buffer->memory_->GetAddr()), DUMP_DATA_UNIT, bufferSize, dumpFile);
     if (ret < 0) {
         MEDIA_LOG_I("dump is fail.");
     }
+    std::fclose(dumpFile);
 }
 } // Media
 } // OHOS
