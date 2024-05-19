@@ -66,6 +66,16 @@ PlayStrategy* MediaSource::GetPlayStrategy() const
     return playStrategy_;
 }
 
+void MediaSource::SetMimeType(const std::string& mimeType)
+{
+    mimeType_ = mimeType;
+}
+
+std::string MediaSource::GetMimeType() const
+{
+    return mimeType_;
+}
+
 #ifndef OHOS_LITE
 std::shared_ptr<IMediaDataSource> MediaSource::GetDataSrc() const
 {
