@@ -373,6 +373,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     // Double
     {Tag::VIDEO_CAPTURE_RATE, defaultDouble},
     {Tag::VIDEO_FRAME_RATE, defaultDouble},
+    {Tag::VIDEO_SAR, defaultDouble},
     {Tag::VIDEO_ENCODER_MSE, defaultDouble},
     // Bool
     {Tag::VIDEO_COLOR_RANGE, defaultBool},
@@ -406,6 +407,9 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::USER_FRAME_PTS, defaultInt64},
     {Tag::USER_PUSH_DATA_TIME, defaultInt64},
     {Tag::MEDIA_TIME_STAMP, defaultInt64},
+    {Tag::MEDIA_CONTAINER_START_TIME, defaultInt64},
+    {Tag::BUFFER_DECODING_TIMESTAMP, defaultInt64},
+    {Tag::BUFFER_DURATION, defaultInt64},
     // AudioChannelLayout UINT64_T
     {Tag::AUDIO_CHANNEL_LAYOUT, defaultAudioChannelLayout},
     {Tag::AUDIO_OUTPUT_CHANNEL_LAYOUT, defaultAudioChannelLayout},

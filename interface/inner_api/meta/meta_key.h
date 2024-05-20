@@ -82,6 +82,7 @@ public:
     static constexpr const char MEDIA_CODEC_MODE[] = "media.codec.mode"; ///< codec mode.
     static constexpr const char MEDIA_POSITION[] = "media.position";     ///< The byte position within media stream/file
     static constexpr const char MEDIA_START_TIME[] = "media.start.time"; ///< The start time of one track
+    static constexpr const char MEDIA_CONTAINER_START_TIME[] = "start_time"; ///< int64_t, The start time of container
     static constexpr const char MEDIA_SEEKABLE[] = "media.seekable"; ///< enum Seekable: Seekable status of the media
     static constexpr const char MEDIA_PLAYBACK_SPEED[] = "media.playback.speed"; ///< double, playback speed
     static constexpr const char MEDIA_TYPE[] =
@@ -98,6 +99,10 @@ public:
     static constexpr const char MEDIA_LEVEL[] = "codec_level";                 ///< codec level, Compatible 4.0
     static constexpr const char MEDIA_TIME_STAMP[] = "timeStamp";              ///< time stamp
     static constexpr const char MEDIA_END_OF_STREAM[] = "endOfStream";         ///< end of stream
+
+    /* -------------------- buffer meta tag -------------------- */
+    static constexpr const char BUFFER_DECODING_TIMESTAMP[] = "decoding_timestamp";  ///< int64_t, decoding timestamp.
+    static constexpr const char BUFFER_DURATION[] = "buffer_duration";               ///< int64_t, buffer duration
 
     /* -------------------- audio universal tag -------------------- */
     static constexpr const char AUDIO_CHANNEL_COUNT[] = "channel_count"; ///< audio channel count
@@ -152,6 +157,7 @@ public:
     static constexpr const char VIDEO_STRIDE[] = "stride";                             ///< int32_t, video stride
     static constexpr const char VIDEO_DISPLAY_WIDTH[] = "display_width";               ///< int32_t, video display width
     static constexpr const char VIDEO_DISPLAY_HEIGHT[] = "display_height"; ///< int32_t, video display height
+    static constexpr const char VIDEO_SAR[] = "video_sar";                             ///< double, sample aspect ratio
     static constexpr const char VIDEO_FRAME_RATE_ADAPTIVE_MODE[] =
         "frame_rate_adaptive_mode";                            ///< bool, video is framerate adaptive mode
     static constexpr const char VIDEO_DELAY[] = "video_delay"; ///< video delay

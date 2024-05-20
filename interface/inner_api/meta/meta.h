@@ -284,9 +284,12 @@ public:
 
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::APP_FULL_TOKEN_ID or
+        tagCharSeq == Tag::BUFFER_DECODING_TIMESTAMP or
+        tagCharSeq == Tag::BUFFER_DURATION or
         tagCharSeq == Tag::MEDIA_DURATION or
         tagCharSeq == Tag::MEDIA_BITRATE or
         tagCharSeq == Tag::MEDIA_START_TIME or
+        tagCharSeq == Tag::MEDIA_CONTAINER_START_TIME or
         tagCharSeq == Tag::USER_FRAME_PTS or
         tagCharSeq == Tag::USER_PUSH_DATA_TIME or
         tagCharSeq == Tag::MEDIA_FILE_SIZE or
@@ -302,6 +305,7 @@ public:
 
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_FRAME_RATE or
         tagCharSeq == Tag::VIDEO_CAPTURE_RATE or
+        tagCharSeq == Tag::VIDEO_SAR or
         tagCharSeq == Tag::VIDEO_ENCODER_MSE, double, AnyValueType::DOUBLE);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::MEDIA_FILE_TYPE, Plugins::FileType, AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(
