@@ -524,6 +524,9 @@ map<TagType, int64_t> testInt64Data = {
     {Tag::MEDIA_FILE_SIZE, 1234567890007},
     {Tag::MEDIA_POSITION, 1234567890008},
     {Tag::MEDIA_TIME_STAMP, 1234567890009},
+    {Tag::MEDIA_CONTAINER_START_TIME, 1234567890010},
+    {Tag::BUFFER_DECODING_TIMESTAMP, 1234567890011},
+    {Tag::BUFFER_DURATION, 1234567890012},
     {Tag::AUDIO_CHANNEL_LAYOUT, static_cast<int64_t>(Plugins::AudioChannelLayout::CH_10POINT2)},
     {Tag::AUDIO_OUTPUT_CHANNEL_LAYOUT, static_cast<int64_t>(Plugins::AudioChannelLayout::HOA_ORDER3_FUMA)}
 };
@@ -582,6 +585,7 @@ map<TagType, double> testDoubleData = {
     // Double
     {Tag::VIDEO_FRAME_RATE, 1.01},
     {Tag::VIDEO_CAPTURE_RATE, 1.02},
+    {Tag::VIDEO_SAR, 1.03},
     {Tag::VIDEO_ENCODER_MSE, 29.01}
 };
 
