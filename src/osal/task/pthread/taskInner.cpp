@@ -102,8 +102,8 @@ void TaskInner::Stop()
         return;
     }
     MEDIA_LOG_I_T(">> " PUBLIC_LOG_S " Stop", name_.c_str());
-    pipelineThread_->LockJobState();
     AutoLock lock1(jobMutex_);
+    pipelineThread_->LockJobState();
     AutoLock lock2(stateMutex_);
     if (runningState_.load() == RunningState::STOPPED) {
         pipelineThread_->UnLockJobState(false);
@@ -152,8 +152,8 @@ void TaskInner::Pause()
         }
     }
     MEDIA_LOG_I_FALSE_D_T(isStateLogEnabled_.load(), PUBLIC_LOG_S " Pause", name_.c_str());
-    pipelineThread_->LockJobState();
     AutoLock lock1(jobMutex_);
+    pipelineThread_->LockJobState();
     AutoLock lock2(stateMutex_);
     RunningState state = runningState_.load();
     if (state != RunningState::STARTED) {
