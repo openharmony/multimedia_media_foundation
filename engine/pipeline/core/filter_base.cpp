@@ -57,7 +57,7 @@ std::shared_ptr<OutPort> FilterBase::GetOutPort(const std::string& name)
 
 ErrorCode FilterBase::Prepare()
 {
-    MEDIA_LOG_I("prepare called");
+    MEDIA_LOG_I("prepare is called");
     FALSE_RETURN_V_MSG_W(state_ == FilterState::INITIALIZED, ErrorCode::ERROR_INVALID_OPERATION,
                          "filter is not in init state");
     state_ = FilterState::PREPARING;
