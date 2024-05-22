@@ -76,6 +76,7 @@ ErrorCode FilterBase::Start()
 
 ErrorCode FilterBase::Pause()
 {
+    MEDIA_LOG_I("pause called");
     state_ = FilterState::PAUSED;
     return ErrorCode::SUCCESS;
 }
