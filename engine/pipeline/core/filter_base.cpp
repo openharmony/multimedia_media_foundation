@@ -70,6 +70,7 @@ ErrorCode FilterBase::Prepare()
 
 ErrorCode FilterBase::Start()
 {
+    MEDIA_LOG_I("start called");
     state_ = FilterState::RUNNING;
     return ErrorCode::SUCCESS;
 }
