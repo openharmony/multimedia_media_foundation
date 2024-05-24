@@ -38,7 +38,7 @@ public:
 
     Mutex operator=(const Mutex&) = delete;
 
-    void lock();
+    virtual void lock();
 
     bool try_lock();
 
@@ -48,6 +48,23 @@ private:
     pthread_mutex_t nativeHandle_;
     bool created_;
     friend class ConditionVariable;
+};
+
+class FairMutex : public Mutex {
+public:
+    FairMutex();
+
+    virtual ~FairMutex();
+
+    FairMutex(const FairMutex&) = delete;
+
+    FairMutex& operator=(const FairMutex&) = delete;
+
+    void lock() override;
+
+private:
+    pthread_mutex_t failLockHandle_;
+    bool created_{false};
 };
 #endif
 } // namespace Media
