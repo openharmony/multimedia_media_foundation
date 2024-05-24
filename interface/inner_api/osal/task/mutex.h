@@ -60,9 +60,11 @@ public:
 
     FairMutex& operator=(const FairMutex&) = delete;
 
-    virtual void lock();
+    void lock() override;
+
 private:
     pthread_mutex_t failLockHandle_;
+    bool created_{false};
 }
 
 #endif
