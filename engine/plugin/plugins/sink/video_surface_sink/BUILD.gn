@@ -54,7 +54,7 @@ ohos_source_set("std_video_surface_sink") {
       cfi_cross_dso = true
       debug = false
       integer_overflow = true
-    }
+  }
   }
 }
 
