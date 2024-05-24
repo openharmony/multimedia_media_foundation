@@ -65,8 +65,7 @@ public:
 private:
     pthread_mutex_t failLockHandle_;
     bool created_{false};
-}
-
+};
 #endif
 } // namespace Media
 } // namespace OHOS
