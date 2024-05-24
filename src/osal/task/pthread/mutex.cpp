@@ -66,5 +66,16 @@ void Mutex::unlock()
     }
     pthread_mutex_unlock(&nativeHandle_);
 }
+
+FairMutex::FairMutex() : Mutex() {}
+
+FairMutex::~FairMutex() {}
+
+void FairMutex::lock()
+{
+    pthread_mutex_lock(&failLockHandle_);
+    Mutex::lock();
+    pthread_mutex_unlock(&failLockHandle_);
+}
 } // namespace Media
 } // namespace OHOS
