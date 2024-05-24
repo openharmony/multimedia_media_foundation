@@ -153,8 +153,7 @@ void EventAggregate::HandleDeviceChangeForDeviceUsage(std::shared_ptr<EventBean>
     MEDIA_LOG_D("Handle device change for device event aggregate.");
     auto isExist = [&bean](const std::shared_ptr<EventBean> &deviceUsageBean) {
         if (bean->GetIntValue("ISOUTPUT") == deviceUsageBean->GetIntValue("IS_PLAYBACK") &&
-            bean->GetIntValue("STREAMID") == deviceUsageBean->GetIntValue("STREAMID") &&
-            bean->GetIntValue("STREAMTYPE") == deviceUsageBean->GetIntValue("STREAM_TYPE")) {
+            bean->GetIntValue("STREAMID") == deviceUsageBean->GetIntValue("STREAMID")) {
             MEDIA_LOG_D("Find the existing device usage");
             return true;
         }
@@ -178,8 +177,7 @@ void EventAggregate::HandleDeviceChangeForCaptureMuted(std::shared_ptr<EventBean
         return;
     }
     auto isExist = [&bean](const std::shared_ptr<EventBean> &captureMutedBean) {
-        if (bean->GetIntValue("STREAMID") == captureMutedBean->GetIntValue("STREAMID") &&
-            bean->GetIntValue("STREAM_TYPE") == captureMutedBean->GetIntValue("STREAM_TYPE")) {
+        if (bean->GetIntValue("STREAMID") == captureMutedBean->GetIntValue("STREAMID")) {
             MEDIA_LOG_D("Find the existing capture muted");
             return true;
         }
