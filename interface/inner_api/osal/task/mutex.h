@@ -63,8 +63,7 @@ public:
     virtual void lock();
 private:
     pthread_mutex_t failLockHandle_;
-}
-
+};
 #endif
 } // namespace Media
 } // namespace OHOS
