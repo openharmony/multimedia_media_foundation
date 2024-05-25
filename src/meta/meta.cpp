@@ -282,6 +282,8 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_STRIDE, defaultInt32},
     {Tag::VIDEO_DISPLAY_WIDTH, defaultInt32},
     {Tag::VIDEO_DISPLAY_HEIGHT, defaultInt32},
+    {Tag::VIDEO_PIC_WIDTH, defaultInt32},
+    {Tag::VIDEO_PIC_HEIGHT, defaultInt32},
     {Tag::VIDEO_ENCODER_TEMPORAL_GOP_SIZE, defaultInt32},
     {Tag::VIDEO_ENCODER_LTR_FRAME_COUNT, defaultInt32},
     {Tag::VIDEO_PER_FRAME_POC, defaultInt32},
