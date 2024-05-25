@@ -87,11 +87,11 @@ if (hst_is_lite_sys) {
         "ipc:ipc_single",
       ]
       sanitize = {
-      cfi = true
-      cfi_cross_dso = true
-      debug = false
-      integer_overflow = true
-    }
+        cfi = true
+        cfi_cross_dso = true
+        debug = false
+        integer_overflow = true
+      }
     }
   }
 }

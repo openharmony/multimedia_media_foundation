@@ -43,11 +43,11 @@ if (hst_is_standard_sys) {
       "hilog:libhilog",
     ]
     sanitize = {
-    cfi = true
-    cfi_cross_dso = true
-    debug = false
-    integer_overflow = true
-  }
+      cfi = true
+      cfi_cross_dso = true
+      debug = false
+      integer_overflow = true
+    }
     relative_install_dir = "media/histreamer_plugins"
   }
 }
