@@ -217,7 +217,7 @@ Status Pipeline::Release()
         }
         filters_.clear();
     });
-    MEDIA_LOG_I("Stop done.");
+    MEDIA_LOG_I("Release done.");
     return Status::OK;
 }
 
