@@ -223,6 +223,7 @@ Status Pipeline::Release()
 
 Status Pipeline::AddHeadFilters(std::vector<std::shared_ptr<Filter>> filtersIn)
 {
+    MEDIA_LOG_I("AddHeadFilters enter.");
     std::vector<std::shared_ptr<Filter>> filtersToAdd;
     for (auto& filterIn : filtersIn) {
         bool matched = false;
