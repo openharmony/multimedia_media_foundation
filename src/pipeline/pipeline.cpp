@@ -246,6 +246,7 @@ Status Pipeline::AddHeadFilters(std::vector<std::shared_ptr<Filter>> filtersIn)
         AutoLock lock(mutex_);
         this->filters_.insert(this->filters_.end(), filtersToAdd.begin(), filtersToAdd.end());
     });
+    MEDIA_LOG_I("AddHeadFilters done.");
     return Status::OK;
 }
 
