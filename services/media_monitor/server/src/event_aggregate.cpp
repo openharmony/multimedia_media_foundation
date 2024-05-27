@@ -173,10 +173,6 @@ void EventAggregate::HandleDeviceChangeForCaptureMuted(std::shared_ptr<EventBean
         MEDIA_LOG_W("HandleDeviceChangeForCaptureMuted is playback");
         return;
     }
-    if (!bean->GetIntValue("MUTED")) {
-        MEDIA_LOG_W("HandleDeviceChangeForCaptureMuted is not muted");
-        return;
-    }
     auto isExist = [&bean](const std::shared_ptr<EventBean> &captureMutedBean) {
         if (bean->GetIntValue("STREAMID") == captureMutedBean->GetIntValue("STREAMID")) {
             MEDIA_LOG_D("Find the existing capture muted");
@@ -185,7 +181,7 @@ void EventAggregate::HandleDeviceChangeForCaptureMuted(std::shared_ptr<EventBean
         return false;
     };
     auto it = std::find_if(captureMutedVector_.begin(), captureMutedVector_.end(), isExist);
-    if (it != captureMutedVector_.end()) {
+    if (it != captureMutedVector_.end() && (*it)->GetIntValue("MUTED")) {
         HandleDeviceChangeForDuration(FOR_CAPTURE_MUTE_EVENT, bean, *it);
     }
 }
