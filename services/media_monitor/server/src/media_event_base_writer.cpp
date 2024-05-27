@@ -277,7 +277,7 @@ void MediaEventBaseWriter::WriteAudioPipeChange(std::shared_ptr<EventBean> &bean
         MEDIA_LOG_E("eventBean is nullptr");
         return;
     }
-    HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "PERFORMANCE_UNDERRUN_STATISTIC",
+    HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "AUDIO_PIPE_CHANGE",
         HiviewDFX::HiSysEvent::EventType::BEHAVIOR,
         "APP_NAME", bean->GetStringValue("APP_NAME"),
         "STREAM_TYPE", static_cast<uint>(bean->GetIntValue("STREAM_TYPE")),
