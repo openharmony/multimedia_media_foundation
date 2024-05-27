@@ -161,6 +161,7 @@ void EventAggregate::HandleDeviceChangeForDeviceUsage(std::shared_ptr<EventBean>
     };
     auto it = std::find_if(deviceUsageVector_.begin(), deviceUsageVector_.end(), isExist);
     if (it != deviceUsageVector_.end()) {
+        bean->Add("STREAM_TYPE", (*it)->GetIntValue("STREAM_TYPE"));
         HandleDeviceChangeForDuration(FOR_DEVICE_EVENT, bean, *it);
     }
 }
