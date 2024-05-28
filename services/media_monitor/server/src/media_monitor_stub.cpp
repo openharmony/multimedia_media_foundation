@@ -43,6 +43,7 @@ void MediaMonitorStub::HandleWriteLogMsg(MessageParcel &data, MessageParcel &rep
 
 void MediaMonitorStub::HandleGetAudioRouteMsg(MessageParcel &data, MessageParcel &reply)
 {
+    MEDIA_LOG_I("HandleGetAudioRouteMsg in");
     std::map<PerferredType, std::shared_ptr<MonitorDeviceInfo>> perferredDevices;
 
     int32_t ret = GetAudioRouteMsg(perferredDevices);
