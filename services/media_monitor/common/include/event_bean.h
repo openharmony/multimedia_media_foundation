@@ -63,9 +63,9 @@ public:
     void ReadFromParcel(MessageParcel &parcel);
 
 private:
-    ModuleId moduleId_;
-    EventId eventId_;
-    EventType eventType_;
+    ModuleId moduleId_ = UNKNOW_MODULEID;
+    EventId eventId_ = UNKNOW_EVENTID;
+    EventType eventType_ = UNKNOW_EVENTTYPE;
     std::map<std::string, int32_t> intMap_;
     std::map<std::string, std::string> stringMap_;
     std::map<std::string, uint64_t> uint64Map_;
