@@ -20,7 +20,6 @@
 #include <mutex>
 #include <queue>
 #include <condition_variable>
-#include "accesstoken_kit.h"
 #include "ipc_skeleton.h"
 #include "iremote_stub.h"
 #include "system_ability.h"

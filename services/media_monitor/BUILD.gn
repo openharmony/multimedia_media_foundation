@@ -137,7 +137,6 @@ if (hst_is_lite_sys) {
     external_deps = [
       "c_utils:utils",
       "hilog:libhilog",
-      "hisysevent:libhisysevent",
       "ipc:ipc_single",
       "samgr:samgr_proxy",
     ]
@@ -190,19 +189,23 @@ if (hst_is_lite_sys) {
     ]
 
     external_deps = [
-      "access_token:libaccesstoken_sdk",
       "audio_framework:audio_client",
       "bundle_framework:appexecfwk_base",
       "bundle_framework:appexecfwk_core",
       "c_utils:utils",
-      "hicollie:libhicollie",
       "hilog:libhilog",
-      "hisysevent:libhisysevent",
       "init:libbegetutil",
       "ipc:ipc_single",
       "safwk:system_ability_fwk",
       "samgr:samgr_proxy",
     ]
+
+    defines = []
+
+    if (has_hisysevent_part) {
+      defines += [ "MONITOR_ENABLE_HISYSEVENT" ]
+      external_deps += [ "hisysevent:libhisysevent" ]
+    }
 
     subsystem_name = "multimedia"
     part_name = "media_foundation"
@@ -244,7 +247,6 @@ if (hst_is_lite_sys) {
 
     external_deps = [
       "c_utils:utils",
-      "eventhandler:libeventhandler",
       "hilog:libhilog",
       "init:libbegetutil",
       "ipc:ipc_single",

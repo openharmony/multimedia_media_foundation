@@ -75,12 +75,8 @@
               "window_manager",
               "ffmpeg",
               "curl",
-              "access_token",
               "safwk",
               "samgr",
-              "c_utils",
-              "hicollie",
-              "eventhandler",
               "bundle_framework"
           ]
         },

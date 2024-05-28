@@ -119,3 +119,10 @@ if (hst_is_mini_sys) {
   media_foundation_enable_plugin_http_source = true
   media_foundation_enable_plugin_hdi_adapter = true
 }
+
+if (defined(global_parts_info) &&
+    defined(global_parts_info.hiviewdfx_hisysevent)) {
+  has_hisysevent_part = true
+} else {
+  has_hisysevent_part = false
+}
