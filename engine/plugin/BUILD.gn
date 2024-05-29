@@ -86,6 +86,12 @@ if (hst_is_lite_sys) {
         "hilog:libhilog",
         "ipc:ipc_single",
       ]
+      sanitize = {
+        cfi = true
+        cfi_cross_dso = true
+        debug = false
+        integer_overflow = true
+      }
     }
   }
 }
