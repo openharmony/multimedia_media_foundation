@@ -96,7 +96,10 @@ public:
         tag == Tag::MEDIA_BITRATE or
         tag == Tag::MEDIA_START_TIME or
         tag == Tag::USER_FRAME_PTS or
-        tag == Tag::USER_PUSH_DATA_TIME, int64_t);
+        tag == Tag::USER_PUSH_DATA_TIME or
+        tag == Tag::USER_PUSH_DATA_TIME or
+        tag == Tag::SUBTITLE_PTS or
+        tag == Tag::SUBTITLE_DURATION, int64_t);
 
     DEFINE_INSERT_GET_FUNC(
         tag == Tag::MEDIA_FILE_SIZE or
@@ -120,7 +123,8 @@ public:
         tag == Tag::USER_TIME_SYNC_RESULT or
         tag == Tag::USER_AV_SYNC_GROUP_INFO or
         tag == Tag::USER_SHARED_MEMORY_FD or
-        tag == Tag::MEDIA_LYRICS, std::string);
+        tag == Tag::MEDIA_LYRICS or
+        tag == Tag::SUBTITLE_TEXT, std::string);
     Meta& operator=(const Meta& other)
     {
         map_ = other.map_;

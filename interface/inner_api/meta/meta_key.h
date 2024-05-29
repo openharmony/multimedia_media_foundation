@@ -331,6 +331,10 @@ public:
     static constexpr const char RECORDER_AUDIO_CHANNEL_COUNT[] = "audioChannelCount";
     static constexpr const char RECORDER_AUDIO_BITRATE[] = "audioBitrate";
     static constexpr const char RECORDER_START_LATENCY[] = "startLatency";
+    
+    static constexpr const char SUBTITLE_TEXT[] = "subtitle_text";
+    static constexpr const char SUBTITLE_PTS[] = "subtitle_pts";
+    static constexpr const char SUBTITLE_DURATION[] = "subtitle_duration";
 /* -------------------- av player tag -------------------- */
     static constexpr const char AV_PLAYER_ERR_CODE[] = "av_player_errCode";
     static constexpr const char AV_PLAYER_ERR_MSG[] = "av_player_errMsg";
