@@ -22,6 +22,9 @@ using namespace std;
 namespace OHOS {
 namespace Media {
 namespace MediaMonitor {
+
+constexpr int MAX_MAP_SIZE = 1000;
+
 MediaMonitorClient::MediaMonitorClient(const sptr<IRemoteObject> &impl)
     : IRemoteProxy<IMediaMonitor>(impl)
 {
@@ -53,6 +56,10 @@ int32_t MediaMonitorClient::GetAudioRouteMsg(std::map<PerferredType,
     FALSE_RETURN_V_MSG_E(error == ERR_NONE, error, "get Audio Route failed");
 
     int32_t mapSize = reply.ReadInt32();
+    if (mapSize > MAX_MAP_SIZE) {
+        MEDIA_LOG_E("The size of mapSize exceeds the maximum value");
+        return ERR_INVALID_OPERATION;
+    }
     for (int32_t index = 0; index < mapSize; index++) {
         shared_ptr<MonitorDeviceInfo> deviceInfo = std::make_shared<MonitorDeviceInfo>();
         PerferredType perferredType = static_cast<PerferredType>(reply.ReadInt32());

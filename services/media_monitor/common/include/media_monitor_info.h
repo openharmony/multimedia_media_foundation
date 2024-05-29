@@ -24,11 +24,13 @@ namespace Media {
 namespace MediaMonitor {
 
 enum ModuleId {
+    UNKNOW_MODULEID = -1,
     AUDIO = 0,
     MEDIA = 1,
 };
 
 enum EventId {
+    UNKNOW_EVENTID = -1,
     // FAULT_EVENT
     LOAD_CONFIG_ERROR = 0,
     LOAD_EFFECT_ENGINE_ERROR = 1,
@@ -59,6 +61,7 @@ enum EventId {
 };
 
 enum EventType {
+    UNKNOW_EVENTTYPE = -1,
     FAULT_EVENT = 0,
     BEHAVIOR_EVENT = 1,
     FREQUENCY_AGGREGATION_EVENT = 2,

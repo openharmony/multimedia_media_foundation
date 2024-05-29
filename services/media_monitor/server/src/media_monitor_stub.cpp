@@ -47,7 +47,7 @@ void MediaMonitorStub::HandleGetAudioRouteMsg(MessageParcel &data, MessageParcel
 
     int32_t ret = GetAudioRouteMsg(perferredDevices);
 
-    int32_t mapSize = perferredDevices.size();
+    int32_t mapSize = static_cast<int32_t>(perferredDevices.size());
     reply.WriteInt32(mapSize);
     for (auto &it : perferredDevices) {
         reply.WriteInt32(static_cast<int32_t>(it.first));
