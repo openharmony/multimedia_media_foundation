@@ -538,6 +538,17 @@ void PluginList::AddAmrnbAudioEncoderPlugins()
     pluginDescriptionList_.push_back(amrnbAudioEncoderPlugin);
 }
 
+void PluginList::AddMp3AudioEncoderPlugins()
+{
+    PluginDescription mp3AudioEncoderPlugin;
+    mp3AudioEncoderPlugin.pluginName = "OH.Media.Codec.Encoder.Audio.Mp3";
+    mp3AudioEncoderPlugin.packageName = "Mp3AudioEncoder";
+    mp3AudioEncoderPlugin.pluginType = PluginType::AUDIO_ENCODER;
+    mp3AudioEncoderPlugin.cap = "audio/mpeg";
+    mp3AudioEncoderPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(mp3AudioEncoderPlugin);
+}
+
 void PluginList::AddFFmpegMuxerPlugins()
 {
     PluginDescription mp4MuxerPlugin;
@@ -563,6 +574,14 @@ void PluginList::AddFFmpegMuxerPlugins()
     amrMuxerPlugin.cap = "media/amr";
     amrMuxerPlugin.rank = DEFAULT_RANK;
     pluginDescriptionList_.push_back(amrMuxerPlugin);
+
+    PluginDescription mp3MuxerPlugin;
+    mp3MuxerPlugin.pluginName = "ffmpegMux_mp3";
+    mp3MuxerPlugin.packageName = "FFmpegMuxer";
+    mp3MuxerPlugin.pluginType = PluginType::MUXER;
+    mp3MuxerPlugin.cap = "media/mp3";
+    mp3MuxerPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(mp3MuxerPlugin);
 }
 
 } // namespace Plugins
