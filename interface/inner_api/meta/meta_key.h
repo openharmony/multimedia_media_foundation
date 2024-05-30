@@ -99,6 +99,7 @@ public:
     static constexpr const char MEDIA_LEVEL[] = "codec_level";                 ///< codec level, Compatible 4.0
     static constexpr const char MEDIA_TIME_STAMP[] = "timeStamp";              ///< time stamp
     static constexpr const char MEDIA_END_OF_STREAM[] = "endOfStream";         ///< end of stream
+    static constexpr const char MEDIA_AVAILABLE_BITRATES[] = "available_bitRates";         ///< available bit ates
 
     /* -------------------- buffer meta tag -------------------- */
     static constexpr const char BUFFER_DECODING_TIMESTAMP[] = "decoding_timestamp";  ///< int64_t, decoding timestamp.

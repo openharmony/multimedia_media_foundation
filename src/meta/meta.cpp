@@ -430,6 +430,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_BIT_STREAM_FORMAT, defaultVectorVideoBitStreamFormat},
     // vector<uint8_t>
     {Tag::DRM_CENC_INFO, defaultVectorUInt8},
+    {Tag::MEDIA_AVAILABLE_BITRATES, defaultVectorUInt8},
     // Uint32
     {Tag::DRM_DECRYPT_AVG_SIZE, defaultUInt32},
     {Tag::DRM_DECRYPT_AVG_DURATION, defaultUInt32},
