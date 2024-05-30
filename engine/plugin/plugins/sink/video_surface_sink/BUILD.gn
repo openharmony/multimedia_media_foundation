@@ -49,12 +49,6 @@ ohos_source_set("std_video_surface_sink") {
       "hilog:libhilog",
       "init:libbeget_proxy",
     ]
-    sanitize = {
-      cfi = true
-      cfi_cross_dso = true
-      debug = false
-      integer_overflow = true
-    }
   }
 }
 
