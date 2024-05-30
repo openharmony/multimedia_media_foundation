@@ -49,7 +49,7 @@ void Filter::LinkPipeLine(const std::string& groupId)
             case FilterType::FILTERTYPE_VENC:
             case FilterType::FILTERTYPE_VDEC:
             case FilterType::VIDEO_CAPTURE:
-                taskType = TaskType::VIDEO;
+                taskType = TaskType::SINGLETON;
                 break;
             case FilterType::FILTERTYPE_ASINK:
             case FilterType::AUDIO_CAPTURE:
