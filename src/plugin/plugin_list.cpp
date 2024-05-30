@@ -103,6 +103,7 @@ PluginList::PluginList()
     AddOpusAudioEncoderPlugins();
     AddAmrwbAudioEncoderPlugins();
     AddAmrnbAudioEncoderPlugins();
+    AddMp3AudioEncoderPlugins();
     AddFFmpegMuxerPlugins();
 }
 
