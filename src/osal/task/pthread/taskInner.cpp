@@ -63,9 +63,9 @@ void TaskInner::DeInit()
 {
     MEDIA_LOG_I("task " PUBLIC_LOG_S " DeInit called", name_.c_str());
     {
-        AutoLock lock(stateMutex_);
+        AutoLock lock1(jobMutex_);
+        AutoLock lock2(stateMutex_);
         runningState_ = RunningState::STOPPED;
-        AutoLock lock2(jobMutex_);
         topProcessUs_ = -1;
     }
     pipelineThread_->RemoveTask(shared_from_this());
@@ -101,13 +101,13 @@ void TaskInner::Stop()
         return;
     }
     MEDIA_LOG_I("task " PUBLIC_LOG_S " Stop entered", name_.c_str());
+    AutoLock lock1(jobMutex_);
     pipelineThread_->LockJobState();
-    AutoLock lock(stateMutex_);
+    AutoLock lock2(stateMutex_);
     if (runningState_.load() == RunningState::STOPPED) {
         pipelineThread_->UnLockJobState(false);
         return;
     }
-    AutoLock lock2(jobMutex_);
     runningState_ = RunningState::STOPPED;
     topProcessUs_ = -1;
     pipelineThread_->UnLockJobState(true);
@@ -151,14 +151,14 @@ void TaskInner::Pause()
         }
     }
     MEDIA_LOG_I_FALSE_D(isStateLogEnabled_.load(), "task " PUBLIC_LOG_S " Pause called", name_.c_str());
+    AutoLock lock1(jobMutex_);
     pipelineThread_->LockJobState();
-    AutoLock lock(stateMutex_);
+    AutoLock lock2(stateMutex_);
     RunningState state = runningState_.load();
     if (state != RunningState::STARTED) {
         pipelineThread_->UnLockJobState(false);
         return;
     }
-    AutoLock lock2(jobMutex_);
     runningState_ = RunningState::PAUSED;
     topProcessUs_ = -1;
     pipelineThread_->UnLockJobState(true);
@@ -255,6 +255,7 @@ int64_t TaskInner::NextJobUs()
 
 void TaskInner::HandleJob()
 {
+    AutoLock lock(jobMutex_);
     if (singleLoop_) {
         stateMutex_.lock();
         if (runningState_.load() == RunningState::PAUSED || runningState_.load() == RunningState::STOPPED) {
@@ -262,7 +263,6 @@ void TaskInner::HandleJob()
             stateMutex_.unlock();
             return;
         }
-        AutoLock lock(jobMutex_);
         stateMutex_.unlock();
         int64_t nextDelay = job_();
         if (topProcessUs_ != -1) {
@@ -279,7 +279,6 @@ void TaskInner::HandleJob()
             msgQueue_.erase(msgQueue_.begin());
         }
         {
-            AutoLock lock(jobMutex_);
             stateMutex_.unlock();
             nextJob();
             replyCond_.NotifyAll();

@@ -48,7 +48,7 @@ public:
 private:
     std::list<std::shared_ptr<TaskInner>> taskList_;
     std::unique_ptr<Thread> loop_;
-    Mutex mutex_;
+    FairMutex mutex_;
     ConditionVariable syncCond_;
     std::atomic<bool> threadExiting_;
     std::atomic<bool> threadExit_;

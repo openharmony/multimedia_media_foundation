@@ -66,5 +66,34 @@ void Mutex::unlock()
     }
     pthread_mutex_unlock(&nativeHandle_);
 }
+
+FairMutex::FairMutex() : Mutex()
+{
+    int rtv = pthread_mutex_init(&failLockHandle_, nullptr);
+    if (rtv != 0) {
+        created_ = false;
+        MEDIA_LOG_E("failed to init FairMutex");
+    } else {
+        created_ = true;
+    }
+}
+
+FairMutex::~FairMutex()
+{
+    if (created_) {
+        pthread_mutex_destroy(&failLockHandle_);
+    }
+}
+
+void FairMutex::lock()
+{
+    if (created_) {
+        pthread_mutex_lock(&failLockHandle_);
+        Mutex::lock();
+        pthread_mutex_unlock(&failLockHandle_);
+    } else {
+        Mutex::lock();
+    }
+}
 } // namespace Media
 } // namespace OHOS

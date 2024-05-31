@@ -103,7 +103,7 @@ private:
     int64_t InsertJob(const std::function<void()>& job, int64_t delayUs, bool inJobQueue);
 
     Mutex stateMutex_{};
-    Mutex jobMutex_{};
+    FairMutex jobMutex_{};
     Mutex replyMtx_{};
     ConditionVariable syncCond_{};
     ConditionVariable replyCond_{};
