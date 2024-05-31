@@ -34,6 +34,7 @@ enum class TaskType : int {
     GLOBAL,
     VIDEO,
     AUDIO,
+    SUBTITLE,
     SINGLETON,
 };
 
