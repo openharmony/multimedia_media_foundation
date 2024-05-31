@@ -75,6 +75,7 @@ private:
     void AddOpusAudioEncoderPlugins();
     void AddAmrwbAudioEncoderPlugins();
     void AddAmrnbAudioEncoderPlugins();
+    void AddMp3AudioEncoderPlugins();
     void AddFFmpegMuxerPlugins();
 
     std::vector<PluginDescription> pluginDescriptionList_;
