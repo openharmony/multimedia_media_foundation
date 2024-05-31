@@ -364,6 +364,8 @@ public:
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::AV_PLAYER_VIDEO_BITDEPTH or
         tagCharSeq == Tag::AV_PLAYER_HDR_TYPE, int8_t, AnyValueType::INT8_T);
+    DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::MEDIA_AVAILABLE_BITRATES, std::vector<uint8_t>, AnyValueType::VECTOR_UINT8);
 
     Meta &operator=(const Meta &other)
     {
