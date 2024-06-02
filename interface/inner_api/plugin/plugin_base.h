@@ -57,7 +57,7 @@ struct Callback {
         (void)flag;
     }
 
-    virtual bool CheckSwitchFlag()
+    virtual bool CanDoSelectBitRate()
     {
         return false;
     }
