@@ -52,11 +52,13 @@ struct Callback {
      */
     virtual void OnEvent(const PluginEvent &event) = 0;
 
-    virtual void SetSelectBitRateFlag(bool flag) {
+    virtual void SetSelectBitRateFlag(bool flag)
+    {
         (void)flag;
     }
 
-    virtual bool CheckSwitchFlag() {
+    virtual bool CheckSwitchFlag()
+    {
         return false;
     }
 };
