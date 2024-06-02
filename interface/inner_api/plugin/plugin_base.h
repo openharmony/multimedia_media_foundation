@@ -51,6 +51,16 @@ struct Callback {
      * @param event Event ID.
      */
     virtual void OnEvent(const PluginEvent &event) = 0;
+
+    virtual void SetSelectBitRateFlag(bool flag)
+    {
+        (void)flag;
+    }
+
+    virtual bool CanDoSelectBitRate()
+    {
+        return false;
+    }
 };
 
 /**
