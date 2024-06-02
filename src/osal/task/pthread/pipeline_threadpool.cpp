@@ -51,6 +51,7 @@ static std::string TaskTypeConvert(TaskType type)
         {TaskType::GLOBAL, "G"},
         {TaskType::VIDEO, "V"},
         {TaskType::AUDIO, "A"},
+        {TaskType::SUBTITLE, "T"},
         {TaskType::SINGLETON, "S"},
     };
     auto it = table.find(type);
