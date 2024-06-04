@@ -641,6 +641,8 @@ void EventAggregate::HandleBackgroundSilentPlayback(std::shared_ptr<EventBean> &
     bean->Add("APP_VERSION_CODE", static_cast<int32_t>(bundleInfo.versionCode));
     mediaMonitorPolicy_.HandleSilentPlaybackToEventVector(bean);
     mediaMonitorPolicy_.WhetherToHiSysEvent();
+    bean->SetEventType(Media::MediaMonitor::BEHAVIOR_EVENT); // report behavior event BG_SILENT_PLAYBACK
+    mediaMonitorPolicy_.WriteEvent(bean->GetEventId(), bean);
 }
 
 void EventAggregate::HandleUnderrunStatistic(std::shared_ptr<EventBean> &bean)

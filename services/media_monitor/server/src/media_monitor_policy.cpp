@@ -126,6 +126,9 @@ void MediaMonitorPolicy::WriteBehaviorEvent(EventId eventId, std::shared_ptr<Eve
         case SET_FORCE_USE_AUDIO_DEVICE:
             mediaEventBaseWriter_.WriteSetForceDevice(bean);
             break;
+        case BACKGROUND_SILENT_PLAYBACK:
+            mediaEventBaseWriter_.WriteBGSilentPlayback(bean);
+            break;
         default:
             break;
     }

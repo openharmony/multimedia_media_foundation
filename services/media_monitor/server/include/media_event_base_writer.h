@@ -39,6 +39,7 @@ public:
     void WriteStreamExhastedError(std::shared_ptr<EventBean> &bean);
     void WriteStreamCreateError(std::shared_ptr<EventBean> &bean);
     void WriteBackgoundSilentPlayback(std::shared_ptr<EventBean> &bean);
+    void WriteBGSilentPlayback(std::shared_ptr<EventBean> &bean);
     void WriteUnderrunStatistic(std::shared_ptr<EventBean> &bean);
     void WriteHeasetChange(std::shared_ptr<EventBean> &bean);
     void WriteVolumeChange(std::shared_ptr<EventBean> &bean);

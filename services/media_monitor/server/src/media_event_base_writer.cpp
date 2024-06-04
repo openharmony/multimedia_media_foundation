@@ -70,7 +70,7 @@ void MediaEventBaseWriter::WriteStreamChange(std::shared_ptr<EventBean> &bean)
         return;
     }
 #ifdef MONITOR_ENABLE_HISYSEVENT
-    HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "STREAM_CHANGE",
+    auto ret = HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "STREAM_CHANGE",
         HiviewDFX::HiSysEvent::EventType::BEHAVIOR,
         "ISOUTPUT", bean->GetIntValue("ISOUTPUT"),
         "STREAMID", bean->GetIntValue("STREAMID"),
@@ -81,6 +81,9 @@ void MediaEventBaseWriter::WriteStreamChange(std::shared_ptr<EventBean> &bean)
         "STATE", bean->GetIntValue("STATE"),
         "DEVICETYPE", bean->GetIntValue("DEVICETYPE"),
         "NETWORKID", bean->GetStringValue("NETWORKID"));
+    if (ret) {
+        MEDIA_LOG_E("write event fail: STREAM_CHANGE, ret = %{public}d", ret);
+    }
 #endif
 }
 
@@ -92,7 +95,7 @@ void MediaEventBaseWriter::WriteDeviceChange(std::shared_ptr<EventBean> &bean)
         return;
     }
 #ifdef MONITOR_ENABLE_HISYSEVENT
-    HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "DEVICE_CHANGE",
+    auto ret = HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "DEVICE_CHANGE",
         HiviewDFX::HiSysEvent::EventType::BEHAVIOR,
         "ISOUTPUT", bean->GetIntValue("ISOUTPUT"),
         "STREAMID", bean->GetIntValue("STREAMID"),
@@ -101,6 +104,9 @@ void MediaEventBaseWriter::WriteDeviceChange(std::shared_ptr<EventBean> &bean)
         "NETWORKID", bean->GetStringValue("NETWORKID"),
         "ADDRESS", bean->GetStringValue("ADDRESS"),
         "DEVICE_DETAILED_CATEGORY", bean->GetStringValue("DEVICE_NAME"));
+    if (ret) {
+        MEDIA_LOG_E("write event fail: DEVICE_CHANGE, ret = %{public}d", ret);
+    }
 #endif
 }
 
@@ -193,6 +199,24 @@ void MediaEventBaseWriter::WriteBackgoundSilentPlayback(std::shared_ptr<EventBea
         "APP_NAME", bean->GetStringValue("APP_NAME"),
         "APP_VERSION_CODE", static_cast<uint32_t>(bean->GetIntValue("APP_VERSION_CODE")),
         "TIMES", static_cast<uint32_t>(bean->GetIntValue("TIMES")));
+#endif
+}
+
+void MediaEventBaseWriter::WriteBGSilentPlayback(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Write bg silent playback");
+    if (bean == nullptr) {
+        MEDIA_LOG_E("eventBean is nullptr");
+        return;
+    }
+#ifdef MONITOR_ENABLE_HISYSEVENT
+    auto ret = HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "BG_SILENT_PLAYBACK",
+        HiviewDFX::HiSysEvent::EventType::BEHAVIOR,
+        "APP_NAME", bean->GetStringValue("APP_NAME"),
+        "APP_VERSION_CODE", static_cast<uint32_t>(bean->GetIntValue("APP_VERSION_CODE")));
+    if (ret) {
+        MEDIA_LOG_E("write event fail: BG_SILENT_PLAYBACK, ret = %{public}d", ret);
+    }
 #endif
 }
 
