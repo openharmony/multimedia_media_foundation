@@ -26,7 +26,9 @@
 
 namespace OHOS {
 namespace Media {
-
+namespace {
+    constexpr int64_t INVALID_DELAY_TIME_US = 10000000; // 10s
+}
 static std::atomic<int32_t> singletonTaskId = 0;
 
 void TaskInner::SleepInTask(unsigned ms)
@@ -78,6 +80,26 @@ TaskInner::~TaskInner()
     MEDIA_LOG_D_T(PUBLIC_LOG_S " dtor", name_.c_str());
 }
 
+void TaskInner::UpdataDelayTime(int64_t delayUs)
+{
+    if (!singleLoop_) {
+        MEDIA_LOG_D_T("task " PUBLIC_LOG_S " UpdataDelayTime do nothing", name_.c_str());
+        return;
+    }
+    MEDIA_LOG_D_T("task " PUBLIC_LOG_S " UpdataDelayTime enter topProcessUs:" PUBLIC_LOG_D64
+        ", delayUs:" PUBLIC_LOG_D64, name_.c_str(), topProcessUs_, delayUs);
+    pipelineThread_->LockJobState();
+    AutoLock lock(stateMutex_);
+    if (runningState_ != RunningState::STARTED) {
+        pipelineThread_->UnLockJobState(false);
+        return;
+    }
+    topProcessUs_ = GetNowUs() + delayUs;
+    pipelineThread_->UnLockJobState(true);
+    MEDIA_LOG_D_T("task " PUBLIC_LOG_S " UpdataDelayTime exit topProcessUs:" PUBLIC_LOG_D64,
+        name_.c_str(), topProcessUs_);
+}
+
 void TaskInner::Start()
 {
     MEDIA_LOG_I_FALSE_D_T(isStateLogEnabled_.load(), PUBLIC_LOG_S " Start", name_.c_str());
@@ -85,6 +107,9 @@ void TaskInner::Start()
     AutoLock lock(stateMutex_);
     runningState_ = RunningState::STARTED;
     if (singleLoop_) {
+        if (!job_) {
+            MEDIA_LOG_D_T("task " PUBLIC_LOG_S " Start, job invalid", name_.c_str());
+        }
         topProcessUs_ = GetNowUs();
     } else {
         UpdateTop();
@@ -259,14 +284,19 @@ void TaskInner::HandleJob()
     AutoLock lock(jobMutex_);
     if (singleLoop_) {
         stateMutex_.lock();
+        int64_t currentTopProcessUs = topProcessUs_;
         if (runningState_.load() == RunningState::PAUSED || runningState_.load() == RunningState::STOPPED) {
             topProcessUs_ = -1;
             stateMutex_.unlock();
             return;
         }
         stateMutex_.unlock();
-        int64_t nextDelay = job_();
-        if (topProcessUs_ != -1) {
+        int64_t nextDelay = (!job_) ? INVALID_DELAY_TIME_US : job_();
+
+        AutoLock lock(stateMutex_);
+        // if topProcessUs_ is -1, we already pause/stop in job_()
+        // if topProcessUs_ is changed, we should ignore the returned delay time.
+        if (topProcessUs_ != -1 && currentTopProcessUs == topProcessUs_) {
             topProcessUs_ = GetNowUs() + nextDelay;
         }
     } else {
@@ -299,13 +329,13 @@ int64_t TaskInner::InsertJob(const std::function<void()>& job, int64_t delayUs, 
     }
     int64_t processTime = nowUs + delayUs;
     if (inJobQueue) {
-        if (jobQueue_.find(processTime) != jobQueue_.end()) {
+        while (jobQueue_.find(processTime) != jobQueue_.end()) { // To prevent dropping job unexpectedly
             MEDIA_LOG_W_T("DUPLICATIVE jobQueue_ TIMESTAMP!!!");
             processTime++;
         }
         jobQueue_[processTime] = std::move(job);
     } else {
-        if (msgQueue_.find(processTime) != msgQueue_.end()) {
+        while (msgQueue_.find(processTime) != msgQueue_.end()) { // To prevent dropping job unexpectedly
             MEDIA_LOG_W_T("DUPLICATIVE msgQueue_ TIMESTAMP!!!");
             processTime++;
         }
