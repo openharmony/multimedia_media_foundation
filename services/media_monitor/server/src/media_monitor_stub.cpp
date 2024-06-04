@@ -58,6 +58,7 @@ void MediaMonitorStub::HandleGetAudioRouteMsg(MessageParcel &data, MessageParcel
         reply.WriteInt32(it.second->usageOrSourceType_);
     }
     reply.WriteInt32(ret);
+    MEDIA_LOG_I("MediaMonitorStub::HandleGetAudioRouteMsg out");
 }
 } // namespace MediaMonitor
 } // namespace Media
