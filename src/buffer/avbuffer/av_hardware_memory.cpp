@@ -47,7 +47,10 @@ AVHardwareAllocator::AVHardwareAllocator()
       allocBase_(nullptr),
       memFlag_(MemoryFlag::MEMORY_READ_ONLY),
       isAllocated_(false),
-      isSecure_(false){MEDIA_LOG_I("AVHardwareAllocator is allocatered");};
+      isSecure_(false)
+{
+    MEDIA_LOG_I("AVHardwareAllocator is allocatered");
+};
 
 AVHardwareAllocator::~AVHardwareAllocator()
 {
