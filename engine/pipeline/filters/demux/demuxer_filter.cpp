@@ -220,6 +220,7 @@ ErrorCode DemuxerFilter::Prepare()
         ActivatePushMode();
     }
     state_ = FilterState::PREPARING;
+    MEDIA_LOG_I("demuexfilter Prepare success");
     return ErrorCode::SUCCESS;
 }
 
