@@ -29,7 +29,7 @@ uint64_t TimeUtils::GetCurSec()
     struct timespec time;
     int ret = clock_gettime(CLOCK_MONOTONIC, &time);
     FALSE_RETURN_V_MSG_E(ret >= 0, result, "GetCurSec fail, result:%{public}d", ret);
-
+    MEDIA_LOG_E("GetCurSec success");
     result = static_cast<uint64_t>((time.tv_sec) + (time.tv_nsec / NANOSECOND_TO_SECOND));
     return result;
 }
