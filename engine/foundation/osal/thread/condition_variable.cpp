@@ -50,6 +50,7 @@ ConditionVariable::ConditionVariable() noexcept : condInited_(true)
         condInited_ = false;
         MEDIA_LOG_E("failed to init pthread cond variable");
     }
+    MEDIA_LOG_D("succeed to init pthread cond variable");
     pthread_condattr_destroy(&attr);
 }
 
