@@ -76,6 +76,7 @@ void ConditionVariable::NotifyAll() noexcept
     if (ret != 0) {
         MEDIA_LOG_E("NotifyAll failed with errno = " PUBLIC_LOG_D32, ret);
     }
+    MEDIA_LOG_D("NotifyAll succeed");
 }
 
 void ConditionVariable::Wait(ScopedLock& lock) noexcept
