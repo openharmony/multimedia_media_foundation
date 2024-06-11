@@ -66,6 +66,7 @@ void ConditionVariable::NotifyOne() noexcept
     if (ret != 0) {
         MEDIA_LOG_E("NotifyOne failed with errno = " PUBLIC_LOG_D32, ret);
     }
+    MEDIA_LOG_D("NotifyOne succeed");
 }
 
 void ConditionVariable::NotifyAll() noexcept
