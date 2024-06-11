@@ -41,9 +41,15 @@ std::shared_ptr<PluginDefBase> CachedPluginPackage::GetPluginDef(PluginDescripti
     std::vector<std::shared_ptr<PluginPackage>>::iterator itPluginPackage;
     for (itPluginPackage = pluginPackageList_.begin();
         itPluginPackage != pluginPackageList_.end(); itPluginPackage++) {
+        if (*itPluginPackage == nullptr) {
+            return nullptr;
+        }
         std::vector<std::shared_ptr<PluginDefBase>> pluginDefList = (*itPluginPackage)->GetAllPlugins();
         std::vector<std::shared_ptr<PluginDefBase>>::iterator itPluginDef;
         for (itPluginDef = pluginDefList.begin(); itPluginDef != pluginDefList.end(); itPluginDef++) {
+            if (*itPluginDef == nullptr) {
+                return nullptr;
+            }
             if (strcmp((*itPluginDef)->name.c_str(), pluginDescription.pluginName.c_str()) == 0) {
                 return (*itPluginDef);
             }
@@ -58,6 +64,9 @@ std::shared_ptr<PluginDefBase> CachedPluginPackage::GetPluginDef(PluginDescripti
     std::vector<std::shared_ptr<PluginDefBase>> pluginDefList = pluginPackage->GetAllPlugins();
     std::vector<std::shared_ptr<PluginDefBase>>::iterator itPluginDef;
     for (itPluginDef = pluginDefList.begin(); itPluginDef != pluginDefList.end(); itPluginDef++) {
+        if (*itPluginDef == nullptr) {
+            return nullptr;
+        }
         if (strcmp((*itPluginDef)->name.c_str(), pluginDescription.pluginName.c_str()) == 0) {
             return (*itPluginDef);
         }
