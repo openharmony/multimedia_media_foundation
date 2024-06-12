@@ -399,7 +399,6 @@ void MediaMonitorPolicy::HandleCaptureMutedToEventVector(std::shared_ptr<EventBe
     auto isExist = [&bean](const std::shared_ptr<EventBean> &eventBean) {
         if (eventBean->GetEventId() == MUTED_CAPTURE_STATS &&
             bean->GetIntValue("STREAM_TYPE") == eventBean->GetIntValue("STREAM_TYPE") &&
-            bean->GetIntValue("STREAMID") == eventBean->GetIntValue("STREAMID") &&
             bean->GetIntValue("DEVICE_TYPE") == eventBean->GetIntValue("DEVICE_TYPE")) {
             MEDIA_LOG_I("Find the existing capture muted");
             return true;
@@ -418,7 +417,6 @@ void MediaMonitorPolicy::HandleCaptureMutedToEventVector(std::shared_ptr<EventBe
         std::shared_ptr<EventBean> eventBean = std::make_shared<EventBean>(ModuleId::AUDIO,
             EventId::MUTED_CAPTURE_STATS, EventType::FREQUENCY_AGGREGATION_EVENT);
         eventBean->Add("STREAM_TYPE", bean->GetIntValue("STREAM_TYPE"));
-        eventBean->Add("STREAMID", bean->GetIntValue("STREAMID"));
         eventBean->Add("DEVICE_TYPE", bean->GetIntValue("DEVICE_TYPE"));
         eventBean->Add("DURATION", bean->GetUint64Value("DURATION"));
         AddToEventVector(eventBean);
