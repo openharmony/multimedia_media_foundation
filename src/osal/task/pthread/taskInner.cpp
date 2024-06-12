@@ -65,13 +65,13 @@ void TaskInner::Init()
 void TaskInner::DeInit()
 {
     MEDIA_LOG_I_T(PUBLIC_LOG_S " DeInit", name_.c_str());
+    pipelineThread_->RemoveTask(shared_from_this());
     {
-        AutoLock lock(stateMutex_);
+        AutoLock lock1(jobMutex_);
+        AutoLock lock2(stateMutex_);
         runningState_ = RunningState::STOPPED;
-        AutoLock lock2(jobMutex_);
         topProcessUs_ = -1;
     }
-    pipelineThread_->RemoveTask(shared_from_this());
     MEDIA_LOG_I_T(PUBLIC_LOG_S " DeInit done", name_.c_str());
 }
 
@@ -232,7 +232,7 @@ void TaskInner::SubmitJobOnce(const std::function<void()>& job, int64_t delayUs,
     MEDIA_LOG_D_T(PUBLIC_LOG_S " SubmitJobOnce", name_.c_str());
     int64_t time = InsertJob(job, delayUs, false);
     if (wait) {
-        AutoLock lock(replyMtx_);
+        AutoLock lock(stateMutex_);
         replyCond_.Wait(lock, [this, time] { return msgQueue_.find(time) == msgQueue_.end(); });
     }
 }
@@ -242,7 +242,7 @@ void TaskInner::SubmitJob(const std::function<void()>& job, int64_t delayUs, boo
     MEDIA_LOG_D_T(PUBLIC_LOG_S " SubmitJob delayUs:%{public}" PRId64, name_.c_str(), delayUs);
     int64_t time = InsertJob(job, delayUs, true);
     if (wait) {
-        AutoLock lock(replyMtx_);
+        AutoLock lock(stateMutex_);
         replyCond_.Wait(lock, [this, time] { return jobQueue_.find(time) == jobQueue_.end(); });
     }
 }

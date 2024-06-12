@@ -92,15 +92,18 @@ std::shared_ptr<PipeLineThread> PipeLineThreadPool::FindThread(std::string group
 
 void PipeLineThreadPool::DestroyThread(std::string groupId)
 {
-    AutoLock lock(mutex_);
-    if (workerGroupMap.find(groupId) == workerGroupMap.end()) {
-        return;
+    std::shared_ptr<std::list<std::shared_ptr<PipeLineThread>>> threadList;
+    {
+        AutoLock lock(mutex_);
+        if (workerGroupMap.find(groupId) == workerGroupMap.end()) {
+            return;
+        }
+        threadList = workerGroupMap[groupId];
+        workerGroupMap.erase(groupId);
     }
-    std::shared_ptr<std::list<std::shared_ptr<PipeLineThread>>> threadList = workerGroupMap[groupId];
     for (auto thread : *threadList.get()) {
         thread->Exit();
     }
-    workerGroupMap.erase(groupId);
 }
 
 PipeLineThread::PipeLineThread(std::string name, TaskType type, TaskPriority priority)
@@ -110,10 +113,11 @@ PipeLineThread::PipeLineThread(std::string name, TaskType type, TaskPriority pri
     loop_ = CppExt::make_unique<Thread>(ConvertPriorityType(priority));
     std::string threadName = name + "_" + TaskTypeConvert(type);
     loop_->SetName(threadName);
-    threadExit_ = false;
-    threadExiting_ = false;
     if (loop_->CreateThread([this] { Run(); })) {
+        threadExit_ = false;
     } else {
+        threadExit_ = true;
+        loop_ = nullptr;
         MEDIA_LOG_E("task " PUBLIC_LOG_S " create failed", name.c_str());
     }
 }
@@ -126,10 +130,10 @@ PipeLineThread::~PipeLineThread()
 void PipeLineThread::Exit()
 {
     AutoLock lock(mutex_);
-    if (threadExit_.load()) {
+    if (threadExit_.load() || !loop_) {
         return;
     }
-    threadExiting_ = true;
+    threadExit_ = true;
     syncCond_.NotifyAll();
 
     // trigger to quit thread in current running thread, must not wait,
@@ -137,7 +141,8 @@ void PipeLineThread::Exit()
     if (IsRunningInSelf()) {
         return;
     }
-    syncCond_.Wait(lock, [this] { return threadExit_.load(); });
+    // loop_ destroy will wait thread join
+    loop_ = nullptr;
 }
 
 void PipeLineThread::Run()
@@ -146,7 +151,7 @@ void PipeLineThread::Run()
         std::shared_ptr<TaskInner> nextTask;
         {
             AutoLock lock(mutex_);
-            if (threadExiting_.load()) {
+            if (threadExit_.load()) {
                 break;
             }
             int64_t nextJobUs = INT64_MAX;
@@ -172,8 +177,6 @@ void PipeLineThread::Run()
         }
         nextTask->HandleJob();
     }
-    threadExit_ = true;
-    syncCond_.NotifyAll();
 }
 
 void PipeLineThread::AddTask(std::shared_ptr<TaskInner> task)

@@ -106,7 +106,6 @@ private:
 
     Mutex stateMutex_{};
     FairMutex jobMutex_{};
-    Mutex replyMtx_{};
     ConditionVariable syncCond_{};
     ConditionVariable replyCond_{};
     std::map<int64_t, std::function<void()>> msgQueue_;  // msg will be sorted by timeUs
