@@ -34,6 +34,7 @@ Mutex::~Mutex()
 {
     if (created_) {
         pthread_mutex_destroy(&nativeHandle_);
+        MEDIA_LOG_D("succeed to destroy pthread mutex");
     }
 }
 
