@@ -92,10 +92,12 @@ std::shared_ptr<PipeLineThread> PipeLineThreadPool::FindThread(std::string group
 
 void PipeLineThreadPool::DestroyThread(std::string groupId)
 {
+    MEDIA_LOG_I("PipeLineThread " PUBLIC_LOG_S " destroy", groupId.c_str());
     std::shared_ptr<std::list<std::shared_ptr<PipeLineThread>>> threadList;
     {
         AutoLock lock(mutex_);
         if (workerGroupMap.find(groupId) == workerGroupMap.end()) {
+            MEDIA_LOG_E("PipeLineThread  not exist");
             return;
         }
         threadList = workerGroupMap[groupId];
@@ -106,19 +108,20 @@ void PipeLineThreadPool::DestroyThread(std::string groupId)
     }
 }
 
-PipeLineThread::PipeLineThread(std::string name, TaskType type, TaskPriority priority)
-    : name_(name), type_(type)
+PipeLineThread::PipeLineThread(std::string groupId, TaskType type, TaskPriority priority)
+    : groupId_(groupId), type_(type)
 {
-    MEDIA_LOG_I("PipeLineThread name:" PUBLIC_LOG_S " type:%{public}d created call", name.c_str(), type);
+    MEDIA_LOG_I("PipeLineThread name:" PUBLIC_LOG_S " type:%{public}d created call", groupId_.c_str(), type);
     loop_ = CppExt::make_unique<Thread>(ConvertPriorityType(priority));
-    std::string threadName = name + "_" + TaskTypeConvert(type);
-    loop_->SetName(threadName);
+    name_ = groupId_ + "_" + TaskTypeConvert(type);
+    loop_->SetName(name_);
+    threadExit_ = false;
     if (loop_->CreateThread([this] { Run(); })) {
         threadExit_ = false;
     } else {
         threadExit_ = true;
         loop_ = nullptr;
-        MEDIA_LOG_E("task " PUBLIC_LOG_S " create failed", name.c_str());
+        MEDIA_LOG_E("PipeLineThread " PUBLIC_LOG_S " create failed", name_.c_str());
     }
 }
 
@@ -129,17 +132,20 @@ PipeLineThread::~PipeLineThread()
 
 void PipeLineThread::Exit()
 {
-    AutoLock lock(mutex_);
-    if (threadExit_.load() || !loop_) {
-        return;
-    }
-    threadExit_ = true;
-    syncCond_.NotifyAll();
+    {
+        AutoLock lock(mutex_);
+        if (threadExit_.load() || !loop_) {
+            return;
+        }
+        MEDIA_LOG_I("PipeLineThread " PUBLIC_LOG_S " exit", name_.c_str());
+        threadExit_ = true;
+        syncCond_.NotifyAll();
 
-    // trigger to quit thread in current running thread, must not wait,
-    // or else the current thread will be suspended and can not quit.
-    if (IsRunningInSelf()) {
-        return;
+        // trigger to quit thread in current running thread, must not wait,
+        // or else the current thread will be suspended and can not quit.
+        if (IsRunningInSelf()) {
+            return;
+        }
     }
     // loop_ destroy will wait thread join
     loop_ = nullptr;
@@ -147,6 +153,7 @@ void PipeLineThread::Exit()
 
 void PipeLineThread::Run()
 {
+    MEDIA_LOG_I("PipeLineThread " PUBLIC_LOG_S " run", name_.c_str());
     while (true) {
         std::shared_ptr<TaskInner> nextTask;
         {
@@ -220,7 +227,7 @@ void PipeLineThread::UnLockJobState(bool notifyChange)
 
 bool PipeLineThread::IsRunningInSelf()
 {
-    return loop_->IsRunningInSelf();
+    return loop_ ? loop_->IsRunningInSelf() : false;
 }
 } // namespace Media
 } // namespace OHOS

@@ -33,7 +33,7 @@ class TaskInner;
 
 class PipeLineThread {
 public:
-    PipeLineThread(std::string name, TaskType type, TaskPriority priority);
+    PipeLineThread(std::string groupId, TaskType type, TaskPriority priority);
     ~PipeLineThread();
     void Run();
     void AddTask(std::shared_ptr<TaskInner> task);
@@ -43,6 +43,7 @@ public:
     void Exit();
     bool IsRunningInSelf();
 
+    std::string groupId_;
     std::string name_;
     TaskType type_;
 private:
