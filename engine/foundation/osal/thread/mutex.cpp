@@ -44,6 +44,7 @@ void Mutex::Lock()
         return;
     }
     pthread_mutex_lock(&nativeHandle_);
+    MEDIA_LOG_D("Lock pthread mutex done!");
 }
 
 bool Mutex::TryLock()
