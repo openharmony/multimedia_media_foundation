@@ -28,6 +28,7 @@ Mutex::Mutex() : created_(true)
         created_ = false;
         MEDIA_LOG_E("failed to init pthread mutex");
     }
+    MEDIA_LOG_D("succeed to init pthread mutex");
 }
 
 Mutex::~Mutex()
