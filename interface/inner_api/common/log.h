@@ -143,13 +143,14 @@ inline std::string HstGetFileName(const std::string& file)
         static uint64_t currentTimes = 0;                                   \
         if (currentTimes++ % ((uint32_t)(frequency)) == 0) {                \
             op(fmt,  ##__VA_ARGS__);                                        \
+        } else {                                                            \
+            MEDIA_LOG_D(fmt,  ##__VA_ARGS__);                               \
         }                                                                   \
     } while (0)
 
 #define MEDIA_LOGE_LIMIT(frequency, fmt, ...) MEDIA_LOG_LIMIT(MEDIA_LOG_E, frequency, fmt, ##__VA_ARGS__)
 #define MEDIA_LOGW_LIMIT(frequency, fmt, ...) MEDIA_LOG_LIMIT(MEDIA_LOG_W, frequency, fmt, ##__VA_ARGS__)
 #define MEDIA_LOGI_LIMIT(frequency, fmt, ...) MEDIA_LOG_LIMIT(MEDIA_LOG_I, frequency, fmt, ##__VA_ARGS__)
-#define MEDIA_LOGD_LIMIT(frequency, fmt, ...) MEDIA_LOG_LIMIT(MEDIA_LOG_D, frequency, fmt, ##__VA_ARGS__)
 #endif
 
 
