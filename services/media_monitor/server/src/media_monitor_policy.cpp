@@ -262,7 +262,6 @@ void MediaMonitorPolicy::HandBtUsageToEventVector(std::shared_ptr<EventBean> &bt
         eventBean->Add("STREAM_TYPE", btUsage->GetIntValue("STREAM_TYPE"));
         eventBean->Add("DURATION", btUsage->GetUint64Value("DURATION"));
         AddToEventVector(eventBean);
-        WriteEvent(eventBean->GetEventId(), eventBean);
     }
 }
 
