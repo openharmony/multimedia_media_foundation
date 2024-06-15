@@ -37,7 +37,7 @@ private:
     bool ReadFromMessageParcel(MessageParcel &parcel) override;
     Status MapMemoryAddr();
     std::mutex mutex_;
-    int32_t fd_ = 0;
+    int32_t fd_ = -1;
     bool isStartSync_;
     MemoryFlag memFlag_;
 };
