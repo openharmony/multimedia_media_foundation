@@ -62,8 +62,8 @@ Status SetVideoResolution(AVCodecContext& codecContext, const std::map<Tag, Valu
         MEDIA_LOG_E("width or height is invalid");
         return Status::ERROR_INVALID_PARAMETER;
     }
-    codecContext.width = width;
-    codecContext.height = height;
+    codecContext.width = static_cast<int>(width);
+    codecContext.height = static_cast<int>(height);
     return Status::OK;
 }
 

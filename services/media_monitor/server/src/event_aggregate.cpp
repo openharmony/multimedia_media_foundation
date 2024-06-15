@@ -210,9 +210,9 @@ void EventAggregate::HandleDeviceChangeForDuration(const DeviceChangeEvent &even
     std::shared_ptr<EventBean> &bean, std::shared_ptr<EventBean> &beanInVector)
 {
     if (bean->GetIntValue("DEVICETYPE") != beanInVector->GetIntValue("DEVICE_TYPE")) {
-        int64_t duration = TimeUtils::GetCurSec() - beanInVector->GetUint64Value("START_TIME");
-        if (duration > 0 && duration > NEED_INCREASE_FREQUENCY) {
-            beanInVector->Add("DURATION", static_cast<uint64_t>(duration));
+        uint64_t duration = TimeUtils::GetCurSec() - beanInVector->GetUint64Value("START_TIME");
+        if (duration > 0 && (static_cast<int64_t>(duration) > NEED_INCREASE_FREQUENCY)) {
+            beanInVector->Add("DURATION", duration);
             if (event == FOR_DEVICE_EVENT) {
                 mediaMonitorPolicy_.HandDeviceUsageToEventVector(beanInVector);
             } else if (event == FOR_CAPTURE_MUTE_EVENT) {
@@ -440,10 +440,10 @@ void EventAggregate::HandleDeviceUsage(std::shared_ptr<EventBean> &bean)
     };
     auto it = std::find_if(deviceUsageVector_.begin(), deviceUsageVector_.end(), isExist);
     if (it != deviceUsageVector_.end()) {
-        int64_t duration = TimeUtils::GetCurSec() - (*it)->GetUint64Value("START_TIME");
+        uint64_t duration = TimeUtils::GetCurSec() - (*it)->GetUint64Value("START_TIME");
         int32_t deviceType = (*it)->GetIntValue("DEVICE_TYPE");
-        if (duration > 0 && duration > NEED_INCREASE_FREQUENCY) {
-            (*it)->Add("DURATION", static_cast<uint64_t>(duration));
+        if (duration > 0 && (static_cast<int64_t>(duration) > NEED_INCREASE_FREQUENCY)) {
+            (*it)->Add("DURATION", duration);
             mediaMonitorPolicy_.HandDeviceUsageToEventVector(*it);
             if (deviceType == AudioStandard::DEVICE_TYPE_BLUETOOTH_SCO ||
                 deviceType == AudioStandard::DEVICE_TYPE_BLUETOOTH_A2DP) {
@@ -473,9 +473,9 @@ void EventAggregate::HandleStreamUsage(std::shared_ptr<EventBean> &bean)
     };
     auto it = std::find_if(streamUsageVector_.begin(), streamUsageVector_.end(), isExist);
     if (it != streamUsageVector_.end()) {
-        int64_t duration = TimeUtils::GetCurSec() - (*it)->GetUint64Value("START_TIME");
-        if (duration > 0 && duration > NEED_INCREASE_FREQUENCY) {
-            (*it)->Add("DURATION", static_cast<uint64_t>(duration));
+        uint64_t duration = TimeUtils::GetCurSec() - (*it)->GetUint64Value("START_TIME");
+        if (duration > 0 && (static_cast<int64_t>(duration) > NEED_INCREASE_FREQUENCY)) {
+            (*it)->Add("DURATION", duration);
             mediaMonitorPolicy_.HandStreamUsageToEventVector(*it);
             mediaMonitorPolicy_.WhetherToHiSysEvent();
         }
@@ -499,9 +499,9 @@ void EventAggregate::HandleStreamPropertyStats(std::shared_ptr<EventBean> &bean)
     };
     auto it = std::find_if(streamPropertyVector_.begin(), streamPropertyVector_.end(), isExist);
     if (it != streamPropertyVector_.end()) {
-        int64_t duration = TimeUtils::GetCurSec() - (*it)->GetUint64Value("START_TIME");
-        if (duration > 0 && duration > NEED_INCREASE_FREQUENCY) {
-            (*it)->Add("DURATION", static_cast<uint64_t>(duration));
+        uint64_t duration = TimeUtils::GetCurSec() - (*it)->GetUint64Value("START_TIME");
+        if (duration > 0 && (static_cast<int64_t>(duration) > NEED_INCREASE_FREQUENCY)) {
+            (*it)->Add("DURATION", duration);
             mediaMonitorPolicy_.HandStreamPropertyToEventVector(*it);
             mediaMonitorPolicy_.WhetherToHiSysEvent();
         }
@@ -527,9 +527,9 @@ void EventAggregate::HandleCaptureMuted(std::shared_ptr<EventBean> &bean)
     };
     auto it = std::find_if(captureMutedVector_.begin(), captureMutedVector_.end(), isExist);
     if (it != captureMutedVector_.end()) {
-        int64_t duration = TimeUtils::GetCurSec() - (*it)->GetUint64Value("START_TIME");
-        if ((*it)->GetIntValue("MUTED") && duration > 0 && duration > NEED_INCREASE_FREQUENCY) {
-            (*it)->Add("DURATION", static_cast<uint64_t>(duration));
+        uint64_t duration = TimeUtils::GetCurSec() - (*it)->GetUint64Value("START_TIME");
+        if ((*it)->GetIntValue("MUTED") && duration > 0 && (static_cast<int64_t>(duration) > NEED_INCREASE_FREQUENCY)) {
+            (*it)->Add("DURATION", duration);
             mediaMonitorPolicy_.HandleCaptureMutedToEventVector(*it);
             mediaMonitorPolicy_.WhetherToHiSysEvent();
         }
@@ -553,9 +553,9 @@ void EventAggregate::HandleStreamChangeForVolume(std::shared_ptr<EventBean> &bea
 
     auto it = std::find_if(volumeVector_.begin(), volumeVector_.end(), isExist);
     if (it != volumeVector_.end()) {
-        int64_t duration = TimeUtils::GetCurSec() - (*it)->GetUint64Value("START_TIME");
-        if (duration > 0 && duration > NEED_INCREASE_FREQUENCY) {
-            (*it)->Add("DURATION", static_cast<uint64_t>(duration));
+        uint64_t duration = TimeUtils::GetCurSec() - (*it)->GetUint64Value("START_TIME");
+        if (duration > 0 && (static_cast<int64_t>(duration) > NEED_INCREASE_FREQUENCY)) {
+            (*it)->Add("DURATION", duration);
             mediaMonitorPolicy_.HandleVolumeToEventVector(*it);
             mediaMonitorPolicy_.WhetherToHiSysEvent();
         }
@@ -594,10 +594,10 @@ void EventAggregate::HandleVolumeChange(std::shared_ptr<EventBean> &bean)
     auto it = std::find_if(volumeVector_.begin(), volumeVector_.end(), isExist);
     if (it != volumeVector_.end()) {
         if ((*it)->GetUint64Value("START_TIME") >= 0) {
-            int64_t duration = TimeUtils::GetCurSec() - (*it)->GetUint64Value("START_TIME");
-            if (duration > 0 && duration > NEED_INCREASE_FREQUENCY &&
+            uint64_t duration = TimeUtils::GetCurSec() - (*it)->GetUint64Value("START_TIME");
+            if (duration > 0 && (static_cast<int64_t>(duration) > NEED_INCREASE_FREQUENCY) &&
                 (*it)->GetIntValue("LEVEL") != UNINITIALIZED) {
-                (*it)->Add("DURATION", static_cast<uint64_t>(duration));
+                (*it)->Add("DURATION", duration);
                 mediaMonitorPolicy_.HandleVolumeToEventVector(*it);
                 mediaMonitorPolicy_.WhetherToHiSysEvent();
             }

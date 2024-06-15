@@ -47,7 +47,7 @@ private:
 
     std::shared_ptr<ShareAllocator> shareAllocator_ {nullptr};
 
-    int fd_;
+    int fd_ = 0;
 };
 } // namespace Plugin
 } // namespace Media

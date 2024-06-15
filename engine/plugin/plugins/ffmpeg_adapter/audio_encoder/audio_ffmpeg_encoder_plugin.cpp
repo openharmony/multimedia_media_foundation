@@ -268,7 +268,7 @@ Status AudioFfmpegEncoderPlugin::Start()
     FALSE_RETURN_V_MSG_E(avCodecContext_->frame_size > 0, Status::ERROR_UNKNOWN, "frame_size unknown");
     fullInputFrameSize_ = (uint32_t)av_samples_get_buffer_size(nullptr, avCodecContext_->channels,
         avCodecContext_->frame_size, srcFmt_, 1);
-    srcBytesPerSample_ = av_get_bytes_per_sample(srcFmt_) * avCodecContext_->channels;
+    srcBytesPerSample_ = static_cast<uint32_t>((av_get_bytes_per_sample(srcFmt_) * avCodecContext_->channels));
     if (needReformat_) {
         Ffmpeg::ResamplePara resamplePara = {
             static_cast<uint32_t>(avCodecContext_->channels),
@@ -376,11 +376,12 @@ void AudioFfmpegEncoderPlugin::FillInFrameCache(const std::shared_ptr<Memory>& m
         FALSE_LOG(resample_->Convert(srcBuffer, srcLength, destBuffer, destLength) == Status::OK);
         if (destLength) {
             sampleData = destBuffer;
-            nbSamples = destLength / av_get_bytes_per_sample(avCodecContext_->sample_fmt) / avCodecContext_->channels;
+            nbSamples = static_cast<int32_t>((destLength
+                / av_get_bytes_per_sample(avCodecContext_->sample_fmt) / avCodecContext_->channels));
         }
     } else {
         sampleData = destBuffer;
-        nbSamples = destLength / srcBytesPerSample_;
+        nbSamples = static_cast<int32_t>((destLength / srcBytesPerSample_));
     }
     cachedFrame_->format = avCodecContext_->sample_fmt;
     cachedFrame_->sample_rate = avCodecContext_->sample_rate;

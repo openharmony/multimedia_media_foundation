@@ -246,7 +246,7 @@ protected:
     bool SkipCommonFromMessageParcel(MessageParcel &parcel);
     bool WriteCommonToMessageParcel(MessageParcel &parcel);
 
-    int32_t capacity_;
+    int32_t capacity_ = 0;
     int32_t align_;
 
     int32_t offset_;

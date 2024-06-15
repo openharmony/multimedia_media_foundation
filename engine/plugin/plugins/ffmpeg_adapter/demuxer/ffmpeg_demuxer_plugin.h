@@ -101,7 +101,7 @@ private:
     VideoBitStreamFormat vdBitStreamFormat_ {VideoBitStreamFormat::UNKNOWN};
     std::shared_ptr<AVBSFContext> avbsfContext_ {nullptr};
     double playbackSpeed_ {1.0};
-    Seekable seekable_;
+    Seekable seekable_ = Seekable::UNSEEKABLE;
     IOContext ioContext_;
     Callback* callback_ {};
     std::shared_ptr<AVInputFormat> pluginImpl_;

@@ -187,7 +187,7 @@ private:
     size_t align_ {0}; // 0: use default alignment.
     std::atomic<bool> isActive_;
     std::atomic<bool> allocInProgress;
-    Plugin::BufferMetaType metaType_;
+    Plugin::BufferMetaType metaType_ = Plugin::BufferMetaType::AUDIO;
 };
 } // namespace Media
 } // namespace OHOS

@@ -90,7 +90,7 @@ private:
     std::function<int64_t()> job_;
     bool singleLoop_ = false;
     int64_t topProcessUs_ {-1};
-    bool topIsJob_;
+    bool topIsJob_ = false;
     std::shared_ptr<PipeLineThread> pipelineThread_;
     std::atomic<bool> isStateLogEnabled_{true};
 #ifdef MEDIA_FOUNDATION_FFRT

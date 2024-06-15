@@ -402,8 +402,8 @@ Status VideoFfmpegEncoderPlugin::FillAvFrame(const std::shared_ptr<Buffer>& inpu
     FALSE_RETURN_V_MSG_W(pixelFormat_ == videoMeta->videoPixelFormat, Status::ERROR_INVALID_PARAMETER,
         "pixel format change");
     cachedFrame_->format = ConvertPixelFormatToFFmpeg(videoMeta->videoPixelFormat);
-    cachedFrame_->width = videoMeta->width;
-    cachedFrame_->height = videoMeta->height;
+    cachedFrame_->width = static_cast<int>(videoMeta->width);
+    cachedFrame_->height = static_cast<int>(videoMeta->height);
     if (!videoMeta->stride.empty()) {
         for (uint32_t i = 0; i < videoMeta->planes; i++) {
             cachedFrame_->linesize[i] = static_cast<int32_t>(videoMeta->stride[i]);
@@ -471,9 +471,9 @@ Status VideoFfmpegEncoderPlugin::FillFrameBuffer(const std::shared_ptr<Buffer>& 
         packetBuffer->flag |= BUFFER_FLAG_KEY_FRAME;
     }
     packetBuffer->pts =
-            static_cast<uint64_t>(ConvertTimeFromFFmpeg(cachedPacket_->pts, avCodecContext_->time_base));
+            static_cast<int64_t>(ConvertTimeFromFFmpeg(cachedPacket_->pts, avCodecContext_->time_base));
     packetBuffer->dts =
-            static_cast<uint64_t>(ConvertTimeFromFFmpeg(cachedPacket_->dts, avCodecContext_->time_base));
+            static_cast<int64_t>(ConvertTimeFromFFmpeg(cachedPacket_->dts, avCodecContext_->time_base));
 #ifdef DUMP_RAW_DATA
     if (dumpFd_) {
         std::fwrite(reinterpret_cast<const char *>(cachedPacket_->data), 1, cachedPacket_->size, dumpFd_);

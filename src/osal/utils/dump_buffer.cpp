@@ -40,15 +40,17 @@ void DumpAVBufferToFile(const std::string& para, const std::string& fileName, co
         MEDIA_LOG_E("para or fileName is invalid.");
         return;
     }
-    size_t bufferSize = buffer->memory_->GetSize();
+    size_t bufferSize = static_cast<size_t>(buffer->memory_->GetSize());
     FALSE_RETURN((bufferSize != 0) && (buffer->memory_->GetAddr() != nullptr));
     std::string mode = para + "b+";
-    FILE* dumpFile = std::fopen(std::string(DUMP_FILE_DIR + fileName).c_str(), mode.c_str());
+    std::string fielPath = DUMP_FILE_DIR + fileName;
+    FILE* dumpFile = std::fopen(fielPath.c_str(), mode.c_str());
     if (dumpFile == nullptr) {
         MEDIA_LOG_E("dump buffer to file failed.");
         return;
     }
-    int ret = fwrite(reinterpret_cast<const char*>(buffer->memory_->GetAddr()), DUMP_DATA_UNIT, bufferSize, dumpFile);
+    size_t ret =
+        fwrite(reinterpret_cast<const char*>(buffer->memory_->GetAddr()), DUMP_DATA_UNIT, bufferSize, dumpFile);
     if (ret < 0) {
         MEDIA_LOG_I("dump is fail.");
     }
