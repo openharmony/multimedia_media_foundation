@@ -320,7 +320,8 @@ void MediaMonitorPolicy::HandStreamPropertyToEventVector(std::shared_ptr<EventBe
             streamProperty->GetIntValue("STREAM_TYPE") == eventBean->GetIntValue("STREAM_TYPE") &&
             streamProperty->GetIntValue("IS_PLAYBACK") == eventBean->GetIntValue("IS_PLAYBACK") &&
             streamProperty->GetStringValue("APP_NAME") == eventBean->GetStringValue("APP_NAME") &&
-            streamProperty->GetIntValue("CHANNEL_LAYOUT") == eventBean->GetUint64Value("CHANNEL_LAYOUT") &&
+            streamProperty->GetIntValue("CHANNEL_LAYOUT") ==
+            static_cast<int64_t>(eventBean->GetUint64Value("CHANNEL_LAYOUT")) &&
             streamProperty->GetIntValue("ENCODING_TYPE") == eventBean->GetIntValue("ENCODING_TYPE")) {
             MEDIA_LOG_I("Find the existing stream property");
             return true;
@@ -558,7 +559,7 @@ void MediaMonitorPolicy::AddToEventVector(std::shared_ptr<EventBean> &bean)
 void MediaMonitorPolicy::WhetherToHiSysEvent()
 {
     MEDIA_LOG_D("eventVector size %{public}zu", eventVector_.size());
-    if (eventVector_.size() >= aggregationFrequency_) {
+    if (eventVector_.size() >= static_cast<uint32_t>(aggregationFrequency_)) {
         std::unique_ptr<std::thread>  writeEventThread = std::make_unique<std::thread>(
             &MediaMonitorPolicy::HandleToHiSysEvent, this);
         pthread_setname_np(writeEventThread->native_handle(), "ToHiSysEvent");
@@ -586,8 +587,8 @@ void MediaMonitorPolicy::HandleToHiSysEvent()
 void MediaMonitorPolicy::WriteInfo(int32_t fd, std::string &dumpString)
 {
     if (fd != -1) {
-        int32_t remainderSize = aggregationFrequency_ - eventVector_.size();
-        int64_t elapsedTime = (TimeUtils::GetCurSec() - curruntTime_) / 60;
+        int32_t remainderSize = static_cast<int32_t>(aggregationFrequency_ - eventVector_.size());
+        int64_t elapsedTime = static_cast<int64_t>((TimeUtils::GetCurSec() - curruntTime_)) / 60;
         int64_t oneDay = aggregationTime_;
         dumpString += "Counting of eventVector entries:";
         dumpString += "\n";

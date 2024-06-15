@@ -70,6 +70,7 @@ VideoEncoderFilter::VideoEncoderFilter(const std::string& name)
     vencFormat_.width = 0;
     vencFormat_.height = 0;
     vencFormat_.bitRate = -1;
+    vencFormat_.format = Plugin::VideoPixelFormat::YUV420P;
 }
 
 VideoEncoderFilter::~VideoEncoderFilter()

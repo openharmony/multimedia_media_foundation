@@ -274,7 +274,7 @@ void VideoFfmpegDecoderPlugin::SetCodecExtraData()
         return;
     }
     auto codecConfig = Plugin::AnyCast<std::vector<uint8_t>>(iter->second);
-    int configSize = codecConfig.size();
+    int configSize = static_cast<int>(codecConfig.size());
     if (configSize > 0) {
         auto allocSize = AlignUp(configSize + AV_INPUT_BUFFER_PADDING_SIZE, STRIDE_ALIGN);
         avCodecContext_->extradata = static_cast<uint8_t*>(av_mallocz(allocSize));
@@ -606,7 +606,7 @@ Status VideoFfmpegDecoderPlugin::WriteRgbDataStride(const std::shared_ptr<Buffer
         auto writeSize = scaleLineSize_[0];
         for (uint32_t colNum = 0; colNum < height_; colNum++) {
             frameBufferMem->Write(scaleData_[0] + srcPos, writeSize, dstPos);
-            dstPos += stride;
+            dstPos += static_cast<size_t>(stride);
         }
     } else {
         return Status::ERROR_UNSUPPORTED_FORMAT;
