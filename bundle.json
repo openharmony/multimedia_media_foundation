@@ -177,8 +177,7 @@
                     "plugin/plugin_definition.h",
                     "plugin/plugin_event.h",
                     "plugin/plugin_info.h",
-                    "plugin/plugin_manager.h",
-                    "plugin/plugin_register.h"
+                    "plugin/plugin_manager_v2.h"
                   ],
                   "header_base": "//foundation/multimedia/media_foundation/interface/inner_api"
                 }
