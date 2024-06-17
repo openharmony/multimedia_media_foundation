@@ -178,6 +178,8 @@ public:
 
     virtual Status GetErrCode();
 
+    virtual Status ClearAllNextFilters();
+
 protected:
     virtual Status PrepareDone() final;
 
