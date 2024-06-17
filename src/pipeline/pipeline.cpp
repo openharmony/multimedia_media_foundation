@@ -261,6 +261,7 @@ Status Pipeline::RemoveHeadFilter(const std::shared_ptr<Filter>& filter)
         }
         filter->Release();
         filter->WaitAllState(FilterState::RELEASED);
+        filter->ClearAllNextFilters();
         return Status::OK;
     });
     return Status::OK;

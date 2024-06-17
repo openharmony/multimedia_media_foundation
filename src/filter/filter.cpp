@@ -289,8 +289,13 @@ Status Filter::ReleaseDone()
     Status ret = DoRelease();
     SetErrCode(ret);
     ChangeState(ret == Status::OK ? FilterState::RELEASED : FilterState::ERROR);
-    nextFiltersMap_.clear();
     return ret;
+}
+
+Status Filter::ClearAllNextFilters()
+{
+    nextFiltersMap_.clear();
+    return Status::OK;
 }
 
 Status Filter::ProcessInputBuffer(int sendArg, int64_t delayUs)
