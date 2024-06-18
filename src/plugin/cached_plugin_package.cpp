@@ -38,6 +38,7 @@ std::shared_ptr<PluginBase> CachedPluginPackage::CreatePlugin(PluginDescription 
 
 std::shared_ptr<PluginDefBase> CachedPluginPackage::GetPluginDef(PluginDescription pluginDescription)
 {
+    AutoLock lock(pluginMutex_);
     std::vector<std::shared_ptr<PluginPackage>>::iterator itPluginPackage;
     for (itPluginPackage = pluginPackageList_.begin();
         itPluginPackage != pluginPackageList_.end(); itPluginPackage++) {

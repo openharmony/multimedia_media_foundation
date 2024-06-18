@@ -20,6 +20,8 @@
 #include "plugin_package.h"
 #include "plugin_base.h"
 #include "plugin_list.h"
+#include "osal/task/mutex.h"
+#include "osal/task/autolock.h"
 
 namespace OHOS {
 namespace Media {
@@ -32,6 +34,7 @@ public:
 
 private:
     std::vector<std::shared_ptr<PluginPackage>> pluginPackageList_;
+    Mutex pluginMutex_;
 };
 } // namespace Plugins
 } // namespace Media
