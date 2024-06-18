@@ -139,60 +139,6 @@ private:
     void DeleteCachedBufferById(uint64_t uniqueId_);
 };
 
-class AVBufferQueueSurfaceWrapper : public AVBufferQueueImpl {
-public:
-    enum: uint8_t {
-        PRODUCER_WRAPPER,
-        CONSUMER_WRAPPER,
-        BOTH_WRAPPER
-    };
-
-    AVBufferQueueSurfaceWrapper(sptr<Surface>& surface, const std::string& name, uint8_t wrapperType);
-
-    sptr<AVBufferQueueProducer> GetProducer() override;
-    sptr<AVBufferQueueConsumer> GetConsumer() override;
-
-    sptr<Surface> GetSurfaceAsProducer() override;
-    sptr<Surface> GetSurfaceAsConsumer() override;
-
-    uint32_t GetQueueSize() override;
-    Status SetQueueSize(uint32_t size) override;
-
-    Status RequestBuffer(std::shared_ptr<AVBuffer>& buffer,
-                         const AVBufferConfig& config, int32_t timeoutMs) override;
-    Status PushBuffer(uint64_t uniqueId, bool available) override;
-    Status PushBuffer(const std::shared_ptr<AVBuffer>& buffer, bool available) override;
-    Status ReturnBuffer(uint64_t uniqueId, bool available) override;
-    Status ReturnBuffer(const std::shared_ptr<AVBuffer>& buffer, bool available) override;
-
-    Status AttachBuffer(std::shared_ptr<AVBuffer>& buffer, bool isFilled) override;
-    Status DetachBuffer(uint64_t uniqueId) override;
-    Status DetachBuffer(const std::shared_ptr<AVBuffer>& buffer) override;
-
-    Status AcquireBuffer(std::shared_ptr<AVBuffer>& buffer) override;
-    Status ReleaseBuffer(const std::shared_ptr<AVBuffer>& buffer) override;
-
-    Status SetBrokerListener(sptr<IBrokerListener>& listener) override;
-    Status RemoveBrokerListener(sptr<IBrokerListener>& listener) override;
-    Status SetProducerListener(sptr<IProducerListener>& listener) override;
-    Status SetConsumerListener(sptr<IConsumerListener>& listener) override;
-
-private:
-    sptr<Surface> surface_;
-    uint8_t wrapperType_;
-
-    std::list<uint64_t> freeBufferList_;
-    std::map<uint64_t, std::shared_ptr<AVBuffer>> cachedBufferMap_;
-
-    sptr<IBufferConsumerListener> surfaceConsumerListener_;
-
-    Status BindSurface(std::shared_ptr<AVBuffer>& buffer, sptr<SurfaceBuffer>& surfaceBuffer, int32_t fence);
-    Status UnbindSurface(uint64_t uniqueId, sptr<SurfaceBuffer>& surfaceBuffer, int32_t& fence,
-                         BufferFlushConfig& config);
-    Status CancelBuffer(uint64_t uniqueId);
-    Status ReleaseBuffer(uint64_t uniqueId);
-};
-
 } // namespace Media
 } // namespace OHOS
 
