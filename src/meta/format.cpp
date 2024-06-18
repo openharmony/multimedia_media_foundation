@@ -278,10 +278,8 @@ bool Format::PutFormatVector(const std::string_view &key, std::vector<Format> &v
 bool Format::GetFormatVector(const std::string_view &key, std::vector<Format> &value) const
 {
     auto iter = formatVecMap_.find(key);
-    if (iter == formatVecMap_.end()) {
-        MEDIA_LOG_E("GetFormatVector failed. Key: %{public}s", key.data());
-        return false;
-    }
+    FALSE_RETURN_V_MSG_E(iter != formatVecMap_.end(),
+        false, "GetFormatVector failed. Key: %{public}s", key.data());
     value.assign(iter->second.begin(), iter->second.end());
     return true;
 }

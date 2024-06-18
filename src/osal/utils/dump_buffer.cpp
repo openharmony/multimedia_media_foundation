@@ -36,10 +36,8 @@ void DumpAVBufferToFile(const std::string& para, const std::string& fileName, co
         MEDIA_LOG_E("buffer or memory is nullptr.");
         return;
     }
-    if ((para != "w" && para != "a") || fileName.empty()) {
-        MEDIA_LOG_E("para or fileName is invalid.");
-        return;
-    }
+    UNITTEST_CHECK_AND_RETURN_RET_LOG((para == "w" || para == "a") && !fileName.empty(),
+        nullptr, "para or fileName is invalid.");
     size_t bufferSize = static_cast<size_t>(buffer->memory_->GetSize());
     FALSE_RETURN((bufferSize != 0) && (buffer->memory_->GetAddr() != nullptr));
     std::string mode = para + "b+";

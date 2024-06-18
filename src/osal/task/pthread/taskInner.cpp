@@ -82,10 +82,7 @@ TaskInner::~TaskInner()
 
 void TaskInner::UpdataDelayTime(int64_t delayUs)
 {
-    if (!singleLoop_) {
-        MEDIA_LOG_D_T("task " PUBLIC_LOG_S " UpdataDelayTime do nothing", name_.c_str());
-        return;
-    }
+    UNITTEST_CHECK_AND_RETURN_RET_LOG(singleLoop_, nullptr, "task " PUBLIC_LOG_S " UpdataDelayTime do nothing", name_.c_str());
     MEDIA_LOG_D_T("task " PUBLIC_LOG_S " UpdataDelayTime enter topProcessUs:" PUBLIC_LOG_D64
         ", delayUs:" PUBLIC_LOG_D64, name_.c_str(), topProcessUs_, delayUs);
     pipelineThread_->LockJobState();
