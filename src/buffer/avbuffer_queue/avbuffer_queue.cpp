@@ -30,24 +30,6 @@ std::shared_ptr<AVBufferQueue> AVBufferQueue::Create(
     return std::make_shared<AVBufferQueueImpl>(size, type, name, disableAlloc);
 }
 
-std::shared_ptr<AVBufferQueue> AVBufferQueue::CreateAsSurfaceProducer(
-    sptr<Surface>& surface, const std::string& name)
-{
-    FALSE_RETURN_V(surface != nullptr, nullptr);
-
-    return std::make_shared<AVBufferQueueSurfaceWrapper>(
-            surface, name, AVBufferQueueSurfaceWrapper::PRODUCER_WRAPPER);
-}
-
-std::shared_ptr<AVBufferQueue> AVBufferQueue::CreateAsSurfaceConsumer(
-    sptr<Surface>& surface, const std::string& name)
-{
-    FALSE_RETURN_V(surface != nullptr, nullptr);
-
-    return std::make_shared<AVBufferQueueSurfaceWrapper>(
-            surface, name, AVBufferQueueSurfaceWrapper::CONSUMER_WRAPPER);
-}
-
 std::shared_ptr<AVBufferQueueProducer> AVBufferQueueImpl::GetLocalProducer()
 {
     std::lock_guard<std::mutex> lockGuard(producerCreatorMutex_);
