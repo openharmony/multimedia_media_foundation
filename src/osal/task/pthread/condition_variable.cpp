@@ -65,7 +65,6 @@ void ConditionVariable::NotifyOne() noexcept
     UNITTEST_CHECK_AND_RETURN_RET_LOG(condInited_, nullptr, "NotifyOne uninitialized pthread cond");
     int ret = pthread_cond_signal(&cond_);
     FALSE_LOG_MSG(ret == 0, "NotifyOne failed with errno = " PUBLIC_LOG_D32, ret);
-
 }
 
 void ConditionVariable::NotifyAll() noexcept
