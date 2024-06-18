@@ -82,7 +82,8 @@ TaskInner::~TaskInner()
 
 void TaskInner::UpdataDelayTime(int64_t delayUs)
 {
-    UNITTEST_CHECK_AND_RETURN_RET_LOG(singleLoop_, nullptr, "task " PUBLIC_LOG_S " UpdataDelayTime do nothing", name_.c_str());
+    UNITTEST_CHECK_AND_RETURN_RET_LOG(singleLoop_, nullptr,
+     "task " PUBLIC_LOG_S " UpdataDelayTime do nothing", name_.c_str());
     MEDIA_LOG_D_T("task " PUBLIC_LOG_S " UpdataDelayTime enter topProcessUs:" PUBLIC_LOG_D64
         ", delayUs:" PUBLIC_LOG_D64, name_.c_str(), topProcessUs_, delayUs);
     pipelineThread_->LockJobState();
@@ -104,9 +105,8 @@ void TaskInner::Start()
     AutoLock lock(stateMutex_);
     runningState_ = RunningState::STARTED;
     if (singleLoop_) {
-        if (!job_) {
-            MEDIA_LOG_D_T("task " PUBLIC_LOG_S " Start, job invalid", name_.c_str());
-        }
+        FALSE_LOG_MSG(job_, "task " PUBLIC_LOG_S " Start, job invalid", name_.c_str());
+
         topProcessUs_ = GetNowUs();
     } else {
         UpdateTop();

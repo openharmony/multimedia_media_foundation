@@ -50,6 +50,8 @@ bool Mutex::try_lock()
     if (ret != 0) {
         MEDIA_LOG_E("trylock failed with ret = " PUBLIC_LOG_D32, ret);
     }
+    FALSE_LOG_MSG(ret == 0, "trylock failed with ret = " PUBLIC_LOG_D32, ret);
+
     return ret == 0;
 }
 

@@ -64,18 +64,15 @@ void ConditionVariable::NotifyOne() noexcept
 {
     UNITTEST_CHECK_AND_RETURN_RET_LOG(condInited_, nullptr, "NotifyOne uninitialized pthread cond");
     int ret = pthread_cond_signal(&cond_);
-    if (ret != 0) {
-        MEDIA_LOG_E("NotifyOne failed with errno = " PUBLIC_LOG_D32, ret);
-    }
+    FALSE_LOG_MSG(ret == 0, "NotifyOne failed with errno = " PUBLIC_LOG_D32, ret);
+
 }
 
 void ConditionVariable::NotifyAll() noexcept
 {
     UNITTEST_CHECK_AND_RETURN_RET_LOG(condInited_, nullptr, "NotifyAll uninitialized pthread cond");
     int ret = pthread_cond_broadcast(&cond_);
-    if (ret != 0) {
-        MEDIA_LOG_E("NotifyAll failed with errno = " PUBLIC_LOG_D32, ret);
-    }
+    FALSE_LOG_MSG(ret == 0, "NotifyAll failed with errno = " PUBLIC_LOG_D32, ret);
 }
 
 void ConditionVariable::Wait(AutoLock& lock) noexcept
@@ -110,14 +107,10 @@ bool ConditionVariable::WaitFor(AutoLock& lock, int timeoutMs)
 
 bool ConditionVariable::WaitFor(AutoLock& lock, int timeoutMs, std::function<bool()> pred)
 {
-    if (timeoutMs < 0) {
-        MEDIA_LOG_E("ConditionVariable WaitUntil invalid timeoutMs: " PUBLIC_LOG_D32, timeoutMs);
-        return false;
-    }
-    if (!condInited_) {
-        MEDIA_LOG_E("WaitFor uninitialized pthread cond");
-        return false;
-    }
+    FALSE_RETURN_V_MSG_E(timeoutMs > 0,
+        false, "ConditionVariable WaitUntil invalid timeoutMs: " PUBLIC_LOG_D32, timeoutMs);
+    FALSE_RETURN_V_MSG_E(condInited_,
+        false, "WaitFor uninitialized pthread cond");
     struct timespec timeout = {0, 0};
 #ifdef USING_CLOCK_REALTIME
     clock_gettime(CLOCK_REALTIME, &timeout);
