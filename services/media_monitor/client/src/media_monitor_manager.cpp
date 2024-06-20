@@ -40,7 +40,7 @@ static const sptr<IMediaMonitor> GetMediaMonitorProxy()
         auto smmgr = SystemAbilityManagerClient::GetInstance().GetSystemAbilityManager();
         FALSE_RETURN_V_MSG_E(smmgr != nullptr, nullptr, "smmgr init failed.");
 
-        sptr<IRemoteObject> object = smmgr->GetSystemAbility(MEDIA_MONITOR_SERVICE_ID);
+        sptr<IRemoteObject> object = smmgr->CheckSystemAbility(MEDIA_MONITOR_SERVICE_ID);
         FALSE_RETURN_V_MSG_E(object != nullptr, nullptr, "Object is NULL.");
 
         g_mmProxy = iface_cast<IMediaMonitor>(object);
