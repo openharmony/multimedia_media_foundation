@@ -62,27 +62,27 @@ ConditionVariable::~ConditionVariable() noexcept
 
 void ConditionVariable::NotifyOne() noexcept
 {
-    UNITTEST_CHECK_AND_RETURN_RET_LOG(condInited_, nullptr, "NotifyOne uninitialized pthread cond");
+    FALSE_LOG_MSG(condInited_, "NotifyOne uninitialized pthread cond");
     int ret = pthread_cond_signal(&cond_);
     FALSE_LOG_MSG(ret == 0, "NotifyOne failed with errno = " PUBLIC_LOG_D32, ret);
 }
 
 void ConditionVariable::NotifyAll() noexcept
 {
-    UNITTEST_CHECK_AND_RETURN_RET_LOG(condInited_, nullptr, "NotifyAll uninitialized pthread cond");
+    FALSE_LOG_MSG(condInited_, "NotifyAll uninitialized pthread cond");
     int ret = pthread_cond_broadcast(&cond_);
     FALSE_LOG_MSG(ret == 0, "NotifyAll failed with errno = " PUBLIC_LOG_D32, ret);
 }
 
 void ConditionVariable::Wait(AutoLock& lock) noexcept
 {
-    UNITTEST_CHECK_AND_RETURN_RET_LOG(condInited_, nullptr, "Wait uninitialized pthread cond");
+    FALSE_LOG_MSG(condInited_, "Wait uninitialized pthread cond");
     pthread_cond_wait(&cond_, &(lock.mutex_->nativeHandle_));
 }
 
 void ConditionVariable::Wait(AutoLock& lock, std::function<bool()> pred) noexcept
 {
-    UNITTEST_CHECK_AND_RETURN_RET_LOG(condInited_, nullptr, "Wait uninitialized pthread cond");
+    FALSE_LOG_MSG(condInited_, "Wait uninitialized pthread cond");
     while (!pred()) {
         Wait(lock);
     }
@@ -90,7 +90,7 @@ void ConditionVariable::Wait(AutoLock& lock, std::function<bool()> pred) noexcep
 
 bool ConditionVariable::WaitFor(AutoLock& lock, int timeoutMs)
 {
-    FALSE_RETURN_V_MSG_E(timeoutMs > 0,
+    FALSE_RETURN_V_MSG_E(timeoutMs >= 0,
         false, "ConditionVariable WaitUntil invalid timeoutMs: " PUBLIC_LOG_D32, timeoutMs);
     FALSE_RETURN_V_MSG_E(condInited_,
         false, "WaitFor uninitialized pthread cond");
@@ -106,7 +106,7 @@ bool ConditionVariable::WaitFor(AutoLock& lock, int timeoutMs)
 
 bool ConditionVariable::WaitFor(AutoLock& lock, int timeoutMs, std::function<bool()> pred)
 {
-    FALSE_RETURN_V_MSG_E(timeoutMs > 0,
+    FALSE_RETURN_V_MSG_E(timeoutMs >= 0,
         false, "ConditionVariable WaitUntil invalid timeoutMs: " PUBLIC_LOG_D32, timeoutMs);
     FALSE_RETURN_V_MSG_E(condInited_,
         false, "WaitFor uninitialized pthread cond");

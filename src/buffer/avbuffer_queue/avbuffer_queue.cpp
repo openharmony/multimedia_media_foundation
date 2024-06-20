@@ -321,7 +321,7 @@ Status AVBufferQueueImpl::RequestBuffer(
 
         // 被条件唤醒后，再次尝试从freeBufferList中取buffer
         ret = PopFromFreeBufferList(buffer, configCopy);
-        FALSE_RETURN_V(ret != Status::OK, RequestReuseBuffer(buffer, configCopy));
+        FALSE_RETURN_W(ret != Status::OK, RequestReuseBuffer(buffer, configCopy));
         if (GetCachedBufferCount() >= GetQueueSize()) return Status::ERROR_NO_FREE_BUFFER;
     }
 

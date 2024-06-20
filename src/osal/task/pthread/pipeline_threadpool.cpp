@@ -134,7 +134,7 @@ void PipeLineThread::Exit()
 {
     {
         AutoLock lock(mutex_);
-        FALSE_RETURN_V(!threadExit_.load() && loop_, nullptr);
+        FALSE_RETURN_W(!threadExit_.load() && loop_);
 
         MEDIA_LOG_I("PipeLineThread " PUBLIC_LOG_S " exit", name_.c_str());
         threadExit_ = true;
@@ -206,7 +206,7 @@ void PipeLineThread::RemoveTask(std::shared_ptr<TaskInner> task)
 
 void PipeLineThread::LockJobState()
 {
-    FALSE_RETURN_V(!IsRunningInSelf(), nullptr);
+    FALSE_RETURN_W(!IsRunningInSelf());
     mutex_.lock();
 }
 

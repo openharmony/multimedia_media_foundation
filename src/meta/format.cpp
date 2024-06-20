@@ -103,8 +103,7 @@ Format::Format()
 
 Format::Format(const Format &rhs)
 {
-    FALSE_RETURN_V(&rhs != this, nullptr);
-
+    FALSE_RETURN_W(&rhs != this);
     this->meta_ = std::make_shared<Meta>();
     *(this->meta_) = *(rhs.meta_);
     CopyFormatVectorMap(rhs.formatVecMap_, formatVecMap_);
@@ -119,7 +118,6 @@ Format::Format(Format &&rhs) noexcept
 Format &Format::operator=(const Format &rhs)
 {
     FALSE_RETURN_V(&rhs != this, *this);
-
     *(this->meta_) = *(rhs.meta_);
     CopyFormatVectorMap(rhs.formatVecMap_, this->formatVecMap_);
     return *this;
@@ -127,8 +125,7 @@ Format &Format::operator=(const Format &rhs)
 
 Format &Format::operator=(Format &&rhs) noexcept
 {
-    FALSE_RETURN_V(&rhs != this, *this);
-
+    FALSE_RETURN_W(&rhs != this, *this);
     this->meta_ = rhs.meta_;
     std::swap(this->formatVecMap_, rhs.formatVecMap_);
     return *this;
@@ -412,7 +409,6 @@ std::shared_ptr<Meta> Format::GetMeta()
 bool Format::SetMeta(std::shared_ptr<Meta> meta)
 {
     FALSE_RETURN_V(meta != nullptr, false);
-
     if (meta.use_count() > 1) {
         *meta_ = *meta;
     } else {

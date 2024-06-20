@@ -25,7 +25,7 @@ AVBufferConfig::AVBufferConfig()
 
 AVBufferConfig::AVBufferConfig(const AVBufferConfig &rhs)
 {
-    FALSE_RETURN_V(&rhs != this, nullptr);
+    FALSE_RETURN_W(&rhs != this);
     this->surfaceBufferConfig = std::make_unique<BufferRequestConfig>();
     *(this->surfaceBufferConfig) = *(rhs.surfaceBufferConfig);
     this->size = rhs.size;
@@ -64,7 +64,7 @@ AVBufferConfig &AVBufferConfig::operator=(const AVBufferConfig &rhs)
 
 AVBufferConfig &AVBufferConfig::operator=(AVBufferConfig &&rhs) noexcept
 {
-    FALSE_RETURN_V(&rhs != this, *this);
+    FALSE_RETURN_W(&rhs != this, *this);
     this->surfaceBufferConfig = std::move(rhs.surfaceBufferConfig);
     this->size = rhs.size;
     this->align = rhs.align;
@@ -77,7 +77,7 @@ AVBufferConfig &AVBufferConfig::operator=(AVBufferConfig &&rhs) noexcept
 
 bool AVBufferConfig::operator<=(const struct AVBufferConfig &rhs) const
 {
-    FALSE_RETURN_V(memoryType == rhs.memoryType, false);
+    FALSE_RETURN_W(memoryType == rhs.memoryType, false);
     int32_t configAllocSize = rhs.align ? (rhs.capacity + rhs.align - 1) : rhs.capacity;
     switch (memoryType) {
         case MemoryType::VIRTUAL_MEMORY:
