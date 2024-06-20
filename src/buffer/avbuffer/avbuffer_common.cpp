@@ -15,7 +15,7 @@
 
 #include "buffer/avbuffer_common.h"
 #include "surface_type.h" // foundation/graphic/graphic_2d/interfaces/surface/surface_type.h
-
+#include "log.h"
 namespace OHOS {
 namespace Media {
 AVBufferConfig::AVBufferConfig()
@@ -25,9 +25,7 @@ AVBufferConfig::AVBufferConfig()
 
 AVBufferConfig::AVBufferConfig(const AVBufferConfig &rhs)
 {
-    if (&rhs == this) {
-        return;
-    }
+    FALSE_RETURN_W(&rhs != this);
     this->surfaceBufferConfig = std::make_unique<BufferRequestConfig>();
     *(this->surfaceBufferConfig) = *(rhs.surfaceBufferConfig);
     this->size = rhs.size;
@@ -66,9 +64,7 @@ AVBufferConfig &AVBufferConfig::operator=(const AVBufferConfig &rhs)
 
 AVBufferConfig &AVBufferConfig::operator=(AVBufferConfig &&rhs) noexcept
 {
-    if (&rhs == this) {
-        return *this;
-    }
+    FALSE_RETURN_V(&rhs != this, *this);
     this->surfaceBufferConfig = std::move(rhs.surfaceBufferConfig);
     this->size = rhs.size;
     this->align = rhs.align;
@@ -81,9 +77,7 @@ AVBufferConfig &AVBufferConfig::operator=(AVBufferConfig &&rhs) noexcept
 
 bool AVBufferConfig::operator<=(const struct AVBufferConfig &rhs) const
 {
-    if (memoryType != rhs.memoryType) {
-        return false;
-    }
+    FALSE_RETURN_V(memoryType == rhs.memoryType, false);
     int32_t configAllocSize = rhs.align ? (rhs.capacity + rhs.align - 1) : rhs.capacity;
     switch (memoryType) {
         case MemoryType::VIRTUAL_MEMORY:

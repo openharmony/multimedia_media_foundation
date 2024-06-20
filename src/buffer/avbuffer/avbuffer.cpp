@@ -68,9 +68,7 @@ std::shared_ptr<AVBuffer> AVBuffer::CreateAVBuffer(const AVBufferConfig &config)
 
 const AVBufferConfig &AVBuffer::GetConfig()
 {
-    if (memory_ == nullptr) {
-        return config_;
-    }
+    FALSE_RETURN_V(memory_ != nullptr, config_);
     config_.size = memory_->GetSize();
     if (config_.memoryType == MemoryType::UNKNOWN_MEMORY) {
         config_.memoryType = memory_->GetMemoryType();
@@ -191,9 +189,7 @@ Status AVBuffer::Init(sptr<SurfaceBuffer> surfaceBuffer)
 
 uint64_t AVBuffer::GetUniqueId()
 {
-    if (memory_ == nullptr) {
-        return 0;
-    }
+    FALSE_RETURN_V(memory_ != nullptr, 0);
     return memory_->uid_;
 }
 
@@ -225,9 +221,7 @@ bool AVBuffer::ReadFromMessageParcel(MessageParcel &parcel, bool isSurfaceBuffer
 {
 #ifdef MEDIA_OHOS
     if (isSurfaceBuffer) {
-        if (memory_ != nullptr) {
-            return false;
-        }
+        FALSE_RETURN_V(memory_ == nullptr, false);
         memory_ = AVMemory::CreateAVMemory(parcel, true);
         FALSE_RETURN_V_MSG_E(memory_ != nullptr, false, "Create memory failed");
         return true;

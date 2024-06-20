@@ -103,9 +103,7 @@ Format::Format()
 
 Format::Format(const Format &rhs)
 {
-    if (&rhs == this) {
-        return;
-    }
+    FALSE_RETURN_W(&rhs != this);
     this->meta_ = std::make_shared<Meta>();
     *(this->meta_) = *(rhs.meta_);
     CopyFormatVectorMap(rhs.formatVecMap_, formatVecMap_);
@@ -119,9 +117,7 @@ Format::Format(Format &&rhs) noexcept
 
 Format &Format::operator=(const Format &rhs)
 {
-    if (&rhs == this) {
-        return *this;
-    }
+    FALSE_RETURN_V(&rhs != this, *this);
     *(this->meta_) = *(rhs.meta_);
     CopyFormatVectorMap(rhs.formatVecMap_, this->formatVecMap_);
     return *this;
@@ -129,9 +125,7 @@ Format &Format::operator=(const Format &rhs)
 
 Format &Format::operator=(Format &&rhs) noexcept
 {
-    if (&rhs == this) {
-        return *this;
-    }
+    FALSE_RETURN_V(&rhs != this, *this);
     this->meta_ = rhs.meta_;
     std::swap(this->formatVecMap_, rhs.formatVecMap_);
     return *this;
@@ -278,10 +272,8 @@ bool Format::PutFormatVector(const std::string_view &key, std::vector<Format> &v
 bool Format::GetFormatVector(const std::string_view &key, std::vector<Format> &value) const
 {
     auto iter = formatVecMap_.find(key);
-    if (iter == formatVecMap_.end()) {
-        MEDIA_LOG_E("GetFormatVector failed. Key: %{public}s", key.data());
-        return false;
-    }
+    FALSE_RETURN_V_MSG_E(iter != formatVecMap_.end(),
+        false, "GetFormatVector failed. Key: %{public}s", key.data());
     value.assign(iter->second.begin(), iter->second.end());
     return true;
 }
@@ -363,9 +355,7 @@ const Format::FormatDataMap &Format::GetFormatMap() const
             default:
                 MEDIA_LOG_E("Format::Stringify failed. Key: %{public}s", iter->first.c_str());
         }
-        if (!ret) {
-            MEDIA_LOG_E("Put value to formatMap failed, key = %{public}s", iter->first.c_str());
-        }
+        FALSE_LOG_MSG(ret, "Put value to formatMap failed, key = %{public}s", iter->first.c_str());
     }
     FormatDataMap *formatMapRef = const_cast<FormatDataMap *>(&formatMap_);
     swap(formatTemp, *formatMapRef);
@@ -418,9 +408,7 @@ std::shared_ptr<Meta> Format::GetMeta()
 
 bool Format::SetMeta(std::shared_ptr<Meta> meta)
 {
-    if (meta == nullptr) {
-        return false;
-    }
+    FALSE_RETURN_V(meta != nullptr, false);
     if (meta.use_count() > 1) {
         *meta_ = *meta;
     } else {
