@@ -134,8 +134,9 @@ void PipeLineThread::Exit()
 {
     {
         AutoLock lock(mutex_);
-        FALSE_RETURN_W(!threadExit_.load() && loop_);
-
+        if (threadExit_.load() || !loop_) {
+            return;
+        }
         MEDIA_LOG_I("PipeLineThread " PUBLIC_LOG_S " exit", name_.c_str());
         threadExit_ = true;
         syncCond_.NotifyAll();
@@ -196,8 +197,9 @@ void PipeLineThread::RemoveTask(std::shared_ptr<TaskInner> task)
     {
         AutoLock lock(mutex_);
         taskList_.remove(task);
-        FALSE_LOG_MSG(!taskList_.empty(),
-         "PipeLineThread " PUBLIC_LOG_S " remove all Task", name_.c_str());
+        if (taskList_.empty()) {
+            MEDIA_LOG_I("PipeLineThread " PUBLIC_LOG_S " remove all Task", name_.c_str());
+        }
     }
     if (type_ == TaskType::SINGLETON) {
         PipeLineThreadPool::GetInstance().DestroyThread(name_);
@@ -206,7 +208,9 @@ void PipeLineThread::RemoveTask(std::shared_ptr<TaskInner> task)
 
 void PipeLineThread::LockJobState()
 {
-    FALSE_RETURN_W(!IsRunningInSelf());
+    if (IsRunningInSelf()) {
+        return;
+    }
     mutex_.lock();
 }
 
