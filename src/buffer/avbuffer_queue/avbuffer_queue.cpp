@@ -303,7 +303,7 @@ Status AVBufferQueueImpl::RequestBuffer(
     // check param
     std::unique_lock<std::mutex> lock(queueMutex_);
     auto res = CheckConfig(configCopy);
-    FALSE_RETURN_V_MSG_E(res == Status::OK,
+    FALSE_RETURN_V_MSG_IMPL(D,res == Status::OK,
         res, "CheckConfig not OK, code %{public}d", static_cast<int32_t>(res));
 
     // dequeue from free list
@@ -321,7 +321,7 @@ Status AVBufferQueueImpl::RequestBuffer(
 
         // 被条件唤醒后，再次尝试从freeBufferList中取buffer
         ret = PopFromFreeBufferList(buffer, configCopy);
-        FALSE_RETURN_W(ret != Status::OK, RequestReuseBuffer(buffer, configCopy));
+        FALSE_RETURN_V(ret != Status::OK, RequestReuseBuffer(buffer, configCopy));
         if (GetCachedBufferCount() >= GetQueueSize()) return Status::ERROR_NO_FREE_BUFFER;
     }
 

@@ -105,8 +105,9 @@ void TaskInner::Start()
     AutoLock lock(stateMutex_);
     runningState_ = RunningState::STARTED;
     if (singleLoop_) {
-        FALSE_LOG_MSG(job_, "task " PUBLIC_LOG_S " Start, job invalid", name_.c_str());
-
+        if (!job_) {
+            MEDIA_LOG_D_T("task " PUBLIC_LOG_S " Start, job invalid", name_.c_str());
+        }
         topProcessUs_ = GetNowUs();
     } else {
         UpdateTop();

@@ -125,7 +125,7 @@ Format &Format::operator=(const Format &rhs)
 
 Format &Format::operator=(Format &&rhs) noexcept
 {
-    FALSE_RETURN_W(&rhs != this, *this);
+    FALSE_RETURN_V(&rhs != this, *this);
     this->meta_ = rhs.meta_;
     std::swap(this->formatVecMap_, rhs.formatVecMap_);
     return *this;
