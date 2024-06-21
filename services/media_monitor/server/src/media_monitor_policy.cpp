@@ -587,7 +587,7 @@ void MediaMonitorPolicy::HandleToHiSysEvent()
 void MediaMonitorPolicy::WriteInfo(int32_t fd, std::string &dumpString)
 {
     if (fd != -1) {
-        int32_t remainderSize = static_cast<int32_t>(aggregationFrequency_ - eventVector_.size());
+        int32_t remainderSize = aggregationFrequency_ - static_cast<int32_t>(eventVector_.size());
         int64_t elapsedTime = static_cast<int64_t>((TimeUtils::GetCurSec() - curruntTime_)) / 60;
         int64_t oneDay = aggregationTime_;
         dumpString += "Counting of eventVector entries:";

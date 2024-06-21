@@ -52,6 +52,9 @@ void CodecBuffer::Init(bool isInput, uint32_t bufferSize, MemoryType bufMemType)
             BufferHandle* bufferHandle =
                 std::static_pointer_cast<Plugin::SurfaceMemory>(memory_)->GetSurfaceBuffer()->GetBufferHandle();
             FALSE_LOG_MSG(bufferHandle != nullptr, "bufferHandle is null");
+            if (bufferHandle == NULL) {
+                return;
+            }
             omxBuffer_->bufferLen =
                 sizeof(BufferHandle) + (sizeof(int32_t) * (bufferHandle->reserveFds + bufferHandle->reserveInts));
             omxBuffer_->buffer = reinterpret_cast<uint8_t *>(bufferHandle);

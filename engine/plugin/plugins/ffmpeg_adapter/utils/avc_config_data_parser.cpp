@@ -52,6 +52,9 @@ AVCConfigDataParser::AVCConfigDataParser(const uint8_t* cfgData, const size_t cf
       newCfgDataSize_(0)
 {
     cfgSet.count = 0;
+    for (int32_t i = 0; i < AVC_MAX_CONFIG_ITEM; i++) {
+        cfgSet.items[i] = nullptr;
+    }
 }
 
 AVCConfigDataParser::~AVCConfigDataParser()
