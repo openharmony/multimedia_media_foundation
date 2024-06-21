@@ -38,7 +38,7 @@ Mutex::~Mutex()
 
 void Mutex::lock()
 {
-    FALSE_LOG_MSG(created_, "lock uninitialized pthread mutex!");
+    FALSE_RETURN_MSG(created_, "lock uninitialized pthread mutex!");
     pthread_mutex_lock(&nativeHandle_);
 }
 
@@ -53,7 +53,7 @@ bool Mutex::try_lock()
 
 void Mutex::unlock()
 {
-    FALSE_LOG_MSG(created_, "unlock uninitialized pthread mutex!");
+    FALSE_RETURN_MSG(created_, "unlock uninitialized pthread mutex!");
     pthread_mutex_unlock(&nativeHandle_);
 }
 
