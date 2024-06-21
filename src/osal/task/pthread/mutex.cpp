@@ -38,32 +38,22 @@ Mutex::~Mutex()
 
 void Mutex::lock()
 {
-    if (!created_) {
-        MEDIA_LOG_E("lock uninitialized pthread mutex!");
-        return;
-    }
+    FALSE_LOG_MSG(created_, "lock uninitialized pthread mutex!");
     pthread_mutex_lock(&nativeHandle_);
 }
 
 bool Mutex::try_lock()
 {
-    if (!created_) {
-        MEDIA_LOG_E("trylock uninitialized pthread mutex.");
-        return false;
-    }
+    FALSE_RETURN_V_MSG_E(created_,
+        false, "trylock uninitialized pthread mutex.");
     int ret = pthread_mutex_trylock(&nativeHandle_);
-    if (ret != 0) {
-        MEDIA_LOG_E("trylock failed with ret = " PUBLIC_LOG_D32, ret);
-    }
+    FALSE_LOG_MSG(ret == 0, "trylock failed with ret = " PUBLIC_LOG_D32, ret);
     return ret == 0;
 }
 
 void Mutex::unlock()
 {
-    if (!created_) {
-        MEDIA_LOG_E("unlock uninitialized pthread mutex!");
-        return;
-    }
+    FALSE_LOG_MSG(created_, "unlock uninitialized pthread mutex!");
     pthread_mutex_unlock(&nativeHandle_);
 }
 

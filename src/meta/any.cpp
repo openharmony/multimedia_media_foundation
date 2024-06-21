@@ -171,10 +171,8 @@ std::string_view Any::GetTypeNameFromFunctionInfo(const char* functionInfo) noex
 #else
     size_t endIndex = stringInfo.find_last_of(';');
 #endif
-    if (endIndex == std::string::npos) {
-        MEDIA_LOG_E("GetTypeNameFromFunctionInfo find Type failed. Function: " PUBLIC_LOG_S, stringInfo.data());
-        return retType;
-    }
+    FALSE_RETURN_V_MSG_E(endIndex != std::string::npos,
+        retType, "GetTypeNameFromFunctionInfo find Type failed. Function: " PUBLIC_LOG_S, stringInfo.data());
     std::string_view typeNameRet(functionInfo + beginIndex, endIndex - beginIndex);
     return typeNameRet;
 }
