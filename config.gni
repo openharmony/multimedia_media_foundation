@@ -90,17 +90,17 @@ if (!defined(ohos_lite) || !ohos_lite) {
 }
 
 if (hst_is_standard_sys) {
-  media_foundation_enable_plugin_file_source = true
-  media_foundation_enable_plugin_file_fd_source = true
+  media_foundation_enable_plugin_file_source = false
+  media_foundation_enable_plugin_file_fd_source = false
   media_foundation_enable_plugin_ffmpeg_adapter = true
-  media_foundation_enable_plugin_http_source = true
-  media_foundation_enable_plugin_audio_server_sink = true
+  media_foundation_enable_plugin_http_source = false
+  media_foundation_enable_plugin_audio_server_sink = false
   media_foundation_enable_recorder = true
   media_foundation_enable_plugin_file_fd_sink = true
-  media_foundation_enable_plugin_std_audio_capture = true
+  media_foundation_enable_plugin_std_audio_capture = false
   media_foundation_enable_plugin_std_stream_source = false
   media_foundation_enable_video = true
-  media_foundation_enable_plugin_std_video_surface_sink = true
+  media_foundation_enable_plugin_std_video_surface_sink = false
   media_foundation_enable_plugin_codec_adapter = true
 }
 
