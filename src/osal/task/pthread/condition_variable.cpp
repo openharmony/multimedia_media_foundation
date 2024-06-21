@@ -62,27 +62,27 @@ ConditionVariable::~ConditionVariable() noexcept
 
 void ConditionVariable::NotifyOne() noexcept
 {
-    FALSE_LOG_MSG(condInited_, "NotifyOne uninitialized pthread cond");
+    FALSE_RETURN_MSG(condInited_, "NotifyOne uninitialized pthread cond");
     int ret = pthread_cond_signal(&cond_);
     FALSE_LOG_MSG(ret == 0, "NotifyOne failed with errno = " PUBLIC_LOG_D32, ret);
 }
 
 void ConditionVariable::NotifyAll() noexcept
 {
-    FALSE_LOG_MSG(condInited_, "NotifyAll uninitialized pthread cond");
+    FALSE_RETURN_MSG(condInited_, "NotifyAll uninitialized pthread cond");
     int ret = pthread_cond_broadcast(&cond_);
     FALSE_LOG_MSG(ret == 0, "NotifyAll failed with errno = " PUBLIC_LOG_D32, ret);
 }
 
 void ConditionVariable::Wait(AutoLock& lock) noexcept
 {
-    FALSE_LOG_MSG(condInited_, "Wait uninitialized pthread cond");
+    FALSE_RETURN_MSG(condInited_, "Wait uninitialized pthread cond");
     pthread_cond_wait(&cond_, &(lock.mutex_->nativeHandle_));
 }
 
 void ConditionVariable::Wait(AutoLock& lock, std::function<bool()> pred) noexcept
 {
-    FALSE_LOG_MSG(condInited_, "Wait uninitialized pthread cond");
+    FALSE_RETURN_MSG(condInited_, "Wait uninitialized pthread cond");
     while (!pred()) {
         Wait(lock);
     }
