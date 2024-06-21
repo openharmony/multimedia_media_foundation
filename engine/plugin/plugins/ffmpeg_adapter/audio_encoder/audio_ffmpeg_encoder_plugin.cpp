@@ -376,7 +376,7 @@ void AudioFfmpegEncoderPlugin::FillInFrameCache(const std::shared_ptr<Memory>& m
         FALSE_LOG(resample_->Convert(srcBuffer, srcLength, destBuffer, destLength) == Status::OK);
         if (destLength) {
             sampleData = destBuffer;
-            nbSamples = static_cast<int32_t>((destLength
+            nbSamples = static_cast<int32_t>((static_cast<int32_t>(destLength)
                 / av_get_bytes_per_sample(avCodecContext_->sample_fmt) / avCodecContext_->channels));
         }
     } else {
@@ -452,7 +452,7 @@ Status AudioFfmpegEncoderPlugin::ReceiveFrameSucc(const std::shared_ptr<Buffer>&
     // how get perfect pts with upstream pts ?
     ioInfo->duration = ConvertTimeFromFFmpeg(packet->duration, avCodecContext_->time_base);
     ioInfo->pts = (UINT64_MAX - prev_pts_ < static_cast<uint64_t>(packet->duration)) ?
-                  (ioInfo->duration - (UINT64_MAX - prev_pts_)) :
+                  (static_cast<uint64_t>(ioInfo->duration) - (UINT64_MAX - prev_pts_)) :
                   (prev_pts_ + ioInfo->duration);
     prev_pts_ = ioInfo->pts;
     return Status::OK;

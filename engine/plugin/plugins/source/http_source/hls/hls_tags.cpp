@@ -113,7 +113,7 @@ std::pair<int, int> Attribute::GetResolution() const
     if (!is.eof()) {
         is >> w;
         if (!is.eof()) {
-            char c = is.get();
+            char c = static_cast<char>(is.get());
             if (c == 'x' && !is.eof()) {
                 is >> h;
             }

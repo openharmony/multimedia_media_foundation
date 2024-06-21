@@ -466,7 +466,7 @@ Status VideoFfmpegEncoderPlugin::FillFrameBuffer(const std::shared_ptr<Buffer>& 
     FALSE_RETURN_V_MSG_E(frameBufferMem->Write(cachedPacket_->data, cachedPacket_->size, 0) ==
                          static_cast<size_t>(cachedPacket_->size), Status::ERROR_UNKNOWN,
                          "copy packet data to buffer fail");
-    if (cachedPacket_->flags & AV_PKT_FLAG_KEY) {
+    if (static_cast<uint32_t>(cachedPacket_->flags) & AV_PKT_FLAG_KEY) {
         MEDIA_LOG_D("It is key frame");
         packetBuffer->flag |= BUFFER_FLAG_KEY_FRAME;
     }
