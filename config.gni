@@ -95,7 +95,7 @@ if (hst_is_standard_sys) {
   media_foundation_enable_plugin_ffmpeg_adapter = true
   media_foundation_enable_plugin_http_source = false
   media_foundation_enable_plugin_audio_server_sink = false
-  media_foundation_enable_recorder = false
+  media_foundation_enable_recorder = true
   media_foundation_enable_plugin_file_fd_sink = false
   media_foundation_enable_plugin_std_audio_capture = false
   media_foundation_enable_plugin_std_stream_source = false
