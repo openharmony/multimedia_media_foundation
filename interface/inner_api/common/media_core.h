@@ -16,6 +16,7 @@
 #ifndef MEDIA_CORE_H
 #define MEDIA_CORE_H
 
+#include <map>
 #include <string_view>
 #include "errors.h"
 
@@ -192,6 +193,19 @@ struct AVFileDescriptor {
     int64_t offset = 0;
     int64_t length = -1;
 };
+
+struct FrameLayerInfo {
+    bool isDiscardable = false;
+    uint32_t gopId = 0;
+    int32_t layer = -1;
+};
+
+struct GopLayerInfo {
+    uint32_t gopSize = 0;
+    uint32_t layerCount = 0;
+    std::map<uint8_t, uint32_t> layerFrameNum;
+};
+
 } // namespace Media
 } // namespace OHOS
 #endif // MEDIA_CORE_H
