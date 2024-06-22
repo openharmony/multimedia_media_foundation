@@ -40,8 +40,8 @@ void PiplineUnitTest::SetUp(void)
     ASSERT_NE(pipeline_, nullptr);
     testId = std::string("Test_") + std::to_string(Pipeline::Pipeline::GetNextPipelineId());
     pipeline_->Init(nullptr, nullptr, testId);
-    filterOne_ = std::make_shared<TestFilter>();
-    filterTwo_ = std::make_shared<TestFilter>();
+    filterOne_ = std::make_shared<TestFilter>("filterOne", Pipeline::FilterType::AUDIO_CAPTURE);
+    filterTwo_ = std::make_shared<TestFilter>("filterTwo", Pipeline::FilterType::FILTERTYPE_AENC);
 }
 
 void PiplineUnitTest::TearDown(void)
@@ -54,7 +54,7 @@ void PiplineUnitTest::TearDown(void)
  * @tc.desc: Pipeline_Test_AddHeadFilters_0100
  * @tc.type: FUNC
  */
-HWTEST_F(PiplineFuncUT, Pipeline_Test_AddHeadFilters_0100, TestSize.Level1)
+HWTEST_F(PiplineUnitTest, Pipeline_Test_AddHeadFilters_0100, TestSize.Level1)
 {
     EXPECT_EQ(pipeline_->AddHeadFilters({filterOne_, filterTwo_}), Status::OK);
 }
@@ -64,15 +64,15 @@ HWTEST_F(PiplineFuncUT, Pipeline_Test_AddHeadFilters_0100, TestSize.Level1)
  * @tc.desc: Pipeline_Test_LinkFilters_0100
  * @tc.type: FUNC
  */
-HWTEST_F(PiplineFuncUT, Pipeline_Test_LinkFilters_0100, TestSize.Level1)
+HWTEST_F(PiplineUnitTest, Pipeline_Test_LinkFilters_0100, TestSize.Level1)
 {
     EXPECT_EQ(pipeline_->AddHeadFilters({filterOne_}), Status::OK);
     EXPECT_EQ(pipeline_->LinkFilters(filterOne_, {filterTwo_},
-        StreamType::STREAMTYPE_ENCODED_AUDIO), Status::OK);
+        Pipeline::StreamType::STREAMTYPE_ENCODED_AUDIO), Status::OK);
     EXPECT_EQ(pipeline_->UpdateFilters(filterOne_, {filterTwo_},
-        StreamType::STREAMTYPE_ENCODED_AUDIO), Status::OK);
+        Pipeline::StreamType::STREAMTYPE_ENCODED_AUDIO), Status::OK);
     EXPECT_EQ(pipeline_->UnLinkFilters(filterOne_, {filterTwo_},
-        StreamType::STREAMTYPE_ENCODED_AUDIO), Status::OK);
+        Pipeline::StreamType::STREAMTYPE_ENCODED_AUDIO), Status::OK);
 }
 
 /**
@@ -80,15 +80,15 @@ HWTEST_F(PiplineFuncUT, Pipeline_Test_LinkFilters_0100, TestSize.Level1)
  * @tc.desc: Pipeline_Test_pipline_0100
  * @tc.type: FUNC
  */
-HWTEST_F(PiplineFuncUT, Pipeline_Test_pipline_0100, TestSize.Level1)
+HWTEST_F(PiplineUnitTest, Pipeline_Test_pipline_0100, TestSize.Level1)
 {
     EXPECT_EQ(pipeline_->AddHeadFilters({filterOne_}), Status::OK);
     EXPECT_EQ(pipeline_->LinkFilters(filterOne_, {filterTwo_},
-        StreamType::STREAMTYPE_ENCODED_AUDIO), Status::OK);
+        Pipeline::StreamType::STREAMTYPE_ENCODED_AUDIO), Status::OK);
     EXPECT_EQ(pipeline_->UpdateFilters(filterOne_, {filterTwo_},
-        StreamType::STREAMTYPE_ENCODED_AUDIO), Status::OK);
+        Pipeline::StreamType::STREAMTYPE_ENCODED_AUDIO), Status::OK);
     EXPECT_EQ(pipeline_->UnLinkFilters(filterOne_, {filterTwo_},
-        StreamType::STREAMTYPE_ENCODED_AUDIO), Status::OK);
+        Pipeline::StreamType::STREAMTYPE_ENCODED_AUDIO), Status::OK);
     EXPECT_EQ(pipeline_->Prepare(), Status::OK);
     EXPECT_EQ(pipeline_->Start(), Status::OK);
     EXPECT_EQ(pipeline_->Pause(), Status::OK);
