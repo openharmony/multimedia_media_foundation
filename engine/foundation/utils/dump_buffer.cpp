@@ -66,7 +66,8 @@ void PrepareDumpDir()
         if (isFileExist) { // 文件存在
             OSAL::FileSystem::ClearFileContent(fullPath);
         }
-        auto realPath = realpath(fullPath.c_str(), nullptr);
+        char path[PATH_MAX] = {0};
+        auto realPath = realpath(fullPath.c_str(), path);
         FALSE_RETURN(realPath != nullptr);
         allDumpFileFds[iter] = fopen(realPath, "ab+");
         if (allDumpFileFds[iter] == nullptr) {

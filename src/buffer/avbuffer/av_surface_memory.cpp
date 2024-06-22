@@ -33,7 +33,8 @@ std::shared_ptr<AVAllocator> AVAllocatorFactory::CreateSurfaceAllocator(const Bu
     return allocator;
 }
 
-AVSurfaceAllocator::AVSurfaceAllocator() {
+AVSurfaceAllocator::AVSurfaceAllocator()
+{
     config_.format = 0;
 }
 
