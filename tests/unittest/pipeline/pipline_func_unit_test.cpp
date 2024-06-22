@@ -13,7 +13,6 @@
  * limitations under the License.
  */
 #include "pipline_func_unit_test.h"
-#include "filter/filter_factory.h"
 
 using namespace std;
 using namespace testing::ext;
