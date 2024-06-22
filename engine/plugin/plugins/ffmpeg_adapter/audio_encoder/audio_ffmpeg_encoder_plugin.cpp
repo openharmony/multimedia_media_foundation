@@ -454,7 +454,7 @@ Status AudioFfmpegEncoderPlugin::ReceiveFrameSucc(const std::shared_ptr<Buffer>&
     ioInfo->pts = (UINT64_MAX - prev_pts_ < static_cast<uint64_t>(packet->duration)) ?
                   (static_cast<uint64_t>(ioInfo->duration) - (UINT64_MAX - prev_pts_)) :
                   (prev_pts_ + ioInfo->duration);
-    prev_pts_ = ioInfo->pts;
+    prev_pts_ = static_cast<uint64_t>(ioInfo->pts);
     return Status::OK;
 }
 

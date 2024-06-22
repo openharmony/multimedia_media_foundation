@@ -263,7 +263,7 @@ Status SetTagsOfTrack(const AVOutputFormat* fmt, AVStream* stream, const Meta& m
         FALSE_RETURN_V(stream->codecpar->extradata != nullptr, Status::ERROR_NO_MEMORY);
         auto ret = memcpy_s(stream->codecpar->extradata, extraSize, codecConfig.data(), extraSize);
         FALSE_RETURN_V(ret == 0, Status::ERROR_UNKNOWN);
-        stream->codecpar->extradata_size = extraSize;
+        stream->codecpar->extradata_size = static_cast<int64_t>(extraSize);
     }
     return Status::OK;
 }

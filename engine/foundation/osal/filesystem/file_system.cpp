@@ -148,7 +148,7 @@ void FileSystem::RemoveFilesInDir(const std::string& path)
 
 std::string FileSystem::GetTmpFileName()
 {
-    char tempFileName[MAX_FILE_PATH] = "/tmp/hstTmp.XXXXXX";
+    char tempFileName[MAX_FILE_PATH] = "/usrbin/hstTmp.XXXXXX";
 #ifdef _WIN32
     char tempPath[MAX_FILE_PATH];
     auto pathLength = GetTempPath(MAX_FILE_PATH, tempPath);

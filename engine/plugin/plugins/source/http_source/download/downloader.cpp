@@ -217,7 +217,7 @@ bool Downloader::Seek(int64_t offset)
     if (offset >= 0 && offset < static_cast<int64_t>(contentLength)) {
         currentRequest_->startPos_ = offset;
     }
-    int64_t temp = currentRequest_->GetFileContentLength() - currentRequest_->startPos_;
+    int64_t temp = static_cast<int64_t>(currentRequest_->GetFileContentLength() - currentRequest_->startPos_);
     currentRequest_->requestSize_ = static_cast<int>(std::min(temp, static_cast<int64_t>(PER_REQUEST_SIZE)));
     currentRequest_->isEos_ = false;
     shouldStartNextRequest = false; // Reuse last request when seek
@@ -427,7 +427,7 @@ size_t Downloader::RxHeaderData(void* buffer, size_t size, size_t nitems, void* 
         size_t start;
         size_t end;
         size_t fileLen;
-        FALSE_LOG_MSG(sscanf_s(strRange, "bytes %ld-%ld/%ld", &start, &end, &fileLen) != -1,
+        FALSE_LOG_MSG(sscanf_s(strRange, "bytes %uld-%uld/%uld", &start, &end, &fileLen) != -1,
             "sscanf get range failed");
         if (info->fileContentLen > 0 && info->fileContentLen != fileLen) {
             MEDIA_LOG_E("FileContentLen doesn't equal to fileLen");
