@@ -53,9 +53,7 @@ ohos_unittest("pipline_func_unit_test") {
     "MEDIA_OHOS",
   ]
 
-  sources = [
-    "./pipline_func_unit_test.cpp",
-  ]
+  sources = [ "./pipline_func_unit_test.cpp" ]
 
   cflags = pipline_unittest_cflags
 
