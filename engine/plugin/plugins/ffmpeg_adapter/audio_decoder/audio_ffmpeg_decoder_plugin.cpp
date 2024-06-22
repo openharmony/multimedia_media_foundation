@@ -304,6 +304,7 @@ do { \
     auto tmpCtx = std::shared_ptr<AVCodecContext>(context, [](AVCodecContext* ptr) {
         avcodec_free_context(&ptr);
     });
+    tmpCtx->bit_rate = 0;
     {
         OSAL::ScopedLock lock1(parameterMutex_);
         FAIL_RET_WHEN_ASSIGN_LOCKED(Tag::AUDIO_CHANNELS, uint32_t, tmpCtx->channels);

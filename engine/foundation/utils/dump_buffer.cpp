@@ -66,10 +66,10 @@ void PrepareDumpDir()
         if (isFileExist) { // 文件存在
             OSAL::FileSystem::ClearFileContent(fullPath);
         }
-        if (fullPath == "") {
-            return;
-        }
-        allDumpFileFds[iter] = fopen(fullPath.c_str(), "ab+");
+        char path[PATH_MAX] = {0};
+        auto realPath = realpath(fullPath.c_str(), path);
+        FALSE_RETURN(realPath != nullptr);
+        allDumpFileFds[iter] = fopen(realPath, "ab+");
         if (allDumpFileFds[iter] == nullptr) {
             MEDIA_LOG_W("Open file(" PUBLIC_LOG_S ") failed(" PUBLIC_LOG_S ").", fullPath.c_str(), strerror(errno));
         }
