@@ -16,13 +16,13 @@ import("//foundation/multimedia/media_foundation/config.gni")
 
 module_output_path = "media_foundation/unittest"
 
-group("pipline_func_unit_test") {
+group("pipline_unit_test") {
   testonly = true
   deps = [ ":pipline_func_unit_test" ]
 }
 
-#################################################################################################################meta
-meta_unittest_cflags = [
+#################################################################################################################pipeline
+pipline_unittest_cflags = [
   "-std=c++17",
   "-fno-rtti",
   "-fexceptions",

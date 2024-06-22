@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 #include "pipline_func_unit_test.h"
+#include "filter/filter_factory.h"
 
 using namespace std;
 using namespace testing::ext;
@@ -24,43 +25,78 @@ namespace PiplineFuncUT {
 
 void PiplineUnitTest::SetUpTestCase(void)
 {
+    std::cout << "[SetUpTestCase]: SetUp!!!" << std::endl;
 }
 
 void PiplineUnitTest::TearDownTestCase(void)
 {
+    std::cout << "[TearDownTestCase]: over!!!" << std::endl;
 }
 
 void PiplineUnitTest::SetUp(void)
 {
+    std::cout << "[SetUp]: SetUp!!!" << std::endl;
+    pipeline_ = std::make_shared<Pipeline::Pipeline>();
+    ASSERT_NE(pipeline_, nullptr);
+    testId = std::string("Test_") + std::to_string(Pipeline::Pipeline::GetNextPipelineId());
+    pipeline_->Init(nullptr, nullptr, testId);
+    filterOne_ = std::make_shared<TestFilter>();
+    filterTwo_ = std::make_shared<TestFilter>();
 }
 
 void PiplineUnitTest::TearDown(void)
 {
+    std::cout << "[TearDown]: over!!!" << std::endl;
 }
 
 /**
- * @tc.name: Pipeline_Test_0100
- * @tc.desc: Pipeline_Test_0100
+ * @tc.name: Pipeline_Test_AddHeadFilters_0100
+ * @tc.desc: Pipeline_Test_AddHeadFilters_0100
  * @tc.type: FUNC
  */
-HWTEST_F(PiplineFuncUT, Pipeline_Test_0100, TestSize.Level1)
+HWTEST_F(PiplineFuncUT, Pipeline_Test_AddHeadFilters_0100, TestSize.Level1)
 {
-    std::shared_ptr<Pipeline::Pipeline> pipeline_ = std::make_shared<Pipeline::Pipeline>();
-    pipeline_->Init(nullptr, nullptr, 0);
-    std::shared_ptr<TestFilter> testFilterOne = std::make_shared<TestFilter>();
-    std::shared_ptr<TestFilter> testFilterTwo = std::make_shared<TestFilter>();
-    pipeline_->AddHeadFilters({testFilterOne});
-    pipeline_->LinkFilters(testFilterOne, {testFilterTwo}, StreamType::STREAMTYPE_ENCODED_AUDIO);
-    pipeline_->UpdateFilters(testFilterOne, {testFilterTwo}, StreamType::STREAMTYPE_ENCODED_AUDIO);
-    pipeline_->UnLinkFilters(testFilterOne, {testFilterTwo}, StreamType::STREAMTYPE_ENCODED_AUDIO);
-    pipeline_->Prepare();
-    pipeline_->Start();
-    pipeline_->Pause();
-    pipeline_->Resume();
-    pipeline_->Stop();
-    pipeline_->Flush();
-    pipeline_->RemoveHeadFilter(filter);
-    pipeline_->Release();
+    EXPECT_EQ(pipeline_->AddHeadFilters({filterOne_, filterTwo_}), Status::OK);
+}
+
+/**
+ * @tc.name: Pipeline_Test_LinkFilters_0100
+ * @tc.desc: Pipeline_Test_LinkFilters_0100
+ * @tc.type: FUNC
+ */
+HWTEST_F(PiplineFuncUT, Pipeline_Test_LinkFilters_0100, TestSize.Level1)
+{
+    EXPECT_EQ(pipeline_->AddHeadFilters({filterOne_}), Status::OK);
+    EXPECT_EQ(pipeline_->LinkFilters(filterOne_, {filterTwo_},
+        StreamType::STREAMTYPE_ENCODED_AUDIO), Status::OK);
+    EXPECT_EQ(pipeline_->UpdateFilters(filterOne_, {filterTwo_},
+        StreamType::STREAMTYPE_ENCODED_AUDIO), Status::OK);
+    EXPECT_EQ(pipeline_->UnLinkFilters(filterOne_, {filterTwo_},
+        StreamType::STREAMTYPE_ENCODED_AUDIO), Status::OK);
+}
+
+/**
+ * @tc.name: Pipeline_Test_pipline_0100
+ * @tc.desc: Pipeline_Test_pipline_0100
+ * @tc.type: FUNC
+ */
+HWTEST_F(PiplineFuncUT, Pipeline_Test_pipline_0100, TestSize.Level1)
+{
+    EXPECT_EQ(pipeline_->AddHeadFilters({filterOne_}), Status::OK);
+    EXPECT_EQ(pipeline_->LinkFilters(filterOne_, {filterTwo_},
+        StreamType::STREAMTYPE_ENCODED_AUDIO), Status::OK);
+    EXPECT_EQ(pipeline_->UpdateFilters(filterOne_, {filterTwo_},
+        StreamType::STREAMTYPE_ENCODED_AUDIO), Status::OK);
+    EXPECT_EQ(pipeline_->UnLinkFilters(filterOne_, {filterTwo_},
+        StreamType::STREAMTYPE_ENCODED_AUDIO), Status::OK);
+    EXPECT_EQ(pipeline_->Prepare(), Status::OK);
+    EXPECT_EQ(pipeline_->Start(), Status::OK);
+    EXPECT_EQ(pipeline_->Pause(), Status::OK);
+    EXPECT_EQ(pipeline_->Resume(), Status::OK);
+    EXPECT_EQ(pipeline_->Stop(), Status::OK);
+    EXPECT_EQ(pipeline_->Flush(), Status::OK);
+    EXPECT_EQ(pipeline_->RemoveHeadFilter(filterOne_), Status::OK);
+    EXPECT_EQ(pipeline_->Release(), Status::OK);
 }
 } // namespace PiplineFuncUT
 } // namespace Media
