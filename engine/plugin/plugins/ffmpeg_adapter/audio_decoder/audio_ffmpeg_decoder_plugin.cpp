@@ -272,7 +272,7 @@ Status AudioFfmpegDecoderPlugin::FindInParameterMapThenAssignLocked(Tag tag, T& 
 {
     if (audioParameter_.count(tag) == 0) {
         MEDIA_LOG_I("tag " PUBLIC_LOG_D32 "is not set", static_cast<int32_t>(tag));
-        return Status::OK;
+        return Status::ERROR_MISMATCHED_TYPE;
     }
     const auto& item = audioParameter_.at(tag);
     if (Any::IsSameTypeWith<T>(item)) {
@@ -304,7 +304,6 @@ do { \
     auto tmpCtx = std::shared_ptr<AVCodecContext>(context, [](AVCodecContext* ptr) {
         avcodec_free_context(&ptr);
     });
-    tmpCtx->bit_rate = 0;
     {
         OSAL::ScopedLock lock1(parameterMutex_);
         FAIL_RET_WHEN_ASSIGN_LOCKED(Tag::AUDIO_CHANNELS, uint32_t, tmpCtx->channels);
