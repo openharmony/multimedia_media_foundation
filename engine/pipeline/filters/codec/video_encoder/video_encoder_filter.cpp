@@ -72,6 +72,8 @@ VideoEncoderFilter::VideoEncoderFilter(const std::string& name)
     vencFormat_.bitRate = -1;
     vencFormat_.format = Plugin::VideoPixelFormat::YUV420P;
     vencFormat_.profile = Plugin::VideoH264Profile::UNKNOWN;
+    vencFormat_.frameRate = 0;
+    vencFormat_.level = 0;
 }
 
 VideoEncoderFilter::~VideoEncoderFilter()

@@ -217,7 +217,7 @@ bool Downloader::Seek(int64_t offset)
     if (offset >= 0 && offset < static_cast<int64_t>(contentLength)) {
         currentRequest_->startPos_ = offset;
     }
-    int64_t temp = static_cast<int64_t>(currentRequest_->GetFileContentLength() - currentRequest_->startPos_);
+    int64_t temp = static_cast<int64_t>(currentRequest_->GetFileContentLength()) - currentRequest_->startPos_;
     currentRequest_->requestSize_ = static_cast<int>(std::min(temp, static_cast<int64_t>(PER_REQUEST_SIZE)));
     currentRequest_->isEos_ = false;
     shouldStartNextRequest = false; // Reuse last request when seek

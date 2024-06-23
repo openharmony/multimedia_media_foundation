@@ -35,7 +35,14 @@ std::shared_ptr<AVAllocator> AVAllocatorFactory::CreateSurfaceAllocator(const Bu
 
 AVSurfaceAllocator::AVSurfaceAllocator()
 {
-    config_.format = 0;
+    config_ = {
+        .width = 0,
+        .height = 0,
+        .strideAlignment = 0x0,
+        .format = GraphicPixelFormat::GRAPHIC_PIXEL_FMT_RGBA_8888,
+        .usage = BUFFER_USAGE_CPU_READ | BUFFER_USAGE_CPU_WRITE | BUFFER_USAGE_MEM_DMA,
+        .timeout = 0,
+    };
 }
 
 void *AVSurfaceAllocator::Alloc(int32_t capacity)
