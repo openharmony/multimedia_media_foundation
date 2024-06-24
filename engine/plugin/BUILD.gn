@@ -71,8 +71,8 @@ if (hst_is_lite_sys) {
       public_external_deps += [
         "c_utils:utilsbase",
         "drivers_peripheral_display:hdi_gralloc_client",
-        "graphic_2d:sync_fence",
         "graphic_surface:surface",
+        "graphic_surface:sync_fence",
       ]
       sources += [
         "common/share_allocator.cpp",
