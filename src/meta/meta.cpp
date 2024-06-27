@@ -328,6 +328,12 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::AV_PLAYER_MAX_LAG_DURATION, defaultInt32},
     {Tag::AV_PLAYER_AVG_LAG_DURATION, defaultInt32},
     {Tag::AV_PLAYER_MAX_SURFACESWAP_LATENCY, defaultInt32},
+    {Tag::VIDEO_COORDINATE_X, defaultInt32},
+    {Tag::VIDEO_COORDINATE_Y, defaultInt32},
+    {Tag::VIDEO_COORDINATE_W, defaultInt32},
+    {Tag::VIDEO_COORDINATE_H, defaultInt32},
+    {Tag::VIDEO_ENCODER_REPEAT_PREVIOUS_FRAME_AFTER, defaultInt32},
+    {Tag::VIDEO_ENCODER_REPEAT_PREVIOUS_MAX_COUNT, defaultInt32},
     // String
     {Tag::MIME_TYPE, defaultString},
     {Tag::MEDIA_FILE_URI, defaultString},
@@ -398,6 +404,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::SCREEN_CAPTURE_ENABLE_MIC, defaultBool},
     {Tag::AV_PLAYER_IS_DRM_PROTECTED, defaultBool},
     {Tag::AV_PLAYER_DOWNLOAD_TIME_OUT, defaultBool},
+    {Tag::VIDEO_ENCODER_PER_FRAME_DISCARD, defaultBool},
     // Int64
     {Tag::MEDIA_FILE_SIZE, defaultUInt64},
     {Tag::MEDIA_POSITION, defaultUInt64},

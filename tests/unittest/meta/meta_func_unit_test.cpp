@@ -444,6 +444,12 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::VIDEO_ENCODE_BITRATE_MODE, static_cast<int32_t>(Plugins::VideoEncodeBitrateMode::CBR)},
     {Tag::VIDEO_ENCODER_TEMPORAL_GOP_REFERENCE_MODE,
      static_cast<int32_t>(Plugins::TemporalGopReferenceMode::JUMP_REFERENCE)},
+    {Tag::VIDEO_COORDINATE_X, 10},
+    {Tag::VIDEO_COORDINATE_Y, 10},
+    {Tag::VIDEO_COORDINATE_W, 10},
+    {Tag::VIDEO_COORDINATE_H, 10},
+    {Tag::VIDEO_ENCODER_REPEAT_PREVIOUS_FRAME_AFTER, 10},
+    {Tag::VIDEO_ENCODER_REPEAT_PREVIOUS_MAX_COUNT, 10},
     // UINT8_T
     {Tag::AUDIO_AAC_PROFILE, static_cast<int32_t>(Plugins::AudioAacProfile::ELD)},
     {Tag::AUDIO_AAC_STREAM_FORMAT, static_cast<int32_t>(Plugins::AudioAacStreamFormat::ADIF)}};
@@ -468,7 +474,8 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::VIDEO_ENABLE_LOW_LATENCY, true},
     {Tag::VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK, true},
     {Tag::AUDIO_RENDER_SET_FLAG, true},
-    {Tag::VIDEO_BUFFER_CAN_DROP, true}};
+    {Tag::VIDEO_BUFFER_CAN_DROP, true},
+    {Tag::VIDEO_ENCODER_PER_FRAME_DISCARD, true}};
 
 
 /**
