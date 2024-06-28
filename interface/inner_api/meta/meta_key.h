@@ -278,7 +278,7 @@ public:
         "video_encoder_repeat_previous_max_count"; ///< int32_t, key for describing the frame previously
                                                    ///< submitted to the encoder will be repeated (once) maximum count
                                                    ///< if no new frame became available since. This key takes effect
-                                                   ///< only when {@lin kVIDEO_ENCODER_REPEAT_PREVIOUS_FRAME_AFTER} is
+                                                   ///< only when {@link VIDEO_ENCODER_REPEAT_PREVIOUS_FRAME_AFTER} is
                                                    ///< vaild. It is used in configure.
 
     /* -------------------- video specific tag -------------------- */
