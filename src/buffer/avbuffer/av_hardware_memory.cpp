@@ -63,9 +63,7 @@ AVHardwareAllocator::~AVHardwareAllocator()
 void *AVHardwareAllocator::Alloc(int32_t capacity)
 {
     (void)capacity;
-    if (isSecure_) {
-        return nullptr;
-    }
+    FALSE_RETURN_V(!isSecure_, nullptr);
     Status ret = MapMemoryAddr();
     FALSE_RETURN_V_MSG_E(ret == Status::OK, nullptr, "Map dma buffer failed");
     isAllocated_ = true;
@@ -75,9 +73,7 @@ void *AVHardwareAllocator::Alloc(int32_t capacity)
 bool AVHardwareAllocator::Free(void *ptr)
 {
 #ifdef MEDIA_OHOS
-    if (isSecure_) {
-        return true;
-    }
+    FALSE_RETURN_V(!isSecure_, true);
     FALSE_RETURN_V_MSG_E(static_cast<uint8_t *>(ptr) == allocBase_, false, "Mapped buffer not match");
     FALSE_RETURN_V_MSG_E(isAllocated_, false, "Never allocated memory by Alloc function of this allocator");
     if (allocBase_ != nullptr) {

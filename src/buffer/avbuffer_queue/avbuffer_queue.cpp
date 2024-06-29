@@ -285,11 +285,8 @@ Status AVBufferQueueImpl::RequestBuffer(
     // check param
     std::unique_lock<std::mutex> lock(queueMutex_);
     auto res = CheckConfig(configCopy);
-    if (res != Status::OK) {
-        MEDIA_LOG_D("CheckConfig not OK, code %{public}d", static_cast<int32_t>(res));
-        return res;
-    }
-
+    FALSE_RETURN_V_MSG(res == Status::OK,
+        res, "CheckConfig not OK, code %{public}d", static_cast<int32_t>(res));
     // dequeue from free list
     auto ret = PopFromFreeBufferList(buffer, configCopy);
     if (ret == Status::OK) {
