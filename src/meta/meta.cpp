@@ -126,7 +126,8 @@ static std::vector<TagType> g_metadataBoolVector = {
     Tag::MEDIA_HAS_VIDEO,
     Tag::MEDIA_HAS_AUDIO,
     Tag::MEDIA_HAS_SUBTITLE,
-    Tag::MEDIA_END_OF_STREAM
+    Tag::MEDIA_END_OF_STREAM,
+    Tag::VIDEO_ENCODER_PER_FRAME_DISCARD
 };
 
 bool SetMetaData(Meta& meta, const TagType& tag, int32_t value)
