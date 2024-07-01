@@ -197,6 +197,139 @@ HWTEST_F(FilterUnitTest, PrepareDone_002, TestSize.Level1)
     filter->ChangeState(FilterState::ERROR);
 }
 
+/**
+ * @tc.name: PrepareFrame_001
+ * @tc.desc: Test PrepareFrame interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(FilterUnitTest, PrepareFrame_001, TestSize.Level1)
+{
+    std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
+    std::shared_ptr<Filter> filter2 = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
+    filter->Init(nullptr, nullptr);
+    filter2->Init(nullptr, nullptr);
+    filter->LinkPipeLine("");
+    filter->nextFiltersMap_[StreamType::STREAMTYPE_PACKED].push_back(filter2);
+    filter->PrepareFrame(true);
+}
+
+/**
+ * @tc.name: PrepareFrame_002
+ * @tc.desc: Test PrepareFrame interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(FilterUnitTest, PrepareFrame_002, TestSize.Level1)
+{
+    std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
+    std::shared_ptr<Filter> filter2 = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
+    filter->Init(nullptr, nullptr);
+    filter2->Init(nullptr, nullptr);
+    filter->LinkPipeLine("");
+    filter->PrepareFrame(true);
+    filter2->PrepareFrame(true);
+}
+
+/**
+ * @tc.name: WaitPrepareFrame_001
+ * @tc.desc: Test WaitPrepareFrame interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(FilterUnitTest, WaitPrepareFrame_001, TestSize.Level1)
+{
+    std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
+    std::shared_ptr<Filter> filter2 = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
+    filter->Init(nullptr, nullptr);
+    filter2->Init(nullptr, nullptr);
+    filter->LinkPipeLine("");
+    filter->nextFiltersMap_[StreamType::STREAMTYPE_PACKED].push_back(filter2);
+    filter->WaitPrepareFrame();
+}
+
+/**
+ * @tc.name: Release_001
+ * @tc.desc: Test Release interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(FilterUnitTest, WaitPrepareFrame_001, TestSize.Level1)
+{
+    std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
+    std::shared_ptr<Filter> filter2 = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
+    filter->Init(nullptr, nullptr);
+    filter2->Init(nullptr, nullptr);
+    filter->nextFiltersMap_[StreamType::STREAMTYPE_PACKED].push_back(filter2);
+    filter->LinkPipeLine("");
+    filter->Start();
+    filter->Pause();
+    filter->Resume();
+    filter->Stop();
+    filter->Release();
+}
+
+/**
+ * @tc.name: InputOutputBuffer_001
+ * @tc.desc: Test ProcessInputBuffer and ProcessInOutputBuffer interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(FilterUnitTest, InputOutputBuffer_001, TestSize.Level1)
+{
+    std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
+    std::shared_ptr<Filter> filter2 = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
+    filter->Init(nullptr, nullptr);
+    filter2->Init(nullptr, nullptr);
+    filter->nextFiltersMap_[StreamType::STREAMTYPE_PACKED].push_back(filter2);
+    filter->LinkPipeLine("");
+    filter->ProcessInputBuffer(0, 0);
+    filter->ProcessInOutputBuffer(0, 0);
+}
+
+/**
+ * @tc.name: WaitAllState_001
+ * @tc.desc: Test WaitAllState interface, wait PREPARING error
+ * @tc.type: FUNC
+ */
+HWTEST_F(FilterUnitTest, WaitAllState_001, TestSize.Level1)
+{
+    std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
+    std::shared_ptr<Filter> filter2 = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
+    filter->Init(nullptr, nullptr);
+    filter2->Init(nullptr, nullptr);
+    filter->nextFiltersMap_[StreamType::STREAMTYPE_PACKED].push_back(filter2);
+    filter->LinkPipeLine("");
+    filter->WaitAllState(FilterState::PREPARING);
+    filter->ChangeState(FilterState::ERROR);
+}
+
+/**
+ * @tc.name: WaitAllState_002
+ * @tc.desc: Test WaitAllState interface, wait INITIALIZED timeout
+ * @tc.type: FUNC
+ */
+HWTEST_F(FilterUnitTest, WaitAllState_002, TestSize.Level1)
+{
+    std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
+    std::shared_ptr<Filter> filter2 = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
+    filter->Init(nullptr, nullptr);
+    filter2->Init(nullptr, nullptr);
+    filter->nextFiltersMap_[StreamType::STREAMTYPE_PACKED].push_back(filter2);
+    filter->ChangeState(FilterState::ERROR);
+    filter->WaitAllState(FilterState::INITIALIZED);
+}
+
+/**
+ * @tc.name: WaitAllState_003
+ * @tc.desc: Test WaitAllState interface, wait INITIALIZED success
+ * @tc.type: FUNC
+ */
+HWTEST_F(FilterUnitTest, WaitAllState_002, TestSize.Level1)
+{
+    std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
+    std::shared_ptr<Filter> filter2 = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
+    filter->Init(nullptr, nullptr);
+    filter2->Init(nullptr, nullptr);
+    filter->nextFiltersMap_[StreamType::STREAMTYPE_PACKED].push_back(filter2);
+    filter->LinkPipeLine("");
+    filter->WaitAllState(FilterState::INITIALIZED);
+}
 } // namespace FilterUnitTest
 } // namespace Media
 } // namespace OHOS
