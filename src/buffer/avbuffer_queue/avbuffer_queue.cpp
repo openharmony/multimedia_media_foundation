@@ -507,7 +507,7 @@ Status AVBufferQueueImpl::DetachBuffer(uint64_t uniqueId, bool force)
         } else if (ele.state == AVBUFFER_STATE_ACQUIRED) {
             MEDIA_LOG_D("detach buffer(%llu) on state acquired", uniqueId);
         } else {
-            MEDIA_LOG_W("cant detachBuffer %llu on state %d", uniqueId, ele.state);
+            MEDIA_LOG_D("cant detachBuffer %llu on state %d", uniqueId, ele.state);
             return Status::ERROR_INVALID_BUFFER_STATE;
         }
     }
