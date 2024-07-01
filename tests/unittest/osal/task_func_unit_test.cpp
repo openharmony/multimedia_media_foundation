@@ -46,7 +46,11 @@ public:
 
     void SetUp(void);
 
+    void SetUpMore(void);
+
     void TearDown(void);
+
+    void TearDownMore(void);
 
     ConditionVariable cv;
     std::shared_ptr<Task> task1 = nullptr;
@@ -61,6 +65,55 @@ public:
     std::shared_ptr<Task> task10 = nullptr;
     std::shared_ptr<Task> task01 = nullptr;
     std::shared_ptr<Task> task02 = nullptr;
+    std::shared_ptr<Task> task03 = nullptr;
+    std::shared_ptr<Task> task04 = nullptr;
+    std::shared_ptr<Task> task05 = nullptr;
+    std::shared_ptr<Task> task06 = nullptr;
+    std::shared_ptr<Task> task07 = nullptr;
+    std::shared_ptr<Task> task08 = nullptr;
+    std::shared_ptr<Task> task09 = nullptr;
+    std::shared_ptr<Task> task20 = nullptr;
+    std::shared_ptr<Task> task21 = nullptr;
+    std::shared_ptr<Task> task22 = nullptr;
+    std::shared_ptr<Task> task23 = nullptr;
+    std::shared_ptr<Task> task24 = nullptr;
+    std::shared_ptr<Task> task25 = nullptr;
+    std::shared_ptr<Task> task26 = nullptr;
+    std::shared_ptr<Task> task27 = nullptr;
+    std::shared_ptr<Task> task28 = nullptr;
+    std::shared_ptr<Task> task29 = nullptr;
+    std::shared_ptr<Task> task30 = nullptr;
+    std::shared_ptr<Task> task31 = nullptr;
+    std::shared_ptr<Task> task32 = nullptr;
+    std::shared_ptr<Task> task33 = nullptr;
+    std::shared_ptr<Task> task34 = nullptr;
+    std::shared_ptr<Task> task35 = nullptr;
+    std::shared_ptr<Task> task36 = nullptr;
+    std::shared_ptr<Task> task37 = nullptr;
+    std::shared_ptr<Task> task38 = nullptr;
+    std::shared_ptr<Task> task39 = nullptr;
+    std::shared_ptr<Task> task40 = nullptr;
+    std::shared_ptr<Task> task41 = nullptr;
+    std::shared_ptr<Task> task42 = nullptr;
+    std::shared_ptr<Task> task43 = nullptr;
+    std::shared_ptr<Task> task44 = nullptr;
+    std::shared_ptr<Task> task45 = nullptr;
+    std::shared_ptr<Task> task46 = nullptr;
+    std::shared_ptr<Task> task47 = nullptr;
+    std::shared_ptr<Task> task48 = nullptr;
+    std::shared_ptr<Task> task49 = nullptr;
+    std::shared_ptr<Task> task50 = nullptr;
+    std::shared_ptr<Task> task51 = nullptr;
+    std::shared_ptr<Task> task52 = nullptr;
+    std::shared_ptr<Task> task53 = nullptr;
+    std::shared_ptr<Task> task54 = nullptr;
+    std::shared_ptr<Task> task55 = nullptr;
+    std::shared_ptr<Task> task56 = nullptr;
+    std::shared_ptr<Task> task57 = nullptr;
+    std::shared_ptr<Task> task58 = nullptr;
+    std::shared_ptr<Task> task59 = nullptr;
+    std::shared_ptr<Task> task60 = nullptr;
+    std::shared_ptr<Task> task61 = nullptr;
     Mutex mutex_;
     std::atomic<bool> isStop_{false};
     std::string modifyMsg_ = "";
@@ -112,6 +165,11 @@ void TaskInnerUnitTest::SetUp(void)
     task34 = std::make_shared<Task>("workTask34", "", TaskType::AUDIO, TaskPriority::HIGHEST, true);
     task35 = std::make_shared<Task>("workTask35", "", TaskType::SUBTITLE, TaskPriority::HIGHEST, true);
     task36 = std::make_shared<Task>("workTask36", "", TaskType::SINGLETON, TaskPriority::HIGHEST, true);
+    SetUpMore();
+}
+
+void TaskInnerUnitTest::SetUpMore(void)
+{
     task37 = std::make_shared<Task>("workTask37", "", TaskType::SINGLETON, TaskPriority::NORMAL, false);
     task38 = std::make_shared<Task>("workTask38", "", TaskType::GLOBAL, TaskPriority::NORMAL, false);
     task39 = std::make_shared<Task>("workTask39", "", TaskType::VIDEO, TaskPriority::NORMAL, false);
@@ -154,7 +212,61 @@ void TaskInnerUnitTest::TearDown(void)
     task10 = nullptr;
     task01 = nullptr;
     task02 = nullptr;
+    task03 = nullptr;
+    task04 = nullptr;
+    task05 = nullptr;
+    task06 = nullptr;
+    task07 = nullptr;
+    task08 = nullptr;
+    task09 = nullptr;
+    task20 = nullptr;
+    task21 = nullptr;
+    task22 = nullptr;
+    task23 = nullptr;
+    task24 = nullptr;
+    task25 = nullptr;
+    task26 = nullptr;
+    task27 = nullptr;
+    task28 = nullptr;
+    task29 = nullptr;
+    TearDownMore();
     std::cout << "[TearDown]: over!!!" << std::endl;
+}
+
+void TaskInnerUnitTest::TearDownMore(void)
+{
+    task30 = nullptr;
+    task31 = nullptr;
+    task32 = nullptr;
+    task33 = nullptr;
+    task34 = nullptr;
+    task35 = nullptr;
+    task36 = nullptr;
+    task37 = nullptr;
+    task38 = nullptr;
+    task39 = nullptr;
+    task40 = nullptr;
+    task41 = nullptr;
+    task42 = nullptr;
+    task43 = nullptr;
+    task44 = nullptr;
+    task45 = nullptr;
+    task46 = nullptr;
+    task47 = nullptr;
+    task48 = nullptr;
+    task49 = nullptr;
+    task50 = nullptr;
+    task51 = nullptr;
+    task52 = nullptr;
+    task53 = nullptr;
+    task54 = nullptr;
+    task55 = nullptr;
+    task56 = nullptr;
+    task57 = nullptr;
+    task58 = nullptr;
+    task59 = nullptr;
+    task60 = nullptr;
+    task61 = nullptr;
 }
 
 /**
