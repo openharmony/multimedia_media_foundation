@@ -18,11 +18,11 @@ module_output_path = "media_foundation/unittest"
 
 group("filter_unit_test") {
   testonly = true
-  deps = [ ":filter_unit_test" ]
+  deps = [ ":filter_unit_inner_test" ]
 }
 
 #################################################################################################################osal
-filter_unit_test_cflags = [
+filter_unit_inner_test_cflags = [
   "-std=c++17",
   "-fno-rtti",
   "-fexceptions",
@@ -44,7 +44,7 @@ filter_unit_test_cflags = [
   "-Dprotected=public",
 ]
 
-ohos_unittest("filter_unit_test") {
+ohos_unittest("filter_unit_inner_test") {
   module_out_path = module_output_path
 
   sanitize = {
@@ -61,7 +61,7 @@ ohos_unittest("filter_unit_test") {
 
   sources = [ "./filter_unit_test.cpp" ]
 
-  cflags = filter_unit_test_cflags
+  cflags = filter_unit_inner_test_cflags
 
   deps = [
     "$histreamer_root_dir/src:media_foundation",
