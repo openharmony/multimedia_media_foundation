@@ -258,6 +258,28 @@ public:
         "video_encoder_mse"; ///< double, key for describing video frame mean squared error. This is a part of a video
                              ///< encoder statistics export feature. This value is emitted from video encoder for a
                              ///< video frame.
+    static constexpr const char VIDEO_ENCODER_PER_FRAME_DISCARD[] =
+        "video_encoder_per_frame_discard"; ///< bool, key for describing whether the current frame is not encoded.
+    static constexpr const char VIDEO_COORDINATE_X[] =
+        "video_coordinate_x"; ///< int32_t, key for describing the x-coordinate of the watermark image.
+    static constexpr const char VIDEO_COORDINATE_Y[] =
+        "video_coordinate_y"; ///< int32_t, key for describing the y-coordinate of the watermark image.
+    static constexpr const char VIDEO_COORDINATE_W[] =
+        "video_coordinate_w"; ///< int32_t, key for describing the w-coordinate of the watermark image.
+    static constexpr const char VIDEO_COORDINATE_H[] =
+        "video_coordinate_h"; ///< int32_t, key for describing the h-coordinate of the watermark image.
+    static constexpr const char VIDEO_ENCODER_REPEAT_PREVIOUS_FRAME_AFTER[] =
+        "video_encoder_repeat_previous_frame_after"; ///< int32_t, key for describing applies only when configuring a
+                                                     ///< video encoder in surface mode. The time in microseconds after
+                                                     ///< which the frame previously submitted to the encoder will be
+                                                     ///< repeated (once) if no new frame became available since. It is
+                                                     ///< used in configure.
+    static constexpr const char VIDEO_ENCODER_REPEAT_PREVIOUS_MAX_COUNT[] =
+        "video_encoder_repeat_previous_max_count"; ///< int32_t, key for describing the frame previously
+                                                   ///< submitted to the encoder will be repeated (once) maximum count
+                                                   ///< if no new frame became available since. This key takes effect
+                                                   ///< only when {@link VIDEO_ENCODER_REPEAT_PREVIOUS_FRAME_AFTER} is
+                                                   ///< vaild. It is used in configure.
 
     /* -------------------- video specific tag -------------------- */
     static constexpr const char VIDEO_H264_PROFILE[] = "video.h264.profile"; ///< @see VideoH264Profile

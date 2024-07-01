@@ -189,7 +189,8 @@ public:
         tagCharSeq == Tag::AV_PLAYER_IS_DRM_PROTECTED or
         tagCharSeq == Tag::AV_PLAYER_DOWNLOAD_TIME_OUT, bool, AnyValueType::BOOL);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_BUFFER_CAN_DROP, bool, AnyValueType::BOOL);
-    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_RENDER_SET_FLAG, bool, ValueType::BOOL);
+    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_RENDER_SET_FLAG, bool, AnyValueType::BOOL);
+    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_ENCODER_PER_FRAME_DISCARD, bool, AnyValueType::BOOL);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_H265_PROFILE, Plugins::HEVCProfile, AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_H265_LEVEL, Plugins::HEVCLevel, AnyValueType::INT32_T);
 
@@ -283,6 +284,13 @@ public:
         tagCharSeq == Tag::AV_PLAYER_MAX_LAG_DURATION or
         tagCharSeq == Tag::AV_PLAYER_AVG_LAG_DURATION or
         tagCharSeq == Tag::AV_PLAYER_MAX_SURFACESWAP_LATENCY, int32_t, AnyValueType::INT32_T);
+    DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::VIDEO_COORDINATE_X or
+        tagCharSeq == Tag::VIDEO_COORDINATE_Y or
+        tagCharSeq == Tag::VIDEO_COORDINATE_W or
+        tagCharSeq == Tag::VIDEO_COORDINATE_H or
+        tagCharSeq == Tag::VIDEO_ENCODER_REPEAT_PREVIOUS_FRAME_AFTER or
+        tagCharSeq == Tag::VIDEO_ENCODER_REPEAT_PREVIOUS_MAX_COUNT, int32_t, AnyValueType::INT32_T);
 
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::APP_FULL_TOKEN_ID or
