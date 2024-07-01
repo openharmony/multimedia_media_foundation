@@ -247,7 +247,7 @@ inline std::string HstGetFileName(const std::string& file)
     do {                                                                                                               \
         bool returnValue = (exec);                                                                                     \
         if (!returnValue) {                                                                                            \
-            MEDIA_LOG_E_NO_RELEASE("FALSE_RETURN " #exec);                                                                        \
+            MEDIA_LOG_E_NO_RELEASE("FALSE_RETURN " #exec);                                                             \
             return;                                                                                                    \
         }                                                                                                              \
     } while (0)
@@ -269,7 +269,7 @@ inline std::string HstGetFileName(const std::string& file)
     do {                                                                                                               \
         bool returnValue = (exec);                                                                                     \
         if (!returnValue) {                                                                                            \
-            MEDIA_LOG_E_NO_RELEASE("FALSE_RETURN_V " #exec);                                                                      \
+            MEDIA_LOG_E_NO_RELEASE("FALSE_RETURN_V " #exec);                                                           \
             return ret;                                                                                                \
         }                                                                                                              \
     } while (0)
