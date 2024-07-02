@@ -165,7 +165,7 @@ HWTEST_F(FilterUnitTest, Prepare_002, TestSize.Level1)
 
 /**
  * @tc.name: Prepare_003
- * @tc.desc: Test Prepare interface, set status is error
+ * @tc.desc: Test Prepare interface, set state is error
  * @tc.type: FUNC
  */
 HWTEST_F(FilterUnitTest, Prepare_003, TestSize.Level1)
@@ -173,7 +173,7 @@ HWTEST_F(FilterUnitTest, Prepare_003, TestSize.Level1)
     std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
     filter->Init(nullptr, nullptr);
     filter->LinkPipeLine("");
-    filter->ChangeState(FilterState::ERROR)
+    filter->ChangeState(FilterState::ERROR);
     EXPECT_EQ(Status::ERROR_INVALID_OPERATION, filter->Prepare());
 }
 
@@ -277,7 +277,7 @@ HWTEST_F(FilterUnitTest, InputOutputBuffer_001, TestSize.Level1)
     filter->nextFiltersMap_[StreamType::STREAMTYPE_PACKED].push_back(filter2);
     filter->LinkPipeLine("");
     EXPECT_EQ(Status::OK, filter->ProcessInputBuffer(0, 0));
-    EXPECT_EQ(Status::OK, filter->ProcessInOutputBuffer(0, 0));
+    EXPECT_EQ(Status::OK, filter->ProcessOutputBuffer(0, 0));
 }
 
 /**
