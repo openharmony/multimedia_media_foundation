@@ -340,6 +340,50 @@ HWTEST_F(AVBufferQueueInnerUnitTest, ReturnBufferTest, TestSize.Level1)
     avBufferQueueImpl_->DeleteBuffers(buffer->GetUniqueId());
     EXPECT_EQ(avBufferQueueImpl_->ReturnBuffer(buffer->GetUniqueId(), true), Status::ERROR_INVALID_BUFFER_ID);
 }
+
+/**
+ * @tc.name: RemoveBrokerListenerTest
+ * @tc.desc: Test RemoveBrokerListener interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferQueueInnerUnitTest, RemoveBrokerListenerTest, TestSize.Level1)
+{
+    aVBufferQueueImpl_ = std::make_shared<AVBufferQueueImpl>(AVBUFFER_QUEUE_MAX_QUEUE_SIZE + 1,
+        MemoryType::SHARED_MEMORY, "RemoveBrokerListenerTest");
+    aVBufferQueueImpl_->RemoveBrokerListener();
+    sptr<IBrokerListener> listener1 = new BrokerListener();
+    sptr<IBrokerListener> listener2 = new BrokerListener();
+    sptr<IBrokerListener> listener3 = new BrokerListener();
+    avBufferQueueImpl_->SetBrokerListener(listener1);
+    avBufferQueueImpl_->SetBrokerListener(listener2);
+    avBufferQueueImpl_->SetBrokerListener(listener3);
+    int32_t brokerListenersSize = avBufferQueueImpl_->brokerListeners_.size();
+    EXPECT_EQ(Status::OK, avBufferQueueImpl_->RemoveBrokerListener(buffer3));
+    EXPECT_EQ(brokerListenersSize - 1, avBufferQueueImpl_->brokerListeners_.size());
+    EXPECT_EQ(Status::OK, avBufferQueueImpl_->RemoveBrokerListener(buffer1));
+    EXPECT_EQ(brokerListenersSize - 1, avBufferQueueImpl_->brokerListeners_.size());
+}
+
+/**
+ * @tc.name: ClearTest
+ * @tc.desc: Test Clear interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferQueueInnerUnitTest, ClearTest, TestSize.Level1)
+{
+    AVBufferConfig config;
+    config.size = 1;
+    config.capacity = 1;
+    config.memoryType = MemoryType::VIRTUAL_MEMORY;
+    avBufferQueueImpl_->SetConsumerListener(listener);
+    std::shared_ptr<AVAllocator> allocator = AVAllocatorFactory::CreateSharedAllocator(MemoryFlag::MEMORY_READ_WRITE);
+    std::shared_ptr<AVBuffer> buffer = AVBuffer::CreateAVBuffer(allocator, 1, 0);
+    ASSERT_NE(nullptr, buffer);
+    EXPECT_EQ(Status::OK, avBufferQueueImpl_->AllocBuffer(buffer, config));
+    EXPECT_EQ(Status::OK, avBufferQueueImpl_->RequestReuseBuffer(buffer, config));
+    EXPECT_EQ(Status::OK, avBufferQueueImpl_->PushBuffer(buffer, true));
+    EXPECT_EQ(Status::OK, avBufferQueueImpl_->Clear());
+}
 } // namespace AVBufferQueueFuncUT
 } // namespace Media
 } // namespace OHOS
