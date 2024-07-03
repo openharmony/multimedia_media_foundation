@@ -69,7 +69,7 @@ HWTEST_F(EventBeanInnerUnitTest, GetIntValue_001, TestSize.Level1)
  */
 HWTEST_F(EventBeanInnerUnitTest, GetStringValue_001, TestSize.Level1)
 {
-    EXPECT_EQ(-1, eventBean_->GetStringValue(strKey));
+    EXPECT_EQ("UNKNOWN", eventBean_->GetStringValue(strKey));
 }
 
 /**
@@ -126,11 +126,11 @@ HWTEST_F(EventBeanInnerUnitTest, UpdateUint64Map_001, TestSize.Level1)
 }
 
 /**
- * @tc.name: UpdateIntMap_001
- * @tc.desc: Test UpdateIntMap interface
+ * @tc.name: UpdateFloatMap_001
+ * @tc.desc: Test UpdateFloatMap interface
  * @tc.type: FUNC
  */
-HWTEST_F(EventBeanInnerUnitTest, UpdateIntMap_001, TestSize.Level1)
+HWTEST_F(EventBeanInnerUnitTest, UpdateFloatMap_001, TestSize.Level1)
 {
     eventBean_->UpdateFloatMap(strKey, 1);
     EXPECT_EQ(0, eventBean_->GetFloatValue(strKey));
