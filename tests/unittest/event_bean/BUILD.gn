@@ -53,9 +53,7 @@ ohos_unittest("event_bean_inner_unit_test") {
     debug = false
   }
 
-  include_dirs = [
-    "../../../services/media_monitor/common/include/",
-  ]
+  include_dirs = [ "../../../services/media_monitor/common/include/" ]
 
   sources = [
     "../../../services/media_monitor/common/src/event_bean.cpp",
