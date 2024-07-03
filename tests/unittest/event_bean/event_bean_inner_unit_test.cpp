@@ -135,6 +135,6 @@ HWTEST_F(EventBeanInnerUnitTest, UpdateIntMap_001, TestSize.Level1)
     eventBean_->UpdateFloatMap(strKey, 1);
     EXPECT_EQ(0, eventBean_->GetFloatValue(strKey));
 }
-} // namespace EventBeanFuncUT
+} // namespace EventBeanUT
 } // namespace Media
 } // namespace OHOS
