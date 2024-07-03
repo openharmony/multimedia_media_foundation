@@ -57,9 +57,9 @@ ohos_unittest("event_bean_inner_unit_test") {
     "../../../services/media_monitor/common/include/",
   ]
 
-  sources = [ 
+  sources = [
+    "../../../services/media_monitor/common/src/event_bean.cpp",
     "./event_bean_inner_unit_test.cpp",
-    "../../../services/media_monitor/common/src/event_bean.cpp"
   ]
 
   cflags = event_bean_unittest_cflags
