@@ -54,7 +54,6 @@ ohos_unittest("event_bean_inner_unit_test") {
   }
 
   include_dirs = [
-    "./event_bean_inner_unit_test.cpp",
     "../../../services/media_monitor/common/include/",
   ]
 
