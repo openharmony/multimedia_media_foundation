@@ -2349,7 +2349,6 @@ HWTEST_F(TaskInnerUnitTest, WaitFor_Failed, TestSize.Level1)
     EXPECT_TRUE((std::abs(static_cast<int>(diff) - timeoutMs) < 20) || (diff < 5));
     MEDIA_LOG_I("Wait Time Diff: " PUBLIC_LOG_D64, diff);
 }
-
 } // namespace MetaFuncUT
 } // namespace Media
 } // namespace OHOS
