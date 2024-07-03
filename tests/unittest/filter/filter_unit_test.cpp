@@ -53,7 +53,7 @@ HWTEST_F(FilterUnitTest, LinkPipline_001, TestSize.Level1)
     std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
     filter->Init(nullptr, nullptr);
     filter->LinkPipeLine("");
-    EXPECT_EQ(FilterState::INITIALIZED, filter->curState_);
+    EXPECT_EQ(FilterState::CREATED, filter->curState_);
 }
 
 /**
@@ -66,7 +66,7 @@ HWTEST_F(FilterUnitTest, LinkPipline_002, TestSize.Level1)
     std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VDEC, true);
     filter->Init(nullptr, nullptr);
     filter->LinkPipeLine("");
-    EXPECT_EQ(FilterState::INITIALIZED, filter->curState_);
+    EXPECT_EQ(FilterState::CREATED, filter->curState_);
 }
 
 /**
@@ -79,7 +79,7 @@ HWTEST_F(FilterUnitTest, LinkPipline_003, TestSize.Level1)
     std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::VIDEO_CAPTURE, true);
     filter->Init(nullptr, nullptr);
     filter->LinkPipeLine("");
-    EXPECT_EQ(FilterState::INITIALIZED, filter->curState_);
+    EXPECT_EQ(FilterState::CREATED, filter->curState_);
 }
 
 /**
@@ -92,7 +92,7 @@ HWTEST_F(FilterUnitTest, LinkPipline_004, TestSize.Level1)
     std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_ASINK, true);
     filter->Init(nullptr, nullptr);
     filter->LinkPipeLine("");
-    EXPECT_EQ(FilterState::INITIALIZED, filter->curState_);
+    EXPECT_EQ(FilterState::CREATED, filter->curState_);
 }
 
 /**
@@ -105,7 +105,7 @@ HWTEST_F(FilterUnitTest, LinkPipline_005, TestSize.Level1)
     std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::AUDIO_CAPTURE, true);
     filter->Init(nullptr, nullptr);
     filter->LinkPipeLine("");
-    EXPECT_EQ(FilterState::INITIALIZED, filter->curState_);
+    EXPECT_EQ(FilterState::CREATED, filter->curState_);
 }
 
 /**
@@ -118,7 +118,7 @@ HWTEST_F(FilterUnitTest, LinkPipline_006, TestSize.Level1)
     std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::AUDIO_DATA_SOURCE, true);
     filter->Init(nullptr, nullptr);
     filter->LinkPipeLine("");
-    EXPECT_EQ(FilterState::INITIALIZED, filter->curState_);
+    EXPECT_EQ(FilterState::CREATED, filter->curState_);
 }
 
 /**
@@ -160,7 +160,7 @@ HWTEST_F(FilterUnitTest, Prepare_002, TestSize.Level1)
     filter->Init(nullptr, nullptr);
     filter->LinkPipeLine("");
     filter->Prepare();
-    EXPECT_EQ(FilterState::READY, filter->curState_);
+    EXPECT_EQ(FilterState::CREATED, filter->curState_);
 }
 
 /**
@@ -170,7 +170,7 @@ HWTEST_F(FilterUnitTest, Prepare_002, TestSize.Level1)
  */
 HWTEST_F(FilterUnitTest, Prepare_003, TestSize.Level1)
 {
-    std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
+    std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, false);
     filter->Init(nullptr, nullptr);
     filter->LinkPipeLine("");
     filter->ChangeState(FilterState::ERROR);
@@ -184,8 +184,8 @@ HWTEST_F(FilterUnitTest, Prepare_003, TestSize.Level1)
  */
 HWTEST_F(FilterUnitTest, PrepareDone_001, TestSize.Level1)
 {
-    std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
-    std::shared_ptr<Filter> filter2 = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
+    std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, false);
+    std::shared_ptr<Filter> filter2 = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, false);
     filter->Init(nullptr, nullptr);
     filter2->Init(nullptr, nullptr);
     filter->LinkPipeLine("");
@@ -250,8 +250,8 @@ HWTEST_F(FilterUnitTest, WaitPrepareFrame_001, TestSize.Level1)
  */
 HWTEST_F(FilterUnitTest, Release_001, TestSize.Level1)
 {
-    std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
-    std::shared_ptr<Filter> filter2 = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
+    std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, false);
+    std::shared_ptr<Filter> filter2 = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, false);
     filter->Init(nullptr, nullptr);
     filter2->Init(nullptr, nullptr);
     filter->nextFiltersMap_[StreamType::STREAMTYPE_PACKED].push_back(filter2);
