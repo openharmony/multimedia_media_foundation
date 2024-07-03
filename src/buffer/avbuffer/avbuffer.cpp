@@ -189,7 +189,9 @@ Status AVBuffer::Init(sptr<SurfaceBuffer> surfaceBuffer)
 
 uint64_t AVBuffer::GetUniqueId()
 {
-    FALSE_RETURN_V(memory_ != nullptr, 0);
+    if (memory_ == nullptr) {
+        return 0;
+    }
     return memory_->uid_;
 }
 
