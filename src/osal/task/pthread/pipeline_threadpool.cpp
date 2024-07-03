@@ -206,7 +206,9 @@ void PipeLineThread::RemoveTask(std::shared_ptr<TaskInner> task)
 
 void PipeLineThread::LockJobState()
 {
-    FALSE_RETURN_W(!IsRunningInSelf());
+    if (IsRunningInSelf()) {
+        return;
+    }
     mutex_.lock();
 }
 
