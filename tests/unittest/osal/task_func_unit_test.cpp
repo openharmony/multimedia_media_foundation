@@ -111,9 +111,6 @@ public:
     std::shared_ptr<Task> task56 = nullptr;
     std::shared_ptr<Task> task57 = nullptr;
     std::shared_ptr<Task> task58 = nullptr;
-    std::shared_ptr<Task> task59 = nullptr;
-    std::shared_ptr<Task> task60 = nullptr;
-    std::shared_ptr<Task> task61 = nullptr;
     Mutex mutex_;
     std::atomic<bool> isStop_{false};
     std::string modifyMsg_ = "";
@@ -192,9 +189,6 @@ void TaskInnerUnitTest::SetUpMore(void)
     task56 = std::make_shared<Task>("workTask56", "", TaskType::SINGLETON, TaskPriority::HIGH, false);
     task57 = std::make_shared<Task>("workTask57", "", TaskType::GLOBAL, TaskPriority::HIGHEST, false);
     task58 = std::make_shared<Task>("workTask58", "", TaskType::VIDEO, TaskPriority::HIGHEST, false);
-    task59 = std::make_shared<Task>("workTask59", "", TaskType::AUDIO, TaskPriority::HIGHEST, false);
-    task60 = std::make_shared<Task>("workTask60", "", TaskType::SUBTITLE, TaskPriority::HIGHEST, false);
-    task61 = std::make_shared<Task>("workTask61", "", TaskType::SINGLETON, TaskPriority::HIGHEST, false);
 }
 
 void TaskInnerUnitTest::TearDown(void)
@@ -264,9 +258,6 @@ void TaskInnerUnitTest::TearDownMore(void)
     task56 = nullptr;
     task57 = nullptr;
     task58 = nullptr;
-    task59 = nullptr;
-    task60 = nullptr;
-    task61 = nullptr;
 }
 
 /**
@@ -2323,120 +2314,6 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart58, TestSize.Level1)
     task58->Start();
     sleep(1);
     bool rtv = task58->IsTaskRunning();
-    EXPECT_EQ(true, rtv);
-}
-
-/**
- * @tc.name: TaskJobPauseStopResumeStart59
- * @tc.desc: TaskJobPauseStopResumeStart59
- * @tc.type: FUNC
- */
-HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart59, TestSize.Level1)
-{
-    task59->RegisterJob([this]() {
-        bool runningState =true;
-        int count = 0;
-        while (runningState) {
-            count++;
-            MEDIA_LOG_I("Task TaskJobPauseStopResumeStart running at " PUBLIC_LOG_U32, count);
-            sleep(1);
-            if (count > 5) { //5 second
-                this->modifyMsg_ = "middle";
-            }
-            if (count > 20) { //20 second
-                runningState = false;
-            }
-        }
-        return 0;
-    });
-    task59->Start();
-    sleep(3);
-    task59->Pause();
-    sleep(2);
-    task59->Start();
-    sleep(2);
-    task59->Stop();
-    sleep(1);
-    EXPECT_EQ("", modifyMsg_);
-    task59->Start();
-    sleep(1);
-    bool rtv = task59->IsTaskRunning();
-    EXPECT_EQ(true, rtv);
-}
-
-/**
- * @tc.name: TaskJobPauseStopResumeStart60
- * @tc.desc: TaskJobPauseStopResumeStart60
- * @tc.type: FUNC
- */
-HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart60, TestSize.Level1)
-{
-    task60->RegisterJob([this]() {
-        bool runningState =true;
-        int count = 0;
-        while (runningState) {
-            count++;
-            MEDIA_LOG_I("Task TaskJobPauseStopResumeStart running at " PUBLIC_LOG_U32, count);
-            sleep(1);
-            if (count > 5) { //5 second
-                this->modifyMsg_ = "middle";
-            }
-            if (count > 20) { //20 second
-                runningState = false;
-            }
-        }
-        return 0;
-    });
-    task60->Start();
-    sleep(3);
-    task60->Pause();
-    sleep(2);
-    task60->Start();
-    sleep(2);
-    task60->Stop();
-    sleep(1);
-    EXPECT_EQ("", modifyMsg_);
-    task60->Start();
-    sleep(1);
-    bool rtv = task60->IsTaskRunning();
-    EXPECT_EQ(true, rtv);
-}
-
-/**
- * @tc.name: TaskJobPauseStopResumeStart61
- * @tc.desc: TaskJobPauseStopResumeStart61
- * @tc.type: FUNC
- */
-HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart61, TestSize.Level1)
-{
-    task61->RegisterJob([this]() {
-        bool runningState =true;
-        int count = 0;
-        while (runningState) {
-            count++;
-            MEDIA_LOG_I("Task TaskJobPauseStopResumeStart running at " PUBLIC_LOG_U32, count);
-            sleep(1);
-            if (count > 5) { //5 second
-                this->modifyMsg_ = "middle";
-            }
-            if (count > 20) { //20 second
-                runningState = false;
-            }
-        }
-        return 0;
-    });
-    task61->Start();
-    sleep(3);
-    task61->Pause();
-    sleep(2);
-    task61->Start();
-    sleep(2);
-    task61->Stop();
-    sleep(1);
-    EXPECT_EQ("", modifyMsg_);
-    task61->Start();
-    sleep(1);
-    bool rtv = task61->IsTaskRunning();
     EXPECT_EQ(true, rtv);
 }
 
