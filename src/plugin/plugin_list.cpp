@@ -326,6 +326,14 @@ void PluginList::AddFFmpegDemuxerPlugins()
     srtDemuxerPlugin.rank = DEFAULT_RANK;
     pluginDescriptionList_.push_back(srtDemuxerPlugin);
 
+    PluginDescription vttDemuxerPlugin;
+    vttDemuxerPlugin.pluginName = "avdemux_webvtt";
+    vttDemuxerPlugin.packageName = "FFmpegDemuxer";
+    vttDemuxerPlugin.pluginType = PluginType::DEMUXER;
+    vttDemuxerPlugin.cap = "";
+    vttDemuxerPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(vttDemuxerPlugin);
+
     PluginDescription mpegtsDemuxerPlugin;
     mpegtsDemuxerPlugin.pluginName = "avdemux_mpegts";
     mpegtsDemuxerPlugin.packageName = "FFmpegDemuxer";
