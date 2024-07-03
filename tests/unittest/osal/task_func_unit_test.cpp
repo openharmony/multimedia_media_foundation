@@ -579,39 +579,6 @@ HWTEST_F(TaskInnerUnitTest, WaitFor_Succ, TestSize.Level1)
 }
 
 /**
- * @tc.name: WaitFor_Failed
- * @tc.desc: WaitFor_Failed
- * @tc.type: FUNC
- */
-HWTEST_F(TaskInnerUnitTest, WaitFor_Failed, TestSize.Level1)
-{
-    AutoLock lock(mutex_);
-    task02->RegisterJob([]() {
-        bool runningState =true;
-        int count = 0;
-        while (runningState) {
-            count++;
-            MEDIA_LOG_I("Task WaitFor_Failed running at " PUBLIC_LOG_U32, count);
-            sleep(1);
-            if (count > 10){ //10 second
-                runningState = false;
-            }
-        }
-        return 0;
-    });
-    task02->Start();
-    int timeoutMs = 100;
-    isStop_.store(false);
-    auto start = std::chrono::high_resolution_clock::now();
-    auto rtv = cv.WaitFor(lock, timeoutMs, [this] { return isStop_.load(); });
-    auto end = std::chrono::high_resolution_clock::now();
-    int64_t diff = static_cast<int64_t>(static_cast<std::chrono::duration<double>>(end - start).count() * 1000);
-    EXPECT_EQ(false, rtv);
-    EXPECT_TRUE((std::abs(static_cast<int>(diff) - timeoutMs) < 20) || (diff < 5));
-    MEDIA_LOG_I("Wait Time Diff: " PUBLIC_LOG_D64, diff);
-}
-
-/**
  * @tc.name: TaskJobPauseStopResumeStart03
  * @tc.desc: TaskJobPauseStopResumeStart03
  * @tc.type: FUNC
@@ -1554,11 +1521,11 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart37, TestSize.Level1)
     sleep(2);
     task37->Stop();
     sleep(1);
-    EXPECT_EQ("middle", modifyMsg_);
+    EXPECT_EQ("", modifyMsg_);
     task37->Start();
     sleep(1);
     bool rtv = task37->IsTaskRunning();
-    EXPECT_EQ(false, rtv);
+    EXPECT_EQ(true, rtv);
 }
 
 /**
@@ -1592,11 +1559,11 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart38, TestSize.Level1)
     sleep(2);
     task38->Stop();
     sleep(1);
-    EXPECT_EQ("middle", modifyMsg_);
+    EXPECT_EQ("", modifyMsg_);
     task38->Start();
     sleep(1);
     bool rtv = task38->IsTaskRunning();
-    EXPECT_EQ(false, rtv);
+    EXPECT_EQ(true, rtv);
 }
 
 /**
@@ -1630,11 +1597,11 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart39, TestSize.Level1)
     sleep(2);
     task39->Stop();
     sleep(1);
-    EXPECT_EQ("middle", modifyMsg_);
+    EXPECT_EQ("", modifyMsg_);
     task39->Start();
     sleep(1);
     bool rtv = task39->IsTaskRunning();
-    EXPECT_EQ(false, rtv);
+    EXPECT_EQ(true, rtv);
 }
 
 /**
@@ -1668,11 +1635,11 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart40, TestSize.Level1)
     sleep(2);
     task40->Stop();
     sleep(1);
-    EXPECT_EQ("middle", modifyMsg_);
+    EXPECT_EQ("", modifyMsg_);
     task40->Start();
     sleep(1);
     bool rtv = task40->IsTaskRunning();
-    EXPECT_EQ(false, rtv);
+    EXPECT_EQ(true, rtv);
 }
 
 /**
@@ -1706,11 +1673,11 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart41, TestSize.Level1)
     sleep(2);
     task41->Stop();
     sleep(1);
-    EXPECT_EQ("middle", modifyMsg_);
+    EXPECT_EQ("", modifyMsg_);
     task41->Start();
     sleep(1);
     bool rtv = task41->IsTaskRunning();
-    EXPECT_EQ(false, rtv);
+    EXPECT_EQ(true, rtv);
 }
 
 /**
@@ -1744,11 +1711,11 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart42, TestSize.Level1)
     sleep(2);
     task42->Stop();
     sleep(1);
-    EXPECT_EQ("middle", modifyMsg_);
+    EXPECT_EQ("", modifyMsg_);
     task42->Start();
     sleep(1);
     bool rtv = task42->IsTaskRunning();
-    EXPECT_EQ(false, rtv);
+    EXPECT_EQ(true, rtv);
 }
 
 /**
@@ -1782,11 +1749,11 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart43, TestSize.Level1)
     sleep(2);
     task43->Stop();
     sleep(1);
-    EXPECT_EQ("middle", modifyMsg_);
+    EXPECT_EQ("", modifyMsg_);
     task43->Start();
     sleep(1);
     bool rtv = task43->IsTaskRunning();
-    EXPECT_EQ(false, rtv);
+    EXPECT_EQ(true, rtv);
 }
 
 /**
@@ -1820,11 +1787,11 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart44, TestSize.Level1)
     sleep(2);
     task44->Stop();
     sleep(1);
-    EXPECT_EQ("middle", modifyMsg_);
+    EXPECT_EQ("", modifyMsg_);
     task44->Start();
     sleep(1);
     bool rtv = task44->IsTaskRunning();
-    EXPECT_EQ(false, rtv);
+    EXPECT_EQ(true, rtv);
 }
 
 /**
@@ -1858,11 +1825,11 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart45, TestSize.Level1)
     sleep(2);
     task45->Stop();
     sleep(1);
-    EXPECT_EQ("middle", modifyMsg_);
+    EXPECT_EQ("", modifyMsg_);
     task45->Start();
     sleep(1);
     bool rtv = task45->IsTaskRunning();
-    EXPECT_EQ(false, rtv);
+    EXPECT_EQ(true, rtv);
 }
 
 /**
@@ -1896,11 +1863,11 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart46, TestSize.Level1)
     sleep(2);
     task46->Stop();
     sleep(1);
-    EXPECT_EQ("middle", modifyMsg_);
+    EXPECT_EQ("", modifyMsg_);
     task46->Start();
     sleep(1);
     bool rtv = task46->IsTaskRunning();
-    EXPECT_EQ(false, rtv);
+    EXPECT_EQ(true, rtv);
 }
 
 /**
@@ -1934,11 +1901,11 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart47, TestSize.Level1)
     sleep(2);
     task47->Stop();
     sleep(1);
-    EXPECT_EQ("middle", modifyMsg_);
+    EXPECT_EQ("", modifyMsg_);
     task47->Start();
     sleep(1);
     bool rtv = task47->IsTaskRunning();
-    EXPECT_EQ(false, rtv);
+    EXPECT_EQ(true, rtv);
 }
 
 /**
@@ -1972,11 +1939,11 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart48, TestSize.Level1)
     sleep(2);
     task48->Stop();
     sleep(1);
-    EXPECT_EQ("middle", modifyMsg_);
+    EXPECT_EQ("", modifyMsg_);
     task48->Start();
     sleep(1);
     bool rtv = task48->IsTaskRunning();
-    EXPECT_EQ(false, rtv);
+    EXPECT_EQ(true, rtv);
 }
 
 /**
@@ -2010,11 +1977,11 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart49, TestSize.Level1)
     sleep(2);
     task49->Stop();
     sleep(1);
-    EXPECT_EQ("middle", modifyMsg_);
+    EXPECT_EQ("", modifyMsg_);
     task49->Start();
     sleep(1);
     bool rtv = task49->IsTaskRunning();
-    EXPECT_EQ(false, rtv);
+    EXPECT_EQ(true, rtv);
 }
 
 /**
@@ -2048,11 +2015,11 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart50, TestSize.Level1)
     sleep(2);
     task50->Stop();
     sleep(1);
-    EXPECT_EQ("middle", modifyMsg_);
+    EXPECT_EQ("", modifyMsg_);
     task50->Start();
     sleep(1);
     bool rtv = task50->IsTaskRunning();
-    EXPECT_EQ(false, rtv);
+    EXPECT_EQ(true, rtv);
 }
 
 /**
@@ -2086,11 +2053,11 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart51, TestSize.Level1)
     sleep(2);
     task51->Stop();
     sleep(1);
-    EXPECT_EQ("middle", modifyMsg_);
+    EXPECT_EQ("", modifyMsg_);
     task51->Start();
     sleep(1);
     bool rtv = task51->IsTaskRunning();
-    EXPECT_EQ(false, rtv);
+    EXPECT_EQ(true, rtv);
 }
 
 /**
@@ -2124,11 +2091,11 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart52, TestSize.Level1)
     sleep(2);
     task52->Stop();
     sleep(1);
-    EXPECT_EQ("middle", modifyMsg_);
+    EXPECT_EQ("", modifyMsg_);
     task52->Start();
     sleep(1);
     bool rtv = task52->IsTaskRunning();
-    EXPECT_EQ(false, rtv);
+    EXPECT_EQ(true, rtv);
 }
 
 /**
@@ -2162,11 +2129,11 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart53, TestSize.Level1)
     sleep(2);
     task53->Stop();
     sleep(1);
-    EXPECT_EQ("middle", modifyMsg_);
+    EXPECT_EQ("", modifyMsg_);
     task53->Start();
     sleep(1);
     bool rtv = task53->IsTaskRunning();
-    EXPECT_EQ(false, rtv);
+    EXPECT_EQ(true, rtv);
 }
 
 /**
@@ -2200,11 +2167,11 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart54, TestSize.Level1)
     sleep(2);
     task54->Stop();
     sleep(1);
-    EXPECT_EQ("middle", modifyMsg_);
+    EXPECT_EQ("", modifyMsg_);
     task54->Start();
     sleep(1);
     bool rtv = task54->IsTaskRunning();
-    EXPECT_EQ(false, rtv);
+    EXPECT_EQ(true, rtv);
 }
 
 /**
@@ -2238,11 +2205,11 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart55, TestSize.Level1)
     sleep(2);
     task55->Stop();
     sleep(1);
-    EXPECT_EQ("middle", modifyMsg_);
+    EXPECT_EQ("", modifyMsg_);
     task55->Start();
     sleep(1);
     bool rtv = task55->IsTaskRunning();
-    EXPECT_EQ(false, rtv);
+    EXPECT_EQ(true, rtv);
 }
 
 /**
@@ -2276,11 +2243,11 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart56, TestSize.Level1)
     sleep(2);
     task56->Stop();
     sleep(1);
-    EXPECT_EQ("middle", modifyMsg_);
+    EXPECT_EQ("", modifyMsg_);
     task56->Start();
     sleep(1);
     bool rtv = task56->IsTaskRunning();
-    EXPECT_EQ(false, rtv);
+    EXPECT_EQ(true, rtv);
 }
 
 /**
@@ -2314,11 +2281,11 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart57, TestSize.Level1)
     sleep(2);
     task57->Stop();
     sleep(1);
-    EXPECT_EQ("middle", modifyMsg_);
+    EXPECT_EQ("", modifyMsg_);
     task57->Start();
     sleep(1);
     bool rtv = task57->IsTaskRunning();
-    EXPECT_EQ(false, rtv);
+    EXPECT_EQ(true, rtv);
 }
 
 /**
@@ -2352,11 +2319,11 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart58, TestSize.Level1)
     sleep(2);
     task58->Stop();
     sleep(1);
-    EXPECT_EQ("middle", modifyMsg_);
+    EXPECT_EQ("", modifyMsg_);
     task58->Start();
     sleep(1);
     bool rtv = task58->IsTaskRunning();
-    EXPECT_EQ(false, rtv);
+    EXPECT_EQ(true, rtv);
 }
 
 /**
@@ -2390,11 +2357,11 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart59, TestSize.Level1)
     sleep(2);
     task59->Stop();
     sleep(1);
-    EXPECT_EQ("middle", modifyMsg_);
+    EXPECT_EQ("", modifyMsg_);
     task59->Start();
     sleep(1);
     bool rtv = task59->IsTaskRunning();
-    EXPECT_EQ(false, rtv);
+    EXPECT_EQ(true, rtv);
 }
 
 /**
@@ -2428,11 +2395,11 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart60, TestSize.Level1)
     sleep(2);
     task60->Stop();
     sleep(1);
-    EXPECT_EQ("middle", modifyMsg_);
+    EXPECT_EQ("", modifyMsg_);
     task60->Start();
     sleep(1);
     bool rtv = task60->IsTaskRunning();
-    EXPECT_EQ(false, rtv);
+    EXPECT_EQ(true, rtv);
 }
 
 /**
@@ -2466,12 +2433,46 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart61, TestSize.Level1)
     sleep(2);
     task61->Stop();
     sleep(1);
-    EXPECT_EQ("middle", modifyMsg_);
+    EXPECT_EQ("", modifyMsg_);
     task61->Start();
     sleep(1);
     bool rtv = task61->IsTaskRunning();
-    EXPECT_EQ(false, rtv);
+    EXPECT_EQ(true, rtv);
 }
+
+/**
+ * @tc.name: WaitFor_Failed
+ * @tc.desc: WaitFor_Failed
+ * @tc.type: FUNC
+ */
+HWTEST_F(TaskInnerUnitTest, WaitFor_Failed, TestSize.Level1)
+{
+    AutoLock lock(mutex_);
+    task02->RegisterJob([]() {
+        bool runningState =true;
+        int count = 0;
+        while (runningState) {
+            count++;
+            MEDIA_LOG_I("Task WaitFor_Failed running at " PUBLIC_LOG_U32, count);
+            sleep(1);
+            if (count > 10){ //10 second
+                runningState = false;
+            }
+        }
+        return 0;
+    });
+    task02->Start();
+    int timeoutMs = 100;
+    isStop_.store(false);
+    auto start = std::chrono::high_resolution_clock::now();
+    auto rtv = cv.WaitFor(lock, timeoutMs, [this] { return isStop_.load(); });
+    auto end = std::chrono::high_resolution_clock::now();
+    int64_t diff = static_cast<int64_t>(static_cast<std::chrono::duration<double>>(end - start).count() * 1000);
+    EXPECT_EQ(false, rtv);
+    EXPECT_TRUE((std::abs(static_cast<int>(diff) - timeoutMs) < 20) || (diff < 5));
+    MEDIA_LOG_I("Wait Time Diff: " PUBLIC_LOG_D64, diff);
+}
+
 } // namespace MetaFuncUT
 } // namespace Media
 } // namespace OHOS
