@@ -348,9 +348,8 @@ HWTEST_F(AVBufferQueueInnerUnitTest, ReturnBufferTest, TestSize.Level1)
  */
 HWTEST_F(AVBufferQueueInnerUnitTest, RemoveBrokerListenerTest, TestSize.Level1)
 {
-    aVBufferQueueImpl_ = std::make_shared<AVBufferQueueImpl>(AVBUFFER_QUEUE_MAX_QUEUE_SIZE + 1,
+    avBufferQueueImpl_ = std::make_shared<AVBufferQueueImpl>(AVBUFFER_QUEUE_MAX_QUEUE_SIZE + 1,
         MemoryType::SHARED_MEMORY, "RemoveBrokerListenerTest");
-    aVBufferQueueImpl_->RemoveBrokerListener();
     sptr<IBrokerListener> listener1 = new BrokerListener();
     sptr<IBrokerListener> listener2 = new BrokerListener();
     sptr<IBrokerListener> listener3 = new BrokerListener();
@@ -358,9 +357,9 @@ HWTEST_F(AVBufferQueueInnerUnitTest, RemoveBrokerListenerTest, TestSize.Level1)
     avBufferQueueImpl_->SetBrokerListener(listener2);
     avBufferQueueImpl_->SetBrokerListener(listener3);
     int32_t brokerListenersSize = avBufferQueueImpl_->brokerListeners_.size();
-    EXPECT_EQ(Status::OK, avBufferQueueImpl_->RemoveBrokerListener(buffer3));
+    EXPECT_EQ(Status::OK, avBufferQueueImpl_->RemoveBrokerListener(listener3));
     EXPECT_EQ(brokerListenersSize - 1, avBufferQueueImpl_->brokerListeners_.size());
-    EXPECT_EQ(Status::OK, avBufferQueueImpl_->RemoveBrokerListener(buffer1));
+    EXPECT_EQ(Status::OK, avBufferQueueImpl_->RemoveBrokerListener(listener1));
     EXPECT_EQ(brokerListenersSize - 1, avBufferQueueImpl_->brokerListeners_.size());
 }
 
@@ -375,7 +374,6 @@ HWTEST_F(AVBufferQueueInnerUnitTest, ClearTest, TestSize.Level1)
     config.size = 1;
     config.capacity = 1;
     config.memoryType = MemoryType::VIRTUAL_MEMORY;
-    avBufferQueueImpl_->SetConsumerListener(listener);
     std::shared_ptr<AVAllocator> allocator = AVAllocatorFactory::CreateSharedAllocator(MemoryFlag::MEMORY_READ_WRITE);
     std::shared_ptr<AVBuffer> buffer = AVBuffer::CreateAVBuffer(allocator, 1, 0);
     ASSERT_NE(nullptr, buffer);
