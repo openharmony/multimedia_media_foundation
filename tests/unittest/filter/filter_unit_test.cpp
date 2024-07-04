@@ -173,7 +173,7 @@ HWTEST_F(FilterUnitTest, Prepare_002, TestSize.Level1)
  */
 HWTEST_F(FilterUnitTest, Prepare_003, TestSize.Level1)
 {
-    std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, false);
+    std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
     filter->Init(nullptr, nullptr);
     filter->LinkPipeLine("");
     filter->ChangeState(FilterState::ERROR);
