@@ -140,7 +140,6 @@ HWTEST_F(FilterUnitTest, LinkPipline_007, TestSize.Level1)
     filter->Init(nullptr, nullptr);
     filter->LinkPipeLine("");
     sleep(sleepTime_);
-    sleep(sleepTime_);
     EXPECT_EQ(FilterState::INITIALIZED, filter->curState_);
 }
 
@@ -156,7 +155,6 @@ HWTEST_F(FilterUnitTest, Prepare_001, TestSize.Level1)
     filter->LinkPipeLine("");
     EXPECT_EQ(FilterState::INITIALIZED, filter->curState_);
     filter->Prepare();
-    sleep(sleepTime_);
     EXPECT_EQ(FilterState::READY, filter->curState_);
 }
 
