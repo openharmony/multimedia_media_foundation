@@ -52,7 +52,7 @@ public:
     static constexpr const char MEDIA_MP3[] = "media/mp3";
 
     static constexpr const char TEXT_SUBRIP[] = "application/x-subrip";
-    static constexpr const char TEXT_WEBVTT[] = "application/webvtt";
+    static constexpr const char TEXT_WEBVTT[] = "text/vtt";
 };
 } // namespace Plugins
 } // namespace Media
