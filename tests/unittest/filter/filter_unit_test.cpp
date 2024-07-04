@@ -33,7 +33,8 @@ public:
     void SetUp(void);
 
     void TearDown(void);
-    const int32_t sleepTime = 1;
+
+    const int32_t sleepTime_ = 1;
 };
 
 void FilterUnitTest::SetUpTestCase(void) {}
@@ -54,7 +55,7 @@ HWTEST_F(FilterUnitTest, LinkPipline_001, TestSize.Level1)
     std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
     filter->Init(nullptr, nullptr);
     filter->LinkPipeLine("");
-    sleep(sleepTime);
+    sleep(sleepTime_);
     EXPECT_EQ(FilterState::INITIALIZED, filter->curState_);
 }
 
@@ -68,6 +69,7 @@ HWTEST_F(FilterUnitTest, LinkPipline_002, TestSize.Level1)
     std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VDEC, true);
     filter->Init(nullptr, nullptr);
     filter->LinkPipeLine("");
+    sleep(sleepTime_);
     EXPECT_EQ(FilterState::INITIALIZED, filter->curState_);
 }
 
@@ -81,6 +83,7 @@ HWTEST_F(FilterUnitTest, LinkPipline_003, TestSize.Level1)
     std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::VIDEO_CAPTURE, true);
     filter->Init(nullptr, nullptr);
     filter->LinkPipeLine("");
+    sleep(sleepTime_);
     EXPECT_EQ(FilterState::INITIALIZED, filter->curState_);
 }
 
@@ -94,6 +97,7 @@ HWTEST_F(FilterUnitTest, LinkPipline_004, TestSize.Level1)
     std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_ASINK, true);
     filter->Init(nullptr, nullptr);
     filter->LinkPipeLine("");
+    sleep(sleepTime_);
     EXPECT_EQ(FilterState::INITIALIZED, filter->curState_);
 }
 
@@ -107,6 +111,7 @@ HWTEST_F(FilterUnitTest, LinkPipline_005, TestSize.Level1)
     std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::AUDIO_CAPTURE, true);
     filter->Init(nullptr, nullptr);
     filter->LinkPipeLine("");
+    sleep(sleepTime_);
     EXPECT_EQ(FilterState::INITIALIZED, filter->curState_);
 }
 
@@ -120,6 +125,7 @@ HWTEST_F(FilterUnitTest, LinkPipline_006, TestSize.Level1)
     std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::AUDIO_DATA_SOURCE, true);
     filter->Init(nullptr, nullptr);
     filter->LinkPipeLine("");
+    sleep(sleepTime_);
     EXPECT_EQ(FilterState::INITIALIZED, filter->curState_);
 }
 
@@ -133,7 +139,8 @@ HWTEST_F(FilterUnitTest, LinkPipline_007, TestSize.Level1)
     std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, false);
     filter->Init(nullptr, nullptr);
     filter->LinkPipeLine("");
-    sleep(sleepTime);
+    sleep(sleepTime_);
+    sleep(sleepTime_);
     EXPECT_EQ(FilterState::INITIALIZED, filter->curState_);
 }
 
@@ -149,6 +156,7 @@ HWTEST_F(FilterUnitTest, Prepare_001, TestSize.Level1)
     filter->LinkPipeLine("");
     EXPECT_EQ(FilterState::INITIALIZED, filter->curState_);
     filter->Prepare();
+    sleep(sleepTime_);
     EXPECT_EQ(FilterState::READY, filter->curState_);
 }
 
@@ -163,6 +171,7 @@ HWTEST_F(FilterUnitTest, Prepare_002, TestSize.Level1)
     filter->Init(nullptr, nullptr);
     filter->LinkPipeLine("");
     filter->Prepare();
+    sleep(sleepTime_);
     EXPECT_EQ(FilterState::READY, filter->curState_);
 }
 
@@ -178,8 +187,8 @@ HWTEST_F(FilterUnitTest, Prepare_003, TestSize.Level1)
     filter->LinkPipeLine("");
     filter->ChangeState(FilterState::ERROR);
     filter->Prepare();
-    sleep(sleepTime);
-    EXPECT_EQ(Status::READY, filter->curState_);
+    sleep(sleepTime_);
+    EXPECT_EQ(FilterState::READY, filter->curState_);
 }
 
 /**
@@ -213,8 +222,8 @@ HWTEST_F(FilterUnitTest, PrepareDone_002, TestSize.Level1)
     filter->LinkPipeLine("");
     filter2->LinkPipeLine("");
     filter->nextFiltersMap_[StreamType::STREAMTYPE_PACKED].push_back(filter2);
-    sleep(sleepTime);
     filter->Prepare();
+    sleep(sleepTime_);
     EXPECT_EQ(FilterState::READY, filter->curState_);
 }
 
@@ -288,11 +297,11 @@ HWTEST_F(FilterUnitTest, Release_001, TestSize.Level1)
 }
 
 /**
- * @tc.name: Release_001
+ * @tc.name: Release_002
  * @tc.desc: Test Release interface
  * @tc.type: FUNC
  */
-HWTEST_F(FilterUnitTest, Release_001, TestSize.Level1)
+HWTEST_F(FilterUnitTest, Release_002, TestSize.Level1)
 {
     std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
     std::shared_ptr<Filter> filter2 = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
@@ -300,15 +309,15 @@ HWTEST_F(FilterUnitTest, Release_001, TestSize.Level1)
     filter2->Init(nullptr, nullptr);
     filter->nextFiltersMap_[StreamType::STREAMTYPE_PACKED].push_back(filter2);
     filter->LinkPipeLine("");
-    sleep(sleepTime);
+    sleep(sleepTime_);
     EXPECT_EQ(Status::OK, filter->Start());
-    sleep(sleepTime);
+    sleep(sleepTime_);
     EXPECT_EQ(Status::OK, filter->Pause());
-    sleep(sleepTime);
+    sleep(sleepTime_);
     EXPECT_EQ(Status::OK, filter->Resume());
-    sleep(sleepTime);
+    sleep(sleepTime_);
     EXPECT_EQ(Status::OK, filter->Stop());
-    sleep(sleepTime);
+    sleep(sleepTime_);
     EXPECT_EQ(Status::OK, filter->Release());
 }
 
@@ -342,7 +351,7 @@ HWTEST_F(FilterUnitTest, WaitAllState_001, TestSize.Level1)
     filter2->Init(nullptr, nullptr);
     filter->nextFiltersMap_[StreamType::STREAMTYPE_PACKED].push_back(filter2);
     filter->LinkPipeLine("");
-    sleep(sleepTime);
+    sleep(sleepTime_);
     EXPECT_NE(Status::OK, filter->WaitAllState(FilterState::PREPARING));
 }
 
@@ -375,7 +384,7 @@ HWTEST_F(FilterUnitTest, WaitAllState_003, TestSize.Level1)
     filter->nextFiltersMap_[StreamType::STREAMTYPE_PACKED].push_back(filter2);
     filter->LinkPipeLine("");
     filter2->LinkPipeLine("");
-    sleep(sleepTime);
+    sleep(sleepTime_);
     EXPECT_EQ(Status::OK, filter->WaitAllState(FilterState::INITIALIZED));
 }
 
