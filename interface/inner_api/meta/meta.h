@@ -187,11 +187,11 @@ public:
         tagCharSeq == Tag::SCREEN_CAPTURE_REQURE_MIC or
         tagCharSeq == Tag::SCREEN_CAPTURE_ENABLE_MIC or
         tagCharSeq == Tag::AV_PLAYER_IS_DRM_PROTECTED or
-        tagCharSeq == Tag::AV_PLAYER_DOWNLOAD_TIME_OUT, bool, AnyValueType::BOOL);
+        tagCharSeq == Tag::AV_PLAYER_DOWNLOAD_TIME_OUT or
+        tagCharSeq == Tag::VIDEO_ENCODER_PER_FRAME_DISCARD or
+        tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_WATERMARK, bool, AnyValueType::BOOL);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_BUFFER_CAN_DROP, bool, AnyValueType::BOOL);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_RENDER_SET_FLAG, bool, AnyValueType::BOOL);
-    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_ENCODER_PER_FRAME_DISCARD or
-        tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_WATERMARK, bool, AnyValueType::BOOL);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_H265_PROFILE, Plugins::HEVCProfile, AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_H265_LEVEL, Plugins::HEVCLevel, AnyValueType::INT32_T);
 
