@@ -13,6 +13,10 @@
  * limitations under the License.
  */
 
+namespace {
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_ONLY_PRERELEASE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
+}
+
 #include "meta/meta.h"
 #include <functional>
 #include "common/log.h"
