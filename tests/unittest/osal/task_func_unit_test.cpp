@@ -429,6 +429,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart03, TestSize.Level1)
     sleep(1);
     bool rtv = task03->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task03->Stop();
 }
 
 /**
@@ -469,6 +470,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart04, TestSize.Level1)
     sleep(1);
     bool rtv = task04->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task04->Stop();
 }
 
 /**
@@ -509,6 +511,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart05, TestSize.Level1)
     sleep(1);
     bool rtv = task05->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task05->Stop();
 }
 
 /**
@@ -549,6 +552,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart06, TestSize.Level1)
     sleep(1);
     bool rtv = task06->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task06->Stop();
 }
 
 /**
@@ -589,6 +593,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart07, TestSize.Level1)
     sleep(1);
     bool rtv = task07->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task07->Stop();
 }
 
 /**
@@ -629,6 +634,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart08, TestSize.Level1)
     sleep(1);
     bool rtv = task08->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task08->Stop();
 }
 
 /**
@@ -669,6 +675,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart09, TestSize.Level1)
     sleep(1);
     bool rtv = task09->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task09->Stop();
 }
 
 /**
@@ -709,6 +716,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart20, TestSize.Level1)
     sleep(1);
     bool rtv = task20->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task20->Stop();
 }
 
 /**
@@ -789,6 +797,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart22, TestSize.Level1)
     sleep(1);
     bool rtv = task22->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task22->Stop();
 }
 
 /**
@@ -829,6 +838,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart23, TestSize.Level1)
     sleep(1);
     bool rtv = task23->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task23->Stop();
 }
 
 /**
@@ -869,6 +879,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart24, TestSize.Level1)
     sleep(1);
     bool rtv = task24->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task24->Stop();
 }
 
 /**
@@ -909,6 +920,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart25, TestSize.Level1)
     sleep(1);
     bool rtv = task25->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task25->Stop();
 }
 
 /**
@@ -989,6 +1001,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart27, TestSize.Level1)
     sleep(1);
     bool rtv = task27->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task27->Stop();
 }
 
 /**
@@ -1029,6 +1042,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart28, TestSize.Level1)
     sleep(1);
     bool rtv = task28->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task28->Stop();
 }
 
 /**
@@ -1069,6 +1083,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart29, TestSize.Level1)
     sleep(1);
     bool rtv = task29->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task29->Stop();
 }
 
 /**
@@ -1109,6 +1124,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart30, TestSize.Level1)
     sleep(1);
     bool rtv = task30->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task30->Stop();
 }
 
 /**
@@ -1189,6 +1205,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart32, TestSize.Level1)
     sleep(1);
     bool rtv = task32->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task32->Stop();
 }
 
 /**
@@ -1229,6 +1246,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart33, TestSize.Level1)
     sleep(1);
     bool rtv = task33->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task33->Stop();
 }
 
 /**
@@ -1269,6 +1287,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart34, TestSize.Level1)
     sleep(1);
     bool rtv = task34->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task34->Stop();
 }
 
 /**
@@ -1309,6 +1328,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart35, TestSize.Level1)
     sleep(1);
     bool rtv = task35->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task35->Stop();
 }
 
 /**
@@ -1429,6 +1449,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart38, TestSize.Level1)
     sleep(1);
     bool rtv = task38->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task38->Stop();
 }
 
 /**
@@ -1469,6 +1490,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart39, TestSize.Level1)
     sleep(1);
     bool rtv = task39->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task39->Stop();
 }
 
 /**
@@ -1509,6 +1531,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart40, TestSize.Level1)
     sleep(1);
     bool rtv = task40->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task40->Stop();
 }
 
 /**
@@ -1549,6 +1572,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart41, TestSize.Level1)
     sleep(1);
     bool rtv = task41->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task41->Stop();
 }
 
 /**
@@ -1589,6 +1613,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart42, TestSize.Level1)
     sleep(1);
     bool rtv = task42->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task42->Stop();
 }
 
 /**
@@ -1629,6 +1654,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart43, TestSize.Level1)
     sleep(1);
     bool rtv = task43->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task43->Stop();
 }
 
 /**
@@ -1669,6 +1695,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart44, TestSize.Level1)
     sleep(1);
     bool rtv = task44->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task44->Stop();
 }
 
 /**
@@ -1709,6 +1736,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart45, TestSize.Level1)
     sleep(1);
     bool rtv = task45->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task45->Stop();
 }
 
 /**
@@ -1789,6 +1817,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart47, TestSize.Level1)
     sleep(1);
     bool rtv = task47->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task47->Stop();
 }
 
 /**
@@ -1829,6 +1858,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart48, TestSize.Level1)
     sleep(1);
     bool rtv = task48->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task48->Stop();
 }
 
 /**
@@ -1869,6 +1899,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart49, TestSize.Level1)
     sleep(1);
     bool rtv = task49->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task49->Stop();
 }
 
 /**
@@ -1909,6 +1940,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart50, TestSize.Level1)
     sleep(1);
     bool rtv = task50->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task50->Stop();
 }
 
 /**
@@ -1989,6 +2021,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart52, TestSize.Level1)
     sleep(1);
     bool rtv = task52->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task52->Stop();
 }
 
 /**
@@ -2029,6 +2062,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart53, TestSize.Level1)
     sleep(1);
     bool rtv = task53->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task53->Stop();
 }
 
 /**
@@ -2069,6 +2103,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart54, TestSize.Level1)
     sleep(1);
     bool rtv = task54->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task54->Stop();
 }
 
 /**
@@ -2109,6 +2144,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart55, TestSize.Level1)
     sleep(1);
     bool rtv = task55->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task55->Stop();
 }
 
 /**
@@ -2189,6 +2225,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart57, TestSize.Level1)
     sleep(1);
     bool rtv = task57->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task57->Stop();
 }
 
 /**
@@ -2229,6 +2266,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart58, TestSize.Level1)
     sleep(1);
     bool rtv = task58->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task58->Stop();
 }
 
 /**
@@ -2261,7 +2299,7 @@ HWTEST_F(TaskInnerUnitTest, WaitFor_Failed, TestSize.Level1)
     auto end = std::chrono::high_resolution_clock::now();
     int64_t diff = static_cast<int64_t>(static_cast<std::chrono::duration<double>>(end - start).count() * 1000);
     EXPECT_EQ(false, rtv);
-    EXPECT_TRUE((std::abs(static_cast<int>(diff) - timeoutMs) < 20) || (diff < 5));
+    EXPECT_EQ(false, ((std::abs(static_cast<int>(diff) - timeoutMs) < 20) || (diff < 5)));
     MEDIA_LOG_I("Wait Time Diff: " PUBLIC_LOG_D64, diff);
 }
 } // namespace MetaFuncUT
