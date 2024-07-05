@@ -18,6 +18,10 @@
 #include "osal/task/task.h"
 #include "common/log.h"
 
+namespace {
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_ONLY_PRERELEASE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
+}
+
 namespace OHOS {
 namespace Media {
 // ffrt::qos priority sorting:qos_utility < qos_default < qos_user_initiated <

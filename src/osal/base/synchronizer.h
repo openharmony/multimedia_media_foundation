@@ -25,6 +25,10 @@
 #include "inner_api/osal/task/condition_variable.h"
 #include "inner_api/osal/task/mutex.h"
 
+namespace {
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_ONLY_PRERELEASE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
+}
+
 namespace OHOS {
 namespace Media {
 template <typename SyncIdType, typename ResultType = void>
