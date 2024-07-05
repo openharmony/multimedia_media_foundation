@@ -25,6 +25,10 @@
 #include "native_avformat.h"
 #endif
 
+namespace {
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_ONLY_PRERELEASE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
+}
+
 using namespace std;
 using namespace testing::ext;
 
