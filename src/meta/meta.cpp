@@ -139,7 +139,8 @@ static std::vector<TagType> g_metadataBoolVector = {
     Tag::SCREEN_CAPTURE_ENABLE_MIC,
     Tag::AV_PLAYER_IS_DRM_PROTECTED,
     Tag::AV_PLAYER_DOWNLOAD_TIME_OUT,
-    Tag::VIDEO_ENCODER_PER_FRAME_DISCARD
+    Tag::VIDEO_ENCODER_PER_FRAME_DISCARD,
+    Tag::VIDEO_ENCODER_ENABLE_WATERMARK
 };
 
 bool SetMetaData(Meta& meta, const TagType& tag, int32_t value)
@@ -418,6 +419,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::AV_PLAYER_IS_DRM_PROTECTED, defaultBool},
     {Tag::AV_PLAYER_DOWNLOAD_TIME_OUT, defaultBool},
     {Tag::VIDEO_ENCODER_PER_FRAME_DISCARD, defaultBool},
+    {Tag::VIDEO_ENCODER_ENABLE_WATERMARK, defaultBool},
     // Int64
     {Tag::MEDIA_FILE_SIZE, defaultUInt64},
     {Tag::MEDIA_POSITION, defaultUInt64},
