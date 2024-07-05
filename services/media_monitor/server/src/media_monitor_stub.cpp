@@ -11,12 +11,16 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+*/
 
 #include "media_monitor_stub.h"
 #include "media_monitor_ipc_interface_code.h"
 #include "log.h"
 #include "monitor_error.h"
+
+namespace {
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = {LOG_CORE, LOG_DOMAIN_FOUNDATION, "HiStreamer"};
+}
 
 namespace OHOS {
 namespace Media {

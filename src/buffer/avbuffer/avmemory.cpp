@@ -51,7 +51,7 @@ uint64_t GetUniqueId()
     uid.bufferId[1] = bufferId;
     return uid.startTime;
 }
-
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = {LOG_CORE, LOG_DOMAIN_FOUNDATION, "HiStreamer"};
 } // namespace
 namespace OHOS {
 namespace Media {

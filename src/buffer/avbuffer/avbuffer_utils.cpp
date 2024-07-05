@@ -23,6 +23,7 @@ namespace {
 using namespace OHOS;
 using namespace OHOS::Media;
 bool WriteSurfaceBufferConfig(MessageParcel &parcel, const BufferRequestConfig &config)
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = {LOG_CORE, LOG_DOMAIN_FOUNDATION, "HiStreamer"};
 {
 #ifdef MEDIA_OHOS
     return parcel.WriteInt32(config.width) && parcel.WriteInt32(config.height) &&

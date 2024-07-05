@@ -27,6 +27,11 @@
 #include "sys/mman.h"
 #endif
 #define HARDWARE_ALLOCATOR std::static_pointer_cast<AVHardwareAllocator>(allocator_)
+
+namespace {
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = {LOG_CORE, LOG_DOMAIN_FOUNDATION, "HiStreamer"};
+}
+
 namespace OHOS {
 namespace Media {
 std::shared_ptr<AVAllocator> AVAllocatorFactory::CreateHardwareAllocator(int32_t fd, int32_t capacity,

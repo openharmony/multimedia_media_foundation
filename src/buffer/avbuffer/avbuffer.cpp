@@ -24,6 +24,10 @@
 #include "surface_type.h"
 #include "unistd.h"
 
+namespace {
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = {LOG_CORE, LOG_DOMAIN_FOUNDATION, "HiStreamer"};
+}
+
 namespace OHOS {
 namespace Media {
 AVBuffer::AVBuffer() : pts_(0), dts_(0), duration_(0), flag_(0), meta_(nullptr), memory_(nullptr) {}

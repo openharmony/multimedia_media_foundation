@@ -23,6 +23,10 @@
 #include "surface_buffer.h"
 #include "surface_type.h"
 
+namespace {
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = {LOG_CORE, LOG_DOMAIN_FOUNDATION, "HiStreamer"};
+}
+
 namespace OHOS {
 namespace Media {
 std::shared_ptr<AVAllocator> AVAllocatorFactory::CreateSurfaceAllocator(const BufferRequestConfig &config)
