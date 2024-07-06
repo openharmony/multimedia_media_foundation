@@ -13,10 +13,6 @@
  * limitations under the License.
  */
 
-namespace {
-constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_ONLY_PRERELEASE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
-}
-
 #include "meta/meta.h"
 #include <functional>
 #include "common/log.h"
@@ -49,6 +45,11 @@ constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_ONLY_PRERELEASE, LOG_DOMAIN_
  *    SetMetaData/GetMetaData: AVFormat use them to set/get enum/bool/int values,
  *    It can convert the integer to/from enum/bool automatically.
  **/
+
+namespace {
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_ONLY_PRERELEASE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
+}
+
 namespace OHOS {
 namespace Media {
 using namespace Plugins;
