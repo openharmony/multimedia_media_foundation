@@ -42,6 +42,7 @@ public:
     }
     size_t Capacity()
     {
+        AutoLock lock(mutex_);
         return capacity_;
     }
     bool Empty()
@@ -147,6 +148,13 @@ public:
         }
     }
 
+    void ResetCapacity(size_t capacity)
+    {
+        AutoLock lock(mutex_);
+        capacity_ = capacity;
+        MEDIA_LOG_D("ResetCapacity: capacity_ is " PUBLIC_LOG_ZU, capacity_);
+    }
+    
 private:
     void ClearUnprotected()
     {
@@ -166,7 +174,7 @@ private:
 
     std::string name_;
     std::queue<T> que_;
-    const size_t capacity_;
+    size_t capacity_;
     std::atomic<bool> isActive;
 };
 } // namespace Media
