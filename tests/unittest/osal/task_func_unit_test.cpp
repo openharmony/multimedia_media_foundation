@@ -29,6 +29,7 @@
 #include "osal/task/condition_variable.h"
 #include "cpp_ext/memory_ext.h"
 #include "common/log.h"
+#include "osal/task/pipeline_threadpool.h"
 
 using namespace std;
 using namespace testing::ext;
@@ -68,6 +69,7 @@ void TaskInnerUnitTest::SetUp(void)
 
 void TaskInnerUnitTest::TearDown(void)
 {
+    PipeLineThreadPool::GetInstance().DestroyThread("");
     std::cout << "[TearDown]: over!!!" << std::endl;
 }
 
