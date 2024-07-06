@@ -97,6 +97,17 @@ HWTEST_F(PiplineUnitTest, Pipeline_Test_pipline_0100, TestSize.Level1)
     EXPECT_EQ(pipeline_->RemoveHeadFilter(filterOne_), Status::OK);
     EXPECT_EQ(pipeline_->Release(), Status::OK);
 }
+
+/**
+* @tc.name: Pipeline_PrepareFrame_001
+* @tc.number: Pipeline_PrepareFrame_001
+* @tc.type: FUNC
+*/
+HWTEST_F(PiplineUnitTest, Pipeline_PrepareFrame_001, TestSize.Level1)
+{
+    EXPECT_EQ(pipeline_->PrepareFrame(true), Status::OK);
+    EXPECT_EQ(pipeline_->PrepareFrame(false), Status::OK);
+}
 } // namespace PiplineFuncUT
 } // namespace Media
 } // namespace OHOS
