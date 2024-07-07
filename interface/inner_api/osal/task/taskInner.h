@@ -65,7 +65,7 @@ public:
 
     virtual bool IsTaskRunning() { return runningState_ == RunningState::STARTED; }
 
-    virtual void UpdataDelayTime(int64_t delayUs);
+    virtual void UpdateDelayTime(int64_t delayUs);
 
     void SetEnableStateChangeLog(bool enable) { isStateLogEnabled_ = enable; }
 

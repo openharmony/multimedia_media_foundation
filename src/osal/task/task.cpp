@@ -87,9 +87,9 @@ bool Task::IsTaskRunning()
     return taskInner_->IsTaskRunning();
 }
 
-void Task::UpdataDelayTime(int64_t delayUs)
+void Task::UpdateDelayTime(int64_t delayUs)
 {
-    taskInner_->UpdataDelayTime(delayUs);
+    taskInner_->UpdateDelayTime(delayUs);
 }
 } // namespace Media
 } // namespace OHOS
