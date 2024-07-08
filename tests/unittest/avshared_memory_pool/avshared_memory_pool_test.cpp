@@ -89,10 +89,10 @@ HWTEST_F(AVSharedMemoryPoolTest, AcquireMemory, TestSize.Level1)
     std::shared_ptr<AVSharedMemoryPool> pool = std::make_shared<AVSharedMemoryPool>("acquireMemory");
     pool->SetNonBlocking(true);
     std::shared_ptr<AVSharedMemory> memory = pool->AcquireMemory(size, blocking);
-    EXPEXT_TRUE(memory == nullptr);
+    EXPECT_TRUE(memory == nullptr);
     pool->SetNonBlocking(false);
     std::shared_ptr<AVSharedMemory> memory1 = pool->AcquireMemory(size, blocking);
-    EXPEXT_TRUE(memory1 == nullptr);
+    EXPECT_TRUE(memory1 == nullptr);
 }
 } // namespace Media
 } // namespace OHOS
