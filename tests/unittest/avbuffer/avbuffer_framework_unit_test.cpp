@@ -16,18 +16,12 @@
 #include "avbuffer_mock.h"
 #include "avbuffer_unit_test.h"
 #include "avbuffer_utils.h"
-#include "common/log.h"
 #include "common/status.h"
-#include "unittest_log.h"
 #ifdef AVBUFFER_CAPI_UNIT_TEST
 #include "common/native_mfmagic.h"
 #include "native_avbuffer.h"
 #include "native_avformat.h"
 #endif
-
-namespace {
-constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_ONLY_PRERELEASE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
-}
 
 using namespace std;
 using namespace testing::ext;
