@@ -584,7 +584,7 @@ HWTEST_F(AVFormatUnitTest, Format_GetFormatMap_002, TestSize.Level1)
     CheckFormatMap(formatMap);
 }
 
-void CheckFormatValueType(std::shared_ptr<Format> &format)
+void CheckValueType(std::shared_ptr<Format> &format)
 {
     const std::string floatKey = "FloatKey";
 
@@ -631,7 +631,7 @@ HWTEST_F(AVFormatUnitTest, Format_GetValueType_001, TestSize.Level1)
     meta->SetData(LONG_ENUM_TESTKEY, Plugins::AudioChannelLayout::STEREO);
 
     format->SetMeta(std::move(meta));
-    CheckFormatValueType(format);
+    CheckValueType(format);
 }
 
 /**
@@ -667,73 +667,7 @@ HWTEST_F(AVFormatUnitTest, Format_GetValueType_002, TestSize.Level1)
 
     format = std::make_shared<Format>();
     format->SetMeta(std::move(meta));
-    CheckFormatValueType(format);
-}
-
-void CheckMetaValueType(std::shared_ptr<Meta> &meta)
-{
-    const std::string floatKey = "FloatKey";
-    constexpr float FLOAT_VALUE = 1.0;
-    bool boolValue = false;
-    int32_t intValue = 0;
-    int64_t longValue = 0;
-    float floatValue = 0.0;
-    double doubleValue = 0.0;
-    std::string stringValue = "";
-    std::vector<uint8_t> bufferValue;
-
-    EXPECT_FALSE(meta->GetData(BOOL_TESTKEY, intValue));
-    EXPECT_TRUE(meta->GetData(BOOL_TESTKEY, boolValue));
-    EXPECT_EQ(BOOL_VALUE, boolValue);
-
-    EXPECT_TRUE(meta->GetData(INT_TESTKEY, intValue));
-    EXPECT_EQ(INT_VALUE, intValue);
-
-    EXPECT_TRUE(meta->GetData(LONG_TESTKEY, longValue));
-    EXPECT_EQ(LONG_VALUE, longValue);
-
-    EXPECT_TRUE(meta->GetData(floatKey, floatValue));
-    EXPECT_EQ(FLOAT_VALUE, floatValue);
-
-    EXPECT_TRUE(meta->GetData(DOUBLE_TESTKEY, doubleValue));
-    EXPECT_EQ(DOUBLE_VALUE, doubleValue);
-
-    EXPECT_TRUE(meta->GetData(STRING_TESTKEY, stringValue));
-    EXPECT_EQ(STRING_VALUE, stringValue);
-
-    EXPECT_TRUE(meta->GetData(BUFFER_TESTKEY, bufferValue));
-    EXPECT_EQ(BUFFER_VALUE, bufferValue);
-}
-
-/**
- * @tc.name: Meta_GetValueType_001
- * @tc.desc:
- *     1. set bool to format;
- *     2. meta trans by parcel;
- *     3. get meta value type;
- * @tc.type: FUNC
- * @tc.require:
- */
-HWTEST_F(AVFormatUnitTest, Meta_GetValueType_001, TestSize.Level1)
-{
-    MessageParcel parcel;
-    std::shared_ptr<Format> format = std::make_shared<Format>();
-    std::shared_ptr<Meta> meta = std::make_shared<Meta>();
-    const std::string floatKey = "FloatKey";
-    constexpr float floatValue = 1.0;
-
-    EXPECT_TRUE(format->PutIntValue(BOOL_TESTKEY, BOOL_VALUE));
-    EXPECT_TRUE(format->PutIntValue(INT_TESTKEY, INT_VALUE));
-    EXPECT_TRUE(format->PutLongValue(LONG_TESTKEY, LONG_VALUE));
-    EXPECT_TRUE(format->PutFloatValue(floatKey, floatValue));
-    EXPECT_TRUE(format->PutDoubleValue(DOUBLE_TESTKEY, DOUBLE_VALUE));
-    EXPECT_TRUE(format->PutStringValue(STRING_TESTKEY, STRING_VALUE));
-    EXPECT_TRUE(format->PutBuffer(BUFFER_TESTKEY, BUFFER_VALUE.data(), BUFFER_VALUE.size()));
-
-    meta = format->GetMeta();
-    ASSERT_TRUE(meta->ToParcel(parcel));
-    ASSERT_TRUE(meta->FromParcel(parcel));
-    CheckMetaValueType(meta);
+    CheckValueType(format);
 }
 #endif
 } // namespace Media

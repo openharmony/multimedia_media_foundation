@@ -16,6 +16,7 @@
 #include <gtest/gtest.h>
 #include <string>
 #include "meta/meta.h"
+#include "meta/format.h"
 #include "unittest_log.h"
 #include <cstdlib>
 #include <string>
@@ -454,17 +455,17 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::AUDIO_AAC_PROFILE, static_cast<int32_t>(Plugins::AudioAacProfile::ELD)},
     {Tag::AUDIO_AAC_STREAM_FORMAT, static_cast<int32_t>(Plugins::AudioAacStreamFormat::ADIF)}};
 
-    map<TagType, bool> testBoolData = {
+map<TagType, bool> testBoolData = {
     // Bool
     {Tag::SCREEN_CAPTURE_USER_AGREE, true},
-    {Tag::SCREEN_CAPTURE_REQURE_MIC, false},
+    {Tag::SCREEN_CAPTURE_REQURE_MIC, true},
     {Tag::SCREEN_CAPTURE_ENABLE_MIC, true},
     {Tag::AV_PLAYER_IS_DRM_PROTECTED, true},
     {Tag::AV_PLAYER_DOWNLOAD_TIME_OUT, true},
     {Tag::VIDEO_COLOR_RANGE, true},
-    {Tag::VIDEO_REQUEST_I_FRAME, false},
+    {Tag::VIDEO_REQUEST_I_FRAME, true},
     {Tag::MEDIA_HAS_VIDEO, true},
-    {Tag::MEDIA_HAS_AUDIO, false},
+    {Tag::MEDIA_HAS_AUDIO, true},
     {Tag::MEDIA_END_OF_STREAM, true},
     {Tag::VIDEO_IS_HDR_VIVID, true},
     {Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE, true},
@@ -497,6 +498,33 @@ HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_All_As_Bool_Using_ParcelPackage, Tes
         ASSERT_TRUE(GetMetaData(*metaOut, item.first, valueOut));
         std::cout <<  item.first << " , " << valueOut << " , " << valueIn << std::endl;
         EXPECT_EQ(valueOut, valueIn);
+    }
+}
+
+/**
+ * @tc.name: Meta_GetData_All_As_Bool_Using_ParcelPackage
+ * @tc.desc:
+ *     1. set bool to format;
+ *     2. meta trans by parcel;
+ *     3. get meta value type;
+ * @tc.type: FUNC
+ */
+HWTEST_F(MetaInnerUnitTest, Meta_GetData_All_As_Bool_Using_ParcelPackage, TestSize.Level1)
+{
+    for (auto item : testBoolData) {
+        bool valueIn = item.second;
+        SetMetaData(*metaIn, item.first, valueIn);
+    }
+    ASSERT_TRUE(metaIn->ToParcel(*parcel));
+    ASSERT_TRUE(metaOut->FromParcel(*parcel));
+    for (auto item : testBoolData) {
+        int32_t valueIn = item.second;
+        bool valueOut = false;
+        int32_t intValue = -1;
+
+        EXPECT_FALSE(metaOut->GetData(item.first, intValue));
+        EXPECT_TRUE(metaOut->GetData(item.first, valueOut));
+        EXPECT_EQ(valueIn, valueOut);
     }
 }
 
