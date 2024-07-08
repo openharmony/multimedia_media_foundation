@@ -13,13 +13,8 @@
  * limitations under the License.
  */
 
-#include <memory>
-#include <iostream>
 #include "gtest/gtest.h"
-#include "osal/utils/dump_buffer.h"
-#include "common/media_core.h"
-#include "meta/meta.h"
-#include "buffer/avbuffer.h"
+#include "osal/filesystem/file_system.h"
 
 using namespace testing::ext;
 using namespace OHOS::Media;
@@ -31,7 +26,7 @@ const std::string DUMP_FILE_NAME = "DumpBufferTest.es";
 
 namespace OHOS {
 namespace Media {
-class DumpBufferTest : public testing::Test {
+class FileSystemUnitTest : public testing::Test {
 public:
     static void SetUpTestCase(void) {};
     static void TearDownTestCase(void) {};
@@ -40,15 +35,21 @@ public:
 };
 
 /**
- * @tc.name: DumpAVBufferToFile
- * @tc.desc: DumpAVBufferToFile
+ * @tc.name: CreateFiles
+ * @tc.desc: CreateFiles
  * @tc.type: FUNC
  */
-HWTEST_F(DumpBufferTest, DumpAVBufferToFile, TestSize.Level1)
+HWTEST_F(FileSystemUnitTest, CreateFiles, TestSize.Level1)
 {
-    std::shared_ptr<Media::AVBuffer> outputBuffer = nullptr;
-    outputBuffer = std::make_shared<AVBuffer>();
-    DumpAVBufferToFile(DUMP_PARAM, DUMP_FILE_NAME, outputBuffer);
+    std::shared_ptr<FileSystem> fileSystem = std::make_shared<FileSystem>();
+    EXPECT_TRUE(fileSystem->MakeMultipleDir("/data/test/makeMulti/dir"));
+    EXPECT_TRUE(fileSystem->MakeDir("/data/test/makedir"));
+    EXPECT_TRUE(fileSystem->IsDirectory("/data/test/makedir"));
+    EXPECT_TRUE(fileSystem->IsExists("/data/test/makedir"));
+    EXPECT_EQ(false, fileSystem->IsRegularFile("/data/test/makedir"));
+    fileSystem->ClearFileContent("/data/test/makeMulti/dir");
+    fileSystem->RemoveFilesInDir("/data/test/makedir");
+    EXPECT_TRUE(fileSystem->IsExists("/data/test/makedir"));
 }
 }
 }
