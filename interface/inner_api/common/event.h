@@ -47,6 +47,7 @@ enum struct EventType : uint32_t {
     BUFFERING_END,
     EVENT_SOURCE_BITRATE_START,
     EVENT_SUBTITLE_TEXT_UPDATE,
+    EVENT_SOURCE_INFO,
 };
 
 struct Event {

@@ -260,6 +260,11 @@ public:
                              ///< video frame.
     static constexpr const char VIDEO_ENCODER_PER_FRAME_DISCARD[] =
         "video_encoder_per_frame_discard"; ///< bool, key for describing whether the current frame is not encoded.
+    static constexpr const char VIDEO_ENCODER_ENABLE_WATERMARK[] =
+        "video_encoder_enable_watermark"; ///< bool, key for enable the watermark image ability, To query supported,
+                                          ///< you should use the interface {@link GetCapability} of class
+                                          ///< AVCodecList. This is an optional key that applies only to video
+                                          ///< encoder. It is used in configure.
     static constexpr const char VIDEO_COORDINATE_X[] =
         "video_coordinate_x"; ///< int32_t, key for describing the x-coordinate of the watermark image.
     static constexpr const char VIDEO_COORDINATE_Y[] =
