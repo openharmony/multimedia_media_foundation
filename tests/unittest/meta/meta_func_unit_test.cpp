@@ -475,7 +475,8 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK, true},
     {Tag::AUDIO_RENDER_SET_FLAG, true},
     {Tag::VIDEO_BUFFER_CAN_DROP, true},
-    {Tag::VIDEO_ENCODER_PER_FRAME_DISCARD, true}};
+    {Tag::VIDEO_ENCODER_PER_FRAME_DISCARD, true},
+    {Tag::VIDEO_ENCODER_ENABLE_WATERMARK, true}};
 
 
 /**
