@@ -64,6 +64,7 @@ HWTEST_F(DumpBufferTest, DumpAVBufferToFile_003, TestSize.Level1)
     std::shared_ptr<Media::AVBuffer> outputBuffer = std::make_shared<AVBuffer>();
     outputBuffer->memory_ = std::shared_ptr<AVMemory>(new AVHardwareMemory);
     DumpAVBufferToFile(DUMP_PARAM, DUMP_FILE_NAME, outputBuffer);
+    DUMP_PARAM = "w";
 }
 
 HWTEST_F(DumpBufferTest, DumpAVBufferToFile_004, TestSize.Level1)
