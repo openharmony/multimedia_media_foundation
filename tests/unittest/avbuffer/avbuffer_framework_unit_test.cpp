@@ -16,7 +16,9 @@
 #include "avbuffer_mock.h"
 #include "avbuffer_unit_test.h"
 #include "avbuffer_utils.h"
+#include "common/log.h"
 #include "common/status.h"
+#include "unittest_log.h"
 #ifdef AVBUFFER_CAPI_UNIT_TEST
 #include "common/native_mfmagic.h"
 #include "native_avbuffer.h"
