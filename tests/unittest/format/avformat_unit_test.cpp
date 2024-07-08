@@ -183,8 +183,6 @@ HWTEST_F(AVFormatUnitTest, Format_DumpInfo_001, TestSize.Level1)
 }
 
 #ifndef AVFORMAT_CAPI_UNIT_TEST
-#define BOOL_TESTKEY Tag::VIDEO_COLOR_RANGE
-constexpr bool BOOL_VALUE = true;
 /**
  * @tc.name: Format_DumpInfo_002
  * @tc.desc:
