@@ -18,11 +18,11 @@ group("media_foundation_unit_test") {
     deps = [
       "unittest/avbuffer:avbuffer_unit_test",
       "unittest/avbuffer_queue:avbuffer_queue_unit_test",
+      "unittest/avshared_memory_pool:avshared_pool_unit_test",
       "unittest/format:format_unit_test",
       "unittest/meta:meta_unit_test",
       "unittest/osal:osal_unit_test",
       "unittest/pipeline:pipline_unit_test",
-      "unittest/avshared_memory_pool:avshared_pool_unit_test",
     ]
   }
 }
