@@ -118,8 +118,8 @@ ohos_unittest("avsharedmemorybase_func_unit_test") {
   module_out_path = module_output_path
   include_dirs = [
     "./",
-    "./capi",
-    "$histreamer_root_dir/interface/kits/c",
+    "./inner",
+    "../../../interface/inner_api",
   ]
 
   defines = [
@@ -127,9 +127,7 @@ ohos_unittest("avsharedmemorybase_func_unit_test") {
     "MEDIA_OHOS",
   ]
 
-  sources = [
-    "./avsharedmemorybase_func_unit_test.cpp",
-  ]
+  sources = [ "./avsharedmemorybase_func_unit_test.cpp" ]
 
   cflags = avbuffer_unittest_cflags
 
