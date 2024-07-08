@@ -18,6 +18,8 @@
 #include "buffer/avsharedmemorybase.h"
 #include "common/status.h"
 
+constexpr int SIZE = 15;
+
 using namespace std;
 using namespace testing::ext;
 using namespace OHOS::Media;
@@ -36,17 +38,13 @@ public:
     void TearDown(void);
 };
 
-void AvsharedmemorybaseUnitTest::SetUpTestCase(void)
-{}
+void AvsharedmemorybaseUnitTest::SetUpTestCase(void) {}
 
-void AvsharedmemorybaseUnitTest::TearDownTestCase(void)
-{}
+void AvsharedmemorybaseUnitTest::TearDownTestCase(void) {}
 
-void AvsharedmemorybaseUnitTest::SetUp(void)
-{}
+void AvsharedmemorybaseUnitTest::SetUp(void) {}
 
-void AvsharedmemorybaseUnitTest::TearDown(void)
-{}
+void AvsharedmemorybaseUnitTest::TearDown(void) {}
 
 /**
  * @tc.name: Test AVSharedMemoryBase::Read API
@@ -56,7 +54,7 @@ void AvsharedmemorybaseUnitTest::TearDown(void)
 HWTEST_F(AvsharedmemorybaseUnitTest, Read_Test_001, TestSize.Level0)
 {
     std::shared_ptr<AVSharedMemoryBase> memory =
-        std::make_shared<AVSharedMemoryBase>(1024, AVSharedMemory::Flags::FLAGS_READ_WRITE, "test");
+        std::make_shared<AVSharedMemoryBase>(SIZE, AVSharedMemory::Flags::FLAGS_READ_WRITE, "test");
     EXPECT_EQ(memory->Read(nullptr, 0, 0), 0);
 }
 
@@ -69,21 +67,21 @@ HWTEST_F(AvsharedmemorybaseUnitTest, Read, TestSize.Level0)
 {
     // 1. Set up the test environment
     std::shared_ptr<AVSharedMemoryBase> memory =
-        std::make_shared<AVSharedMemoryBase>(1024, AVSharedMemory::Flags::FLAGS_READ_WRITE, "test");
+        std::make_shared<AVSharedMemoryBase>(SIZE, AVSharedMemory::Flags::FLAGS_READ_WRITE, "test");
     ASSERT_TRUE(memory != nullptr);
     int32_t ret = memory->Init();
     ASSERT_TRUE(ret == static_cast<int32_t>(Status::OK));
 
     // 2. Call the function to be tested
-    uint8_t buffer[1024] = {0};
-    ret = memory->Write(buffer, 1024);
-    ASSERT_TRUE(ret == 1024);
+    uint8_t buffer[SIZE] = {0};
+    ret = memory->Write(buffer, SIZE);
+    ASSERT_TRUE(ret == SIZE);
 
     // 3. Verify the result
-    uint8_t readBuffer[1024] = {0};
-    ret = memory->Read(readBuffer, 1024);
-    ASSERT_TRUE(ret == 1024);
-    ASSERT_TRUE(memcmp(buffer, readBuffer, 1024) == 0);
+    uint8_t readBuffer[SIZE] = {0};
+    ret = memory->Read(readBuffer, SIZE);
+    ASSERT_TRUE(ret == SIZE);
+    ASSERT_TRUE(memcmp(buffer, readBuffer, SIZE) == 0);
 }
 }  // namespace AvsharedmemorybaseUnitTest
 }  // namespace Media
