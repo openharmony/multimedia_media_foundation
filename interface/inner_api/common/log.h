@@ -50,6 +50,8 @@ inline std::string HstGetFileName(const std::string &file)
 #define LOG_DOMAIN_MEDIA_CODEC 0xD002B0E
 #undef LOG_DOMAIN_FOUNDATION
 #define LOG_DOMAIN_FOUNDATION 0xD002B0F
+#undef LOG_DOMAIN_AUDIO
+#define LOG_DOMAIN_AUDIO 0xD002B31
 #ifndef LOG_TAG
 #define LOG_TAG "HiStreamer"
 #endif
