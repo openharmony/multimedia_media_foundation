@@ -62,7 +62,7 @@ HWTEST_F(DumpBufferTest, DumpAVBufferToFile_003, TestSize.Level1)
 {
     DUMP_PARAM = "invalid";
     std::shared_ptr<Media::AVBuffer> outputBuffer = std::make_shared<AVBuffer>();
-    outputBuffer->memory_ = std::shared_ptr<AVMemory>(new AVHardWwareMemory);
+    outputBuffer->memory_ = std::shared_ptr<AVMemory>(new AVHardwareMemory);
     DumpAVBufferToFile(DUMP_PARAM, DUMP_FILE_NAME, outputBuffer);
 }
 
@@ -70,14 +70,15 @@ HWTEST_F(DumpBufferTest, DumpAVBufferToFile_004, TestSize.Level1)
 {
     DUMP_FILE_NAME = "";
     std::shared_ptr<Media::AVBuffer> outputBuffer = std::make_shared<AVBuffer>();
-    outputBuffer->memory_ = std::shared_ptr<AVMemory>(new AVHardWwareMemory);
+    outputBuffer->memory_ = std::shared_ptr<AVMemory>(new AVHardwareMemory);
     DumpAVBufferToFile(DUMP_PARAM, DUMP_FILE_NAME, outputBuffer);
 }
 
 HWTEST_F(DumpBufferTest, DumpAVBufferToFile_005, TestSize.Level1)
 {
+    DUMP_FILE_NAME = "DumpBufferTest.es";
     std::shared_ptr<Media::AVBuffer> outputBuffer = std::make_shared<AVBuffer>();
-    outputBuffer->memory_ = std::shared_ptr<AVMemory>(new AVHardWwareMemory);
+    outputBuffer->memory_ = std::shared_ptr<AVMemory>(new AVHardwareMemory);
     outputBuffer->memory_->SetSize(0);
     DumpAVBufferToFile(DUMP_PARAM, DUMP_FILE_NAME, outputBuffer);
 }
@@ -85,7 +86,7 @@ HWTEST_F(DumpBufferTest, DumpAVBufferToFile_005, TestSize.Level1)
 HWTEST_F(DumpBufferTest, DumpAVBufferToFile_006, TestSize.Level1)
 {
     std::shared_ptr<Media::AVBuffer> outputBuffer = std::make_shared<AVBuffer>();
-    outputBuffer->memory_ = std::shared_ptr<AVMemory>(new AVHardWwareMemory);
+    outputBuffer->memory_ = std::shared_ptr<AVMemory>(new AVHardwareMemory);
     outputBuffer->memory_->SetSize(DUMP_SIZE);
     DumpAVBufferToFile(DUMP_PARAM, DUMP_FILE_NAME, outputBuffer);
 }
@@ -93,7 +94,7 @@ HWTEST_F(DumpBufferTest, DumpAVBufferToFile_006, TestSize.Level1)
 HWTEST_F(DumpBufferTest, DumpAVBufferToFile_007, TestSize.Level1)
 {
     std::shared_ptr<Media::AVBuffer> outputBuffer = std::make_shared<AVBuffer>();
-    outputBuffer->memory_ = std::shared_ptr<AVMemory>(new AVHardWwareMemory);
+    outputBuffer->memory_ = std::shared_ptr<AVMemory>(new AVHardwareMemory);
     outputBuffer->memory_->SetSize(DUMP_SIZE);
     outputBuffer->memory_->base_ = new uint8_t[DUMP_SIZE];
     DumpAVBufferToFile(DUMP_PARAM, DUMP_FILE_NAME, outputBuffer);
