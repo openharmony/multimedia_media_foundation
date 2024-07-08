@@ -89,12 +89,6 @@ ohos_unittest("avbuffer_capi_unit_test") {
     "$histreamer_root_dir/interface/kits/c",
   ]
 
-  sanitize = {
-    cfi = true
-    cfi_cross_dso = true
-    debug = false
-  }
-  
   defines = [
     "AVBUFFER_CAPI_UNIT_TEST",
     "MEDIA_OHOS",
@@ -127,6 +121,12 @@ ohos_unittest("avsharedmemorybase_func_unit_test") {
     "./inner",
     "../../../interface/inner_api",
   ]
+
+  sanitize = {
+    cfi = true
+    cfi_cross_dso = true
+    debug = false
+  }
 
   defines = [
     "AVSHAREDMEMORYBASE_FUNC_UNIT_TEST",
