@@ -89,6 +89,12 @@ ohos_unittest("avbuffer_capi_unit_test") {
     "$histreamer_root_dir/interface/kits/c",
   ]
 
+  sanitize = {
+    cfi = true
+    cfi_cross_dso = true
+    debug = false
+  }
+  
   defines = [
     "AVBUFFER_CAPI_UNIT_TEST",
     "MEDIA_OHOS",
