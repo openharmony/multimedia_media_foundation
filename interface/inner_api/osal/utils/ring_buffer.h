@@ -214,6 +214,7 @@ public:
         return result;
     }
 private:
+    static constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_ONLY_PRERELEASE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
     const size_t bufferSize_;
     std::unique_ptr<uint8_t[]> buffer_;
     size_t head_ {0}; // head

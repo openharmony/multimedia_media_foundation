@@ -26,6 +26,10 @@
 #include "surface_buffer.h"
 
 namespace {
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_ONLY_PRERELEASE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
+}
+
+namespace {
 uint64_t GetUniqueId()
 {
 #ifdef MEDIA_OHOS
@@ -51,7 +55,6 @@ uint64_t GetUniqueId()
     uid.bufferId[1] = bufferId;
     return uid.startTime;
 }
-
 } // namespace
 namespace OHOS {
 namespace Media {

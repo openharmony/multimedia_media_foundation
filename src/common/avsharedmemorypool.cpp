@@ -19,6 +19,10 @@
 #include "scope_guard.h"
 
 namespace {
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_ONLY_PRERELEASE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
+}
+
+namespace {
     constexpr int32_t MAX_MEM_SIZE = 100 * 1024 * 1024;
 }
 

@@ -30,6 +30,10 @@
 #include "cpp_ext/memory_ext.h"
 #include "common/log.h"
 
+namespace {
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_ONLY_PRERELEASE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
+}
+
 using namespace std;
 using namespace testing::ext;
 using namespace OHOS;

@@ -22,6 +22,10 @@
 #include "securec.h"
 
 namespace {
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_ONLY_PRERELEASE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
+}
+
+namespace {
 constexpr uint32_t MAX_STRING_LENGTH = 256;
 constexpr uint32_t MAX_DUMP_LENGTH = 1024;
 } // namespace

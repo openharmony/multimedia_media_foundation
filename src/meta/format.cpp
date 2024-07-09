@@ -21,6 +21,10 @@
 #include "securec.h"
 
 namespace {
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_ONLY_PRERELEASE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
+}
+
+namespace {
 using namespace OHOS::Media;
 using FormatDataMap = Format::FormatDataMap;
 constexpr size_t BUFFER_SIZE_MAX = 1 * 1024 * 1024;

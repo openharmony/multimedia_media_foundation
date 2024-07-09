@@ -23,7 +23,8 @@
 #include "osal/filesystem/file_system.h"
 
 namespace {
-    constexpr size_t DUMP_DATA_UNIT = 1; // data unit is 1 byte
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_ONLY_PRERELEASE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
+constexpr size_t DUMP_DATA_UNIT = 1; // data unit is 1 byte
 }
 
 namespace OHOS {

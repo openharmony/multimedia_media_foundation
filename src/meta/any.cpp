@@ -18,6 +18,10 @@
 #include <map>
 
 namespace {
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_ONLY_PRERELEASE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
+}
+
+namespace {
 using namespace OHOS::Media;
 using BaseTypesMap = std::map<std::string, AnyValueType>;
 
