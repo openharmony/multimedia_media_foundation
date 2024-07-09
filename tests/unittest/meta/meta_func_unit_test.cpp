@@ -1045,7 +1045,7 @@ HWTEST_F(MetaInnerUnitTest, Meta_GetData_All_As_Int32_Using_ParcelPackage, TestS
     std::vector<TagType> skipList = {Tag::AUDIO_AAC_PROFILE, Tag::AUDIO_AAC_STREAM_FORMAT};
     for (auto item : testInt32Data) {
         auto iter = std::find(skipList.begin(), skipList.end(), item.first);
-        if (iter != skipList.end()) {  
+        if (iter != skipList.end()) {
             continue;
         }
 
@@ -1078,7 +1078,7 @@ HWTEST_F(MetaInnerUnitTest, Meta_GetData_All_As_Int64_Using_ParcelPackage, TestS
     std::vector<TagType> skipList = {Tag::MEDIA_FILE_SIZE, Tag::MEDIA_POSITION};
     for (auto item : testInt64Data) {
         auto iter = std::find(skipList.begin(), skipList.end(), item.first);
-        if (iter != skipList.end()) {  
+        if (iter != skipList.end()) {
             continue;
         }
 
