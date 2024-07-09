@@ -15,6 +15,7 @@
 
 #include <memory>
 #include <iostream>
+#include "av_hardware_memory.h"
 #include "gtest/gtest.h"
 #include "osal/utils/dump_buffer.h"
 #include "common/media_core.h"
