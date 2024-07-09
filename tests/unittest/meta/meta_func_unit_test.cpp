@@ -458,14 +458,14 @@ map<TagType, int32_t> testInt32Data = {
 map<TagType, bool> testBoolData = {
     // Bool
     {Tag::SCREEN_CAPTURE_USER_AGREE, true},
-    {Tag::SCREEN_CAPTURE_REQURE_MIC, true},
+    {Tag::SCREEN_CAPTURE_REQURE_MIC, false},
     {Tag::SCREEN_CAPTURE_ENABLE_MIC, true},
     {Tag::AV_PLAYER_IS_DRM_PROTECTED, true},
     {Tag::AV_PLAYER_DOWNLOAD_TIME_OUT, true},
     {Tag::VIDEO_COLOR_RANGE, true},
-    {Tag::VIDEO_REQUEST_I_FRAME, true},
+    {Tag::VIDEO_REQUEST_I_FRAME, false},
     {Tag::MEDIA_HAS_VIDEO, true},
-    {Tag::MEDIA_HAS_AUDIO, true},
+    {Tag::MEDIA_HAS_AUDIO, false},
     {Tag::MEDIA_END_OF_STREAM, true},
     {Tag::VIDEO_IS_HDR_VIVID, true},
     {Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE, true},
@@ -1024,7 +1024,7 @@ HWTEST_F(MetaInnerUnitTest, Meta_GetData_All_As_Bool_Using_ParcelPackage, TestSi
         ASSERT_TRUE(meta->ToParcel(parcel));
         ASSERT_TRUE(meta->FromParcel(parcel));
 
-        bool valueOut = false;
+        bool valueOut = !valueIn;
         int32_t intValue = -1;
         EXPECT_FALSE(meta->GetData(item.first, intValue));
         EXPECT_TRUE(meta->GetData(item.first, valueOut));
