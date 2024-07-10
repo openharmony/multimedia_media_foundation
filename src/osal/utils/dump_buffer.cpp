@@ -42,10 +42,10 @@ void DumpAVBufferToFile(const std::string& para, const std::string& fileName, co
     FALSE_RETURN((bufferSize != 0) && (buffer->memory_->GetAddr() != nullptr));
     std::string mode = para + "b+";
     std::string filePath = DUMP_FILE_DIR + fileName;
-    char path[PATH_MAX] = {0};
-    auto realPath = realpath(filePath.c_str(), path);
-    FALSE_RETURN(realPath != nullptr);
-    FILE* dumpFile = std::fopen(realPath, mode.c_str());
+    if (filePath == "") {
+        return;
+    }
+    FILE* dumpFile = std::fopen(filePath.c_str(), mode.c_str());
     if (dumpFile == nullptr) {
         MEDIA_LOG_E("dump buffer to file failed.");
         return;
