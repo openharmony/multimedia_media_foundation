@@ -19,7 +19,6 @@
 #include <cstdint> // NOLINT: using int32_t in this file
 #include <string>
 #include "meta/any.h"
-#include "media_types.h"
 
 namespace OHOS {
 namespace Media {
@@ -40,7 +39,6 @@ enum struct PluginEventType : int32_t {
     BUFFERING_END,
     VIDEO_SIZE_CHANGE,
     SOURCE_BITRATE_START,
-    SOURCE_INFO,
 };
 
 enum class NetworkClientErrorCode : int32_t {
@@ -58,10 +56,6 @@ struct PluginEvent {
     std::string description;
 };
 
-struct SourceInfo {
-    int64_t duration;
-    Seekable seekable;
-};
 } // namespace Plugins
 } // namespace Media
 } // namespace OHOS
