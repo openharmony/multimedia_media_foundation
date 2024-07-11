@@ -296,6 +296,17 @@ Status Filter::ReleaseDone()
     return ret;
 }
 
+Status Filter::SetPlayRange(int64_t start, int64_t end)
+{
+    MEDIA_LOG_D("SetPlayRange %{public}ld, pState:%{public}ld", name_.c_str(), curState_);
+    for (auto iter : nextFiltersMap_) {
+        for (auto filter : iter.second) {
+            filter->SetPlayRange(start, end);
+        }
+    }
+    return DoSetPlayRange(start, end);
+}
+
 Status Filter::ClearAllNextFilters()
 {
     nextFiltersMap_.clear();
@@ -376,6 +387,11 @@ Status Filter::DoFlush()
 }
 
 Status Filter::DoRelease()
+{
+    return Status::OK;
+}
+
+Status Filter::DoSetPlayRange(int64_t start, int64_t end)
 {
     return Status::OK;
 }
