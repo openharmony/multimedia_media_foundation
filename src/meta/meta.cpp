@@ -290,6 +290,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::AUDIO_AAC_IS_ADTS, defaultInt32},
     {Tag::AUDIO_COMPRESSION_LEVEL, defaultInt32},
     {Tag::AUDIO_BITS_PER_CODED_SAMPLE, defaultInt32},
+    {Tag::AUDIO_BITS_PER_RAW_SAMPLE, defaultInt32},
     {Tag::REGULAR_TRACK_ID, defaultInt32},
     {Tag::VIDEO_SCALE_TYPE, defaultInt32},
     {Tag::VIDEO_I_FRAME_INTERVAL, defaultInt32},

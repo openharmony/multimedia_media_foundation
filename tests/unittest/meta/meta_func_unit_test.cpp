@@ -376,6 +376,7 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::AUDIO_AAC_IS_ADTS, 33},
     {Tag::AUDIO_COMPRESSION_LEVEL, 44},
     {Tag::AUDIO_BITS_PER_CODED_SAMPLE, 44},
+    {Tag::AUDIO_BITS_PER_RAW_SAMPLE, 44},
     {Tag::MEDIA_TRACK_COUNT, 11},
     {Tag::REGULAR_TRACK_ID, 13},
     {Tag::VIDEO_SCALE_TYPE, 14},

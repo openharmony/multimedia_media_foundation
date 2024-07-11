@@ -119,6 +119,7 @@ public:
     static constexpr const char AUDIO_MAX_INPUT_SIZE[] = "audio.max.input.size";         ///< max input size
     static constexpr const char AUDIO_MAX_OUTPUT_SIZE[] = "audio.max.output.size";       ///< max output size
     static constexpr const char AUDIO_BITS_PER_CODED_SAMPLE[] = "bits_per_coded_sample"; ///< bits per coded sample
+    static constexpr const char AUDIO_BITS_PER_RAW_SAMPLE[] = "bits_per_raw_sample"; ///< bits per raw sample
 
     /* -------------------- audio specific tag -------------------- */
     static constexpr const char AUDIO_MPEG_VERSION[] = "audio.mpeg.version"; ///< mpeg version
