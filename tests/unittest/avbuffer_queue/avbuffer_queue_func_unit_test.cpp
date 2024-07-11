@@ -375,10 +375,13 @@ HWTEST_F(AVBufferQueueInnerUnitTest, ClearTest, TestSize.Level1)
     config.capacity = 1;
     config.memoryType = MemoryType::VIRTUAL_MEMORY;
     std::shared_ptr<AVAllocator> allocator = AVAllocatorFactory::CreateSharedAllocator(MemoryFlag::MEMORY_READ_WRITE);
-    std::shared_ptr<AVBuffer> buffer = AVBuffer::CreateAVBuffer(allocator, 1, 0);
+    std::shared_ptr<AVBuffer> buffer = AVBuffer::CreateAVBuffer(allocator, 1, 1);
     ASSERT_NE(nullptr, buffer);
+    sptr<IConsumerListener> listener = new ConsumerListener();
+    avBufferQueueImpl_->SetConsumerListener(listener);
     EXPECT_EQ(Status::OK, avBufferQueueImpl_->AllocBuffer(buffer, config));
     EXPECT_EQ(Status::OK, avBufferQueueImpl_->RequestReuseBuffer(buffer, config));
+    buffer->memory_->SetSize(1);
     EXPECT_EQ(Status::OK, avBufferQueueImpl_->PushBuffer(buffer, true));
     EXPECT_EQ(Status::OK, avBufferQueueImpl_->Clear());
 }
