@@ -38,7 +38,6 @@ public:
 
     void TearDown(void);
 
-    ConditionVariable cv;
     Mutex mutex_;
     std::atomic<bool> isStop_{false};
     std::string modifyMsg_ = "";
@@ -77,7 +76,6 @@ HWTEST_F(TaskInnerFuncUnitTest, Pause_Pause_Stop_Stop, TestSize.Level1)
         int count = 0;
         while (runningState) {
             count++;
-            MEDIA_LOG_I("Task WaitFor_Failed running at " PUBLIC_LOG_U32, count);
             sleep(1);
             if (count > 10){ //10 second
                 runningState = false;
@@ -112,7 +110,6 @@ HWTEST_F(TaskInnerFuncUnitTest, UpdateTop_Empty_MsgQueue, TestSize.Level1)
         int count = 0;
         while (runningState) {
             count++;
-            MEDIA_LOG_I("Task WaitFor_Failed running at " PUBLIC_LOG_U32, count);
             sleep(1);
             if (count > 10){ //10 second
                 runningState = false;
@@ -139,7 +136,6 @@ HWTEST_F(TaskInnerFuncUnitTest, Stop_SubmitJob_UpdateTop, TestSize.Level1)
         int count = 0;
         while (runningState) {
             count++;
-            MEDIA_LOG_I("Task WaitFor_Failed running at " PUBLIC_LOG_U32, count);
             sleep(1);
             if (count > 10){ //10 second
                 runningState = false;
@@ -170,7 +166,6 @@ HWTEST_F(TaskInnerFuncUnitTest, Stop_SubmitJobOnce_UpdateTop, TestSize.Level1)
         int count = 0;
         while (runningState) {
             count++;
-            MEDIA_LOG_I("Task WaitFor_Failed running at " PUBLIC_LOG_U32, count);
             sleep(1);
             if (count > 10){ //10 second
                 runningState = false;
