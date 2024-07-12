@@ -15,25 +15,10 @@
 
 #include <gtest/gtest.h>
 #include <string>
-#include "unittest_log.h"
-#include <cstdlib>
-#include <string>
-#include <cmath>
-#include <chrono>
-#include <iostream>
-#include <sstream>
-#include "common/status.h"
-#include "securec.h"
 #define HST_LOG_TAG "Task"
 #include "osal/task/task.h"
-#include "osal/task/condition_variable.h"
-#include "cpp_ext/memory_ext.h"
 #include "common/log.h"
 #include "osal/task/pipeline_threadpool.h"
-
-namespace {
-constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_ONLY_PRERELEASE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
-}
 
 using namespace std;
 using namespace testing::ext;
@@ -42,8 +27,8 @@ using namespace OHOS::Media;
 
 namespace OHOS {
 namespace Media {
-namespace TaskInnerUT {
-class TaskInnerUnitTest : public testing::Test {
+namespace TaskInnerFuncUT {
+class TaskInnerFuncUnitTest : public testing::Test {
 public:
     static void SetUpTestCase(void);
 
@@ -60,11 +45,11 @@ public:
     std::string groupId_ = "";
 };
 
-void TaskInnerUnitTest::SetUpTestCase(void) {}
+void TaskInnerFuncUnitTest::SetUpTestCase(void) {}
 
-void TaskInnerUnitTest::TearDownTestCase(void) {}
+void TaskInnerFuncUnitTest::TearDownTestCase(void) {}
 
-void TaskInnerUnitTest::SetUp(void)
+void TaskInnerFuncUnitTest::SetUp(void)
 {
     std::cout << "[SetUp]: SetUp!!!, test: ";
     const ::testing::TestInfo *testInfo_ = ::testing::UnitTest::GetInstance()->current_test_info();
@@ -72,7 +57,7 @@ void TaskInnerUnitTest::SetUp(void)
     std::cout << testName << std::endl;
 }
 
-void TaskInnerUnitTest::TearDown(void)
+void TaskInnerFuncUnitTest::TearDown(void)
 {
     PipeLineThreadPool::GetInstance().DestroyThread(groupId_);
     std::cout << "[TearDown]: over!!!" << std::endl;
@@ -83,7 +68,7 @@ void TaskInnerUnitTest::TearDown(void)
  * @tc.desc: Pause_Pause_Stop_Stop
  * @tc.type: FUNC
  */
-HWTEST_F(TaskInnerUnitTest, Pause_Pause_Stop_Stop, TestSize.Level1)
+HWTEST_F(TaskInnerFuncUnitTest, Pause_Pause_Stop_Stop, TestSize.Level1)
 {
     std::shared_ptr<Task> task = std::make_shared<Task>("workTask");
     AutoLock lock(mutex_);
@@ -117,7 +102,7 @@ HWTEST_F(TaskInnerUnitTest, Pause_Pause_Stop_Stop, TestSize.Level1)
  * @tc.desc: UpdateTop No SubmitJob
  * @tc.type: FUNC
  */
-HWTEST_F(TaskInnerUnitTest, UpdateTop_Empty_MsgQueue, TestSize.Level1)
+HWTEST_F(TaskInnerFuncUnitTest, UpdateTop_Empty_MsgQueue, TestSize.Level1)
 {
     std::shared_ptr<Task> task = std::make_shared<Task>("workTask", groupId_, TaskType::SINGLETON,
         TaskPriority::NORMAL, false);
@@ -145,7 +130,7 @@ HWTEST_F(TaskInnerUnitTest, UpdateTop_Empty_MsgQueue, TestSize.Level1)
  * @tc.desc: UpdateTop jobQueue no empty, state is not start
  * @tc.type: FUNC
  */
-HWTEST_F(TaskInnerUnitTest, Stop_SubmitJob_UpdateTop, TestSize.Level1)
+HWTEST_F(TaskInnerFuncUnitTest, Stop_SubmitJob_UpdateTop, TestSize.Level1)
 {
     std::shared_ptr<Task> task = std::make_shared<Task>("workTask", groupId_, TaskType::SINGLETON,
         TaskPriority::NORMAL, false);
@@ -176,7 +161,7 @@ HWTEST_F(TaskInnerUnitTest, Stop_SubmitJob_UpdateTop, TestSize.Level1)
  * @tc.desc: UpdateTop jobQueue no empty, state is not start
  * @tc.type: FUNC
  */
-HWTEST_F(TaskInnerUnitTest, Stop_SubmitJobOnce_UpdateTop, TestSize.Level1)
+HWTEST_F(TaskInnerFuncUnitTest, Stop_SubmitJobOnce_UpdateTop, TestSize.Level1)
 {
     std::shared_ptr<Task> task = std::make_shared<Task>("workTask", groupId_, TaskType::SINGLETON,
         TaskPriority::NORMAL, false);
@@ -201,6 +186,6 @@ HWTEST_F(TaskInnerUnitTest, Stop_SubmitJobOnce_UpdateTop, TestSize.Level1)
     sleep(1);
     ASSERT_EQ(false, task->IsTaskRunning());
 }
-} // namespace TaskInnerUT
+} // namespace TaskInnerFuncUT
 } // namespace Media
 } // namespace OHOS
