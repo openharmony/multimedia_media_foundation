@@ -177,6 +177,7 @@ public:
         tagCharSeq == Tag::MEDIA_HAS_VIDEO or
         tagCharSeq == Tag::MEDIA_HAS_AUDIO or
         tagCharSeq == Tag::MEDIA_HAS_SUBTITLE or
+        tagCharSeq == Tag::MEDIA_HAS_TIMEDMETA or
         tagCharSeq == Tag::MEDIA_END_OF_STREAM or
         tagCharSeq == Tag::VIDEO_ENCODER_PER_FRAME_MARK_LTR or
         tagCharSeq == Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE or
@@ -376,6 +377,14 @@ public:
         tagCharSeq == Tag::AV_PLAYER_HDR_TYPE, int8_t, AnyValueType::INT8_T);
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::MEDIA_AVAILABLE_BITRATES, std::vector<uint8_t>, AnyValueType::VECTOR_UINT8);
+    DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::TIMED_METADATA_SRC_TRACK_MIME or
+        tagCharSeq == Tag::TIMED_METADATA_KEY or
+        tagCharSeq == Tag::TIMED_METADATA_LOCALE or
+        tagCharSeq == Tag::TIMED_METADATA_SETUP, std::string, AnyValueType::STRING);
+    DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::TIMED_METADATA_SRC_TRACK, int32_t, AnyValueType::INT32_T);
+        
 
     Meta &operator=(const Meta &other)
     {

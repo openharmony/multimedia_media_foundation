@@ -93,6 +93,7 @@ public:
     static constexpr const char MEDIA_HAS_VIDEO[] = "has_video";               ///< has video track in file
     static constexpr const char MEDIA_HAS_AUDIO[] = "has_audio";               ///< has audio track in file
     static constexpr const char MEDIA_HAS_SUBTITLE[] = "has_subtitle";         ///< has subtitle track in file
+    static constexpr const char MEDIA_HAS_TIMEDMETA[] = "has_timed_meta";      ///< has timed metadata track in file
     static constexpr const char MEDIA_COVER[] = "cover";                       ///< cover in file
     static constexpr const char MEDIA_PROTOCOL_TYPE[] = "media.protocol.type"; ///< Source protocol type
     static constexpr const char MEDIA_PROFILE[] = "codec_profile";             ///< codec profile, Compatible 4.0
@@ -104,6 +105,15 @@ public:
     /* -------------------- buffer meta tag -------------------- */
     static constexpr const char BUFFER_DECODING_TIMESTAMP[] = "decoding_timestamp";  ///< int64_t, decoding timestamp.
     static constexpr const char BUFFER_DURATION[] = "buffer_duration";               ///< int64_t, buffer duration
+
+    /* -------------------- timed metadata tag -------------------- */
+    static constexpr const char TIMED_METADATA_SRC_TRACK_MIME[] =
+        "timed_metadata_src_track_mime";   ///< source track mime of timed metadata
+    static constexpr const char TIMED_METADATA_SRC_TRACK[] =
+        "timed_metadata_track_id";   ///< source track of timed metadata
+    static constexpr const char TIMED_METADATA_KEY[] = "timed_metadata_key";         ///< key of timed metadata
+    static constexpr const char TIMED_METADATA_LOCALE[] = "locale_timed_metadata";   ///< locale of timed metadata
+    static constexpr const char TIMED_METADATA_SETUP[] = "setup_of_timed_metadata";  ///< set up info of timed metadata
 
     /* -------------------- audio universal tag -------------------- */
     static constexpr const char AUDIO_CHANNEL_COUNT[] = "channel_count"; ///< audio channel count
