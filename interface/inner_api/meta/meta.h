@@ -385,7 +385,6 @@ public:
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::TIMED_METADATA_SRC_TRACK, int32_t, AnyValueType::INT32_T);
         
-
     Meta &operator=(const Meta &other)
     {
         map_ = other.map_;
