@@ -52,6 +52,7 @@ public:
     static constexpr const char MEDIA_MP3[] = "media/mp3";
 
     static constexpr const char TEXT_SUBRIP[] = "application/x-subrip";
+    static constexpr const char TIMED_METADATA[] = "meta/timed-metadata";
 };
 } // namespace Plugins
 } // namespace Media
