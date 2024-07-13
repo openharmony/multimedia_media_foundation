@@ -293,7 +293,7 @@ enum MPEG4Level : int32_t {
 enum class TemporalGopReferenceMode : int32_t {
     ADJACENT_REFERENCE = 0,
     JUMP_REFERENCE = 1,
-    UNIFORMLY_SACLED_REFERENCE = 2,
+    UNIFORMLY_SCALED_REFERENCE = 2,
     UNKNOWN_REFERENCE_MODE,
 };
 } // namespace Plugins
