@@ -38,22 +38,22 @@ inline std::string HstGetFileName(const std::string &file)
 #endif
 
 #ifdef MEDIA_OHOS
-#undef  LOG_DOMAIN_SYSTEM_PLAYER
-#define LOG_DOMAIN_SYSTEM_PLAYER    0xD002B0A
-#undef  LOG_DOMAIN_STREAM_SOURCE
-#define LOG_DOMAIN_STREAM_SOURCE    0xD002B0B
-#undef  LOG_DOMAIN_FOUNDATION
-#define LOG_DOMAIN_FOUNDATION       0xD002B0C
-#undef  LOG_DOMAIN_DEMUXER
-#define LOG_DOMAIN_DEMUXER          0xD002B3A
-#undef  LOG_DOMAIN_MUXER
-#define LOG_DOMAIN_MUXER            0xD002B3B
-#undef  LOG_DOMAIN_AUDIO
-#define LOG_DOMAIN_AUDIO            0xD002B31
-#undef  LOG_DOMAIN_PLAYER
-#define LOG_DOMAIN_PLAYER           0xD002B2B
-#undef  LOG_DOMAIN_RECORDER
-#define LOG_DOMAIN_RECORDER         0xD002B2C
+#undef LOG_DOMAIN_SYSTEM_PLAYER
+#define LOG_DOMAIN_SYSTEM_PLAYER 0xD002B22
+#undef LOG_DOMAIN_STREAM_SOURCE
+#define LOG_DOMAIN_STREAM_SOURCE 0xD002B23
+#undef LOG_DOMAIN_FOUNDATION
+#define LOG_DOMAIN_FOUNDATION    0xD002B24
+#undef LOG_DOMAIN_DEMUXER
+#define LOG_DOMAIN_DEMUXER       0xD002B3A
+#undef LOG_DOMAIN_MUXER
+#define LOG_DOMAIN_MUXER         0xD002B3B
+#undef LOG_DOMAIN_AUDIO
+#define LOG_DOMAIN_AUDIO         0xD002B31
+#undef LOG_DOMAIN_PLAYER
+#define LOG_DOMAIN_PLAYER        0xD002B2B
+#undef LOG_DOMAIN_RECORDER
+#define LOG_DOMAIN_RECORDER      0xD002B2C
 #ifndef LOG_TAG
 #define LOG_TAG "HiStreamer"
 #endif
@@ -92,10 +92,10 @@ inline std::string HstGetFileName(const std::string &file)
         op(LABEL, "(" PUBLIC_LOG_S ", " PUBLIC_LOG_D32 "): " fmt, HstGetFileName(std::string(__FILE__)).c_str(), \
            __LINE__, ##args);                                                                                    \
     } while (0)
-#define HST_HILOG_NO_RELEASE(op, fmt, args...)                                                                        \
-    do {                                                                                                              \
-        op(LABEL.type, "(" PUBLIC_LOG_S ", " PUBLIC_LOG_D32 "): " fmt, HstGetFileName(std::string(__FILE__)).c_str(), \
-           __LINE__, ##args);                                                                                         \
+#define HST_HILOG_NO_RELEASE(op, fmt, args...)                                  \
+    do {                                                                        \
+        op(LOG_ONLY_PRERELEASE, "(" PUBLIC_LOG_S ", " PUBLIC_LOG_D32 "): " fmt, \
+           HstGetFileName(std::string(__FILE__)).c_str(), __LINE__, ##args);    \
     } while (0)
 
 #define HST_HILOG_TAG(op, fmt, args...)                            \
@@ -103,15 +103,15 @@ inline std::string HstGetFileName(const std::string &file)
         op(LABEL, "[" PUBLIC_LOG_S "]:" fmt, HST_LOG_TAG, ##args); \
     } while (0)
 
-#define HST_HILOG_WITH_LEVEL_JUDGE(op1, op2, con, fmt, args...)                   \
-    do {                                                                          \
-        if (!con) {                                                               \
-            op2(LABEL, "(" PUBLIC_LOG_S ", " PUBLIC_LOG_D32 "): " fmt,         \
-                HstGetFileName(std::string(__FILE__)).c_str(), __LINE__, ##args); \
-        } else {                                                                  \
-            op1(LABEL, "(" PUBLIC_LOG_S ", " PUBLIC_LOG_D32 "): " fmt,         \
-                HstGetFileName(std::string(__FILE__)).c_str(), __LINE__, ##args); \
-        }                                                                         \
+#define HST_HILOG_WITH_LEVEL_JUDGE(op1, op2, con, fmt, args...)                                                       \
+    do {                                                                                                              \
+        if (!con) {                                                                                                   \
+            op2(LABEL, "(" PUBLIC_LOG_S ", " PUBLIC_LOG_D32 "): " fmt, HstGetFileName(std::string(__FILE__)).c_str(), \
+                __LINE__, ##args);                                                                                    \
+        } else {                                                                                                      \
+            op1(LABEL, "(" PUBLIC_LOG_S ", " PUBLIC_LOG_D32 "): " fmt, HstGetFileName(std::string(__FILE__)).c_str(), \
+                __LINE__, ##args);                                                                                    \
+        }                                                                                                             \
     } while (0)
 #endif
 
@@ -121,7 +121,7 @@ inline std::string HstGetFileName(const std::string &file)
 #define MEDIA_LOG_E(fmt, ...) HST_HILOG(::OHOS::HiviewDFX::HiLog::Error, fmt, ##__VA_ARGS__)
 #define MEDIA_LOG_F(fmt, ...) HST_HILOG(::OHOS::HiviewDFX::HiLog::Fatal, fmt, ##__VA_ARGS__)
 #define MEDIA_LOG_I_NO_RELEASE(fmt, ...) HST_HILOG_NO_RELEASE(HILOG_INFO, fmt, ##__VA_ARGS__)
-#define MEDIA_LOG_W_NO_RELEASE(fmt, ...) HST_HILOG_NO_RELEASE(HILOG_WARN), fmt, ##__VA_ARGS__)
+#define MEDIA_LOG_W_NO_RELEASE(fmt, ...) HST_HILOG_NO_RELEASE(HILOG_WARN, fmt, ##__VA_ARGS__)
 #define MEDIA_LOG_E_NO_RELEASE(fmt, ...) HST_HILOG_NO_RELEASE(HILOG_ERROR, fmt, ##__VA_ARGS__)
 #define MEDIA_LOG_F_NO_RELEASE(fmt, ...) HST_HILOG_NO_RELEASE(HILOG_FATAL, fmt, ##__VA_ARGS__)
 #define MEDIA_LOG_I_FALSE_D(con, fmt, ...) \
