@@ -54,6 +54,8 @@ public:
 
     static constexpr const char TEXT_SUBRIP[] = "application/x-subrip";
     static constexpr const char TIMED_METADATA[] = "meta/timed-metadata";
+
+    static constexpr const char INVALID_TYPE[] = "invalid";
 };
 } // namespace Plugins
 } // namespace Media
