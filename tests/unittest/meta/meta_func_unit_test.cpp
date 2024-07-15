@@ -430,6 +430,7 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::AV_PLAYER_MAX_LAG_DURATION, 12},
     {Tag::AV_PLAYER_MAX_SURFACESWAP_LATENCY, 13},
     {Tag::AV_PLAYER_LAG_TIMES, 14},
+    {Tag::TIMED_METADATA_SRC_TRACK, 1},
     {Tag::SRC_INPUT_TYPE, static_cast<int32_t>(Plugins::SrcInputType::AUD_ES)},
     {Tag::AUDIO_SAMPLE_FORMAT, static_cast<int32_t>(Plugins::AudioSampleFormat::SAMPLE_S16LE)},
     {Tag::VIDEO_PIXEL_FORMAT, static_cast<int32_t>(Plugins::VideoPixelFormat::YUV411P)},
@@ -467,6 +468,7 @@ map<TagType, bool> testBoolData = {
     {Tag::VIDEO_REQUEST_I_FRAME, false},
     {Tag::MEDIA_HAS_VIDEO, true},
     {Tag::MEDIA_HAS_AUDIO, false},
+    {Tag::MEDIA_HAS_TIMEDMETA, true},
     {Tag::MEDIA_END_OF_STREAM, true},
     {Tag::VIDEO_IS_HDR_VIVID, true},
     {Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE, true},
@@ -661,6 +663,10 @@ map<TagType, std::string> testStringData = {
     {Tag::AV_PLAYER_VIDEO_MIME, "String AV_PLAYER_VIDEO_MIME"},
     {Tag::AV_PLAYER_VIDEO_RESOLUTION, "String AV_PLAYER_VIDEO_RESOLUTION"},
     {Tag::AV_PLAYER_AUDIO_MIME, "String AV_PLAYER_AUDIO_MIME"},
+    {Tag::TIMED_METADATA_SRC_TRACK_MIME, "String TIMED_METADATA_SRC_TRACK_MIME"},
+    {Tag::TIMED_METADATA_KEY, "String TIMED_METADATA_KEY"},
+    {Tag::TIMED_METADATA_LOCALE, "String TIMED_METADATA_LOCALE"},
+    {Tag::TIMED_METADATA_SETUP, "String TIMED_METADATA_SETUP"},
 };
 
 /**
