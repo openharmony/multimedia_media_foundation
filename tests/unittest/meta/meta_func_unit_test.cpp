@@ -430,7 +430,7 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::AV_PLAYER_MAX_LAG_DURATION, 12},
     {Tag::AV_PLAYER_MAX_SURFACESWAP_LATENCY, 13},
     {Tag::AV_PLAYER_LAG_TIMES, 14},
-    {Tag::TIMED_METADATA_SRC_TRACK,1},
+    {Tag::TIMED_METADATA_SRC_TRACK, 1},
     {Tag::SRC_INPUT_TYPE, static_cast<int32_t>(Plugins::SrcInputType::AUD_ES)},
     {Tag::AUDIO_SAMPLE_FORMAT, static_cast<int32_t>(Plugins::AudioSampleFormat::SAMPLE_S16LE)},
     {Tag::VIDEO_PIXEL_FORMAT, static_cast<int32_t>(Plugins::VideoPixelFormat::YUV411P)},
