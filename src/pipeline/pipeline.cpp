@@ -226,6 +226,19 @@ Status Pipeline::Release()
     return Status::OK;
 }
 
+Status Pipeline::SetPlayRange(int64_t start, int64_t end)
+{
+    MEDIA_LOG_I("SetPlayRange enter.");
+    SubmitJobOnce([&] {
+        AutoLock lock(mutex_);
+        for (auto it = filters_.begin(); it != filters_.end(); ++it) {
+            (*it)->SetPlayRange(start, end);
+        }
+    });
+    MEDIA_LOG_I("SetPlayRange done.");
+    return Status::OK;
+}
+
 Status Pipeline::AddHeadFilters(std::vector<std::shared_ptr<Filter>> filtersIn)
 {
     MEDIA_LOG_I("AddHeadFilters enter.");
