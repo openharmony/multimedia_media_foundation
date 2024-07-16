@@ -318,19 +318,18 @@ Status Filter::ProcessInputBuffer(int sendArg, int64_t delayUs)
     return Status::OK;
 }
 
-Status Filter::ProcessOutputBuffer(int sendArg, int64_t delayUs, bool byIdx, uint32_t idx, int64_t renderTime)
+Status Filter::ProcessOutputBuffer(int sendArg, int64_t delayUs)
 {
     MEDIA_LOG_D("Filter::ProcessOutputBuffer  %{public}s", name_.c_str());
     if (filterTask_) {
         jobIdx_++;
-        filterTask_->SubmitJob([this, sendArg, byIdx, idx, renderTime]() {
+        filterTask_->SubmitJob([this, sendArg]() {
             processIdx_++;
-            // drop frame after flush
-            DoProcessOutputBuffer(sendArg, processIdx_<= jobIdxBase_, byIdx, idx, renderTime);
+            DoProcessOutputBuffer(sendArg, processIdx_<= jobIdxBase_); // drop frame after flush
         }, delayUs, 0);
     } else {
         Task::SleepInTask(delayUs / 1000); // 1000 convert to ms
-        DoProcessOutputBuffer(sendArg, false, false, idx, false, renderTime);
+        DoProcessOutputBuffer(sendArg, false);
     }
     return Status::OK;
 }
@@ -386,7 +385,7 @@ Status Filter::DoProcessInputBuffer(int recvArg, bool dropFrame)
     return Status::OK;
 }
 
-Status Filter::DoProcessOutputBuffer(int recvArg, bool dropFrame, bool byIdx, uint32_t idx, int64_t renderTimee)
+Status Filter::DoProcessOutputBuffer(int recvArg, bool dropFrame)
 {
     return Status::OK;
 }
