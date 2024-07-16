@@ -294,7 +294,7 @@ enum class TemporalGopReferenceMode : int32_t {
     ADJACENT_REFERENCE = 0,
     JUMP_REFERENCE = 1,
     UNIFORMLY_SCALED_REFERENCE = 2,
-    UNKNOWN_REFERENCE_MODE,
+    UNKNOWN,
 };
 } // namespace Plugins
 } // namespace Media
