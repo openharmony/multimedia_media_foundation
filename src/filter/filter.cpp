@@ -330,7 +330,7 @@ Status Filter::ProcessOutputBuffer(int sendArg, int64_t delayUs, bool byIdx, uin
         }, delayUs, 0);
     } else {
         Task::SleepInTask(delayUs / 1000); // 1000 convert to ms
-        DoProcessOutputBuffer(sendArg, false, false, idx, false, renderTime);
+        DoProcessOutputBuffer(sendArg, false, false, idx, renderTime);
     }
     return Status::OK;
 }
