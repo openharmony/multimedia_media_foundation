@@ -139,9 +139,8 @@ Status Filter::Start()
     MEDIA_LOG_D("Start %{public}s, pState:%{public}d", name_.c_str(), curState_);
     if (filterTask_) {
         filterTask_->SubmitJobOnce([this] {
-            if (StartDone() == Status::OK) {
-                filterTask_->Start();
-            }
+            StartDone();
+            filterTask_->Start();
         });
         for (auto iter : nextFiltersMap_) {
             for (auto filter : iter.second) {
@@ -198,9 +197,8 @@ Status Filter::Resume()
     MEDIA_LOG_D("Resume %{public}s, pState:%{public}d", name_.c_str(), curState_);
     if (filterTask_) {
         filterTask_->SubmitJobOnce([this]() {
-            if (ResumeDone() == Status::OK) {
-                filterTask_->Start();
-            }
+            ResumeDone();
+            filterTask_->Start();
         });
         for (auto iter : nextFiltersMap_) {
             for (auto filter : iter.second) {
