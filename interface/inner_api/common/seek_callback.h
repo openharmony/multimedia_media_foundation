@@ -24,13 +24,13 @@ namespace Media {
 class VideoStreamReadyCallback {
 public:
     virtual ~VideoStreamReadyCallback() = default;
-    virtual bool IsVideoStreamDiscardable(std::shared_ptr<AVBuffer> buffer) = 0;
+    virtual bool IsVideoStreamDiscardable(const std::shared_ptr<AVBuffer> buffer) = 0;
 };
 
 class VideoFrameReadyCallback {
 public:
     virtual ~VideoFrameReadyCallback() = default;
-    virtual void ConsumeVideoFrame(std::shared_ptr<AVBuffer> buffer, uint32_t bufferIndex) = 0;
+    virtual void ConsumeVideoFrame(const std::shared_ptr<AVBuffer> buffer, uint32_t bufferIndex) = 0;
 };
 
 } // namespace Media
