@@ -19,8 +19,6 @@
 #include <map>
 #include <string_view>
 #include "errors.h"
-#include "buffer/avbuffer.h"
-
 namespace OHOS {
 namespace Media {
 using MSErrCode = ErrCode;
@@ -207,18 +205,6 @@ struct GopLayerInfo {
     uint32_t gopSize = 0;
     uint32_t layerCount = 0;
     std::map<uint8_t, uint32_t> layerFrameNum;
-};
-
-class VideoStreamReadyCallback {
-public:
-    virtual ~VideoStreamReadyCallback() = default;
-    virtual bool IsVideoStreamDiscardable(std::shared_ptr<AVBuffer> buffer) = 0;
-};
-
-class VideoFrameReadyCallback {
-public:
-    virtual ~VideoFrameReadyCallback() = default;
-    virtual void ConsumeVideoFrame(std::shared_ptr<AVBuffer> buffer, uint32_t bufferIndex) = 0;
 };
 
 } // namespace Media
