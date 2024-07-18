@@ -54,6 +54,7 @@ ohos_source_set("filefdsource") {
     external_deps = [
       "graphic_surface:surface",
       "hilog:libhilog",
+      "ipc:ipc_core",
     ]
   }
 }

@@ -87,6 +87,7 @@ ohos_source_set("ffmpeg_audio_decoders") {
     external_deps = [
       "graphic_surface:surface",
       "hilog:libhilog",
+      "ipc:ipc_core",
     ]
   }
   if (hst_is_lite_sys) {
@@ -178,6 +179,7 @@ ohos_source_set("ffmpeg_video_decoders") {
     external_deps = [
       "graphic_surface:surface",
       "hilog:libhilog",
+      "ipc:ipc_core",
     ]
   }
   if (hst_is_lite_sys) {

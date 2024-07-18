@@ -81,6 +81,7 @@ if (hst_is_standard_sys) {
       "graphic_surface:surface",
       "graphic_surface:sync_fence",
       "hilog:libhilog",
+      "ipc:ipc_core",
     ]
 
     output_extension = "so"

@@ -189,6 +189,7 @@ if (hst_is_lite_sys) {
     ]
 
     external_deps = [
+      "ability_base:want",
       "audio_framework:audio_client",
       "bundle_framework:appexecfwk_base",
       "bundle_framework:appexecfwk_core",
