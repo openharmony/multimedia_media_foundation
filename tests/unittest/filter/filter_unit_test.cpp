@@ -317,6 +317,7 @@ HWTEST_F(FilterUnitTest, Release_002, TestSize.Level1)
     EXPECT_EQ(Status::OK, filter->Stop());
     sleep(sleepTime_);
     EXPECT_EQ(Status::OK, filter->Release());
+    sleep(sleepTime_);
 }
 
 /**
