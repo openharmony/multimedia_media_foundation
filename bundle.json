@@ -77,7 +77,8 @@
               "curl",
               "safwk",
               "samgr",
-              "bundle_framework"
+              "bundle_framework",
+              "ability_base"
           ]
         },
         "build": {
