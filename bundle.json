@@ -54,6 +54,7 @@
             "ffmpeg"
           ],
           "components": [
+              "ability_base",
               "hilog",
               "hilog_lite",
               "hitrace",
@@ -77,8 +78,7 @@
               "curl",
               "safwk",
               "samgr",
-              "bundle_framework",
-              "ability_base"
+              "bundle_framework"
           ]
         },
         "build": {
