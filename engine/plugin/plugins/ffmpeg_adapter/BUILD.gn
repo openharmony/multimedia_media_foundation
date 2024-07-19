@@ -61,6 +61,7 @@ ohos_source_set("ffmpeg_adapter_common") {
     external_deps = [
       "graphic_surface:surface",
       "hilog:libhilog",
+      "ipc:ipc_core",
     ]
   }
   if (hst_is_lite_sys) {
