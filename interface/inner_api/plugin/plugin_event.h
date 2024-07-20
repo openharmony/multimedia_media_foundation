@@ -38,6 +38,7 @@ enum struct PluginEventType : int32_t {
     BUFFERING_START,
     BUFFERING_PERCENT,
     BUFFERING_END,
+    CACHED_DURATION,
     VIDEO_SIZE_CHANGE,
     SOURCE_BITRATE_START,
 };
