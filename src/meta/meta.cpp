@@ -356,6 +356,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_COORDINATE_H, defaultInt32},
     {Tag::VIDEO_ENCODER_REPEAT_PREVIOUS_FRAME_AFTER, defaultInt32},
     {Tag::VIDEO_ENCODER_REPEAT_PREVIOUS_MAX_COUNT, defaultInt32},
+    {Tag::VIDEO_DECODER_OUTPUT_COLOR_SPACE, defaultInt32},
     // String
     {Tag::MIME_TYPE, defaultString},
     {Tag::MEDIA_FILE_URI, defaultString},

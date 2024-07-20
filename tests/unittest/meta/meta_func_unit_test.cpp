@@ -453,6 +453,7 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::VIDEO_COORDINATE_H, 10},
     {Tag::VIDEO_ENCODER_REPEAT_PREVIOUS_FRAME_AFTER, 10},
     {Tag::VIDEO_ENCODER_REPEAT_PREVIOUS_MAX_COUNT, 10},
+    {Tag::VIDEO_DECODER_OUTPUT_COLOR_SPACE, 8},
     // UINT8_T
     {Tag::AUDIO_AAC_PROFILE, static_cast<int32_t>(Plugins::AudioAacProfile::ELD)},
     {Tag::AUDIO_AAC_STREAM_FORMAT, static_cast<int32_t>(Plugins::AudioAacStreamFormat::ADIF)}};

@@ -171,7 +171,7 @@ public:
                            AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_ENCODE_BITRATE_MODE,
         Plugins::VideoEncodeBitrateMode, AnyValueType::INT32_T);
-    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_COLOR_RANGE or 
+    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_COLOR_RANGE or
         tagCharSeq == Tag::VIDEO_REQUEST_I_FRAME or
         tagCharSeq == Tag::VIDEO_IS_HDR_VIVID or
         tagCharSeq == Tag::MEDIA_HAS_VIDEO or
@@ -384,7 +384,9 @@ public:
         tagCharSeq == Tag::TIMED_METADATA_SETUP, std::string, AnyValueType::STRING);
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::TIMED_METADATA_SRC_TRACK, int32_t, AnyValueType::INT32_T);
-        
+    DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::VIDEO_DECODER_OUTPUT_COLOR_SPACE, int32_t, AnyValueType::INT32_T);
+
     Meta &operator=(const Meta &other)
     {
         map_ = other.map_;

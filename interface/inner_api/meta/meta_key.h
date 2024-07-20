@@ -296,6 +296,10 @@ public:
                                                    ///< if no new frame became available since. This key takes effect
                                                    ///< only when {@link VIDEO_ENCODER_REPEAT_PREVIOUS_FRAME_AFTER} is
                                                    ///< vaild. It is used in configure.
+    static constexpr const char VIDEO_DECODER_OUTPUT_COLOR_SPACE[] =
+        "video_decoder_output_colorspace"; ///< int32_t, Key for video color space of the video decoder output.
+                                           ///< See {@link OH_NativeBuffer_ColorSpace} for value, and only
+                                           ///< {@link OH_COLORSPACE_BT709_LIMIT} is valid. It is used in configure.
 
     /* -------------------- video specific tag -------------------- */
     static constexpr const char VIDEO_H264_PROFILE[] = "video.h264.profile"; ///< @see VideoH264Profile
@@ -330,7 +334,7 @@ public:
     static constexpr const char FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_COUNT[] =
         "feature_property_video_encoder_max_ltr_frame_count"; ///< int32_t, the key for querying the maximum long
                                                             ///< term reference count
-    
+
     /* -------------------- AVCodec tag -------------------- */
     // Pid is int32_t and process name is string, to describe AVCodec's forward caller info.
     // For example, camera recording, forward caller is camera.
@@ -370,7 +374,7 @@ public:
     static constexpr const char RECORDER_AUDIO_CHANNEL_COUNT[] = "audioChannelCount";
     static constexpr const char RECORDER_AUDIO_BITRATE[] = "audioBitrate";
     static constexpr const char RECORDER_START_LATENCY[] = "startLatency";
-    
+
     static constexpr const char SUBTITLE_TEXT[] = "subtitle_text";
     static constexpr const char SUBTITLE_PTS[] = "subtitle_pts";
     static constexpr const char SUBTITLE_DURATION[] = "subtitle_duration";
