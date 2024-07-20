@@ -31,13 +31,13 @@
 namespace OHOS {
 namespace Media {
 namespace OSAL {
-constexpr float EPSILON = 0.000001;
+constexpr float MEDIA_FOUNDATION_FLOAT_EPSILON = 0.000001;
 void SleepFor(unsigned ms);
 bool ConvertFullPath(const std::string& partialPath, std::string& fullPath);
 std::string AVStrError(int errnum);
 inline bool IsFloatEqualZero(float value)
 {
-    if (abs(value - 0) <= EPSILON) {
+    if (abs(value - 0) <= MEDIA_FOUNDATION_FLOAT_EPSILON) {
         return true;
     }
     return false;
