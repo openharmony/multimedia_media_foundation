@@ -54,6 +54,7 @@ public:
     static constexpr const char MEDIA_WAV[] = "media/wav";
 
     static constexpr const char TEXT_SUBRIP[] = "application/x-subrip";
+    static constexpr const char TEXT_WEBVTT[] = "text/vtt";
     static constexpr const char TIMED_METADATA[] = "meta/timed-metadata";
 };
 } // namespace Plugins
