@@ -88,7 +88,7 @@ bool Thread::CreateThread(const std::function<void()>& func)
 #endif
     int rtv = pthread_create(&id_, &attr, Thread::Run, this);
     if (rtv == 0) {
-        MEDIA_LOG_I("thread " PUBLIC_LOG_S " create success", name_.c_str());
+        MEDIA_LOG_D("thread " PUBLIC_LOG_S " create success", name_.c_str());
         isExistThread_.store(true);
         SetNameInternal();
     } else {

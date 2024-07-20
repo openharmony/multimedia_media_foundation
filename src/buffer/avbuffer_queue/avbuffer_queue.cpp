@@ -539,7 +539,7 @@ Status AVBufferQueueImpl::AcquireBuffer(std::shared_ptr<AVBuffer>& buffer)
     std::lock_guard<std::mutex> lockGuard(queueMutex_);
     auto ret = PopFromDirtyBufferList(buffer);
     if (ret != Status::OK) {
-        MEDIA_LOG_E("acquire buffer failed");
+        MEDIA_LOG_D("acquire buffer failed");
         return ret;
     }
 
