@@ -22,6 +22,10 @@
 #include "scope_guard.h"
 #include "securec.h"
 
+namespace {
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
+}
+
 namespace OHOS {
 namespace Media {
 struct AVSharedMemoryBaseImpl : public AVSharedMemoryBase {

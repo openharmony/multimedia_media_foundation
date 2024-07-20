@@ -19,7 +19,6 @@
 #include <map>
 #include <string_view>
 #include "errors.h"
-
 namespace OHOS {
 namespace Media {
 using MSErrCode = ErrCode;
@@ -166,6 +165,8 @@ enum PlayerSeekMode : int32_t {
     SEEK_CLOSEST_SYNC,
     /* seek to frames closest the time point. */
     SEEK_CLOSEST,
+    /* seek continously. */
+    SEEK_CONTINOUS,
 };
 
 /**

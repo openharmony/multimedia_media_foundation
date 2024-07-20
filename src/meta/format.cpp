@@ -21,6 +21,10 @@
 #include "securec.h"
 
 namespace {
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
+}
+
+namespace {
 using namespace OHOS::Media;
 using FormatDataMap = Format::FormatDataMap;
 constexpr size_t BUFFER_SIZE_MAX = 1 * 1024 * 1024;
@@ -105,6 +109,9 @@ Format::Format(const Format &rhs)
 {
     FALSE_RETURN_W(&rhs != this);
     this->meta_ = std::make_shared<Meta>();
+
+    FALSE_RETURN_W(this->meta_ != nullptr);
+    FALSE_RETURN_W(rhs.meta_ != nullptr);
     *(this->meta_) = *(rhs.meta_);
     CopyFormatVectorMap(rhs.formatVecMap_, formatVecMap_);
 }
@@ -117,7 +124,10 @@ Format::Format(Format &&rhs) noexcept
 
 Format &Format::operator=(const Format &rhs)
 {
-    FALSE_RETURN_V(&rhs != this, *this);
+    FALSE_RETURN_V_W(&rhs != this, *this);
+
+    FALSE_RETURN_V_W(this->meta_ != nullptr, *this);
+    FALSE_RETURN_V_W(rhs.meta_ != nullptr, *this);
     *(this->meta_) = *(rhs.meta_);
     CopyFormatVectorMap(rhs.formatVecMap_, this->formatVecMap_);
     return *this;

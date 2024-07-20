@@ -20,6 +20,10 @@
 #include "audio_info.h"
 #include "monitor_error.h"
 
+namespace {
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = {LOG_CORE, LOG_DOMAIN_FOUNDATION, "HiStreamer"};
+}
+
 namespace OHOS {
 namespace Media {
 namespace MediaMonitor {

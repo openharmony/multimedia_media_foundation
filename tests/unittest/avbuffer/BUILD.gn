@@ -21,6 +21,7 @@ group("avbuffer_unit_test") {
   deps = [
     ":avbuffer_capi_unit_test",
     ":avbuffer_inner_unit_test",
+    ":avsharedmemorybase_func_unit_test",
   ]
 }
 
@@ -97,6 +98,42 @@ ohos_unittest("avbuffer_capi_unit_test") {
     "./avbuffer_framework_unit_test.cpp",
     "./avbuffer_unit_test.cpp",
   ]
+
+  cflags = avbuffer_unittest_cflags
+
+  public_deps = [ "../common:media_foundation_capi_unit_test" ]
+
+  external_deps = [
+    "c_utils:utils",
+    "graphic_surface:surface",
+    "graphic_surface:sync_fence",
+    "hilog:libhilog",
+    "ipc:ipc_core",
+    "memory_utils:libdmabufheap",
+  ]
+}
+
+#################################################################################################################videodec
+ohos_unittest("avsharedmemorybase_func_unit_test") {
+  module_out_path = module_output_path
+  include_dirs = [
+    "./",
+    "./inner",
+    "../../../interface/inner_api",
+  ]
+
+  sanitize = {
+    cfi = true
+    cfi_cross_dso = true
+    debug = false
+  }
+
+  defines = [
+    "AVSHAREDMEMORYBASE_FUNC_UNIT_TEST",
+    "MEDIA_OHOS",
+  ]
+
+  sources = [ "./avsharedmemorybase_func_unit_test.cpp" ]
 
   cflags = avbuffer_unittest_cflags
 

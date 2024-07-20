@@ -42,6 +42,7 @@ public:
     }
     size_t Capacity()
     {
+        AutoLock lock(mutex_);
         return capacity_;
     }
     bool Empty()
@@ -147,7 +148,18 @@ public:
         }
     }
 
+    void ResetCapacity(size_t capacity)
+    {
+        {
+            AutoLock lock(mutex_);
+            capacity_ = capacity;
+        }
+        cvEmpty_.NotifyAll();
+        MEDIA_LOG_D("ResetCapacity: capacity_ is " PUBLIC_LOG_ZU, capacity_);
+    }
+    
 private:
+    static constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
     void ClearUnprotected()
     {
         if (que_.empty()) {
@@ -166,7 +178,7 @@ private:
 
     std::string name_;
     std::queue<T> que_;
-    const size_t capacity_;
+    size_t capacity_;
     std::atomic<bool> isActive;
 };
 } // namespace Media

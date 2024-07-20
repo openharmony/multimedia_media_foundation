@@ -65,7 +65,7 @@ public:
     Format &operator=(Format &&rhs) noexcept;
 
     /**
-     * @brief Sets metadata of the integer type.
+     * @brief Sets metadata of the integer or boolean type.
      *
      * @param key Indicates the metadata key.
      * @param value Indicates the metadata value, which is a 32-bit integer.
@@ -143,7 +143,7 @@ public:
     bool PutFormatVector(const std::string_view &key, std::vector<Format> &value);
 
     /**
-     * @brief Obtains the metadata value of the integer type.
+     * @brief Obtains the metadata value of the integer or boolean type.
      *
      * @param key Indicates the metadata key.
      * @param value Indicates the metadata value to obtain, which is a 32-bit integer.

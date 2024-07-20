@@ -16,7 +16,6 @@
 #include "avbuffer_utils.h"
 #include <unordered_map>
 #include "buffer/avbuffer.h"
-#include "common/log.h"
 #include "surface_type.h"
 
 namespace {

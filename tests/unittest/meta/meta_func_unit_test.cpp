@@ -16,6 +16,7 @@
 #include <gtest/gtest.h>
 #include <string>
 #include "meta/meta.h"
+#include "meta/format.h"
 #include "unittest_log.h"
 #include <cstdlib>
 #include <string>
@@ -375,6 +376,7 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::AUDIO_AAC_IS_ADTS, 33},
     {Tag::AUDIO_COMPRESSION_LEVEL, 44},
     {Tag::AUDIO_BITS_PER_CODED_SAMPLE, 44},
+    {Tag::AUDIO_BITS_PER_RAW_SAMPLE, 44},
     {Tag::MEDIA_TRACK_COUNT, 11},
     {Tag::REGULAR_TRACK_ID, 13},
     {Tag::VIDEO_SCALE_TYPE, 14},
@@ -428,6 +430,7 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::AV_PLAYER_MAX_LAG_DURATION, 12},
     {Tag::AV_PLAYER_MAX_SURFACESWAP_LATENCY, 13},
     {Tag::AV_PLAYER_LAG_TIMES, 14},
+    {Tag::TIMED_METADATA_SRC_TRACK, 1},
     {Tag::SRC_INPUT_TYPE, static_cast<int32_t>(Plugins::SrcInputType::AUD_ES)},
     {Tag::AUDIO_SAMPLE_FORMAT, static_cast<int32_t>(Plugins::AudioSampleFormat::SAMPLE_S16LE)},
     {Tag::VIDEO_PIXEL_FORMAT, static_cast<int32_t>(Plugins::VideoPixelFormat::YUV411P)},
@@ -454,7 +457,7 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::AUDIO_AAC_PROFILE, static_cast<int32_t>(Plugins::AudioAacProfile::ELD)},
     {Tag::AUDIO_AAC_STREAM_FORMAT, static_cast<int32_t>(Plugins::AudioAacStreamFormat::ADIF)}};
 
-    map<TagType, bool> testBoolData = {
+map<TagType, bool> testBoolData = {
     // Bool
     {Tag::SCREEN_CAPTURE_USER_AGREE, true},
     {Tag::SCREEN_CAPTURE_REQURE_MIC, false},
@@ -465,6 +468,7 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::VIDEO_REQUEST_I_FRAME, false},
     {Tag::MEDIA_HAS_VIDEO, true},
     {Tag::MEDIA_HAS_AUDIO, false},
+    {Tag::MEDIA_HAS_TIMEDMETA, true},
     {Tag::MEDIA_END_OF_STREAM, true},
     {Tag::VIDEO_IS_HDR_VIVID, true},
     {Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE, true},
@@ -475,7 +479,8 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK, true},
     {Tag::AUDIO_RENDER_SET_FLAG, true},
     {Tag::VIDEO_BUFFER_CAN_DROP, true},
-    {Tag::VIDEO_ENCODER_PER_FRAME_DISCARD, true}};
+    {Tag::VIDEO_ENCODER_PER_FRAME_DISCARD, true},
+    {Tag::VIDEO_ENCODER_ENABLE_WATERMARK, true}};
 
 
 /**
@@ -658,6 +663,10 @@ map<TagType, std::string> testStringData = {
     {Tag::AV_PLAYER_VIDEO_MIME, "String AV_PLAYER_VIDEO_MIME"},
     {Tag::AV_PLAYER_VIDEO_RESOLUTION, "String AV_PLAYER_VIDEO_RESOLUTION"},
     {Tag::AV_PLAYER_AUDIO_MIME, "String AV_PLAYER_AUDIO_MIME"},
+    {Tag::TIMED_METADATA_SRC_TRACK_MIME, "String TIMED_METADATA_SRC_TRACK_MIME"},
+    {Tag::TIMED_METADATA_KEY, "String TIMED_METADATA_KEY"},
+    {Tag::TIMED_METADATA_LOCALE, "String TIMED_METADATA_LOCALE"},
+    {Tag::TIMED_METADATA_SETUP, "String TIMED_METADATA_SETUP"},
 };
 
 /**
@@ -1000,6 +1009,209 @@ HWTEST_F(MetaInnerUnitTest, GetValueType_Data_VECTOR_UINT8, TestSize.Level1)
     ASSERT_TRUE(type == AnyValueType::VECTOR_UINT8);
     metaIn->GetData(key, valueOut);
     EXPECT_EQ(valueOut, valueIn);
+}
+
+/**
+ * @tc.name: Meta_GetData_All_As_Bool_Using_ParcelPackage
+ * @tc.desc:
+ *     1. set bool to format;
+ *     2. meta trans by parcel;
+ *     3. get meta value type;
+ * @tc.type: FUNC
+ */
+HWTEST_F(MetaInnerUnitTest, Meta_GetData_All_As_Bool_Using_ParcelPackage, TestSize.Level1)
+{
+    for (auto item : testBoolData) {
+        bool valueIn = item.second;
+        MessageParcel parcel;
+        std::shared_ptr<Format> format = std::make_shared<Format>();
+        std::shared_ptr<Meta> meta = std::make_shared<Meta>();
+
+        EXPECT_TRUE(format->PutIntValue(item.first, valueIn));
+        meta = format->GetMeta();
+        ASSERT_TRUE(meta->ToParcel(parcel));
+        ASSERT_TRUE(meta->FromParcel(parcel));
+
+        bool valueOut = !valueIn;
+        int32_t intValue = -1;
+        EXPECT_FALSE(meta->GetData(item.first, intValue));
+        EXPECT_TRUE(meta->GetData(item.first, valueOut));
+        EXPECT_EQ(valueIn, valueOut);
+    }
+}
+
+/**
+ * @tc.name: Meta_GetData_All_As_Int32_Using_ParcelPackage
+ * @tc.desc:
+ *     1. set int32_t to format;
+ *     2. meta trans by parcel;
+ *     3. get meta value type;
+ * @tc.type: FUNC
+ */
+HWTEST_F(MetaInnerUnitTest, Meta_GetData_All_As_Int32_Using_ParcelPackage, TestSize.Level1)
+{
+    std::vector<TagType> skipList = {Tag::AUDIO_AAC_PROFILE, Tag::AUDIO_AAC_STREAM_FORMAT};
+    for (auto item : testInt32Data) {
+        auto iter = std::find(skipList.begin(), skipList.end(), item.first);
+        if (iter != skipList.end()) {
+            continue;
+        }
+
+        int32_t valueIn = item.second;
+        MessageParcel parcel;
+        std::shared_ptr<Format> format = std::make_shared<Format>();
+        std::shared_ptr<Meta> meta = std::make_shared<Meta>();
+
+        EXPECT_TRUE(format->PutIntValue(item.first, valueIn));
+        meta = format->GetMeta();
+        ASSERT_TRUE(meta->ToParcel(parcel));
+        ASSERT_TRUE(meta->FromParcel(parcel));
+
+        int32_t valueOut = -1;
+        EXPECT_TRUE(GetMetaData(*meta, item.first, valueOut));
+        EXPECT_EQ(valueIn, valueOut);
+    }
+}
+
+/**
+ * @tc.name: Meta_GetData_All_As_Int64_Using_ParcelPackage
+ * @tc.desc:
+ *     1. set int64_t to format;
+ *     2. meta trans by parcel;
+ *     3. get meta value type;
+ * @tc.type: FUNC
+ */
+HWTEST_F(MetaInnerUnitTest, Meta_GetData_All_As_Int64_Using_ParcelPackage, TestSize.Level1)
+{
+    std::vector<TagType> skipList = {Tag::MEDIA_FILE_SIZE, Tag::MEDIA_POSITION};
+    for (auto item : testInt64Data) {
+        auto iter = std::find(skipList.begin(), skipList.end(), item.first);
+        if (iter != skipList.end()) {
+            continue;
+        }
+
+        int64_t valueIn = item.second;
+        MessageParcel parcel;
+        std::shared_ptr<Format> format = std::make_shared<Format>();
+        std::shared_ptr<Meta> meta = std::make_shared<Meta>();
+
+        EXPECT_TRUE(format->PutLongValue(item.first, valueIn));
+        meta = format->GetMeta();
+        ASSERT_TRUE(meta->ToParcel(parcel));
+        ASSERT_TRUE(meta->FromParcel(parcel));
+
+        int64_t valueOut = -1;
+        EXPECT_TRUE(GetMetaData(*meta, item.first, valueOut));
+        EXPECT_EQ(valueIn, valueOut);
+    }
+}
+
+/**
+ * @tc.name: Meta_GetData_All_As_Float_Using_ParcelPackage
+ * @tc.desc:
+ *     1. set float to format;
+ *     2. meta trans by parcel;
+ *     3. get meta value type;
+ * @tc.type: FUNC
+ */
+HWTEST_F(MetaInnerUnitTest, Meta_GetData_All_As_Float_Using_ParcelPackage, TestSize.Level1)
+{
+    for (auto item : testFloatData) {
+        float valueIn = item.second;
+        MessageParcel parcel;
+        std::shared_ptr<Format> format = std::make_shared<Format>();
+        std::shared_ptr<Meta> meta = std::make_shared<Meta>();
+
+        EXPECT_TRUE(format->PutFloatValue(item.first, valueIn));
+        meta = format->GetMeta();
+        ASSERT_TRUE(meta->ToParcel(parcel));
+        ASSERT_TRUE(meta->FromParcel(parcel));
+
+        float valueOut = 0.0f;
+        ASSERT_TRUE(meta->GetData(item.first, valueOut));
+        EXPECT_EQ(valueIn, valueOut);
+    }
+}
+
+/**
+ * @tc.name: Meta_GetData_All_As_Double_Using_ParcelPackage
+ * @tc.desc:
+ *     1. set double to format;
+ *     2. meta trans by parcel;
+ *     3. get meta value type;
+ * @tc.type: FUNC
+ */
+HWTEST_F(MetaInnerUnitTest, Meta_GetData_All_As_Double_Using_ParcelPackage, TestSize.Level1)
+{
+    for (auto item : testDoubleData) {
+        double valueIn = item.second;
+        MessageParcel parcel;
+        std::shared_ptr<Format> format = std::make_shared<Format>();
+        std::shared_ptr<Meta> meta = std::make_shared<Meta>();
+
+        EXPECT_TRUE(format->PutDoubleValue(item.first, valueIn));
+        meta = format->GetMeta();
+        ASSERT_TRUE(meta->ToParcel(parcel));
+        ASSERT_TRUE(meta->FromParcel(parcel));
+
+        double valueOut = 0.0;
+        ASSERT_TRUE(meta->GetData(item.first, valueOut));
+        EXPECT_EQ(valueIn, valueOut);
+    }
+}
+
+/**
+ * @tc.name: Meta_GetData_All_As_String_Using_ParcelPackage
+ * @tc.desc:
+ *     1. set string to format;
+ *     2. meta trans by parcel;
+ *     3. get meta value type;
+ * @tc.type: FUNC
+ */
+HWTEST_F(MetaInnerUnitTest, Meta_GetData_All_As_String_Using_ParcelPackage, TestSize.Level1)
+{
+    for (auto item : testStringData) {
+        string valueIn = item.second;
+        MessageParcel parcel;
+        std::shared_ptr<Format> format = std::make_shared<Format>();
+        std::shared_ptr<Meta> meta = std::make_shared<Meta>();
+
+        EXPECT_TRUE(format->PutStringValue(item.first, valueIn));
+        meta = format->GetMeta();
+        ASSERT_TRUE(meta->ToParcel(parcel));
+        ASSERT_TRUE(meta->FromParcel(parcel));
+
+        string valueOut = "String Value";
+        EXPECT_TRUE(meta->GetData(item.first, valueOut));
+        EXPECT_EQ(valueIn, valueOut);
+    }
+}
+
+/**
+ * @tc.name: Meta_GetData_All_As_VectorUint8_Using_ParcelPackage
+ * @tc.desc:
+ *     1. set vectorUint8 to format;
+ *     2. meta trans by parcel;
+ *     3. get meta value type;
+ * @tc.type: FUNC
+ */
+HWTEST_F(MetaInnerUnitTest, Meta_GetData_All_As_VectorUint8_Using_ParcelPackage, TestSize.Level1)
+{
+    for (auto item : testVetcorInt8Data) {
+        std::vector<uint8_t> valueIn = item.second;
+        MessageParcel parcel;
+        std::shared_ptr<Format> format = std::make_shared<Format>();
+        std::shared_ptr<Meta> meta = std::make_shared<Meta>();
+
+        EXPECT_TRUE(format->PutBuffer(item.first, valueIn.data(), valueIn.size()));
+        meta = format->GetMeta();
+        ASSERT_TRUE(meta->ToParcel(parcel));
+        ASSERT_TRUE(meta->FromParcel(parcel));
+
+        std::vector<uint8_t> valueOut;
+        EXPECT_TRUE(meta->GetData(item.first, valueOut));
+        EXPECT_EQ(valueIn, valueOut);
+    }
 }
 } // namespace MetaFuncUT
 } // namespace Media

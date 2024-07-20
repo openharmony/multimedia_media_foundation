@@ -22,6 +22,10 @@
 
 #include <mutex>
 
+namespace {
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
+}
+
 namespace OHOS {
 namespace Media {
 namespace {
@@ -206,7 +210,9 @@ void PipeLineThread::RemoveTask(std::shared_ptr<TaskInner> task)
 
 void PipeLineThread::LockJobState()
 {
-    FALSE_RETURN_W(!IsRunningInSelf());
+    if (IsRunningInSelf()) {
+        return;
+    }
     mutex_.lock();
 }
 

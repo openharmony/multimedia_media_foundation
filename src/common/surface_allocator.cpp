@@ -22,6 +22,10 @@
 #include "inner_api/common/log.h"
 #include "sync_fence.h"
 
+namespace {
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
+}
+
 namespace OHOS {
 namespace Media {
 namespace Plugins {

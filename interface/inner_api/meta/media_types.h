@@ -35,7 +35,8 @@ enum class MediaType : int32_t {
     VIDEO = 1,
     SUBTITLE = 2,
     ATTACHMENT,     ///< Opaque data information usually sparse
-    DATA            ///< Opaque data information usually continuous
+    DATA,           ///< Opaque data information usually continuous
+    TIMEDMETA
 };
 
 /**
@@ -73,6 +74,7 @@ enum class OutputFormat : uint32_t {
     M4A = 6,
     AMR = 8,
     MP3 = 9,
+    WAV = 10,
 };
 
 struct Location {

@@ -65,7 +65,7 @@ public:
 
     virtual bool IsTaskRunning();
 
-    virtual void UpdataDelayTime(int64_t delayUs = 0);
+    virtual void UpdateDelayTime(int64_t delayUs = 0);
 
     static void SleepInTask(unsigned ms);
 

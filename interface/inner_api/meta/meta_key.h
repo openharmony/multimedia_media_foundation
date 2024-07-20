@@ -93,6 +93,7 @@ public:
     static constexpr const char MEDIA_HAS_VIDEO[] = "has_video";               ///< has video track in file
     static constexpr const char MEDIA_HAS_AUDIO[] = "has_audio";               ///< has audio track in file
     static constexpr const char MEDIA_HAS_SUBTITLE[] = "has_subtitle";         ///< has subtitle track in file
+    static constexpr const char MEDIA_HAS_TIMEDMETA[] = "has_timed_meta";      ///< has timed metadata track in file
     static constexpr const char MEDIA_COVER[] = "cover";                       ///< cover in file
     static constexpr const char MEDIA_PROTOCOL_TYPE[] = "media.protocol.type"; ///< Source protocol type
     static constexpr const char MEDIA_PROFILE[] = "codec_profile";             ///< codec profile, Compatible 4.0
@@ -104,6 +105,15 @@ public:
     /* -------------------- buffer meta tag -------------------- */
     static constexpr const char BUFFER_DECODING_TIMESTAMP[] = "decoding_timestamp";  ///< int64_t, decoding timestamp.
     static constexpr const char BUFFER_DURATION[] = "buffer_duration";               ///< int64_t, buffer duration
+
+    /* -------------------- timed metadata tag -------------------- */
+    static constexpr const char TIMED_METADATA_SRC_TRACK_MIME[] =
+        "timed_metadata_src_track_mime";   ///< source track mime of timed metadata
+    static constexpr const char TIMED_METADATA_SRC_TRACK[] =
+        "timed_metadata_track_id";   ///< source track of timed metadata
+    static constexpr const char TIMED_METADATA_KEY[] = "timed_metadata_key";         ///< key of timed metadata
+    static constexpr const char TIMED_METADATA_LOCALE[] = "locale_timed_metadata";   ///< locale of timed metadata
+    static constexpr const char TIMED_METADATA_SETUP[] = "setup_of_timed_metadata";  ///< set up info of timed metadata
 
     /* -------------------- audio universal tag -------------------- */
     static constexpr const char AUDIO_CHANNEL_COUNT[] = "channel_count"; ///< audio channel count
@@ -119,6 +129,7 @@ public:
     static constexpr const char AUDIO_MAX_INPUT_SIZE[] = "audio.max.input.size";         ///< max input size
     static constexpr const char AUDIO_MAX_OUTPUT_SIZE[] = "audio.max.output.size";       ///< max output size
     static constexpr const char AUDIO_BITS_PER_CODED_SAMPLE[] = "bits_per_coded_sample"; ///< bits per coded sample
+    static constexpr const char AUDIO_BITS_PER_RAW_SAMPLE[] = "bits_per_raw_sample"; ///< bits per raw sample
 
     /* -------------------- audio specific tag -------------------- */
     static constexpr const char AUDIO_MPEG_VERSION[] = "audio.mpeg.version"; ///< mpeg version
@@ -260,6 +271,11 @@ public:
                              ///< video frame.
     static constexpr const char VIDEO_ENCODER_PER_FRAME_DISCARD[] =
         "video_encoder_per_frame_discard"; ///< bool, key for describing whether the current frame is not encoded.
+    static constexpr const char VIDEO_ENCODER_ENABLE_WATERMARK[] =
+        "video_encoder_enable_watermark"; ///< bool, key for enable the watermark image ability, To query supported,
+                                          ///< you should use the interface {@link GetCapability} of class
+                                          ///< AVCodecList. This is an optional key that applies only to video
+                                          ///< encoder. It is used in configure.
     static constexpr const char VIDEO_COORDINATE_X[] =
         "video_coordinate_x"; ///< int32_t, key for describing the x-coordinate of the watermark image.
     static constexpr const char VIDEO_COORDINATE_Y[] =

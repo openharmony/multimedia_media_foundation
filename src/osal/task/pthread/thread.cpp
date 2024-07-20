@@ -19,6 +19,10 @@
 #include "common/log.h"
 #include "osal/task/autolock.h"
 
+namespace {
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
+}
+
 namespace OHOS {
 namespace Media {
 Thread::Thread(ThreadPriority priority) noexcept : id_(), name_(), priority_(priority), state_()

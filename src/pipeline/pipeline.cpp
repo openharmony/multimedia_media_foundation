@@ -23,6 +23,11 @@
 #include "osal/task/jobutils.h"
 #include "common/log.h"
 #include "osal/utils/hitrace_utils.h"
+
+namespace {
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
+}
+
 namespace OHOS {
 namespace Media {
 namespace Pipeline {
@@ -218,6 +223,19 @@ Status Pipeline::Release()
         filters_.clear();
     });
     MEDIA_LOG_I("Release done.");
+    return Status::OK;
+}
+
+Status Pipeline::SetPlayRange(int64_t start, int64_t end)
+{
+    MEDIA_LOG_I("SetPlayRange enter.");
+    SubmitJobOnce([&] {
+        AutoLock lock(mutex_);
+        for (auto it = filters_.begin(); it != filters_.end(); ++it) {
+            (*it)->SetPlayRange(start, end);
+        }
+    });
+    MEDIA_LOG_I("SetPlayRange done.");
     return Status::OK;
 }
 

@@ -45,6 +45,11 @@
  *    SetMetaData/GetMetaData: AVFormat use them to set/get enum/bool/int values,
  *    It can convert the integer to/from enum/bool automatically.
  **/
+
+namespace {
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
+}
+
 namespace OHOS {
 namespace Media {
 using namespace Plugins;
@@ -125,6 +130,7 @@ static std::vector<TagType> g_metadataBoolVector = {
     Tag::MEDIA_HAS_VIDEO,
     Tag::MEDIA_HAS_AUDIO,
     Tag::MEDIA_HAS_SUBTITLE,
+    Tag::MEDIA_HAS_TIMEDMETA,
     Tag::MEDIA_END_OF_STREAM,
     Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE,
     Tag::VIDEO_ENCODER_ENABLE_TEMPORAL_SCALABILITY,
@@ -139,7 +145,8 @@ static std::vector<TagType> g_metadataBoolVector = {
     Tag::SCREEN_CAPTURE_ENABLE_MIC,
     Tag::AV_PLAYER_IS_DRM_PROTECTED,
     Tag::AV_PLAYER_DOWNLOAD_TIME_OUT,
-    Tag::VIDEO_ENCODER_PER_FRAME_DISCARD
+    Tag::VIDEO_ENCODER_PER_FRAME_DISCARD,
+    Tag::VIDEO_ENCODER_ENABLE_WATERMARK
 };
 
 bool SetMetaData(Meta& meta, const TagType& tag, int32_t value)
@@ -284,6 +291,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::AUDIO_AAC_IS_ADTS, defaultInt32},
     {Tag::AUDIO_COMPRESSION_LEVEL, defaultInt32},
     {Tag::AUDIO_BITS_PER_CODED_SAMPLE, defaultInt32},
+    {Tag::AUDIO_BITS_PER_RAW_SAMPLE, defaultInt32},
     {Tag::REGULAR_TRACK_ID, defaultInt32},
     {Tag::VIDEO_SCALE_TYPE, defaultInt32},
     {Tag::VIDEO_I_FRAME_INTERVAL, defaultInt32},
@@ -326,6 +334,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::RECORDER_AUDIO_CHANNEL_COUNT, defaultInt32},
     {Tag::RECORDER_AUDIO_BITRATE, defaultInt32},
     {Tag::RECORDER_START_LATENCY, defaultInt32},
+    {Tag::TIMED_METADATA_SRC_TRACK, defaultInt32},
     {Tag::VIDEO_ENCODER_QP_AVERAGE, defaultInt32},
     {Tag::AV_PLAYER_ERR_CODE, defaultInt32},
     {Tag::AV_PLAYER_PLAY_DURATION, defaultInt32},
@@ -377,6 +386,10 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::DRM_APP_NAME, defaultString},
     {Tag::DRM_INSTANCE_ID, defaultString},
     {Tag::DRM_ERROR_MESG, defaultString},
+    {Tag::TIMED_METADATA_SRC_TRACK_MIME, defaultString},
+    {Tag::TIMED_METADATA_KEY, defaultString},
+    {Tag::TIMED_METADATA_LOCALE, defaultString},
+    {Tag::TIMED_METADATA_SETUP, defaultString},
     {Tag::RECORDER_ERR_MSG, defaultString},
     {Tag::RECORDER_CONTAINER_MIME, defaultString},
     {Tag::RECORDER_VIDEO_MIME, defaultString},
@@ -403,6 +416,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::MEDIA_HAS_VIDEO, defaultBool},
     {Tag::MEDIA_HAS_AUDIO, defaultBool},
     {Tag::MEDIA_HAS_SUBTITLE, defaultBool},
+    {Tag::MEDIA_HAS_TIMEDMETA, defaultBool},
     {Tag::MEDIA_END_OF_STREAM, defaultBool},
     {Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE, defaultBool},
     {Tag::VIDEO_ENCODER_ENABLE_TEMPORAL_SCALABILITY, defaultBool},
@@ -418,6 +432,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::AV_PLAYER_IS_DRM_PROTECTED, defaultBool},
     {Tag::AV_PLAYER_DOWNLOAD_TIME_OUT, defaultBool},
     {Tag::VIDEO_ENCODER_PER_FRAME_DISCARD, defaultBool},
+    {Tag::VIDEO_ENCODER_ENABLE_WATERMARK, defaultBool},
     // Int64
     {Tag::MEDIA_FILE_SIZE, defaultUInt64},
     {Tag::MEDIA_POSITION, defaultUInt64},

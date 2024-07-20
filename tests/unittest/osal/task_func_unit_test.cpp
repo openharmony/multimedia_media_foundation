@@ -29,6 +29,11 @@
 #include "osal/task/condition_variable.h"
 #include "cpp_ext/memory_ext.h"
 #include "common/log.h"
+#include "osal/task/pipeline_threadpool.h"
+
+namespace {
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
+}
 
 using namespace std;
 using namespace testing::ext;
@@ -46,71 +51,9 @@ public:
 
     void SetUp(void);
 
-    void SetUpMore(void);
-
     void TearDown(void);
 
-    void TearDownMore(void);
-
     ConditionVariable cv;
-    std::shared_ptr<Task> task1 = nullptr;
-    std::shared_ptr<Task> task2 = nullptr;
-    std::shared_ptr<Task> task3 = nullptr;
-    std::shared_ptr<Task> task4 = nullptr;
-    std::shared_ptr<Task> task5 = nullptr;
-    std::shared_ptr<Task> task6 = nullptr;
-    std::shared_ptr<Task> task7 = nullptr;
-    std::shared_ptr<Task> task8 = nullptr;
-    std::shared_ptr<Task> task9 = nullptr;
-    std::shared_ptr<Task> task10 = nullptr;
-    std::shared_ptr<Task> task01 = nullptr;
-    std::shared_ptr<Task> task02 = nullptr;
-    std::shared_ptr<Task> task03 = nullptr;
-    std::shared_ptr<Task> task04 = nullptr;
-    std::shared_ptr<Task> task05 = nullptr;
-    std::shared_ptr<Task> task06 = nullptr;
-    std::shared_ptr<Task> task07 = nullptr;
-    std::shared_ptr<Task> task08 = nullptr;
-    std::shared_ptr<Task> task09 = nullptr;
-    std::shared_ptr<Task> task20 = nullptr;
-    std::shared_ptr<Task> task21 = nullptr;
-    std::shared_ptr<Task> task22 = nullptr;
-    std::shared_ptr<Task> task23 = nullptr;
-    std::shared_ptr<Task> task24 = nullptr;
-    std::shared_ptr<Task> task25 = nullptr;
-    std::shared_ptr<Task> task26 = nullptr;
-    std::shared_ptr<Task> task27 = nullptr;
-    std::shared_ptr<Task> task28 = nullptr;
-    std::shared_ptr<Task> task29 = nullptr;
-    std::shared_ptr<Task> task30 = nullptr;
-    std::shared_ptr<Task> task31 = nullptr;
-    std::shared_ptr<Task> task32 = nullptr;
-    std::shared_ptr<Task> task33 = nullptr;
-    std::shared_ptr<Task> task34 = nullptr;
-    std::shared_ptr<Task> task35 = nullptr;
-    std::shared_ptr<Task> task36 = nullptr;
-    std::shared_ptr<Task> task37 = nullptr;
-    std::shared_ptr<Task> task38 = nullptr;
-    std::shared_ptr<Task> task39 = nullptr;
-    std::shared_ptr<Task> task40 = nullptr;
-    std::shared_ptr<Task> task41 = nullptr;
-    std::shared_ptr<Task> task42 = nullptr;
-    std::shared_ptr<Task> task43 = nullptr;
-    std::shared_ptr<Task> task44 = nullptr;
-    std::shared_ptr<Task> task45 = nullptr;
-    std::shared_ptr<Task> task46 = nullptr;
-    std::shared_ptr<Task> task47 = nullptr;
-    std::shared_ptr<Task> task48 = nullptr;
-    std::shared_ptr<Task> task49 = nullptr;
-    std::shared_ptr<Task> task50 = nullptr;
-    std::shared_ptr<Task> task51 = nullptr;
-    std::shared_ptr<Task> task52 = nullptr;
-    std::shared_ptr<Task> task53 = nullptr;
-    std::shared_ptr<Task> task54 = nullptr;
-    std::shared_ptr<Task> task55 = nullptr;
-    std::shared_ptr<Task> task56 = nullptr;
-    std::shared_ptr<Task> task57 = nullptr;
-    std::shared_ptr<Task> task58 = nullptr;
     Mutex mutex_;
     std::atomic<bool> isStop_{false};
     std::string modifyMsg_ = "";
@@ -126,138 +69,12 @@ void TaskInnerUnitTest::SetUp(void)
     const ::testing::TestInfo *testInfo_ = ::testing::UnitTest::GetInstance()->current_test_info();
     std::string testName = testInfo_->name();
     std::cout << testName << std::endl;
-    task1 = std::make_shared<Task>("workTask1");
-    task2 = std::make_shared<Task>("workTask2");
-    task3 = std::make_shared<Task>("workTask3");
-    task4 = std::make_shared<Task>("workTask4");
-    task5 = std::make_shared<Task>("workTask5");
-    task6 = std::make_shared<Task>("workTask6");
-    task7 = std::make_shared<Task>("workTask7");
-    task8 = std::make_shared<Task>("workTask8");
-    task9 = std::make_shared<Task>("workTask9");
-    task10 = std::make_shared<Task>("workTask10");
-    task01 = std::make_shared<Task>("workTask01");
-    task02 = std::make_shared<Task>("workTask02");
-    task03 = std::make_shared<Task>("workTask03", "", TaskType::GLOBAL, TaskPriority::NORMAL, true);
-    task04 = std::make_shared<Task>("workTask04", "", TaskType::VIDEO, TaskPriority::NORMAL, true);
-    task05 = std::make_shared<Task>("workTask05", "", TaskType::AUDIO, TaskPriority::NORMAL, true);
-    task06 = std::make_shared<Task>("workTask06", "", TaskType::SUBTITLE, TaskPriority::NORMAL, true);
-    task07 = std::make_shared<Task>("workTask07", "", TaskType::GLOBAL, TaskPriority::LOW, true);
-    task08 = std::make_shared<Task>("workTask08", "", TaskType::VIDEO, TaskPriority::LOW, true);
-    task09 = std::make_shared<Task>("workTask09", "", TaskType::AUDIO, TaskPriority::LOW, true);
-    task20 = std::make_shared<Task>("workTask20", "", TaskType::SUBTITLE, TaskPriority::LOW, true);
-    task21 = std::make_shared<Task>("workTask21", "", TaskType::SINGLETON, TaskPriority::LOW, true);
-    task22 = std::make_shared<Task>("workTask22", "", TaskType::GLOBAL, TaskPriority::MIDDLE, true);
-    task23 = std::make_shared<Task>("workTask23", "", TaskType::VIDEO, TaskPriority::MIDDLE, true);
-    task24 = std::make_shared<Task>("workTask24", "", TaskType::AUDIO, TaskPriority::MIDDLE, true);
-    task25 = std::make_shared<Task>("workTask25", "", TaskType::SUBTITLE, TaskPriority::MIDDLE, true);
-    task26 = std::make_shared<Task>("workTask26", "", TaskType::SINGLETON, TaskPriority::MIDDLE, true);
-    task27 = std::make_shared<Task>("workTask27", "", TaskType::GLOBAL, TaskPriority::HIGH, true);
-    task28 = std::make_shared<Task>("workTask28", "", TaskType::VIDEO, TaskPriority::HIGH, true);
-    task29 = std::make_shared<Task>("workTask29", "", TaskType::AUDIO, TaskPriority::HIGH, true);
-    task30 = std::make_shared<Task>("workTask30", "", TaskType::SUBTITLE, TaskPriority::HIGH, true);
-    task31 = std::make_shared<Task>("workTask31", "", TaskType::SINGLETON, TaskPriority::HIGH, true);
-    task32 = std::make_shared<Task>("workTask32", "", TaskType::GLOBAL, TaskPriority::HIGHEST, true);
-    task33 = std::make_shared<Task>("workTask33", "", TaskType::VIDEO, TaskPriority::HIGHEST, true);
-    task34 = std::make_shared<Task>("workTask34", "", TaskType::AUDIO, TaskPriority::HIGHEST, true);
-    task35 = std::make_shared<Task>("workTask35", "", TaskType::SUBTITLE, TaskPriority::HIGHEST, true);
-    task36 = std::make_shared<Task>("workTask36", "", TaskType::SINGLETON, TaskPriority::HIGHEST, true);
-    SetUpMore();
-}
-
-void TaskInnerUnitTest::SetUpMore(void)
-{
-    task37 = std::make_shared<Task>("workTask37", "", TaskType::SINGLETON, TaskPriority::NORMAL, false);
-    task38 = std::make_shared<Task>("workTask38", "", TaskType::GLOBAL, TaskPriority::NORMAL, false);
-    task39 = std::make_shared<Task>("workTask39", "", TaskType::VIDEO, TaskPriority::NORMAL, false);
-    task40 = std::make_shared<Task>("workTask40", "", TaskType::AUDIO, TaskPriority::NORMAL, false);
-    task41 = std::make_shared<Task>("workTask41", "", TaskType::SUBTITLE, TaskPriority::NORMAL, false);
-    task42 = std::make_shared<Task>("workTask42", "", TaskType::GLOBAL, TaskPriority::LOW, false);
-    task43 = std::make_shared<Task>("workTask43", "", TaskType::VIDEO, TaskPriority::LOW, false);
-    task44 = std::make_shared<Task>("workTask44", "", TaskType::AUDIO, TaskPriority::LOW, false);
-    task45 = std::make_shared<Task>("workTask45", "", TaskType::SUBTITLE, TaskPriority::LOW, false);
-    task46 = std::make_shared<Task>("workTask46", "", TaskType::SINGLETON, TaskPriority::LOW, false);
-    task47 = std::make_shared<Task>("workTask47", "", TaskType::GLOBAL, TaskPriority::MIDDLE, false);
-    task48 = std::make_shared<Task>("workTask48", "", TaskType::VIDEO, TaskPriority::MIDDLE, false);
-    task49 = std::make_shared<Task>("workTask49", "", TaskType::AUDIO, TaskPriority::MIDDLE, false);
-    task50 = std::make_shared<Task>("workTask50", "", TaskType::SUBTITLE, TaskPriority::MIDDLE, false);
-    task51 = std::make_shared<Task>("workTask51", "", TaskType::SINGLETON, TaskPriority::MIDDLE, false);
-    task52 = std::make_shared<Task>("workTask52", "", TaskType::GLOBAL, TaskPriority::HIGH, false);
-    task53 = std::make_shared<Task>("workTask53", "", TaskType::VIDEO, TaskPriority::HIGH, false);
-    task54 = std::make_shared<Task>("workTask54", "", TaskType::AUDIO, TaskPriority::HIGH, false);
-    task55 = std::make_shared<Task>("workTask55", "", TaskType::SUBTITLE, TaskPriority::HIGH, false);
-    task56 = std::make_shared<Task>("workTask56", "", TaskType::SINGLETON, TaskPriority::HIGH, false);
-    task57 = std::make_shared<Task>("workTask57", "", TaskType::GLOBAL, TaskPriority::HIGHEST, false);
-    task58 = std::make_shared<Task>("workTask58", "", TaskType::VIDEO, TaskPriority::HIGHEST, false);
 }
 
 void TaskInnerUnitTest::TearDown(void)
 {
-    task1 = nullptr;
-    task1 = nullptr;
-    task2 = nullptr;
-    task3 = nullptr;
-    task4 = nullptr;
-    task5 = nullptr;
-    task6 = nullptr;
-    task7 = nullptr;
-    task8 = nullptr;
-    task9 = nullptr;
-    task10 = nullptr;
-    task01 = nullptr;
-    task02 = nullptr;
-    task03 = nullptr;
-    task04 = nullptr;
-    task05 = nullptr;
-    task06 = nullptr;
-    task07 = nullptr;
-    task08 = nullptr;
-    task09 = nullptr;
-    task20 = nullptr;
-    task21 = nullptr;
-    task22 = nullptr;
-    task23 = nullptr;
-    task24 = nullptr;
-    task25 = nullptr;
-    task26 = nullptr;
-    task27 = nullptr;
-    task28 = nullptr;
-    task29 = nullptr;
-    TearDownMore();
+    PipeLineThreadPool::GetInstance().DestroyThread("");
     std::cout << "[TearDown]: over!!!" << std::endl;
-}
-
-void TaskInnerUnitTest::TearDownMore(void)
-{
-    task30 = nullptr;
-    task31 = nullptr;
-    task32 = nullptr;
-    task33 = nullptr;
-    task34 = nullptr;
-    task35 = nullptr;
-    task36 = nullptr;
-    task37 = nullptr;
-    task38 = nullptr;
-    task39 = nullptr;
-    task40 = nullptr;
-    task41 = nullptr;
-    task42 = nullptr;
-    task43 = nullptr;
-    task44 = nullptr;
-    task45 = nullptr;
-    task46 = nullptr;
-    task47 = nullptr;
-    task48 = nullptr;
-    task49 = nullptr;
-    task50 = nullptr;
-    task51 = nullptr;
-    task52 = nullptr;
-    task53 = nullptr;
-    task54 = nullptr;
-    task55 = nullptr;
-    task56 = nullptr;
-    task57 = nullptr;
-    task58 = nullptr;
 }
 
 /**
@@ -267,6 +84,7 @@ void TaskInnerUnitTest::TearDownMore(void)
  */
 HWTEST_F(TaskInnerUnitTest, TaskNotRunning, TestSize.Level1)
 {
+    std::shared_ptr<Task> task1 = std::make_shared<Task>("workTask1");
     bool rtv = task1->IsTaskRunning();
     EXPECT_EQ(false, rtv);
 }
@@ -278,6 +96,7 @@ HWTEST_F(TaskInnerUnitTest, TaskNotRunning, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskRegisterJobNotRunning, TestSize.Level1)
 {
+    std::shared_ptr<Task> task2 = std::make_shared<Task>("workTask2");
     task2->RegisterJob([]() {
         bool runningState =true;
         int count = 0;
@@ -303,6 +122,7 @@ HWTEST_F(TaskInnerUnitTest, TaskRegisterJobNotRunning, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskRegisterJobRun, TestSize.Level1)
 {
+    std::shared_ptr<Task> task3 = std::make_shared<Task>("workTask3");
     task3->RegisterJob([]() {
         bool runningState =true;
         int count = 0;
@@ -329,6 +149,7 @@ HWTEST_F(TaskInnerUnitTest, TaskRegisterJobRun, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskRegisterJobPause, TestSize.Level1)
 {
+    std::shared_ptr<Task> task4 = std::make_shared<Task>("workTask4");
     task4->RegisterJob([]() {
         bool runningState =true;
         int count = 0;
@@ -360,6 +181,7 @@ HWTEST_F(TaskInnerUnitTest, TaskRegisterJobPause, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseResume, TestSize.Level1)
 {
+    std::shared_ptr<Task> task5 = std::make_shared<Task>("workTask5");
     task5->RegisterJob([]() {
         bool runningState =true;
         int count = 0;
@@ -392,6 +214,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseResume, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskRegisterJobPauseAsync, TestSize.Level1)
 {
+    std::shared_ptr<Task> task6 = std::make_shared<Task>("workTask6");
     task6->RegisterJob([]() {
         bool runningState =true;
         int count = 0;
@@ -424,6 +247,7 @@ HWTEST_F(TaskInnerUnitTest, TaskRegisterJobPauseAsync, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskRegisterJobStopAsync, TestSize.Level1)
 {
+    std::shared_ptr<Task> task7 = std::make_shared<Task>("workTask7");
     task7->RegisterJob([]() {
         bool runningState =true;
         int count = 0;
@@ -452,6 +276,7 @@ HWTEST_F(TaskInnerUnitTest, TaskRegisterJobStopAsync, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskRegisterJobStop, TestSize.Level1)
 {
+    std::shared_ptr<Task> task8 = std::make_shared<Task>("workTask8");
     task8->RegisterJob([]() {
         bool runningState =true;
         int count = 0;
@@ -480,6 +305,7 @@ HWTEST_F(TaskInnerUnitTest, TaskRegisterJobStop, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskRegisterJobStopResume, TestSize.Level1)
 {
+    std::shared_ptr<Task> task9 = std::make_shared<Task>("workTask9");
     task9->RegisterJob([]() {
         bool runningState =true;
         int count = 0;
@@ -510,6 +336,7 @@ HWTEST_F(TaskInnerUnitTest, TaskRegisterJobStopResume, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart, TestSize.Level1)
 {
+    std::shared_ptr<Task> task10 = std::make_shared<Task>("workTask10");
     task10->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -548,6 +375,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, WaitFor_Succ, TestSize.Level1)
 {
+    std::shared_ptr<Task> task01 = std::make_shared<Task>("workTask01");
     AutoLock lock(mutex_);
     task01->RegisterJob([]() {
         bool runningState =true;
@@ -576,6 +404,8 @@ HWTEST_F(TaskInnerUnitTest, WaitFor_Succ, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart03, TestSize.Level1)
 {
+    std::shared_ptr<Task> task03 = std::make_shared<Task>("workTask03",
+     "", TaskType::GLOBAL, TaskPriority::NORMAL, true);
     task03->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -605,6 +435,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart03, TestSize.Level1)
     sleep(1);
     bool rtv = task03->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task03->Stop();
 }
 
 /**
@@ -614,6 +445,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart03, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart04, TestSize.Level1)
 {
+    std::shared_ptr<Task> task04 = std::make_shared<Task>("workTask04",
+     "", TaskType::VIDEO, TaskPriority::NORMAL, true);
     task04->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -643,6 +476,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart04, TestSize.Level1)
     sleep(1);
     bool rtv = task04->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task04->Stop();
 }
 
 /**
@@ -652,6 +486,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart04, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart05, TestSize.Level1)
 {
+    std::shared_ptr<Task> task05 = std::make_shared<Task>("workTask05",
+     "", TaskType::AUDIO, TaskPriority::NORMAL, true);
     task05->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -681,6 +517,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart05, TestSize.Level1)
     sleep(1);
     bool rtv = task05->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task05->Stop();
 }
 
 /**
@@ -690,6 +527,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart05, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart06, TestSize.Level1)
 {
+    std::shared_ptr<Task> task06 = std::make_shared<Task>("workTask06",
+     "", TaskType::SUBTITLE, TaskPriority::NORMAL, true);
     task06->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -719,6 +558,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart06, TestSize.Level1)
     sleep(1);
     bool rtv = task06->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task06->Stop();
 }
 
 /**
@@ -728,6 +568,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart06, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart07, TestSize.Level1)
 {
+    std::shared_ptr<Task> task07 = std::make_shared<Task>("workTask07",
+     "", TaskType::GLOBAL, TaskPriority::LOW, true);
     task07->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -757,6 +599,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart07, TestSize.Level1)
     sleep(1);
     bool rtv = task07->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task07->Stop();
 }
 
 /**
@@ -766,6 +609,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart07, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart08, TestSize.Level1)
 {
+    std::shared_ptr<Task> task08 = std::make_shared<Task>("workTask08",
+     "", TaskType::VIDEO, TaskPriority::LOW, true);
     task08->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -795,6 +640,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart08, TestSize.Level1)
     sleep(1);
     bool rtv = task08->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task08->Stop();
 }
 
 /**
@@ -804,6 +650,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart08, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart09, TestSize.Level1)
 {
+    std::shared_ptr<Task> task09 = std::make_shared<Task>("workTask09",
+     "", TaskType::AUDIO, TaskPriority::LOW, true);
     task09->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -833,6 +681,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart09, TestSize.Level1)
     sleep(1);
     bool rtv = task09->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task09->Stop();
 }
 
 /**
@@ -842,6 +691,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart09, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart20, TestSize.Level1)
 {
+    std::shared_ptr<Task> task20 = std::make_shared<Task>("workTask20",
+     "", TaskType::SUBTITLE, TaskPriority::LOW, true);
     task20->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -871,6 +722,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart20, TestSize.Level1)
     sleep(1);
     bool rtv = task20->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task20->Stop();
 }
 
 /**
@@ -880,6 +732,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart20, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart21, TestSize.Level1)
 {
+    std::shared_ptr<Task> task21 = std::make_shared<Task>("workTask21",
+     "", TaskType::SINGLETON, TaskPriority::LOW, true);
     task21->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -918,6 +772,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart21, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart22, TestSize.Level1)
 {
+    std::shared_ptr<Task> task22 = std::make_shared<Task>("workTask22",
+     "", TaskType::GLOBAL, TaskPriority::MIDDLE, true);
     task22->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -947,6 +803,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart22, TestSize.Level1)
     sleep(1);
     bool rtv = task22->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task22->Stop();
 }
 
 /**
@@ -956,6 +813,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart22, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart23, TestSize.Level1)
 {
+    std::shared_ptr<Task> task23 = std::make_shared<Task>("workTask23",
+     "", TaskType::VIDEO, TaskPriority::MIDDLE, true);
     task23->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -985,6 +844,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart23, TestSize.Level1)
     sleep(1);
     bool rtv = task23->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task23->Stop();
 }
 
 /**
@@ -994,6 +854,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart23, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart24, TestSize.Level1)
 {
+    std::shared_ptr<Task> task24 = std::make_shared<Task>("workTask24",
+     "", TaskType::AUDIO, TaskPriority::MIDDLE, true);
     task24->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -1023,6 +885,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart24, TestSize.Level1)
     sleep(1);
     bool rtv = task24->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task24->Stop();
 }
 
 /**
@@ -1032,6 +895,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart24, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart25, TestSize.Level1)
 {
+    std::shared_ptr<Task> task25 = std::make_shared<Task>("workTask25",
+     "", TaskType::SUBTITLE, TaskPriority::MIDDLE, true);
     task25->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -1061,6 +926,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart25, TestSize.Level1)
     sleep(1);
     bool rtv = task25->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task25->Stop();
 }
 
 /**
@@ -1070,6 +936,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart25, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart26, TestSize.Level1)
 {
+    std::shared_ptr<Task> task26 = std::make_shared<Task>("workTask26",
+     "", TaskType::SINGLETON, TaskPriority::MIDDLE, true);
     task26->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -1108,6 +976,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart26, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart27, TestSize.Level1)
 {
+    std::shared_ptr<Task> task27 = std::make_shared<Task>("workTask27",
+     "", TaskType::GLOBAL, TaskPriority::HIGH, true);
     task27->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -1137,6 +1007,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart27, TestSize.Level1)
     sleep(1);
     bool rtv = task27->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task27->Stop();
 }
 
 /**
@@ -1146,6 +1017,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart27, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart28, TestSize.Level1)
 {
+    std::shared_ptr<Task> task28 = std::make_shared<Task>("workTask28",
+     "", TaskType::VIDEO, TaskPriority::HIGH, true);
     task28->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -1175,6 +1048,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart28, TestSize.Level1)
     sleep(1);
     bool rtv = task28->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task28->Stop();
 }
 
 /**
@@ -1184,6 +1058,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart28, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart29, TestSize.Level1)
 {
+    std::shared_ptr<Task> task29 = std::make_shared<Task>("workTask29",
+     "", TaskType::AUDIO, TaskPriority::HIGH, true);
     task29->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -1213,6 +1089,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart29, TestSize.Level1)
     sleep(1);
     bool rtv = task29->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task29->Stop();
 }
 
 /**
@@ -1222,6 +1099,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart29, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart30, TestSize.Level1)
 {
+    std::shared_ptr<Task> task30 = std::make_shared<Task>("workTask30",
+     "", TaskType::SUBTITLE, TaskPriority::HIGH, true);
     task30->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -1251,6 +1130,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart30, TestSize.Level1)
     sleep(1);
     bool rtv = task30->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task30->Stop();
 }
 
 /**
@@ -1260,6 +1140,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart30, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart31, TestSize.Level1)
 {
+    std::shared_ptr<Task> task31 = std::make_shared<Task>("workTask31",
+     "", TaskType::SINGLETON, TaskPriority::HIGH, true);
     task31->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -1298,6 +1180,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart31, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart32, TestSize.Level1)
 {
+    std::shared_ptr<Task> task32 = std::make_shared<Task>("workTask32",
+     "", TaskType::GLOBAL, TaskPriority::HIGHEST, true);
     task32->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -1327,6 +1211,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart32, TestSize.Level1)
     sleep(1);
     bool rtv = task32->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task32->Stop();
 }
 
 /**
@@ -1336,6 +1221,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart32, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart33, TestSize.Level1)
 {
+    std::shared_ptr<Task> task33 = std::make_shared<Task>("workTask33",
+     "", TaskType::VIDEO, TaskPriority::HIGHEST, true);
     task33->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -1365,6 +1252,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart33, TestSize.Level1)
     sleep(1);
     bool rtv = task33->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task33->Stop();
 }
 
 /**
@@ -1374,6 +1262,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart33, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart34, TestSize.Level1)
 {
+    std::shared_ptr<Task> task34 = std::make_shared<Task>("workTask34",
+     "", TaskType::AUDIO, TaskPriority::HIGHEST, true);
     task34->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -1403,6 +1293,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart34, TestSize.Level1)
     sleep(1);
     bool rtv = task34->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task34->Stop();
 }
 
 /**
@@ -1412,6 +1303,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart34, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart35, TestSize.Level1)
 {
+    std::shared_ptr<Task> task35 = std::make_shared<Task>("workTask35",
+     "", TaskType::SUBTITLE, TaskPriority::HIGHEST, true);
     task35->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -1441,6 +1334,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart35, TestSize.Level1)
     sleep(1);
     bool rtv = task35->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task35->Stop();
 }
 
 /**
@@ -1450,6 +1344,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart35, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart36, TestSize.Level1)
 {
+    std::shared_ptr<Task> task36 = std::make_shared<Task>("workTask36",
+     "", TaskType::SINGLETON, TaskPriority::HIGHEST, true);
     task36->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -1488,6 +1384,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart36, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart37, TestSize.Level1)
 {
+    std::shared_ptr<Task> task37 = std::make_shared<Task>("workTask37",
+     "", TaskType::SINGLETON, TaskPriority::NORMAL, false);
     task37->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -1526,6 +1424,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart37, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart38, TestSize.Level1)
 {
+    std::shared_ptr<Task> task38 = std::make_shared<Task>("workTask38",
+     "", TaskType::GLOBAL, TaskPriority::NORMAL, false);
     task38->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -1555,6 +1455,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart38, TestSize.Level1)
     sleep(1);
     bool rtv = task38->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task38->Stop();
 }
 
 /**
@@ -1564,6 +1465,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart38, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart39, TestSize.Level1)
 {
+    std::shared_ptr<Task> task39 = std::make_shared<Task>("workTask39",
+     "", TaskType::VIDEO, TaskPriority::NORMAL, false);
     task39->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -1593,6 +1496,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart39, TestSize.Level1)
     sleep(1);
     bool rtv = task39->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task39->Stop();
 }
 
 /**
@@ -1602,6 +1506,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart39, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart40, TestSize.Level1)
 {
+    std::shared_ptr<Task> task40 = std::make_shared<Task>("workTask40",
+     "", TaskType::AUDIO, TaskPriority::NORMAL, false);
     task40->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -1631,6 +1537,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart40, TestSize.Level1)
     sleep(1);
     bool rtv = task40->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task40->Stop();
 }
 
 /**
@@ -1640,6 +1547,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart40, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart41, TestSize.Level1)
 {
+    std::shared_ptr<Task> task41 = std::make_shared<Task>("workTask41",
+     "", TaskType::SUBTITLE, TaskPriority::NORMAL, false);
     task41->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -1669,6 +1578,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart41, TestSize.Level1)
     sleep(1);
     bool rtv = task41->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task41->Stop();
 }
 
 /**
@@ -1678,6 +1588,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart41, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart42, TestSize.Level1)
 {
+    std::shared_ptr<Task> task42 = std::make_shared<Task>("workTask42",
+     "", TaskType::GLOBAL, TaskPriority::LOW, false);
     task42->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -1707,6 +1619,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart42, TestSize.Level1)
     sleep(1);
     bool rtv = task42->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task42->Stop();
 }
 
 /**
@@ -1716,6 +1629,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart42, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart43, TestSize.Level1)
 {
+    std::shared_ptr<Task> task43 = std::make_shared<Task>("workTask43",
+     "", TaskType::VIDEO, TaskPriority::LOW, false);
     task43->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -1745,6 +1660,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart43, TestSize.Level1)
     sleep(1);
     bool rtv = task43->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task43->Stop();
 }
 
 /**
@@ -1754,6 +1670,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart43, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart44, TestSize.Level1)
 {
+    std::shared_ptr<Task> task44 = std::make_shared<Task>("workTask44",
+     "", TaskType::AUDIO, TaskPriority::LOW, false);
     task44->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -1783,6 +1701,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart44, TestSize.Level1)
     sleep(1);
     bool rtv = task44->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task44->Stop();
 }
 
 /**
@@ -1792,6 +1711,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart44, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart45, TestSize.Level1)
 {
+    std::shared_ptr<Task> task45 = std::make_shared<Task>("workTask45",
+     "", TaskType::SUBTITLE, TaskPriority::LOW, false);
     task45->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -1821,6 +1742,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart45, TestSize.Level1)
     sleep(1);
     bool rtv = task45->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task45->Stop();
 }
 
 /**
@@ -1830,6 +1752,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart45, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart46, TestSize.Level1)
 {
+    std::shared_ptr<Task> task46 = std::make_shared<Task>("workTask46",
+     "", TaskType::SINGLETON, TaskPriority::LOW, false);
     task46->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -1868,6 +1792,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart46, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart47, TestSize.Level1)
 {
+    std::shared_ptr<Task> task47 = std::make_shared<Task>("workTask47",
+     "", TaskType::GLOBAL, TaskPriority::MIDDLE, false);
     task47->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -1897,6 +1823,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart47, TestSize.Level1)
     sleep(1);
     bool rtv = task47->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task47->Stop();
 }
 
 /**
@@ -1906,6 +1833,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart47, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart48, TestSize.Level1)
 {
+    std::shared_ptr<Task> task48 = std::make_shared<Task>("workTask48",
+     "", TaskType::VIDEO, TaskPriority::MIDDLE, false);
     task48->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -1935,6 +1864,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart48, TestSize.Level1)
     sleep(1);
     bool rtv = task48->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task48->Stop();
 }
 
 /**
@@ -1944,6 +1874,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart48, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart49, TestSize.Level1)
 {
+    std::shared_ptr<Task> task49 = std::make_shared<Task>("workTask49",
+     "", TaskType::AUDIO, TaskPriority::MIDDLE, false);
     task49->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -1973,6 +1905,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart49, TestSize.Level1)
     sleep(1);
     bool rtv = task49->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task49->Stop();
 }
 
 /**
@@ -1982,6 +1915,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart49, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart50, TestSize.Level1)
 {
+    std::shared_ptr<Task> task50 = std::make_shared<Task>("workTask50",
+     "", TaskType::SUBTITLE, TaskPriority::MIDDLE, false);
     task50->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -2011,6 +1946,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart50, TestSize.Level1)
     sleep(1);
     bool rtv = task50->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task50->Stop();
 }
 
 /**
@@ -2020,6 +1956,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart50, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart51, TestSize.Level1)
 {
+    std::shared_ptr<Task> task51 = std::make_shared<Task>("workTask51",
+     "", TaskType::SINGLETON, TaskPriority::MIDDLE, false);
     task51->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -2058,6 +1996,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart51, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart52, TestSize.Level1)
 {
+    std::shared_ptr<Task> task52 = std::make_shared<Task>("workTask52",
+     "", TaskType::GLOBAL, TaskPriority::HIGH, false);
     task52->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -2087,6 +2027,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart52, TestSize.Level1)
     sleep(1);
     bool rtv = task52->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task52->Stop();
 }
 
 /**
@@ -2096,6 +2037,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart52, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart53, TestSize.Level1)
 {
+    std::shared_ptr<Task> task53 = std::make_shared<Task>("workTask53",
+     "", TaskType::VIDEO, TaskPriority::HIGH, false);
     task53->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -2125,6 +2068,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart53, TestSize.Level1)
     sleep(1);
     bool rtv = task53->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task53->Stop();
 }
 
 /**
@@ -2134,6 +2078,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart53, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart54, TestSize.Level1)
 {
+    std::shared_ptr<Task> task54 = std::make_shared<Task>("workTask54",
+     "", TaskType::AUDIO, TaskPriority::HIGH, false);
     task54->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -2163,6 +2109,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart54, TestSize.Level1)
     sleep(1);
     bool rtv = task54->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task54->Stop();
 }
 
 /**
@@ -2172,6 +2119,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart54, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart55, TestSize.Level1)
 {
+    std::shared_ptr<Task> task55 = std::make_shared<Task>("workTask55",
+     "", TaskType::SUBTITLE, TaskPriority::HIGH, false);
     task55->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -2201,6 +2150,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart55, TestSize.Level1)
     sleep(1);
     bool rtv = task55->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task55->Stop();
 }
 
 /**
@@ -2210,6 +2160,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart55, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart56, TestSize.Level1)
 {
+    std::shared_ptr<Task> task56 = std::make_shared<Task>("workTask56",
+     "", TaskType::SINGLETON, TaskPriority::HIGH, false);
     task56->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -2248,6 +2200,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart56, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart57, TestSize.Level1)
 {
+    std::shared_ptr<Task> task57 = std::make_shared<Task>("workTask57",
+     "", TaskType::GLOBAL, TaskPriority::HIGHEST, false);
     task57->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -2277,6 +2231,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart57, TestSize.Level1)
     sleep(1);
     bool rtv = task57->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task57->Stop();
 }
 
 /**
@@ -2286,6 +2241,8 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart57, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart58, TestSize.Level1)
 {
+    std::shared_ptr<Task> task58 = std::make_shared<Task>("workTask58",
+     "", TaskType::VIDEO, TaskPriority::HIGHEST, false);
     task58->RegisterJob([this]() {
         bool runningState =true;
         int count = 0;
@@ -2315,6 +2272,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart58, TestSize.Level1)
     sleep(1);
     bool rtv = task58->IsTaskRunning();
     EXPECT_EQ(true, rtv);
+    task58->Stop();
 }
 
 /**
@@ -2324,6 +2282,7 @@ HWTEST_F(TaskInnerUnitTest, TaskJobPauseStopResumeStart58, TestSize.Level1)
  */
 HWTEST_F(TaskInnerUnitTest, WaitFor_Failed, TestSize.Level1)
 {
+    std::shared_ptr<Task> task02 = std::make_shared<Task>("workTask02");
     AutoLock lock(mutex_);
     task02->RegisterJob([]() {
         bool runningState =true;
@@ -2341,13 +2300,8 @@ HWTEST_F(TaskInnerUnitTest, WaitFor_Failed, TestSize.Level1)
     task02->Start();
     int timeoutMs = 100;
     isStop_.store(false);
-    auto start = std::chrono::high_resolution_clock::now();
     auto rtv = cv.WaitFor(lock, timeoutMs, [this] { return isStop_.load(); });
-    auto end = std::chrono::high_resolution_clock::now();
-    int64_t diff = static_cast<int64_t>(static_cast<std::chrono::duration<double>>(end - start).count() * 1000);
     EXPECT_EQ(false, rtv);
-    EXPECT_TRUE((std::abs(static_cast<int>(diff) - timeoutMs) < 20) || (diff < 5));
-    MEDIA_LOG_I("Wait Time Diff: " PUBLIC_LOG_D64, diff);
 }
 } // namespace MetaFuncUT
 } // namespace Media

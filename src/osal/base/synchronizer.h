@@ -124,6 +124,7 @@ public:
     }
 
 private:
+    static constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
     Mutex mutex_;
     ConditionVariable cv_;
     std::string name_;

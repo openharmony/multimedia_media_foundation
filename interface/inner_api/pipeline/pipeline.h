@@ -51,6 +51,8 @@ public:
 
     Status Release();
 
+    Status SetPlayRange(int64_t start, int64_t end);
+
     Status AddHeadFilters(std::vector<std::shared_ptr<Filter>> filters);
 
     Status RemoveHeadFilter(const std::shared_ptr<Filter>& filter);

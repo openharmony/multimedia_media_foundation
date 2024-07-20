@@ -24,6 +24,10 @@
 
 #include <mutex>
 
+namespace {
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
+}
+
 namespace OHOS {
 namespace Media {
 namespace {
@@ -80,11 +84,13 @@ TaskInner::~TaskInner()
     MEDIA_LOG_D_T(PUBLIC_LOG_S " dtor", name_.c_str());
 }
 
-void TaskInner::UpdataDelayTime(int64_t delayUs)
+void TaskInner::UpdateDelayTime(int64_t delayUs)
 {
-    FALSE_RETURN_MSG(singleLoop_,
-     "task " PUBLIC_LOG_S " UpdataDelayTime do nothing", name_.c_str());
-    MEDIA_LOG_D_T("task " PUBLIC_LOG_S " UpdataDelayTime enter topProcessUs:" PUBLIC_LOG_D64
+    if (!singleLoop_) {
+        MEDIA_LOG_D_T("task " PUBLIC_LOG_S " UpdateDelayTime do nothing", name_.c_str());
+        return;
+    }
+    MEDIA_LOG_D_T("task " PUBLIC_LOG_S " UpdateDelayTime enter topProcessUs:" PUBLIC_LOG_D64
         ", delayUs:" PUBLIC_LOG_D64, name_.c_str(), topProcessUs_, delayUs);
     pipelineThread_->LockJobState();
     AutoLock lock(stateMutex_);
@@ -94,7 +100,7 @@ void TaskInner::UpdataDelayTime(int64_t delayUs)
     }
     topProcessUs_ = GetNowUs() + delayUs;
     pipelineThread_->UnLockJobState(true);
-    MEDIA_LOG_D_T("task " PUBLIC_LOG_S " UpdataDelayTime exit topProcessUs:" PUBLIC_LOG_D64,
+    MEDIA_LOG_D_T("task " PUBLIC_LOG_S " UpdateDelayTime exit topProcessUs:" PUBLIC_LOG_D64,
         name_.c_str(), topProcessUs_);
 }
 

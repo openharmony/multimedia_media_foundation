@@ -36,6 +36,7 @@ enum struct PluginEventType : int32_t {
     EVENT_CHANNEL_CLOSED,
     SOURCE_DRM_INFO_UPDATE,
     BUFFERING_START,
+    BUFFERING_PERCENT,
     BUFFERING_END,
     VIDEO_SIZE_CHANGE,
     SOURCE_BITRATE_START,
@@ -55,6 +56,7 @@ struct PluginEvent {
     Any param;
     std::string description;
 };
+
 } // namespace Plugins
 } // namespace Media
 } // namespace OHOS
