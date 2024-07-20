@@ -164,15 +164,11 @@ if (hst_is_lite_sys) {
     }
     install_enable = true
 
-    deps = [
-      ":media_monitor.para",
-      ":media_monitor.para.dac",
-      ":media_monitor_common",
-    ]
-
     sources = [
+      "server/src/audio_buffer_cache.cpp",
       "server/src/audio_memo.cpp",
       "server/src/event_aggregate.cpp",
+      "server/src/media_audio_encoder.cpp",
       "server/src/media_event_base_writer.cpp",
       "server/src/media_monitor_policy.cpp",
       "server/src/media_monitor_service.cpp",
@@ -186,6 +182,14 @@ if (hst_is_lite_sys) {
       "server/include",
       "common/include",
       "../../interface/inner_api/common/",
+      "../../interface/inner_api/",
+    ]
+
+    deps = [
+      ":media_monitor.para",
+      ":media_monitor.para.dac",
+      ":media_monitor_common",
+      "//foundation/multimedia/media_foundation/src:media_foundation",
     ]
 
     external_deps = [
@@ -206,6 +210,8 @@ if (hst_is_lite_sys) {
       defines += [ "MONITOR_ENABLE_HISYSEVENT" ]
       external_deps += [ "hisysevent:libhisysevent" ]
     }
+
+    public_external_deps = [ "ffmpeg:libohosffmpeg" ]
 
     subsystem_name = "multimedia"
     part_name = "media_foundation"
@@ -241,9 +247,13 @@ if (hst_is_lite_sys) {
       "server/include",
       "common/include",
       "../../interface/inner_api/common/",
+      "../../interface/inner_api/",
     ]
 
-    deps = [ ":media_monitor_common" ]
+    deps = [
+      ":media_monitor_common",
+      "//foundation/multimedia/media_foundation/src:media_foundation",
+    ]
 
     external_deps = [
       "c_utils:utils",

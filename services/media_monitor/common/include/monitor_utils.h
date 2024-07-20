@@ -15,10 +15,18 @@
 
 #ifndef I_MONITOR_UTILS_H
 #define I_MONITOR_UTILS_H
+#include <string>
 
 namespace OHOS {
 namespace Media {
 namespace MediaMonitor {
+
+const std::string COMMERCIAL_VERSION = "commercial";
+const std::string BETA_VERSION = "beta";
+const std::string DEFAULT_DUMP_TYPE = "R_AND_D";
+const std::string BETA_DUMP_TYPE = "BETA";
+
+bool IsRealPath(const std::string& inputPath);
 
 class TimeUtils {
 public:

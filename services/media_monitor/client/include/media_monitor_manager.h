@@ -16,7 +16,8 @@
 #ifndef ST_MEDIA_MONITOR_MANAGER_H
 #define ST_MEDIA_MONITOR_MANAGER_H
 
-#include "media_monitor_base.h"
+#include "event_bean.h"
+#include "monitor_utils.h"
 
 namespace OHOS {
 namespace Media {
@@ -24,22 +25,26 @@ namespace MediaMonitor {
 
 class MediaMonitorManager {
 public:
-    static MediaMonitorManager& GetInstance()
-    {
-        static MediaMonitorManager monitorManager;
-        return monitorManager;
-    }
+    static MediaMonitorManager& GetInstance();
 
     void WriteLogMsg(std::shared_ptr<EventBean> &bean);
 
     void GetAudioRouteMsg(std::map<PerferredType,
         std::shared_ptr<MonitorDeviceInfo>> &perferredDevices);
 
+    void WriteAudioBuffer(const std::string &fileName, void *ptr, size_t size);
+
+    int32_t SetMediaParameters(const std::vector<std::pair<std::string, std::string>>& kvpairs);
+
     static void MediaMonitorDied(pid_t pid);
 
 private:
-    MediaMonitorManager() {}
+    MediaMonitorManager();
     ~MediaMonitorManager() {}
+    bool dumpEnable_ = false;
+    std::string dumpType_ = DEFAULT_DUMP_TYPE;
+    std::string versionType_ = "unknow";
+    std::time_t dumpStartTime_;
 };
 } // namespace MediaMonitor
 } // namespace Media
