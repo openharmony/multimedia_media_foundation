@@ -65,6 +65,83 @@ void MediaMonitorStub::HandleGetAudioRouteMsg(MessageParcel &data, MessageParcel
     reply.WriteInt32(ret);
     MEDIA_LOG_I("MediaMonitorStub::HandleGetAudioRouteMsg out");
 }
+
+void MediaMonitorStub::HandleSetMediaParams(MessageParcel &data, MessageParcel &reply)
+{
+    std::string dumpType;
+    std::string dumpEnable;
+    if (data.ReadString(dumpType) == false) {
+        MEDIA_LOG_E("MediaMonitorStub::HandleSetMediaParams read type failed");
+        reply.WriteInt32(ERR_INVALID_PARAM);
+        return;
+    }
+    if (data.ReadString(dumpEnable) == false) {
+        MEDIA_LOG_E("MediaMonitorStub::HandleSetMediaParams read type failed");
+        reply.WriteInt32(ERR_INVALID_PARAM);
+        return;
+    }
+    int32_t ret = SetMediaParameters(dumpType, dumpEnable);
+    reply.WriteInt32(ret);
+}
+
+void MediaMonitorStub::HandleSendPcmBuffer(MessageParcel &data, MessageParcel &reply)
+{
+    std::shared_ptr<AVBuffer> buffer = AVBuffer::CreateAVBuffer();
+    std::string fileName;
+    if (buffer->ReadFromMessageParcel(data) == false) {
+        MEDIA_LOG_E("MediaMonitorStub::HandleSendPcmBuffer read data failed");
+        reply.WriteInt32(ERR_INVALID_PARAM);
+        return;
+    }
+    if (data.ReadString(fileName) == false) {
+        MEDIA_LOG_E("MediaMonitorStub::HandleSendPcmBuffer read name failed");
+        reply.WriteInt32(ERR_INVALID_PARAM);
+        return;
+    }
+    int32_t ret = WriteAudioBuffer(fileName, buffer);
+    reply.WriteInt32(ret);
+}
+
+void MediaMonitorStub::HandleGetInputBuffer(MessageParcel &data, MessageParcel &reply)
+{
+    int32_t size;
+    std::shared_ptr<AVBuffer> buffer = nullptr;
+    if (data.ReadInt32(size) == false) {
+        MEDIA_LOG_E("MediaMonitorStub::HandleGetInputBuffer get size failed");
+        reply.WriteInt32(ERR_INVALID_PARAM);
+        return;
+    }
+    int32_t ret = GetInputBuffer(buffer, size);
+    if (buffer == nullptr) {
+        MEDIA_LOG_E("MediaMonitorStub::HandleGetInputBuffer failed");
+        reply.WriteInt32(ret);
+        return;
+    }
+    if (buffer->WriteToMessageParcel(reply) == false) {
+        MEDIA_LOG_E("MediaMonitorStub::HandleGetInputBuffer write data failed");
+        reply.WriteInt32(ERR_OPERATION_FAILED);
+        return;
+    }
+    reply.WriteInt32(ret);
+}
+
+void MediaMonitorStub::HandleInputBufferFilled(MessageParcel &data, MessageParcel &reply)
+{
+    std::string fileName;
+    uint64_t bufferId;
+    if (data.ReadString(fileName) == false) {
+        MEDIA_LOG_E("MediaMonitorStub::HandleInputBufferFilled read name failed");
+        reply.WriteInt32(ERR_INVALID_PARAM);
+        return;
+    }
+    if (data.ReadUint64(bufferId) == false) {
+        MEDIA_LOG_E("MediaMonitorStub::HandleInputBufferFilled read id failed");
+        reply.WriteInt32(ERR_INVALID_PARAM);
+        return;
+    }
+    int32_t ret = InputBufferFilled(fileName, bufferId);
+    reply.WriteInt32(ret);
+}
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS

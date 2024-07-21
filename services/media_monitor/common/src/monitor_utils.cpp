@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+#include <climits>
 #include <ctime>
 #include "log.h"
 #include "monitor_utils.h"
@@ -26,6 +27,15 @@ namespace Media {
 namespace MediaMonitor {
 
 static constexpr int NANOSECOND_TO_SECOND = 1000000000;
+
+bool IsRealPath(const std::string& inputPath)
+{
+    if (inputPath.length() > PATH_MAX) {
+        MEDIA_LOG_E("invalid path");
+        return false;
+    }
+    return true;
+}
 
 uint64_t TimeUtils::GetCurSec()
 {

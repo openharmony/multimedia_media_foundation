@@ -76,6 +76,73 @@ int32_t MediaMonitorClient::GetAudioRouteMsg(std::map<PerferredType,
     }
     return reply.ReadInt32();
 }
+
+int32_t MediaMonitorClient::WriteAudioBuffer(const std::string &fileName, std::shared_ptr<AVBuffer> &buffer)
+{
+    MessageParcel data;
+    MessageParcel reply;
+    MessageOption option;
+    FALSE_RETURN_V_MSG_E(buffer != nullptr, ERR_INVALID_DATA, "input buffer nullptr");
+    data.WriteInterfaceToken(GetDescriptor());
+    buffer->WriteToMessageParcel(data);
+    data.WriteString(fileName);
+    int32_t error = Remote()->SendRequest(
+        static_cast<uint32_t>(MediaMonitorInterfaceCode::WRITE_AUDIO_BUFFER), data, reply, option);
+    FALSE_RETURN_V_MSG_E(error == ERR_NONE, error, "send pcm buffer failed %{public}d", error);
+    return reply.ReadInt32();
+}
+
+int32_t MediaMonitorClient::GetInputBuffer(std::shared_ptr<AVBuffer> &buffer, int32_t size)
+{
+    MessageParcel data;
+    MessageParcel reply;
+    MessageOption option(MessageOption::TF_SYNC);
+
+    data.WriteInterfaceToken(GetDescriptor());
+    data.WriteInt32(size);
+    int32_t error = Remote()->SendRequest(
+        static_cast<uint32_t>(MediaMonitorInterfaceCode::GET_INPUT_BUFFER), data, reply, option);
+    FALSE_RETURN_V_MSG_E(error == ERR_NONE, error, "get pcm buffer failed %{public}d", error);
+
+    buffer = AVBuffer::CreateAVBuffer();
+    FALSE_RETURN_V_MSG_E(buffer != nullptr, ERR_INVALID_DATA, "create buffer failed");
+    if (buffer->ReadFromMessageParcel(reply) == false) {
+        MEDIA_LOG_E("read data failed");
+        return reply.ReadInt32();
+    }
+    FALSE_RETURN_V_MSG_E(buffer != nullptr, ERR_INVALID_DATA, "get input buffer failed");
+    return reply.ReadInt32();
+}
+
+int32_t MediaMonitorClient::InputBufferFilled(std::string fileName, uint64_t bufferId)
+{
+    MessageParcel data;
+    MessageParcel reply;
+    MessageOption option;
+
+    data.WriteInterfaceToken(GetDescriptor());
+    data.WriteString(fileName);
+    data.WriteUint64(bufferId);
+    int32_t error = Remote()->SendRequest(
+        static_cast<uint32_t>(MediaMonitorInterfaceCode::INPUT_BUFFER_FILL), data, reply, option);
+    FALSE_RETURN_V_MSG_E(error == ERR_NONE, error, "send request error %{public}d", error);
+    return reply.ReadInt32();
+}
+
+int32_t MediaMonitorClient::SetMediaParameters(const std::string& dumpType, const std::string& dumpEnable)
+{
+    MessageParcel data;
+    MessageParcel reply;
+    MessageOption option(MessageOption::TF_SYNC);
+
+    data.WriteInterfaceToken(GetDescriptor());
+    data.WriteString(dumpType);
+    data.WriteString(dumpEnable);
+    int32_t error = Remote()->SendRequest(
+        static_cast<uint32_t>(MediaMonitorInterfaceCode::SET_MEDIA_PARAMS), data, reply, option);
+    FALSE_RETURN_V_MSG_E(error == ERR_NONE, error, "set media param error %{public}d", error);
+    return reply.ReadInt32();
+}
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS

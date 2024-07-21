@@ -21,6 +21,7 @@
 #include "iremote_proxy.h"
 #include "iremote_stub.h"
 #include "event_bean.h"
+#include "buffer/avbuffer.h"
 
 namespace OHOS {
 namespace Media {
@@ -43,6 +44,14 @@ public:
      */
     virtual int32_t GetAudioRouteMsg(std::map<PerferredType,
         std::shared_ptr<MonitorDeviceInfo>> &perferredDevices) = 0;
+
+    virtual int32_t WriteAudioBuffer(const std::string &fileName, std::shared_ptr<AVBuffer> &buffer) = 0;
+
+    virtual int32_t GetInputBuffer(std::shared_ptr<AVBuffer> &buffer, int32_t size) = 0;
+
+    virtual int32_t InputBufferFilled(std::string fileName, uint64_t bufferId) = 0;
+
+    virtual int32_t SetMediaParameters(const std::string& dumpType, const std::string& dumpEnable) = 0;
 
 public:
     DECLARE_INTERFACE_DESCRIPTOR(u"IMediaMonitor");
