@@ -513,7 +513,16 @@ int32_t FFmpegMuxerPlugin::IoWrite(void* opaque, uint8_t* buf, int bufSize)
     if (ioCtx && ioCtx->dataSink_) {
         auto buffer = std::make_shared<Buffer>();
         auto bufferMem = buffer->AllocMemory(nullptr, bufSize);
-        buffer->GetMemory()->Write(buf, bufSize, 0); // copy to buffer
+        if (bufferMem == nullptr) {
+            MEDIA_LOG_E("IoWrite buffer AllocMemory nullptr");
+            return -1;
+        }
+        auto bufferGetMem = buffer->GetMemory();
+        if (bufferGetMem == nullptr) {
+            MEDIA_LOG_E("IoWrite buffer GetMemory nullptr");
+            return -1;
+        }
+        bufferGetMem->Write(buf, bufSize, 0); // copy to buffer
         auto res = ioCtx->dataSink_->WriteAt(ioCtx->pos_, buffer);
         if (res == Status::OK) {
             ioCtx->pos_ += bufferMem->GetSize();

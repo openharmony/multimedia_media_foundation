@@ -117,6 +117,9 @@ int32_t AVBufferQueueProducerStub::OnAttachBuffer(
     MessageParcel& arguments, MessageParcel& reply, MessageOption& option)
 {
     auto buffer = AVBuffer::CreateAVBuffer();
+    if (buffer == nullptr) {
+        return -1;
+    }
     buffer->ReadFromMessageParcel(arguments);
     auto isFilled = arguments.ReadBool();
 

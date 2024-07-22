@@ -544,6 +544,10 @@ Status AudioFfmpegDecoderPlugin::ReceiveFrameSucc(const std::shared_ptr<Buffer>&
     size_t outputSize =
             static_cast<size_t>(samples) * static_cast<size_t>(bytePerSample) * static_cast<size_t>(channels);
     auto ioInfoMem = ioInfo->GetMemory();
+    if (ioInfoMem == nullptr) {
+        MEDIA_LOG_E("ReceiveFrameSucc ioInfo GetMemory nullptr");
+        return Status::ERROR_UNKNOWN;
+    }
     if (ioInfoMem->GetCapacity() < outputSize) {
         MEDIA_LOG_W("output buffer size is not enough");
         return Status::ERROR_NO_MEMORY;
