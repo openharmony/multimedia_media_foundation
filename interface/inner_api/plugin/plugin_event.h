@@ -41,6 +41,7 @@ enum struct PluginEventType : int32_t {
     CACHED_DURATION,
     VIDEO_SIZE_CHANGE,
     SOURCE_BITRATE_START,
+    EVENT_BUFFER_PROGRESS,
 };
 
 enum class NetworkClientErrorCode : int32_t {
