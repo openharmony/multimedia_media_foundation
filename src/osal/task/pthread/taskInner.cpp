@@ -25,7 +25,7 @@
 #include <mutex>
 
 namespace {
-constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_ONLY_PRERELEASE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
 }
 
 namespace OHOS {
@@ -50,7 +50,7 @@ TaskInner::TaskInner(const std::string& name, const std::string& groupId, TaskTy
     bool singleLoop)
     : name_(std::move(name)), runningState_(RunningState::PAUSED), singleLoop_(singleLoop)
 {
-    MEDIA_LOG_I_T(">> " PUBLIC_LOG_S " groupId:" PUBLIC_LOG_S " type:%{public}d ctor",
+    MEDIA_LOG_I(">> " PUBLIC_LOG_S " groupId:" PUBLIC_LOG_S " type:%{public}d ctor",
         name_.c_str(), groupId.c_str(), type);
     if (type == TaskType::SINGLETON) {
         std::string newName = name_ + std::to_string(++singletonTaskId);
@@ -62,13 +62,13 @@ TaskInner::TaskInner(const std::string& name, const std::string& groupId, TaskTy
 
 void TaskInner::Init()
 {
-    MEDIA_LOG_I_T(">> " PUBLIC_LOG_S " Init", name_.c_str());
+    MEDIA_LOG_I(">> " PUBLIC_LOG_S " Init", name_.c_str());
     pipelineThread_->AddTask(shared_from_this());
 }
 
 void TaskInner::DeInit()
 {
-    MEDIA_LOG_I_T(PUBLIC_LOG_S " DeInit", name_.c_str());
+    MEDIA_LOG_I(PUBLIC_LOG_S " DeInit", name_.c_str());
     pipelineThread_->RemoveTask(shared_from_this());
     {
         AutoLock lock1(jobMutex_);
@@ -76,21 +76,21 @@ void TaskInner::DeInit()
         runningState_ = RunningState::STOPPED;
         topProcessUs_ = -1;
     }
-    MEDIA_LOG_I_T(PUBLIC_LOG_S " DeInit done", name_.c_str());
+    MEDIA_LOG_I(PUBLIC_LOG_S " DeInit done", name_.c_str());
 }
 
 TaskInner::~TaskInner()
 {
-    MEDIA_LOG_D_T(PUBLIC_LOG_S " dtor", name_.c_str());
+    MEDIA_LOG_D(PUBLIC_LOG_S " dtor", name_.c_str());
 }
 
 void TaskInner::UpdateDelayTime(int64_t delayUs)
 {
     if (!singleLoop_) {
-        MEDIA_LOG_D_T("task " PUBLIC_LOG_S " UpdateDelayTime do nothing", name_.c_str());
+        MEDIA_LOG_D("task " PUBLIC_LOG_S " UpdateDelayTime do nothing", name_.c_str());
         return;
     }
-    MEDIA_LOG_D_T("task " PUBLIC_LOG_S " UpdateDelayTime enter topProcessUs:" PUBLIC_LOG_D64
+    MEDIA_LOG_D("task " PUBLIC_LOG_S " UpdateDelayTime enter topProcessUs:" PUBLIC_LOG_D64
         ", delayUs:" PUBLIC_LOG_D64, name_.c_str(), topProcessUs_, delayUs);
     pipelineThread_->LockJobState();
     AutoLock lock(stateMutex_);
@@ -100,7 +100,7 @@ void TaskInner::UpdateDelayTime(int64_t delayUs)
     }
     topProcessUs_ = GetNowUs() + delayUs;
     pipelineThread_->UnLockJobState(true);
-    MEDIA_LOG_D_T("task " PUBLIC_LOG_S " UpdateDelayTime exit topProcessUs:" PUBLIC_LOG_D64,
+    MEDIA_LOG_D("task " PUBLIC_LOG_S " UpdateDelayTime exit topProcessUs:" PUBLIC_LOG_D64,
         name_.c_str(), topProcessUs_);
 }
 
@@ -112,7 +112,7 @@ void TaskInner::Start()
     runningState_ = RunningState::STARTED;
     if (singleLoop_) {
         if (!job_) {
-            MEDIA_LOG_D_T("task " PUBLIC_LOG_S " Start, job invalid", name_.c_str());
+            MEDIA_LOG_D("task " PUBLIC_LOG_S " Start, job invalid", name_.c_str());
         }
         topProcessUs_ = GetNowUs();
     } else {
@@ -125,12 +125,12 @@ void TaskInner::Start()
 void TaskInner::Stop()
 {
     if (pipelineThread_->IsRunningInSelf()) {
-        MEDIA_LOG_W_T(PUBLIC_LOG_S " Stop done in self task", name_.c_str());
+        MEDIA_LOG_W(PUBLIC_LOG_S " Stop done in self task", name_.c_str());
         runningState_ = RunningState::STOPPED;
         topProcessUs_ = -1;
         return;
     }
-    MEDIA_LOG_I_T(">> " PUBLIC_LOG_S " Stop", name_.c_str());
+    MEDIA_LOG_I(">> " PUBLIC_LOG_S " Stop", name_.c_str());
     AutoLock lock1(jobMutex_);
     pipelineThread_->LockJobState();
     AutoLock lock2(stateMutex_);
@@ -141,18 +141,18 @@ void TaskInner::Stop()
     runningState_ = RunningState::STOPPED;
     topProcessUs_ = -1;
     pipelineThread_->UnLockJobState(true);
-    MEDIA_LOG_I_T(PUBLIC_LOG_S " Stop <<", name_.c_str());
+    MEDIA_LOG_I(PUBLIC_LOG_S " Stop <<", name_.c_str());
 }
 
 void TaskInner::StopAsync()
 {
     if (pipelineThread_->IsRunningInSelf()) {
-        MEDIA_LOG_W_T(PUBLIC_LOG_S " Stop done in self task", name_.c_str());
+        MEDIA_LOG_W(PUBLIC_LOG_S " Stop done in self task", name_.c_str());
         runningState_ = RunningState::STOPPED;
         topProcessUs_ = -1;
         return;
     }
-    MEDIA_LOG_I_T(PUBLIC_LOG_S " StopAsync", name_.c_str());
+    MEDIA_LOG_I(PUBLIC_LOG_S " StopAsync", name_.c_str());
     pipelineThread_->LockJobState();
     AutoLock lock(stateMutex_);
     bool stateChanged = false;
@@ -227,13 +227,13 @@ void TaskInner::PauseAsync()
 
 void TaskInner::RegisterJob(const std::function<int64_t()>& job)
 {
-    MEDIA_LOG_I_T(PUBLIC_LOG_S " RegisterHandler", name_.c_str());
+    MEDIA_LOG_I(PUBLIC_LOG_S " RegisterHandler", name_.c_str());
     job_ = std::move(job);
 }
 
 void TaskInner::SubmitJobOnce(const std::function<void()>& job, int64_t delayUs, bool wait)
 {
-    MEDIA_LOG_D_T(PUBLIC_LOG_S " SubmitJobOnce", name_.c_str());
+    MEDIA_LOG_D(PUBLIC_LOG_S " SubmitJobOnce", name_.c_str());
     int64_t time = InsertJob(job, delayUs, false);
     if (wait) {
         AutoLock lock(stateMutex_);
@@ -243,7 +243,7 @@ void TaskInner::SubmitJobOnce(const std::function<void()>& job, int64_t delayUs,
 
 void TaskInner::SubmitJob(const std::function<void()>& job, int64_t delayUs, bool wait)
 {
-    MEDIA_LOG_D_T(PUBLIC_LOG_S " SubmitJob delayUs:%{public}" PRId64, name_.c_str(), delayUs);
+    MEDIA_LOG_D(PUBLIC_LOG_S " SubmitJob delayUs:%{public}" PRId64, name_.c_str(), delayUs);
     int64_t time = InsertJob(job, delayUs, true);
     if (wait) {
         AutoLock lock(stateMutex_);
@@ -334,13 +334,13 @@ int64_t TaskInner::InsertJob(const std::function<void()>& job, int64_t delayUs, 
     int64_t processTime = nowUs + delayUs;
     if (inJobQueue) {
         while (jobQueue_.find(processTime) != jobQueue_.end()) { // To prevent dropping job unexpectedly
-            MEDIA_LOG_W_T("DUPLICATIVE jobQueue_ TIMESTAMP!!!");
+            MEDIA_LOG_W("DUPLICATIVE jobQueue_ TIMESTAMP!!!");
             processTime++;
         }
         jobQueue_[processTime] = std::move(job);
     } else {
         while (msgQueue_.find(processTime) != msgQueue_.end()) { // To prevent dropping job unexpectedly
-            MEDIA_LOG_W_T("DUPLICATIVE msgQueue_ TIMESTAMP!!!");
+            MEDIA_LOG_W("DUPLICATIVE msgQueue_ TIMESTAMP!!!");
             processTime++;
         }
         msgQueue_[processTime] = std::move(job);

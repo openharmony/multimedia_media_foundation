@@ -54,6 +54,8 @@ inline std::string HstGetFileName(const std::string &file)
 #define LOG_DOMAIN_PLAYER        0xD002B2B
 #undef LOG_DOMAIN_RECORDER
 #define LOG_DOMAIN_RECORDER      0xD002B2C
+#undef LOG_DOMAIN_HIPLAYER
+#define LOG_DOMAIN_HIPLAYER      0xD002B2D
 #ifndef LOG_TAG
 #define LOG_TAG "HiStreamer"
 #endif
@@ -92,6 +94,10 @@ inline std::string HstGetFileName(const std::string &file)
         op(LABEL, "(" PUBLIC_LOG_S ", " PUBLIC_LOG_D32 "): " fmt, HstGetFileName(std::string(__FILE__)).c_str(), \
            __LINE__, ##args);                                                                                    \
     } while (0)
+#define HST_HILOG_SHORT(op, fmt, args...)                        \
+    do {                                                         \
+        op(LABEL, "#" PUBLIC_LOG_D32 " " fmt, __LINE__, ##args); \
+    } while (0)
 #define HST_HILOG_NO_RELEASE(op, fmt, args...)                                  \
     do {                                                                        \
         op(LOG_ONLY_PRERELEASE, "(" PUBLIC_LOG_S ", " PUBLIC_LOG_D32 "): " fmt, \
@@ -124,6 +130,11 @@ inline std::string HstGetFileName(const std::string &file)
 #define MEDIA_LOG_W_NO_RELEASE(fmt, ...) HST_HILOG_NO_RELEASE(HILOG_WARN, fmt, ##__VA_ARGS__)
 #define MEDIA_LOG_E_NO_RELEASE(fmt, ...) HST_HILOG_NO_RELEASE(HILOG_ERROR, fmt, ##__VA_ARGS__)
 #define MEDIA_LOG_F_NO_RELEASE(fmt, ...) HST_HILOG_NO_RELEASE(HILOG_FATAL, fmt, ##__VA_ARGS__)
+#define MEDIA_LOG_D_SHORT(fmt, ...) HST_HILOG_SHORT(::OHOS::HiviewDFX::HiLog::Debug, fmt, ##__VA_ARGS__)
+#define MEDIA_LOG_I_SHORT(fmt, ...) HST_HILOG_SHORT(::OHOS::HiviewDFX::HiLog::Info, fmt, ##__VA_ARGS__)
+#define MEDIA_LOG_W_SHORT(fmt, ...) HST_HILOG_SHORT(::OHOS::HiviewDFX::HiLog::Warn, fmt, ##__VA_ARGS__)
+#define MEDIA_LOG_E_SHORT(fmt, ...) HST_HILOG_SHORT(::OHOS::HiviewDFX::HiLog::Error, fmt, ##__VA_ARGS__)
+#define MEDIA_LOG_F_SHORT(fmt, ...) HST_HILOG_SHORT(::OHOS::HiviewDFX::HiLog::Fatal, fmt, ##__VA_ARGS__)
 #define MEDIA_LOG_I_FALSE_D(con, fmt, ...) \
     HST_HILOG_WITH_LEVEL_JUDGE(::OHOS::HiviewDFX::HiLog::Info, ::OHOS::HiviewDFX::HiLog::Debug, con, fmt, ##__VA_ARGS__)
 
