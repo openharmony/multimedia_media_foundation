@@ -43,6 +43,7 @@ if (hst_is_standard_sys) {
       "ffmpeg:libohosffmpeg",
       "graphic_surface:surface",
       "hilog:libhilog",
+      "audio_framework:audio_client",
     ]
     sanitize = {
       cfi = true

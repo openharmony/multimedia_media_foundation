@@ -121,6 +121,7 @@ ohos_source_set("ffmpeg_demuxers") {
     external_deps = [
       "graphic_surface:surface",
       "hilog:libhilog",
+      "ipc:ipc_core",
     ]
   }
 
@@ -152,6 +153,7 @@ ohos_source_set("ffmpeg_audio_encoders") {
     external_deps = [
       "graphic_surface:surface",
       "hilog:libhilog",
+      "ipc:ipc_core",
     ]
   }
   if (hst_is_lite_sys) {
@@ -237,6 +239,7 @@ ohos_source_set("ffmpeg_muxers") {
     external_deps = [
       "graphic_surface:surface",
       "hilog:libhilog",
+      "ipc:ipc_core",
     ]
   }
   if (hst_is_lite_sys) {
