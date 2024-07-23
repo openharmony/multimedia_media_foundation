@@ -78,7 +78,8 @@
               "curl",
               "safwk",
               "samgr",
-              "bundle_framework"
+              "bundle_framework",
+              "openmax"
           ]
         },
         "build": {
