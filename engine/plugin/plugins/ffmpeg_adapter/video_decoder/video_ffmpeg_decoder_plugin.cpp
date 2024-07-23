@@ -455,6 +455,10 @@ Status VideoFfmpegDecoderPlugin::SendBufferLocked(const std::shared_ptr<Buffer>&
     }
     if (inputBuffer && !(inputBuffer->flag & BUFFER_FLAG_EOS)) {
         auto inputMemory = inputBuffer->GetMemory();
+        if (inputMemory == nullptr) {
+            MEDIA_LOG_E("SendBufferLocked inputBuffer GetMemory nullptr");
+            return Status::ERROR_UNKNOWN;
+        }
         const uint8_t* ptr = inputMemory->GetReadOnlyData();
         auto bufferLength = inputMemory->GetSize();
         size_t bufferEnd = bufferLength;
@@ -557,6 +561,10 @@ Status VideoFfmpegDecoderPlugin::ScaleVideoFrame()
 Status VideoFfmpegDecoderPlugin::WriteYuvDataStride(const std::shared_ptr<Buffer>& frameBuffer, int32_t stride)
 {
     auto frameBufferMem = frameBuffer->GetMemory();
+    if (frameBufferMem == nullptr) {
+        MEDIA_LOG_E("WriteYuvDataStride frameBuffer GetMemory nullptr");
+        return Status::ERROR_UNKNOWN;
+    }
     size_t srcPos = 0;
     size_t dstPos = 0;
     if (pixelFormat_ == VideoPixelFormat::YUV420P) {
@@ -599,6 +607,10 @@ Status VideoFfmpegDecoderPlugin::WriteYuvDataStride(const std::shared_ptr<Buffer
 Status VideoFfmpegDecoderPlugin::WriteRgbDataStride(const std::shared_ptr<Buffer>& frameBuffer, int32_t stride)
 {
     auto frameBufferMem = frameBuffer->GetMemory();
+    if (frameBufferMem == nullptr) {
+        MEDIA_LOG_E("WriteRgbDataStride frameBuffer GetMemory nullptr");
+        return Status::ERROR_UNKNOWN;
+    }
     if (pixelFormat_ == VideoPixelFormat::RGBA || pixelFormat_ == VideoPixelFormat::ARGB ||
         pixelFormat_ == VideoPixelFormat::ABGR || pixelFormat_ == VideoPixelFormat::BGRA) {
         size_t srcPos = 0;
@@ -659,6 +671,10 @@ Status VideoFfmpegDecoderPlugin::WriteYuvData(const std::shared_ptr<Buffer>& fra
 Status VideoFfmpegDecoderPlugin::WriteRgbData(const std::shared_ptr<Buffer>& frameBuffer)
 {
     auto frameBufferMem = frameBuffer->GetMemory();
+    if (frameBufferMem == nullptr) {
+        MEDIA_LOG_E("WriteRgbData frameBuffer GetMemory nullptr");
+        return Status::ERROR_UNKNOWN;
+    }
 #ifndef OHOS_LITE
     if (frameBufferMem->GetMemoryType() == Plugin::MemoryType::SURFACE_BUFFER) {
         std::shared_ptr<Plugin::SurfaceMemory> surfaceMemory =
@@ -734,7 +750,12 @@ Status VideoFfmpegDecoderPlugin::ReceiveBufferLocked(const std::shared_ptr<Buffe
         status = FillFrameBuffer(frameBuffer);
     } else if (ret == AVERROR_EOF) {
         MEDIA_LOG_I("eos received");
-        frameBuffer->GetMemory()->Reset();
+        auto frameBufferMem = frameBuffer->GetMemory();
+        if (frameBufferMem == nullptr) {
+            MEDIA_LOG_E("ReceiveBufferLocked frameBuffer GetMemory nullptr");
+            return Status::ERROR_UNKNOWN;
+        }
+        frameBufferMem->Reset();
         frameBuffer->flag |= BUFFER_FLAG_EOS;
         avcodec_flush_buffers(avCodecContext_.get());
         status = Status::END_OF_STREAM;

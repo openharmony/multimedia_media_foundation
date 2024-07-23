@@ -63,6 +63,9 @@ int32_t FixedCapKeyStringiness(char* buf, size_t maxLen, const char* name, const
     }
     pos += ret;
     auto item = Plugin::AnyCast<T>(&val);
+    if (item == nullptr) {
+        return -1;
+    }
     RETURN_IF_FAILED(Stringiness(buf + pos, maxLen - pos, name, *item), -1, ret);
     return pos + ret;
 }
@@ -78,6 +81,9 @@ int32_t IntervalCapKeyStringiness(char* buf, size_t maxLen, const char* name, co
     }
     pos += ret;
     auto item = Plugin::AnyCast<Plugin::IntervalCapability<T>>(&val);
+    if (item == nullptr) {
+        return -1;
+    }
     RETURN_IF_FAILED(Stringiness(buf + pos, maxLen - pos, name, item->first), -1, ret);
     pos += ret;
     RETURN_IF_FAILED(snprintf_truncated_s(buf + pos, maxLen - pos, ", "), -1, ret);
@@ -99,6 +105,9 @@ int32_t DiscreteCapKeyStringiness(char* buf, size_t maxLen, const char* name, co
     }
     pos += ret;
     auto item = Plugin::AnyCast<Plugin::DiscreteCapability<T>>(&val);
+    if (item == nullptr) {
+        return -1;
+    }
     int32_t i = 0;
     int32_t length = item->size();
     for (; i < length - 1; i++) {
@@ -364,6 +373,9 @@ std::vector<std::pair<std::shared_ptr<Plugin::PluginInfo>, Plugin::Capability>> 
     std::vector<std::pair<std::shared_ptr<Plugin::PluginInfo>, Plugin::Capability>> infos;
     for (const auto& name : pluginNames) {
         auto tmpInfo = Plugin::PluginManager::Instance().GetPluginInfo(pluginType, name);
+        if (tmpInfo == nullptr) {
+            continue;
+        }
         Capability cap;
         if (ApplyCapabilitySet(upStreamCaps, tmpInfo->inCaps, cap)) {
             infos.emplace_back(tmpInfo, cap);
