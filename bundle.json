@@ -54,6 +54,7 @@
             "ffmpeg"
           ],
           "components": [
+              "ability_base",
               "hilog",
               "hilog_lite",
               "hitrace",
