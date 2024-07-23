@@ -118,7 +118,8 @@ int32_t AVBufferQueueProducerStub::OnAttachBuffer(
 {
     auto buffer = AVBuffer::CreateAVBuffer();
     if (buffer == nullptr) {
-        return -1;
+        reply.WriteInt32(static_cast<int32_t>(Status::ERROR_NO_MEMORY));
+        return 0;
     }
     buffer->ReadFromMessageParcel(arguments);
     auto isFilled = arguments.ReadBool();
