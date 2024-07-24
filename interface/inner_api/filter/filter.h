@@ -120,6 +120,8 @@ public:
 
     virtual Status Resume() final;
 
+    virtual Status ResumeDragging() final;
+
     virtual Status Stop() final;
 
     virtual Status Flush() final;
@@ -146,6 +148,8 @@ public:
     virtual Status DoPause();
 
     virtual Status DoResume();
+
+    virtual Status DoResumeDragging();
 
     virtual Status DoStop();
 
