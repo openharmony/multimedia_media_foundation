@@ -225,6 +225,30 @@ Status Filter::ResumeDone()
     return ret;
 }
 
+Status Filter::ResumeDragging()
+{
+    MEDIA_LOG_D("ResumeDragging %{public}s, pState:%{public}d", name_.c_str(), curState_);
+    if (filterTask_) {
+        filterTask_->SubmitJobOnce([this]() {
+            DoResumeDragging();
+            filterTask_->Start();
+        });
+        for (auto iter : nextFiltersMap_) {
+            for (auto filter : iter.second) {
+                filter->ResumeDragging();
+            }
+        }
+    } else {
+        for (auto iter : nextFiltersMap_) {
+            for (auto filter : iter.second) {
+                filter->ResumeDragging();
+            }
+        }
+        return DoResumeDragging();
+    }
+    return Status::OK;
+}
+
 Status Filter::Stop()
 {
     MEDIA_LOG_D("Stop %{public}s, pState:%{public}d", name_.c_str(), curState_);
@@ -371,6 +395,11 @@ Status Filter::DoPause()
 }
 
 Status Filter::DoResume()
+{
+    return Status::OK;
+}
+
+Status Filter::DoResumeDragging()
 {
     return Status::OK;
 }
