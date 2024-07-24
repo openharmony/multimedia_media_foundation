@@ -204,7 +204,7 @@ public:
                                        ///< wthether the capability is supported. This is an optional key that applies
                                        ///< only to video encoder. It is used in configure.
     static constexpr const char VIDEO_ENCODER_ENABLE_PARAMS_FEEDBACK[] =
-        "video_encoder_enable_params_feedback"; ///< int32_t, key for describing enable statistics params feedback with the
+        "video_encoder_enable_params_feedback"; ///< int32_t, key for describing enable statistics params feedback with
                                                 ///< frame, This is an optional key that applies only to video encoder.
                                                 ///< It is used in configure.
     static constexpr const char VIDEO_ENCODER_PER_FRAME_MARK_LTR[] =
