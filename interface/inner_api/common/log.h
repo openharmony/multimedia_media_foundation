@@ -56,9 +56,6 @@ inline std::string HstGetFileName(const std::string &file)
 #define LOG_DOMAIN_RECORDER      0xD002B2C
 #undef LOG_DOMAIN_HIPLAYER
 #define LOG_DOMAIN_HIPLAYER      0xD002B2D
-#ifndef LOG_TAG
-#define LOG_TAG "HiStreamer"
-#endif
 #define PUBLIC_LOG "%{public}"
 #else
 #define PUBLIC_LOG "%"
@@ -82,21 +79,29 @@ inline std::string HstGetFileName(const std::string &file)
 #define PUBLIC_LOG_P PUBLIC_LOG "p"
 #define PUBLIC_LOG_ZU PUBLIC_LOG "zu"
 
+#undef LOG_TAG
+#define LOG_TAG LABEL.tag
+#undef LOG_DOMAIN
+#define LOG_DOMAIN LABEL.domain
+#undef LOG_TYPE
+#define LOG_TYPE LABEL.type
+
+
 #ifdef MEDIA_OHOS
 #ifndef HST_DEBUG
-#define HST_HILOG(op, fmt, args...)                           \
-    do {                                                      \
-        op(LABEL, PUBLIC_LOG_S ":" fmt, HST_LOG_TAG, ##args); \
+#define HST_HILOG(op, fmt, args...)                              \
+    do {                                                         \
+        op(LOG_TYPE, PUBLIC_LOG_S ":" fmt, HST_LOG_TAG, ##args); \
     } while (0)
 #else
-#define HST_HILOG(op, fmt, args...)                                                                              \
-    do {                                                                                                         \
-        op(LABEL, "(" PUBLIC_LOG_S ", " PUBLIC_LOG_D32 "): " fmt, HstGetFileName(std::string(__FILE__)).c_str(), \
-           __LINE__, ##args);                                                                                    \
+#define HST_HILOG(op, fmt, args...)                                                                                 \
+    do {                                                                                                            \
+        op(LOG_TYPE, "(" PUBLIC_LOG_S ", " PUBLIC_LOG_D32 "): " fmt, HstGetFileName(std::string(__FILE__)).c_str(), \
+           __LINE__, ##args);                                                                                       \
     } while (0)
-#define HST_HILOG_SHORT(op, fmt, args...)                        \
-    do {                                                         \
-        op(LABEL, "#" PUBLIC_LOG_D32 " " fmt, __LINE__, ##args); \
+#define HST_HILOG_SHORT(op, fmt, args...)                           \
+    do {                                                            \
+        op(LOG_TYPE, "#" PUBLIC_LOG_D32 " " fmt, __LINE__, ##args); \
     } while (0)
 #define HST_HILOG_NO_RELEASE(op, fmt, args...)                                  \
     do {                                                                        \
@@ -104,57 +109,56 @@ inline std::string HstGetFileName(const std::string &file)
            HstGetFileName(std::string(__FILE__)).c_str(), __LINE__, ##args);    \
     } while (0)
 
-#define HST_HILOG_TAG(op, fmt, args...)                            \
-    do {                                                           \
-        op(LABEL, "[" PUBLIC_LOG_S "]:" fmt, HST_LOG_TAG, ##args); \
+#define HST_HILOG_TAG(op, fmt, args...)                               \
+    do {                                                              \
+        op(LOG_TYPE, "[" PUBLIC_LOG_S "]:" fmt, HST_LOG_TAG, ##args); \
     } while (0)
 
-#define HST_HILOG_WITH_LEVEL_JUDGE(op1, op2, con, fmt, args...)                                                       \
-    do {                                                                                                              \
-        if (!con) {                                                                                                   \
-            op2(LABEL, "(" PUBLIC_LOG_S ", " PUBLIC_LOG_D32 "): " fmt, HstGetFileName(std::string(__FILE__)).c_str(), \
-                __LINE__, ##args);                                                                                    \
-        } else {                                                                                                      \
-            op1(LABEL, "(" PUBLIC_LOG_S ", " PUBLIC_LOG_D32 "): " fmt, HstGetFileName(std::string(__FILE__)).c_str(), \
-                __LINE__, ##args);                                                                                    \
-        }                                                                                                             \
+#define HST_HILOG_WITH_LEVEL_JUDGE(op1, op2, con, fmt, args...)                   \
+    do {                                                                          \
+        if (!con) {                                                               \
+            op2(LOG_TYPE, "(" PUBLIC_LOG_S ", " PUBLIC_LOG_D32 "): " fmt,         \
+                HstGetFileName(std::string(__FILE__)).c_str(), __LINE__, ##args); \
+        } else {                                                                  \
+            op1(LOG_TYPE, "(" PUBLIC_LOG_S ", " PUBLIC_LOG_D32 "): " fmt,         \
+                HstGetFileName(std::string(__FILE__)).c_str(), __LINE__, ##args); \
+        }                                                                         \
     } while (0)
 #endif
 
-#define MEDIA_LOG_D(fmt, ...) HST_HILOG(::OHOS::HiviewDFX::HiLog::Debug, fmt, ##__VA_ARGS__)
-#define MEDIA_LOG_I(fmt, ...) HST_HILOG(::OHOS::HiviewDFX::HiLog::Info, fmt, ##__VA_ARGS__)
-#define MEDIA_LOG_W(fmt, ...) HST_HILOG(::OHOS::HiviewDFX::HiLog::Warn, fmt, ##__VA_ARGS__)
-#define MEDIA_LOG_E(fmt, ...) HST_HILOG(::OHOS::HiviewDFX::HiLog::Error, fmt, ##__VA_ARGS__)
-#define MEDIA_LOG_F(fmt, ...) HST_HILOG(::OHOS::HiviewDFX::HiLog::Fatal, fmt, ##__VA_ARGS__)
+#define MEDIA_LOG_D(fmt, ...) HST_HILOG(HILOG_DEBUG, fmt, ##__VA_ARGS__)
+#define MEDIA_LOG_I(fmt, ...) HST_HILOG(HILOG_INFO, fmt, ##__VA_ARGS__)
+#define MEDIA_LOG_W(fmt, ...) HST_HILOG(HILOG_WARN, fmt, ##__VA_ARGS__)
+#define MEDIA_LOG_E(fmt, ...) HST_HILOG(HILOG_ERROR, fmt, ##__VA_ARGS__)
+#define MEDIA_LOG_F(fmt, ...) HST_HILOG(HILOG_FATAL, fmt, ##__VA_ARGS__)
 #define MEDIA_LOG_I_NO_RELEASE(fmt, ...) HST_HILOG_NO_RELEASE(HILOG_INFO, fmt, ##__VA_ARGS__)
 #define MEDIA_LOG_W_NO_RELEASE(fmt, ...) HST_HILOG_NO_RELEASE(HILOG_WARN, fmt, ##__VA_ARGS__)
 #define MEDIA_LOG_E_NO_RELEASE(fmt, ...) HST_HILOG_NO_RELEASE(HILOG_ERROR, fmt, ##__VA_ARGS__)
 #define MEDIA_LOG_F_NO_RELEASE(fmt, ...) HST_HILOG_NO_RELEASE(HILOG_FATAL, fmt, ##__VA_ARGS__)
-#define MEDIA_LOG_D_SHORT(fmt, ...) HST_HILOG_SHORT(::OHOS::HiviewDFX::HiLog::Debug, fmt, ##__VA_ARGS__)
-#define MEDIA_LOG_I_SHORT(fmt, ...) HST_HILOG_SHORT(::OHOS::HiviewDFX::HiLog::Info, fmt, ##__VA_ARGS__)
-#define MEDIA_LOG_W_SHORT(fmt, ...) HST_HILOG_SHORT(::OHOS::HiviewDFX::HiLog::Warn, fmt, ##__VA_ARGS__)
-#define MEDIA_LOG_E_SHORT(fmt, ...) HST_HILOG_SHORT(::OHOS::HiviewDFX::HiLog::Error, fmt, ##__VA_ARGS__)
-#define MEDIA_LOG_F_SHORT(fmt, ...) HST_HILOG_SHORT(::OHOS::HiviewDFX::HiLog::Fatal, fmt, ##__VA_ARGS__)
+#define MEDIA_LOG_D_SHORT(fmt, ...) HST_HILOG_SHORT(HILOG_DEBUG, fmt, ##__VA_ARGS__)
+#define MEDIA_LOG_I_SHORT(fmt, ...) HST_HILOG_SHORT(HILOG_INFO, fmt, ##__VA_ARGS__)
+#define MEDIA_LOG_W_SHORT(fmt, ...) HST_HILOG_SHORT(HILOG_WARN, fmt, ##__VA_ARGS__)
+#define MEDIA_LOG_E_SHORT(fmt, ...) HST_HILOG_SHORT(HILOG_ERROR, fmt, ##__VA_ARGS__)
+#define MEDIA_LOG_F_SHORT(fmt, ...) HST_HILOG_SHORT(HILOG_FATAL, fmt, ##__VA_ARGS__)
 #define MEDIA_LOG_I_FALSE_D(con, fmt, ...) \
-    HST_HILOG_WITH_LEVEL_JUDGE(::OHOS::HiviewDFX::HiLog::Info, ::OHOS::HiviewDFX::HiLog::Debug, con, fmt, ##__VA_ARGS__)
+    HST_HILOG_WITH_LEVEL_JUDGE(HILOG_INFO, HILOG_DEBUG, con, fmt, ##__VA_ARGS__)
 
-#define HST_HILOG_T_WITH_LEVEL_JUDGE(op1, op2, con, fmt, args...)       \
-    do {                                                                \
-        if (!con) {                                                     \
-            op2(LABEL, "[" PUBLIC_LOG_S "]:" fmt, HST_LOG_TAG, ##args); \
-        } else {                                                        \
-            op1(LABEL, "[" PUBLIC_LOG_S "]:" fmt, HST_LOG_TAG, ##args); \
-        }                                                               \
+#define HST_HILOG_T_WITH_LEVEL_JUDGE(op1, op2, con, fmt, args...)           \
+    do {                                                                    \
+        if (!con) {                                                         \
+            op2(LOG_TYPE, "[" PUBLIC_LOG_S "]:" fmt, HST_LOG_TAG, ##args);  \
+        } else {                                                            \
+            op1(LOG_TYPE, "[" PUBLIC_LOG_S "]:" fmt, HST_LOG_TAG, ##args);  \
+        }                                                                   \
     } while (0)
 
-#define MEDIA_LOG_D_T(fmt, ...) HST_HILOG_TAG(::OHOS::HiviewDFX::HiLog::Debug, fmt, ##__VA_ARGS__)
-#define MEDIA_LOG_I_T(fmt, ...) HST_HILOG_TAG(::OHOS::HiviewDFX::HiLog::Info, fmt, ##__VA_ARGS__)
-#define MEDIA_LOG_W_T(fmt, ...) HST_HILOG_TAG(::OHOS::HiviewDFX::HiLog::Warn, fmt, ##__VA_ARGS__)
-#define MEDIA_LOG_E_T(fmt, ...) HST_HILOG_TAG(::OHOS::HiviewDFX::HiLog::Error, fmt, ##__VA_ARGS__)
-#define MEDIA_LOG_F_T(fmt, ...) HST_HILOG_TAG(::OHOS::HiviewDFX::HiLog::Fatal, fmt, ##__VA_ARGS__)
-#define MEDIA_LOG_I_FALSE_D_T(con, fmt, ...)                                                                \
-    HST_HILOG_T_WITH_LEVEL_JUDGE(::OHOS::HiviewDFX::HiLog::Info, ::OHOS::HiviewDFX::HiLog::Debug, con, fmt, \
-                                 ##__VA_ARGS__)
+#define MEDIA_LOG_D_T(fmt, ...) HST_HILOG_TAG(HILOG_DEBUG, fmt, ##__VA_ARGS__)
+#define MEDIA_LOG_I_T(fmt, ...) HST_HILOG_TAG(HILOG_INFO, fmt, ##__VA_ARGS__)
+#define MEDIA_LOG_W_T(fmt, ...) HST_HILOG_TAG(HILOG_WARN, fmt, ##__VA_ARGS__)
+#define MEDIA_LOG_E_T(fmt, ...) HST_HILOG_TAG(HILOG_ERROR, fmt, ##__VA_ARGS__)
+#define MEDIA_LOG_F_T(fmt, ...) HST_HILOG_TAG(HILOG_FATAL, fmt, ##__VA_ARGS__)
+#define MEDIA_LOG_I_FALSE_D_T(con, fmt, ...)                                      \
+    HST_HILOG_T_WITH_LEVEL_JUDGE(HILOG_INFO, HILOG_DEBUG, con, fmt, ##__VA_ARGS__)
 
 #define MEDIA_LOG_LIMIT(op, frequency, fmt, ...)             \
     do {                                                     \
