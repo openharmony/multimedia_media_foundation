@@ -426,7 +426,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_ENCODER_ENABLE_TEMPORAL_SCALABILITY, defaultBool},
     {Tag::VIDEO_ENCODER_PER_FRAME_MARK_LTR, defaultBool},
     {Tag::VIDEO_PER_FRAME_IS_LTR, defaultBool},
-    {Tag::VIDEO_PER_FRAME_IS_SKIP, defaultBool},	
+    {Tag::VIDEO_PER_FRAME_IS_SKIP, defaultBool},
     {Tag::VIDEO_ENABLE_LOW_LATENCY, defaultBool},
     {Tag::VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK, defaultBool},
     {Tag::VIDEO_ENCODER_ENABLE_PARAMS_FEEDBACK, defaultBool},
