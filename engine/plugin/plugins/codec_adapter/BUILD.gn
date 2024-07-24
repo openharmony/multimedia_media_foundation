@@ -53,7 +53,6 @@ ohos_source_set("std_plugin_codec_adapter") {
     "//foundation/multimedia/media_foundation:histreamer_presets",
   ]
   public_external_deps = [
-    "drivers_peripheral_codec:libcodec_client",
     "drivers_peripheral_codec:libcodec_hdi_omx_client",
     "drivers_peripheral_display:hdi_gralloc_client",
     "openmax:libopenmax_static",
