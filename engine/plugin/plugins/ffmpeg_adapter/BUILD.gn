@@ -210,6 +210,7 @@ ohos_source_set("ffmpeg_video_encoders") {
     external_deps = [
       "graphic_surface:surface",
       "hilog:libhilog",
+      "ipc:ipc_core",
     ]
   }
   if (hst_is_lite_sys) {
