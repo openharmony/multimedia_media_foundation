@@ -169,6 +169,15 @@ enum PlayerSeekMode : int32_t {
     SEEK_CONTINOUS,
 };
 
+enum PlayerSwitchMode : int32_t {
+    /* no seek. */
+    SWITCH_SOOMTH = 0,
+    /* switch to keyframes before the time point. */
+    SWITCH_SEGMENT,
+    /* switch to frames closest the time point. */
+    SWITCH_CLOSEST,
+};
+
 /**
  * @brief Enumerates the container format types.
  */
