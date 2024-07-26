@@ -203,6 +203,10 @@ public:
                                        ///< must be within the supported range. To get supported range, you should query
                                        ///< wthether the capability is supported. This is an optional key that applies
                                        ///< only to video encoder. It is used in configure.
+    static constexpr const char VIDEO_ENCODER_ENABLE_PARAMS_FEEDBACK[] =
+        "video_encoder_enable_params_feedback"; ///< int32_t, key for describing enable statistics params feedback with
+                                                ///< frame, This is an optional key that applies only to video encoder.
+                                                ///< It is used in configure.
     static constexpr const char VIDEO_ENCODER_PER_FRAME_MARK_LTR[] =
         "video_encoder_per_frame_mark_ltr"; ///< bool, key for describing mark this frame as a long term reference
                                             ///< frame, true is mark, false otherwise. It takes effect only when the
@@ -217,6 +221,9 @@ public:
         "video_per_frame_is_ltr"; ///< bool, key for indicating this frame is a long-term reference frame, true is LTR,
                                   ///< false otherwise. This is an optional key that applies only to video encoder
                                   ///< output loop. It indicates the attribute of the frame.
+    static constexpr const char VIDEO_PER_FRAME_IS_SKIP[] =
+        "video_per_frame_is_skip"; ///< bool, key for indicating all macroblocks in this frame are skipped, only to
+                                   ///< video encoder input loop. It indicates the attribute of the frame.
     static constexpr const char VIDEO_PER_FRAME_POC[] =
         "video_per_frame_poc"; ///< int32_t, key for describing the frame poc. This is an optional key that applies only
                                ///< to video encoder output loop. It indicates the attribute of the frame.
@@ -253,6 +260,9 @@ public:
         "video_encoder_qp_min"; ///< int32_t, key for describing the minimum quantization parameter allowed for video
                                 ///< encoder. It is used in configure/setparameter or takes effect immediately with the
                                 ///< frame.
+    static constexpr const char VIDEO_ENCODER_QP_START[] =
+        "video_encoder_qp_start"; ///< int32_t, key for describing the start quantization parameter allowed for video
+                                  ///< encoder. This is an optional key that applies only to video encoder input loop.
     static constexpr const char VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK[] =
         "video_encoder_enable_surface_input_callback"; ///< bool, the associated value is an bool (true or false): true
                                                        ///< is enabled, false is closed.
@@ -300,6 +310,9 @@ public:
         "video_decoder_output_colorspace"; ///< int32_t, Key for video color space of the video decoder output.
                                            ///< See {@link OH_NativeBuffer_ColorSpace} for value, and only
                                            ///< {@link OH_COLORSPACE_BT709_LIMIT} is valid. It is used in configure.
+    static constexpr const char VIDEO_ENCODER_FRAME_TEMPORAL_ID[] =
+        "video_encoder_frame_temporal_id"; ///< int32_t, key for describing the temporal ID of the frame when SVC is
+                                           ///< enabled. This value is emitted from video encoder for a video frame.
 
     /* -------------------- video specific tag -------------------- */
     static constexpr const char VIDEO_H264_PROFILE[] = "video.h264.profile"; ///< @see VideoH264Profile

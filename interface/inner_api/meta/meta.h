@@ -182,7 +182,9 @@ public:
         tagCharSeq == Tag::VIDEO_ENCODER_PER_FRAME_MARK_LTR or
         tagCharSeq == Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE or
         tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_TEMPORAL_SCALABILITY or
+        tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_PARAMS_FEEDBACK or
         tagCharSeq == Tag::VIDEO_PER_FRAME_IS_LTR or
+        tagCharSeq == Tag::VIDEO_PER_FRAME_IS_SKIP or
         tagCharSeq == Tag::VIDEO_ENABLE_LOW_LATENCY or
         tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK or
         tagCharSeq == Tag::SCREEN_CAPTURE_USER_AGREE or
@@ -259,6 +261,7 @@ public:
         tagCharSeq == Tag::VIDEO_SLICE_HEIGHT or
         tagCharSeq == Tag::VIDEO_ENCODER_QP_MAX or
         tagCharSeq == Tag::VIDEO_ENCODER_QP_MIN or
+        tagCharSeq == Tag::VIDEO_ENCODER_QP_START or
         tagCharSeq == Tag::FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_COUNT or
         tagCharSeq == Tag::SCREEN_CAPTURE_ERR_CODE or
         tagCharSeq == Tag::SCREEN_CAPTURE_DURATION or
@@ -273,6 +276,7 @@ public:
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::VIDEO_DECODER_RATE_UPPER_LIMIT or
         tagCharSeq == Tag::VIDEO_ENCODER_QP_AVERAGE or
+        tagCharSeq == Tag::VIDEO_ENCODER_FRAME_TEMPORAL_ID or
         tagCharSeq == Tag::AV_PLAYER_ERR_CODE or
         tagCharSeq == Tag::AV_PLAYER_PLAY_DURATION or
         tagCharSeq == Tag::AV_PLAYER_SOURCE_TYPE or
