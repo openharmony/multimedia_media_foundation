@@ -43,7 +43,7 @@ struct MessageSignal {
 struct DumpSignal {
     std::mutex dumpMutex_;
     std::condition_variable dumpCond_;
-    std::queue<std::pair<std::string, std::shared_ptr<AVBuffer>>> dumpQueue_;
+    std::queue<std::pair<std::string, std::shared_ptr<DumpBuffer>>> dumpQueue_;
     std::atomic<bool> isRunning_ = false;
 };
 
@@ -66,8 +66,8 @@ public:
     void OnStart() override;
     void OnStop() override;
 
-    void OnAddSystemAbility(int32_t systemAbilityId, const std::string& deviceId) override;
-    void OnRemoveSystemAbility(int32_t systemAbilityId, const std::string& deviceId) override;
+    void OnAddSystemAbility(int32_t systemAbilityId, const std::string &deviceId) override;
+    void OnRemoveSystemAbility(int32_t systemAbilityId, const std::string &deviceId) override;
 
     int32_t Dump(int32_t fd, const std::vector<std::u16string> &args) override;
 
@@ -75,13 +75,13 @@ public:
 
     int32_t GetAudioRouteMsg(std::map<PerferredType, std::shared_ptr<MonitorDeviceInfo>> &perferredDevices) override;
 
-    int32_t SetMediaParameters(const std::string& dumpType, const std::string& dumpEnable) override;
+    int32_t SetMediaParameters(const std::string &dumpType, const std::string &dumpEnable) override;
 
-    int32_t WriteAudioBuffer(const std::string &fileName, std::shared_ptr<AVBuffer> &buffer) override;
+    int32_t WriteAudioBuffer(const std::string &fileName, void *ptr, size_t size) override;
 
-    int32_t GetInputBuffer(std::shared_ptr<AVBuffer> &buffer, int32_t size) override;
+    int32_t GetInputBuffer(std::shared_ptr<DumpBuffer> &buffer, int32_t size) override;
 
-    int32_t InputBufferFilled(std::string fileName, uint64_t bufferId) override;
+    int32_t InputBufferFilled(const std::string &fileName, uint64_t bufferId, int32_t size) override;
 private:
     MediaMonitorService();
     void MessageLoopFunc();
@@ -96,6 +96,7 @@ private:
     bool isExit_ = false;
 
     bool IsNeedDump();
+    int32_t DumpThreadProcess();
     void DumpThreadStart();
     void DumpThreadStop();
     void DumpThreadExit();
@@ -103,11 +104,11 @@ private:
     void DumpFileClear();
     void DumpBufferClear();
     void HistoryFilesHandle();
-    void AudioBufferRelease(std::shared_ptr<AVBuffer> &buffer);
+    void AudioBufferRelease(std::shared_ptr<DumpBuffer> &buffer);
     bool DeleteHistoryFile(const std::string &filePath);
-    void DumpBufferWrite(std::queue<std::pair<std::string, std::shared_ptr<AVBuffer>>> &bufferQueue);
-    void AddBufferToQueue(const std::string &fileName, std::shared_ptr<AVBuffer> &buffer);
-    void WriteBufferFromQueue(const std::string &fileName, std::shared_ptr<AVBuffer> &buffer);
+    void DumpBufferWrite(std::queue<std::pair<std::string, std::shared_ptr<DumpBuffer>>> &bufferQueue);
+    void AddBufferToQueue(const std::string &fileName, std::shared_ptr<DumpBuffer> &buffer);
+    void WriteBufferFromQueue(const std::string &fileName, std::shared_ptr<DumpBuffer> &buffer);
     bool isDumpExit_ = false;
     bool dumpEnable_ = false;
     std::mutex paramMutex_;

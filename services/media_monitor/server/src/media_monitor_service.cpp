@@ -84,12 +84,12 @@ void MediaMonitorService::OnStop()
     DumpThreadExit();
 }
 
-void MediaMonitorService::OnAddSystemAbility(int32_t systemAbilityId, const std::string& deviceId)
+void MediaMonitorService::OnAddSystemAbility(int32_t systemAbilityId, const std::string &deviceId)
 {
     MEDIA_LOG_I("systemAbilityId:%{public}d", systemAbilityId);
 }
 
-void MediaMonitorService::OnRemoveSystemAbility(int32_t systemAbilityId, const std::string& deviceId)
+void MediaMonitorService::OnRemoveSystemAbility(int32_t systemAbilityId, const std::string &deviceId)
 {
     MEDIA_LOG_I("OnRemoveSystemAbility systemAbilityId:%{public}d removed", systemAbilityId);
 }
@@ -184,24 +184,17 @@ bool MediaMonitorService::IsNeedDump()
     }
     return false;
 }
-
-int32_t MediaMonitorService::WriteAudioBuffer(const std::string &fileName, std::shared_ptr<AVBuffer> &buffer)
+int32_t MediaMonitorService::WriteAudioBuffer(const std::string &fileName, void *ptr, size_t size)
 {
-    if (!IsNeedDump()) {
-        AudioBufferRelease(buffer);
-        return ERR_ILLEGAL_STATE;
-    }
-    FALSE_RETURN_V_MSG_E(buffer != nullptr, ERROR, "input buffer nullptr");
-    if (buffer->memory_ == nullptr) {
-        MEDIA_LOG_E("WriteAudioBuffer get buffer failed");
-        return ERROR;
-    }
-    AddBufferToQueue(fileName, buffer);
     return SUCCESS;
 }
 
-int32_t MediaMonitorService::GetInputBuffer(std::shared_ptr<AVBuffer> &buffer, int32_t size)
+int32_t MediaMonitorService::GetInputBuffer(std::shared_ptr<DumpBuffer> &buffer, int32_t size)
 {
+    if (versionType_ != BETA_VERSION) {
+        return ERROR;
+    }
+
     if (!IsNeedDump()) {
         return ERR_ILLEGAL_STATE;
     }
@@ -213,21 +206,26 @@ int32_t MediaMonitorService::GetInputBuffer(std::shared_ptr<AVBuffer> &buffer, i
     return SUCCESS;
 }
 
-int32_t MediaMonitorService::InputBufferFilled(std::string fileName, uint64_t bufferId)
+int32_t MediaMonitorService::InputBufferFilled(const std::string &fileName, uint64_t bufferId, int32_t size)
 {
-    std::shared_ptr<AVBuffer> buffer = nullptr;
-    if (audioBufferCache_) {
-        audioBufferCache_->GetBufferById(buffer, bufferId);
-    }
-    if (buffer == nullptr || buffer->memory_ == nullptr) {
+    if (versionType_ != BETA_VERSION) {
         return ERROR;
     }
+
+    FALSE_RETURN_V_MSG_E(audioBufferCache_ != nullptr, ERROR, "buffer cahce nullptr");
+    std::shared_ptr<DumpBuffer> buffer = nullptr;
+    audioBufferCache_->GetBufferById(buffer, bufferId);
+    FALSE_RETURN_V_MSG_E(buffer != nullptr, ERROR, "get buffer falied");
+    audioBufferCache_->SetBufferSize(buffer, size);
     AddBufferToQueue(fileName, buffer);
     return SUCCESS;
 }
 
-int32_t MediaMonitorService::SetMediaParameters(const std::string& dumpType, const std::string& dumpEnable)
+int32_t MediaMonitorService::SetMediaParameters(const std::string &dumpType, const std::string &dumpEnable)
 {
+    if (versionType_ != BETA_VERSION) {
+        return ERROR;
+    }
     MEDIA_LOG_D("SetMediaParameters dumpEnable: %{public}s", dumpEnable.c_str());
     unique_lock<mutex> lock(paramMutex_);
     if (dumpType != DEFAULT_DUMP_TYPE && dumpType != BETA_DUMP_TYPE) {
@@ -246,7 +244,24 @@ int32_t MediaMonitorService::SetMediaParameters(const std::string& dumpType, con
     fileFloader_ = (dumpType_ == BETA_DUMP_TYPE) ? BETA_DUMP_DIR : DEFAULT_DUMP_DIR;
     dumpThreadTime_ = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
 
+    int32_t ret = DumpThreadProcess();
+    return ret;
+}
+
+int32_t MediaMonitorService::DumpThreadProcess()
+{
+    if (dumpSignal_ != nullptr) {
+        dumpSignal_->isRunning_.store(false);
+    }
     if (dumpEnable_) {
+        isDumpExit_ = false;
+        if (dumpLoopThread_ && dumpLoopThread_->joinable()) {
+            dumpLoopThread_->join();
+        }
+        dumpBufferWrap_ = std::make_shared<DumpBufferWrap>();
+        if (!dumpBufferWrap_->Open()) {
+            return ERROR;
+        }
         DumpThreadStart();
     } else {
         DumpThreadStop();
@@ -258,15 +273,8 @@ void MediaMonitorService::DumpThreadStart()
 {
     MEDIA_LOG_I("DumpThreadStart enter");
     DumpFileClear();
-    isDumpExit_ = false;
-    if (dumpSignal_ != nullptr) {
-        dumpSignal_->isRunning_.store(false);
-    }
-    if (dumpLoopThread_ && dumpLoopThread_->joinable()) {
-        dumpLoopThread_->join();
-    }
+    audioBufferCache_ = std::make_shared<AudioBufferCache>(dumpBufferWrap_);
     dumpSignal_ = std::make_shared<DumpSignal>();
-    audioBufferCache_ = std::make_shared<AudioBufferCache>();
     dumpSignal_->isRunning_.store(true);
     dumpLoopThread_ = std::make_unique<thread>(&MediaMonitorService::DumpLoopFunc, this);
     pthread_setname_np(dumpLoopThread_->native_handle(), "MDLoopThread");
@@ -275,16 +283,12 @@ void MediaMonitorService::DumpThreadStart()
 void MediaMonitorService::DumpThreadStop()
 {
     MEDIA_LOG_I("DumpThreadStop enter");
+    dumpSignal_->isRunning_.store(false);
     dumpEnable_ = false;
     DumpBufferClear();
-    dumpSignal_->isRunning_.store(false);
     if (dumpType_ == BETA_DUMP_TYPE) {
         HistoryFilesHandle();
         AudioEncodeDump();
-    }
-    if (audioBufferCache_) {
-        audioBufferCache_->Clear();
-        audioBufferCache_ = nullptr;
     }
     dumpType_ = DEFAULT_DUMP_TYPE;
     fileFloader_ = DEFAULT_DUMP_DIR;
@@ -302,12 +306,13 @@ void MediaMonitorService::DumpLoopFunc()
 {
     MEDIA_LOG_I("DumpLoopFunc enter");
     FALSE_RETURN_MSG(dumpSignal_ != nullptr, "signal is nullptr");
+    FALSE_RETURN_MSG(dumpBufferWrap_ != nullptr, "buffer wrap is nullptr");
     while (!isDumpExit_) {
         if (!dumpSignal_->isRunning_.load()) {
             MEDIA_LOG_I("DumpLoopFunc running exit");
             break;
         }
-        std::queue<std::pair<std::string, std::shared_ptr<AVBuffer>>> tmpBufferQue;
+        std::queue<std::pair<std::string, std::shared_ptr<DumpBuffer>>> tmpBufferQue;
         {
             unique_lock<mutex> lock(dumpSignal_->dumpMutex_);
             dumpSignal_->dumpCond_.wait_for(lock, std::chrono::seconds(WAIT_DUMP_TIMEOUT_S), [this]() {
@@ -318,16 +323,24 @@ void MediaMonitorService::DumpLoopFunc()
 
         DumpBufferWrite(tmpBufferQue);
         int duration = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()) - dumpThreadTime_;
-        if (!dumpEnable_ || (dumpType_ == BETA_DUMP_TYPE && duration >= MAX_DUMP_TIME)) {
-            MEDIA_LOG_D("dump duration %{public}d", duration);
+        if (dumpType_ == BETA_DUMP_TYPE && duration >= MAX_DUMP_TIME) {
+            MEDIA_LOG_I("dump duration %{public}d", duration);
             DumpThreadStop();
         }
     }
+    if (audioBufferCache_ != nullptr) {
+        audioBufferCache_->Clear();
+        audioBufferCache_ = nullptr;
+    }
+    if (dumpBufferWrap_ != nullptr) {
+        dumpBufferWrap_->Close();
+        dumpBufferWrap_ = nullptr;
+    }
 }
 
-void MediaMonitorService::DumpBufferWrite(std::queue<std::pair<std::string, std::shared_ptr<AVBuffer>>> &bufferQueue)
+void MediaMonitorService::DumpBufferWrite(std::queue<std::pair<std::string, std::shared_ptr<DumpBuffer>>> &bufferQueue)
 {
-    std::pair<std::string, std::shared_ptr<AVBuffer>> dumpData;
+    std::pair<std::string, std::shared_ptr<DumpBuffer>> dumpData;
     while (!bufferQueue.empty()) {
         dumpData = bufferQueue.front();
         bufferQueue.pop();
@@ -338,7 +351,7 @@ void MediaMonitorService::DumpBufferWrite(std::queue<std::pair<std::string, std:
     }
 }
 
-void MediaMonitorService::AddBufferToQueue(const std::string &fileName, std::shared_ptr<AVBuffer> &buffer)
+void MediaMonitorService::AddBufferToQueue(const std::string &fileName, std::shared_ptr<DumpBuffer> &buffer)
 {
     MEDIA_LOG_D("AddBufferToQueue enter");
     FALSE_RETURN_MSG(dumpSignal_ != nullptr, "signal is nullptr");
@@ -351,14 +364,13 @@ void MediaMonitorService::AddBufferToQueue(const std::string &fileName, std::sha
     dumpSignal_->dumpCond_.notify_all();
 }
 
-void MediaMonitorService::WriteBufferFromQueue(const std::string &fileName, std::shared_ptr<AVBuffer> &buffer)
+void MediaMonitorService::WriteBufferFromQueue(const std::string &fileName, std::shared_ptr<DumpBuffer> &buffer)
 {
     MEDIA_LOG_D("WriteBufferFromQueue enter");
     FALSE_RETURN_MSG(buffer != nullptr, "buffer is nullptr");
     std::string realFilePath = fileFloader_ + fileName;
     FILE *dumpFile = fopen(realFilePath.c_str(), "a");
-    FALSE_RETURN_MSG(dumpFile != nullptr, "pcm file %{public}s open fail, error %{public}s",
-        realFilePath.c_str(), strerror(errno));
+    FALSE_RETURN_MSG(dumpFile != nullptr, "pcm file %{public}s open failed", realFilePath.c_str());
     if (fseek(dumpFile, 0, SEEK_END)) {
         return;
     }
@@ -369,16 +381,28 @@ void MediaMonitorService::WriteBufferFromQueue(const std::string &fileName, std:
         dumpFile = fopen(realFilePath.c_str(), "a");
         FALSE_RETURN_MSG(dumpFile != nullptr, "reopen file failed");
     }
-    size_t bufferSize = static_cast<size_t>(buffer->memory_->GetSize());
-    size_t writeResult = fwrite(buffer->memory_->GetAddr(), 1, bufferSize, dumpFile);
-    FALSE_RETURN_MSG(writeResult == bufferSize, "write file failed");
+    size_t bufferSize = static_cast<size_t>(dumpBufferWrap_->GetSize(buffer.get()));
+    uint8_t *bufferAddr = dumpBufferWrap_->GetAddr(buffer.get());
+    if (bufferAddr == nullptr) {
+        (void)fclose(dumpFile);
+        dumpFile = nullptr;
+        return;
+    }
+    (void)fwrite(bufferAddr, 1, bufferSize, dumpFile);
     (void)fclose(dumpFile);
     dumpFile = nullptr;
 }
 
 void MediaMonitorService::DumpFileClear()
 {
-    for (const auto& elem : std::filesystem::directory_iterator(BETA_DUMP_DIR)) {
+    std::error_code errorCode;
+    std::filesystem::directory_iterator iter(BETA_DUMP_DIR, errorCode);
+    if (errorCode) {
+        MEDIA_LOG_E("get file failed");
+        return;
+    }
+
+    for (const auto &elem : iter) {
         (void)DeleteHistoryFile(elem.path().string());
     }
 }
@@ -387,14 +411,14 @@ void MediaMonitorService::DumpBufferClear()
 {
     dumpSignal_->dumpMutex_.lock();
     while (!dumpSignal_->dumpQueue_.empty()) {
-        auto& dumpData = dumpSignal_->dumpQueue_.front();
+        auto &dumpData = dumpSignal_->dumpQueue_.front();
         AudioBufferRelease(dumpData.second);
         dumpSignal_->dumpQueue_.pop();
     }
     dumpSignal_->dumpMutex_.unlock();
 }
 
-void MediaMonitorService::AudioBufferRelease(std::shared_ptr<AVBuffer> &buffer)
+void MediaMonitorService::AudioBufferRelease(std::shared_ptr<DumpBuffer> &buffer)
 {
     FALSE_RETURN_MSG(buffer != nullptr, "buffer is nullptr");
     if (audioBufferCache_) {
@@ -408,8 +432,15 @@ void MediaMonitorService::HistoryFilesHandle()
     if (dumpType_ != BETA_DUMP_TYPE) {
         return;
     }
+
+    std::error_code errorCode;
+    std::filesystem::directory_iterator iter(fileFloader_, errorCode);
+    if (errorCode) {
+        MEDIA_LOG_E("get file failed");
+        return;
+    }
     std::vector<std::filesystem::path> mediaFileVecs;
-    for (const auto& elem : std::filesystem::directory_iterator(fileFloader_)) {
+    for (const auto &elem : iter) {
         if (std::filesystem::is_regular_file(elem.status())) {
             mediaFileVecs.emplace_back(elem.path());
         }
@@ -417,9 +448,9 @@ void MediaMonitorService::HistoryFilesHandle()
     MEDIA_LOG_D("HistoryFilesHandle dumpType %{public}s size: %{public}d",
         dumpType_.c_str(), (int)mediaFileVecs.size());
     std::sort(mediaFileVecs.begin(), mediaFileVecs.end(),
-        [](const filesystem::path& file1, const filesystem::path& file2) {
-            return filesystem::file_time_type(filesystem::last_write_time(file1)) <
-            filesystem::file_time_type(filesystem::last_write_time(file2));
+        [](const std::filesystem::path &file1, const std::filesystem::path &file2) {
+            return std::filesystem::file_time_type(std::filesystem::last_write_time(file1)) <
+            std::filesystem::file_time_type(std::filesystem::last_write_time(file2));
     });
     while (static_cast<int>(mediaFileVecs.size()) > MAX_FILE_COUNT) {
         std::string delFilePath = (mediaFileVecs.front()).string();
@@ -443,6 +474,7 @@ bool MediaMonitorService::DeleteHistoryFile(const std::string &filePath)
     }
     return true;
 }
+
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS

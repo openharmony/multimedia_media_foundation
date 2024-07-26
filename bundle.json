@@ -221,6 +221,17 @@
               },
               {
                 "type": "so",
+                "name": "//foundation/multimedia/media_foundation/services/media_monitor:media_monitor_buffer",
+                "header": {
+                  "header_files": [
+                    "dump_buffer_define.h",
+                    "dump_buffer_manager.h"
+                  ],
+                  "header_base": "//foundation/multimedia/media_foundation/services/media_monitor/buffer/include"
+                }
+              },
+              {
+                "type": "so",
                 "name": "//foundation/multimedia/media_foundation/video_processing_engine/framework:image_processing",
                 "header": {
                   "header_files": [
