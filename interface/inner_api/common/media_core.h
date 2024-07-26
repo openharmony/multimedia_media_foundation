@@ -170,7 +170,7 @@ enum PlayerSeekMode : int32_t {
 
 enum PlayerSwitchMode : int32_t {
     /* no seek. */
-    SWITCH_SOOMTH = 0,
+    SWITCH_SMOOTH = 0,
     /* switch to keyframes before the time point. */
     SWITCH_SEGMENT,
     /* switch to frames closest the time point. */
