@@ -50,6 +50,7 @@ if (hst_is_lite_sys) {
     external_deps = [
       "graphic_surface:surface",
       "hilog:libhilog",
+      "ipc:ipc_core",
     ]
     sanitize = {
       cfi = true

@@ -40,6 +40,7 @@ if (hst_is_standard_sys) {
     ]
 
     external_deps = [
+      "audio_framework:audio_client",
       "ffmpeg:libohosffmpeg",
       "graphic_surface:surface",
       "hilog:libhilog",

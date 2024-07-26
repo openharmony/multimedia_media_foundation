@@ -50,6 +50,8 @@ ohos_source_set("httpsource") {
     external_deps = [
       "graphic_surface:surface",
       "hilog:libhilog",
+      "hitrace:hitrace_meter",
+      "ipc:ipc_core",
     ]
   }
 }
