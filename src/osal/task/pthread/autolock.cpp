@@ -21,7 +21,9 @@ namespace OHOS {
 namespace Media {
 AutoLock::AutoLock(Mutex& mutex) : mutex_(&mutex)
 {
-    mutex_->lock();
+    if (mutex_ != nullptr) {
+        mutex_->lock();
+    }
 }
 
 AutoLock::~AutoLock()
