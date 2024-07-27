@@ -539,8 +539,8 @@ int FFmpegDemuxerPlugin::AVReadPacket(void* opaque, uint8_t* buf, int bufSize) /
         auto result = ioContext->dataSource->ReadAt(ioContext->offset, buffer, static_cast<size_t>(bufSize));
         MEDIA_LOG_DD("AVReadPacket read data size = " PUBLIC_LOG_D32, static_cast<int>(bufData->GetSize()));
         if (result == Status::OK) {
-            ioContext->offset += buffer->GetMemory()->GetSize();
-            rtv = buffer->GetMemory()->GetSize();
+            ioContext->offset += static_cast<int64_t>(bufferMem->GetSize());
+            rtv = static_cast<int>(bufferMem->GetSize());
         } else if (result == Status::END_OF_STREAM) {
             ioContext->eos = true;
             rtv = AVERROR_EOF;
