@@ -48,6 +48,7 @@ enum class FilterType {
     AUDIO_DATA_SOURCE,
     VIDEO_CAPTURE,
     FILTERTYPE_VIDRESIZE,
+    TIMED_METADATA,
     FILTERTYPE_MAX,
 };
 
