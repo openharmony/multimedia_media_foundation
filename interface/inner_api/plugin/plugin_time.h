@@ -92,6 +92,11 @@ inline int64_t Us2Ms(int64_t us)
 {
     return us / HST_USECOND;
 }
+
+inline int64_t Ms2Us(int64_t ms)
+{
+    return ms * HST_USECOND;
+}
 } // Plugins
 } // Media
 } // OHOS

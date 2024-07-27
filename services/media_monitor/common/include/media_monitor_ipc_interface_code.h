@@ -21,7 +21,11 @@ namespace MediaMonitor {
 enum class MediaMonitorInterfaceCode {
     WRITE_LOG_MSG,
     GET_AUDIO_ROUTE_MSG,
-    MEDIA_MONITOR_CODE_MAX = GET_AUDIO_ROUTE_MSG,
+    SET_MEDIA_PARAMS,
+    WRITE_AUDIO_BUFFER,
+    GET_INPUT_BUFFER,
+    INPUT_BUFFER_FILL,
+    MEDIA_MONITOR_CODE_MAX = INPUT_BUFFER_FILL,
 };
 
 } // namespace MediaMonitor

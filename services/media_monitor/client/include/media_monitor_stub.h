@@ -29,10 +29,18 @@ public:
 private:
     void HandleWriteLogMsg(MessageParcel &data, MessageParcel &reply);
     void HandleGetAudioRouteMsg(MessageParcel &data, MessageParcel &reply);
+    void HandleSetMediaParams(MessageParcel &data, MessageParcel &reply);
+    void HandleSendPcmBuffer(MessageParcel &data, MessageParcel &reply);
+    void HandleGetInputBuffer(MessageParcel &data, MessageParcel &reply);
+    void HandleInputBufferFilled(MessageParcel &data, MessageParcel &reply);
     using HandlerFunc = void (MediaMonitorStub::*)(MessageParcel &data, MessageParcel &reply);
     static inline HandlerFunc handlers[] = {
         &MediaMonitorStub::HandleWriteLogMsg,
         &MediaMonitorStub::HandleGetAudioRouteMsg,
+        &MediaMonitorStub::HandleSetMediaParams,
+        &MediaMonitorStub::HandleSendPcmBuffer,
+        &MediaMonitorStub::HandleGetInputBuffer,
+        &MediaMonitorStub::HandleInputBufferFilled,
     };
     static constexpr size_t handlersNums = sizeof(handlers) / sizeof(HandlerFunc);
 };

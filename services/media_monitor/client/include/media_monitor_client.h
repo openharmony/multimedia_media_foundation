@@ -34,6 +34,14 @@ public:
     int32_t GetAudioRouteMsg(std::map<PerferredType,
         std::shared_ptr<MonitorDeviceInfo>> &perferredDevices) override;
 
+    int32_t WriteAudioBuffer(const std::string &fileName, std::shared_ptr<AVBuffer> &buffer) override;
+
+    int32_t GetInputBuffer(std::shared_ptr<AVBuffer> &buffer, int32_t size) override;
+
+    int32_t InputBufferFilled(std::string fileName, uint64_t bufferId) override;
+
+    int32_t SetMediaParameters(const std::string& dumpType, const std::string& dumpEnable) override;
+
 private:
     static inline BrokerDelegator<MediaMonitorClient> delegator_;
 };

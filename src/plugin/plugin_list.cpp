@@ -326,6 +326,14 @@ void PluginList::AddFFmpegDemuxerPlugins()
     srtDemuxerPlugin.rank = DEFAULT_RANK;
     pluginDescriptionList_.push_back(srtDemuxerPlugin);
 
+    PluginDescription vttDemuxerPlugin;
+    vttDemuxerPlugin.pluginName = "avdemux_webvtt";
+    vttDemuxerPlugin.packageName = "FFmpegDemuxer";
+    vttDemuxerPlugin.pluginType = PluginType::DEMUXER;
+    vttDemuxerPlugin.cap = "";
+    vttDemuxerPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(vttDemuxerPlugin);
+
     PluginDescription mpegtsDemuxerPlugin;
     mpegtsDemuxerPlugin.pluginName = "avdemux_mpegts";
     mpegtsDemuxerPlugin.packageName = "FFmpegDemuxer";
@@ -591,6 +599,14 @@ void PluginList::AddFFmpegMuxerPlugins()
     mp3MuxerPlugin.cap = "media/mp3";
     mp3MuxerPlugin.rank = DEFAULT_RANK;
     pluginDescriptionList_.push_back(mp3MuxerPlugin);
+
+    PluginDescription wavMuxerPlugin;
+    wavMuxerPlugin.pluginName = "ffmpegMux_wav";
+    wavMuxerPlugin.packageName = "FFmpegMuxer";
+    wavMuxerPlugin.pluginType = PluginType::MUXER;
+    wavMuxerPlugin.cap = "media/wav";
+    wavMuxerPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(wavMuxerPlugin);
 }
 
 } // namespace Plugins

@@ -19,6 +19,10 @@
 #include "common/log.h"
 #include "osal/task/autolock.h"
 
+namespace {
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
+}
+
 namespace OHOS {
 namespace Media {
 Thread::Thread(ThreadPriority priority) noexcept : id_(), name_(), priority_(priority), state_()
@@ -84,7 +88,7 @@ bool Thread::CreateThread(const std::function<void()>& func)
 #endif
     int rtv = pthread_create(&id_, &attr, Thread::Run, this);
     if (rtv == 0) {
-        MEDIA_LOG_I("thread " PUBLIC_LOG_S " create success", name_.c_str());
+        MEDIA_LOG_D("thread " PUBLIC_LOG_S " create success", name_.c_str());
         isExistThread_.store(true);
         SetNameInternal();
     } else {

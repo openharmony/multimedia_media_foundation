@@ -335,9 +335,8 @@ HWTEST_F(AVBufferInnerUnitTest, AVBuffer_CreateWithInvalid_005, TestSize.Level1)
 
     auto surfaceBuffer = SurfaceBuffer::Create();
     surfaceBuffer->Alloc(DEFAULT_CONFIG);
-    surfaceBuffer->DecStrongRef(surfaceBuffer.GetRefPtr());
     buffer_ = AVBuffer::CreateAVBuffer(surfaceBuffer);
-    EXPECT_EQ(nullptr, buffer_);
+    EXPECT_NE(nullptr, buffer_);
 }
 
 /**

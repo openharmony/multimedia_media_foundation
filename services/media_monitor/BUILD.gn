@@ -50,6 +50,7 @@ if (hst_is_lite_sys) {
 } else {
   ohos_prebuilt_etc("media_monitor.para") {
     source = "etc/media_monitor.para"
+    subsystem_name = "multimedia"
     part_name = "media_foundation"
     module_install_dir = "etc/param"
   }
@@ -62,6 +63,7 @@ if (hst_is_lite_sys) {
 } else {
   ohos_prebuilt_etc("media_monitor.para.dac") {
     source = "etc/media_monitor.para.dac"
+    subsystem_name = "multimedia"
     part_name = "media_foundation"
     module_install_dir = "etc/param"
   }
@@ -164,15 +166,11 @@ if (hst_is_lite_sys) {
     }
     install_enable = true
 
-    deps = [
-      ":media_monitor.para",
-      ":media_monitor.para.dac",
-      ":media_monitor_common",
-    ]
-
     sources = [
+      "server/src/audio_buffer_cache.cpp",
       "server/src/audio_memo.cpp",
       "server/src/event_aggregate.cpp",
+      "server/src/media_audio_encoder.cpp",
       "server/src/media_event_base_writer.cpp",
       "server/src/media_monitor_policy.cpp",
       "server/src/media_monitor_service.cpp",
@@ -186,9 +184,18 @@ if (hst_is_lite_sys) {
       "server/include",
       "common/include",
       "../../interface/inner_api/common/",
+      "../../interface/inner_api/",
+    ]
+
+    deps = [
+      ":media_monitor.para",
+      ":media_monitor.para.dac",
+      ":media_monitor_common",
+      "//foundation/multimedia/media_foundation/src:media_foundation",
     ]
 
     external_deps = [
+      "ability_base:want",
       "audio_framework:audio_client",
       "bundle_framework:appexecfwk_base",
       "bundle_framework:appexecfwk_core",
@@ -206,6 +213,8 @@ if (hst_is_lite_sys) {
       defines += [ "MONITOR_ENABLE_HISYSEVENT" ]
       external_deps += [ "hisysevent:libhisysevent" ]
     }
+
+    public_external_deps = [ "ffmpeg:libohosffmpeg" ]
 
     subsystem_name = "multimedia"
     part_name = "media_foundation"
@@ -241,9 +250,13 @@ if (hst_is_lite_sys) {
       "server/include",
       "common/include",
       "../../interface/inner_api/common/",
+      "../../interface/inner_api/",
     ]
 
-    deps = [ ":media_monitor_common" ]
+    deps = [
+      ":media_monitor_common",
+      "//foundation/multimedia/media_foundation/src:media_foundation",
+    ]
 
     external_deps = [
       "c_utils:utils",

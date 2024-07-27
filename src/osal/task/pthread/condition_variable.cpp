@@ -21,6 +21,10 @@
 #include "common/log.h"
 
 namespace {
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
+}
+
+namespace {
 inline long long TmToNs(struct timespec tm)
 {
     return tm.tv_sec * std::giga::num + tm.tv_nsec;

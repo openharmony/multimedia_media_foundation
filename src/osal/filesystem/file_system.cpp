@@ -30,6 +30,10 @@
 #include <dirent.h>
 #include "common/log.h"
 
+namespace {
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
+}
+
 #ifndef _WIN32
 mode_t umask(mode_t mask);
 #endif

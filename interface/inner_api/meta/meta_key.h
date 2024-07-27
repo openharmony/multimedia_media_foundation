@@ -93,6 +93,7 @@ public:
     static constexpr const char MEDIA_HAS_VIDEO[] = "has_video";               ///< has video track in file
     static constexpr const char MEDIA_HAS_AUDIO[] = "has_audio";               ///< has audio track in file
     static constexpr const char MEDIA_HAS_SUBTITLE[] = "has_subtitle";         ///< has subtitle track in file
+    static constexpr const char MEDIA_HAS_TIMEDMETA[] = "has_timed_meta";      ///< has timed metadata track in file
     static constexpr const char MEDIA_COVER[] = "cover";                       ///< cover in file
     static constexpr const char MEDIA_PROTOCOL_TYPE[] = "media.protocol.type"; ///< Source protocol type
     static constexpr const char MEDIA_PROFILE[] = "codec_profile";             ///< codec profile, Compatible 4.0
@@ -104,6 +105,15 @@ public:
     /* -------------------- buffer meta tag -------------------- */
     static constexpr const char BUFFER_DECODING_TIMESTAMP[] = "decoding_timestamp";  ///< int64_t, decoding timestamp.
     static constexpr const char BUFFER_DURATION[] = "buffer_duration";               ///< int64_t, buffer duration
+
+    /* -------------------- timed metadata tag -------------------- */
+    static constexpr const char TIMED_METADATA_SRC_TRACK_MIME[] =
+        "timed_metadata_src_track_mime";   ///< source track mime of timed metadata
+    static constexpr const char TIMED_METADATA_SRC_TRACK[] =
+        "timed_metadata_track_id";   ///< source track of timed metadata
+    static constexpr const char TIMED_METADATA_KEY[] = "timed_metadata_key";         ///< key of timed metadata
+    static constexpr const char TIMED_METADATA_LOCALE[] = "locale_timed_metadata";   ///< locale of timed metadata
+    static constexpr const char TIMED_METADATA_SETUP[] = "setup_of_timed_metadata";  ///< set up info of timed metadata
 
     /* -------------------- audio universal tag -------------------- */
     static constexpr const char AUDIO_CHANNEL_COUNT[] = "channel_count"; ///< audio channel count
@@ -119,6 +129,7 @@ public:
     static constexpr const char AUDIO_MAX_INPUT_SIZE[] = "audio.max.input.size";         ///< max input size
     static constexpr const char AUDIO_MAX_OUTPUT_SIZE[] = "audio.max.output.size";       ///< max output size
     static constexpr const char AUDIO_BITS_PER_CODED_SAMPLE[] = "bits_per_coded_sample"; ///< bits per coded sample
+    static constexpr const char AUDIO_BITS_PER_RAW_SAMPLE[] = "bits_per_raw_sample"; ///< bits per raw sample
 
     /* -------------------- audio specific tag -------------------- */
     static constexpr const char AUDIO_MPEG_VERSION[] = "audio.mpeg.version"; ///< mpeg version
@@ -192,6 +203,10 @@ public:
                                        ///< must be within the supported range. To get supported range, you should query
                                        ///< wthether the capability is supported. This is an optional key that applies
                                        ///< only to video encoder. It is used in configure.
+    static constexpr const char VIDEO_ENCODER_ENABLE_PARAMS_FEEDBACK[] =
+        "video_encoder_enable_params_feedback"; ///< int32_t, key for describing enable statistics params feedback with
+                                                ///< frame, This is an optional key that applies only to video encoder.
+                                                ///< It is used in configure.
     static constexpr const char VIDEO_ENCODER_PER_FRAME_MARK_LTR[] =
         "video_encoder_per_frame_mark_ltr"; ///< bool, key for describing mark this frame as a long term reference
                                             ///< frame, true is mark, false otherwise. It takes effect only when the
@@ -206,6 +221,9 @@ public:
         "video_per_frame_is_ltr"; ///< bool, key for indicating this frame is a long-term reference frame, true is LTR,
                                   ///< false otherwise. This is an optional key that applies only to video encoder
                                   ///< output loop. It indicates the attribute of the frame.
+    static constexpr const char VIDEO_PER_FRAME_IS_SKIP[] =
+        "video_per_frame_is_skip"; ///< bool, key for indicating all macroblocks in this frame are skipped, only to
+                                   ///< video encoder input loop. It indicates the attribute of the frame.
     static constexpr const char VIDEO_PER_FRAME_POC[] =
         "video_per_frame_poc"; ///< int32_t, key for describing the frame poc. This is an optional key that applies only
                                ///< to video encoder output loop. It indicates the attribute of the frame.
@@ -242,6 +260,9 @@ public:
         "video_encoder_qp_min"; ///< int32_t, key for describing the minimum quantization parameter allowed for video
                                 ///< encoder. It is used in configure/setparameter or takes effect immediately with the
                                 ///< frame.
+    static constexpr const char VIDEO_ENCODER_QP_START[] =
+        "video_encoder_qp_start"; ///< int32_t, key for describing the start quantization parameter allowed for video
+                                  ///< encoder. This is an optional key that applies only to video encoder input loop.
     static constexpr const char VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK[] =
         "video_encoder_enable_surface_input_callback"; ///< bool, the associated value is an bool (true or false): true
                                                        ///< is enabled, false is closed.
@@ -285,6 +306,13 @@ public:
                                                    ///< if no new frame became available since. This key takes effect
                                                    ///< only when {@link VIDEO_ENCODER_REPEAT_PREVIOUS_FRAME_AFTER} is
                                                    ///< vaild. It is used in configure.
+    static constexpr const char VIDEO_DECODER_OUTPUT_COLOR_SPACE[] =
+        "video_decoder_output_colorspace"; ///< int32_t, Key for video color space of the video decoder output.
+                                           ///< See {@link OH_NativeBuffer_ColorSpace} for value, and only
+                                           ///< {@link OH_COLORSPACE_BT709_LIMIT} is valid. It is used in configure.
+    static constexpr const char VIDEO_ENCODER_FRAME_TEMPORAL_ID[] =
+        "video_encoder_frame_temporal_id"; ///< int32_t, key for describing the temporal ID of the frame when SVC is
+                                           ///< enabled. This value is emitted from video encoder for a video frame.
 
     /* -------------------- video specific tag -------------------- */
     static constexpr const char VIDEO_H264_PROFILE[] = "video.h264.profile"; ///< @see VideoH264Profile
@@ -319,7 +347,7 @@ public:
     static constexpr const char FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_COUNT[] =
         "feature_property_video_encoder_max_ltr_frame_count"; ///< int32_t, the key for querying the maximum long
                                                             ///< term reference count
-    
+
     /* -------------------- AVCodec tag -------------------- */
     // Pid is int32_t and process name is string, to describe AVCodec's forward caller info.
     // For example, camera recording, forward caller is camera.
@@ -359,7 +387,7 @@ public:
     static constexpr const char RECORDER_AUDIO_CHANNEL_COUNT[] = "audioChannelCount";
     static constexpr const char RECORDER_AUDIO_BITRATE[] = "audioBitrate";
     static constexpr const char RECORDER_START_LATENCY[] = "startLatency";
-    
+
     static constexpr const char SUBTITLE_TEXT[] = "subtitle_text";
     static constexpr const char SUBTITLE_PTS[] = "subtitle_pts";
     static constexpr const char SUBTITLE_DURATION[] = "subtitle_duration";

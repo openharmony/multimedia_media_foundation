@@ -120,15 +120,20 @@ public:
 
     virtual Status Resume() final;
 
+    virtual Status ResumeDragging() final;
+
     virtual Status Stop() final;
 
     virtual Status Flush() final;
 
     virtual Status Release() final;
 
+    virtual Status SetPlayRange(int64_t start, int64_t end) final;
+
     virtual Status ProcessInputBuffer(int sendArg = 0, int64_t delayUs = 0) final;
 
-    virtual Status ProcessOutputBuffer(int sendArg = 0, int64_t delayUs = 0) final;
+    virtual Status ProcessOutputBuffer(int sendArg = 0, int64_t delayUs = 0, bool byIdx = false, uint32_t idx = 0,
+        int64_t renderTime = -1) final;
 
     virtual Status WaitAllState(FilterState state) final;
 
@@ -144,15 +149,19 @@ public:
 
     virtual Status DoResume();
 
+    virtual Status DoResumeDragging();
+
     virtual Status DoStop();
 
     virtual Status DoFlush();
 
     virtual Status DoRelease();
 
+    virtual Status DoSetPlayRange(int64_t start, int64_t end);
+
     virtual Status DoProcessInputBuffer(int recvArg, bool dropFrame);
 
-    virtual Status DoProcessOutputBuffer(int recvArg, bool dropFrame);
+    virtual Status DoProcessOutputBuffer(int recvArg, bool dropFrame, bool byIdx, uint32_t idx, int64_t renderTime);
 
     virtual void SetParameter(const std::shared_ptr<Meta>& meta);
 

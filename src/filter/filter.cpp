@@ -21,6 +21,10 @@
 #include "common/log.h"
 #include <algorithm>
 
+namespace {
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_ONLY_PRERELEASE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
+}
+
 namespace OHOS {
 namespace Media {
 namespace Pipeline {
@@ -135,9 +139,8 @@ Status Filter::Start()
     MEDIA_LOG_D("Start %{public}s, pState:%{public}d", name_.c_str(), curState_);
     if (filterTask_) {
         filterTask_->SubmitJobOnce([this] {
-            if (StartDone() == Status::OK) {
-                filterTask_->Start();
-            }
+            StartDone();
+            filterTask_->Start();
         });
         for (auto iter : nextFiltersMap_) {
             for (auto filter : iter.second) {
@@ -194,9 +197,8 @@ Status Filter::Resume()
     MEDIA_LOG_D("Resume %{public}s, pState:%{public}d", name_.c_str(), curState_);
     if (filterTask_) {
         filterTask_->SubmitJobOnce([this]() {
-            if (ResumeDone() == Status::OK) {
-                filterTask_->Start();
-            }
+            ResumeDone();
+            filterTask_->Start();
         });
         for (auto iter : nextFiltersMap_) {
             for (auto filter : iter.second) {
@@ -221,6 +223,30 @@ Status Filter::ResumeDone()
     SetErrCode(ret);
     ChangeState(ret == Status::OK ? FilterState::RUNNING : FilterState::ERROR);
     return ret;
+}
+
+Status Filter::ResumeDragging()
+{
+    MEDIA_LOG_D("ResumeDragging %{public}s, pState:%{public}d", name_.c_str(), curState_);
+    if (filterTask_) {
+        filterTask_->SubmitJobOnce([this]() {
+            DoResumeDragging();
+            filterTask_->Start();
+        });
+        for (auto iter : nextFiltersMap_) {
+            for (auto filter : iter.second) {
+                filter->ResumeDragging();
+            }
+        }
+    } else {
+        for (auto iter : nextFiltersMap_) {
+            for (auto filter : iter.second) {
+                filter->ResumeDragging();
+            }
+        }
+        return DoResumeDragging();
+    }
+    return Status::OK;
 }
 
 Status Filter::Stop()
@@ -292,6 +318,17 @@ Status Filter::ReleaseDone()
     return ret;
 }
 
+Status Filter::SetPlayRange(int64_t start, int64_t end)
+{
+    MEDIA_LOG_D("SetPlayRange %{public}ld, pState:%{public}ld", name_.c_str(), curState_);
+    for (auto iter : nextFiltersMap_) {
+        for (auto filter : iter.second) {
+            filter->SetPlayRange(start, end);
+        }
+    }
+    return DoSetPlayRange(start, end);
+}
+
 Status Filter::ClearAllNextFilters()
 {
     nextFiltersMap_.clear();
@@ -314,18 +351,19 @@ Status Filter::ProcessInputBuffer(int sendArg, int64_t delayUs)
     return Status::OK;
 }
 
-Status Filter::ProcessOutputBuffer(int sendArg, int64_t delayUs)
+Status Filter::ProcessOutputBuffer(int sendArg, int64_t delayUs, bool byIdx, uint32_t idx, int64_t renderTime)
 {
     MEDIA_LOG_D("Filter::ProcessOutputBuffer  %{public}s", name_.c_str());
     if (filterTask_) {
         jobIdx_++;
-        filterTask_->SubmitJob([this, sendArg]() {
+        filterTask_->SubmitJob([this, sendArg, byIdx, idx, renderTime]() {
             processIdx_++;
-            DoProcessOutputBuffer(sendArg, processIdx_<= jobIdxBase_); // drop frame after flush
+            // drop frame after flush
+            DoProcessOutputBuffer(sendArg, processIdx_<= jobIdxBase_, byIdx, idx, renderTime);
         }, delayUs, 0);
     } else {
         Task::SleepInTask(delayUs / 1000); // 1000 convert to ms
-        DoProcessOutputBuffer(sendArg, false);
+        DoProcessOutputBuffer(sendArg, false, false, idx, renderTime);
     }
     return Status::OK;
 }
@@ -361,6 +399,11 @@ Status Filter::DoResume()
     return Status::OK;
 }
 
+Status Filter::DoResumeDragging()
+{
+    return Status::OK;
+}
+
 Status Filter::DoStop()
 {
     return Status::OK;
@@ -376,12 +419,17 @@ Status Filter::DoRelease()
     return Status::OK;
 }
 
+Status Filter::DoSetPlayRange(int64_t start, int64_t end)
+{
+    return Status::OK;
+}
+
 Status Filter::DoProcessInputBuffer(int recvArg, bool dropFrame)
 {
     return Status::OK;
 }
 
-Status Filter::DoProcessOutputBuffer(int recvArg, bool dropFrame)
+Status Filter::DoProcessOutputBuffer(int recvArg, bool dropFrame, bool byIdx, uint32_t idx, int64_t renderTimee)
 {
     return Status::OK;
 }

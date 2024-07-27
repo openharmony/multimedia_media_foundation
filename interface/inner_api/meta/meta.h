@@ -171,17 +171,20 @@ public:
                            AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_ENCODE_BITRATE_MODE,
         Plugins::VideoEncodeBitrateMode, AnyValueType::INT32_T);
-    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_COLOR_RANGE or 
+    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_COLOR_RANGE or
         tagCharSeq == Tag::VIDEO_REQUEST_I_FRAME or
         tagCharSeq == Tag::VIDEO_IS_HDR_VIVID or
         tagCharSeq == Tag::MEDIA_HAS_VIDEO or
         tagCharSeq == Tag::MEDIA_HAS_AUDIO or
         tagCharSeq == Tag::MEDIA_HAS_SUBTITLE or
+        tagCharSeq == Tag::MEDIA_HAS_TIMEDMETA or
         tagCharSeq == Tag::MEDIA_END_OF_STREAM or
         tagCharSeq == Tag::VIDEO_ENCODER_PER_FRAME_MARK_LTR or
         tagCharSeq == Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE or
         tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_TEMPORAL_SCALABILITY or
+        tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_PARAMS_FEEDBACK or
         tagCharSeq == Tag::VIDEO_PER_FRAME_IS_LTR or
+        tagCharSeq == Tag::VIDEO_PER_FRAME_IS_SKIP or
         tagCharSeq == Tag::VIDEO_ENABLE_LOW_LATENCY or
         tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK or
         tagCharSeq == Tag::SCREEN_CAPTURE_USER_AGREE or
@@ -228,6 +231,7 @@ public:
         tagCharSeq == Tag::AUDIO_AAC_IS_ADTS or
         tagCharSeq == Tag::AUDIO_COMPRESSION_LEVEL or
         tagCharSeq == Tag::AUDIO_BITS_PER_CODED_SAMPLE or
+        tagCharSeq == Tag::AUDIO_BITS_PER_RAW_SAMPLE or
         tagCharSeq == Tag::REGULAR_TRACK_ID or
         tagCharSeq == Tag::VIDEO_SCALE_TYPE or
         tagCharSeq == Tag::VIDEO_I_FRAME_INTERVAL or
@@ -257,6 +261,7 @@ public:
         tagCharSeq == Tag::VIDEO_SLICE_HEIGHT or
         tagCharSeq == Tag::VIDEO_ENCODER_QP_MAX or
         tagCharSeq == Tag::VIDEO_ENCODER_QP_MIN or
+        tagCharSeq == Tag::VIDEO_ENCODER_QP_START or
         tagCharSeq == Tag::FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_COUNT or
         tagCharSeq == Tag::SCREEN_CAPTURE_ERR_CODE or
         tagCharSeq == Tag::SCREEN_CAPTURE_DURATION or
@@ -271,6 +276,7 @@ public:
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::VIDEO_DECODER_RATE_UPPER_LIMIT or
         tagCharSeq == Tag::VIDEO_ENCODER_QP_AVERAGE or
+        tagCharSeq == Tag::VIDEO_ENCODER_FRAME_TEMPORAL_ID or
         tagCharSeq == Tag::AV_PLAYER_ERR_CODE or
         tagCharSeq == Tag::AV_PLAYER_PLAY_DURATION or
         tagCharSeq == Tag::AV_PLAYER_SOURCE_TYPE or
@@ -375,6 +381,15 @@ public:
         tagCharSeq == Tag::AV_PLAYER_HDR_TYPE, int8_t, AnyValueType::INT8_T);
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::MEDIA_AVAILABLE_BITRATES, std::vector<uint8_t>, AnyValueType::VECTOR_UINT8);
+    DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::TIMED_METADATA_SRC_TRACK_MIME or
+        tagCharSeq == Tag::TIMED_METADATA_KEY or
+        tagCharSeq == Tag::TIMED_METADATA_LOCALE or
+        tagCharSeq == Tag::TIMED_METADATA_SETUP, std::string, AnyValueType::STRING);
+    DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::TIMED_METADATA_SRC_TRACK, int32_t, AnyValueType::INT32_T);
+    DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::VIDEO_DECODER_OUTPUT_COLOR_SPACE, int32_t, AnyValueType::INT32_T);
 
     Meta &operator=(const Meta &other)
     {

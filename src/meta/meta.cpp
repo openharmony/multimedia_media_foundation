@@ -45,6 +45,11 @@
  *    SetMetaData/GetMetaData: AVFormat use them to set/get enum/bool/int values,
  *    It can convert the integer to/from enum/bool automatically.
  **/
+
+namespace {
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
+}
+
 namespace OHOS {
 namespace Media {
 using namespace Plugins;
@@ -125,11 +130,13 @@ static std::vector<TagType> g_metadataBoolVector = {
     Tag::MEDIA_HAS_VIDEO,
     Tag::MEDIA_HAS_AUDIO,
     Tag::MEDIA_HAS_SUBTITLE,
+    Tag::MEDIA_HAS_TIMEDMETA,
     Tag::MEDIA_END_OF_STREAM,
     Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE,
     Tag::VIDEO_ENCODER_ENABLE_TEMPORAL_SCALABILITY,
     Tag::VIDEO_ENCODER_PER_FRAME_MARK_LTR,
     Tag::VIDEO_PER_FRAME_IS_LTR,
+    Tag::VIDEO_PER_FRAME_IS_SKIP,
     Tag::VIDEO_ENABLE_LOW_LATENCY,
     Tag::VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK,
     Tag::VIDEO_BUFFER_CAN_DROP,
@@ -285,6 +292,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::AUDIO_AAC_IS_ADTS, defaultInt32},
     {Tag::AUDIO_COMPRESSION_LEVEL, defaultInt32},
     {Tag::AUDIO_BITS_PER_CODED_SAMPLE, defaultInt32},
+    {Tag::AUDIO_BITS_PER_RAW_SAMPLE, defaultInt32},
     {Tag::REGULAR_TRACK_ID, defaultInt32},
     {Tag::VIDEO_SCALE_TYPE, defaultInt32},
     {Tag::VIDEO_I_FRAME_INTERVAL, defaultInt32},
@@ -309,6 +317,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_SLICE_HEIGHT, defaultInt32},
     {Tag::VIDEO_ENCODER_QP_MAX, defaultInt32},
     {Tag::VIDEO_ENCODER_QP_MIN, defaultInt32},
+    {Tag::VIDEO_ENCODER_QP_START, defaultInt32},
     {Tag::FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_COUNT, defaultInt32},
     {Tag::OH_MD_KEY_AUDIO_OBJECT_NUMBER, defaultInt32},
     {Tag::AV_CODEC_CALLER_PID, defaultInt32},
@@ -327,7 +336,9 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::RECORDER_AUDIO_CHANNEL_COUNT, defaultInt32},
     {Tag::RECORDER_AUDIO_BITRATE, defaultInt32},
     {Tag::RECORDER_START_LATENCY, defaultInt32},
+    {Tag::TIMED_METADATA_SRC_TRACK, defaultInt32},
     {Tag::VIDEO_ENCODER_QP_AVERAGE, defaultInt32},
+    {Tag::VIDEO_ENCODER_FRAME_TEMPORAL_ID, defaultInt32},
     {Tag::AV_PLAYER_ERR_CODE, defaultInt32},
     {Tag::AV_PLAYER_PLAY_DURATION, defaultInt32},
     {Tag::AV_PLAYER_SOURCE_TYPE, defaultInt32},
@@ -348,6 +359,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_COORDINATE_H, defaultInt32},
     {Tag::VIDEO_ENCODER_REPEAT_PREVIOUS_FRAME_AFTER, defaultInt32},
     {Tag::VIDEO_ENCODER_REPEAT_PREVIOUS_MAX_COUNT, defaultInt32},
+    {Tag::VIDEO_DECODER_OUTPUT_COLOR_SPACE, defaultInt32},
     // String
     {Tag::MIME_TYPE, defaultString},
     {Tag::MEDIA_FILE_URI, defaultString},
@@ -378,6 +390,10 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::DRM_APP_NAME, defaultString},
     {Tag::DRM_INSTANCE_ID, defaultString},
     {Tag::DRM_ERROR_MESG, defaultString},
+    {Tag::TIMED_METADATA_SRC_TRACK_MIME, defaultString},
+    {Tag::TIMED_METADATA_KEY, defaultString},
+    {Tag::TIMED_METADATA_LOCALE, defaultString},
+    {Tag::TIMED_METADATA_SETUP, defaultString},
     {Tag::RECORDER_ERR_MSG, defaultString},
     {Tag::RECORDER_CONTAINER_MIME, defaultString},
     {Tag::RECORDER_VIDEO_MIME, defaultString},
@@ -404,13 +420,16 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::MEDIA_HAS_VIDEO, defaultBool},
     {Tag::MEDIA_HAS_AUDIO, defaultBool},
     {Tag::MEDIA_HAS_SUBTITLE, defaultBool},
+    {Tag::MEDIA_HAS_TIMEDMETA, defaultBool},
     {Tag::MEDIA_END_OF_STREAM, defaultBool},
     {Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE, defaultBool},
     {Tag::VIDEO_ENCODER_ENABLE_TEMPORAL_SCALABILITY, defaultBool},
     {Tag::VIDEO_ENCODER_PER_FRAME_MARK_LTR, defaultBool},
     {Tag::VIDEO_PER_FRAME_IS_LTR, defaultBool},
+    {Tag::VIDEO_PER_FRAME_IS_SKIP, defaultBool},
     {Tag::VIDEO_ENABLE_LOW_LATENCY, defaultBool},
     {Tag::VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK, defaultBool},
+    {Tag::VIDEO_ENCODER_ENABLE_PARAMS_FEEDBACK, defaultBool},
     {Tag::VIDEO_BUFFER_CAN_DROP, defaultBool},
     {Tag::AUDIO_RENDER_SET_FLAG, defaultBool},
     {Tag::SCREEN_CAPTURE_USER_AGREE, defaultBool},

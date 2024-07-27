@@ -150,12 +150,16 @@ public:
 
     void ResetCapacity(size_t capacity)
     {
-        AutoLock lock(mutex_);
-        capacity_ = capacity;
+        {
+            AutoLock lock(mutex_);
+            capacity_ = capacity;
+        }
+        cvEmpty_.NotifyAll();
         MEDIA_LOG_D("ResetCapacity: capacity_ is " PUBLIC_LOG_ZU, capacity_);
     }
     
 private:
+    static constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
     void ClearUnprotected()
     {
         if (que_.empty()) {

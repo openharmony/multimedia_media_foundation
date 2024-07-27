@@ -17,6 +17,9 @@
 #include "avbuffer_queue_producer_impl.h"
 #include "common/log.h"
 
+namespace {
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
+}
 
 namespace OHOS {
 namespace Media {
@@ -114,6 +117,10 @@ int32_t AVBufferQueueProducerStub::OnAttachBuffer(
     MessageParcel& arguments, MessageParcel& reply, MessageOption& option)
 {
     auto buffer = AVBuffer::CreateAVBuffer();
+    if (buffer == nullptr) {
+        reply.WriteInt32(static_cast<int32_t>(Status::ERROR_NO_MEMORY));
+        return 0;
+    }
     buffer->ReadFromMessageParcel(arguments);
     auto isFilled = arguments.ReadBool();
 

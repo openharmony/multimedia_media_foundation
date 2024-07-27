@@ -19,6 +19,10 @@
 #include "common/native_mfmagic.h"
 #include "common/status.h"
 
+namespace {
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
+}
+
 using namespace OHOS::Media;
 
 struct OH_AVMemory *OH_AVMemory_Create(int32_t size)

@@ -539,6 +539,11 @@ int FFmpegDemuxerPlugin::AVReadPacket(void* opaque, uint8_t* buf, int bufSize) /
         auto result = ioContext->dataSource->ReadAt(ioContext->offset, buffer, static_cast<size_t>(bufSize));
         MEDIA_LOG_DD("AVReadPacket read data size = " PUBLIC_LOG_D32, static_cast<int>(bufData->GetSize()));
         if (result == Status::OK) {
+            auto bufferMem = buffer->GetMemory();
+            if (bufferMem == nullptr) {
+                MEDIA_LOG_E("AVReadPacket buffer GetMemory nullptr");
+                return -1;
+            }
             ioContext->offset += static_cast<int64_t>(bufferMem->GetSize());
             rtv = static_cast<int>(bufferMem->GetSize());
         } else if (result == Status::END_OF_STREAM) {
@@ -623,7 +628,12 @@ int Sniff(const std::string& pluginName, std::shared_ptr<DataSource> dataSource)
     auto bufData = bufferInfo->WrapMemory(buff.data(), bufferSize, bufferSize);
     int confidence = 0;
     if (bufData && dataSource->ReadAt(0, bufferInfo, bufferSize) == Status::OK) {
-        AVProbeData probeData{"", buff.data(), static_cast<int>(bufferInfo->GetMemory()->GetSize()), ""};
+        auto bufferInfoMem = bufferInfo->GetMemory();
+        if (bufferInfoMem == nullptr) {
+            MEDIA_LOG_E("Sniff failed due to bufferInfo GetMemory nullptr");
+            return 0;
+        }
+        AVProbeData probeData{"", buff.data(), static_cast<int>(bufferInfoMem->GetSize()), ""};
         confidence = plugin->read_probe(&probeData);
     }
     if (confidence > 0) {

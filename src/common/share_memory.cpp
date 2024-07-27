@@ -20,6 +20,10 @@
 #include "cpp_ext/type_cast_ext.h"
 #include "securec.h"
 
+namespace {
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
+}
+
 namespace OHOS {
 namespace Media {
 namespace Plugins {

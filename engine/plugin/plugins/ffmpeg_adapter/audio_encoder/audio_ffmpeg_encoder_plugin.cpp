@@ -417,6 +417,10 @@ Status AudioFfmpegEncoderPlugin::SendBufferLocked(const std::shared_ptr<Buffer>&
         eos = true;
     } else {
         auto inputMemory = inputBuffer->GetMemory();
+        if (inputMemory == nullptr) {
+            MEDIA_LOG_E("SendBufferLocked inputBuffer GetMemory nullptr");
+            return Status::ERROR_UNKNOWN;
+        }
         FALSE_RETURN_V_MSG_W(inputMemory->GetSize() == fullInputFrameSize_, Status::ERROR_NOT_ENOUGH_DATA,
             "Not enough data, input: " PUBLIC_LOG_ZU ", fullInputFrameSize: " PUBLIC_LOG_U32,
             inputMemory->GetSize(), fullInputFrameSize_);
@@ -446,6 +450,10 @@ Status AudioFfmpegEncoderPlugin::ReceiveFrameSucc(const std::shared_ptr<Buffer>&
                                                   const std::shared_ptr<AVPacket>& packet)
 {
     auto ioInfoMem = ioInfo->GetMemory();
+    if (ioInfoMem == nullptr) {
+        MEDIA_LOG_E("ReceiveFrameSucc ioInfo GetMemory nullptr");
+        return Status::ERROR_UNKNOWN;
+    }
     FALSE_RETURN_V_MSG_W(ioInfoMem->GetCapacity() >= static_cast<size_t>(packet->size),
                          Status::ERROR_NO_MEMORY, "buffer size is not enough");
     ioInfoMem->Write(packet->data, packet->size);
