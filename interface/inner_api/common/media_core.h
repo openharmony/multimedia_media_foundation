@@ -78,6 +78,7 @@ enum MediaServiceErrCode : ErrCode {
     MSERR_AUD_INTERRUPT,                              // audio interrupted.
     MSERR_USER_NO_PERMISSION,                         // user permission denied (AccessToken).
     MSERR_DRM_VERIFICATION_FAILED,                    // DRM verification failed
+    MSERR_UNSUPPORT_WATER_MARK,                       // unsupported watermark
     MSERR_EXTEND_START      = MS_ERR_OFFSET + 0xF000, // extend err start.
 };
 
