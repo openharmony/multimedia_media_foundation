@@ -57,7 +57,7 @@ struct Callback {
         (void)flag;
     }
 
-    virtual bool CanDoSelectBitRate()
+    virtual bool CanAutoSelectBitRate()
     {
         return false;
     }
