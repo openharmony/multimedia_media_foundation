@@ -544,8 +544,8 @@ int FFmpegDemuxerPlugin::AVReadPacket(void* opaque, uint8_t* buf, int bufSize) /
                 MEDIA_LOG_E("AVReadPacket buffer GetMemory nullptr");
                 return -1;
             }
-            ioContext->offset += bufferMem->GetSize();
-            rtv = bufferMem->GetSize();
+            ioContext->offset += static_cast<int64_t>(bufferMem->GetSize());
+            rtv = static_cast<int>(bufferMem->GetSize());
         } else if (result == Status::END_OF_STREAM) {
             ioContext->eos = true;
             rtv = AVERROR_EOF;
