@@ -56,6 +56,8 @@ inline std::string HstGetFileName(const std::string &file)
 #define LOG_DOMAIN_RECORDER      0xD002B2C
 #undef LOG_DOMAIN_HIPLAYER
 #define LOG_DOMAIN_HIPLAYER      0xD002B2D
+#undef LOG_DOMAIN_METADATA
+#define LOG_DOMAIN_METADATA      0xD002B2C
 #define PUBLIC_LOG "%{public}"
 #else
 #define PUBLIC_LOG "%"
