@@ -272,9 +272,9 @@ public:
         "video_buffer_can_drop"; ///< bool, key to describe that encoded video buffer can be dropped or not befor
                                  ///< sent to decoder in video playing.
     static constexpr const char VIDEO_ENCODER_FRAME_I_RATIO[] = 
-        "video_encoder_frame_I_ratio"; ///< int32_t, key for describing the ratio of I frame num in all video frame num.
-                                       ///< This is a part of a video encoder statistics export feature. This value is
-                                       ///< emitted from video encoder for a video frame.
+        "video_encoder_frame_I_ratio"; ///< int32_t, key for describing the percent ratio of I macroblock num in all
+                                       ///< macroblock num of this frame. This is a part of a video encoder statistics
+                                       ///< export feature. This value is emitted from video encoder for a video frame.
     static constexpr const char VIDEO_ENCODER_FRAME_MADI[] = 
         "video_encoder_frame_madi"; ///< int32_t, key for describing frame madi. This is a part of a video encoder
                                     ///< statistic sexport feature. This value is emitted from video encoder for a video
