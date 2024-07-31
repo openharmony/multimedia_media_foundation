@@ -275,6 +275,12 @@ public:
         tagCharSeq == Tag::RECORDER_START_LATENCY, int32_t, AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::VIDEO_DECODER_RATE_UPPER_LIMIT or
+        tagCharSeq == Tag::VIDEO_ENCODER_FRAME_I_RATIO or
+        tagCharSeq == Tag::VIDEO_ENCODER_FRAME_MADI or
+        tagCharSeq == Tag::VIDEO_ENCODER_FRAME_MADP or
+        tagCharSeq == Tag::VIDEO_ENCODER_SUM_MADI or
+        tagCharSeq == Tag::VIDEO_ENCODER_REAL_BIT_RATE or
+        tagCharSeq == Tag::VIDEO_ENCODER_FRAME_QP or
         tagCharSeq == Tag::VIDEO_ENCODER_QP_AVERAGE or
         tagCharSeq == Tag::VIDEO_ENCODER_FRAME_TEMPORAL_ID or
         tagCharSeq == Tag::AV_PLAYER_ERR_CODE or
