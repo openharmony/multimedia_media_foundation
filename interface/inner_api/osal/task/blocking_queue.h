@@ -40,7 +40,7 @@ public:
         AutoLock lock(mutex_);
         return que_.size();
     }
-    size_t Capacity()
+    size_t __attribute__((no_sanitize("cfi"))) Capacity()
     {
         AutoLock lock(mutex_);
         return capacity_;
