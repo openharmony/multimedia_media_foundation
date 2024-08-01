@@ -341,7 +341,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_ENCODER_FRAME_MADI, defaultInt32},
     {Tag::VIDEO_ENCODER_FRAME_MADP, defaultInt32},
     {Tag::VIDEO_ENCODER_SUM_MADI, defaultInt32},
-    {Tag::VIDEO_ENCODER_REAL_BIT_RATE, defaultInt32},
+    {Tag::VIDEO_ENCODER_REAL_BITRATE, defaultInt32},
     {Tag::VIDEO_ENCODER_FRAME_QP, defaultInt32},
     {Tag::VIDEO_ENCODER_QP_AVERAGE, defaultInt32},
     {Tag::VIDEO_ENCODER_FRAME_TEMPORAL_ID, defaultInt32},
