@@ -287,7 +287,7 @@ public:
         "video_encoder_sum_madi"; ///< int32_t, key for describing the sum of the previous 10 frame madi. This is a part
                                   ///< of a video encoder statistics export feature. This value is emitted from video
                                   ///< encoder for a video frame.
-    static constexpr const char VIDEO_ENCODER_REAL_BIT_RATE[] =
+    static constexpr const char VIDEO_ENCODER_REAL_BITRATE[] =
         "video_encoder_real_bit_rate"; ///< int32_t, key for describing the real bit rate. This is a part of a video
                                        ///< encoder statistics export feature. This value is emitted from video
                                        ///< encoder for a video frame.

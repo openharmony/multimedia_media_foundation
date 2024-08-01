@@ -279,7 +279,7 @@ public:
         tagCharSeq == Tag::VIDEO_ENCODER_FRAME_MADI or
         tagCharSeq == Tag::VIDEO_ENCODER_FRAME_MADP or
         tagCharSeq == Tag::VIDEO_ENCODER_SUM_MADI or
-        tagCharSeq == Tag::VIDEO_ENCODER_REAL_BIT_RATE or
+        tagCharSeq == Tag::VIDEO_ENCODER_REAL_BITRATE or
         tagCharSeq == Tag::VIDEO_ENCODER_FRAME_QP or
         tagCharSeq == Tag::VIDEO_ENCODER_QP_AVERAGE or
         tagCharSeq == Tag::VIDEO_ENCODER_FRAME_TEMPORAL_ID or
