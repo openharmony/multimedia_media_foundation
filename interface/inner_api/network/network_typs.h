@@ -15,6 +15,8 @@
 #ifndef HISTREAMER_NETWORK_TYPES_H
 #define HISTREAMER_NETWORK_TYPES_H
 
+#include <string>
+#include <map>
 #include "common/status.h"
 #include "plugin/plugin_event.h"
 
@@ -27,8 +29,14 @@ using RxHeader = size_t(*)(void* buffer, size_t size, size_t nitems, void* userP
 using RequestCompletedFunc = std::function<void(const Status&)>;
 using HandleResponseCbFunc = std::function<void(
     const NetworkClientErrorCode clientCode, const NetworkServerErrorCode serverCode, const Status ret)>;
+
+struct RequestInfo {
+    std::string url;
+    std::map<std::string, std::string> httpHeader;
+    int32_t timeoutMs{-1};
+};
 } // namespace HttpPlugin
 } // namespace Plugins
 } // namespace Media
 } // namespace OHOS
-#endif // HISTREAMER_NETWORK_TYPES_H
+#endif // HISTREAMER_NETWORK_TYPES_H
