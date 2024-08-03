@@ -79,6 +79,7 @@ enum MediaServiceErrCode : ErrCode {
     MSERR_USER_NO_PERMISSION,                         // user permission denied (AccessToken).
     MSERR_DRM_VERIFICATION_FAILED,                    // DRM verification failed
     MSERR_UNSUPPORT_WATER_MARK,                       // unsupported watermark
+    MSERR_DEMUXER_BUFFER_NO_MEMORY,                   // demuxer cache data reached its limit
     MSERR_EXTEND_START      = MS_ERR_OFFSET + 0xF000, // extend err start.
 };
 
