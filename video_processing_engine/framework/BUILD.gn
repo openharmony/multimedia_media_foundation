@@ -14,48 +14,119 @@
 import("//foundation/multimedia/media_foundation/config.gni")
 import("$histreamer_root_dir/video_processing_engine/config.gni")
 
-ohos_shared_library("image_processing") {
-  sanitize = {
-    boundary_sanitize = true
-    cfi = true
-    cfi_cross_dso = true
-    integer_overflow = true
-    ubsan = true
-    debug = false
+if (hst_is_standard_sys) {
+  config("vpe_capi_config") {
+    cflags = [
+      "-fno-exceptions",
+      "-Wall",
+      "-fno-common",
+      "-fstack-protector-all",
+      "-Wshadow",
+      "-FPIC",
+      "-FS",
+      "-O2",
+      "-D_FORTIFY_SOURCE=2",
+      "-Wformat=2",
+      "-Wdate-time",
+    ]
+
+    cflags_cc = [
+      "-std=c++17",
+      "-fno-rtti",
+    ]
   }
 
-  stack_protector_ret = true
+  config("vpe_capi_public_config") {
+    include_dirs = [
+      "$vpe_interface_capi_dir",
+      "$vpe_interface_inner_dir",
+    ]
+  }
 
-  cflags = vpe_cflags
-  cflags += [
-    "-ffunction-sections",
-    "-fdata-sections",
-  ]
+  ohos_shared_library("image_processing") {
+    stack_protector_ret = true
+    install_enable = true
 
-  ldflags = [ "-W1,--gc-sections" ]
+    sanitize = {
+      boundary_sanitize = true
+      cfi = true
+      cfi_cross_dso = true
+      integer_overflow = true
+      ubsan = true
+      debug = false
+    }
 
-  include_dirs = [
-    "$vpe_interface_capi_dir",
-    "$vpe_dfx_dir/include",
-    "$vpe_capi_image_dir/include",
-  ]
+    configs = [ ":vpe_capi_config" ]
+    public_configs = [ ":vpe_capi_public_config" ]
 
-  sources = [
-    "$vpe_capi_image_dir/image_processing.cpp",
-    "$vpe_capi_image_dir/image_processing_loader.cpp",
-  ]
+    include_dirs = [
+      "$vpe_interface_capi_dir",
+      "$vpe_interface_inner_dir",
+      "$vpe_dfx_dir/include",
+      "$vpe_capi_image_dir/include",
+    ]
 
-  deps = [ "$vpe_base_root_dir/src:media_foundation" ]
+    sources = [
+      "$vpe_capi_image_dir/image_processing.cpp",
+      "$vpe_capi_image_dir/image_processing_loader.cpp",
+    ]
 
-  external_deps = [
-    "c_utils:utils",
-    "graphic_surface:surface",
-    "hilog:libhilog",
-    "hitrace:hitrace_meter",
-  ]
+    deps = [ "$vpe_base_root_dir/src:media_foundation" ]
 
-  output_extension = "so"
-  subsystem_name = "multimedia"
-  innerapi_tags = [ "ndk" ]
-  part_name = "media_foundation"
+    external_deps = [
+      "graphic_surface:surface",
+      "hilog:libhilog",
+      "hitrace:hitrace_meter",
+    ]
+
+    output_extension = "so"
+    subsystem_name = "multimedia"
+    part_name = "media_foundation"
+  }
+
+  ohos_shared_library("video_processing") {
+    stack_protector_ret = true
+    install_enable = true
+
+    sanitize = {
+      boundary_sanitize = true
+      cfi = true
+      cfi_cross_dso = true
+      integer_overflow = true
+      ubsan = true
+      debug = false
+    }
+
+    configs = [ ":vpe_capi_config" ]
+    public_configs = [ ":vpe_capi_public_config" ]
+
+    include_dirs = [
+      "$vpe_interface_capi_dir",
+      "$vpe_interface_inner_dir",
+      "$vpe_dfx_dir/include",
+      "$vpe_capi_video_dir/include",
+    ]
+
+    sources = [
+      "$vpe_capi_video_dir/video_processing.cpp",
+      "$vpe_capi_video_dir/video_processing_loader.cpp",
+    ]
+
+    deps = [ "$vpe_base_root_dir/src:media_foundation" ]
+
+    external_deps = [
+      "graphic_surface:surface",
+      "hilog:libhilog",
+      "hitrace:hitrace_meter",
+    ]
+
+    output_extension = "so"
+    subsystem_name = "multimedia"
+    part_name = "media_foundation"
+  }
+} else {
+  group("image_processing") {
+  }
+  group("video_processing") {
+  }
 }

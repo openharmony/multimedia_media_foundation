@@ -27,24 +27,4 @@ vpe_capi_video_dir = "$vpe_capi_dir/video_processing"
 
 vpe_interface_dir = "$vpe_capi_root_dir/interface"
 vpe_interface_capi_dir = "$vpe_interface_dir/kits/c"
-
-vpe_cflags = [
-  "-std=c++17",
-  "-fno-rtti",
-  "-fno-exceptions",
-  "-Wall",
-  "-fno-common",
-  "-fstack-protector-strong",
-  "-Wshadow",
-  "-FPIC",
-  "-FS",
-  "-O2",
-  "-D_FORTIFY_SOURCE=2",
-  "-Wformat=2",
-  "-Wdate-time",
-  "-Werror",
-  "-Wextra",
-  "-Wimplicit-fallthrough",
-  "-Wsign-compare",
-  "-Wunused-parameter",
-]
+vpe_interface_inner_dir = "$vpe_interface_dir/inner_api"

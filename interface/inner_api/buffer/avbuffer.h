@@ -108,6 +108,7 @@ public:
     using MetaData = std::vector<uint8_t>;
 
     int64_t pts_;
+    int64_t absPts_;
     int64_t dts_;
     int64_t duration_;
     uint32_t flag_;

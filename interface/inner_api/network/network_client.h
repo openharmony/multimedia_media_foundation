@@ -33,14 +33,15 @@ public:
     virtual Status Init() = 0;
     virtual Status Open(const std::string& url, const std::map<std::string, std::string>& httpHeader,
         int32_t timeoutMs) = 0;
-    virtual Status RequestData(long startPos, int len, const std::string& url,
-        const std::map<std::string, std::string>& httpHeader, HandleResponseCbFunc completedCb) = 0;
+    virtual Status RequestData(long startPos, int len, const RequestInfo& sourceInfo,
+        HandleResponseCbFunc completedCb) = 0;
     virtual Status Close() = 0;
     virtual Status Deinit() = 0;
     static std::shared_ptr<NetworkClient> GetInstance(RxHeader headCallback, RxBody bodyCallback, void *userParam);
+    virtual Status GetIp(std::string &ip);
 };
 } // namespace HttpPlugin
 } // namespace Plugins
 } // namespace Media
 } // namespace OHOS
-#endif // HISTREAMER_NETWORK_CLIENT_H
+#endif // HISTREAMER_NETWORK_CLIENT_H

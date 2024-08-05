@@ -229,6 +229,17 @@
                   ],
                   "header_base": "//foundation/multimedia/media_foundation/video_processing_engine/interface/kits/c"
                 }
+              },
+              {
+                "type": "so",
+                "name": "//foundation/multimedia/media_foundation/video_processing_engine/framework:video_processing",
+                "header": {
+                  "header_files": [
+                    "video_processing.h",
+                    "video_processing_types.h"
+                  ],
+                  "header_base": "//foundation/multimedia/media_foundation/video_processing_engine/interface/kits/c"
+                }
               }
             ],
             "test": [

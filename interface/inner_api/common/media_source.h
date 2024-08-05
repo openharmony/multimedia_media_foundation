@@ -64,6 +64,14 @@ public:
     static constexpr std::string_view APPLICATION_M3U8 = "application/m3u8";
 };
 
+typedef struct PlaybackInfo {
+    std::string serverIpAddress {};
+    int64_t averageDownloadRate = 0;
+    int64_t downloadRate = 0;
+    bool isDownloading = false;
+    int64_t bufferDuration = 0;
+} PlaybackInfo;
+
 class MediaSource {
 public:
     /// Construct an a specified URI.

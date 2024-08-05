@@ -15,6 +15,10 @@
 
 #include "image_processing_loader.h"
 
+#include <dlfcn.h>
+
+#include "vpe_log.h"
+
 namespace {
 const std::string VPE_IMPL_LIBRARY_PATH = "libimage_processing_capi_impl.so";
 }
