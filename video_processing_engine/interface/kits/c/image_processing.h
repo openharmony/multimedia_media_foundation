@@ -257,7 +257,7 @@ ImageProcessing_ErrorCode OH_ImageProcessing_Compose(OH_ImageProcessing* imagePr
  * {@link IMAGE_PROCESSING_ERROR_NO_MEMORY} if memory allocation failed.
  * @since 12
  */
-ImageProcessing_ErrorCode OH_ImageProcessing_Deompose(OH_ImageProcessing* imageProcessor,
+ImageProcessing_ErrorCode OH_ImageProcessing_Decompose(OH_ImageProcessing* imageProcessor,
     OH_PixelmapNative* sourceImage, OH_PixelmapNative* destinationImage, OH_PixelmapNative* destinationGainmap);
 
 /**

@@ -21,10 +21,7 @@
 #include <mutex>
 #include <string>
 
-#include <dlfcn.h>
-
-#include "vpe_log.h"
-#include "image_processing_interface.h"
+#include "image_processing_capi_interface.h"
 
 class ImageProcessingNdkLoader {
 public:
@@ -77,36 +74,11 @@ private:
     bool LoadLibraryLocked();
     void UnloadLibraryLocked();
     bool OpenLibraryLocked(const std::string& path);
+    bool LoadInterfaceLocked(IImageProcessingNdk*& interface, destroyNdkFunc& destroyFunc,
+        const std::string& createFuncName, const std::string& destroyFuncName, const std::string& path);
 
     bool CallSupportNdk(std::function<bool(IImageProcessingNdk*)>&& operation);
     ImageProcessing_ErrorCode CallNdk(std::function<ImageProcessing_ErrorCode(IImageProcessingNdk*)>&& operation);
-
-    template <typename T1, typename T2, typename T3>
-    bool LoadInterfaceLocked(T1& interface, T2& destroyFunc, const std::string& createFuncName,
-        const std::string& destroyFuncName, const std::string& path)
-    {
-        T3 createFunc = reinterpret_cast<T3>(dlsym(mLibHandle, createFuncName.c_str()));
-        if (createFunc == nullptr) {
-            VPE_LOGE("Failed to locate %{public}s in %{public}s - %{public}s",
-                createFuncName.c_str(), path.c_str(), path.c_str());
-            UnloadLibraryLocked();
-            return false;
-        }
-        destroyFunc = reinterpret_cast<T2>(dlsym(mLibHandle, destroyFuncName.c_str()));
-        if (destroyFunc == nullptr) {
-            VPE_LOGE("Failed to locate %{public}s in %{public}s - %{public}s",
-                destroyFuncName.c_str(), path.c_str(), path.c_str());
-            UnloadLibraryLocked();
-            return false;
-        }
-        interface = createFunc();
-        if (interface == nullptr) {
-            VPE_LOGW("Failed to create interface!");
-            UnloadLibraryLocked();
-            return false;
-        }
-        return true;
-    }
 
     std::mutex lock_{};
     // Guarded by lock_ begin

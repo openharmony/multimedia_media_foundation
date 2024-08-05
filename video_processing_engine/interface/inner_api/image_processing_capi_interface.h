@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-#ifndef IMAGE_PROCESSING_INTERFACE_H
-#define IMAGE_PROCESSING_INTERFACE_H
+#ifndef IMAGE_PROCESSING_CAPI_INTERFACE_H
+#define IMAGE_PROCESSING_CAPI_INTERFACE_H
 
 #include "image_processing_types.h"
 
@@ -41,18 +41,16 @@ public:
     virtual ImageProcessing_ErrorCode GetParameter(OH_ImageProcessing* imageProcessor, OH_AVFormat* parameter) = 0;
     virtual ImageProcessing_ErrorCode ConvertColorSpace(OH_ImageProcessing* imageProcessor,
         OH_PixelmapNative* sourceImage, OH_PixelmapNative* destinationImage) = 0;
-    virtual ImageProcessing_ErrorCode Compose(
-        OH_ImageProcessing* imageProcessor, OH_PixelmapNative* sourceImage,
+    virtual ImageProcessing_ErrorCode Compose(OH_ImageProcessing* imageProcessor, OH_PixelmapNative* sourceImage,
         OH_PixelmapNative* sourceGainmap, OH_PixelmapNative* destinationImage) = 0;
-    virtual ImageProcessing_ErrorCode Decompose(
-        OH_ImageProcessing* imageProcessor, OH_PixelmapNative* sourceImage,
+    virtual ImageProcessing_ErrorCode Decompose(OH_ImageProcessing* imageProcessor, OH_PixelmapNative* sourceImage,
         OH_PixelmapNative* destinationImage, OH_PixelmapNative* destinationGainmap) = 0;
     virtual ImageProcessing_ErrorCode GenerateMetadata(OH_ImageProcessing* imageProcessor,
         OH_PixelmapNative* sourceImage) = 0;
     virtual ImageProcessing_ErrorCode EnhanceDetail(OH_ImageProcessing* imageProcessor, OH_PixelmapNative* sourceImage,
         OH_PixelmapNative* destinationImage) = 0;
 
-private:
+protected:
     IImageProcessingNdk() = default;
     virtual ~IImageProcessingNdk() = default;
     IImageProcessingNdk(const IImageProcessingNdk&) = delete;
@@ -61,9 +59,7 @@ private:
     IImageProcessingNdk& operator=(IImageProcessingNdk&&) = delete;
 };
 
-extern "C" {
-IImageProcessingNdk* CreateImageProcessingNdk();
-void DestroyImageProcessingNdk(IImageProcessingNdk* obj);
-}
+extern "C" IImageProcessingNdk* CreateImageProcessingNdk();
+extern "C" void DestroyImageProcessingNdk(IImageProcessingNdk* obj);
 
-#endif // IMAGE_PROCESSING_INTERFACE_H
+#endif // IMAGE_PROCESSING_CAPI_INTERFACE_H

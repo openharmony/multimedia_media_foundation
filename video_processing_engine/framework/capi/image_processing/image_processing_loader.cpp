@@ -187,8 +187,7 @@ bool ImageProcessingNdkLoader::LoadLibraryLocked()
         return false;
     }
 
-    if (!LoadInterfaceLocked<IImageProcessingNdk*, destroyNdkFunc, createNdkFunc>(
-        imageProcessing_, destroyImageProcessingFunc_,
+    if (!LoadInterfaceLocked(imageProcessing_, destroyImageProcessingFunc_,
         "CreateImageProcessingNdk", "DestroyImageProcessingNdk", path)) {
         UnloadLibraryLocked();
         return false;
@@ -221,6 +220,32 @@ bool ImageProcessingNdkLoader::OpenLibraryLocked(const std::string& path)
     mLibHandle = dlopen(path.c_str(), RTLD_NOW);
     if (mLibHandle == nullptr) {
         VPE_LOGW("Can't open library %{public}s - %{public}s", path.c_str(), dlerror());
+        return false;
+    }
+    return true;
+}
+
+bool ImageProcessingNdkLoader::LoadInterfaceLocked(IImageProcessingNdk*& interface, destroyNdkFunc& destroyFunc,
+    const std::string& createFuncName, const std::string& destroyFuncName, const std::string& path)
+{
+    createNdkFunc createFunc = reinterpret_cast<createNdkFunc>(dlsym(mLibHandle, createFuncName.c_str()));
+    if (createFunc == nullptr) {
+        VPE_LOGE("Failed to locate %{public}s in %{public}s - %{public}s",
+            createFuncName.c_str(), path.c_str(), path.c_str());
+        UnloadLibraryLocked();
+        return false;
+    }
+    destroyFunc = reinterpret_cast<destroyNdkFunc>(dlsym(mLibHandle, destroyFuncName.c_str()));
+    if (destroyFunc == nullptr) {
+        VPE_LOGE("Failed to locate %{public}s in %{public}s - %{public}s",
+            destroyFuncName.c_str(), path.c_str(), path.c_str());
+        UnloadLibraryLocked();
+        return false;
+    }
+    interface = createFunc();
+    if (interface == nullptr) {
+        VPE_LOGW("Failed to create interface!");
+        UnloadLibraryLocked();
         return false;
     }
     return true;
