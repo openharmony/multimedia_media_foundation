@@ -43,6 +43,47 @@ if (hst_is_standard_sys) {
     ]
   }
 
+  ohos_shared_library("image_processing") {
+    stack_protector_ret = true
+    install_enable = true
+
+    sanitize = {
+      boundary_sanitize = true
+      cfi = true
+      cfi_cross_dso = true
+      integer_overflow = true
+      ubsan = true
+      debug = false
+    }
+
+    configs = [ ":vpe_capi_config" ]
+    public_configs = [ ":vpe_capi_public_config" ]
+
+    include_dirs = [
+      "$vpe_interface_capi_dir",
+      "$vpe_interface_inner_dir",
+      "$vpe_dfx_dir/include",
+      "$vpe_capi_image_dir/include",
+    ]
+
+    sources = [
+      "$vpe_capi_image_dir/image_processing.cpp",
+      "$vpe_capi_image_dir/image_processing_loader.cpp",
+    ]
+
+    deps = [ "$vpe_base_root_dir/src:media_foundation" ]
+
+    external_deps = [
+      "graphic_surface:surface",
+      "hilog:libhilog",
+      "hitrace:hitrace_meter",
+    ]
+
+    output_extension = "so"
+    subsystem_name = "multimedia"
+    part_name = "media_foundation"
+  }
+
   ohos_shared_library("video_processing") {
     stack_protector_ret = true
     install_enable = true
@@ -84,6 +125,8 @@ if (hst_is_standard_sys) {
     part_name = "media_foundation"
   }
 } else {
+  group("image_processing") {
+  }
   group("video_processing") {
   }
 }
