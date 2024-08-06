@@ -46,17 +46,17 @@ enum class SourceType : int32_t {
 };
 
 typedef struct PlayStrategy {
-    uint32_t width;
-    uint32_t height;
-    uint32_t duration;
-    bool preferHDR;
+    uint32_t width {0};
+    uint32_t height {0};
+    uint32_t duration {0};
+    bool preferHDR {false};
 } PlayStrategy;
 
 typedef struct DownloadInfo {
-    int32_t avgDownloadRate;
-    int32_t avgDownloadSpeed;
-    uint64_t totalDownLoadBits;
-    bool isTimeOut;
+    int32_t avgDownloadRate {0};
+    int32_t avgDownloadSpeed {0};
+    uint64_t totalDownLoadBits {0};
+    bool isTimeOut {false};
 } DownloadInfo;
 
 class AVMimeTypes {
@@ -94,9 +94,9 @@ public:
 
     const std::map<std::string, std::string> &GetSourceHeader() const;
 
-    void SetPlayStrategy(PlayStrategy* playStrategy);
+    void SetPlayStrategy(std::shared_ptr<PlayStrategy>& playStrategy);
 
-    PlayStrategy* GetPlayStrategy() const;
+    std::shared_ptr<PlayStrategy> GetPlayStrategy() const;
 
     void SetMimeType(const std::string& mimeType);
 
@@ -111,7 +111,7 @@ private:
     std::string mimeType_ {};
     SourceType type_ {};
     std::map<std::string, std::string> header_ {};
-    PlayStrategy* playStrategy_ {nullptr};
+     std::shared_ptr<PlayStrategy> playStrategy_ {};
     //std::shared_ptr<DataConsumer> dataConsumer_ {};
 #ifndef OHOS_LITE
     std::shared_ptr<IMediaDataSource> dataSrc_ {};
