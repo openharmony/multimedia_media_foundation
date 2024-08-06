@@ -61,6 +61,10 @@ public:
     const std::map<std::string, std::string> &GetSourceHeader() const;
 
     std::shared_ptr<DataConsumer> GetDataConsumer() const;
+
+        void SetPlayStrategy(std::shared_ptr<PlayStrategy>& playStrategy);
+
+    std::shared_ptr<PlayStrategy> GetPlayStrategy() const;
 private:
     std::string uri_ {};
     SourceType type_ {};
