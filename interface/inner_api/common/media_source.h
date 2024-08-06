@@ -111,7 +111,7 @@ private:
     std::string mimeType_ {};
     SourceType type_ {};
     std::map<std::string, std::string> header_ {};
-     std::shared_ptr<PlayStrategy> playStrategy_ {};
+    std::shared_ptr<PlayStrategy> playStrategy_ {};
     //std::shared_ptr<DataConsumer> dataConsumer_ {};
 #ifndef OHOS_LITE
     std::shared_ptr<IMediaDataSource> dataSrc_ {};
