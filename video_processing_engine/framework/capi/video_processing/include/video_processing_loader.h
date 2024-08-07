@@ -29,7 +29,7 @@ public:
 
     bool LoadLibrary();
     void UnloadLibrary();
-    bool IsValid();
+    bool IsValid() const;
 
     // Interface
     VideoProcessing_ErrorCode InitializeEnvironment();
@@ -79,13 +79,13 @@ private:
     bool CallSupportNdk(std::function<bool(IVideoProcessingNdk*)>&& operation);
     VideoProcessing_ErrorCode CallNdk(std::function<VideoProcessing_ErrorCode(IVideoProcessingNdk*)>&& operation);
 
-    std::mutex lock_{};
+    mutable std::mutex lock_{};
     // Guarded by lock_ begin
     std::atomic<bool> isValid_{};
     uint32_t refCount_{0};
     IVideoProcessingNdk* videoProcessing_{};
     destroyNdkFunc destroyVideoProcessingFunc_{};
-    void* mLibHandle{};
+    void* libHandle_{};
     // Guarded by lock_ end
 };
 

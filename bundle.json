@@ -51,7 +51,8 @@
         "deps": {
           "third_party": [
             "curl",
-            "ffmpeg"
+            "ffmpeg",
+            "skia"
           ],
           "components": [
               "ability_base",
@@ -78,6 +79,7 @@
               "curl",
               "safwk",
               "samgr",
+              "skia",
               "bundle_framework",
               "openmax"
           ]
