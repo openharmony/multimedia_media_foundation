@@ -40,6 +40,13 @@ enum class SourceType : int32_t {
     SOURCE_TYPE_STREAM,
 };
 
+typedef struct PlayStrategy {
+    uint32_t width {0};
+    uint32_t height {0};
+    uint32_t duration {0};
+    bool preferHDR {false};
+} PlayStrategy;
+
 class MediaSource {
 public:
     /// Construct an a specified URI.
