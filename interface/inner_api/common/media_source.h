@@ -94,7 +94,7 @@ public:
 
     const std::map<std::string, std::string> &GetSourceHeader() const;
 
-    void SetPlayStrategy(std::shared_ptr<PlayStrategy>& playStrategy);
+    void SetPlayStrategy(const std::shared_ptr<PlayStrategy>& playStrategy);
 
     std::shared_ptr<PlayStrategy> GetPlayStrategy() const;
 
