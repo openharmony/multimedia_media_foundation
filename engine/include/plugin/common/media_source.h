@@ -62,7 +62,7 @@ public:
 
     std::shared_ptr<DataConsumer> GetDataConsumer() const;
 
-        void SetPlayStrategy(std::shared_ptr<PlayStrategy>& playStrategy);
+    void SetPlayStrategy(const std::shared_ptr<PlayStrategy>& playStrategy);
 
     std::shared_ptr<PlayStrategy> GetPlayStrategy() const;
 private:
