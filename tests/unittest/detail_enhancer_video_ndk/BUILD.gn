@@ -22,6 +22,27 @@ group("detail_enhancer_video_ndk_unit_test") {
 }
 
 #################################################################################################################
+detail_enhancer_video_ndk_unit_test_cflags = [
+  "-std=c++17",
+  "-fno-rtti",
+  "-fexceptions",
+  "-Wall",
+  "-fno-common",
+  "-fstack-protector-strong",
+  "-Wshadow",
+  "-FPIC",
+  "-FS",
+  "-O2",
+  "-D_FORTIFY_SOURCE=2",
+  "-fvisibility=hidden",
+  "-Wformat=2",
+  "-Wdate-time",
+  "-Wextra",
+  "-Wimplicit-fallthrough",
+  "-Wsign-compare",
+  "-Dprivate=public",
+  "-Dprotected=public",
+]
 
 ohos_unittest("detail_enhancer_video_ndk_inner_unit_test") {
   module_out_path = module_output_path
@@ -57,4 +78,3 @@ ohos_unittest("detail_enhancer_video_ndk_inner_unit_test") {
     "media_foundation:native_media_core",
   ]
 }
-
