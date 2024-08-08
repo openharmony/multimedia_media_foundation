@@ -1,9 +1,9 @@
-# Copyright (c) 2024 Huawei Device Co., Ltd.
+# Copyright (C) 2024 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#       http://www.apache.org/licenses/LICENSE-2.0
+#     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,36 +15,44 @@ import("//build/test.gni")
 import("//foundation/multimedia/media_foundation/config.gni")
 import("$histreamer_root_dir/video_processing_engine/config.gni")
 
-ohos_unittest("detail_enhancer_video_ndk_unit_test") {
-  module_out_path = "media_foundation/unittest"
+module_output_path = "media_foundation/unittest"
+
+group("detail_enhancer_video_ndk_unit_test") {
+  testonly = true
+  deps = [ ":detail_enhancer_video_ndk_inner_unit_test" ]
+}
+
+#################################################################################################################osal
+detail_enhancer_video_ndk_unit_test_cflags = [
+  "-std=c++17",
+  "-fno-rtti",
+  "-fexceptions",
+  "-Wall",
+  "-fno-common",
+  "-fstack-protector-strong",
+  "-Wshadow",
+  "-FPIC",
+  "-FS",
+  "-O2",
+  "-D_FORTIFY_SOURCE=2",
+  "-fvisibility=hidden",
+  "-Wformat=2",
+  "-Wdate-time",
+  "-Wextra",
+  "-Wimplicit-fallthrough",
+  "-Wsign-compare",
+  "-Dprivate=public",
+  "-Dprotected=public",
+]
+
+ohos_unittest("detail_enhancer_video_ndk_inner_unit_test") {
+  module_out_path = module_output_path
 
   sanitize = {
     cfi = true
     cfi_cross_dso = true
     debug = false
   }
-
-  cflags = [
-    "-std=c++17",
-    "-fno-rtti",
-    "-fexceptions",
-    "-Wall",
-    "-fno-common",
-    "-fstack-protector-strong",
-    "-Wshadow",
-    "-FPIC",
-    "-FS",
-    "-O2",
-    "-D_FORTIFY_SOURCE=2",
-    "-fvisibility=hidden",
-    "-Wformat=2",
-    "-Wdate-time",
-    "-Wextra",
-    "-Wimplicit-fallthrough",
-    "-Wsign-compare",
-    "-Dprivate=public",
-    "-Dprotected=public",
-  ]
 
   include_dirs = [
     "$vpe_interface_capi_dir",
@@ -53,7 +61,9 @@ ohos_unittest("detail_enhancer_video_ndk_unit_test") {
     "$vpe_capi_video_dir/include",
   ]
 
-  sources = [ "detail_enhancer_video_ndk_unit_test.cpp" ]
+  sources = [ "./detail_enhancer_video_ndk_unit_test.cpp" ]
+
+  cflags = detail_enhancer_video_ndk_unit_test_cflags
 
   deps = [
     "$histreamer_root_dir/interface/kits/ndk/core:libnative_media_core",
@@ -68,7 +78,4 @@ ohos_unittest("detail_enhancer_video_ndk_unit_test") {
     "hitrace:hitrace_meter",
     "media_foundation:native_media_core",
   ]
-
-  subsystem_name = "multimedia"
-  part_name = "media_foundation"
 }
