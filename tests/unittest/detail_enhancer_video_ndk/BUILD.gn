@@ -78,3 +78,4 @@ ohos_unittest("detail_enhancer_video_ndk_inner_unit_test") {
     "media_foundation:native_media_core",
   ]
 }
+
