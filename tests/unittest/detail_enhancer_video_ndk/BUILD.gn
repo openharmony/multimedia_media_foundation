@@ -22,7 +22,7 @@ group("detail_enhancer_video_ndk_unit_test") {
   deps = [ ":detail_enhancer_video_ndk_inner_unit_test" ]
 }
 
-#################################################################################################################osal
+#################################################################################################################
 detail_enhancer_video_ndk_unit_test_cflags = [
   "-std=c++17",
   "-fno-rtti",
@@ -79,3 +79,4 @@ ohos_unittest("detail_enhancer_video_ndk_inner_unit_test") {
     "media_foundation:native_media_core",
   ]
 }
+
