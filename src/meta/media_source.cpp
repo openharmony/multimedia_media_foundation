@@ -58,14 +58,14 @@ const std::map<std::string, std::string> &MediaSource::GetSourceHeader() const
     return header_;
 }
 
-void MediaSource::SetPlayStrategy(PlayStrategy* playStrategy)
+void MediaSource::SetPlayStrategy(const std::shared_ptr<PlayStrategy>& playStrategy)
 {
     MEDIA_LOG_I("SetPlayStrategy width: %{public}d, height: %{public}d, duration: %{public}d, preferHDR: %{public}d",
         playStrategy->width, playStrategy->height, playStrategy->duration, playStrategy->preferHDR);
     playStrategy_ = playStrategy;
 }
 
-PlayStrategy* MediaSource::GetPlayStrategy() const
+std::shared_ptr<PlayStrategy> MediaSource::GetPlayStrategy() const
 {
     return playStrategy_;
 }
