@@ -50,6 +50,8 @@ typedef struct PlayStrategy {
     uint32_t height {0};
     uint32_t duration {0};
     bool preferHDR {false};
+    std::string audioLanguage {""};
+    std::string subtitleLanguage {""};
 } PlayStrategy;
 
 typedef struct DownloadInfo {
