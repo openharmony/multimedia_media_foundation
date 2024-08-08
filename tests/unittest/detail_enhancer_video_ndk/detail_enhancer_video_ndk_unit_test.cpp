@@ -91,7 +91,7 @@ uint32_t DetailEnhancerVideoNdkUnitTest::FlushSurf(OHNativeWindowBuffer* ohNativ
     rect->h = DEFAULT_HEIGHT;
     region.rects = rect;
     NativeWindowHandleOpt(window, SET_UI_TIMESTAMP, GetSystemTime());
-    int32_t err = OH_NativeWindow_NativewWindowFlushBuffer(window, ohNativeWindowBuffer, -1, region);
+    int32_t err = OH_NativeWindow_NativeWindowFlushBuffer(window, ohNativeWindowBuffer, -1, region);
     delete rect;
     if (err != 0) {
         cout << "FlushBuffer failed" << endl;

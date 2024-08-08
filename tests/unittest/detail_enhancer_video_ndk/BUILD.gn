@@ -13,62 +13,63 @@
 
 import("//build/test.gni")
 import("//foundation/multimedia/media_foundation/config.gni")
-import("//foundation/multimedia/media_foundation/video_processing_engine/config.gni")
+import(
+    "//foundation/multimedia/media_foundation/video_processing_engine/config.gni")
 
 ohos_unittest("detail_enhancer_video_ndk_unit_test") {
-    module_out_path = "media_foundation/unittest"
+  module_out_path = "media_foundation/unittest"
 
-    sanitize = {
-        cfi = true
-        cfi_cross_dso = true
-        debug = false
-    }
+  sanitize = {
+    cfi = true
+    cfi_cross_dso = true
+    debug = false
+  }
 
-    cflags = [
-        "-std=c++17",
-        "-fno-rtti",
-        "-fexceptions",
-        "-Wall",
-        "-fno-common",
-        "-fstack-protector-strong",
-        "-Wshadow",
-        "-FPIC",
-        "-FS",
-        "-O2",
-        "-D_FORTIFY_SOURCE=2",
-        "-fvisibility=hidden",
-        "-Wformat=2",
-        "-Wdate-time",
-        "-Wextra",
-        "-Wimplicit-fallthrough",
-        "-Wsign-compare",
-        "-Dprivate=public",
-        "-Dprotected=public",
-    ]
+  cflags = [
+    "-std=c++17",
+    "-fno-rtti",
+    "-fexceptions",
+    "-Wall",
+    "-fno-common",
+    "-fstack-protector-strong",
+    "-Wshadow",
+    "-FPIC",
+    "-FS",
+    "-O2",
+    "-D_FORTIFY_SOURCE=2",
+    "-fvisibility=hidden",
+    "-Wformat=2",
+    "-Wdate-time",
+    "-Wextra",
+    "-Wimplicit-fallthrough",
+    "-Wsign-compare",
+    "-Dprivate=public",
+    "-Dprotected=public",
+  ]
 
-    include_dirs = [
-        "$vpe_interface_capi_dir",
-        "$vpe_interface_inner_dir",
-        "$vpe_dfx_dir/include",
-        "$vpe_capi_video_dir/include",
-    ]
+  include_dirs = [
+    "$vpe_interface_capi_dir",
+    "$vpe_interface_inner_dir",
+    "$vpe_dfx_dir/include",
+    "$vpe_capi_video_dir/include",
+  ]
 
-    sources = [ "detail_enhancer_video_ndk_unit_test.cpp" ]
+  sources = [ "detail_enhancer_video_ndk_unit_test.cpp" ]
 
-    deps = [
-        "$histreamer_root_dir/interface/kits/ndk/core:libnative_media_core",
-        "$vpe_base_root_dir/src:media_foundation",
-        "$vpe_interface_capi_dir/video_processing:libvideo_processing_ndk",
-        "$vpe_framework_dir:video_processing",
-    ]
+  deps = [
+    "$histreamer_root_dir/interface/kits/ndk/core:libnative_media_core",
+    "$vpe_base_root_dir/src:media_foundation",
+    "$vpe_framework_dir:video_processing",
+    "$vpe_interface_capi_dir/video_processing:libvideo_processing_ndk",
+  ]
 
-    external_deps = [
-        "graphic_surface:surface",
-        "hilog:libhilog",
-        "hitrace:hitrace_meter",
-        "media_foundation:native_media_core",
-    ]
+  external_deps = [
+    "graphic_surface:surface",
+    "hilog:libhilog",
+    "hitrace:hitrace_meter",
+    "media_foundation:native_media_core",
+  ]
 
-    subsystem_name = "multimedia"
-    part_name = "media_foundation"
+  subsystem_name = "multimedia"
+  part_name = "media_foundation"
 }
