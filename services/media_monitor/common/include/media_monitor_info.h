@@ -58,6 +58,8 @@ enum EventId {
 
     // just for capturer mute status change
     CAPTURE_MUTE_STATUS_CHANGE = 21,
+
+    STREAM_STANDBY = 22,
 };
 
 enum EventType {
