@@ -13,7 +13,6 @@
 
 import("//build/test.gni")
 import("//foundation/multimedia/media_foundation/config.gni")
-import("$histreamer_root_dir/video_processing_engine/config.gni")
 
 module_output_path = "media_foundation/unittest"
 
@@ -55,10 +54,10 @@ ohos_unittest("detail_enhancer_video_ndk_inner_unit_test") {
   }
 
   include_dirs = [
-    "$vpe_interface_capi_dir",
-    "$vpe_interface_inner_dir",
-    "$vpe_dfx_dir/include",
-    "$vpe_capi_video_dir/include",
+    "$histreamer_root_dir/video_processing_engine/interface/kits/c",
+    "$histreamer_root_dir/video_processing_engine/interface/inner_api",
+    "$histreamer_root_dir/video_processing_engine/framework/dfx/include",
+    "$histreamer_root_dir/video_processing_engine/framework/capi/video_processing/include",
   ]
 
   sources = [ "./detail_enhancer_video_ndk_unit_test.cpp" ]
@@ -67,9 +66,9 @@ ohos_unittest("detail_enhancer_video_ndk_inner_unit_test") {
 
   deps = [
     "$histreamer_root_dir/interface/kits/ndk/core:libnative_media_core",
-    "$vpe_base_root_dir/src:media_foundation",
-    "$vpe_framework_dir:video_processing",
-    "$vpe_interface_capi_dir/video_processing:libvideo_processing_ndk",
+    "$histreamer_root_dir/src:media_foundation",
+    "$histreamer_root_dir/video_processing_engine/framework:video_processing",
+    "$histreamer_root_dir/video_processing_engine/interface/kits/c/video_processing:libvideo_processing_ndk",
   ]
 
   external_deps = [
@@ -79,4 +78,3 @@ ohos_unittest("detail_enhancer_video_ndk_inner_unit_test") {
     "media_foundation:native_media_core",
   ]
 }
-
