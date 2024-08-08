@@ -13,8 +13,7 @@
 
 import("//build/test.gni")
 import("//foundation/multimedia/media_foundation/config.gni")
-import(
-    "//foundation/multimedia/media_foundation/video_processing_engine/config.gni")
+import("$histreamer_root_dir/video_processing_engine/config.gni")
 
 ohos_unittest("detail_enhancer_video_ndk_unit_test") {
   module_out_path = "media_foundation/unittest"
