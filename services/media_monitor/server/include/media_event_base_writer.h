@@ -44,6 +44,7 @@ public:
     void WriteHeasetChange(std::shared_ptr<EventBean> &bean);
     void WriteVolumeChange(std::shared_ptr<EventBean> &bean);
     void WriteStreamChange(std::shared_ptr<EventBean> &bean);
+    void WriteStreamStandby(std::shared_ptr<EventBean> &bean);
     void WriteDeviceChange(std::shared_ptr<EventBean> &bean);
     void WriteSetForceDevice(std::shared_ptr<EventBean> &bean);
     void WriteDeviceStatistic(std::shared_ptr<EventBean> &bean);

@@ -89,6 +89,7 @@ void EventAggregate::WriteEvent(std::shared_ptr<EventBean> &bean)
         case AUDIO_ROUTE_CHANGE:
         case LOAD_CONFIG_ERROR:
         case AUDIO_SERVICE_STARTUP_ERROR:
+        case STREAM_STANDBY:
             mediaMonitorPolicy_.WriteEvent(bean->GetEventId(), bean);
             break;
         case LOAD_EFFECT_ENGINE_ERROR:
