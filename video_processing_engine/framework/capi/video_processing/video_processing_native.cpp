@@ -53,10 +53,10 @@ VideoProcessing_ErrorCode VideoProcessingNative::Initialize()
         return VIDEO_PROCESSING_ERROR_OPERATION_NOT_PERMITTED;
     }
     worker_ = std::thread([this]() {
-        while (state_load() != VPEState::IDLE) {
+        while (state_.load() != VPEState::IDLE) {
             {
                 std::unique_lock<std::mutex> lock(bufferLock_);
-                if (!WaitCV([this]() {
+                if (!WaitCV([this] {
                     return isExit_.load() || (!producerBufferQueue_.empty() && !consumerBufferQueue_.empty());
                     }, lock)) {
                     CheckStopping();
@@ -64,11 +64,11 @@ VideoProcessing_ErrorCode VideoProcessingNative::Initialize()
                 }
 
                 if (isExit_.load()) {
-                    VPE_LOGI("Video Processing destroy.");
+                    VPE_LOGI("Video processing destroy.");
                     break;
                 }
                 if (producerBufferQueue_.empty() || consumerBufferQueue_.empty()) {
-                    VPE_LOGD("Video Processing spurious wakeup.");
+                    VPE_LOGD("Video processing spurious wakeup.");
                     continue;
                 }
             }
@@ -116,7 +116,7 @@ VideoProcessing_ErrorCode VideoProcessingNative::RegisterCallback(const VideoPro
         callback_ = callback->GetObj();
         userData_ = userData;
         return VIDEO_PROCESSING_SUCCESS;
-        }, "Registeration of callbacks during running is not allowed.");
+        }, "Registration of callbacks during running is not allowed!");
 }
 
 VideoProcessing_ErrorCode VideoProcessingNative::SetSurface(const OHNativeWindow* window)
@@ -160,7 +160,7 @@ VideoProcessing_ErrorCode VideoProcessingNative::GetSurface(OHNativeWindow** win
             return VIDEO_PROCESSING_ERROR_CREATE_FAILED;
         }
         return VIDEO_PROCESSING_SUCCESS;
-        }, "Getting a surface during running is not allowed.");
+        }, "Getting a surface during running is not allowed!");
 }
 
 VideoProcessing_ErrorCode VideoProcessingNative::SetParameter(const OH_AVFormat* parameter)
@@ -325,7 +325,7 @@ GSError VideoProcessingNative::OnConsumerBufferAvailable()
         OHOS::Rect damage;
         GSError errorCode = consumer_->AcquireBuffer(bufferInfo.buffer, releaseFence, bufferInfo.timestamp, damage);
         if (errorCode != GSERROR_OK || bufferInfo.buffer == nullptr) {
-            VPE_LOGE("Failed to acquire buffer!!");
+            VPE_LOGE("Failed to acquire buffer!");
             return errorCode;
         }
 
@@ -347,14 +347,14 @@ GSError VideoProcessingNative::OnProducerBufferReleased()
     {
         std::lock_guard<std::mutex> lock(lock_);
         if (producer_ == nullptr) {
-            VPE_LOGW("Proucer surface is null!!");
+            VPE_LOGW("Producer surface is null!");
             return GSERROR_OK;
         }
 
         std::lock_guard<std::mutex> buflock(bufferLock_);
         GSError errorCode = GSERROR_OK;
         if (!RequestBuffer(errorCode)) {
-            VPE_LOGE("Failed to request buffer!!");
+            VPE_LOGE("Failed to request buffer!");
             return errorCode;
         }
     }
@@ -379,7 +379,7 @@ VideoProcessing_ErrorCode VideoProcessingNative::RenderOutputBufferInner(uint32_
             return VIDEO_PROCESSING_SUCCESS;
         }
     }
-    VPE_LOGE("Invalid input: index=%{public}u!!", index);
+    VPE_LOGE("Invalid input: index=%{public}u!", index);
     return VIDEO_PROCESSING_ERROR_INVALID_PARAMETER;
 }
 
@@ -446,7 +446,7 @@ void VideoProcessingNative::ProcessBuffers()
         }
         consumer = consumer_;
     }
-    while (state_load() != VPEState::IDLE) {
+    while (state_.load() != VPEState::IDLE) {
         SurfaceBufferInfo srcBufferInfo;
         SurfaceBufferInfo dstBufferInfo;
         {
@@ -506,21 +506,19 @@ void VideoProcessingNative::CheckStopping()
 VideoProcessing_ErrorCode VideoProcessingNative::ExecuteWhenIdle(
     std::function<VideoProcessing_ErrorCode(void)>&& operation, const std::string& errorMessage)
 {
-    return ExecuteWithCheck([this]() { return state_.load() != VPEState::IDLE; }, std::move(operation), errorMessage);
+    return ExecuteWithCheck([this] { return state_.load() != VPEState::IDLE; }, std::move(operation), errorMessage);
 }
 
 VideoProcessing_ErrorCode VideoProcessingNative::ExecuteWhenNotIdle(
     std::function<VideoProcessing_ErrorCode(void)>&& operation, const std::string& errorMessage)
 {
-    return ExecuteWithCheck([this]() { return state_.load() == VPEState::IDLE; }, std::move(operation), errorMessage);
+    return ExecuteWithCheck([this] { return state_.load() == VPEState::IDLE; }, std::move(operation), errorMessage);
 }
 
 VideoProcessing_ErrorCode VideoProcessingNative::ExecuteWhenRunning(
     std::function<VideoProcessing_ErrorCode(void)>&& operation, const std::string& errorMessage)
 {
-    return ExecuteWithCheck(
-        [this]() { return state_.load() != VPEState::RUNNING; }, std::move(operation), errorMessage
-    );
+    return ExecuteWithCheck([this] { return state_.load() != VPEState::RUNNING; }, std::move(operation), errorMessage);
 }
 
 VideoProcessing_ErrorCode VideoProcessingNative::ExecuteWithCheck(std::function<bool(void)>&& checker,

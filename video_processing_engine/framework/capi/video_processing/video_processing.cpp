@@ -108,10 +108,10 @@ bool OH_VideoProcessing_IsColorSpaceConversionSupported(const VideoProcessing_Co
 
 bool OH_VideoProcessing_IsMetadataGenerationSupported(const VideoProcessing_ColorSpaceInfo* sourceVideoInfo)
 {
-    return CallVideoProcessingSupport([sourceVideoInfo, destinationVideoInfo]() {
-        return VideoProcessingCapability::IsMetadataGenerationSupported(sourceVideoInfo, destinationVideoInfo);
-        }, [sourceVideoInfo, destinationVideoInfo](VideoProcessingNdkLoader& loader) {
-        return loader.IsMetadataGenerationSupported(sourceVideoInfo, destinationVideoInfo);
+    return CallVideoProcessingSupport([sourceVideoInfo]() {
+        return VideoProcessingCapability::IsMetadataGenerationSupported(sourceVideoInfo);
+        }, [sourceVideoInfo](VideoProcessingNdkLoader& loader) {
+        return loader.IsMetadataGenerationSupported(sourceVideoInfo);
     });
 }
 

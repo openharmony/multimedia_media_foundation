@@ -16,7 +16,6 @@
 #include "detail_enhancer.h"
 
 #include "vpe_log.h"
-#include "skia_impl.h"
 
 using namespace OHOS;
 using namespace OHOS::Media::VideoProcessingEngine;
@@ -59,8 +58,8 @@ AlgoErrorCode DetailEnhancer::GetParameter(Level& level)
     return ALGO_SUCCESS;
 }
 
-AlgoErrorCode DetailEnhancer::Process(const sptr<SurfaceBuffer>& sourceImage, sptr<SurfaceBuffer>& destinationImage)
+AlgoErrorCode DetailEnhancer::Process([[maybe_unused]] const sptr<SurfaceBuffer>& sourceImage,
+    [[maybe_unused]] sptr<SurfaceBuffer>& destinationImage)
 {
-    auto skiaImpl = Skia::Create();
-    return skiaImpl->Process(sourceImage, destinationImage);
+    return ALGO_SUCCESS;
 }

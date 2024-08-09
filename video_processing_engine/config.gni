@@ -13,8 +13,6 @@
 
 import("//build/ohos.gni")
 
-skia_root = "//third_party"
-
 vpe_base_root_dir = "//foundation/multimedia/media_foundation"
 vpe_capi_root_dir = "$vpe_base_root_dir/video_processing_engine"
 

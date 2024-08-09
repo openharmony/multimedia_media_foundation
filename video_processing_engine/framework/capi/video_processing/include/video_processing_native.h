@@ -50,7 +50,7 @@ public:
     VideoProcessing_ErrorCode RenderOutputBuffer(uint32_t index);
 
 protected:
-    explicit VideoProcessingNative(OH_VideoProcessing* context) : context_(context) {};
+    explicit VideoProcessingNative(OH_VideoProcessing* context) : context_(context) {}
     virtual ~VideoProcessingNative() = default;
     VideoProcessingNative(const VideoProcessingNative&) = delete;
     VideoProcessingNative& operator=(const VideoProcessingNative&) = delete;

@@ -20,14 +20,17 @@
 using namespace OHOS::Media::VideoProcessingEngine;
 
 bool VideoProcessingCapability::IsColorSpaceConversionSupported(
-    [[maybe_unused]] const VideoProcessing_ColorSpaceInfo* sourceVideoInfo,
-    [[maybe_unused]] const VideoProcessing_ColorSpaceInfo* destinationVideoInfo)
+    const VideoProcessing_ColorSpaceInfo* sourceVideoInfo,
+    const VideoProcessing_ColorSpaceInfo* destinationVideoInfo)
 {
+    (void)sourceVideoInfo;
+    (void)destinationVideoInfo;
     return false;
 }
 
 bool VideoProcessingCapability::IsMetadataGenerationSupported(
-    [[maybe_unused]] const VideoProcessing_ColorSpaceInfo* sourceVideoInfo)
+    const VideoProcessing_ColorSpaceInfo* sourceVideoInfo)
 {
+    (void)sourceVideoInfo;
     return false;
 }

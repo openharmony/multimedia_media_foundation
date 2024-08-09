@@ -77,44 +77,54 @@ int32_t MediaMonitorClient::GetAudioRouteMsg(std::map<PerferredType,
     return reply.ReadInt32();
 }
 
-int32_t MediaMonitorClient::WriteAudioBuffer(const std::string &fileName, std::shared_ptr<AVBuffer> &buffer)
+int32_t MediaMonitorClient::WriteAudioBuffer(const std::string &fileName, void *ptr, size_t size)
+{
+    std::shared_ptr<DumpBuffer> bufferPtr = nullptr;
+    FALSE_RETURN_V_MSG_E(dumpBufferWrap_ != nullptr, ERROR, "dump buffer wrap error");
+
+    int32_t ret = GetInputBuffer(bufferPtr, size);
+    FALSE_RETURN_V_MSG_E(ret == SUCCESS, ERROR, "get buffer failed.");
+    FALSE_RETURN_V_MSG_E(bufferPtr != nullptr, ERROR, "get buffer is nullptr.");
+
+    int32_t bufferCapacitySize = dumpBufferWrap_->GetCapacity(bufferPtr.get());
+    FALSE_RETURN_V_MSG_E(bufferCapacitySize > 0, ERROR, "get buffer capacity error");
+    int32_t writeSize = dumpBufferWrap_->Write(bufferPtr.get(), static_cast<uint8_t*>(ptr), size);
+    FALSE_RETURN_V_MSG_E(writeSize > 0, ERROR, "write buffer error");
+
+    uint64_t bufferId = dumpBufferWrap_->GetUniqueId(bufferPtr.get());
+    ret = InputBufferFilled(fileName, bufferId, writeSize);
+    FALSE_RETURN_V_MSG_E(ret == SUCCESS, ERROR, "write buffer error %{public}d", ret);
+    return SUCCESS;
+}
+
+int32_t MediaMonitorClient::GetInputBuffer(std::shared_ptr<DumpBuffer> &buffer, int32_t size)
 {
     MessageParcel data;
     MessageParcel reply;
     MessageOption option;
-    FALSE_RETURN_V_MSG_E(buffer != nullptr, ERR_INVALID_DATA, "input buffer nullptr");
-    data.WriteInterfaceToken(GetDescriptor());
-    buffer->WriteToMessageParcel(data);
-    data.WriteString(fileName);
-    int32_t error = Remote()->SendRequest(
-        static_cast<uint32_t>(MediaMonitorInterfaceCode::WRITE_AUDIO_BUFFER), data, reply, option);
-    FALSE_RETURN_V_MSG_E(error == ERR_NONE, error, "send pcm buffer failed %{public}d", error);
-    return reply.ReadInt32();
-}
-
-int32_t MediaMonitorClient::GetInputBuffer(std::shared_ptr<AVBuffer> &buffer, int32_t size)
-{
-    MessageParcel data;
-    MessageParcel reply;
-    MessageOption option(MessageOption::TF_SYNC);
 
     data.WriteInterfaceToken(GetDescriptor());
     data.WriteInt32(size);
     int32_t error = Remote()->SendRequest(
         static_cast<uint32_t>(MediaMonitorInterfaceCode::GET_INPUT_BUFFER), data, reply, option);
     FALSE_RETURN_V_MSG_E(error == ERR_NONE, error, "get pcm buffer failed %{public}d", error);
+    FALSE_RETURN_V_MSG_E(dumpBufferWrap_ != nullptr, error, "dump buffer error");
 
-    buffer = AVBuffer::CreateAVBuffer();
-    FALSE_RETURN_V_MSG_E(buffer != nullptr, ERR_INVALID_DATA, "create buffer failed");
-    if (buffer->ReadFromMessageParcel(reply) == false) {
+    DumpBuffer *bufferPtr = dumpBufferWrap_->NewDumpBuffer();
+    FALSE_RETURN_V_MSG_E(bufferPtr != nullptr, error, "new dump buffer error");
+
+    buffer = std::shared_ptr<DumpBuffer>(bufferPtr, [this](DumpBuffer *ptr) {
+        dumpBufferWrap_->DestroyDumpBuffer(ptr);
+    });
+    void *replyPtr = (void *)&reply;
+    if (dumpBufferWrap_->ReadFromParcel(buffer.get(), replyPtr) == false) {
         MEDIA_LOG_E("read data failed");
         return reply.ReadInt32();
     }
-    FALSE_RETURN_V_MSG_E(buffer != nullptr, ERR_INVALID_DATA, "get input buffer failed");
     return reply.ReadInt32();
 }
 
-int32_t MediaMonitorClient::InputBufferFilled(std::string fileName, uint64_t bufferId)
+int32_t MediaMonitorClient::InputBufferFilled(const std::string &fileName, uint64_t bufferId, int32_t size)
 {
     MessageParcel data;
     MessageParcel reply;
@@ -123,17 +133,29 @@ int32_t MediaMonitorClient::InputBufferFilled(std::string fileName, uint64_t buf
     data.WriteInterfaceToken(GetDescriptor());
     data.WriteString(fileName);
     data.WriteUint64(bufferId);
+    data.WriteInt32(size);
     int32_t error = Remote()->SendRequest(
         static_cast<uint32_t>(MediaMonitorInterfaceCode::INPUT_BUFFER_FILL), data, reply, option);
     FALSE_RETURN_V_MSG_E(error == ERR_NONE, error, "send request error %{public}d", error);
     return reply.ReadInt32();
 }
 
-int32_t MediaMonitorClient::SetMediaParameters(const std::string& dumpType, const std::string& dumpEnable)
+int32_t MediaMonitorClient::SetMediaParameters(const std::string &dumpType, const std::string &dumpEnable)
 {
     MessageParcel data;
     MessageParcel reply;
-    MessageOption option(MessageOption::TF_SYNC);
+    MessageOption option;
+
+    if (dumpEnable == "true") {
+        dumpBufferWrap_ = std::make_shared<DumpBufferWrap>();
+        if (!dumpBufferWrap_->Open()) {
+            dumpBufferWrap_ = nullptr;
+            MEDIA_LOG_E("load dumpbuffer failed");
+            return ERROR;
+        }
+    } else {
+        dumpBufferWrap_ = nullptr;
+    }
 
     data.WriteInterfaceToken(GetDescriptor());
     data.WriteString(dumpType);

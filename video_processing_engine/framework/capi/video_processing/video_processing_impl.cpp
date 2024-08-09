@@ -61,7 +61,7 @@ VideoProcessing_ErrorCode OH_VideoProcessing::Create(OH_VideoProcessing** instan
     }
     auto errorCode = obj->Initialize();
     if (errorCode != VIDEO_PROCESSING_SUCCESS) {
-        VPE_LOGE("Failed to initialize video processing oject!");
+        VPE_LOGE("Failed to initialize video processing object!");
         delete videoProcessor;
         return errorCode;
     }

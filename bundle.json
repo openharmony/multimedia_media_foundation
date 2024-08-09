@@ -14,6 +14,7 @@
         "name": "media_foundation",
         "subsystem": "multimedia",
         "syscap": [
+          "SystemCapability.Multimedia.VideoProcessingEngine",
           "SystemCapability.Multimedia.Media.Core"
         ],
         "features": [
@@ -51,8 +52,7 @@
         "deps": {
           "third_party": [
             "curl",
-            "ffmpeg",
-            "skia"
+            "ffmpeg"
           ],
           "components": [
               "ability_base",
@@ -79,7 +79,6 @@
               "curl",
               "safwk",
               "samgr",
-              "skia",
               "bundle_framework",
               "openmax"
           ]
@@ -219,6 +218,17 @@
                     "media_monitor_info.h"
                   ],
                   "header_base": "//foundation/multimedia/media_foundation/services/media_monitor/common/include"
+                }
+              },
+              {
+                "type": "so",
+                "name": "//foundation/multimedia/media_foundation/services/media_monitor:media_monitor_buffer",
+                "header": {
+                  "header_files": [
+                    "dump_buffer_define.h",
+                    "dump_buffer_manager.h"
+                  ],
+                  "header_base": "//foundation/multimedia/media_foundation/services/media_monitor/buffer/include"
                 }
               },
               {
