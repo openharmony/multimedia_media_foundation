@@ -34,7 +34,7 @@ public:
 
     void WriteAudioBuffer(const std::string &fileName, void *ptr, size_t size);
 
-    int32_t SetMediaParameters(const std::vector<std::pair<std::string, std::string>>& kvpairs);
+    int32_t SetMediaParameters(const std::vector<std::pair<std::string, std::string>> &kvpairs);
 
     static void MediaMonitorDied(pid_t pid);
 
@@ -43,7 +43,7 @@ private:
     ~MediaMonitorManager() {}
     bool dumpEnable_ = false;
     std::string dumpType_ = DEFAULT_DUMP_TYPE;
-    std::string versionType_ = "unknow";
+    std::string versionType_ = COMMERCIAL_VERSION;
     std::time_t dumpStartTime_;
 };
 } // namespace MediaMonitor

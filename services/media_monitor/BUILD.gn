@@ -83,6 +83,74 @@ if (hst_is_lite_sys) {
 }
 
 if (hst_is_lite_sys) {
+  group("media_monitor_buffer") {
+    deps = []
+  }
+} else {
+  ohos_shared_library("media_monitor_buffer") {
+    sanitize = {
+      ubsan = true
+      boundary_sanitize = true
+      cfi = true
+      cfi_cross_dso = true
+      debug = false
+      integer_overflow = true
+    }
+
+    public_configs = [ ":media_monitor_public_config" ]
+
+    install_enable = true
+
+    include_dirs = [
+      "buffer/include",
+      "../../interface/inner_api/common/",
+      "../../interface/inner_api/buffer/",
+    ]
+
+    sources = [
+      "buffer/src/dump_buffer_define.cpp",
+      "buffer/src/dump_buffer_manager.cpp",
+    ]
+
+    cflags = [
+      "-std=c++17",
+      "-fno-rtti",
+      "-fexceptions",
+      "-Wall",
+      "-fno-common",
+      "-fstack-protector-strong",
+      "-Wshadow",
+      "-FPIC",
+      "-FS",
+      "-O2",
+      "-D_FORTIFY_SOURCE=2",
+      "-Wformat=2",
+      "-Wdate-time",
+      "-Werror",
+      "-Wextra",
+      "-Wimplicit-fallthrough",
+      "-Wsign-compare",
+      "-Wunused-parameter",
+      "-Dprivate=public",
+      "-Dprotected=public",
+    ]
+
+    deps = [ "//foundation/multimedia/media_foundation/src:media_foundation" ]
+
+    external_deps = [
+      "c_utils:utils",
+      "hilog:libhilog",
+      "ipc:ipc_single",
+      "samgr:samgr_proxy",
+    ]
+
+    subsystem_name = "multimedia"
+    part_name = "media_foundation"
+    innerapi_tags = [ "platformsdk" ]
+  }
+}
+
+if (hst_is_lite_sys) {
   group("media_monitor_common") {
     deps = []
   }
@@ -102,11 +170,13 @@ if (hst_is_lite_sys) {
     install_enable = true
 
     include_dirs = [
+      "buffer/include",
       "common/include",
       "../../interface/inner_api/common/",
     ]
 
     sources = [
+      "common/src/dump_buffer_wrap.cpp",
       "common/src/event_bean.cpp",
       "common/src/monitor_utils.cpp",
     ]
@@ -170,6 +240,7 @@ if (hst_is_lite_sys) {
       "server/src/audio_buffer_cache.cpp",
       "server/src/audio_memo.cpp",
       "server/src/event_aggregate.cpp",
+      "server/src/ffmpeg_api_wrap.cpp",
       "server/src/media_audio_encoder.cpp",
       "server/src/media_event_base_writer.cpp",
       "server/src/media_monitor_policy.cpp",
@@ -180,18 +251,17 @@ if (hst_is_lite_sys) {
     configs = []
 
     include_dirs = [
+      "buffer/include",
       "client/include",
       "server/include",
       "common/include",
       "../../interface/inner_api/common/",
-      "../../interface/inner_api/",
     ]
 
     deps = [
       ":media_monitor.para",
       ":media_monitor.para.dac",
       ":media_monitor_common",
-      "//foundation/multimedia/media_foundation/src:media_foundation",
     ]
 
     external_deps = [
@@ -207,14 +277,14 @@ if (hst_is_lite_sys) {
       "samgr:samgr_proxy",
     ]
 
+    public_external_deps = [ "ffmpeg:libohosffmpeg" ]
+
     defines = []
 
     if (has_hisysevent_part) {
       defines += [ "MONITOR_ENABLE_HISYSEVENT" ]
       external_deps += [ "hisysevent:libhisysevent" ]
     }
-
-    public_external_deps = [ "ffmpeg:libohosffmpeg" ]
 
     subsystem_name = "multimedia"
     part_name = "media_foundation"
@@ -246,17 +316,14 @@ if (hst_is_lite_sys) {
     ]
 
     include_dirs = [
+      "buffer/include",
       "client/include",
       "server/include",
       "common/include",
       "../../interface/inner_api/common/",
-      "../../interface/inner_api/",
     ]
 
-    deps = [
-      ":media_monitor_common",
-      "//foundation/multimedia/media_foundation/src:media_foundation",
-    ]
+    deps = [ ":media_monitor_common" ]
 
     external_deps = [
       "c_utils:utils",

@@ -102,6 +102,34 @@ HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_WriteLogMsg_003, TestSize.Le
     EXPECT_EQ(bean->GetIntValue("DEVICETYPE"), deviceType2);
 }
 
+HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_SetMediaParams_001, TestSize.Level0)
+{
+    size_t size = 0;
+    std::vector<std::pair<std::string, std::string>> kvpairs;
+    kvpairs.push_back({"BETA", "true"});
+    size = kvpairs.size();
+    MediaMonitorManager::GetInstance().SetMediaParameters(kvpairs);
+    EXPECT_EQ(kvpairs.size(), size);
+}
+
+HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_SetMediaParams_002, TestSize.Level0)
+{
+    size_t size = 0;
+    std::vector<std::pair<std::string, std::string>> kvpairs;
+    kvpairs.push_back({"BETA", "false"});
+    size = kvpairs.size();
+    MediaMonitorManager::GetInstance().SetMediaParameters(kvpairs);
+    EXPECT_EQ(kvpairs.size(), size);
+}
+
+HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_WriteAudioBuffer_001, TestSize.Level0)
+{
+    std::string filename = "/data/log/audiodump/unit_test_48000_1_1.pcm";
+    uint8_t *buffer = nullptr;
+    MediaMonitorManager::GetInstance().WriteAudioBuffer(filename, static_cast<void *>(buffer), 0);
+    EXPECT_EQ(buffer, nullptr);
+}
+
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS

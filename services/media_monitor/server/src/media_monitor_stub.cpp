@@ -84,28 +84,10 @@ void MediaMonitorStub::HandleSetMediaParams(MessageParcel &data, MessageParcel &
     reply.WriteInt32(ret);
 }
 
-void MediaMonitorStub::HandleSendPcmBuffer(MessageParcel &data, MessageParcel &reply)
-{
-    std::shared_ptr<AVBuffer> buffer = AVBuffer::CreateAVBuffer();
-    std::string fileName;
-    if (buffer->ReadFromMessageParcel(data) == false) {
-        MEDIA_LOG_E("MediaMonitorStub::HandleSendPcmBuffer read data failed");
-        reply.WriteInt32(ERR_INVALID_PARAM);
-        return;
-    }
-    if (data.ReadString(fileName) == false) {
-        MEDIA_LOG_E("MediaMonitorStub::HandleSendPcmBuffer read name failed");
-        reply.WriteInt32(ERR_INVALID_PARAM);
-        return;
-    }
-    int32_t ret = WriteAudioBuffer(fileName, buffer);
-    reply.WriteInt32(ret);
-}
-
 void MediaMonitorStub::HandleGetInputBuffer(MessageParcel &data, MessageParcel &reply)
 {
     int32_t size;
-    std::shared_ptr<AVBuffer> buffer = nullptr;
+    std::shared_ptr<DumpBuffer> buffer = nullptr;
     if (data.ReadInt32(size) == false) {
         MEDIA_LOG_E("MediaMonitorStub::HandleGetInputBuffer get size failed");
         reply.WriteInt32(ERR_INVALID_PARAM);
@@ -117,7 +99,12 @@ void MediaMonitorStub::HandleGetInputBuffer(MessageParcel &data, MessageParcel &
         reply.WriteInt32(ret);
         return;
     }
-    if (buffer->WriteToMessageParcel(reply) == false) {
+    if (dumpBufferWrap_ == nullptr) {
+        reply.WriteInt32(ERR_OPERATION_FAILED);
+        return;
+    }
+    void *replyPtr = (void *)&reply;
+    if (dumpBufferWrap_->WriteToParcel(buffer.get(), replyPtr) == false) {
         MEDIA_LOG_E("MediaMonitorStub::HandleGetInputBuffer write data failed");
         reply.WriteInt32(ERR_OPERATION_FAILED);
         return;
@@ -128,7 +115,8 @@ void MediaMonitorStub::HandleGetInputBuffer(MessageParcel &data, MessageParcel &
 void MediaMonitorStub::HandleInputBufferFilled(MessageParcel &data, MessageParcel &reply)
 {
     std::string fileName;
-    uint64_t bufferId;
+    uint64_t bufferId = 0;
+    int32_t size = 0;
     if (data.ReadString(fileName) == false) {
         MEDIA_LOG_E("MediaMonitorStub::HandleInputBufferFilled read name failed");
         reply.WriteInt32(ERR_INVALID_PARAM);
@@ -139,9 +127,16 @@ void MediaMonitorStub::HandleInputBufferFilled(MessageParcel &data, MessageParce
         reply.WriteInt32(ERR_INVALID_PARAM);
         return;
     }
-    int32_t ret = InputBufferFilled(fileName, bufferId);
+
+    if (data.ReadInt32(size) == false) {
+        MEDIA_LOG_E("MediaMonitorStub::HandleInputBufferFilled read size failed");
+        reply.WriteInt32(ERR_INVALID_PARAM);
+        return;
+    }
+    int32_t ret = InputBufferFilled(fileName, bufferId, size);
     reply.WriteInt32(ret);
 }
+
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS
