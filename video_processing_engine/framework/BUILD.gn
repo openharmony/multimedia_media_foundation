@@ -64,19 +64,30 @@ if (hst_is_standard_sys) {
       "$vpe_interface_inner_dir",
       "$vpe_dfx_dir/include",
       "$vpe_capi_image_dir/include",
+      "$vpe_capi_image_dir/detail_enhancer/include",
+      "$vpe_algorithm_dir/include",
+      "$vpe_algorithm_dir/detail_enhancer/include",
     ]
 
     sources = [
+      "$vpe_algorithm_dir/detail_enhancer/detail_enhancer.cpp",
+      "$vpe_capi_image_dir/detail_enhancer/detail_enhancer_image_native.cpp",
       "$vpe_capi_image_dir/image_processing.cpp",
+      "$vpe_capi_image_dir/image_processing_capability.cpp",
+      "$vpe_capi_image_dir/image_processing_impl.cpp",
       "$vpe_capi_image_dir/image_processing_loader.cpp",
+      "$vpe_capi_image_dir/image_processing_native.cpp",
     ]
 
     deps = [ "$vpe_base_root_dir/src:media_foundation" ]
 
     external_deps = [
-      "graphic_surface:surface",
+      "c_utils:utils",
+      "graphic_2d:2d_graphics",
       "hilog:libhilog",
       "hitrace:hitrace_meter",
+      "image_framework:image_native",
+      "image_framework:pixelmap",
     ]
 
     output_extension = "so"
