@@ -58,7 +58,8 @@ ohos_unittest("detail_enhancer_image_ndk_inner_unit_test") {
     "$histreamer_root_dir/video_processing_engine/interface/inner_api",
     "$histreamer_root_dir/video_processing_engine/framework/dfx/include",
     "$histreamer_root_dir/video_processing_engine/framework/capi/image_processing/include",
-  ]
+    "//foundation/multimedia/image_framework/interfaces/kits/native/include/image",
+]
 
   sources = [ "./detail_enhancer_image_ndk_unit_test.cpp" ]
 
@@ -68,8 +69,7 @@ ohos_unittest("detail_enhancer_image_ndk_inner_unit_test") {
     "$histreamer_root_dir/interface/kits/ndk/core:libnative_media_core",
     "$histreamer_root_dir/src:media_foundation",
     "$histreamer_root_dir/video_processing_engine/framework:image_processing",
-    "$histreamer_root_dir/video_processing_engine/interface/kits/c/video_processing:libimage_processing_ndk",
-    "//foundation/multimedia/image_framework/interface/kits/native/include/image"
+    "$histreamer_root_dir/video_processing_engine/interface/kits/c/image_processing:libimage_processing_ndk",
   ]
 
   external_deps = [
@@ -80,3 +80,4 @@ ohos_unittest("detail_enhancer_image_ndk_inner_unit_test") {
     "media_foundation:native_media_core",
   ]
 }
+
