@@ -16,13 +16,13 @@ import("//foundation/multimedia/media_foundation/config.gni")
 
 module_output_path = "media_foundation/unittest"
 
-group("detail_enhancer_video_ndk_unit_test") {
+group("detail_enhancer_image_ndk_unit_test") {
   testonly = true
-  deps = [ ":detail_enhancer_video_ndk_inner_unit_test" ]
+  deps = [ ":detail_enhancer_image_ndk_inner_unit_test" ]
 }
 
 #################################################################################################################
-detail_enhancer_video_ndk_unit_test_cflags = [
+detail_enhancer_image_ndk_unit_test_cflags = [
   "-std=c++17",
   "-fno-rtti",
   "-fexceptions",
@@ -44,7 +44,7 @@ detail_enhancer_video_ndk_unit_test_cflags = [
   "-Dprotected=public",
 ]
 
-ohos_unittest("detail_enhancer_video_ndk_inner_unit_test") {
+ohos_unittest("detail_enhancer_image_ndk_inner_unit_test") {
   module_out_path = module_output_path
 
   sanitize = {
@@ -60,7 +60,7 @@ ohos_unittest("detail_enhancer_video_ndk_inner_unit_test") {
     "$histreamer_root_dir/video_processing_engine/framework/capi/video_processing/include",
   ]
 
-  sources = [ "./detail_enhancer_video_ndk_unit_test.cpp" ]
+  sources = [ "./detail_enhancer_image_ndk_unit_test.cpp" ]
 
   cflags = detail_enhancer_video_ndk_unit_test_cflags
 
