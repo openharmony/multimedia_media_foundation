@@ -78,6 +78,16 @@ typedef enum OH_AVErrCode {
      * @since 12
      */
     AV_ERR_DRM_DECRYPT_FAILED = 201,
+    /**
+     * @error video error base.
+     * @since 12
+     */
+    AV_ERR_VIDEO_BASE = 300,
+    /**
+     * @error video unsupported color space conversion.
+     * @since 12
+     */
+    AV_ERR_VIDEO_UNSUPPORT_COLOR_SPACE_CONVERSION = 301,
 } OH_AVErrCode;
 
 #ifdef __cplusplus
