@@ -62,7 +62,7 @@ ohos_unittest("detail_enhancer_image_ndk_inner_unit_test") {
 
   sources = [ "./detail_enhancer_image_ndk_unit_test.cpp" ]
 
-  cflags = detail_enhancer_video_ndk_unit_test_cflags
+  cflags = detail_enhancer_image_ndk_unit_test_cflags
 
   deps = [
     "$histreamer_root_dir/interface/kits/ndk/core:libnative_media_core",
