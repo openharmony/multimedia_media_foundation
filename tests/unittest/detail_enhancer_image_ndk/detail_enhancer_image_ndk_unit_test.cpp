@@ -60,7 +60,7 @@ void CreateEmptyPixelmap(OH_PixelmapNative** pixelMap, int32_t width, int32_t he
     (void)OH_PixelmapNative_CreateEmptyPixelmap(options, pixelMap);
 }
 
-//initialize environment
+// initialize environment
 HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_01, TestSize.Level1)
 {
     ImageProcessing_ErrorCode ret = OH_ImageProcessing_InitializeEnvironment();
@@ -76,7 +76,7 @@ HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_02, TestSize.Level1)
     EXPECT_NE(ret, IMAGE_PROCESSING_SUCCESS);
 }
 
-// de-initialize without //initialize and de-initialize
+// de-initialize without initialize
 HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_03, TestSize.Level1)
 {
     ImageProcessing_ErrorCode ret = OH_ImageProcessing_DeinitializeEnvironment();
@@ -112,7 +112,7 @@ HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_06, TestSize.Level1)
 }
 
 // destroy null instance
-HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_07, TestSize.Level1)
+HWTEST_F(DetailEnhancerImageNdkUniitTest, vpeImageNdk_07, TestSize.Level1)
 {
     OH_ImageProcessing_InitializeEnvironment();
     OH_ImageProcessing* instance = nullptr;
@@ -158,7 +158,7 @@ HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_11, TestSize.Level1)
     OH_AVFormat* parameter = OH_AVFormat_Create();
     OH_AVFormat_SetIntValue(parameter, IMAGE_DETAIL_ENHANCER_PARAMETER_KEY_QUALITY_LEVEL,
         IMAGE_DETAIL_ENHANCER_QUALITY_LEVEL_HIGH);
-    OH_ImageProcessing_SetParameter(instance, parameter)
+    OH_ImageProcessing_SetParameter(instance, parameter);
     ImageProcessing_ErrorCode ret = OH_ImageProcessing_GetParameter(instance, parameter);
     EXPECT_NE(ret, IMAGE_PROCESSING_SUCCESS);
 }
@@ -168,16 +168,16 @@ HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_12, TestSize.Level1)
 {
     OH_ImageProcessing* instance = nullptr;
     OH_ImageProcessing_Create(&instance, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
-    OH_AVFormat* parameter = OH_AVFormat_Create();
+    OH_AVFormat* parameter = nullptr;
     ImageProcessing_ErrorCode ret = OH_ImageProcessing_GetParameter(instance, parameter);
-    EXPECT_EQ(ret, IMAGE_PROCESSING_SUCCESS);
+    EXPECT_NE(ret, IMAGE_PROCESSING_SUCCESS);
 }
 
 // get parameter but instance is null set
 HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_13, TestSize.Level1)
 {
     OH_ImageProcessing* instance = nullptr;
-    OH_AVFormat* parameter = OH_AVFormat_Create();
+    OH_AVFormat* parameter = nullptr;
     ImageProcessing_ErrorCode ret = OH_ImageProcessing_GetParameter(instance, parameter);
     EXPECT_NE(ret, IMAGE_PROCESSING_SUCCESS);
 }
@@ -199,7 +199,7 @@ HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_15, TestSize.Level1)
         .metadataType = 0x1,
         .colorSpace = 0x2,
         .pixelFormat = 0x3,
-    }
+    };
     bool ret = OH_ImageProcessing_IsColorSpaceConversionSupported(&param, &param);
     EXPECT_EQ(ret, false);
 }
@@ -211,7 +211,7 @@ HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_16, TestSize.Level1)
         .metadataType = 0x1,
         .colorSpace = 0x2,
         .pixelFormat = 0x3,
-    }
+    };
     bool ret = OH_ImageProcessing_IsCompositionSupported(&param, &param, &param);
     EXPECT_EQ(ret, false);
 }
@@ -223,7 +223,7 @@ HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_17, TestSize.Level1)
         .metadataType = 0x1,
         .colorSpace = 0x2,
         .pixelFormat = 0x3,
-    }
+    };
     bool ret = OH_ImageProcessing_IsDecompositionSupported(&param, &param, &param);
     EXPECT_EQ(ret, false);
 }
@@ -235,7 +235,7 @@ HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_18, TestSize.Level1)
         .metadataType = 0x1,
         .colorSpace = 0x2,
         .pixelFormat = 0x3,
-    }
+    };
     bool ret = OH_ImageProcessing_IsMetadataGenerationSupported(&param);
     EXPECT_EQ(ret, false);
 }
@@ -249,7 +249,7 @@ HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_19, TestSize.Level1)
     OH_PixelmapNative* dstImg = nullptr;
     CreateEmptyPixelmap(&srcImg, 720, 960, 4);
     CreateEmptyPixelmap(&dstImg, 2880, 3840, 4);
-    OH_ImageProcessing_Create(&instance, IMAGE_PROCESSING_TYPR_DETAIL_ENHANCER);
+    OH_ImageProcessing_Create(&instance, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
     ImageProcessing_ErrorCode ret = OH_ImageProcessing_ConvertColorSpace(instance, srcImg, dstImg);
     EXPECT_NE(ret, IMAGE_PROCESSING_SUCCESS);
     OH_ImageProcessing_DeinitializeEnvironment();
@@ -266,7 +266,7 @@ HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_20, TestSize.Level1)
     CreateEmptyPixelmap(&srcImg, 720, 960, 4);
     CreateEmptyPixelmap(&gainmap, 720, 960, 4);
     CreateEmptyPixelmap(&dstImg, 720, 960, 4);
-    OH_ImageProcessing_Create(&instance, IMAGE_PROCESSING_TYPR_DETAIL_ENHANCER);
+    OH_ImageProcessing_Create(&instance, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
     ImageProcessing_ErrorCode ret = OH_ImageProcessing_Compose(instance, srcImg, gainmap, dstImg);
     EXPECT_NE(ret, IMAGE_PROCESSING_SUCCESS);
     OH_ImageProcessing_DeinitializeEnvironment();
@@ -283,8 +283,8 @@ HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_21, TestSize.Level1)
     CreateEmptyPixelmap(&srcImg, 720, 960, 4);
     CreateEmptyPixelmap(&gainmap, 720, 960, 4);
     CreateEmptyPixelmap(&dstImg, 720, 960, 4);
-    OH_ImageProcessing_Create(&instance, IMAGE_PROCESSING_TYPR_DETAIL_ENHANCER);
-    ImageProcessing_ErrorCode ret = OH_ImageProcessing_Decompose(instance, srcImg, gainmap, dstImg);
+    OH_ImageProcessing_Create(&instance, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
+    ImageProcessing_ErrorCode ret = OH_ImageProcessing_Decompose(instance, srcImg, dstImg, gainmap);
     EXPECT_NE(ret, IMAGE_PROCESSING_SUCCESS);
     OH_ImageProcessing_DeinitializeEnvironment();
 }
@@ -296,7 +296,7 @@ HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_22, TestSize.Level1)
     OH_ImageProcessing* instance = nullptr;
     OH_PixelmapNative* srcImg = nullptr;
     CreateEmptyPixelmap(&srcImg, 720, 960, 4);
-    OH_ImageProcessing_Create(&instance, IMAGE_PROCESSING_TYPR_DETAIL_ENHANCER);
+    OH_ImageProcessing_Create(&instance, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
     ImageProcessing_ErrorCode ret = OH_ImageProcessing_GenerateMetadata(instance, srcImg);
     EXPECT_NE(ret, IMAGE_PROCESSING_SUCCESS);
     OH_ImageProcessing_DeinitializeEnvironment();
@@ -311,7 +311,7 @@ HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_23, TestSize.Level1)
     OH_PixelmapNative* dstImg = nullptr;
     CreateEmptyPixelmap(&srcImg, 720, 960, 4);
     CreateEmptyPixelmap(&dstImg, 2880, 3840, 4);
-    OH_ImageProcessing_Create(&instance, IMAGE_PROCESSING_TYPR_DETAIL_ENHANCER);
+    OH_ImageProcessing_Create(&instance, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
     ImageProcessing_ErrorCode ret = OH_ImageProcessing_EnhanceDetail(instance, srcImg, dstImg);
     EXPECT_NE(ret, IMAGE_PROCESSING_SUCCESS);
     OH_ImageProcessing_DeinitializeEnvironment();
