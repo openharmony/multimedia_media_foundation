@@ -58,8 +58,7 @@ ohos_unittest("detail_enhancer_image_ndk_inner_unit_test") {
     "$histreamer_root_dir/video_processing_engine/interface/inner_api",
     "$histreamer_root_dir/video_processing_engine/framework/dfx/include",
     "$histreamer_root_dir/video_processing_engine/framework/capi/image_processing/include",
-    "//foundation/multimedia/image_framework/interfaces/kits/native/include/image",
-]
+  ]
 
   sources = [ "./detail_enhancer_image_ndk_unit_test.cpp" ]
 
