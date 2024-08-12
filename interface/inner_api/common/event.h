@@ -51,6 +51,9 @@ enum struct EventType : uint32_t {
     EVENT_AUDIO_TRACK_CHANGE,
     EVENT_VIDEO_TRACK_CHANGE,
     EVENT_SUBTITLE_TRACK_CHANGE,
+    EVENT_VIDEO_LAG, // player lag event detected by video sink
+    EVENT_AUDIO_LAG, // player lag event detected by audio sink
+    EVENT_STREAM_LAG, // player lag event detected by sync manager
 };
 
 struct Event {
