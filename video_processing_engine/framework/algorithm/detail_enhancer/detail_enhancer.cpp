@@ -62,6 +62,5 @@ AlgoErrorCode DetailEnhancer::GetParameter(Level& level)
 AlgoErrorCode DetailEnhancer::Process(const sptr<SurfaceBuffer>& sourceImage,
     sptr<SurfaceBuffer>& destinationImage)
 {
-    auto skiaImpl = Skia::Create();
-    return skiaImpl->Process(sourceImage, destinationImage);
+    return Skia::Process(sourceImage, destinationImage);
 }

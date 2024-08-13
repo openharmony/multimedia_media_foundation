@@ -67,10 +67,12 @@ if (hst_is_standard_sys) {
       "$vpe_capi_image_dir/detail_enhancer/include",
       "$vpe_algorithm_dir/include",
       "$vpe_algorithm_dir/detail_enhancer/include",
+      "$vpe_algorithm_dir/detail_enhancer/skia/include",
     ]
 
     sources = [
       "$vpe_algorithm_dir/detail_enhancer/detail_enhancer.cpp",
+      "$vpe_algorithm_dir/detail_enhancer/skia/skia_impl.cpp",
       "$vpe_capi_image_dir/detail_enhancer/detail_enhancer_image_native.cpp",
       "$vpe_capi_image_dir/image_processing.cpp",
       "$vpe_capi_image_dir/image_processing_capability.cpp",
@@ -88,6 +90,8 @@ if (hst_is_standard_sys) {
       "hitrace:hitrace_meter",
       "image_framework:image_native",
       "image_framework:pixelmap",
+      "ipc:ipc_single",
+      "skia:skia_canvaskit",
     ]
 
     innerapi_tags = [ "ndk" ]

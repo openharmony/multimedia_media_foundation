@@ -26,34 +26,15 @@ namespace Media {
 namespace VideoProcessingEngine {
 class Skia {
 public:
-    static std::unique_ptr<Skia> Create();
+    static AlgoErrorCode Process(const sptr<SurfaceBuffer>& input, sptr<SurfaceBuffer>& output);
 
-    enum ImageFormatType {
-        IMAGE_FORMAT_TYPE_UNKNOWN = 0,
-        IMAGE_FORMAT_TYPE_RGB,
-        IMAGE_FORMAT_TYPE_YUV,
-    };
-
+private:
     Skia() = default;
     virtual ~Skia() = default;
     Skia(const Skia&) = delete;
     Skia& operator=(const Skia&) = delete;
     Skia(Skia&&) = delete;
     Skia& operator=(Skia&&) = delete;
-
-    AlgoErrorCode Process(const sptr<SurfaceBuffer>& input, sptr<SurfaceBuffer>& output);
-
-private:
-    AlgoErrorCode RGBScale(const sptr<SurfaceBuffer>& input, sptr<SurfaceBuffer>& output);
-    AlgoErrorCode YUVScale(const sptr<SurfaceBuffer>& input, sptr<SurfaceBuffer>& output);
-    AlgoErrorCode PixmapScale(SkPixmap inputPixmap, SkPixmap outputPixmap, SkSamplingOptions options);
-    SkColorType GetImageFormat(const sptr<SurfaceBuffer>& input);
-    ImageFormatType GetImageType(const sptr<SurfaceBuffer>& input, const sptr<SurfaceBuffer>& output);
-    SkColorType GetRGBImageFormat(const sptr<SurfaceBuffer>& surfaceBuffer);
-    int CreateYUVPixmap(const sptr<SurfaceBuffer>& buffer, SkPixmap* pixmaps);
-    AlgoErrorCode YUVPixmapScale(SkPixmap* inputPixmap, SkPixmap* outputPixmap, SkSamplingOptions opt, int numPlanes);
-    int ConfigYUVFormat(const sptr<SurfaceBuffer>& buffer, SkYUVAInfo::PlaneConfig& planeConfig, size_t* rowbyte,
-        unsigned char** pixmapAddr);
 };
 } // VideoProcessingEngine
 } // Media

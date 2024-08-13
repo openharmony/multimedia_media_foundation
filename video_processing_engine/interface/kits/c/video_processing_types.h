@@ -29,7 +29,7 @@
  *
  * @library libvideo_processing.so
  * @syscap SystemCapability.Multimedia.VideoProcessingEngine
- * @kit Media Kit
+ * @kit MediaKit
  * @since 12
  */
 
@@ -120,7 +120,7 @@ extern const char* VIDEO_DETAIL_ENHANCER_PARAMETER_KEY_QUALITY_LEVEL;
  * @since 12
  */
 typedef struct VideoProcessing_ColorSpaceInfo {
-    /** The metadata type of the video */
+    /** The metadata type of the video, see {@link enum OH_NativeBuffer_MetadataType} */
     int32_t metadataType;
     /** The color space type of the video, see {@link enum OH_NativeBuffer_ColorSpace} */
     int32_t colorSpace;
@@ -154,27 +154,42 @@ typedef enum VideoDetailEnhancer_QualityLevel {
  * @since 12
  */
 typedef enum VideoProcessing_ErrorCode {
-    /** Operation is successful */
+    /** @error Operation is successful. */
     VIDEO_PROCESSING_SUCCESS,
-    /** Parameter is invalid. */
+    /** @error Input parameter is invalid. This error is returned for all of the following error conditions:
+     *  1 - Invalid input or output video buffer - The video buffer is null.
+     *  2 - Invalid parameter - The parameter is null.
+     *  3 - Invalid type - The type passed in the create function does not exist.
+     */
     VIDEO_PROCESSING_ERROR_INVALID_PARAMETER = 401,
-    /** Some unknown error occurred */
+    /** @error Some unknown error occurred, such as GPU calculation failure or memcpy failure. */
     VIDEO_PROCESSING_ERROR_UNKNOWN = 29210001,
-    /** Initializing global environment for video processing failed */
+    /** @error The global environment initialization for video processing failed, such as failure to initialize
+     * the GPU environment.
+     */
     VIDEO_PROCESSING_ERROR_INITIALIZE_FAILED,
-    /** Create video processing instance failed */
+    /** @error Failed to create video processing instance. For example,
+     * the number of instances exceeds the upper limit.
+     */
     VIDEO_PROCESSING_ERROR_CREATE_FAILED,
-    /** Process video failed */
+    /** @error Failed to process video buffer. For example, the processing times out. */
     VIDEO_PROCESSING_ERROR_PROCESS_FAILED,
-    /** The processing is not supported */
+    /** @error The processing is not supported. You may call OH_VideoProcessing_IsXXXSupported
+     * to check whether the capability is supported.
+     */
     VIDEO_PROCESSING_ERROR_UNSUPPORTED_PROCESSING,
-    /** Operation is not permitted */
+    /** @error The operation is not permitted. This may be caused by incorrect status. */
     VIDEO_PROCESSING_ERROR_OPERATION_NOT_PERMITTED,
-    /** Out of memory */
+    /** @error Out of memory. */
     VIDEO_PROCESSING_ERROR_NO_MEMORY,
-    /** Video processing instance is invalid */
+    /** @error The video processing instance is invalid. This may be caused by null instance. */
     VIDEO_PROCESSING_ERROR_INVALID_INSTANCE,
-    /** Value is invalid */
+    /** @error Input value is invalid. This error is returned for all of the following error conditions:
+     *  1 - Invalid input or output video buffer - The video buffer width(height)
+     *      is too large or colorspace is incorrect.
+     *  2 - Invalid parameter - The parameter does not contain valid information,
+     *      such as detail enhancer level is incorrect.
+     */
     VIDEO_PROCESSING_ERROR_INVALID_VALUE
 } VideoProcessing_ErrorCode;
 

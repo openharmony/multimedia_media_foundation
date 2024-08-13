@@ -29,7 +29,7 @@
  *
  * @library libimage_processing.so
  * @syscap SystemCapability.Multimedia.VideoProcessingEngine
- * @kit Image Kit
+ * @kit ImageKit
  * @since 12
  */
 
@@ -182,27 +182,42 @@ typedef enum ImageDetailEnhancer_QualityLevel {
  * @since 12
  */
 typedef enum ImageProcessing_ErrorCode {
-    /** Operation is successful */
+    /** @error Operation is successful. */
     IMAGE_PROCESSING_SUCCESS,
-    /** Parameter is invalid */
+    /** @error Input parameter is invalid. This error is returned for all of the following error conditions:
+     *  1 - Invalid input or output image buffer - The image buffer is null.
+     *  2 - Invalid parameter - The parameter is null.
+     *  3 - Invalid type - The type passed in the create function does not exist.
+     */
     IMAGE_PROCESSING_ERROR_INVALID_PARAMETER = 401,
-    /** Some unknown error occurred */
+    /** @error Some unknown error occurred, such as GPU calculation failure or memcpy failure. */
     IMAGE_PROCESSING_ERROR_UNKNOWN = 29200001,
-    /** Initialize global environment for image processing failed */
+    /** @error The global environment initialization for image processing failed, such as failure to initialize
+     * the GPU environment.
+     */
     IMAGE_PROCESSING_ERROR_INITIALIZE_FAILED,
-    /** Create image processing instance failed */
+    /** @error Failed to create image processing instance. For example,
+     * the number of instances exceeds the upper limit.
+     */
     IMAGE_PROCESSING_ERROR_CREATE_FAILED,
-    /** Process image failed */
+    /** @error Failed to process image buffer. For example, the processing times out. */
     IMAGE_PROCESSING_ERROR_PROCESS_FAILED,
-    /** Processing is not supported */
+    /** @error The processing is not supported. You may call OH_ImageProcessing_IsXXXSupported
+     * to check whether the capability is supported.
+     */
     IMAGE_PROCESSING_ERROR_UNSUPPORTED_PROCESSING,
-    /** Operation is not permitted */
+    /** @error The operation is not permitted. This may be caused by incorrect status. */
     IMAGE_PROCESSING_ERROR_OPERATION_NOT_PERMITTED,
-    /** Out of memory */
+    /** @error Out of memory. */
     IMAGE_PROCESSING_ERROR_NO_MEMORY,
-    /** Image processing instance is invalid */
+    /** @error The image processing instance is invalid. This may be caused by null instance. */
     IMAGE_PROCESSING_ERROR_INVALID_INSTANCE,
-    /** Value is invalid. */
+    /** @error Input value is invalid. This error is returned for all of the following error conditions:
+     *  1 - Invalid input or output image buffer - The image buffer width(height)
+     *      is too large or colorspace is incorrect.
+     *  2 - Invalid parameter - The parameter does not contain valid information,
+     *      such as detail enhancer level is incorrect.
+     */
     IMAGE_PROCESSING_ERROR_INVALID_VALUE
 } ImageProcessing_ErrorCode;
 
