@@ -59,7 +59,7 @@ void ImageProcessingNdkLoader::UnloadLibrary()
     UnloadLibraryLocked();
 }
 
-bool ImageProcessingNdkLoader::IsValid()
+bool ImageProcessingNdkLoader::IsValid() const
 {
     return isValid_.load();
 }
@@ -207,9 +207,9 @@ void ImageProcessingNdkLoader::UnloadLibraryLocked()
         destroyImageProcessingFunc_ = nullptr;
     }
 
-    if (mLibHandle != nullptr)  {
-        dlclose(mLibHandle);
-        mLibHandle = nullptr;
+    if (libHandle_ != nullptr)  {
+        dlclose(libHandle_);
+        libHandle_ = nullptr;
     }
 
     VPE_LOGI("Unload library.");
@@ -217,8 +217,8 @@ void ImageProcessingNdkLoader::UnloadLibraryLocked()
 
 bool ImageProcessingNdkLoader::OpenLibraryLocked(const std::string& path)
 {
-    mLibHandle = dlopen(path.c_str(), RTLD_NOW);
-    if (mLibHandle == nullptr) {
+    libHandle_ = dlopen(path.c_str(), RTLD_NOW);
+    if (libHandle_ == nullptr) {
         VPE_LOGW("Can't open library %{public}s - %{public}s", path.c_str(), dlerror());
         return false;
     }
@@ -228,14 +228,14 @@ bool ImageProcessingNdkLoader::OpenLibraryLocked(const std::string& path)
 bool ImageProcessingNdkLoader::LoadInterfaceLocked(IImageProcessingNdk*& interface, destroyNdkFunc& destroyFunc,
     const std::string& createFuncName, const std::string& destroyFuncName, const std::string& path)
 {
-    createNdkFunc createFunc = reinterpret_cast<createNdkFunc>(dlsym(mLibHandle, createFuncName.c_str()));
+    createNdkFunc createFunc = reinterpret_cast<createNdkFunc>(dlsym(libHandle_, createFuncName.c_str()));
     if (createFunc == nullptr) {
         VPE_LOGE("Failed to locate %{public}s in %{public}s - %{public}s",
             createFuncName.c_str(), path.c_str(), path.c_str());
         UnloadLibraryLocked();
         return false;
     }
-    destroyFunc = reinterpret_cast<destroyNdkFunc>(dlsym(mLibHandle, destroyFuncName.c_str()));
+    destroyFunc = reinterpret_cast<destroyNdkFunc>(dlsym(libHandle_, destroyFuncName.c_str()));
     if (destroyFunc == nullptr) {
         VPE_LOGE("Failed to locate %{public}s in %{public}s - %{public}s",
             destroyFuncName.c_str(), path.c_str(), path.c_str());

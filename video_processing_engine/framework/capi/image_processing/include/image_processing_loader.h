@@ -29,7 +29,7 @@ public:
 
     bool LoadLibrary();
     void UnloadLibrary();
-    bool IsValid();
+    bool IsValid() const;
 
     // Interface
     ImageProcessing_ErrorCode InitializeEnvironment();
@@ -86,7 +86,7 @@ private:
     uint32_t refCount_{0};
     IImageProcessingNdk* imageProcessing_{};
     destroyNdkFunc destroyImageProcessingFunc_{};
-    void* mLibHandle{};
+    void* libHandle_{};
     // Guarded by lock_ end
 };
 
