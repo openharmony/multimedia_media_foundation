@@ -81,7 +81,8 @@
               "samgr",
               "skia",
               "bundle_framework",
-              "openmax"
+              "openmax",
+              "image_framework"
           ]
         },
         "build": {
