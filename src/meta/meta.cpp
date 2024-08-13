@@ -147,7 +147,8 @@ static std::vector<TagType> g_metadataBoolVector = {
     Tag::AV_PLAYER_IS_DRM_PROTECTED,
     Tag::AV_PLAYER_DOWNLOAD_TIME_OUT,
     Tag::VIDEO_ENCODER_PER_FRAME_DISCARD,
-    Tag::VIDEO_ENCODER_ENABLE_WATERMARK
+    Tag::VIDEO_ENCODER_ENABLE_WATERMARK,
+    Tag::VIDEO_ENCODER_ENABLE_PARAMS_FEEDBACK
 };
 
 bool SetMetaData(Meta& meta, const TagType& tag, int32_t value)
