@@ -87,7 +87,7 @@ typedef enum OH_AVErrCode {
      * @error video unsupported color space conversion.
      * @since 12
      */
-    AV_ERR_VIDEO_UNSUPPORT_COLOR_SPACE_CONVERSION = 301,
+    AV_ERR_VIDEO_UNSUPPORTED_COLOR_SPACE_CONVERSION = 301,
 } OH_AVErrCode;
 
 #ifdef __cplusplus
