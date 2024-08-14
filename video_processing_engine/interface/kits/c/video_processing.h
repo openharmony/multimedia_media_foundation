@@ -17,7 +17,7 @@
  * @addtogroup VideoProcessing
  * @{
  *
- * @brief Provide video processing including color space conversion and metadata generation.
+ * @brief Provide APIs for video quality processing.
  *
  * @since 12
  */
@@ -27,9 +27,12 @@
  *
  * @brief Declare video processing functions.
  *
+ * Provides SDR content processing for videos, including color space conversion, metadata generation
+ * and video scaling.
+ *
  * @library libvideo_processing.so
  * @syscap SystemCapability.Multimedia.VideoProcessingEngine
- * @kit Media Kit
+ * @kit MediaKit
  * @since 12
  */
 
@@ -37,6 +40,7 @@
 #define VIDEO_PROCESSING_ENGINE_C_API_VIDEO_PROCESSING_H
 
 #include <stdint.h>
+#include <stdbool.h>
 #include "video_processing_types.h"
 
 #ifdef __cplusplus
@@ -52,7 +56,8 @@ extern "C" {
  * To deinitialize global environment, call {@link OH_VideoProcessing_DeinitializeEnvironment}.
  *
  * @return {@link VIDEO_PROCESSING_SUCCESS} if initialization is successful. \n
- * {@link VIDEO_PROCESSING_ERROR_INITIALIZE_FAILED} if initialization is failed.
+ * {@link VIDEO_PROCESSING_ERROR_INITIALIZE_FAILED} if initialization is failed. \n
+ * You can check if the device GPU is working properly.
  * @since 12
  */
 VideoProcessing_ErrorCode OH_VideoProcessing_InitializeEnvironment(void);

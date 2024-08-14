@@ -17,7 +17,7 @@
  * @addtogroup ImageProcessing
  * @{
  *
- * @brief Provide image processing including color space conversion and metadata generation.
+ * @brief Provide APIs for image quality processing.
  *
  * @since 12
  */
@@ -27,11 +27,12 @@
  *
  * @brief Declare image processing functions.
  *
- * Provides SDR content processing for images, including color space conversion and metadata generation.
+ * Provides SDR content processing for images, including color space conversion, metadata generation
+ * and image scaling.
  *
  * @library libimage_processing.so
  * @syscap SystemCapability.Multimedia.VideoProcessingEngine
- * @kit Image Kit
+ * @kit ImageKit
  * @since 12
  */
 
@@ -39,7 +40,7 @@
 #define VIDEO_PROCESSING_ENGINE_C_API_IMAGE_PROCESSING_H
 
 #include <stdint.h>
-
+#include <stdbool.h>
 #include "image_processing_types.h"
 
 #ifdef __cplusplus
@@ -55,7 +56,8 @@ extern "C" {
  * To deinitialize global environment, call {@link OH_ImageProcessing_DeinitializeEnvironment}.
  *
  * @return {@link IMAGE_PROCESSING_SUCCESS} if initialization is successful. \n
- * {@link IMAGE_PROCESSING_ERROR_INITIALIZE_FAILED} if initialization is failed.
+ * {@link IMAGE_PROCESSING_ERROR_INITIALIZE_FAILED} if initialization is failed. \n
+ * You can check if the device GPU is working properly.
  * @since 12
  */
 ImageProcessing_ErrorCode OH_ImageProcessing_InitializeEnvironment(void);
