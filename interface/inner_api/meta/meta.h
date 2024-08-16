@@ -304,6 +304,23 @@ public:
         tagCharSeq == Tag::VIDEO_COORDINATE_H or
         tagCharSeq == Tag::VIDEO_ENCODER_REPEAT_PREVIOUS_FRAME_AFTER or
         tagCharSeq == Tag::VIDEO_ENCODER_REPEAT_PREVIOUS_MAX_COUNT, int32_t, AnyValueType::INT32_T);
+    DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::AV_TRANSCODER_ERR_CODE or
+        tagCharSeq == Tag::AV_TRANSCODER_SOURCE_DURATION or
+        tagCharSeq == Tag::AV_TRANSCODER_TRANSCODER_DURATION or
+        tagCharSeq == Tag::AV_TRANSCODER_SRC_VIDEO_BITRATE or
+        tagCharSeq == Tag::AV_TRANSCODER_SRC_HDR_TYPE or
+        tagCharSeq == Tag::AV_TRANSCODER_SRC_AUDIO_SAMPLE_RATE or
+        tagCharSeq == Tag::AV_TRANSCODER_SRC_AUDIO_CHANNEL_COUNT or
+        tagCharSeq == Tag::AV_TRANSCODER_SRC_AUDIO_BITRATE or
+        tagCharSeq == Tag::AV_TRANSCODER_DST_VIDEO_BITRATE or
+        tagCharSeq == Tag::AV_TRANSCODER_DST_HDR_TYPE or
+        tagCharSeq == Tag::AV_TRANSCODER_DST_AUDIO_SAMPLE_RATE or
+        tagCharSeq == Tag::AV_TRANSCODER_DST_AUDIO_CHANNEL_COUNT or
+        tagCharSeq == Tag::AV_TRANSCODER_DST_AUDIO_BITRATE or
+        tagCharSeq == Tag::AV_TRANSCODER_VIDEO_DECODER_DURATION or
+        tagCharSeq == Tag::AV_TRANSCODER_VIDEO_ENCODER_DURATION or
+        tagCharSeq == Tag::AV_TRANSCODER_VIDEO_VPE_DURATION, int32_t, AnyValueType::INT32_T);
 
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::APP_FULL_TOKEN_ID or
@@ -330,6 +347,9 @@ public:
         tagCharSeq == Tag::VIDEO_CAPTURE_RATE or
         tagCharSeq == Tag::VIDEO_SAR or
         tagCharSeq == Tag::VIDEO_ENCODER_MSE, double, AnyValueType::DOUBLE);
+    DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::AV_TRANSCODER_SRC_VIDEO_FRAME_RATE or
+        tagCharSeq == Tag::AV_TRANSCODER_DST_VIDEO_FRAME_RATE, double, AnyValueType::DOUBLE);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::MEDIA_FILE_TYPE, Plugins::FileType, AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::DRM_DECRYPT_AVG_SIZE or
@@ -375,6 +395,14 @@ public:
         tagCharSeq == Tag::AV_PLAYER_VIDEO_MIME or
         tagCharSeq == Tag::AV_PLAYER_VIDEO_RESOLUTION or
         tagCharSeq == Tag::AV_PLAYER_AUDIO_MIME, std::string, AnyValueType::STRING);
+    DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::AV_TRANSCODER_ERR_MSG or
+        tagCharSeq == Tag::AV_TRANSCODER_SRC_FORMAT or
+        tagCharSeq == Tag::AV_TRANSCODER_SRC_AUDIO_MIME or
+        tagCharSeq == Tag::AV_TRANSCODER_SRC_VIDEO_MIME or
+        tagCharSeq == Tag::AV_TRANSCODER_DST_FORMAT or
+        tagCharSeq == Tag::AV_TRANSCODER_DST_AUDIO_MIME or
+        tagCharSeq == Tag::AV_TRANSCODER_DST_VIDEO_MIME, std::string, AnyValueType::STRING);
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::RECORDER_HDR_TYPE, int8_t, AnyValueType::INT8_T);
 
