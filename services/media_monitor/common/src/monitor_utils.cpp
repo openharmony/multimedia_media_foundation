@@ -34,6 +34,10 @@ bool IsRealPath(const std::string& inputPath)
         MEDIA_LOG_E("invalid path");
         return false;
     }
+
+    char path[PATH_MAX] = {0};
+    auto realPath = realpath(inputPath.c_str(), path);
+    FALSE_RETURN_V(realPath != nullptr, false);
     return true;
 }
 

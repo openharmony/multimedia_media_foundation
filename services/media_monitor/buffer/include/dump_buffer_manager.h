@@ -25,27 +25,6 @@ extern "C" {
 
 typedef struct DumpBuffer DumpBuffer;
 
-DumpBuffer *DumpBufferNew(void);
-
-DumpBuffer *DumpBufferCreate(int32_t capacity);
-
-void DumpBufferDestroy(DumpBuffer *buffer);
-
-uint8_t *DumpBufferGetAddr(DumpBuffer *buffer);
-
-int32_t DumpBufferGetCapacity(DumpBuffer *buffer);
-
-int32_t DumpBufferGetSize(DumpBuffer *buffer);
-
-bool DumpBufferSetSize(DumpBuffer *buffer, int32_t size);
-
-int32_t DumpBufferWrite(DumpBuffer *buffer, const uint8_t *in, int32_t writeSize);
-
-uint64_t DumpBufferGetUniqueId(DumpBuffer *buffer);
-
-bool DumpBufferReadFromParcel(DumpBuffer *buffer, void *parcel);
-
-bool DumpBufferWriteToParcel(DumpBuffer *buffer, void *parcel);
 #ifdef __cplusplus
 }
 #endif

@@ -369,9 +369,11 @@ void MediaMonitorService::WriteBufferFromQueue(const std::string &fileName, std:
     MEDIA_LOG_D("WriteBufferFromQueue enter");
     FALSE_RETURN_MSG(buffer != nullptr, "buffer is nullptr");
     std::string realFilePath = fileFloader_ + fileName;
+    FALSE_RETURN_MSG(IsRealPath(fileFloader_), "check path failed");
     FILE *dumpFile = fopen(realFilePath.c_str(), "a");
     FALSE_RETURN_MSG(dumpFile != nullptr, "pcm file %{public}s open failed", realFilePath.c_str());
     if (fseek(dumpFile, 0, SEEK_END)) {
+        (void)fclose(dumpFile);
         return;
     }
     int filelen = ftell(dumpFile);

@@ -17,6 +17,10 @@
 #include "dump_buffer_define.h"
 #include "log.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 namespace {
 constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
 }
@@ -127,3 +131,7 @@ bool DumpBufferWriteToParcel(DumpBuffer *buffer, void *parcel)
     bool ret = buffer->buffer_->WriteToMessageParcel(*parcelIn);
     return ret;
 }
+
+#ifdef __cplusplus
+}
+#endif

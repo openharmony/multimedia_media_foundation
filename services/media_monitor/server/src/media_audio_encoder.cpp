@@ -174,27 +174,28 @@ int32_t MediaAudioEncoder::EncodePcmFiles(const std::string &fileDir)
 int32_t MediaAudioEncoder::EncodePcmToFlac(const std::string &in)
 {
     int32_t status = SUCCESS;
+    FALSE_RETURN_V_MSG_E(IsRealPath(in), ERROR, "check path failed");
     status = Init(in);
-    FILE *pcmFile = fopen(in.c_str(), "rb");
-    if (status != SUCCESS || pcmFile == nullptr) {
+    if (status != SUCCESS) {
         Release();
         return ERROR;
     }
     size_t bufferLen = PcmDataSize();
     if (bufferLen <= 0 || bufferLen > MAX_BUFFER_LEN) {
-        MEDIA_LOG_E("get frame size failed");
-        (void)fclose(pcmFile);
         Release();
         return ERROR;
     }
     uint8_t *buffer = reinterpret_cast<uint8_t *>(malloc(bufferLen));
     if (buffer == nullptr) {
-        MEDIA_LOG_E("alloc buffer failed");
-        (void)fclose(pcmFile);
         Release();
         return ERROR;
     }
-
+    FILE *pcmFile = fopen(in.c_str(), "rb");
+    if (pcmFile == nullptr) {
+        free(buffer);
+        Release();
+        return ERROR;
+    }
     while (!feof(pcmFile)) {
         errno_t err = memset_s(static_cast<void *>(buffer), bufferLen, 0, bufferLen);
         if (err != EOK) {
@@ -203,7 +204,6 @@ int32_t MediaAudioEncoder::EncodePcmToFlac(const std::string &in)
         }
         size_t bytesToWrite = fread(buffer, 1, bufferLen, pcmFile);
         if (bytesToWrite <= 0) {
-            MEDIA_LOG_E("read pcm bytes error");
             status = ERROR;
             break;
         }
@@ -212,11 +212,9 @@ int32_t MediaAudioEncoder::EncodePcmToFlac(const std::string &in)
             break;
         }
     }
-
-    free(buffer);
     (void)fclose(pcmFile);
+    free(buffer);
     Release();
-    MEDIA_LOG_I("encode flac file end");
     return status;
 }
 
@@ -273,9 +271,9 @@ int32_t MediaAudioEncoder::ParseAudioArgs(const std::string &fileName, AudioEnco
     if (IsSupportAudioArgs(sampleRate, SupportedSampleRates) &&
         IsSupportAudioArgs(channel, SupportedChannels) &&
         IsSupportAudioArgs(sampleFormat, SupportedSampleFormats)) {
-        config.sampleRate = std::stoi(sampleRate);
-        config.channels = std::stoi(channel);
-        config.sampleFmt = (SampleFormat)std::stoi(sampleFormat);
+        config.sampleRate = static_cast<uint32_t>(std::stoi(sampleRate));
+        config.channels =  static_cast<uint32_t>(std::stoi(channel));
+        config.sampleFmt = static_cast<SampleFormat>(std::stoi(sampleFormat));
         MEDIA_LOG_I("parser success %{public}s %{public}s %{public}s",
             sampleRate.c_str(), channel.c_str(), sampleFormat.c_str());
     } else {
@@ -283,7 +281,7 @@ int32_t MediaAudioEncoder::ParseAudioArgs(const std::string &fileName, AudioEnco
         return ERROR;
     }
     if (fileName.find(BLUETOOTCH_FILE) != std::string::npos) {
-        config.sampleFmt = (SampleFormat)(std::stoi(sampleFormat) - BLUETOOTH_SAMPLE_FORMAT_OFFSET);
+        config.sampleFmt = static_cast<SampleFormat>(std::stoi(sampleFormat) - BLUETOOTH_SAMPLE_FORMAT_OFFSET);
     }
     return SUCCESS;
 }
@@ -331,13 +329,13 @@ int32_t MediaAudioEncoder::InitMux()
         FALSE_RETURN_V_MSG_E(ret >= 0, ERROR, "could not copy the stream parameters");
         videoStream->codecpar->codec_tag = 0;
     }
-    AVDictionary *opt = nullptr;
-    if (!(formatContext_->oformat->flags & AVFMT_NOFILE)) {
+    unsigned int formatCtxFlag = static_cast<unsigned int>(formatContext_->oformat->flags);
+    if (!(formatCtxFlag & AVFMT_NOFILE)) {
         ret = apiWrap_->IoOpen(&formatContext_->pb, fileName_.c_str(), AVIO_FLAG_WRITE,
             &formatContext_->interrupt_callback, nullptr);
         FALSE_RETURN_V_MSG_E(ret >= 0, ERROR, "open fail %{public}s", fileName_.c_str());
     }
-    ret = apiWrap_->FormatWriteHeader(formatContext_.get(), &opt);
+    ret = apiWrap_->FormatWriteHeader(formatContext_.get(), nullptr);
     if (ret < 0) {
         MEDIA_LOG_E("error occurred when write header: %{public}d", ret);
         return ERROR;
@@ -366,9 +364,11 @@ int32_t MediaAudioEncoder::InitAudioEncode(const AudioEncodeConfig &audioConfig)
     audioCodecContext_->bit_rate = audioConfig.bitRate;
     audioCodecContext_->sample_rate = audioConfig.sampleRate;
     audioCodecContext_->channels = audioConfig.channels;
-    audioCodecContext_->channel_layout = apiWrap_->GetChannelLayout(audioConfig.channels);
+    audioCodecContext_->channel_layout = static_cast<uint64_t>(apiWrap_->GetChannelLayout(audioConfig.channels));
 
-    audioCodecContext_->flags |= AV_CODEC_FLAG_GLOBAL_HEADER;
+    unsigned int codecCtxFlag = static_cast<unsigned int>(audioCodecContext_->flags);
+    codecCtxFlag |= AV_CODEC_FLAG_GLOBAL_HEADER;
+    audioCodecContext_->flags = static_cast<int>(codecCtxFlag);
     ret = apiWrap_->CodecOpen(audioCodecContext_.get(), codec, nullptr);
     FALSE_RETURN_V_MSG_E(ret >= 0, ERROR, "could not open audio codec %{public}d", ret);
     return SUCCESS;
@@ -425,6 +425,10 @@ int32_t MediaAudioEncoder::InitSampleConvert()
 
 void MediaAudioEncoder::CopyS24ToS32(int32_t *dst, const uint8_t *src, size_t count)
 {
+    if (dst == nullptr || src == nullptr) {
+        return;
+    }
+
     dst += count;
     src += count * S24LE_SAMPLESIZE;
     for (; count > 0; --count) {
@@ -437,7 +441,7 @@ void MediaAudioEncoder::CopyS24ToS32(int32_t *dst, const uint8_t *src, size_t co
 
 int32_t MediaAudioEncoder::FillFrameFromBuffer(const uint8_t *buffer, size_t size)
 {
-    FALSE_RETURN_V_MSG_E(avFrame_->linesize[0] >= size, ERROR, "frame size error");
+    FALSE_RETURN_V_MSG_E(avFrame_->linesize[0] >= static_cast<int>(size), ERROR, "frame size error");
     if (srcSampleFormat_ == SampleFormat::S24LE) {
         size_t count = size / S24LE_SAMPLESIZE;
         CopyS24ToS32(reinterpret_cast<int32_t*>(avFrame_->data[0]), buffer, count);
@@ -511,7 +515,8 @@ void MediaAudioEncoder::Release()
     if (isInit_) {
         apiWrap_->FormatWriteTrailer(formatContext_.get());
         apiWrap_->IoFlush(formatContext_->pb);
-        if (!(formatContext_->oformat->flags & AVFMT_NOFILE)) {
+        unsigned int formatCtxFlag = static_cast<unsigned int>(formatContext_->oformat->flags);
+        if (!(formatCtxFlag & AVFMT_NOFILE)) {
             (void)apiWrap_->IoClose(formatContext_->pb);
             formatContext_->pb = nullptr;
         }
@@ -536,9 +541,9 @@ size_t MediaAudioEncoder::PcmDataSize()
         bytesPerSample = apiWrap_->GetBytesPerSample(AudioSampleMap[srcSampleFormat_]);
     }
 
-    size = audioCodecContext_->frame_size
+    size = static_cast<size_t>(audioCodecContext_->frame_size
         * audioCodecContext_->channels
-        * bytesPerSample;
+        * bytesPerSample);
     return size;
 }
 

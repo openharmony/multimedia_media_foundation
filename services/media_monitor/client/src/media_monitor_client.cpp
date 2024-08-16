@@ -116,7 +116,7 @@ int32_t MediaMonitorClient::GetInputBuffer(std::shared_ptr<DumpBuffer> &buffer, 
     buffer = std::shared_ptr<DumpBuffer>(bufferPtr, [this](DumpBuffer *ptr) {
         dumpBufferWrap_->DestroyDumpBuffer(ptr);
     });
-    void *replyPtr = (void *)&reply;
+    void *replyPtr = reinterpret_cast<void *>(&reply);
     if (dumpBufferWrap_->ReadFromParcel(buffer.get(), replyPtr) == false) {
         MEDIA_LOG_E("read data failed");
         return reply.ReadInt32();
@@ -148,9 +148,10 @@ int32_t MediaMonitorClient::SetMediaParameters(const std::string &dumpType, cons
 
     if (dumpEnable == "true") {
         dumpBufferWrap_ = std::make_shared<DumpBufferWrap>();
-        if (!dumpBufferWrap_->Open()) {
-            dumpBufferWrap_ = nullptr;
+        bool ret = dumpBufferWrap_->Open();
+        if (!ret) {
             MEDIA_LOG_E("load dumpbuffer failed");
+            dumpBufferWrap_ = nullptr;
             return ERROR;
         }
     } else {
