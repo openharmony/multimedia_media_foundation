@@ -81,7 +81,7 @@ public:
         "codec_config"; ///< codec config. e.g. AudioSpecificConfig for mp4
     static constexpr const char MEDIA_CODEC_MODE[] = "media.codec.mode"; ///< codec mode.
     static constexpr const char MEDIA_POSITION[] = "media.position";     ///< The byte position within media stream/file
-    static constexpr const char MEDIA_START_TIME[] = "media.start.time"; ///< The start time of one track
+    static constexpr const char MEDIA_START_TIME[] = "track_start_time"; ///< The start time of one track
     static constexpr const char MEDIA_CONTAINER_START_TIME[] = "start_time"; ///< int64_t, The start time of container
     static constexpr const char MEDIA_SEEKABLE[] = "media.seekable"; ///< enum Seekable: Seekable status of the media
     static constexpr const char MEDIA_PLAYBACK_SPEED[] = "media.playback.speed"; ///< double, playback speed
