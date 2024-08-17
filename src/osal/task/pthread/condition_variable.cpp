@@ -92,10 +92,10 @@ void ConditionVariable::Wait(AutoLock& lock, std::function<bool()> pred) noexcep
     }
 }
 
-bool ConditionVariable::WaitFor(AutoLock& lock, int timeoutMs)
+bool ConditionVariable::WaitFor(AutoLock& lock, int64_t timeoutMs)
 {
     FALSE_RETURN_V_MSG_E(timeoutMs >= 0,
-        false, "ConditionVariable WaitUntil invalid timeoutMs: " PUBLIC_LOG_D32, timeoutMs);
+        false, "ConditionVariable WaitUntil invalid timeoutMs: " PUBLIC_LOG_D64, timeoutMs);
     FALSE_RETURN_V_MSG_E(condInited_,
         false, "WaitFor uninitialized pthread cond");
     struct timespec timeout = {0, 0};
@@ -108,10 +108,10 @@ bool ConditionVariable::WaitFor(AutoLock& lock, int timeoutMs)
     return pthread_cond_timedwait(&cond_, &(lock.mutex_->nativeHandle_), &timeout) == 0;
 }
 
-bool ConditionVariable::WaitFor(AutoLock& lock, int timeoutMs, std::function<bool()> pred)
+bool ConditionVariable::WaitFor(AutoLock& lock, int64_t timeoutMs, std::function<bool()> pred)
 {
     FALSE_RETURN_V_MSG_E(timeoutMs >= 0,
-        false, "ConditionVariable WaitUntil invalid timeoutMs: " PUBLIC_LOG_D32, timeoutMs);
+        false, "ConditionVariable WaitUntil invalid timeoutMs: " PUBLIC_LOG_D64, timeoutMs);
     FALSE_RETURN_V_MSG_E(condInited_,
         false, "WaitFor uninitialized pthread cond");
     struct timespec timeout = {0, 0};
