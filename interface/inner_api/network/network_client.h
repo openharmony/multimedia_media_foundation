@@ -39,6 +39,7 @@ public:
     virtual Status Deinit() = 0;
     static std::shared_ptr<NetworkClient> GetInstance(RxHeader headCallback, RxBody bodyCallback, void *userParam);
     virtual Status GetIp(std::string &ip);
+    virtual void SetAppUid(int32_t appUid);
 };
 } // namespace HttpPlugin
 } // namespace Plugins

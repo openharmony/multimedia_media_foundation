@@ -104,6 +104,10 @@ public:
 
     std::string GetMimeType() const;
 
+    void SetAppUid(int32_t appUid);
+
+    int32_t GetAppUid();
+
     //std::shared_ptr<DataConsumer> GetDataConsumer() const;
 #ifndef OHOS_LITE
     std::shared_ptr<IMediaDataSource> GetDataSrc() const;
@@ -114,6 +118,7 @@ private:
     SourceType type_ {};
     std::map<std::string, std::string> header_ {};
     std::shared_ptr<PlayStrategy> playStrategy_ {};
+    int32_t appUid_;
     //std::shared_ptr<DataConsumer> dataConsumer_ {};
 #ifndef OHOS_LITE
     std::shared_ptr<IMediaDataSource> dataSrc_ {};
