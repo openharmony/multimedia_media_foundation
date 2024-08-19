@@ -77,7 +77,9 @@ VideoProcessing_ErrorCode CallVideoProcessingWithUnload(
 {
     if (VideoProcessingNdkLoader::Get().IsValid()) {
         auto ret = operationLoader(VideoProcessingNdkLoader::Get());
-        VideoProcessingNdkLoader::Get().UnloadLibrary();
+        if (ret == VIDEO_PROCESSING_SUCCESS) {
+            VideoProcessingNdkLoader::Get().UnloadLibrary();
+        }
         return ret;
     }
     return operation();

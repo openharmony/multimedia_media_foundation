@@ -79,7 +79,9 @@ ImageProcessing_ErrorCode CallImageProcessingWithUnload(
 {
     if (ImageProcessingNdkLoader::Get().IsValid()) {
         auto ret = operationLoader(ImageProcessingNdkLoader::Get());
-        ImageProcessingNdkLoader::Get().UnloadLibrary();
+        if (ret == IMAGE_PROCESSING_SUCCESS) {
+            ImageProcessingNdkLoader::Get().UnloadLibrary();
+        }
         return ret;
     }
     return operation();
