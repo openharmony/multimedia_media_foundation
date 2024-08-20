@@ -119,7 +119,7 @@ private:
     std::unique_ptr<std::thread> dumpLoopThread_ = nullptr;
     std::shared_ptr<DumpSignal> dumpSignal_ = nullptr;
     std::shared_ptr<AudioBufferCache> audioBufferCache_ = nullptr;
-    std::time_t dumpThreadTime_;
+    std::time_t dumpThreadTime_ = 0;
 };
 
 } // namespace MediaMonitor

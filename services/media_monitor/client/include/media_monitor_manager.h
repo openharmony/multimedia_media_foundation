@@ -44,7 +44,7 @@ private:
     bool dumpEnable_ = false;
     std::string dumpType_ = DEFAULT_DUMP_TYPE;
     std::string versionType_ = COMMERCIAL_VERSION;
-    std::time_t dumpStartTime_;
+    std::time_t dumpStartTime_ = 0;
 };
 } // namespace MediaMonitor
 } // namespace Media

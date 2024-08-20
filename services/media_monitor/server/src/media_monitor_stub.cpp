@@ -103,7 +103,7 @@ void MediaMonitorStub::HandleGetInputBuffer(MessageParcel &data, MessageParcel &
         reply.WriteInt32(ERR_OPERATION_FAILED);
         return;
     }
-    void *replyPtr = (void *)&reply;
+    void *replyPtr = reinterpret_cast<void *>(&reply);
     if (dumpBufferWrap_->WriteToParcel(buffer.get(), replyPtr) == false) {
         MEDIA_LOG_E("MediaMonitorStub::HandleGetInputBuffer write data failed");
         reply.WriteInt32(ERR_OPERATION_FAILED);
