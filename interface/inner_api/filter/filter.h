@@ -192,6 +192,11 @@ public:
 
     virtual Status ClearAllNextFilters();
 
+    virtual Status SetMuted(bool isMuted)
+    {
+        (void)isMuted;
+        return Status::OK;
+    }
 protected:
     virtual Status PrepareDone() final;
 
