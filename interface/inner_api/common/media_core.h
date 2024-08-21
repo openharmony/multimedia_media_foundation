@@ -129,6 +129,10 @@ enum MediaType : int32_t {
      * track is subtitle.
      */
     MEDIA_TYPE_SUBTITLE = 2,
+    /**
+     * track is unknown
+     */
+    MEDIA_TYPE_MAX_COUNT = 3,
 };
 
 /**
