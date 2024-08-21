@@ -40,11 +40,6 @@ using namespace testing::ext;
 namespace OHOS {
 namespace Media {
 namespace VideoProcessingEngine {
-bool FileExists(const string& filename)
-{
-    ifstream file(filename);
-    return file.good();
-}
 
 const VideoProcessing_ColorSpaceInfo SRC_INFO {
     .metadataType = OH_VIDEO_HDR_HDR10,
@@ -77,7 +72,6 @@ public:
     void SetUp();
     void TearDown();
     uint32_t FlushSurf(OHNativeWindowBuffer* ohNativeWindowBuffer, OHNativeWindow* window);
-    bool capiImplExist;
 };
 
 void DetailEnhancerVideoNdkUnitTest::SetUpTestCase(void)
@@ -90,7 +84,6 @@ void DetailEnhancerVideoNdkUnitTest::TearDownTestCase(void)
 
 void DetailEnhancerVideoNdkUnitTest::SetUp(void)
 {
-    capiImplExist = FileExists("/system/lib64/ndk/libimage_processing_capi_impl.so");
 }
 
 void DetailEnhancerVideoNdkUnitTest::TearDown(void)
@@ -175,17 +168,9 @@ HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_03, TestSize.Level1)
     VideoProcessing_ErrorCode ret = OH_VideoProcessing_InitializeEnvironment();
     OH_VideoProcessing* instance = nullptr;
     ret = OH_VideoProcessing_Create(&instance, badCreateType);
-    if (capiImplExist) {
-        EXPECT_EQ(ret, VIDEO_PROCESSING_SUCCESS);
-    } else {
-        EXPECT_NE(ret, VIDEO_PROCESSING_SUCCESS);
-    }
+    EXPECT_EQ(ret, VIDEO_PROCESSING_SUCCESS);
     ret = OH_VideoProcessing_Destroy(instance);
-    if (capiImplExist) {
-        EXPECT_EQ(ret, VIDEO_PROCESSING_SUCCESS);
-    } else {
-        EXPECT_NE(ret, VIDEO_PROCESSING_SUCCESS);
-    }
+    EXPECT_EQ(ret, VIDEO_PROCESSING_SUCCESS);
     ret = OH_VideoProcessing_DeinitializeEnvironment();
     EXPECT_EQ(ret, VIDEO_PROCESSING_SUCCESS);
 }
@@ -210,17 +195,9 @@ HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_04, TestSize.Level1)
     VideoProcessing_ErrorCode ret1 = OH_VideoProcessing_InitializeEnvironment();
     EXPECT_EQ(ret1, VIDEO_PROCESSING_SUCCESS);
     VideoProcessing_ErrorCode ret2 = OH_VideoProcessing_InitializeEnvironment();
-    if (capiImplExist) {
-        EXPECT_NE(ret2, VIDEO_PROCESSING_SUCCESS);
-    } else {
-        EXPECT_EQ(ret2, VIDEO_PROCESSING_SUCCESS);
-    }
+    EXPECT_NE(ret2, VIDEO_PROCESSING_SUCCESS);
     VideoProcessing_ErrorCode ret3 = OH_VideoProcessing_InitializeEnvironment();
-    if (capiImplExist) {
-        EXPECT_NE(ret3, VIDEO_PROCESSING_SUCCESS);
-    } else {
-        EXPECT_EQ(ret3, VIDEO_PROCESSING_SUCCESS);
-    }
+    EXPECT_NE(ret3, VIDEO_PROCESSING_SUCCESS);
     OH_VideoProcessing* instance1 = nullptr;
     VideoProcessing_ErrorCode ret4 = OH_VideoProcessing_Create(&instance1, CREATE_TYPE);
     EXPECT_EQ(ret4, VIDEO_PROCESSING_SUCCESS);
@@ -234,17 +211,9 @@ HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_04, TestSize.Level1)
     VideoProcessing_ErrorCode ret8 = OH_VideoProcessing_DeinitializeEnvironment();
     EXPECT_EQ(ret8, VIDEO_PROCESSING_SUCCESS);
     VideoProcessing_ErrorCode ret9 = OH_VideoProcessing_DeinitializeEnvironment();
-    if (capiImplExist) {
-        EXPECT_NE(ret9, VIDEO_PROCESSING_SUCCESS);
-    } else {
-        EXPECT_EQ(ret9, VIDEO_PROCESSING_SUCCESS);
-    }
+    EXPECT_NE(ret9, VIDEO_PROCESSING_SUCCESS);
     VideoProcessing_ErrorCode ret10 = OH_VideoProcessing_DeinitializeEnvironment();
-    if (capiImplExist) {
-        EXPECT_NE(ret10, VIDEO_PROCESSING_SUCCESS);
-    } else {
-        EXPECT_EQ(ret10, VIDEO_PROCESSING_SUCCESS);
-    }
+    EXPECT_NE(ret10, VIDEO_PROCESSING_SUCCESS);
     VideoProcessing_ErrorCode ret11 = OH_VideoProcessing_InitializeEnvironment();
     EXPECT_EQ(ret11, VIDEO_PROCESSING_SUCCESS);
     VideoProcessing_ErrorCode ret12 = OH_VideoProcessing_DeinitializeEnvironment();
@@ -257,17 +226,9 @@ HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_04_1, TestSize.Level1)
     VideoProcessing_ErrorCode ret1 = OH_VideoProcessing_InitializeEnvironment();
     EXPECT_EQ(ret1, VIDEO_PROCESSING_SUCCESS);
     VideoProcessing_ErrorCode ret2 = OH_VideoProcessing_InitializeEnvironment();
-    if (capiImplExist) {
-        EXPECT_NE(ret2, VIDEO_PROCESSING_SUCCESS);
-    } else {
-        EXPECT_EQ(ret2, VIDEO_PROCESSING_SUCCESS);
-    }
+    EXPECT_NE(ret2, VIDEO_PROCESSING_SUCCESS);
     VideoProcessing_ErrorCode ret3 = OH_VideoProcessing_InitializeEnvironment();
-    if (capiImplExist) {
-        EXPECT_NE(ret3, VIDEO_PROCESSING_SUCCESS);
-    } else {
-        EXPECT_EQ(ret3, VIDEO_PROCESSING_SUCCESS);
-    }
+    EXPECT_NE(ret3, VIDEO_PROCESSING_SUCCESS);
     OH_VideoProcessing* instance1 = nullptr;
     VideoProcessing_ErrorCode ret4 = OH_VideoProcessing::Create(&instance1, CREATE_TYPE);
     EXPECT_EQ(ret4, VIDEO_PROCESSING_SUCCESS);
@@ -281,17 +242,9 @@ HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_04_1, TestSize.Level1)
     VideoProcessing_ErrorCode ret8 = OH_VideoProcessing_DeinitializeEnvironment();
     EXPECT_EQ(ret8, VIDEO_PROCESSING_SUCCESS);
     VideoProcessing_ErrorCode ret9 = OH_VideoProcessing_DeinitializeEnvironment();
-    if (capiImplExist) {
-        EXPECT_NE(ret9, VIDEO_PROCESSING_SUCCESS);
-    } else {
-        EXPECT_EQ(ret9, VIDEO_PROCESSING_SUCCESS);
-    }
+    EXPECT_NE(ret9, VIDEO_PROCESSING_SUCCESS);
     VideoProcessing_ErrorCode ret10 = OH_VideoProcessing_DeinitializeEnvironment();
-    if (capiImplExist) {
-        EXPECT_NE(ret10, VIDEO_PROCESSING_SUCCESS);
-    } else {
-        EXPECT_EQ(ret10, VIDEO_PROCESSING_SUCCESS);
-    }
+    EXPECT_NE(ret10, VIDEO_PROCESSING_SUCCESS);
     VideoProcessing_ErrorCode ret11 = OH_VideoProcessing_InitializeEnvironment();
     EXPECT_EQ(ret11, VIDEO_PROCESSING_SUCCESS);
     VideoProcessing_ErrorCode ret12 = OH_VideoProcessing_DeinitializeEnvironment();
@@ -551,11 +504,7 @@ HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_19, TestSize.Level1)
     OH_VideoProcessing_Create(&instance, CREATE_TYPE);
     OH_AVFormat* parameter = OH_AVFormat_Create();
     VideoProcessing_ErrorCode ret = OH_VideoProcessing_GetParameter(instance, parameter);
-    if (capiImplExist) {
-        EXPECT_NE(ret, VIDEO_PROCESSING_SUCCESS);
-    } else {
-        EXPECT_EQ(ret, VIDEO_PROCESSING_SUCCESS);
-    }
+    EXPECT_NE(ret, VIDEO_PROCESSING_SUCCESS);
     OH_VideoProcessing_Destroy(instance);
     OH_VideoProcessing_DeinitializeEnvironment();
 }

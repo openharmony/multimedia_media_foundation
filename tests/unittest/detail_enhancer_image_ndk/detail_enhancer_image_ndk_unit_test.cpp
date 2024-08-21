@@ -30,11 +30,6 @@ using namespace testing::ext;
 namespace OHOS {
 namespace Media {
 namespace VideoProcessingEngine {
-bool FileExists(const string& filename)
-{
-    ifstream file(filename);
-    return file.good();
-}
 
 const ImageProcessing_ColorSpaceInfo param_srgb = {
     0,
@@ -72,7 +67,6 @@ public:
     static void TearDownTestCase(void);
     void SetUp();
     void TearDown();
-    bool capiImplExist;
 };
 
 void DetailEnhancerImageNdkUnitTest::SetUpTestCase(void)
@@ -85,7 +79,6 @@ void DetailEnhancerImageNdkUnitTest::TearDownTestCase(void)
 
 void DetailEnhancerImageNdkUnitTest::SetUp(void)
 {
-    capiImplExist = FileExists("/system/lib64/ndk/libimage_processing_capi_impl.so");
 }
 
 void DetailEnhancerImageNdkUnitTest::TearDown(void)
@@ -445,11 +438,7 @@ HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_29, TestSize.Level1)
     CreateEmptyPixelmap(&dstImg, 720, 960, PIXEL_FORMAT_BGRA_8888);
     OH_ImageProcessing_Create(&instance, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
     ImageProcessing_ErrorCode ret = OH_ImageProcessing_ConvertColorSpace(instance, srcImg, dstImg);
-    if (capiImplExist) {
-        EXPECT_EQ(ret, IMAGE_PROCESSING_SUCCESS);
-    } else {
-        EXPECT_NE(ret, IMAGE_PROCESSING_SUCCESS);
-    }
+    EXPECT_EQ(ret, IMAGE_PROCESSING_SUCCESS);
     OH_ImageProcessing_Destroy(instance);
     OH_ImageProcessing_DeinitializeEnvironment();
 }
@@ -481,11 +470,7 @@ HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_30, TestSize.Level1)
     CreateEmptyPixelmap(&dstImg, 720, 960, PIXEL_FORMAT_RGBA_8888);
     OH_ImageProcessing_Create(&instance, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
     ImageProcessing_ErrorCode ret = OH_ImageProcessing_ConvertColorSpace(instance, srcImg, dstImg);
-    if (capiImplExist) {
-        EXPECT_EQ(ret, IMAGE_PROCESSING_SUCCESS);
-    } else {
-        EXPECT_NE(ret, IMAGE_PROCESSING_SUCCESS);
-    }
+    EXPECT_EQ(ret, IMAGE_PROCESSING_SUCCESS);
     OH_ImageProcessing_Destroy(instance);
     OH_ImageProcessing_DeinitializeEnvironment();
 }
@@ -547,11 +532,7 @@ HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_32, TestSize.Level1)
     CreateEmptyPixelmap(&dstImg, 720, 960, PIXEL_FORMAT_RGBA_8888);
     OH_ImageProcessing_Create(&instance, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
     ImageProcessing_ErrorCode ret = OH_ImageProcessing_Compose(instance, srcImg, gainmap, dstImg);
-    if (capiImplExist) {
-        EXPECT_EQ(ret, IMAGE_PROCESSING_SUCCESS);
-    } else {
-        EXPECT_NE(ret, IMAGE_PROCESSING_SUCCESS);
-    }
+    EXPECT_EQ(ret, IMAGE_PROCESSING_SUCCESS);
     OH_ImageProcessing_Destroy(instance);
     OH_ImageProcessing_DeinitializeEnvironment();
 }
@@ -587,11 +568,7 @@ HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_33, TestSize.Level1)
     CreateEmptyPixelmap(&dstImg, 720, 960, PIXEL_FORMAT_BGRA_8888);
     OH_ImageProcessing_Create(&instance, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
     ImageProcessing_ErrorCode ret = OH_ImageProcessing_Compose(instance, srcImg, gainmap, dstImg);
-    if (capiImplExist) {
-        EXPECT_EQ(ret, IMAGE_PROCESSING_SUCCESS);
-    } else {
-        EXPECT_NE(ret, IMAGE_PROCESSING_SUCCESS);
-    }
+    EXPECT_EQ(ret, IMAGE_PROCESSING_SUCCESS);
     OH_ImageProcessing_Destroy(instance);
     OH_ImageProcessing_DeinitializeEnvironment();
 }
@@ -657,11 +634,7 @@ HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_35, TestSize.Level1)
     CreateEmptyPixelmap(&dstImg, 720, 960, PIXEL_FORMAT_RGBA_8888);
     OH_ImageProcessing_Create(&instance, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
     ImageProcessing_ErrorCode ret = OH_ImageProcessing_Decompose(instance, srcImg, dstImg, gainmap);
-    if (capiImplExist) {
-        EXPECT_EQ(ret, IMAGE_PROCESSING_SUCCESS);
-    } else {
-        EXPECT_NE(ret, IMAGE_PROCESSING_SUCCESS);
-    }
+    EXPECT_EQ(ret, IMAGE_PROCESSING_SUCCESS);
     OH_ImageProcessing_Destroy(instance);
     OH_ImageProcessing_DeinitializeEnvironment();
 }
@@ -697,11 +670,7 @@ HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_36, TestSize.Level1)
     CreateEmptyPixelmap(&dstImg, 720, 960, PIXEL_FORMAT_BGRA_8888);
     OH_ImageProcessing_Create(&instance, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
     ImageProcessing_ErrorCode ret = OH_ImageProcessing_Decompose(instance, srcImg, dstImg, gainmap);
-    if (capiImplExist) {
-        EXPECT_EQ(ret, IMAGE_PROCESSING_SUCCESS);
-    } else {
-        EXPECT_NE(ret, IMAGE_PROCESSING_SUCCESS);
-    }
+    EXPECT_EQ(ret, IMAGE_PROCESSING_SUCCESS);
     OH_ImageProcessing_Destroy(instance);
     OH_ImageProcessing_DeinitializeEnvironment();
 }
@@ -763,11 +732,7 @@ HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_38, TestSize.Level1)
     CreateEmptyPixelmap(&srcImg, 720, 960, PIXEL_FORMAT_RGBA_8888);
     OH_ImageProcessing_Create(&instance, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
     ImageProcessing_ErrorCode ret = OH_ImageProcessing_GenerateMetadata(instance, srcImg);
-    if (capiImplExist) {
-        EXPECT_EQ(ret, IMAGE_PROCESSING_SUCCESS);
-    } else {
-        EXPECT_NE(ret, IMAGE_PROCESSING_SUCCESS);
-    }
+    EXPECT_EQ(ret, IMAGE_PROCESSING_SUCCESS);
     OH_ImageProcessing_Destroy(instance);
     OH_ImageProcessing_DeinitializeEnvironment();
 }
@@ -795,11 +760,7 @@ HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_39, TestSize.Level1)
     CreateEmptyPixelmap(&srcImg, 720, 960, PIXEL_FORMAT_BGRA_8888);
     OH_ImageProcessing_Create(&instance, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
     ImageProcessing_ErrorCode ret = OH_ImageProcessing_GenerateMetadata(instance, srcImg);
-    if (capiImplExist) {
-        EXPECT_EQ(ret, IMAGE_PROCESSING_SUCCESS);
-    } else {
-        EXPECT_NE(ret, IMAGE_PROCESSING_SUCCESS);
-    }
+    EXPECT_EQ(ret, IMAGE_PROCESSING_SUCCESS);
     OH_ImageProcessing_Destroy(instance);
     OH_ImageProcessing_DeinitializeEnvironment();
 }
