@@ -56,6 +56,7 @@ ohos_unittest("detail_enhancer_video_ndk_inner_unit_test") {
   include_dirs = [
     "$histreamer_root_dir/video_processing_engine/interface/kits/c",
     "$histreamer_root_dir/video_processing_engine/interface/inner_api",
+    "$histreamer_root_dir/video_processing_engine/framework/algorithm/include",
     "$histreamer_root_dir/video_processing_engine/framework/dfx/include",
     "$histreamer_root_dir/video_processing_engine/framework/capi/video_processing/include",
   ]
