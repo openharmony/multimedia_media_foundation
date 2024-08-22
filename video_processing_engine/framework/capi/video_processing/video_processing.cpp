@@ -15,6 +15,7 @@
 
 #include "video_processing.h"
 
+#include <atomic>
 #include <functional>
 
 #include "vpe_log.h"
@@ -32,6 +33,8 @@ const int32_t VIDEO_PROCESSING_TYPE_DETAIL_ENHANCER = 0x4;
 const char* VIDEO_DETAIL_ENHANCER_PARAMETER_KEY_QUALITY_LEVEL = "QualityLevel";
 
 namespace {
+std::atomic<bool> g_isInit = false;
+
 bool CallVideoProcessingSupport(std::function<bool(void)>&& operation,
     std::function<bool(VideoProcessingNdkLoader&)>&& operationLoader)
 {
@@ -88,13 +91,24 @@ VideoProcessing_ErrorCode CallVideoProcessingWithUnload(
 
 VideoProcessing_ErrorCode OH_VideoProcessing_InitializeEnvironment(void)
 {
-    return CallVideoProcessingWithLoad([]() { return VIDEO_PROCESSING_SUCCESS; },
+    return CallVideoProcessingWithLoad(
+        []() {
+            g_isInit = true;
+            return VIDEO_PROCESSING_SUCCESS;
+        },
         [](VideoProcessingNdkLoader& loader) { return loader.InitializeEnvironment(); });
 }
 
 VideoProcessing_ErrorCode OH_VideoProcessing_DeinitializeEnvironment(void)
 {
-    return CallVideoProcessingWithUnload([]() { return VIDEO_PROCESSING_SUCCESS; },
+    return CallVideoProcessingWithUnload(
+        []() {
+            if (!g_isInit.load()) {
+                return VIDEO_PROCESSING_ERROR_OPERATION_NOT_PERMITTED;
+            }
+            g_isInit = false;
+            return VIDEO_PROCESSING_SUCCESS;
+        },
         [](VideoProcessingNdkLoader& loader) { return loader.DeinitializeEnvironment(); });
 }
 
