@@ -80,6 +80,17 @@ enum MediaServiceErrCode : ErrCode {
     MSERR_DRM_VERIFICATION_FAILED,                    // DRM verification failed
     MSERR_UNSUPPORT_WATER_MARK,                       // unsupported watermark
     MSERR_DEMUXER_BUFFER_NO_MEMORY,                   // demuxer cache data reached its limit
+    MSERR_IO_CANNOT_FIND_HOST = MS_ERR_OFFSET + 0x400,// = MS_ERR_OFFSET + 0x400, IO can not find host
+    MSERR_IO_CONNECTION_TIMEOUT,                      // IO connection timeout
+    MSERR_IO_NETWORK_ABNORMAL,                        // IO network abnormal.
+    MSERR_IO_NETWORK_UNAVAILABLE,                     // IO network unavailable.
+    MSERR_IO_NO_PERMISSION,                           // IO no permission.
+    MSERR_IO_REQUEST_DENID,                           // IO request denied.
+    MSERR_IO_RESOURE_NOT_FOUND,                       // IO resource not found.
+    MSERR_IO_SSL_CLIENT_CERT_NEEDED,                  // IO SSL client cert needed.
+    MSERR_IO_SSL_CONNECT_FAIL,                        // IO SSL connect fail.
+    MSERR_IO_SSL_SERVER_CERT_UNTRUSTED,               // IO SSL server cert untrusted.
+    MSERR_IO_UNSUPPORTTED_REQEST,                     // IO unsupported request.
     MSERR_EXTEND_START      = MS_ERR_OFFSET + 0xF000, // extend err start.
 };
 
@@ -112,6 +123,17 @@ enum MediaServiceExtErrCodeAPI9 : int32_t {
     MSERR_EXT_API9_SERVICE_DIED = 5400105,          // media service died.
     MSERR_EXT_API9_UNSUPPORT_FORMAT = 5400106,      // unsupport format.
     MSERR_EXT_API9_AUDIO_INTERRUPTED = 5400107,     // audio interrupted.
+    MSERR_EXT_API12_IO_CANNOT_FIND_HOST = 5411001,              // IO can not find host
+    MSERR_EXT_API12_IO_CONNECTION_TIMEOUT = 5411102,            // IO connection timeout
+    MSERR_EXT_API12_IO_NETWORK_ABNORMAL = 5411003,              // IO network abnormal.
+    MSERR_EXT_API12_IO_NETWORK_UNAVAILABLE = 5411004,           // IO network unavailable.
+    MSERR_EXT_API12_IO_NO_PERMISSION = 5411005,                 // IO no permission.
+    MSERR_EXT_API12_IO_REQUEST_DENID = 5411006,                 // IO request denied.
+    MSERR_EXT_API12_IO_RESOURE_NOT_FOUND = 5411007,             // IO resource not found.
+    MSERR_EXT_API12_IO_SSL_CLIENT_CERT_NEEDED = 5411008,        // IO SSL client cert needed.
+    MSERR_EXT_API12_IO_SSL_CONNECT_FAIL = 5411009,              // IO SSL connect fail.
+    MSERR_EXT_API12_IO_SSL_SERVER_CERT_UNTRUSTED = 5411010,     // IO SSL server cert untrusted.
+    MSERR_EXT_API12_IO_UNSUPPORTTED_REQEST = 5411011,           // IO unsupported request.
 };
 
 /**
