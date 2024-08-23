@@ -123,7 +123,7 @@ enum MediaServiceExtErrCodeAPI9 : int32_t {
     MSERR_EXT_API9_SERVICE_DIED = 5400105,                      // media service died.
     MSERR_EXT_API9_UNSUPPORT_FORMAT = 5400106,                  // unsupport format.
     MSERR_EXT_API9_AUDIO_INTERRUPTED = 5400107,                 // audio interrupted.
-    MSERR_EXT_API12_IO_CANNOT_FIND_HOST = 5411001,              // IO can not find host
+    MSERR_EXT_API12_IO_CANNOT_FIND_HOST = 5411001,              // IO can not find host
     MSERR_EXT_API12_IO_CONNECTION_TIMEOUT = 5411102,            // IO connection timeout
     MSERR_EXT_API12_IO_NETWORK_ABNORMAL = 5411003,              // IO network abnormal.
     MSERR_EXT_API12_IO_NETWORK_UNAVAILABLE = 5411004,           // IO network unavailable.
