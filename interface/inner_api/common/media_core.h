@@ -111,18 +111,18 @@ enum MediaServiceExtErrCode : int32_t {
 
 // media api9 error code
 enum MediaServiceExtErrCodeAPI9 : int32_t {
-    MSERR_EXT_API9_OK = 0,                                      // use for determine error
-    MSERR_EXT_API9_NO_PERMISSION = 201,                         // permission denied (AccessToken).
-    MSERR_EXT_API9_PERMISSION_DENIED = 202,                     // permission denied (system API).
-    MSERR_EXT_API9_INVALID_PARAMETER = 401,                     // invalid parameter.
-    MSERR_EXT_API9_UNSUPPORT_CAPABILITY = 801,                  // unsupport api.
-    MSERR_EXT_API9_NO_MEMORY = 5400101,                         // no memory.
-    MSERR_EXT_API9_OPERATE_NOT_PERMIT = 5400102,                // opertation not be permitted.
-    MSERR_EXT_API9_IO = 5400103,                                // IO error.
-    MSERR_EXT_API9_TIMEOUT = 5400104,                           // opertate timeout.
-    MSERR_EXT_API9_SERVICE_DIED = 5400105,                      // media service died.
-    MSERR_EXT_API9_UNSUPPORT_FORMAT = 5400106,                  // unsupport format.
-    MSERR_EXT_API9_AUDIO_INTERRUPTED = 5400107,                 // audio interrupted.
+    MSERR_EXT_API9_OK = 0,                          // use for determine error
+    MSERR_EXT_API9_NO_PERMISSION = 201,             // permission denied (AccessToken).
+    MSERR_EXT_API9_PERMISSION_DENIED = 202,         // permission denied (system API).
+    MSERR_EXT_API9_INVALID_PARAMETER = 401,         // invalid parameter.
+    MSERR_EXT_API9_UNSUPPORT_CAPABILITY = 801,      // unsupport api.
+    MSERR_EXT_API9_NO_MEMORY = 5400101,             // no memory.
+    MSERR_EXT_API9_OPERATE_NOT_PERMIT = 5400102,    // opertation not be permitted.
+    MSERR_EXT_API9_IO = 5400103,                    // IO error.
+    MSERR_EXT_API9_TIMEOUT = 5400104,               // opertate timeout.
+    MSERR_EXT_API9_SERVICE_DIED = 5400105,          // media service died.
+    MSERR_EXT_API9_UNSUPPORT_FORMAT = 5400106,      // unsupport format.
+    MSERR_EXT_API9_AUDIO_INTERRUPTED = 5400107,     // audio interrupted.
     MSERR_EXT_API12_IO_CANNOT_FIND_HOST = 5411001,              // IO can not find host
     MSERR_EXT_API12_IO_CONNECTION_TIMEOUT = 5411102,            // IO connection timeout
     MSERR_EXT_API12_IO_NETWORK_ABNORMAL = 5411003,              // IO network abnormal.
