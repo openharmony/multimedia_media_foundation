@@ -28,59 +28,70 @@ constexpr MSErrCode MS_MODULE = 0X01000;
 constexpr MSErrCode MS_ERR_OFFSET = ErrCodeOffset(SUBSYS_MULTIMEDIA, MS_MODULE);
 enum MediaServiceErrCode : ErrCode {
     MSERR_OK                = ERR_OK,
-    MSERR_NO_MEMORY         = MS_ERR_OFFSET + ENOMEM, // no memory
-    MSERR_INVALID_OPERATION = MS_ERR_OFFSET + ENOSYS, // opertation not be permitted
-    MSERR_INVALID_VAL       = MS_ERR_OFFSET + EINVAL, // invalid argument
-    MSERR_UNKNOWN           = MS_ERR_OFFSET + 0x200,  // unkown error.
-    MSERR_MANDATORY_PARAMETER_UNSPECIFIED,            // mandatory parameters are left unspecified
-    MSERR_INCORRECT_PARAMETER_TYPE,                   // Incorrect parameter types
-    MSERR_PARAMETER_VERIFICATION_FAILED,              // Parameter verification failed
-    MSERR_SERVICE_DIED,                               // media service died
-    MSERR_CREATE_REC_ENGINE_FAILED,                   // create recorder engine failed.
-    MSERR_CREATE_PLAYER_ENGINE_FAILED,                // create player engine failed.
-    MSERR_CREATE_AVMETADATAHELPER_ENGINE_FAILED,      // create avmetadatahelper engine failed.
-    MSERR_CREATE_AVCODEC_ENGINE_FAILED,               // create avcodec engine failed.
-    MSERR_INVALID_STATE,                              // the state is not support this operation.
-    MSERR_UNSUPPORT,                                  // unsupport interface.
-    MSERR_UNSUPPORT_AUD_SRC_TYPE,                     // unsupport audio source type.
-    MSERR_UNSUPPORT_AUD_SAMPLE_RATE,                  // unsupport audio sample rate.
-    MSERR_UNSUPPORT_AUD_CHANNEL_NUM,                  // unsupport audio channel.
-    MSERR_UNSUPPORT_AUD_ENC_TYPE,                     // unsupport audio encoder type.
-    MSERR_UNSUPPORT_AUD_PARAMS,                       // unsupport audio params(other params).
-    MSERR_UNSUPPORT_VID_SRC_TYPE,                     // unsupport video source type.
-    MSERR_UNSUPPORT_VID_ENC_TYPE,                     // unsupport video encoder type.
-    MSERR_UNSUPPORT_VID_PARAMS,                       // unsupport video params(other params).
-    MSERR_UNSUPPORT_CONTAINER_TYPE,                   // unsupport container format type.
-    MSERR_UNSUPPORT_PROTOCOL_TYPE,                    // unsupport protocol type.
-    MSERR_UNSUPPORT_VID_DEC_TYPE,                     // unsupport video decoder type.
-    MSERR_UNSUPPORT_AUD_DEC_TYPE,                     // unsupport audio decoder type.
-    MSERR_UNSUPPORT_STREAM,                           // internal data stream error.
-    MSERR_UNSUPPORT_FILE,                             // this appears to be a text file.
-    MSERR_UNSUPPORT_SOURCE,                           // unsupport source type.
-    MSERR_AUD_RENDER_FAILED,                          // audio render failed.
-    MSERR_AUD_ENC_FAILED,                             // audio encode failed.
-    MSERR_VID_ENC_FAILED,                             // video encode failed.
-    MSERR_AUD_DEC_FAILED,                             // audio decode failed.
-    MSERR_VID_DEC_FAILED,                             // video decode failed.
-    MSERR_MUXER_FAILED,                               // stream avmuxer failed.
-    MSERR_DEMUXER_FAILED,                             // stream demuxer or parser failed.
-    MSERR_OPEN_FILE_FAILED,                           // open file failed.
-    MSERR_FILE_ACCESS_FAILED,                         // read or write file failed.
-    MSERR_START_FAILED,                               // audio/video start failed.
-    MSERR_PAUSE_FAILED,                               // audio/video pause failed.
-    MSERR_STOP_FAILED,                                // audio/video stop failed.
-    MSERR_SEEK_FAILED,                                // audio/video seek failed.
-    MSERR_NETWORK_TIMEOUT,                            // network timeout.
-    MSERR_NOT_FIND_CONTAINER,                         // not find a demuxer.
-    MSERR_DATA_SOURCE_IO_ERROR,                       // media data source IO failed.
-    MSERR_DATA_SOURCE_OBTAIN_MEM_ERROR,               // media data source get mem failed.
-    MSERR_DATA_SOURCE_ERROR_UNKNOWN,                  // media data source error unknow.
-    MSERR_AUD_INTERRUPT,                              // audio interrupted.
-    MSERR_USER_NO_PERMISSION,                         // user permission denied (AccessToken).
-    MSERR_DRM_VERIFICATION_FAILED,                    // DRM verification failed
-    MSERR_UNSUPPORT_WATER_MARK,                       // unsupported watermark
-    MSERR_DEMUXER_BUFFER_NO_MEMORY,                   // demuxer cache data reached its limit
-    MSERR_EXTEND_START      = MS_ERR_OFFSET + 0xF000, // extend err start.
+    MSERR_NO_MEMORY         = MS_ERR_OFFSET + ENOMEM,   // no memory
+    MSERR_INVALID_OPERATION = MS_ERR_OFFSET + ENOSYS,   // opertation not be permitted
+    MSERR_INVALID_VAL       = MS_ERR_OFFSET + EINVAL,   // invalid argument
+    MSERR_UNKNOWN           = MS_ERR_OFFSET + 0x200,    // unkown error.
+    MSERR_MANDATORY_PARAMETER_UNSPECIFIED,              // mandatory parameters are left unspecified
+    MSERR_INCORRECT_PARAMETER_TYPE,                     // Incorrect parameter types
+    MSERR_PARAMETER_VERIFICATION_FAILED,                // Parameter verification failed
+    MSERR_SERVICE_DIED,                                 // media service died
+    MSERR_CREATE_REC_ENGINE_FAILED,                     // create recorder engine failed.
+    MSERR_CREATE_PLAYER_ENGINE_FAILED,                  // create player engine failed.
+    MSERR_CREATE_AVMETADATAHELPER_ENGINE_FAILED,        // create avmetadatahelper engine failed.
+    MSERR_CREATE_AVCODEC_ENGINE_FAILED,                 // create avcodec engine failed.
+    MSERR_INVALID_STATE,                                // the state is not support this operation.
+    MSERR_UNSUPPORT,                                    // unsupport interface.
+    MSERR_UNSUPPORT_AUD_SRC_TYPE,                       // unsupport audio source type.
+    MSERR_UNSUPPORT_AUD_SAMPLE_RATE,                    // unsupport audio sample rate.
+    MSERR_UNSUPPORT_AUD_CHANNEL_NUM,                    // unsupport audio channel.
+    MSERR_UNSUPPORT_AUD_ENC_TYPE,                       // unsupport audio encoder type.
+    MSERR_UNSUPPORT_AUD_PARAMS,                         // unsupport audio params(other params).
+    MSERR_UNSUPPORT_VID_SRC_TYPE,                       // unsupport video source type.
+    MSERR_UNSUPPORT_VID_ENC_TYPE,                       // unsupport video encoder type.
+    MSERR_UNSUPPORT_VID_PARAMS,                         // unsupport video params(other params).
+    MSERR_UNSUPPORT_CONTAINER_TYPE,                     // unsupport container format type.
+    MSERR_UNSUPPORT_PROTOCOL_TYPE,                      // unsupport protocol type.
+    MSERR_UNSUPPORT_VID_DEC_TYPE,                       // unsupport video decoder type.
+    MSERR_UNSUPPORT_AUD_DEC_TYPE,                       // unsupport audio decoder type.
+    MSERR_UNSUPPORT_STREAM,                             // internal data stream error.
+    MSERR_UNSUPPORT_FILE,                               // this appears to be a text file.
+    MSERR_UNSUPPORT_SOURCE,                             // unsupport source type.
+    MSERR_AUD_RENDER_FAILED,                            // audio render failed.
+    MSERR_AUD_ENC_FAILED,                               // audio encode failed.
+    MSERR_VID_ENC_FAILED,                               // video encode failed.
+    MSERR_AUD_DEC_FAILED,                               // audio decode failed.
+    MSERR_VID_DEC_FAILED,                               // video decode failed.
+    MSERR_MUXER_FAILED,                                 // stream avmuxer failed.
+    MSERR_DEMUXER_FAILED,                               // stream demuxer or parser failed.
+    MSERR_OPEN_FILE_FAILED,                             // open file failed.
+    MSERR_FILE_ACCESS_FAILED,                           // read or write file failed.
+    MSERR_START_FAILED,                                 // audio/video start failed.
+    MSERR_PAUSE_FAILED,                                 // audio/video pause failed.
+    MSERR_STOP_FAILED,                                  // audio/video stop failed.
+    MSERR_SEEK_FAILED,                                  // audio/video seek failed.
+    MSERR_NETWORK_TIMEOUT,                              // network timeout.
+    MSERR_NOT_FIND_CONTAINER,                           // not find a demuxer.
+    MSERR_DATA_SOURCE_IO_ERROR,                         // media data source IO failed.
+    MSERR_DATA_SOURCE_OBTAIN_MEM_ERROR,                 // media data source get mem failed.
+    MSERR_DATA_SOURCE_ERROR_UNKNOWN,                    // media data source error unknow.
+    MSERR_AUD_INTERRUPT,                                // audio interrupted.
+    MSERR_USER_NO_PERMISSION,                           // user permission denied (AccessToken).
+    MSERR_DRM_VERIFICATION_FAILED,                      // DRM verification failed
+    MSERR_UNSUPPORT_WATER_MARK,                         // unsupported watermark
+    MSERR_DEMUXER_BUFFER_NO_MEMORY,                     // demuxer cache data reached its limit
+    MSERR_IO_CANNOT_FIND_HOST = MS_ERR_OFFSET + 0x400,  // IO can not find host
+    MSERR_IO_CONNECTION_TIMEOUT,                        // IO connection timeout
+    MSERR_IO_NETWORK_ABNORMAL,                          // IO network abnormal.
+    MSERR_IO_NETWORK_UNAVAILABLE,                       // IO network unavailable.
+    MSERR_IO_NO_PERMISSION,                             // IO no permission.
+    MSERR_IO_REQUEST_DENID,                             // IO request denied.
+    MSERR_IO_RESOURE_NOT_FOUND,                         // IO resource not found.
+    MSERR_IO_SSL_CLIENT_CERT_NEEDED,                    // IO SSL client cert needed.
+    MSERR_IO_SSL_CONNECT_FAIL,                          // IO SSL connect fail.
+    MSERR_IO_SSL_SERVER_CERT_UNTRUSTED,                 // IO SSL server cert untrusted.
+    MSERR_IO_UNSUPPORTTED_REQEST,                       // IO unsupported request.
+    MSERR_EXTEND_START      = MS_ERR_OFFSET + 0xF000,   // extend err start.
 };
 
 // media api error code
@@ -112,6 +123,17 @@ enum MediaServiceExtErrCodeAPI9 : int32_t {
     MSERR_EXT_API9_SERVICE_DIED = 5400105,          // media service died.
     MSERR_EXT_API9_UNSUPPORT_FORMAT = 5400106,      // unsupport format.
     MSERR_EXT_API9_AUDIO_INTERRUPTED = 5400107,     // audio interrupted.
+    MSERR_EXT_API12_IO_CANNOT_FIND_HOST = 5411001,              // IO can not find host
+    MSERR_EXT_API12_IO_CONNECTION_TIMEOUT = 5411102,            // IO connection timeout
+    MSERR_EXT_API12_IO_NETWORK_ABNORMAL = 5411003,              // IO network abnormal.
+    MSERR_EXT_API12_IO_NETWORK_UNAVAILABLE = 5411004,           // IO network unavailable.
+    MSERR_EXT_API12_IO_NO_PERMISSION = 5411005,                 // IO no permission.
+    MSERR_EXT_API12_IO_REQUEST_DENID = 5411006,                 // IO request denied.
+    MSERR_EXT_API12_IO_RESOURE_NOT_FOUND = 5411007,             // IO resource not found.
+    MSERR_EXT_API12_IO_SSL_CLIENT_CERT_NEEDED = 5411008,        // IO SSL client cert needed.
+    MSERR_EXT_API12_IO_SSL_CONNECT_FAIL = 5411009,              // IO SSL connect fail.
+    MSERR_EXT_API12_IO_SSL_SERVER_CERT_UNTRUSTED = 5411010,     // IO SSL server cert untrusted.
+    MSERR_EXT_API12_IO_UNSUPPORTTED_REQEST = 5411011,           // IO unsupported request.
 };
 
 /**
