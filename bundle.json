@@ -14,6 +14,7 @@
         "name": "media_foundation",
         "subsystem": "multimedia",
         "syscap": [
+          "SystemCapability.Multimedia.VideoProcessingEngine",
           "SystemCapability.Multimedia.Media.Core"
         ],
         "features": [
@@ -78,6 +79,7 @@
               "curl",
               "safwk",
               "samgr",
+              "skia",
               "bundle_framework",
               "openmax"
           ]
@@ -217,6 +219,17 @@
                     "media_monitor_info.h"
                   ],
                   "header_base": "//foundation/multimedia/media_foundation/services/media_monitor/common/include"
+                }
+              },
+              {
+                "type": "so",
+                "name": "//foundation/multimedia/media_foundation/video_processing_engine/framework:video_processing",
+                "header": {
+                  "header_files": [
+                    "video_processing.h",
+                    "video_processing_types.h"
+                  ],
+                  "header_base": "//foundation/multimedia/media_foundation/video_processing_engine/interface/kits/c"
                 }
               }
             ],

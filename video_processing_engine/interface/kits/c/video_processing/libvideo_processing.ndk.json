@@ -1,0 +1,93 @@
+[
+    {
+        "first_introduced": "12",
+        "name": "OH_VideoProcessing_InitializeEnvironment"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_VideoProcessing_DeinitializeEnvironment"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_VideoProcessing_IsColorSpaceConversionSupported"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_VideoProcessing_IsMetadataGenerationSupported"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_VideoProcessing_Create"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_VideoProcessing_Destroy"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_VideoProcessing_RegisterCallback"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_VideoProcessing_SetSurface"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_VideoProcessing_GetSurface"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_VideoProcessing_SetParameter"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_VideoProcessing_GetParameter"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_VideoProcessing_Start"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_VideoProcessing_Stop"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_VideoProcessing_RenderOutputBuffer"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_VideoProcessingCallback_Create"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_VideoProcessingCallback_Destroy"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_VideoProcessingCallback_BindOnError"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_VideoProcessingCallback_BindOnState"
+    },
+    {
+        "first_introduced": "12",
+        "name": "OH_VideoProcessingCallback_BindOnNewOutputBuffer"
+    },
+    {
+        "first_introduced": "12",
+        "name": "VIDEO_PROCESSING_TYPE_COLOR_SPACE_CONVERSION",
+        "type": "variable"
+    },
+    {
+        "first_introduced": "12",
+        "name": "VIDEO_PROCESSING_TYPE_METADATA_GENERATION",
+        "type": "variable"
+    },
+    {
+        "first_introduced": "12",
+        "name": "VIDEO_PROCESSING_TYPE_DETAIL_ENHANCER",
+        "type": "variable"
+    }
+]
