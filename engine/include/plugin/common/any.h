@@ -589,19 +589,19 @@ bool AnyCast(const Any* operand, ValueType& value) noexcept
         return false;
     }
 #ifndef HST_ANY_WITH_NO_RTTI
-     if (!operand->SameTypeWith(typeid(ValueType))) {
+    if (!operand->SameTypeWith(typeid(ValueType))) {
 #else
-     if (!operand->SameTypeWith(Any::GetTypeName<ValueType>())) {
+    if (!operand->SameTypeWith(Any::GetTypeName<ValueType>())) {
 #endif
-         return false;
-     } else {
-         auto casted_value = operand->Cast<ValueType>();
-         if (casted_value != nullptr) {
-             value = *casted_value;
-             return true;
-         }
-         return false;
-     }
+        return false;
+    } else {
+        auto casted_value = operand->Cast<ValueType>();
+        if (casted_value != nullptr) {
+            value = *casted_value;
+            return true;
+        }
+        return false;
+    }
 }
 
 /**
