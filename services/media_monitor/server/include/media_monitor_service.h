@@ -95,6 +95,7 @@ private:
     std::shared_ptr<MessageSignal> signal_ = nullptr;
     bool isExit_ = false;
 
+    bool VerifyIsAudio();
     bool IsNeedDump();
     int32_t DumpThreadProcess();
     void DumpThreadStart();
