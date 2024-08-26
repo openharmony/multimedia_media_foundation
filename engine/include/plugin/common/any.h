@@ -595,8 +595,12 @@ bool AnyCast(const Any* operand, ValueType& value) noexcept
 #endif
          return false;
      } else {
-         value = *(operand->Cast<ValueType>());
-         return true;
+         auto casted_value = operand->Cast<ValueType>();
+         if (casted_value != nullptr) {
+             value = *casted_value;
+             return true;
+         }
+         return false;
      }
 }
 
