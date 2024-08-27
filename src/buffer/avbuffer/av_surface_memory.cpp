@@ -117,7 +117,7 @@ Status AVSurfaceMemory::InitSurfaceBuffer(MessageParcel &parcel)
     FALSE_RETURN_V_MSG_E(ret == GSERROR_OK, Status::ERROR_INVALID_OPERATION, "Read message parcel failed! %{public}s",
                          GSErrorStr(ret).c_str());
     capacity_ = static_cast<int32_t>(surfaceBuffer_->GetSize());
-
+    size_ = capacity_;
     return Status::OK;
 }
 
@@ -125,7 +125,7 @@ Status AVSurfaceMemory::InitSurfaceBuffer(sptr<SurfaceBuffer> surfaceBuffer)
 {
     surfaceBuffer_ = surfaceBuffer;
     capacity_ = static_cast<int32_t>(surfaceBuffer_->GetSize());
-
+    size_ = capacity_;
     return Status::OK;
 }
 
