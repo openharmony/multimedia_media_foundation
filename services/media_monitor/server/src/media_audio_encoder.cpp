@@ -51,7 +51,9 @@ const std::string PCM_FILE = ".pcm";
 const std::string FLAC_FILE = ".flac";
 const std::string BLUETOOTCH_FILE = "bluetooth";
 const int BLUETOOTH_SAMPLE_FORMAT_OFFSET = 1;
-constexpr size_t MAX_BUFFER_LEN = 4608 * 2 * 10;
+// samples(flac: 4608) * formatSize(f32: 4) * channles(6)
+constexpr size_t MAX_BUFFER_LEN = 4608 * 4 * 6;
+// samples(flac: 4608) * formatSize(s16: 2) * channles(2)
 constexpr size_t DEFALUT_BUFFER_LEN = 4608 * 2 * 2;
 
 static std::map<SampleFormat, AVSampleFormat> AudioSampleMap = {
