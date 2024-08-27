@@ -34,7 +34,7 @@ namespace OHOS {
 namespace Media {
 namespace MediaMonitor {
 constexpr int32_t WAIT_DUMP_TIMEOUT_S = 1;
-constexpr int32_t ADUIO_CLIENT_UID = 1041;
+constexpr int32_t AUDIO_UID = 1041;
 REGISTER_SYSTEM_ABILITY_BY_ID(MediaMonitorService, MEDIA_MONITOR_SERVICE_ID, true)
 
 MediaMonitorService::MediaMonitorService(int32_t systemAbilityId, bool runOnCreate)
@@ -177,7 +177,7 @@ void MediaMonitorService::AudioEncodeDump()
 bool MediaMonitorService::VerifyIsAudio()
 {
     int32_t callingUid = IPCSkeleton::GetCallingUid();
-    if (callingUid == ADUIO_CLIENT_UID) {
+    if (callingUid == AUDIO_UID) {
         return true;
     }
     return false;
@@ -194,6 +194,7 @@ bool MediaMonitorService::IsNeedDump()
     }
     return false;
 }
+
 int32_t MediaMonitorService::WriteAudioBuffer(const std::string &fileName, void *ptr, size_t size)
 {
     return SUCCESS;
