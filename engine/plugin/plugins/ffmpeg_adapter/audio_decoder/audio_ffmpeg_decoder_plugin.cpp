@@ -503,6 +503,9 @@ Status AudioFfmpegDecoderPlugin::SendBufferLocked(const std::shared_ptr<Buffer>&
 {
     if (inputBuffer && !(inputBuffer->flag & BUFFER_FLAG_EOS)) {
         auto inputMemory = inputBuffer->GetMemory();
+        if (inputMemory == nullptr) {
+            return Status::ERROR_NULL_POINTER;
+        }
         const uint8_t* ptr = inputMemory->GetReadOnlyData();
         auto bufferLength = inputMemory->GetSize();
         // pad to data if needed
@@ -612,6 +615,9 @@ Status AudioFfmpegDecoderPlugin::ReceiveBufferLocked(const std::shared_ptr<Buffe
         status = ReceiveFrameSucc(ioInfo);
     } else if (ret == AVERROR_EOF) {
         MEDIA_LOG_I("eos received");
+        if (ioInfo->GetMemory() == nullptr) {
+            return Status::ERROR_NULL_POINTER;
+        }
         ioInfo->GetMemory()->Reset();
         ioInfo->flag = BUFFER_FLAG_EOS;
         avcodec_flush_buffers(avCodecContext_.get());
