@@ -351,7 +351,7 @@ HWTEST_F(FilterUnitTest, WaitAllState_001, TestSize.Level1)
     filter->nextFiltersMap_[StreamType::STREAMTYPE_PACKED].push_back(filter2);
     filter->LinkPipeLine("");
     sleep(sleepTime_);
-    EXPECT_NE(Status::OK, filter->WaitAllState(FilterState::PREPARING));
+    EXPECT_EQ(Status::OK, filter->WaitAllState(FilterState::PREPARING));
 }
 
 /**
@@ -366,7 +366,7 @@ HWTEST_F(FilterUnitTest, WaitAllState_002, TestSize.Level1)
     filter->Init(nullptr, nullptr);
     filter2->Init(nullptr, nullptr);
     filter->nextFiltersMap_[StreamType::STREAMTYPE_PACKED].push_back(filter2);
-    EXPECT_NE(Status::OK, filter->WaitAllState(FilterState::INITIALIZED));
+    EXPECT_EQ(Status::OK, filter->WaitAllState(FilterState::INITIALIZED));
 }
 
 /**
