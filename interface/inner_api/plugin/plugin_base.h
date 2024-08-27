@@ -52,7 +52,7 @@ struct Callback {
      */
     virtual void OnEvent(const PluginEvent &event) = 0;
 
-    virtual void SetSelectBitRateFlag(bool flag)
+    virtual void SetSelectBitRateFlag(bool flag, uint32_t desBitRate)
     {
         (void)flag;
     }
