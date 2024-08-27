@@ -34,6 +34,7 @@ namespace OHOS {
 namespace Media {
 namespace MediaMonitor {
 constexpr int32_t WAIT_DUMP_TIMEOUT_S = 1;
+constexpr int32_t ADUIO_CLIENT_UID = 1041;
 REGISTER_SYSTEM_ABILITY_BY_ID(MediaMonitorService, MEDIA_MONITOR_SERVICE_ID, true)
 
 MediaMonitorService::MediaMonitorService(int32_t systemAbilityId, bool runOnCreate)
@@ -173,6 +174,15 @@ void MediaMonitorService::AudioEncodeDump()
     encoder = nullptr;
 }
 
+bool MediaMonitorService::VerifyIsAudio()
+{
+    int32_t callingUid = IPCSkeleton::GetCallingUid();
+    if (callingUid == ADUIO_CLIENT_UID) {
+        return true;
+    }
+    return false;
+}
+
 bool MediaMonitorService::IsNeedDump()
 {
     MEDIA_LOG_D("dumpType_:%{public}s, dumpEnable:%{public}d", dumpType_.c_str(), dumpEnable_);
@@ -199,6 +209,7 @@ int32_t MediaMonitorService::GetInputBuffer(std::shared_ptr<DumpBuffer> &buffer,
         return ERR_ILLEGAL_STATE;
     }
 
+    FALSE_RETURN_V_MSG_E(VerifyIsAudio(), ERROR, "client permissionn denied");
     unique_lock<mutex> lock(bufferMutex_);
     if (audioBufferCache_) {
         audioBufferCache_->RequestBuffer(buffer, size);
@@ -212,6 +223,7 @@ int32_t MediaMonitorService::InputBufferFilled(const std::string &fileName, uint
         return ERROR;
     }
 
+    FALSE_RETURN_V_MSG_E(VerifyIsAudio(), ERROR, "client permissionn denied");
     FALSE_RETURN_V_MSG_E(audioBufferCache_ != nullptr, ERROR, "buffer cahce nullptr");
     std::shared_ptr<DumpBuffer> buffer = nullptr;
     audioBufferCache_->GetBufferById(buffer, bufferId);
@@ -226,6 +238,8 @@ int32_t MediaMonitorService::SetMediaParameters(const std::string &dumpType, con
     if (versionType_ != BETA_VERSION) {
         return ERROR;
     }
+
+    FALSE_RETURN_V_MSG_E(VerifyIsAudio(), ERROR, "client permissionn denied");
     MEDIA_LOG_D("SetMediaParameters dumpEnable: %{public}s", dumpEnable.c_str());
     unique_lock<mutex> lock(paramMutex_);
     if (dumpType != DEFAULT_DUMP_TYPE && dumpType != BETA_DUMP_TYPE) {
