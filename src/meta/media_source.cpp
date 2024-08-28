@@ -80,7 +80,7 @@ void MediaSource::GetAppUid()
     return appUid_;
 }
 
-void MediaSource::SetMimeType(const std::string& mimeType)
+int32_t MediaSource::SetMimeType(const std::string& mimeType)
 {
     mimeType_ = mimeType;
 }
