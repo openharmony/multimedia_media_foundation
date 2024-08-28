@@ -392,9 +392,9 @@ std::vector<std::shared_ptr<Plugin::PluginInfo>> FindAvailablePluginsByOutputMim
     for (const auto& name : pluginNames) {
         auto tmpInfo = Plugin::PluginManager::Instance().GetPluginInfo(pluginType, name);
         if (tmpInfo == nullptr) {
-+           MEDIA_LOG_E("tmpInfo is null");
-+           return rets;
-+       }
+            MEDIA_LOG_E("tmpInfo is null");
+            return rets;
+        }
         for (const auto& cap : tmpInfo->outCaps) {
             if (cap.mime == outputMime) {
                 rets.emplace_back(tmpInfo);

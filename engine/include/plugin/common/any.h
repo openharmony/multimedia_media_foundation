@@ -594,14 +594,14 @@ bool AnyCast(const Any* operand, ValueType& value) noexcept
     if (!operand->SameTypeWith(Any::GetTypeName<ValueType>())) {
 #endif
         return false;
-+   } else {
-+       auto casted_value = operand->Cast<ValueType>();
-+       if (casted_value != nullptr) {
-+           value = *casted_value;
-+           return true;
-+       }
-+       return false;
-+    
+    } else {
+        auto casted_value = operand->Cast<ValueType>();
+        if (casted_value != nullptr) {
+            value = *casted_value;
+            return true;
+        }
+        return false;
+    }
 }
 
 /**

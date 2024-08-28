@@ -395,8 +395,8 @@ Status VideoFfmpegEncoderPlugin::QueueInputBuffer(const std::shared_ptr<Buffer>&
 Status VideoFfmpegEncoderPlugin::FillAvFrame(const std::shared_ptr<Buffer>& inputBuffer)
 {
     if (inputBuffer->GetMemory() == nullptr) {
-+       return Status::ERROR_NULL_POINTER;
-+   }
+        return Status::ERROR_NULL_POINTER;
+    }
     const uint8_t *data = inputBuffer->GetMemory()->GetReadOnlyData();
     auto bufferMeta = inputBuffer->GetBufferMeta();
     FALSE_RETURN_V_MSG_W(bufferMeta != nullptr && bufferMeta->GetType() == BufferMetaType::VIDEO,
@@ -467,8 +467,8 @@ Status VideoFfmpegEncoderPlugin::FillFrameBuffer(const std::shared_ptr<Buffer>& 
                          "avcodec_receive_packet() packet data is empty");
     auto frameBufferMem = packetBuffer->GetMemory();
     if (frameBufferMem == nullptr) {
-+       return Status::ERROR_NULL_POINTER;
-+   }
+        return Status::ERROR_NULL_POINTER;
+    }
     FALSE_RETURN_V_MSG_E(frameBufferMem->Write(cachedPacket_->data, cachedPacket_->size, 0) ==
                          static_cast<size_t>(cachedPacket_->size), Status::ERROR_UNKNOWN,
                          "copy packet data to buffer fail");
@@ -502,8 +502,8 @@ Status VideoFfmpegEncoderPlugin::ReceiveBufferLocked(const std::shared_ptr<Buffe
     } else if (ret == AVERROR_EOF) {
         MEDIA_LOG_I("eos received");
         if (packetBuffer->GetMemory() == nullptr) {
-+           return Status::ERROR_NULL_POINTER;
-+       }
+            return Status::ERROR_NULL_POINTER;
+        }
         packetBuffer->GetMemory()->Reset();
         packetBuffer->flag |= BUFFER_FLAG_EOS;
         avcodec_flush_buffers(avCodecContext_.get());

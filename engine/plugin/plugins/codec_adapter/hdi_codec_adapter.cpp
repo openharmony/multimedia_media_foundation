@@ -67,7 +67,7 @@ int32_t HdiCodecAdapter::EmptyBufferDone(CodecCallbackType* self, int64_t appDat
     auto hdiAdapter = reinterpret_cast<HdiCodecAdapter*>(appData);
     hdiAdapter->inBufPool_->UseBufferDone(omxBuffer->bufferId);
     if (!hdiAdapter->isFlushing_) {
-        hdiAdapter->HandleFrame();
+        hdiAdapter->HandleFrame();    
     }
     MEDIA_LOG_DD("EmptyBufferDone-callback end, free in buffer count: " PUBLIC_LOG_U32,
                  hdiAdapter->inBufPool_->EmptyBufferCount());
@@ -81,8 +81,8 @@ int32_t HdiCodecAdapter::FillBufferDone(CodecCallbackType* self, int64_t appData
     auto hdiAdapter = reinterpret_cast<HdiCodecAdapter*>(appData);
     auto codecBuffer = hdiAdapter->outBufPool_->GetBuffer(omxBuffer->bufferId);
     if (codecBuffer == nullptr) {
-+       return HDF_FAILURE;
-+   }
+        return HDF_FAILURE;
+    }
     std::shared_ptr<Plugin::Buffer> outputBuffer = nullptr;
     (void)codecBuffer->Unbind(outputBuffer, omxBuffer);
     hdiAdapter->outBufPool_->UseBufferDone(omxBuffer->bufferId);

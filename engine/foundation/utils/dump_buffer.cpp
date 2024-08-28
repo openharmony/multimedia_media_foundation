@@ -50,17 +50,17 @@ void DumpBufferToFile(const std::string& fileName, const std::shared_ptr<Plugin:
 {
     FALSE_RETURN_MSG(allDumpFileFds[fileName] != nullptr, "fd is null");
     if (buffer->GetMemory() == nullptr) {
-+       MEDIA_LOG_E("Get memory failed: nullptr");
-+       return;
-+   }
+        MEDIA_LOG_E("Get memory failed: nullptr");
+        return;
+    }
     size_t bufferSize = buffer->GetMemory()->GetSize();
     FALSE_RETURN(bufferSize != 0);
     auto addr = reinterpret_cast<const char*>(buffer->GetMemory()->GetReadOnlyData());
-+   if (addr == nullptr) {
-+       MEDIA_LOG_E("Get address failed: nullptr");
-+       return;
-+   }
-+   (void)fwrite(addr,
+    if (addr == nullptr) {
+        MEDIA_LOG_E("Get address failed: nullptr");
+        return;
+    }
+    (void)fwrite(addr,
                  1, bufferSize, allDumpFileFds[fileName]);
 }
 

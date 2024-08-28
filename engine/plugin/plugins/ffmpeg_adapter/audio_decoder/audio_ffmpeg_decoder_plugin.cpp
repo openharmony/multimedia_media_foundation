@@ -504,8 +504,8 @@ Status AudioFfmpegDecoderPlugin::SendBufferLocked(const std::shared_ptr<Buffer>&
     if (inputBuffer && !(inputBuffer->flag & BUFFER_FLAG_EOS)) {
         auto inputMemory = inputBuffer->GetMemory();
         if (inputMemory == nullptr) {
-+           return Status::ERROR_NULL_POINTER;
-+       }
+            return Status::ERROR_NULL_POINTER;
+        }
         const uint8_t* ptr = inputMemory->GetReadOnlyData();
         auto bufferLength = inputMemory->GetSize();
         // pad to data if needed

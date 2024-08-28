@@ -218,9 +218,9 @@ ErrorCode AudioEncoderFilter::PushData(const std::string& inPort, const AVBuffer
         auto encodeSize = std::min(available, frameSize_);
         if (encodeSize > 0) { // ring buffer has buffer available
             if (cacheBuffer_->GetMemory() == nullptr) {
-+               MEDIA_LOG_E("Get memory fail");
-+               return ErrorCode::ERROR_NULL_POINTER;
-+           }
+                MEDIA_LOG_E("Get memory fail");
+                return ErrorCode::ERROR_NULL_POINTER;
+            }
             if (rb_->ReadBuffer(cacheBuffer_->GetMemory()->GetWritableAddr(encodeSize), encodeSize) != encodeSize) {
                 MEDIA_LOG_E("Read data from ring buffer fail");
                 return ErrorCode::ERROR_UNKNOWN;

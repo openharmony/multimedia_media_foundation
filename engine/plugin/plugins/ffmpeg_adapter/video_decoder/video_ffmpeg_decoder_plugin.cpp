@@ -632,8 +632,8 @@ Status VideoFfmpegDecoderPlugin::WriteYuvData(const std::shared_ptr<Buffer>& fra
 {
     auto frameBufferMem = frameBuffer->GetMemory();
     if (frameBufferMem == nullptr) {
-+       return Status::ERROR_NULL_POINTER;
-+   }
+        return Status::ERROR_NULL_POINTER;
+    }
 #ifndef OHOS_LITE
     if (frameBufferMem->GetMemoryType() == Plugin::MemoryType::SURFACE_BUFFER) {
         std::shared_ptr<Plugin::SurfaceMemory> surfaceMemory =
