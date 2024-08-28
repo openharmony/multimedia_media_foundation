@@ -182,6 +182,18 @@ int32_t MediaMonitorManager::SetMediaParameters(const std::vector<std::pair<std:
     }
     return ret;
 }
+
+int32_t MediaMonitorManager::ErasePreferredDeviceByType(const PerferredType preferredType)
+{
+    MEDIA_LOG_D("Erase preferred device by type");
+    sptr<IMediaMonitor> gamp = GetMediaMonitorProxy();
+    if (gamp == nullptr) {
+        MEDIA_LOG_E("gamp is nullptr.");
+        return ERROR;
+    }
+    int32_t ret = gamp->ErasePreferredDeviceByType(preferredType);
+    return ret;
+}
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS

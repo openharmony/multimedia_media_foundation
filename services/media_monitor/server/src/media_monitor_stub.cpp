@@ -137,6 +137,17 @@ void MediaMonitorStub::HandleInputBufferFilled(MessageParcel &data, MessageParce
     reply.WriteInt32(ret);
 }
 
+void MediaMonitorStub::HandleErasePreferredDeviceByType(MessageParcel &data, MessageParcel &reply)
+{
+    int32_t preferredType;
+    if (data.ReadInt32(preferredType) == false) {
+        MEDIA_LOG_E("MediaMonitorStub::HandleErasePreferredDeviceByType read type failed");
+        reply.WriteInt32(ERR_INVALID_PARAM);
+        return;
+    }
+    int32_t ret = ErasePreferredDeviceByType(static_cast<PerferredType>(preferredType));
+    reply.WriteInt32(ret);
+}
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS

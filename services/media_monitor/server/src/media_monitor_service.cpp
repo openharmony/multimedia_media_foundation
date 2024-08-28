@@ -491,6 +491,11 @@ bool MediaMonitorService::DeleteHistoryFile(const std::string &filePath)
     return true;
 }
 
+int32_t MediaMonitorService::ErasePreferredDeviceByType(const PerferredType preferredType)
+{
+    MEDIA_LOG_D("ErasePreferredDeviceByType enter");
+    return audioMemo_.ErasePreferredDeviceByType(preferredType);
+}
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS
