@@ -486,7 +486,6 @@ map<TagType, bool> testBoolData = {
     {Tag::VIDEO_ENCODER_PER_FRAME_MARK_LTR, true},
     {Tag::VIDEO_PER_FRAME_IS_LTR, true},
     {Tag::VIDEO_PER_FRAME_IS_SKIP, true},
-    {Tag::VIDEO_ENCODER_ENABLE_PARAMS_FEEDBACK, true},
     {Tag::VIDEO_ENABLE_LOW_LATENCY, true},
     {Tag::VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK, true},
     {Tag::AUDIO_RENDER_SET_FLAG, true},
