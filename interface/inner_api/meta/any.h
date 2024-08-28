@@ -808,7 +808,7 @@ bool AnyCast(const Any* operand, ValueType& value) noexcept
             value = *casted_value;
             return true;
         }
-        return false;
+        return false;             
     }
 }
 /**
