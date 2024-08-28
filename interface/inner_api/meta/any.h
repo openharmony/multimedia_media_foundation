@@ -789,25 +789,28 @@ const ValueType* AnyCast(const Any* operand) noexcept
   * @return false if type mismatch, operand is nullptr, or valueType is function/array. Otherwise, true to the
   *  value contained by operand.
   */
- template <typename ValueType>
- bool AnyCast(const Any* operand, ValueType& value) noexcept
- {
-     static_assert(!std::is_void<ValueType>::value, "ValueType of any_cast must not be void");
-     if (std::is_function<ValueType>::value || std::is_array<ValueType>::value || operand == nullptr) {
-         return false;
-     }
+template <typename ValueType>
+bool AnyCast(const Any* operand, ValueType& value) noexcept
+{
+    static_assert(!std::is_void<ValueType>::value, "ValueType of any_cast must not be void");
+    if (std::is_function<ValueType>::value || std::is_array<ValueType>::value || operand == nullptr) {
+        return false;
+    }
 #ifndef HST_ANY_WITH_NO_RTTI
-     if (!operand->SameTypeWith(typeid(ValueType))) {
+    if (!operand->SameTypeWith(typeid(ValueType))) {
 #else
-         if (!operand->SameTypeWith(Any::GetTypeName<ValueType>())) {
+        if (!operand->SameTypeWith(Any::GetTypeName<ValueType>())) {
 #endif
-         return false;
-     } else {
-         value = *(operand->Cast<ValueType>());
-         return true;
-     }
- }
-
+        return false;
+    } else {
+        auto casted_value = operand->Cast<ValueType>();
+        if (casted_value != nullptr) {
+            value = *casted_value;
+            return true;
+        }
+        return false;
+    }
+}
 /**
  * cast one Any pointer into ValueType pointer
  *

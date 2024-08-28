@@ -477,6 +477,9 @@ Status AudioFfmpegEncoderPlugin::ReceiveBufferLocked(const std::shared_ptr<Buffe
         status = ReceiveFrameSucc(ioInfo, packet);
     } else if (ret == AVERROR_EOF) {
         MEDIA_LOG_I("eos received");
+        if (ioInfo->GetMemory() == nullptr) {
++           return Status::ERROR_NULL_POINTER;
++       }
         ioInfo->GetMemory()->Reset();
         ioInfo->flag = BUFFER_FLAG_EOS;
         status = Status::END_OF_STREAM;

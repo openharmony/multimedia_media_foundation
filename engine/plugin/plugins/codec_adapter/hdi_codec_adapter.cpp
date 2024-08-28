@@ -80,6 +80,9 @@ int32_t HdiCodecAdapter::FillBufferDone(CodecCallbackType* self, int64_t appData
                          ", pts: " PUBLIC_LOG_D64, omxBuffer->bufferId, omxBuffer->flag, omxBuffer->pts);
     auto hdiAdapter = reinterpret_cast<HdiCodecAdapter*>(appData);
     auto codecBuffer = hdiAdapter->outBufPool_->GetBuffer(omxBuffer->bufferId);
+    if (codecBuffer == nullptr) {
++       return HDF_FAILURE;
++   }
     std::shared_ptr<Plugin::Buffer> outputBuffer = nullptr;
     (void)codecBuffer->Unbind(outputBuffer, omxBuffer);
     hdiAdapter->outBufPool_->UseBufferDone(omxBuffer->bufferId);
