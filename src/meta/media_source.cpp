@@ -75,12 +75,12 @@ void MediaSource::SetAppUid(int32_t appUid)
     appUid_ = appUid;
 }
 
-void MediaSource::GetAppUid()
+int32_t MediaSource::GetAppUid()
 {
     return appUid_;
 }
 
-int32_t MediaSource::SetMimeType(const std::string& mimeType)
+void MediaSource::SetMimeType(const std::string& mimeType)
 {
     mimeType_ = mimeType;
 }
