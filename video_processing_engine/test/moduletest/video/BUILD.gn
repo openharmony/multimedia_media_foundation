@@ -53,10 +53,10 @@ ohos_unittest("vpe_video_native_module_test") {
 
   sources = [ "api_test.cpp" ]
 
-  deps = [ 
+  deps = [
     "$vpe_capi_root_dir/framework:video_processing",
     "//third_party/googletest:gtest_rtti",
-    ]
+  ]
 
   external_deps = [
     "c_utils:utils",
