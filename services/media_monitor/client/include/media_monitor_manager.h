@@ -38,6 +38,8 @@ public:
 
     static void MediaMonitorDied(pid_t pid);
 
+    int32_t ErasePreferredDeviceByType(const PerferredType preferredType);
+
 private:
     MediaMonitorManager();
     ~MediaMonitorManager() {}

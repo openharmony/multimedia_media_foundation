@@ -166,6 +166,20 @@ int32_t MediaMonitorClient::SetMediaParameters(const std::string &dumpType, cons
     FALSE_RETURN_V_MSG_E(error == ERR_NONE, error, "set media param error %{public}d", error);
     return reply.ReadInt32();
 }
+
+int32_t MediaMonitorClient::ErasePreferredDeviceByType(const PerferredType preferredType)
+{
+    MessageParcel data;
+    MessageParcel reply;
+    MessageOption option;
+
+    data.WriteInterfaceToken(GetDescriptor());
+    data.WriteInt32(static_cast<int32_t>(preferredType));
+    int32_t error = Remote()->SendRequest(
+        static_cast<uint32_t>(MediaMonitorInterfaceCode::ERASE_PREFERRED_DEVICE), data, reply, option);
+    FALSE_RETURN_V_MSG_E(error == ERR_NONE, error, "erase preferred device error %{public}d", error);
+    return reply.ReadInt32();
+}
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS

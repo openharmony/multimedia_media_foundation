@@ -53,6 +53,8 @@ public:
 
     virtual int32_t SetMediaParameters(const std::string &dumpType, const std::string &dumpEnable) = 0;
 
+    virtual int32_t ErasePreferredDeviceByType(const PerferredType preferredType) = 0;
+
 public:
     DECLARE_INTERFACE_DESCRIPTOR(u"IMediaMonitor");
 };

@@ -40,6 +40,8 @@ public:
     int32_t GetAudioRouteMsg(std::map<PerferredType, std::shared_ptr<MonitorDeviceInfo>> &perferredDevices);
 
     void WriteInfo(int32_t fd, std::string &dumpString);
+
+    int32_t ErasePreferredDeviceByType(const PerferredType &preferredType);
 private:
     PerferredType GetPerferredType(std::shared_ptr<EventBean> &bean);
     PerferredType GetPerferredRenderType(int32_t streamUsage);
