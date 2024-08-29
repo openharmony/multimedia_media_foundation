@@ -402,7 +402,7 @@ std::string Format::Stringify() const
                 break;
             case FORMAT_TYPE_ADDR: {
                 Any *value = const_cast<Any *>(&(iter->second));
-                if (value != nullptr) {
+                if (AnyCast<std::vector<uint8_t>>(value) != nullptr) {
                     dumpStream << iter->first << ", bufferSize = " << (AnyCast<std::vector<uint8_t>>(value))->size()
                             << " | ";
                 }
