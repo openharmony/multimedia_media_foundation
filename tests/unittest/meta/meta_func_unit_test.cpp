@@ -291,6 +291,20 @@ HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_Enum_As_Int32, TestSize.Level1)
 }
 
 /**
+ * @tc.name: SetGet_MetaData_Enum_As_Uint32
+ * @tc.desc: SetGet_MetaData_Enum_As_Uint32
+ * @tc.type: FUNC
+ */
+HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_Enum_As_Uint32, TestSize.Level1)
+{
+    uint32_t valueOut = 6;
+    uint32_t valueIn = static_cast<uint32_t>(Plugins::VideoOrientationType::FLIP_H_ROT90);
+    SetMetaData(*metaIn, Tag::VIDEO_ROTATION, valueIn);
+    GetMetaData(*metaIn, Tag::VIDEO_ROTATION, valueOut);
+    EXPECT_EQ(valueOut, valueIn);
+}
+
+/**
  * @tc.name: SetGet_MetaData_Int32_Using_Parcel
  * @tc.desc: SetGet_MetaData_Int32_Using_Parcel
  * @tc.type: FUNC
