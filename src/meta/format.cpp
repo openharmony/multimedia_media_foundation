@@ -265,7 +265,7 @@ bool Format::GetBuffer(const std::string_view &key, uint8_t **addr, size_t &size
     auto iter = meta_->Find(std::string(key));
     if ((iter != meta_->end()) && Any::IsSameTypeWith<Buf>(iter->second)) {
         Any *value = const_cast<Any *>(&(iter->second));
-        if (value != nullptr) {
+        if (AnyCast<Buf>(value) != nullptr) {
             *addr = (AnyCast<Buf>(value))->data();
             size = (AnyCast<Buf>(value))->size();
             return true;
