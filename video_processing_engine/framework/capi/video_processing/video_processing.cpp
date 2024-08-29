@@ -54,7 +54,7 @@ VideoProcessing_ErrorCode CallVideoProcessing(T2* instance,
     }
     if (instance == nullptr) {
         VPE_LOGE("instance is null!");
-        return VIDEO_PROCESSING_ERROR_INVALID_PARAMETER;
+        return VIDEO_PROCESSING_ERROR_INVALID_INSTANCE;
     }
     auto obj = instance->GetObj();
     if (obj == nullptr) {
