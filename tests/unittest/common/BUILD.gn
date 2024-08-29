@@ -118,7 +118,6 @@ config("media_foundation_inner_unit_test_config") {
     "$histreamer_root_dir/interface/inner_api/buffer",
     "$histreamer_root_dir/interface/inner_api/meta",
     "$histreamer_root_dir/src/buffer/avbuffer/include",
-    "$histreamer_root_dir/../../graphic/graphic_surface/surface/include",
   ]
 
   cflags = [
