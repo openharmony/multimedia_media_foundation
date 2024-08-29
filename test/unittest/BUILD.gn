@@ -33,6 +33,7 @@ ohos_unittest("histreamer_unit_test") {
     "$histreamer_root_dir/engine/plugin/core/",
     "./plugins/",
     "//drivers/peripheral/base/",
+    "//third_party/openmax/api/1.1.2",
     "$histreamer_root_dir/engine/include/",
     "//graphic/graphic_surface/interfaces/innerkits/surface",
     "//foundation/window/window_manager/interfaces/innerkits/wm",
@@ -74,7 +75,6 @@ ohos_unittest("histreamer_unit_test") {
     "graphic_surface:surface",
     "hdf_core:libpub_utils",
     "hilog:libhilog",
-    "openmax:libopenmax_static",
     "window_manager:libwm",
   ]
 
