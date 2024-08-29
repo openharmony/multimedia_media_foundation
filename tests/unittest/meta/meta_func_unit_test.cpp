@@ -297,8 +297,8 @@ HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_Enum_As_Int32, TestSize.Level1)
  */
 HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_Enum_As_Uint32, TestSize.Level1)
 {
-    uint32_t valueOut = 6;
-    uint32_t valueIn = static_cast<uint32_t>(Plugins::VideoOrientationType::FLIP_H_ROT90);
+    int32_t valueOut = 6;
+    int32_t valueIn = static_cast<uint32_t>(Plugins::VideoOrientationType::FLIP_H_ROT90);
     SetMetaData(*metaIn, Tag::VIDEO_ROTATION, valueIn);
     GetMetaData(*metaIn, Tag::VIDEO_ROTATION, valueOut);
     EXPECT_EQ(valueOut, valueIn);

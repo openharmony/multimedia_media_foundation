@@ -164,7 +164,7 @@ enum VideoRotation : int32_t {
     VIDEO_ROTATION_270 = 270,
 };
 
-enum VideoOrientationType : uint32_t {
+enum VideoOrientationType : int32_t {
     ROTATE_NONE = 0,        /**< No rotation */
     ROTATE_90,              /**< Rotation by 90 degrees */
     ROTATE_180,             /**< Rotation by 180 degrees */

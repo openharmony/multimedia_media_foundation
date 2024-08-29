@@ -163,7 +163,7 @@ public:
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_H264_PROFILE, Plugins::VideoH264Profile,
                            AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_ROTATION, Plugins::VideoRotation, AnyValueType::INT32_T);
-    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_ORIENTATION_TYPE, Plugins::VideoOrientationType, AnyValueType::UINT32_T);
+    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_ORIENTATION_TYPE, Plugins::VideoOrientationType, AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_COLOR_PRIMARIES, Plugins::ColorPrimary,
                            AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_COLOR_TRC, Plugins::TransferCharacteristic,
