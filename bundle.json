@@ -259,8 +259,7 @@
             "test": [
               "//foundation/multimedia/media_foundation/test:histreamer_test",
               "//foundation/multimedia/media_foundation/tests:media_foundation_unit_test",
-              "//foundation/multimedia/media_foundation/services/media_monitor/test/unittest:media_monitor_unit_test",
-              "//foundation/multimedia/media_foundation/video_processing_engine/test:vpe_module_test"
+              "//foundation/multimedia/media_foundation/services/media_monitor/test/unittest:media_monitor_unit_test"
             ]
         }
     }
