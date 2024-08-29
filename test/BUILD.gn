@@ -19,6 +19,7 @@ group("histreamer_test") {
     deps += [
       "scenetest:histreamer_scene_test",
       "unittest:histreamer_unit_test",
+      "moduletest:vpe_video_native_module_test",
     ]
   }
 }

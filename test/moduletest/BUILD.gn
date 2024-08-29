@@ -13,13 +13,12 @@
 
 import("//build/test.gni")
 import("//foundation/multimedia/media_foundation/config.gni")
-import("$histreamer_root_dir/video_processing_engine/config.gni")
 
 video_moduletest_native_include_dirs = [
-  "$vpe_interface_capi_dir",
-  "$vpe_capi_root_dir/test/moduletest/common",
-  "$vpe_capi_root_dir/../../../graphic/graphic_2d/interfaces/inner_api",
-  "$vpe_capi_root_dir/../../../window/window_manager/interfaces/innerkits",
+  "$histreamer_root_dir/video_processing_engine/interface/kits/c",
+  "$histreamer_root_dir/test/moduletest/common",
+  "$histreamer_root_dir/video_processing_engine/../../../graphic/graphic_2d/interfaces/inner_api",
+  "$histreamer_root_dir/video_processing_engine/../../../window/window_manager/interfaces/innerkits",
 ]
 
 video_moduletest_cflags = [
@@ -51,9 +50,9 @@ ohos_unittest("vpe_video_native_module_test") {
   include_dirs += [ "./" ]
   cflags = video_moduletest_cflags
 
-  sources = [ "api_test.cpp" ]
+  sources = [ "./video/api_test.cpp" ]
 
-  deps = [ "$vpe_capi_root_dir/framework:video_processing" ]
+  deps = [ "$histreamer_root_dir/video_processing_engine/framework:video_processing" ]
 
   external_deps = [
     "c_utils:utils",
