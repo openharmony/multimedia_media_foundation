@@ -17,8 +17,8 @@
 #include "native_buffer.h"
 
 int32_t NativeBuffer_ColorSpace[] = {
-    OH_COLORSPACE_NONE, 
-    OH_COLORSPACE_BT601_EBU_FULL, 
+    OH_COLORSPACE_NONE,
+    OH_COLORSPACE_BT601_EBU_FULL,
     OH_COLORSPACE_BT601_SMPTE_C_FULL,
     OH_COLORSPACE_BT709_FULL,
     OH_COLORSPACE_BT2020_HLG_FULL,
@@ -101,13 +101,13 @@ int32_t NativeBuffer_MetadataType[] = {
     100
 };
 
-std::unordered_map<int32_t, std::string> metadataString = {
+std::unordered_map<int32_t, std::string> g_metadataString = {
     {OH_VIDEO_HDR_HLG, "HDR_HLG"},
     {OH_VIDEO_HDR_HDR10, "HDR_HDR10"},
     {OH_VIDEO_HDR_VIVID, "HDR_VIVID"}
 };
 
-std::unordered_map<int32_t, std::string> formatString = {
+std::unordered_map<int32_t, std::string> g_formatString = {
     {NATIVEBUFFER_PIXEL_FMT_CLUT8, "CLUT8"},
     {NATIVEBUFFER_PIXEL_FMT_CLUT1, "CLUT1"},
     {NATIVEBUFFER_PIXEL_FMT_CLUT4, "CLUT4"},
@@ -150,7 +150,7 @@ std::unordered_map<int32_t, std::string> formatString = {
     {NATIVEBUFFER_PIXEL_FMT_BUTT, "BUTT"}
 };
 
-std::unordered_map<int32_t, std::string> colorString = {
+std::unordered_map<int32_t, std::string> g_colorString = {
     {OH_COLORSPACE_NONE, "NONE"},
     {OH_COLORSPACE_BT601_EBU_FULL, "BT601_EBU_FULL"},
     {OH_COLORSPACE_BT601_SMPTE_C_FULL, "BT601_SMPTC_FULL"},

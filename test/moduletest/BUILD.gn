@@ -52,7 +52,9 @@ ohos_unittest("vpe_video_native_module_test") {
 
   sources = [ "./video/api_test.cpp" ]
 
-  deps = [ "$histreamer_root_dir/video_processing_engine/framework:video_processing" ]
+  deps = [
+    "$histreamer_root_dir/video_processing_engine/framework:video_processing",
+  ]
 
   external_deps = [
     "c_utils:utils",
