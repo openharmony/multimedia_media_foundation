@@ -173,9 +173,7 @@ ohos_static_library("media_foundation_inner_unit_test") {
     "../format/inner/avformat_inner_mock_factory.cpp",
   ]
 
-  deps = [
-    "$histreamer_root_dir/src:media_foundation",
-  ]
+  deps = [ "$histreamer_root_dir/src:media_foundation" ]
 
   external_deps = [
     "bounds_checking_function:libsec_static",
