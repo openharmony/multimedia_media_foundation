@@ -16,7 +16,6 @@ import("//foundation/multimedia/media_foundation/config.gni")
 
 video_moduletest_native_include_dirs = [
   "$histreamer_root_dir/video_processing_engine/interface/kits/c",
-  "$histreamer_root_dir/test/moduletest/common",
   "$histreamer_root_dir/video_processing_engine/../../../graphic/graphic_2d/interfaces/inner_api",
   "$histreamer_root_dir/video_processing_engine/../../../window/window_manager/interfaces/innerkits",
 ]
