@@ -265,7 +265,7 @@ bool Format::GetBuffer(const std::string_view &key, uint8_t **addr, size_t &size
     auto iter = meta_->Find(std::string(key));
     if ((iter != meta_->end()) && Any::IsSameTypeWith<Buf>(iter->second)) {
         Any *value = const_cast<Any *>(&(iter->second));
-        if (value != nullptr) {
+        if (AnyCast<Buf>(value) != nullptr) {
             *addr = (AnyCast<Buf>(value))->data();
             size = (AnyCast<Buf>(value))->size();
             return true;
@@ -402,7 +402,7 @@ std::string Format::Stringify() const
                 break;
             case FORMAT_TYPE_ADDR: {
                 Any *value = const_cast<Any *>(&(iter->second));
-                if (value != nullptr) {
+                if (AnyCast<std::vector<uint8_t>>(value) != nullptr) {
                     dumpStream << iter->first << ", bufferSize = " << (AnyCast<std::vector<uint8_t>>(value))->size()
                             << " | ";
                 }
