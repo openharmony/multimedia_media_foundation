@@ -29,8 +29,6 @@ config("media_foundation_capi_unit_test_config") {
     "$histreamer_root_dir/interface/inner_api/buffer",
     "$histreamer_root_dir/interface/inner_api/meta",
     "$histreamer_root_dir/src/buffer/avbuffer/include",
-    "$histreamer_root_dir/../../graphic/graphic_surface/interface/inner_api/surface",
-    "$histreamer_root_dir/../../graphic/graphic_surface/surface/include",
     "$histreamer_root_dir/../../graphic/graphic_2d/interface/inner_api",
     "$histreamer_root_dir/../../graphic/graphic_surface/interface/inner_api",
     "$histreamer_root_dir/../../window/window_manager/interface/innerkits",
@@ -87,10 +85,10 @@ ohos_static_library("media_foundation_capi_unit_test") {
   deps = [
     "$histreamer_root_dir/src:media_foundation",
     "$histreamer_root_dir/src/capi:capi_packages",
-    "//third_party/bounds_checking_function:libsec_static",
   ]
 
   external_deps = [
+    "bounds_checking_function:libsec_static",
     "c_utils:utils",
     "graphic_2d:libgraphic_utils",
     "graphic_2d:librender_service_client",
@@ -123,7 +121,6 @@ config("media_foundation_inner_unit_test_config") {
     "$histreamer_root_dir/interface/inner_api/buffer",
     "$histreamer_root_dir/interface/inner_api/meta",
     "$histreamer_root_dir/src/buffer/avbuffer/include",
-    "$histreamer_root_dir/../../graphic/graphic_surface/interface/inner_api/surface",
     "$histreamer_root_dir/../../graphic/graphic_surface/surface/include",
     "$histreamer_root_dir/../../graphic/graphic_2d/interface/inner_api",
     "$histreamer_root_dir/../../graphic/graphic_surface/interface/inner_api",
@@ -178,10 +175,10 @@ ohos_static_library("media_foundation_inner_unit_test") {
 
   deps = [
     "$histreamer_root_dir/src:media_foundation",
-    "//third_party/bounds_checking_function:libsec_static",
   ]
 
   external_deps = [
+    "bounds_checking_function:libsec_static",
     "c_utils:utils",
     "graphic_2d:libgraphic_utils",
     "graphic_2d:librender_service_client",
