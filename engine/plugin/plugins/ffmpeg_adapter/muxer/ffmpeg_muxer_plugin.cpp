@@ -457,7 +457,7 @@ Status FFmpegMuxerPlugin::WriteFrame(const std::shared_ptr<Plugin::Buffer>& buff
     auto memory = buffer->GetMemory();
     if (memory == nullptr) {
         MEDIA_LOG_E("Get memory failed: nullptr");
-        return;
+        return Status::ERROR_UNKNOWN;
     }
     cachePacket_->data = const_cast<uint8_t*>(memory->GetReadOnlyData());
     cachePacket_->size = memory->GetSize();
