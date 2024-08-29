@@ -164,6 +164,22 @@ enum VideoRotation : int32_t {
     VIDEO_ROTATION_270 = 270,
 };
 
+enum VideoOrientationType : int32_t {
+    INVALID = -1,           /**< Invalid operation */
+    ROTATE_NONE = 0,        /**< No rotation */
+    ROTATE_90,              /**< Rotation by 90 degrees */
+    ROTATE_180,             /**< Rotation by 180 degrees */
+    ROTATE_270,             /**< Rotation by 270 degrees */
+    FLIP_H,                 /**< Flip horizontally */
+    FLIP_V,                 /**< Flip vertically */
+    FLIP_H_ROT90,           /**< Flip horizontally and rotate 90 degrees */
+    FLIP_V_ROT90,           /**< Flip vertically and rotate 90 degrees */
+    FLIP_H_ROT180,          /**< Flip horizontally and rotate 180 degrees */
+    FLIP_V_ROT180,          /**< Flip vertically and rotate 180 degrees */
+    FLIP_H_ROT270,          /**< Flip horizontally and rotate 270 degrees */
+    FLIP_V_ROT270           /**< Flip vertically and rotate 270 degrees */
+};
+
 enum AVCProfile : int32_t {
     AVC_PROFILE_BASELINE = 0,
     AVC_PROFILE_CONSTRAINED_BASELINE = 1,
