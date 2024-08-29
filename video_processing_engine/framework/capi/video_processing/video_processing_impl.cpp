@@ -80,7 +80,7 @@ VideoProcessing_ErrorCode OH_VideoProcessing::Destroy(OH_VideoProcessing* instan
         return VIDEO_PROCESSING_ERROR_INVALID_INSTANCE;
     }
     if (instance->GetObj() == nullptr) {
-        VPE_LOGE("instance is invalid!")
+        VPE_LOGE("instance is invalid!");
     return VIDEO_PROCESSING_ERROR_INVALID_PARAMETER;
     }
 
