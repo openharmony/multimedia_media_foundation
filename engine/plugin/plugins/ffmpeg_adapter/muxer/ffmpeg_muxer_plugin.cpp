@@ -455,6 +455,10 @@ Status FFmpegMuxerPlugin::WriteFrame(const std::shared_ptr<Plugin::Buffer>& buff
     FALSE_RETURN_V(trackId < formatContext_->nb_streams, Status::ERROR_INVALID_PARAMETER);
     (void)memset_s(cachePacket_.get(), sizeof(AVPacket), 0, sizeof(AVPacket));
     auto memory = buffer->GetMemory();
+    if (memory == nullptr) {
+        MEDIA_LOG_E("Get memory failed: nullptr");
+        return;
+    }
     cachePacket_->data = const_cast<uint8_t*>(memory->GetReadOnlyData());
     cachePacket_->size = memory->GetSize();
     cachePacket_->stream_index = static_cast<int>(trackId);
