@@ -81,7 +81,7 @@ VideoProcessing_ErrorCode OH_VideoProcessing::Destroy(OH_VideoProcessing* instan
     }
     if (instance->GetObj() == nullptr) {
         VPE_LOGE("instance is invalid!");
-    return VIDEO_PROCESSING_ERROR_INVALID_PARAMETER;
+        return VIDEO_PROCESSING_ERROR_INVALID_PARAMETER;
     }
 
     auto result = instance->GetObj()->Deinitialize();
