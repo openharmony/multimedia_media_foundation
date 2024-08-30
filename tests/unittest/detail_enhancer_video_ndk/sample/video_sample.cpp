@@ -165,7 +165,7 @@ int32_t VideoSample::InitVideoSampleImpl(VideoProcessParam param)
     return VIDEO_PROCESSING_SUCCESS;
 }
 
-void VideoSampl::SetInputWindowParam()
+void VideoSample::SetInputWindowParam()
 {
     (void)OH_NativeWindow_NativeWindowHandleOpt(inWindow, SET_BUFFER_GEOMETRY, param_.in_width, param_.in_height);
     (void)OH_NativeWindow_NativeWindowHandleOpt(inWindow, SET_USAGE,
