@@ -42,11 +42,11 @@ const std::unordered_map<int, std::function<std::shared_ptr<VideoProcessingNativ
 
 VideoProcessing_ErrorCode OH_VideoProcessing::Create(OH_VideoProcessing** instance, int type)
 {
-    auto it = CREATORS.find(type);
     if (instance == nullptr) {
         VPE_LOGE("instance is null!");
         return VIDEO_PROCESSING_ERROR_INVALID_INSTANCE;
     }
+    auto it = CREATORS.find(type);
     if (it == CREATORS.end()) {
         VPE_LOGE("type is not supported!");
         return VIDEO_PROCESSING_ERROR_INVALID_PARAMETER;
