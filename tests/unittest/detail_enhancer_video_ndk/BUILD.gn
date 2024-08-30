@@ -59,9 +59,16 @@ ohos_unittest("detail_enhancer_video_ndk_inner_unit_test") {
     "$histreamer_root_dir/video_processing_engine/framework/algorithm/include",
     "$histreamer_root_dir/video_processing_engine/framework/dfx/include",
     "$histreamer_root_dir/video_processing_engine/framework/capi/video_processing/include",
+    "$histreamer_root_dir/video_processing_engine/framework/capi/video_processing/detail_enhancer/include",
+    "$histreamer_root_dir/video_processing_engine/framework/algorithm/detail_enhancer/skia/include",
+    "$histreamer_root_dir/video_processing_engine/framework/algorithm/detail_enhancer/include",
+    "$histreamer_root_dir/tests/unittest/detail_enhancer_video_ndk/sample",
   ]
 
-  sources = [ "./detail_enhancer_video_ndk_unit_test.cpp" ]
+  sources = [
+    "./detail_enhancer_video_ndk_unit_test.cpp",
+    "./sample/video_sample.cpp",
+  ]
 
   cflags = detail_enhancer_video_ndk_unit_test_cflags
 
@@ -73,6 +80,9 @@ ohos_unittest("detail_enhancer_video_ndk_inner_unit_test") {
   ]
 
   external_deps = [
+    "c_utils:utils",
+    "graphic_2d:libgraphic_utils",
+    "graphic_2d:librender_service_client",
     "graphic_surface:surface",
     "hilog:libhilog",
     "hitrace:hitrace_meter",
