@@ -60,8 +60,8 @@ const VideoProcessing_ColorSpaceInfo DST_INFO {
 static std::condition_variable g_Cond;
 
 class TestConsumerListener : public IBufferConsumerListener {
-public
-    TestConsumerListener(sptr<Surface>);
+public:
+    TestConsumerListener(sptr<Surface> cs, std::string_view name);
     ~TestConsumerListener();
     void OnBufferAvailable() override;
 };
@@ -143,7 +143,7 @@ uint32_t DetailEnhancerVideoNdkUnitTest::FlushSurf(OHNativeWindowBuffer* ohNativ
 // load test
 HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_00, TestSize.Level1)
 {
-    VideoProcessingNdkLoader& ndkLoader VideoProcessingNdkLoader::Get();
+    VideoProcessingNdkLoader& ndkLoader = VideoProcessingNdkLoader::Get();
     ndkLoader.LoadLibrary();
     ndkLoader.LoadLibrary();
     ndkLoader.InitializeEnvironment();
@@ -157,7 +157,7 @@ HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_00, TestSize.Level1)
     OH_VideoProcessingCallback_Create(&callback);
     ndkLoader.RegisterCallback(instance, callback, nullptr);
     OHNativeWindow* window = nullptr;
-    ndkLoader.GetSurface(nullptr nullptr);
+    ndkLoader.GetSurface(nullptr, nullptr);
     ndkLoader.SetSurface(instance, window);
     ndkLoader.GetSurface(instance, &window);
     OH_AVFormat* parameter = nullptr;
@@ -165,12 +165,12 @@ HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_00, TestSize.Level1)
     ndkLoader.GetParameter(instance, parameter);
     ndkLoader.Start(instance);
     ndkLoader.Stop(instance);
-    ndkLoader.RenderOutpuBuffer(instance, 0);
+    ndkLoader.RenderOutputBuffer(instance, 0);
     ndkLoader.Create(&callback);
     ndkLoader.Destroy(callback);
     ndkLoader.Destroy(instance);
-    ndkLoader.UnLoadLibrary();
-    ndkLoader.UnLoadLibrary();
+    ndkLoader.UnloadLibrary();
+    ndkLoader.UnloadLibrary();
 }
 
 // initialize context with nullptr
@@ -1191,7 +1191,6 @@ HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_34_3, TestSize.Level1)
     FlushSurf(ohNativeWindowBuffer, window);
     ret = instance->GetObj()->Stop();
     EXPECT_NE(ret, VIDEO_PROCESSING_SUCCESS);
-    VideoProcessing_Callback::Destroy(callback);
     OH_VideoProcessing::Destroy(instance);
     OH_VideoProcessing::Destroy(instance2);
     OH_VideoProcessing_DeinitializeEnvironment();
@@ -1242,13 +1241,13 @@ sptr<SurfaceBuffer> CreateSurfaceBuffer(uint32_t pixelFormat, int32_t width, int
     BufferRequestConfig inputCfg;
     inputCfg.width = width;
     inputCfg.height = height;
-    inputCfg.strideAlignment = witdth;
+    inputCfg.strideAlignment = width;
     inputCfg.usage = BUFFER_USAGE_CPU_READ | BUFFER_USAGE_CPU_WRITE | BUFFER_USAGE_MEM_DMA;
     inputCfg.format = pixelFormat;
     inputCfg.timeout = 0;
     GSError err = buffer->Alloc(inputCfg);
     if (err != GSERROR_OK) {
-        return nullptr
+        return nullptr;
     }
     return buffer;
 }
@@ -1273,7 +1272,7 @@ HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_38, TestSize.Level1)
     sample->qualityLevel_ = VIDEO_DETAIL_ENHANCER_QUALITY_LEVEL_HIGH;
     VideoProcessParam Param = {NATIVEBUFFER_PIXEL_FMT_YCRCB_420_P, 480, 360,
                                 NATIVEBUFFER_PIXEL_FMT_YCRCB_420_P, 1280, 720};
-    int32_t ret = sample->InitVideoSample(param);
+    int32_t ret = sample->InitVideoSample(Param);
     EXPECT_EQ(ret, VIDEO_PROCESSING_SUCCESS);
     sample->StartProcess();
     EXPECT_EQ(sample->WaitAndStopSample(), VIDEO_PROCESSING_SUCCESS);
@@ -1287,7 +1286,7 @@ HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_39, TestSize.Level1)
     sample->qualityLevel_ = VIDEO_DETAIL_ENHANCER_QUALITY_LEVEL_HIGH;
     VideoProcessParam Param = {NATIVEBUFFER_PIXEL_FMT_YCRCB_420_P, 480, 360,
                                 NATIVEBUFFER_PIXEL_FMT_YCRCB_420_P, 1280, 720};
-    int32_t ret = sample->InitVideoSampleImpl(param);
+    int32_t ret = sample->InitVideoSampleImpl(Param);
     EXPECT_EQ(ret, VIDEO_PROCESSING_SUCCESS);
     sample->StartProcessImpl();
     EXPECT_EQ(sample->WaitAndStopSampleImpl(), VIDEO_PROCESSING_SUCCESS);
@@ -1301,7 +1300,7 @@ HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_40, TestSize.Level1)
     sample->qualityLevel_ = VIDEO_DETAIL_ENHANCER_QUALITY_LEVEL_HIGH;
     VideoProcessParam Param = {NATIVEBUFFER_PIXEL_FMT_YCRCB_420_P, 480, 360,
                                 NATIVEBUFFER_PIXEL_FMT_YCRCB_420_P, 1280, 720};
-    int32_t ret = sample->InitVideoSampleImpl(param);
+    int32_t ret = sample->InitVideoSampleImpl(Param);
     EXPECT_EQ(ret, VIDEO_PROCESSING_SUCCESS);
     sample->StartProcessImpl();
     EXPECT_EQ(sample->SetSurfaceOnRunningImpl(), VIDEO_PROCESSING_SUCCESS);
@@ -1316,13 +1315,13 @@ HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_41, TestSize.Level1)
     sptr<SurfaceBuffer> input = CreateSurfaceBuffer(OHOS::GRAPHIC_PIXEL_FMT_RGBA_8888, 1024, 1024);
     sptr<SurfaceBuffer> output = CreateSurfaceBuffer(OHOS::GRAPHIC_PIXEL_FMT_RGBA_8888, 1024, 1024);
     enhancer.Process(input, output);
-    enhancer.Deinitailize()
-    enhancer.Deinitailize()
+    enhancer.Deinitialize();
+    enhancer.Deinitialize();
 }
 
 HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_42, TestSize.Level1)
 {
-    OHOS:Media::VideoProcessingEngine::Skia skiaImpl;
+    Media::VideoProcessingEngine::Skia skiaImpl;
     sptr<SurfaceBuffer> input = CreateSurfaceBuffer(OHOS::GRAPHIC_PIXEL_FMT_YUV_422_I, 1024, 1024);
     sptr<SurfaceBuffer> output = CreateSurfaceBuffer(OHOS::GRAPHIC_PIXEL_FMT_YUV_422_I, 1024, 1024);
     AlgoErrorCode ret = skiaImpl.Process(input, output);
@@ -1394,8 +1393,8 @@ HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_43, TestSize.Level1)
         .width = 0,
         .height = 0,
         .strideAlignment = 0x8,
-        .format = GraphicPixelFormat::Graphic_PIXEL_FMT_RGBA_8888,
-        .usage = BUFFER_USAGE_CPU_READ | BUFFER_USAGE_CPU_WRITE | BUFFER_USAGE_MEM_DMA;
+        .format = GraphicPixelFormat::GRAPHIC_PIXEL_FMT_RGBA_8888,
+        .usage = BUFFER_USAGE_CPU_READ | BUFFER_USAGE_CPU_WRITE | BUFFER_USAGE_MEM_DMA,
         .timeout = 0,
     };
     videoNative.UpdateRequestCfg(input, bufferConfig1);
@@ -1403,8 +1402,8 @@ HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_43, TestSize.Level1)
         .width = 400,
         .height = 400,
         .strideAlignment = 0x8,
-        .format = GraphicPixelFormat::Graphic_PIXEL_FMT_RGBA_8888,
-        .usage = BUFFER_USAGE_CPU_READ | BUFFER_USAGE_CPU_WRITE | BUFFER_USAGE_MEM_DMA;
+        .format = GraphicPixelFormat::GRAPHIC_PIXEL_FMT_RGBA_8888,
+        .usage = BUFFER_USAGE_CPU_READ | BUFFER_USAGE_CPU_WRITE | BUFFER_USAGE_MEM_DMA,
         .timeout = 0,
     };
     videoNative.UpdateRequestCfg(input, bufferConfig2);
@@ -1412,8 +1411,8 @@ HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_43, TestSize.Level1)
         .width = 400,
         .height = 400,
         .strideAlignment = 0x8,
-        .format = GraphicPixelFormat::Graphic_PIXEL_FMT_RGBA_8888,
-        .usage = BUFFER_USAGE_CPU_READ | BUFFER_USAGE_CPU_WRITE | BUFFER_USAGE_MEM_DMA;
+        .format = GraphicPixelFormat::GRAPHIC_PIXEL_FMT_RGBA_8888,
+        .usage = BUFFER_USAGE_CPU_READ | BUFFER_USAGE_CPU_WRITE | BUFFER_USAGE_MEM_DMA,
         .timeout = 0,
     };
     videoNative.UpdateRequestCfg(input, bufferConfig3);
@@ -1421,17 +1420,17 @@ HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_43, TestSize.Level1)
         .width = 400,
         .height = 400,
         .strideAlignment = 0x8,
-        .format = GraphicPixelFormat::Graphic_PIXEL_FMT_RGBA_8888,
-        .usage = BUFFER_USAGE_CPU_READ | BUFFER_USAGE_CPU_WRITE | BUFFER_USAGE_MEM_DMA;
+        .format = GraphicPixelFormat::GRAPHIC_PIXEL_FMT_RGBA_8888,
+        .usage = BUFFER_USAGE_CPU_READ | BUFFER_USAGE_CPU_WRITE | BUFFER_USAGE_MEM_DMA,
         .timeout = 0,
     };
     videoNative.UpdateRequestCfg(input, bufferConfig4);
     videoNative.Deinitialize();
     videoNative.SetProducerSurface(*window, bufferConfig4);
     videoNative.OnError(VIDEO_PROCESSING_SUCCESS);
-    videoNative.OnNewoutputBuffer(1);
-    videoNative.OnProducerBufferRelease();
-    videoNative.RenderOutBufferInner(1);
+    videoNative.OnNewOutputBuffer(1);
+    videoNative.OnProducerBufferReleased();
+    videoNative.RenderOutputBufferInner(1);
     videoNative.ProcessBuffers();
     std::unique_lock<std::mutex> lock;
     videoNative.WaitCV([this] {return 1;}, lock);

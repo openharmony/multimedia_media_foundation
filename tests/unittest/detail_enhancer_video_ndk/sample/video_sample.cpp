@@ -60,7 +60,7 @@ static void OnState(OH_VideoProcessing* videoProcessor, VideoProcessing_State st
 {
 }
 
-static void OnNewOutputBuffer(OH_VideoProcessing* videoProcessor, int32_t index, void* userData)
+static void OnNewOutputBufferCall(OH_VideoProcessing* videoProcessor, uint32_t index, void* userData)
 {
     VideoSample* sample = reinterpret_cast<VideoSample*>(userData);
     VideoProcessing_ErrorCode ret = OH_VideoProcessing_RenderOutputBuffer(videoProcessor, index);
@@ -69,7 +69,7 @@ static void OnNewOutputBuffer(OH_VideoProcessing* videoProcessor, int32_t index,
     }
 }
 
-static void OnNewOutputBufferImpl(OH_VideoProcessing* videoProcessor, int32_t index, void* userData)
+static void OnNewOutputBufferCallImpl(OH_VideoProcessing* videoProcessor, uint32_t index, void* userData)
 {
     VideoSample* sample = reinterpret_cast<VideoSample*>(userData);
     VideoProcessing_ErrorCode ret = videoProcessor->GetObj()->RenderOutputBuffer(index);
@@ -85,11 +85,11 @@ VideoSample::VideoSample()
 VideoSample::~VideoSample()
 {
     if (callback || callbackImpl) {
-        if (!Impl) {
+        if (!isImpl) {
             OH_VideoProcessingCallback_Destroy(callback);
             callback = nullptr;
         } else {
-            OH_VideoProcessing_Callback::Destroy(callbackImpl);
+            VideoProcessing_Callback::Destroy(callbackImpl);
         }
     }
     if (rect) {
@@ -104,18 +104,18 @@ VideoSample::~VideoSample()
     OH_VideoProcessing_DeinitializeEnvironment();
 }
 
-int32 VideoSample::InitVideoSample(VideoProcessParam param)
+int32_t VideoSample::InitVideoSample(VideoProcessParam param)
 {
     OH_VideoProcessing_InitializeEnvironment();
     param_ = param;
-    int32_t ret = OH_VideoProcessing_Create(&videoProcessor, VIDEO_PROCESSING_TYPE_DETAIL_ENHANCER);
+    OH_VideoProcessing_Create(&videoProcessor, VIDEO_PROCESSING_TYPE_DETAIL_ENHANCER);
     cs = Surface::CreateSurfaceAsConsumer();
     sptr<IBufferConsumerListener> listener = new TestConsumerListener(this);
     cs->RegisterConsumerListener(listener);
     auto p = cs->GetProducer();
     ps = Surface::CreateSurfaceAsProducer(p);
     outWindow = CreateNativeWindowFromSurface(&ps);
-    cs->SetQueueSize(5)
+    cs->SetQueueSize(5);
     (void)OH_NativeWindow_NativeWindowHandleOpt(outWindow, SET_BUFFER_GEOMETRY, param_.out_width, param_.out_height);
     (void)OH_NativeWindow_NativeWindowHandleOpt(outWindow, SET_USAGE,
         NATIVEBUFFER_USAGE_CPU_READ | NATIVEBUFFER_USAGE_CPU_WRITE |
@@ -127,7 +127,7 @@ int32 VideoSample::InitVideoSample(VideoProcessParam param)
     OH_VideoProcessingCallback_Create(&callback);
     OH_VideoProcessingCallback_BindOnError(callback, OnError);
     OH_VideoProcessingCallback_BindOnState(callback, OnState);
-    OH_VideoProcessingCallback_BindOnNewOutputBuffer(callback, OnNewOutputBuffer);
+    OH_VideoProcessingCallback_BindOnNewOutputBuffer(callback, OnNewOutputBufferCall);
     OH_VideoProcessing_RegisterCallback(videoProcessor, callback, this);
     OH_AVFormat* parameter = OH_AVFormat_Create();
     OH_AVFormat_SetIntValue(parameter, VIDEO_DETAIL_ENHANCER_PARAMETER_KEY_QUALITY_LEVEL, qualityLevel_);
@@ -135,17 +135,17 @@ int32 VideoSample::InitVideoSample(VideoProcessParam param)
     return VIDEO_PROCESSING_SUCCESS;
 }
 
-int32 VideoSample::InitVideoSampleImpl(VideoProcessParam param)
+int32_t VideoSample::InitVideoSampleImpl(VideoProcessParam param)
 {
     param_ = param;
-    int32_t ret = OH_VideoProcessing::Create(&videoProcessorImpl, VIDEO_PROCESSING_TYPE_DETAIL_ENHANCER);
+    OH_VideoProcessing::Create(&videoProcessorImpl, VIDEO_PROCESSING_TYPE_DETAIL_ENHANCER);
     cs = Surface::CreateSurfaceAsConsumer();
     sptr<IBufferConsumerListener> listener = new TestConsumerListener(this);
     cs->RegisterConsumerListener(listener);
     auto p = cs->GetProducer();
     ps = Surface::CreateSurfaceAsProducer(p);
     outWindow = CreateNativeWindowFromSurface(&ps);
-    cs->SetQueueSize(5)
+    cs->SetQueueSize(5);
     (void)OH_NativeWindow_NativeWindowHandleOpt(outWindow, SET_BUFFER_GEOMETRY, param_.out_width, param_.out_height);
     (void)OH_NativeWindow_NativeWindowHandleOpt(outWindow, SET_USAGE,
         NATIVEBUFFER_USAGE_CPU_READ | NATIVEBUFFER_USAGE_CPU_WRITE |
@@ -154,14 +154,14 @@ int32 VideoSample::InitVideoSampleImpl(VideoProcessParam param)
     videoProcessorImpl->GetObj()->SetSurface(outWindow);
     videoProcessorImpl->GetObj()->GetSurface(&inWindow);
     SetInputWindowParam();
-    OH_VideoProcessing_Callback::Create(&callbackImpl);
+    VideoProcessing_Callback::Create(&callbackImpl);
     callbackImpl->GetObj()->BindOnError(OnError);
     callbackImpl->GetObj()->BindOnState(OnState);
-    callbackImpl->GetObj()->BindOnNewOutputBuffer(OnNewOutputBuffer);
+    callbackImpl->GetObj()->BindOnNewOutputBuffer(OnNewOutputBufferCallImpl);
     videoProcessorImpl->GetObj()->RegisterCallback(callbackImpl, this);
     OH_AVFormat* parameter = OH_AVFormat_Create();
     OH_AVFormat_SetIntValue(parameter, VIDEO_DETAIL_ENHANCER_PARAMETER_KEY_QUALITY_LEVEL, qualityLevel_);
-    videoProcessorImpl->GetObj()->SetParameter(videoProcessor, parameter);
+    videoProcessorImpl->GetObj()->SetParameter(parameter);
     return VIDEO_PROCESSING_SUCCESS;
 }
 
@@ -177,16 +177,16 @@ void VideoSampl::SetInputWindowParam()
     rect->x = 0;
     rect->y = 0;
     rect->w = param_.in_width;
-    rect->h = param_.in_heightd;
+    rect->h = param_.in_height;
     region.rects = rect;
 }
 
-int32_t VideoSampl::InputFunc()
+int32_t VideoSample::InputFunc()
 {
     for (int32_t i = 0; i < inputFrameNumber; i++) {
         int fenceFd = -1;
         OHNativeWindowBuffer *ohNativeWindowBuffer;
-        int32_t err = OH_NativeWindow_NativeWindowRequestBuffer(inWindow &ohNativeWindowBuffer, &fenceFd);
+        OH_NativeWindow_NativeWindowRequestBuffer(inWindow, &ohNativeWindowBuffer, &fenceFd);
         if (fenceFd > 0) {
             close(fenceFd);
         }
@@ -198,48 +198,48 @@ int32_t VideoSampl::InputFunc()
     return 0;
 }
 
-int32_t VideoSampl::StartProcess()
+int32_t VideoSample::StartProcess()
 {
-    OH_VideoProcessing_Start(videoProcessing);
+    OH_VideoProcessing_Start(videoProcessor);
     inputLoop_ = make_unique<thread>(&VideoSample::InputFunc, this);
     return VIDEO_PROCESSING_SUCCESS;
 }
 
-int32_t VideoSampl::StartProcessImpl()
+int32_t VideoSample::StartProcessImpl()
 {
     videoProcessorImpl->GetObj()->Start();
     inputLoop_ = make_unique<thread>(&VideoSample::InputFunc, this);
     return VIDEO_PROCESSING_SUCCESS;
 }
 
-int32_t VideoSampl::WaitAndStopSample()
+int32_t VideoSample::WaitAndStopSample()
 {
     inputLoop_->join();
-    int32_t ret = OH_VideoProcessing_Stop(videoProcessing);
+    int32_t ret = OH_VideoProcessing_Stop(videoProcessor);
     unique_lock<mutex> lock(g_Mutex);
-    if (g_Cond.wait_for(lock, STOP_TIMEOUT) == std::cv_status::timeout) {
+    if (g_Cord.wait_for(lock, STOP_TIMEOUT) == std::cv_status::timeout) {
         std::cout << "waiting stop state timeout" << std::endl;
     }
     return ret;
 }
 
-int32_t VideoSampl::WaitAndStopSampleImpl()
+int32_t VideoSample::WaitAndStopSampleImpl()
 {
     inputLoop_->join();
     int32_t ret = videoProcessorImpl->GetObj()->Stop();
     unique_lock<mutex> lock(g_Mutex);
-    if (g_Cond.wait_for(lock, STOP_TIMEOUT) == std::cv_status::timeout) {
+    if (g_Cord.wait_for(lock, STOP_TIMEOUT) == std::cv_status::timeout) {
         std::cout << "waiting stop state timeout" << std::endl;
     }
     return ret;
 }
 
-int32_t VideoSampl::SetSurfaceOnRunningImpl()
+int32_t VideoSample::SetSurfaceOnRunningImpl()
 {
     OH_VideoProcessing* videoProcessing2 = nullptr;
-    OH_VideoProcessing::Create(&videoProcessor2, VIDEO_PROCESSING_TYPE_DETAIL_ENHANCER);
+    OH_VideoProcessing::Create(&videoProcessing2, VIDEO_PROCESSING_TYPE_DETAIL_ENHANCER);
     OHNativeWindow* window2 = nullptr;
     videoProcessing2->GetObj()->GetSurface(&window2);
-    int32_t videoProcessorImpl->GetObj()->SetSurface(window2);
+    int32_t ret = videoProcessorImpl->GetObj()->SetSurface(window2);
     return ret;
 }

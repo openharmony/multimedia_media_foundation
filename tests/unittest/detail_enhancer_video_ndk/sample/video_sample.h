@@ -14,7 +14,7 @@
  */
 
 #ifndef VIDEO_SAMPLE_HF
-#define VIDEO_SAMPLE_H
+#define VIDEO_SAMPLE_HF
 
 #include <string>
 #include <thread>
