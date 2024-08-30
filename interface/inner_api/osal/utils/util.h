@@ -25,7 +25,7 @@
 #undef MEDIA_OHOS
 #endif
 #endif
-#defile FLOAT_EPS = 1e-9f
+#define FLOAT_EPS 1e-9f
 
 #include <string>
 
