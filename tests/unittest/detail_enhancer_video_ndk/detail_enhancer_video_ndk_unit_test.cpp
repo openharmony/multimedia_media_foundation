@@ -57,6 +57,42 @@ const VideoProcessing_ColorSpaceInfo DST_INFO {
     .pixelFormat = NATIVEBUFFER_PIXEL_FMT_YCBCR_420_SP,
 };
 
+BufferRequestConfig bufferConfig1 = {
+    .width = 0,
+    .height = 0,
+    .strideAlignment = 0x8,
+    .format = GraphicPixelFormat::GRAPHIC_PIXEL_FMT_RGBA_8888,
+    .usage = BUFFER_USAGE_CPU_READ | BUFFER_USAGE_CPU_WRITE | BUFFER_USAGE_MEM_DMA,
+    .timeout = 0,
+};
+
+BufferRequestConfig bufferConfig2 = {
+    .width = 400,
+    .height = 0,
+    .strideAlignment = 0x8,
+    .format = GraphicPixelFormat::GRAPHIC_PIXEL_FMT_RGBA_8888,
+    .usage = BUFFER_USAGE_CPU_READ | BUFFER_USAGE_CPU_WRITE | BUFFER_USAGE_MEM_DMA,
+    .timeout = 0,
+};
+
+BufferRequestConfig bufferConfig4 = {
+    .width = 0,
+    .height = 400,
+    .strideAlignment = 0x8,
+    .format = GraphicPixelFormat::GRAPHIC_PIXEL_FMT_RGBA_8888,
+    .usage = BUFFER_USAGE_CPU_READ | BUFFER_USAGE_CPU_WRITE | BUFFER_USAGE_MEM_DMA,
+    .timeout = 0,
+};
+
+BufferRequestConfig bufferConfig3 = {
+    .width = 400,
+    .height = 400,
+    .strideAlignment = 0x8,
+    .format = GraphicPixelFormat::GRAPHIC_PIXEL_FMT_RGBA_8888,
+    .usage = BUFFER_USAGE_CPU_READ | BUFFER_USAGE_CPU_WRITE | BUFFER_USAGE_MEM_DMA,
+    .timeout = 0,
+};
+
 static std::condition_variable g_Cond;
 
 class TestConsumerListener : public IBufferConsumerListener {
@@ -1389,41 +1425,9 @@ HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_43, TestSize.Level1)
     videoNative.ProcessBuffers();
     ret = videoNative.Process(input, output);
     EXPECT_EQ(ret, VIDEO_PROCESSING_SUCCESS);
-    BufferRequestConfig bufferConfig1 = {
-        .width = 0,
-        .height = 0,
-        .strideAlignment = 0x8,
-        .format = GraphicPixelFormat::GRAPHIC_PIXEL_FMT_RGBA_8888,
-        .usage = BUFFER_USAGE_CPU_READ | BUFFER_USAGE_CPU_WRITE | BUFFER_USAGE_MEM_DMA,
-        .timeout = 0,
-    };
     videoNative.UpdateRequestCfg(input, bufferConfig1);
-    BufferRequestConfig bufferConfig2 = {
-        .width = 400,
-        .height = 400,
-        .strideAlignment = 0x8,
-        .format = GraphicPixelFormat::GRAPHIC_PIXEL_FMT_RGBA_8888,
-        .usage = BUFFER_USAGE_CPU_READ | BUFFER_USAGE_CPU_WRITE | BUFFER_USAGE_MEM_DMA,
-        .timeout = 0,
-    };
     videoNative.UpdateRequestCfg(input, bufferConfig2);
-    BufferRequestConfig bufferConfig3 = {
-        .width = 400,
-        .height = 400,
-        .strideAlignment = 0x8,
-        .format = GraphicPixelFormat::GRAPHIC_PIXEL_FMT_RGBA_8888,
-        .usage = BUFFER_USAGE_CPU_READ | BUFFER_USAGE_CPU_WRITE | BUFFER_USAGE_MEM_DMA,
-        .timeout = 0,
-    };
     videoNative.UpdateRequestCfg(input, bufferConfig3);
-    BufferRequestConfig bufferConfig4 = {
-        .width = 400,
-        .height = 400,
-        .strideAlignment = 0x8,
-        .format = GraphicPixelFormat::GRAPHIC_PIXEL_FMT_RGBA_8888,
-        .usage = BUFFER_USAGE_CPU_READ | BUFFER_USAGE_CPU_WRITE | BUFFER_USAGE_MEM_DMA,
-        .timeout = 0,
-    };
     videoNative.UpdateRequestCfg(input, bufferConfig4);
     videoNative.Deinitialize();
     videoNative.SetProducerSurface(*window, bufferConfig4);

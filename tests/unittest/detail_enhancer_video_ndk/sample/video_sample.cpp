@@ -33,15 +33,16 @@ using std::mutex;
 using OHOS::SurfaceBuffer;
 using OHOS::IBufferConsumerListener;
 
-namespace{
+namespace {
 static std::mutex g_Mutex;
 static std::condition_variable g_Cord;
 constexpr std::chrono::seconds STOP_TIMEOUT(10);
+static uint32_t kQueueBufferSize = 5;
 }
 
 class TestConsumerListener : public IBufferConsumerListener {
 public:
-    TestConsumerListener(VideoSample *sample) : sample_(sample) {};
+    explicit TestConsumerListener(VideoSample *sample) : sample_(sample) {};
     ~TestConsumerListener() {}
     void OnBufferAvailable() override
     {
@@ -115,7 +116,7 @@ int32_t VideoSample::InitVideoSample(VideoProcessParam param)
     auto p = cs->GetProducer();
     ps = Surface::CreateSurfaceAsProducer(p);
     outWindow = CreateNativeWindowFromSurface(&ps);
-    cs->SetQueueSize(5);
+    cs->SetQueueSize(kQueueBufferSize);
     (void)OH_NativeWindow_NativeWindowHandleOpt(outWindow, SET_BUFFER_GEOMETRY, param_.out_width, param_.out_height);
     (void)OH_NativeWindow_NativeWindowHandleOpt(outWindow, SET_USAGE,
         NATIVEBUFFER_USAGE_CPU_READ | NATIVEBUFFER_USAGE_CPU_WRITE |
@@ -145,7 +146,7 @@ int32_t VideoSample::InitVideoSampleImpl(VideoProcessParam param)
     auto p = cs->GetProducer();
     ps = Surface::CreateSurfaceAsProducer(p);
     outWindow = CreateNativeWindowFromSurface(&ps);
-    cs->SetQueueSize(5);
+    cs->SetQueueSize(kQueueBufferSize);
     (void)OH_NativeWindow_NativeWindowHandleOpt(outWindow, SET_BUFFER_GEOMETRY, param_.out_width, param_.out_height);
     (void)OH_NativeWindow_NativeWindowHandleOpt(outWindow, SET_USAGE,
         NATIVEBUFFER_USAGE_CPU_READ | NATIVEBUFFER_USAGE_CPU_WRITE |
