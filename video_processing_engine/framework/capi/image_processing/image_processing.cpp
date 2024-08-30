@@ -15,6 +15,7 @@
 
 #include "image_processing.h"
 
+#include <atomic>
 #include <functional>
 
 #include "vpe_log.h"
@@ -33,6 +34,8 @@ const int32_t IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER = 0x10;
 const char* IMAGE_DETAIL_ENHANCER_PARAMETER_KEY_QUALITY_LEVEL = "QualityLevel";
 
 namespace {
+std::atomic<bool> g_isInit = false;
+
 bool CallImageProcessingSupport(
     std::function<bool(void)>&& operation,
     std::function<bool(ImageProcessingNdkLoader&)>&& operationLoader)
@@ -90,13 +93,24 @@ ImageProcessing_ErrorCode CallImageProcessingWithUnload(
 
 ImageProcessing_ErrorCode OH_ImageProcessing_InitializeEnvironment(void)
 {
-    return CallImageProcessingWithLoad([]() { return IMAGE_PROCESSING_SUCCESS; },
+    return CallImageProcessingWithLoad(
+        []() {
+            g_isInit = true;
+            return IMAGE_PROCESSING_SUCCESS;
+        },
         [](ImageProcessingNdkLoader& loader) { return loader.InitializeEnvironment(); });
 }
 
 ImageProcessing_ErrorCode OH_ImageProcessing_DeinitializeEnvironment(void)
 {
-    return CallImageProcessingWithUnload([]() { return IMAGE_PROCESSING_SUCCESS; },
+    return CallImageProcessingWithUnload(
+        []() {
+            if (!g_isInit.load()) {
+                return IMAGE_PROCESSING_ERROR_OPERATION_NOT_PERMITTED;
+            }
+            g_isInit = false;
+            return IMAGE_PROCESSING_SUCCESS;
+        },
         [](ImageProcessingNdkLoader& loader) { return loader.DeinitializeEnvironment(); });
 }
 
