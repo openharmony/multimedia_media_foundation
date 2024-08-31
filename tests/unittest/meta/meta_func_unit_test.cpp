@@ -291,20 +291,6 @@ HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_Enum_As_Int32, TestSize.Level1)
 }
 
 /**
- * @tc.name: SetGet_MetaData_Enum_As_Uint32
- * @tc.desc: SetGet_MetaData_Enum_As_Uint32
- * @tc.type: FUNC
- */
-HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_Enum_As_Uint32, TestSize.Level1)
-{
-    int32_t valueOut = 6;
-    int32_t valueIn = static_cast<uint32_t>(Plugins::VideoOrientationType::FLIP_H_ROT90);
-    SetMetaData(*metaIn, Tag::VIDEO_ROTATION, valueIn);
-    GetMetaData(*metaIn, Tag::VIDEO_ROTATION, valueOut);
-    EXPECT_EQ(valueOut, valueIn);
-}
-
-/**
  * @tc.name: SetGet_MetaData_Int32_Using_Parcel
  * @tc.desc: SetGet_MetaData_Int32_Using_Parcel
  * @tc.type: FUNC
@@ -460,6 +446,7 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::MEDIA_TYPE, static_cast<int32_t>(Plugins::MediaType::AUDIO)},
     {Tag::VIDEO_H264_PROFILE, static_cast<int32_t>(Plugins::VideoH264Profile::BASELINE)},
     {Tag::VIDEO_ROTATION, static_cast<int32_t>(Plugins::VideoRotation::VIDEO_ROTATION_90)},
+    {Tag::VIDEO_ORIENTATION_TYPE, static_cast<int32_t>(Plugins::VideoOrientationType::FLIP_H_ROT90)},
     {Tag::VIDEO_COLOR_PRIMARIES, static_cast<int32_t>(Plugins::ColorPrimary::BT2020)},
     {Tag::VIDEO_COLOR_TRC, static_cast<int32_t>(Plugins::TransferCharacteristic::BT1361)},
     {Tag::VIDEO_COLOR_MATRIX_COEFF, static_cast<int32_t>(Plugins::MatrixCoefficient::BT2020_CL)},
