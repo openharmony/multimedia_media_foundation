@@ -25,7 +25,6 @@
 #undef MEDIA_OHOS
 #endif
 #endif
-#define FLOAT_EPS 1e-9f
 
 #include <string>
 
@@ -46,7 +45,7 @@ inline bool IsFloatEqualZero(float value)
 
 inline bool IsFloatEqual(float p1, float p2)
 {
-    return fabs(p1 - p2) <= FLOAT_EPS;
+    return fabs(p1 - p2) <= MEDIA_FOUNDATION_FLOAT_EPSILON;
 }
 } // namespace OSAL
 } // namespace Media
