@@ -356,10 +356,10 @@ Status Filter::ProcessOutputBuffer(int sendArg, int64_t delayUs, bool byIdx, uin
     MEDIA_LOG_D("Filter::ProcessOutputBuffer  %{public}s", name_.c_str());
     if (filterTask_) {
         jobIdx_++;
-        filterTask_->SubmitJob([this, sendArg, byIdx, idx, renderTime]() {
-            processIdx_++;
+        int64_t processIdx = jobIdx_;
+        filterTask_->SubmitJob([this, sendArg, processIdx, byIdx, idx, renderTime]() {
             // drop frame after flush
-            DoProcessOutputBuffer(sendArg, processIdx_<= jobIdxBase_, byIdx, idx, renderTime);
+            DoProcessOutputBuffer(sendArg, processIdx <= jobIdxBase_, byIdx, idx, renderTime);
         }, delayUs, 0);
     } else {
         Task::SleepInTask(delayUs / 1000); // 1000 convert to ms
