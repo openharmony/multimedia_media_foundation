@@ -358,6 +358,7 @@ Status Filter::ProcessOutputBuffer(int sendArg, int64_t delayUs, bool byIdx, uin
         jobIdx_++;
         int64_t processIdx = jobIdx_;
         filterTask_->SubmitJob([this, sendArg, processIdx, byIdx, idx, renderTime]() {
+            processIdx_++;
             // drop frame after flush
             DoProcessOutputBuffer(sendArg, processIdx <= jobIdxBase_, byIdx, idx, renderTime);
         }, delayUs, 0);
