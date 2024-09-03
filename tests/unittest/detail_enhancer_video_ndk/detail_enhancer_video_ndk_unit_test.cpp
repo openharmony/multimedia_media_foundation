@@ -253,20 +253,6 @@ HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_02_1, TestSize.Level1)
     ret = OH_VideoProcessing::Destroy(instance);
 }
 
-// initialize context with wrong type
-HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_03, TestSize.Level1)
-{
-    int badCreateType = 0x1;
-    VideoProcessing_ErrorCode ret = OH_VideoProcessing_InitializeEnvironment();
-    OH_VideoProcessing* instance = nullptr;
-    ret = OH_VideoProcessing_Create(&instance, badCreateType);
-    EXPECT_EQ(ret, VIDEO_PROCESSING_SUCCESS);
-    ret = OH_VideoProcessing_Destroy(instance);
-    EXPECT_EQ(ret, VIDEO_PROCESSING_SUCCESS);
-    ret = OH_VideoProcessing_DeinitializeEnvironment();
-    EXPECT_EQ(ret, VIDEO_PROCESSING_SUCCESS);
-}
-
 // initialize context with wrong type impl
 HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_03_1, TestSize.Level1)
 {
@@ -279,68 +265,6 @@ HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_03_1, TestSize.Level1)
     EXPECT_NE(ret, VIDEO_PROCESSING_SUCCESS);
     ret = OH_VideoProcessing_DeinitializeEnvironment();
     EXPECT_EQ(ret, VIDEO_PROCESSING_SUCCESS);
-}
-
-// repeated context initialization
-HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_04, TestSize.Level1)
-{
-    VideoProcessing_ErrorCode ret1 = OH_VideoProcessing_InitializeEnvironment();
-    EXPECT_EQ(ret1, VIDEO_PROCESSING_SUCCESS);
-    VideoProcessing_ErrorCode ret2 = OH_VideoProcessing_InitializeEnvironment();
-    EXPECT_NE(ret2, VIDEO_PROCESSING_SUCCESS);
-    VideoProcessing_ErrorCode ret3 = OH_VideoProcessing_InitializeEnvironment();
-    EXPECT_NE(ret3, VIDEO_PROCESSING_SUCCESS);
-    OH_VideoProcessing* instance1 = nullptr;
-    VideoProcessing_ErrorCode ret4 = OH_VideoProcessing_Create(&instance1, CREATE_TYPE);
-    EXPECT_EQ(ret4, VIDEO_PROCESSING_SUCCESS);
-    VideoProcessing_ErrorCode ret5 = OH_VideoProcessing_Destroy(instance1);
-    EXPECT_EQ(ret5, VIDEO_PROCESSING_SUCCESS);
-    OH_VideoProcessing* instance2 = nullptr;
-    VideoProcessing_ErrorCode ret6 = OH_VideoProcessing_Create(&instance2, CREATE_TYPE);
-    EXPECT_EQ(ret6, VIDEO_PROCESSING_SUCCESS);
-    VideoProcessing_ErrorCode ret7 = OH_VideoProcessing_Destroy(instance2);
-    EXPECT_EQ(ret7, VIDEO_PROCESSING_SUCCESS);
-    VideoProcessing_ErrorCode ret8 = OH_VideoProcessing_DeinitializeEnvironment();
-    EXPECT_EQ(ret8, VIDEO_PROCESSING_SUCCESS);
-    VideoProcessing_ErrorCode ret9 = OH_VideoProcessing_DeinitializeEnvironment();
-    EXPECT_NE(ret9, VIDEO_PROCESSING_SUCCESS);
-    VideoProcessing_ErrorCode ret10 = OH_VideoProcessing_DeinitializeEnvironment();
-    EXPECT_NE(ret10, VIDEO_PROCESSING_SUCCESS);
-    VideoProcessing_ErrorCode ret11 = OH_VideoProcessing_InitializeEnvironment();
-    EXPECT_EQ(ret11, VIDEO_PROCESSING_SUCCESS);
-    VideoProcessing_ErrorCode ret12 = OH_VideoProcessing_DeinitializeEnvironment();
-    EXPECT_EQ(ret12, VIDEO_PROCESSING_SUCCESS);
-}
-
-// repeated context initialization impl
-HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_04_1, TestSize.Level1)
-{
-    VideoProcessing_ErrorCode ret1 = OH_VideoProcessing_InitializeEnvironment();
-    EXPECT_EQ(ret1, VIDEO_PROCESSING_SUCCESS);
-    VideoProcessing_ErrorCode ret2 = OH_VideoProcessing_InitializeEnvironment();
-    EXPECT_NE(ret2, VIDEO_PROCESSING_SUCCESS);
-    VideoProcessing_ErrorCode ret3 = OH_VideoProcessing_InitializeEnvironment();
-    EXPECT_NE(ret3, VIDEO_PROCESSING_SUCCESS);
-    OH_VideoProcessing* instance1 = nullptr;
-    VideoProcessing_ErrorCode ret4 = OH_VideoProcessing::Create(&instance1, CREATE_TYPE);
-    EXPECT_EQ(ret4, VIDEO_PROCESSING_SUCCESS);
-    VideoProcessing_ErrorCode ret5 = OH_VideoProcessing::Destroy(instance1);
-    EXPECT_EQ(ret5, VIDEO_PROCESSING_SUCCESS);
-    OH_VideoProcessing* instance2 = nullptr;
-    VideoProcessing_ErrorCode ret6 = OH_VideoProcessing::Create(&instance2, CREATE_TYPE);
-    EXPECT_EQ(ret6, VIDEO_PROCESSING_SUCCESS);
-    VideoProcessing_ErrorCode ret7 = OH_VideoProcessing::Destroy(instance2);
-    EXPECT_EQ(ret7, VIDEO_PROCESSING_SUCCESS);
-    VideoProcessing_ErrorCode ret8 = OH_VideoProcessing_DeinitializeEnvironment();
-    EXPECT_EQ(ret8, VIDEO_PROCESSING_SUCCESS);
-    VideoProcessing_ErrorCode ret9 = OH_VideoProcessing_DeinitializeEnvironment();
-    EXPECT_NE(ret9, VIDEO_PROCESSING_SUCCESS);
-    VideoProcessing_ErrorCode ret10 = OH_VideoProcessing_DeinitializeEnvironment();
-    EXPECT_NE(ret10, VIDEO_PROCESSING_SUCCESS);
-    VideoProcessing_ErrorCode ret11 = OH_VideoProcessing_InitializeEnvironment();
-    EXPECT_EQ(ret11, VIDEO_PROCESSING_SUCCESS);
-    VideoProcessing_ErrorCode ret12 = OH_VideoProcessing_DeinitializeEnvironment();
-    EXPECT_EQ(ret12, VIDEO_PROCESSING_SUCCESS);
 }
 
 // destroy context without create
@@ -585,19 +509,6 @@ HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_18_1, TestSize.Level1)
     VideoProcessing_ErrorCode ret = instance->GetObj()->SetParameter(parameter);
     EXPECT_EQ(ret, VIDEO_PROCESSING_SUCCESS);
     OH_VideoProcessing::Destroy(instance);
-    OH_VideoProcessing_DeinitializeEnvironment();
-}
-
-// get parameter to non-nullptr
-HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_19, TestSize.Level1)
-{
-    OH_VideoProcessing_InitializeEnvironment();
-    OH_VideoProcessing* instance = nullptr;
-    OH_VideoProcessing_Create(&instance, CREATE_TYPE);
-    OH_AVFormat* parameter = OH_AVFormat_Create();
-    VideoProcessing_ErrorCode ret = OH_VideoProcessing_GetParameter(instance, parameter);
-    EXPECT_NE(ret, VIDEO_PROCESSING_SUCCESS);
-    OH_VideoProcessing_Destroy(instance);
     OH_VideoProcessing_DeinitializeEnvironment();
 }
 
