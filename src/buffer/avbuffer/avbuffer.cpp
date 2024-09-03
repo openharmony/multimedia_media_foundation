@@ -30,7 +30,7 @@ constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION,
 
 namespace OHOS {
 namespace Media {
-AVBuffer::AVBuffer() : pts_(0), absPts_(0), dts_(0), duration_(0), flag_(0), meta_(nullptr), memory_(nullptr) {}
+AVBuffer::AVBuffer() : pts_(0), dts_(0), duration_(0), flag_(0), meta_(nullptr), memory_(nullptr) {}
 
 AVBuffer::~AVBuffer() {}
 
@@ -204,8 +204,7 @@ bool AVBuffer::WriteToMessageParcel(MessageParcel &parcel)
 #ifdef MEDIA_OHOS
     MessageParcel bufferParcel;
     bool ret = bufferParcel.WriteUint64(GetUniqueId()) && bufferParcel.WriteInt64(pts_) &&
-               bufferParcel.WriteInt64(absPts_) && bufferParcel.WriteInt64(dts_) &&
-               bufferParcel.WriteInt64(duration_) && bufferParcel.WriteUint32(flag_) &&
+               bufferParcel.WriteInt64(dts_) && bufferParcel.WriteInt64(duration_) && bufferParcel.WriteUint32(flag_) &&
                meta_->ToParcel(bufferParcel);
 
     if (memory_ != nullptr) {
@@ -239,12 +238,11 @@ bool AVBuffer::ReadFromMessageParcel(MessageParcel &parcel, bool isSurfaceBuffer
     // 4. 只传buffer的attr：    memroy == nullptr，fromParcel == 0，更新attr
     uint64_t uid = 0;
     int64_t pts = 0;
-    int64_t absPts = 0;
     int64_t dts = 0;
     int64_t duration = 0;
     uint32_t flag = 0;
     Meta meta;
-    bool ret = parcel.ReadUint64(uid) && parcel.ReadInt64(pts) && parcel.ReadInt64(absPts) && parcel.ReadInt64(dts) &&
+    bool ret = parcel.ReadUint64(uid) && parcel.ReadInt64(pts) && parcel.ReadInt64(dts) &&
                parcel.ReadInt64(duration) && parcel.ReadUint32(flag) && meta.FromParcel(parcel);
     FALSE_RETURN_V_MSG_E(ret, false, "Unmarshalling buffer info failed");
 
@@ -259,7 +257,6 @@ bool AVBuffer::ReadFromMessageParcel(MessageParcel &parcel, bool isSurfaceBuffer
         memory_->uid_ = uid;
     }
     pts_ = pts;
-    absPts_ = absPts;
     dts_ = dts;
     duration_ = duration;
     flag_ = flag;
