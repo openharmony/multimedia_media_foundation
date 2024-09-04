@@ -28,7 +28,9 @@
 #include "video_processing_callback_impl.h"
 #include "video_processing_callback_native.h"
 #include "video_sample.h"
+#ifdef SKIA_ENABLE
 #include "skia_impl.h"
+#endif
 #include "detail_enhancer_video_native.h"
 
 constexpr int64_t NANOS_IN_SECOND = 1000000000L;
@@ -1266,6 +1268,7 @@ HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_41, TestSize.Level1)
     enhancer.Deinitialize();
 }
 
+#ifdef SKIA_ENABLE
 HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_42, TestSize.Level1)
 {
     Media::VideoProcessingEngine::Skia skiaImpl;
@@ -1301,6 +1304,7 @@ HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_42, TestSize.Level1)
     ret = skiaImpl.Process(input, output);
     EXPECT_EQ(ret, ALGO_SUCCESS);
 }
+#endif
 
 // native impl inner test
 HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_43, TestSize.Level1)
