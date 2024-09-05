@@ -35,7 +35,7 @@ public:
         int32_t timeoutMs) = 0;
     virtual Status RequestData(long startPos, int len, const RequestInfo& sourceInfo,
         HandleResponseCbFunc completedCb) = 0;
-    virtual Status Close() = 0;
+    virtual Status Close(bool isAsync) = 0;
     virtual Status Deinit() = 0;
     static std::shared_ptr<NetworkClient> GetInstance(RxHeader headCallback, RxBody bodyCallback, void *userParam);
     virtual Status GetIp(std::string &ip);
