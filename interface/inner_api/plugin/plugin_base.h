@@ -55,6 +55,7 @@ struct Callback {
     virtual void SetSelectBitRateFlag(bool flag, uint32_t desBitRate)
     {
         (void)flag;
+        (void)desBitRate;
     }
 
     virtual bool CanAutoSelectBitRate()
