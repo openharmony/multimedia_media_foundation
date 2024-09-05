@@ -15,6 +15,7 @@
 
 #include "skia_impl.h"
 
+#include <array>
 #include <chrono>
 #include <dlfcn.h>
 
@@ -156,7 +157,7 @@ int ConfigYUVFormat(const sptr<SurfaceBuffer>& buffer, SkYUVAInfo::PlaneConfig& 
     return numPlanes;
 }
 
-int CreateYUVPixmap(const sptr<SurfaceBuffer>& buffer, SkPixmap* pixmaps)
+int CreateYUVPixmap(const sptr<SurfaceBuffer>& buffer, std::array<SkPixmap, SkYUVAInfo::kMaxPlanes>& pixmaps)
 {
     SkISize imageSize;
     imageSize.fWidth = buffer->GetWidth();
@@ -181,7 +182,7 @@ int CreateYUVPixmap(const sptr<SurfaceBuffer>& buffer, SkPixmap* pixmaps)
     if (planesInfoPtr == nullptr) {
         VPE_LOGD("Planes info is nullptr, configure uv stride with general stride.");
         for (int i = 0; i < SkYUVAInfo::kMaxPlanes; i++) {
-            rowbyte[i] = buffer->GetStride();
+            rowbyte[i] = static_cast<size_t>(buffer->GetStride());
         }
     }
 
@@ -198,7 +199,8 @@ int CreateYUVPixmap(const sptr<SurfaceBuffer>& buffer, SkPixmap* pixmaps)
     return numPlanes;
 }
 
-AlgoErrorCode YUVPixmapScale(SkPixmap* inputPixmap, SkPixmap* outputPixmap, SkSamplingOptions opt, int numPlanes)
+AlgoErrorCode YUVPixmapScale(const std::array<SkPixmap, SkYUVAInfo::kMaxPlanes>& inputPixmap,
+    std::array<SkPixmap, SkYUVAInfo::kMaxPlanes>& outputPixmap, SkSamplingOptions opt, int numPlanes)
 {
     for (int i = 0; i < numPlanes; i++) {
         if (!inputPixmap[i].scalePixels(outputPixmap[i], opt)) {
@@ -211,8 +213,8 @@ AlgoErrorCode YUVPixmapScale(SkPixmap* inputPixmap, SkPixmap* outputPixmap, SkSa
 
 AlgoErrorCode YUVScale(const sptr<SurfaceBuffer>& input, sptr<SurfaceBuffer>& output)
 {
-    SkPixmap inputPixmap[SkYUVAInfo::kMaxPlanes];
-    SkPixmap outputPixmap[SkYUVAInfo::kMaxPlanes];
+    std::array<SkPixmap, SkYUVAInfo::kMaxPlanes> inputPixmap;
+    std::array<SkPixmap, SkYUVAInfo::kMaxPlanes> outputPixmap;
     int numPlanesInput = CreateYUVPixmap(input, inputPixmap);
     int numPlanesOutput = CreateYUVPixmap(output, outputPixmap);
     if (numPlanesInput != numPlanesOutput || numPlanesInput * numPlanesOutput == 0) {
