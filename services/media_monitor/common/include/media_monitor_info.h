@@ -60,6 +60,7 @@ enum EventId {
     CAPTURE_MUTE_STATUS_CHANGE = 21,
 
     STREAM_STANDBY = 22,
+    AI_VOICE_NOISE_SUPPRESSION = 23
 };
 
 enum EventType {
