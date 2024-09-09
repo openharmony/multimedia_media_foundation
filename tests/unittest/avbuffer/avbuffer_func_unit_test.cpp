@@ -822,6 +822,10 @@ HWTEST_F(AVBufferInnerUnitTest, AVBuffer_Create_Remote_SurfaceMemory_001, TestSi
         reinterpret_cast<uintptr_t>(buffer_->memory_->GetAddr()));
     EXPECT_EQ(buffer_->memory_->GetMemoryType(), MemoryType::SURFACE_MEMORY);
     EXPECT_EQ(buffer_->memory_->offset_, offset);
+    uint8_t *addr = buffer_->memory_->GetAddr();
+    auto surfaceBuffer = buffer_->memory_->GetSurfaceBuffer();
+    buffer_ = nullptr;
+    EXPECT_EQ(addr, surfaceBuffer->GetVirAddr());
 }
 
 /**
