@@ -83,7 +83,6 @@ AVSurfaceMemory::AVSurfaceMemory() : isFirstFlag_(true) {}
 AVSurfaceMemory::~AVSurfaceMemory()
 {
     if (base_ != nullptr) {
-        surfaceBuffer_->Unmap();
         base_ = nullptr;
     }
     if (allocator_ != nullptr) {
@@ -158,8 +157,7 @@ bool AVSurfaceMemory::ReadFromMessageParcel(MessageParcel &parcel)
 uint8_t *AVSurfaceMemory::GetAddr()
 {
     if (isFirstFlag_) {
-        Status ret = MapMemoryAddr();
-        FALSE_RETURN_V_MSG_E(ret == Status::OK, nullptr, "MapMemory failed");
+        base_ = reinterpret_cast<uint8_t *>(surfaceBuffer_->GetVirAddr());
         isFirstFlag_ = false;
     }
     return base_;
@@ -178,30 +176,6 @@ int32_t AVSurfaceMemory::GetFileDescriptor()
 sptr<SurfaceBuffer> AVSurfaceMemory::GetSurfaceBuffer()
 {
     return surfaceBuffer_;
-}
-
-void AVSurfaceMemory::UnMapMemoryAddr()
-{
-    if (base_ != nullptr) {
-        surfaceBuffer_->Unmap();
-        base_ = nullptr;
-    }
-}
-
-Status AVSurfaceMemory::MapMemoryAddr()
-{
-    ON_SCOPE_EXIT(0)
-    {
-        MEDIA_LOG_E("create avsurfacememory failed, uid:" PUBLIC_LOG_U64 ", capacity:%{public}d", uid_, capacity_);
-        UnMapMemoryAddr();
-        return Status::ERROR_NO_MEMORY;
-    };
-    GSError ret = surfaceBuffer_->Map();
-    FALSE_RETURN_V_MSG_E(ret == GSERROR_OK, Status::ERROR_INVALID_OPERATION,
-                         "mmap failed, please check params, %{public}s", GSErrorStr(ret).c_str());
-    base_ = reinterpret_cast<uint8_t *>(surfaceBuffer_->GetVirAddr());
-    CANCEL_SCOPE_EXIT_GUARD(0);
-    return Status::OK;
 }
 } // namespace Media
 } // namespace OHOS
