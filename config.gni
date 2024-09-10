@@ -126,3 +126,9 @@ if (defined(global_parts_info) &&
 } else {
   has_hisysevent_part = false
 }
+
+if (defined(global_parts_info) && defined(global_parts_info.third_party_skia)) {
+  has_skia = true
+} else {
+  has_skia = false
+}
