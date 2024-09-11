@@ -40,8 +40,10 @@ bool CallImageProcessingSupport(
     std::function<bool(void)>&& operation,
     std::function<bool(ImageProcessingNdkLoader&)>&& operationLoader)
 {
-    if (ImageProcessingNdkLoader::Get().IsValid()) {
-        return operationLoader(ImageProcessingNdkLoader::Get());
+    if (ImageProcessingNdkLoader::Get().LoadLibrary()) {
+        auto support = operationLoader(ImageProcessingNdkLoader::Get());
+        ImageProcessingNdkLoader::Get().UnloadLibrary();
+        return support;
     }
     return operation();
 }

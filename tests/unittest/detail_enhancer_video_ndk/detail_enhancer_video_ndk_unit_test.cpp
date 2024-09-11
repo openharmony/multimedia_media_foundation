@@ -28,9 +28,7 @@
 #include "video_processing_callback_impl.h"
 #include "video_processing_callback_native.h"
 #include "video_sample.h"
-#ifdef SKIA_ENABLE
 #include "skia_impl.h"
-#endif
 #include "detail_enhancer_video_native.h"
 
 constexpr int64_t NANOS_IN_SECOND = 1000000000L;
@@ -1218,7 +1216,7 @@ HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_37, TestSize.Level1)
 HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_38, TestSize.Level1)
 {
     std::unique_ptr<VideoSample> sample = std::make_unique<VideoSample>();
-    sample->qualityLevel_ = VIDEO_DETAIL_ENHANCER_QUALITY_LEVEL_HIGH;
+    sample->SetQualityLevel(VIDEO_DETAIL_ENHANCER_QUALITY_LEVEL_HIGH);
     VideoProcessParam Param = {NATIVEBUFFER_PIXEL_FMT_YCRCB_420_P, 480, 360,
                                 NATIVEBUFFER_PIXEL_FMT_YCRCB_420_P, 1280, 720};
     int32_t ret = sample->InitVideoSample(Param);
@@ -1231,8 +1229,8 @@ HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_38, TestSize.Level1)
 HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_39, TestSize.Level1)
 {
     std::unique_ptr<VideoSample> sample = std::make_unique<VideoSample>();
-    sample->isImpl = true;
-    sample->qualityLevel_ = VIDEO_DETAIL_ENHANCER_QUALITY_LEVEL_HIGH;
+    sample->SetImplLoader(true);
+    sample->SetQualityLevel(VIDEO_DETAIL_ENHANCER_QUALITY_LEVEL_HIGH);
     VideoProcessParam Param = {NATIVEBUFFER_PIXEL_FMT_YCRCB_420_P, 480, 360,
                                 NATIVEBUFFER_PIXEL_FMT_YCRCB_420_P, 1280, 720};
     int32_t ret = sample->InitVideoSampleImpl(Param);
@@ -1245,8 +1243,8 @@ HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_39, TestSize.Level1)
 HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_40, TestSize.Level1)
 {
     std::unique_ptr<VideoSample> sample = std::make_unique<VideoSample>();
-    sample->isImpl = true;
-    sample->qualityLevel_ = VIDEO_DETAIL_ENHANCER_QUALITY_LEVEL_HIGH;
+    sample->SetImplLoader(true);
+    sample->SetQualityLevel(VIDEO_DETAIL_ENHANCER_QUALITY_LEVEL_HIGH);
     VideoProcessParam Param = {NATIVEBUFFER_PIXEL_FMT_YCRCB_420_P, 480, 360,
                                 NATIVEBUFFER_PIXEL_FMT_YCRCB_420_P, 1280, 720};
     int32_t ret = sample->InitVideoSampleImpl(Param);
@@ -1268,7 +1266,6 @@ HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_41, TestSize.Level1)
     enhancer.Deinitialize();
 }
 
-#ifdef SKIA_ENABLE
 HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_42, TestSize.Level1)
 {
     Media::VideoProcessingEngine::Skia skiaImpl;
@@ -1304,7 +1301,6 @@ HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_42, TestSize.Level1)
     ret = skiaImpl.Process(input, output);
     EXPECT_EQ(ret, ALGO_SUCCESS);
 }
-#endif
 
 // native impl inner test
 HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_43, TestSize.Level1)

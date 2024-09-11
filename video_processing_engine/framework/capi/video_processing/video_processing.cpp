@@ -38,8 +38,10 @@ std::atomic<bool> g_isInit = false;
 bool CallVideoProcessingSupport(std::function<bool(void)>&& operation,
     std::function<bool(VideoProcessingNdkLoader&)>&& operationLoader)
 {
-    if (VideoProcessingNdkLoader::Get().IsValid()) {
-        return operationLoader(VideoProcessingNdkLoader::Get());
+    if (VideoProcessingNdkLoader::Get().LoadLibrary()) {
+        auto support = operationLoader(VideoProcessingNdkLoader::Get());
+        VideoProcessingNdkLoader::Get().UnloadLibrary();
+        return support;
     }
     return operation();
 }
