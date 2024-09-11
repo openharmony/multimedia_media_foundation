@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-#ifndef VIDEO_SAMPLE_HF
-#define VIDEO_SAMPLE_HF
+#ifndef VIDEO_SAMPLE
+#define VIDEO_SAMPLE
 
 #include <string>
 #include <thread>
@@ -30,12 +30,12 @@
 
 typedef struct VideoProcessParam {
     OH_NativeBuffer_Format inFmt;
-    int32_t in_width;
-    int32_t in_height;
+    int32_t inWidth;
+    int32_t inHeight;
     OH_NativeBuffer_Format outFmt;
-    int32_t out_width;
-    int32_t out_height;
-}VideoProcessParam;
+    int32_t outWidth;
+    int32_t outHeight;
+} VideoProcessParam;
 
 namespace OHOS {
 
@@ -43,6 +43,7 @@ struct SurfaceBufferWrapper {
 public:
     SurfaceBufferWrapper() = default;
     ~SurfaceBufferWrapper() = default;
+
     sptr<SurfaceBuffer> memory{nullptr};
     sptr<SyncFence> fence{nullptr};
     int64_t timestamp;
@@ -52,34 +53,43 @@ class VideoSample {
 public:
     VideoSample();
     ~VideoSample();
-    int32_t inputFrameNumber = 10;
-    VideoDetailEnhancer_QualityLevel qualityLevel_;
-    bool isImpl = false;
+
+    void OnBufferAvailable();
+    void NotifyCv();
+    void SetImplLoader(bool isImpl);
+    void SetQualityLevel(VideoDetailEnhancer_QualityLevel level);
+    void UpdateErrorCount();
+    int32_t InitVideoSample(VideoProcessParam param);
+    int32_t InitVideoSampleImpl(VideoProcessParam param);
     int32_t InputFunc();
-    int32_t InitVideoSample(VideoProcessParam);
-    int32_t InitVideoSampleImpl(VideoProcessParam);
+    int32_t SetSurfaceOnRunningImpl();
     int32_t StartProcess();
     int32_t StartProcessImpl();
     int32_t WaitAndStopSample();
     int32_t WaitAndStopSampleImpl();
-    int32_t SetSurfaceOnRunningImpl();
-    int32_t errCount = 0;
+
 private:
     void SetInputWindowParam();
-    VideoProcessParam param_;
-    OH_VideoProcessing* videoProcessor = nullptr;
-    OH_VideoProcessing* videoProcessorImpl = nullptr;
-    OHNativeWindow *inWindow = nullptr;
-    OHNativeWindow *outWindow = nullptr;
-    std::unique_ptr<std::ifstream> inFile;
-    std::unique_ptr<std::thread> inputLoop_;
-    VideoProcessing_Callback* callback = nullptr;
-    VideoProcessing_Callback* callbackImpl = nullptr;
-    struct Region region;
-    struct Region::Rect *rect;
-    sptr<Surface> cs = nullptr;
-    sptr<Surface> ps = nullptr;
+
+    VideoProcessing_Callback* callback_{};
+    VideoProcessing_Callback* callbackImpl_{};
+    std::unique_ptr<std::thread> inputLoop_{};
+    std::mutex mutexListener_{};
+    sptr<Surface> cs_{};
+    int32_t errCount_{0};
+    std::queue<sptr<SurfaceBuffer>> inputBufferAvilQue_{};
+    bool isImpl_{false};
+    OHNativeWindow* inWindow_{};
+    OHNativeWindow* outWindow_{};
+    VideoProcessParam param_{};
+    struct Region::Rect* rect_{};
+    struct Region region_{};
+    OH_VideoProcessing* videoProcessor_{};
+    OH_VideoProcessing* videoProcessorImpl_{};
+    VideoDetailEnhancer_QualityLevel qualityLevel_{};
+    std::mutex mutex_{};
+    std::condition_variable cv_{};
 };
 } // namespace OHOS
 
-#endif
+#endif // VIDEO_SAMPLE

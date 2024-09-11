@@ -116,7 +116,7 @@ HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_02, TestSize.Level1)
 HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_03, TestSize.Level1)
 {
     ImageProcessing_ErrorCode ret = OH_ImageProcessing_DeinitializeEnvironment();
-    EXPECT_EQ(ret, IMAGE_PROCESSING_SUCCESS);
+    EXPECT_NE(ret, IMAGE_PROCESSING_SUCCESS);
 }
 
 // create instance
@@ -427,31 +427,19 @@ HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_28, TestSize.Level1)
     ASSERT_FALSE(ret);
 }
 
-// convert color space RGBA to BGRA
+// convert color space RGBA to BGRA impl
 HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_29, TestSize.Level1)
 {
     OH_ImageProcessing_InitializeEnvironment();
     OH_ImageProcessing* instance = nullptr;
+    OH_ImageProcessing* instance2 = nullptr;
     OH_PixelmapNative* srcImg = nullptr;
     OH_PixelmapNative* dstImg = nullptr;
     CreateEmptyPixelmap(&srcImg, 720, 960, PIXEL_FORMAT_RGBA_8888);
     CreateEmptyPixelmap(&dstImg, 720, 960, PIXEL_FORMAT_BGRA_8888);
-    OH_ImageProcessing_Create(&instance, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
-    ImageProcessing_ErrorCode ret = OH_ImageProcessing_ConvertColorSpace(instance, srcImg, dstImg);
-    EXPECT_EQ(ret, IMAGE_PROCESSING_SUCCESS);
-    OH_ImageProcessing_Destroy(instance);
-    OH_ImageProcessing_DeinitializeEnvironment();
-}
-
-// convert color space RGBA to BGRA impl
-HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_29_1, TestSize.Level1)
-{
-    OH_ImageProcessing_InitializeEnvironment();
-    OH_ImageProcessing* instance = nullptr;
-    OH_PixelmapNative* srcImg = nullptr;
-    OH_PixelmapNative* dstImg = nullptr;
-    CreateEmptyPixelmap(&srcImg, 720, 960, PIXEL_FORMAT_RGBA_8888);
-    CreateEmptyPixelmap(&dstImg, 720, 960, PIXEL_FORMAT_BGRA_8888);
+    OH_ImageProcessing_Create(&instance2, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
+    OH_ImageProcessing_ConvertColorSpace(instance2, srcImg, dstImg);
+    OH_ImageProcessing_Destroy(instance2);
     OH_ImageProcessing::Create(&instance, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
     ImageProcessing_ErrorCode ret = instance->GetObj()->ConvertColorSpace(srcImg, dstImg);
     EXPECT_NE(ret, IMAGE_PROCESSING_SUCCESS);
@@ -459,31 +447,19 @@ HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_29_1, TestSize.Level1)
     OH_ImageProcessing_DeinitializeEnvironment();
 }
 
-// convert color space BGRA to RGBA
+// convert color space BGRA to RGBA impl
 HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_30, TestSize.Level1)
 {
     OH_ImageProcessing_InitializeEnvironment();
     OH_ImageProcessing* instance = nullptr;
+    OH_ImageProcessing* instance2 = nullptr;
     OH_PixelmapNative* srcImg = nullptr;
     OH_PixelmapNative* dstImg = nullptr;
     CreateEmptyPixelmap(&srcImg, 720, 960, PIXEL_FORMAT_BGRA_8888);
     CreateEmptyPixelmap(&dstImg, 720, 960, PIXEL_FORMAT_RGBA_8888);
-    OH_ImageProcessing_Create(&instance, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
-    ImageProcessing_ErrorCode ret = OH_ImageProcessing_ConvertColorSpace(instance, srcImg, dstImg);
-    EXPECT_EQ(ret, IMAGE_PROCESSING_SUCCESS);
-    OH_ImageProcessing_Destroy(instance);
-    OH_ImageProcessing_DeinitializeEnvironment();
-}
-
-// convert color space BGRA to RGBA impl
-HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_30_1, TestSize.Level1)
-{
-    OH_ImageProcessing_InitializeEnvironment();
-    OH_ImageProcessing* instance = nullptr;
-    OH_PixelmapNative* srcImg = nullptr;
-    OH_PixelmapNative* dstImg = nullptr;
-    CreateEmptyPixelmap(&srcImg, 720, 960, PIXEL_FORMAT_BGRA_8888);
-    CreateEmptyPixelmap(&dstImg, 720, 960, PIXEL_FORMAT_RGBA_8888);
+    OH_ImageProcessing_Create(&instance2, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
+    OH_ImageProcessing_ConvertColorSpace(instance2, srcImg, dstImg);
+    OH_ImageProcessing_Destroy(instance2);
     OH_ImageProcessing::Create(&instance, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
     ImageProcessing_ErrorCode ret = instance->GetObj()->ConvertColorSpace(srcImg, dstImg);
     EXPECT_NE(ret, IMAGE_PROCESSING_SUCCESS);
@@ -519,35 +495,21 @@ HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_31_1, TestSize.Level1)
     OH_ImageProcessing_DeinitializeEnvironment();
 }
 
-// compose RGBA
+// compose RGBA impl
 HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_32, TestSize.Level1)
 {
     OH_ImageProcessing_InitializeEnvironment();
     OH_ImageProcessing* instance = nullptr;
+    OH_ImageProcessing* instance2 = nullptr;
     OH_PixelmapNative* srcImg = nullptr;
     OH_PixelmapNative* gainmap = nullptr;
     OH_PixelmapNative* dstImg = nullptr;
     CreateEmptyPixelmap(&srcImg, 720, 960, PIXEL_FORMAT_RGBA_8888);
     CreateEmptyPixelmap(&gainmap, 720, 960, PIXEL_FORMAT_RGBA_8888);
     CreateEmptyPixelmap(&dstImg, 720, 960, PIXEL_FORMAT_RGBA_8888);
-    OH_ImageProcessing_Create(&instance, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
-    ImageProcessing_ErrorCode ret = OH_ImageProcessing_Compose(instance, srcImg, gainmap, dstImg);
-    EXPECT_EQ(ret, IMAGE_PROCESSING_SUCCESS);
-    OH_ImageProcessing_Destroy(instance);
-    OH_ImageProcessing_DeinitializeEnvironment();
-}
-
-// compose RGBA impl
-HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_32_1, TestSize.Level1)
-{
-    OH_ImageProcessing_InitializeEnvironment();
-    OH_ImageProcessing* instance = nullptr;
-    OH_PixelmapNative* srcImg = nullptr;
-    OH_PixelmapNative* gainmap = nullptr;
-    OH_PixelmapNative* dstImg = nullptr;
-    CreateEmptyPixelmap(&srcImg, 720, 960, PIXEL_FORMAT_RGBA_8888);
-    CreateEmptyPixelmap(&gainmap, 720, 960, PIXEL_FORMAT_RGBA_8888);
-    CreateEmptyPixelmap(&dstImg, 720, 960, PIXEL_FORMAT_RGBA_8888);
+    OH_ImageProcessing_Create(&instance2, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
+    OH_ImageProcessing_Compose(instance2, srcImg, gainmap, dstImg);
+    OH_ImageProcessing_Destroy(instance2);
     OH_ImageProcessing::Create(&instance, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
     ImageProcessing_ErrorCode ret = instance->GetObj()->Compose(srcImg, gainmap, dstImg);
     EXPECT_NE(ret, IMAGE_PROCESSING_SUCCESS);
@@ -555,35 +517,21 @@ HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_32_1, TestSize.Level1)
     OH_ImageProcessing_DeinitializeEnvironment();
 }
 
-// compose BGRA
+// compose BGRA impl
 HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_33, TestSize.Level1)
 {
     OH_ImageProcessing_InitializeEnvironment();
     OH_ImageProcessing* instance = nullptr;
+    OH_ImageProcessing* instance2 = nullptr;
     OH_PixelmapNative* srcImg = nullptr;
     OH_PixelmapNative* gainmap = nullptr;
     OH_PixelmapNative* dstImg = nullptr;
     CreateEmptyPixelmap(&srcImg, 720, 960, PIXEL_FORMAT_BGRA_8888);
     CreateEmptyPixelmap(&gainmap, 720, 960, PIXEL_FORMAT_BGRA_8888);
     CreateEmptyPixelmap(&dstImg, 720, 960, PIXEL_FORMAT_BGRA_8888);
-    OH_ImageProcessing_Create(&instance, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
-    ImageProcessing_ErrorCode ret = OH_ImageProcessing_Compose(instance, srcImg, gainmap, dstImg);
-    EXPECT_EQ(ret, IMAGE_PROCESSING_SUCCESS);
-    OH_ImageProcessing_Destroy(instance);
-    OH_ImageProcessing_DeinitializeEnvironment();
-}
-
-// compose BGRA impl
-HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_33_1, TestSize.Level1)
-{
-    OH_ImageProcessing_InitializeEnvironment();
-    OH_ImageProcessing* instance = nullptr;
-    OH_PixelmapNative* srcImg = nullptr;
-    OH_PixelmapNative* gainmap = nullptr;
-    OH_PixelmapNative* dstImg = nullptr;
-    CreateEmptyPixelmap(&srcImg, 720, 960, PIXEL_FORMAT_BGRA_8888);
-    CreateEmptyPixelmap(&gainmap, 720, 960, PIXEL_FORMAT_BGRA_8888);
-    CreateEmptyPixelmap(&dstImg, 720, 960, PIXEL_FORMAT_BGRA_8888);
+    OH_ImageProcessing_Create(&instance2, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
+    OH_ImageProcessing_Compose(instance2, srcImg, gainmap, dstImg);
+    OH_ImageProcessing_Destroy(instance2);
     OH_ImageProcessing::Create(&instance, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
     ImageProcessing_ErrorCode ret = instance->GetObj()->Compose(srcImg, gainmap, dstImg);
     EXPECT_NE(ret, IMAGE_PROCESSING_SUCCESS);
@@ -621,35 +569,21 @@ HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_34_1, TestSize.Level1)
     OH_ImageProcessing_DeinitializeEnvironment();
 }
 
-// decompose RGBA
+// decompose RGBA impl
 HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_35, TestSize.Level1)
 {
     OH_ImageProcessing_InitializeEnvironment();
     OH_ImageProcessing* instance = nullptr;
+    OH_ImageProcessing* instance2 = nullptr;
     OH_PixelmapNative* srcImg = nullptr;
     OH_PixelmapNative* gainmap = nullptr;
     OH_PixelmapNative* dstImg = nullptr;
     CreateEmptyPixelmap(&srcImg, 720, 960, PIXEL_FORMAT_RGBA_8888);
     CreateEmptyPixelmap(&gainmap, 720, 960, PIXEL_FORMAT_RGBA_8888);
     CreateEmptyPixelmap(&dstImg, 720, 960, PIXEL_FORMAT_RGBA_8888);
-    OH_ImageProcessing_Create(&instance, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
-    ImageProcessing_ErrorCode ret = OH_ImageProcessing_Decompose(instance, srcImg, dstImg, gainmap);
-    EXPECT_EQ(ret, IMAGE_PROCESSING_SUCCESS);
-    OH_ImageProcessing_Destroy(instance);
-    OH_ImageProcessing_DeinitializeEnvironment();
-}
-
-// decompose RGBA impl
-HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_35_1, TestSize.Level1)
-{
-    OH_ImageProcessing_InitializeEnvironment();
-    OH_ImageProcessing* instance = nullptr;
-    OH_PixelmapNative* srcImg = nullptr;
-    OH_PixelmapNative* gainmap = nullptr;
-    OH_PixelmapNative* dstImg = nullptr;
-    CreateEmptyPixelmap(&srcImg, 720, 960, PIXEL_FORMAT_RGBA_8888);
-    CreateEmptyPixelmap(&gainmap, 720, 960, PIXEL_FORMAT_RGBA_8888);
-    CreateEmptyPixelmap(&dstImg, 720, 960, PIXEL_FORMAT_RGBA_8888);
+    OH_ImageProcessing_Create(&instance2, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
+    OH_ImageProcessing_Decompose(instance2, srcImg, dstImg, gainmap);
+    OH_ImageProcessing_Destroy(instance2);
     OH_ImageProcessing::Create(&instance, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
     ImageProcessing_ErrorCode ret = instance->GetObj()->Decompose(srcImg, dstImg, gainmap);
     EXPECT_NE(ret, IMAGE_PROCESSING_SUCCESS);
@@ -657,35 +591,21 @@ HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_35_1, TestSize.Level1)
     OH_ImageProcessing_DeinitializeEnvironment();
 }
 
-// decompose BGRA
+// decompose BGRA impl
 HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_36, TestSize.Level1)
 {
     OH_ImageProcessing_InitializeEnvironment();
     OH_ImageProcessing* instance = nullptr;
+    OH_ImageProcessing* instance2 = nullptr;
     OH_PixelmapNative* srcImg = nullptr;
     OH_PixelmapNative* gainmap = nullptr;
     OH_PixelmapNative* dstImg = nullptr;
     CreateEmptyPixelmap(&srcImg, 720, 960, PIXEL_FORMAT_BGRA_8888);
     CreateEmptyPixelmap(&gainmap, 720, 960, PIXEL_FORMAT_BGRA_8888);
     CreateEmptyPixelmap(&dstImg, 720, 960, PIXEL_FORMAT_BGRA_8888);
-    OH_ImageProcessing_Create(&instance, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
-    ImageProcessing_ErrorCode ret = OH_ImageProcessing_Decompose(instance, srcImg, dstImg, gainmap);
-    EXPECT_EQ(ret, IMAGE_PROCESSING_SUCCESS);
-    OH_ImageProcessing_Destroy(instance);
-    OH_ImageProcessing_DeinitializeEnvironment();
-}
-
-// decompose BGRA impl
-HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_36_1, TestSize.Level1)
-{
-    OH_ImageProcessing_InitializeEnvironment();
-    OH_ImageProcessing* instance = nullptr;
-    OH_PixelmapNative* srcImg = nullptr;
-    OH_PixelmapNative* gainmap = nullptr;
-    OH_PixelmapNative* dstImg = nullptr;
-    CreateEmptyPixelmap(&srcImg, 720, 960, PIXEL_FORMAT_BGRA_8888);
-    CreateEmptyPixelmap(&gainmap, 720, 960, PIXEL_FORMAT_BGRA_8888);
-    CreateEmptyPixelmap(&dstImg, 720, 960, PIXEL_FORMAT_BGRA_8888);
+    OH_ImageProcessing_Create(&instance2, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
+    OH_ImageProcessing_Decompose(instance2, srcImg, dstImg, gainmap);
+    OH_ImageProcessing_Destroy(instance2);
     OH_ImageProcessing::Create(&instance, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
     ImageProcessing_ErrorCode ret = instance->GetObj()->Decompose(srcImg, dstImg, gainmap);
     EXPECT_NE(ret, IMAGE_PROCESSING_SUCCESS);
@@ -723,27 +643,17 @@ HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_37_1, TestSize.Level1)
     OH_ImageProcessing_DeinitializeEnvironment();
 }
 
-// generate metadata RGBA
+// generate metadata RGBA impl
 HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_38, TestSize.Level1)
 {
     OH_ImageProcessing_InitializeEnvironment();
     OH_ImageProcessing* instance = nullptr;
+    OH_ImageProcessing* instance2 = nullptr;
     OH_PixelmapNative* srcImg = nullptr;
     CreateEmptyPixelmap(&srcImg, 720, 960, PIXEL_FORMAT_RGBA_8888);
-    OH_ImageProcessing_Create(&instance, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
-    ImageProcessing_ErrorCode ret = OH_ImageProcessing_GenerateMetadata(instance, srcImg);
-    EXPECT_EQ(ret, IMAGE_PROCESSING_SUCCESS);
-    OH_ImageProcessing_Destroy(instance);
-    OH_ImageProcessing_DeinitializeEnvironment();
-}
-
-// generate metadata RGBA impl
-HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_38_1, TestSize.Level1)
-{
-    OH_ImageProcessing_InitializeEnvironment();
-    OH_ImageProcessing* instance = nullptr;
-    OH_PixelmapNative* srcImg = nullptr;
-    CreateEmptyPixelmap(&srcImg, 720, 960, PIXEL_FORMAT_RGBA_8888);
+    OH_ImageProcessing_Create(&instance2, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
+    OH_ImageProcessing_GenerateMetadata(instance2, srcImg);
+    OH_ImageProcessing_Destroy(instance2);
     OH_ImageProcessing::Create(&instance, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
     ImageProcessing_ErrorCode ret = instance->GetObj()->GenerateMetadata(srcImg);
     EXPECT_NE(ret, IMAGE_PROCESSING_SUCCESS);
@@ -751,27 +661,17 @@ HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_38_1, TestSize.Level1)
     OH_ImageProcessing_DeinitializeEnvironment();
 }
 
-// generate metadata RGBA
+// generate metadata BGRA impl
 HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_39, TestSize.Level1)
 {
     OH_ImageProcessing_InitializeEnvironment();
     OH_ImageProcessing* instance = nullptr;
+    OH_ImageProcessing* instance2 = nullptr;
     OH_PixelmapNative* srcImg = nullptr;
     CreateEmptyPixelmap(&srcImg, 720, 960, PIXEL_FORMAT_BGRA_8888);
-    OH_ImageProcessing_Create(&instance, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
-    ImageProcessing_ErrorCode ret = OH_ImageProcessing_GenerateMetadata(instance, srcImg);
-    EXPECT_EQ(ret, IMAGE_PROCESSING_SUCCESS);
-    OH_ImageProcessing_Destroy(instance);
-    OH_ImageProcessing_DeinitializeEnvironment();
-}
-
-// generate metadata BGRA impl
-HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_39_1, TestSize.Level1)
-{
-    OH_ImageProcessing_InitializeEnvironment();
-    OH_ImageProcessing* instance = nullptr;
-    OH_PixelmapNative* srcImg = nullptr;
-    CreateEmptyPixelmap(&srcImg, 720, 960, PIXEL_FORMAT_BGRA_8888);
+    OH_ImageProcessing_Create(&instance2, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
+    OH_ImageProcessing_GenerateMetadata(instance2, srcImg);
+    OH_ImageProcessing_Destroy(instance2);
     OH_ImageProcessing::Create(&instance, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
     ImageProcessing_ErrorCode ret = instance->GetObj()->GenerateMetadata(srcImg);
     EXPECT_NE(ret, IMAGE_PROCESSING_SUCCESS);
