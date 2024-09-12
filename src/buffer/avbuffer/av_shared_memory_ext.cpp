@@ -105,12 +105,9 @@ Status AVSharedMemoryExt::Init()
 Status AVSharedMemoryExt::Init(MessageParcel &parcel)
 {
 #ifdef MEDIA_OHOS
-    int32_t fd = parcel.ReadFileDescriptor();
-    FALSE_RETURN_V_MSG_E(fd > 0, Status::ERROR_INVALID_DATA, "File descriptor is invalid");
-    fd_ = dup(fd);
-
+    fd_ = parcel.ReadFileDescriptor();
+    FALSE_RETURN_V_MSG_E(fd_ > 0, Status::ERROR_INVALID_DATA, "File descriptor is invalid");
     memFlag_ = static_cast<MemoryFlag>(parcel.ReadUint32());
-    (void)::close(fd);
     return Status::OK;
 #else
     return Status::OK;

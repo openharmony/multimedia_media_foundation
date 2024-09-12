@@ -37,8 +37,6 @@ private:
     Status InitSurfaceBuffer(sptr<SurfaceBuffer> surfaceBuffer) override;
     bool WriteToMessageParcel(MessageParcel &parcel) override;
     bool ReadFromMessageParcel(MessageParcel &parcel) override;
-    Status MapMemoryAddr();
-    void UnMapMemoryAddr();
     sptr<SurfaceBuffer> surfaceBuffer_;
     bool isFirstFlag_;
 };
