@@ -42,9 +42,13 @@ const std::unordered_map<int, std::function<std::shared_ptr<VideoProcessingNativ
 
 VideoProcessing_ErrorCode OH_VideoProcessing::Create(OH_VideoProcessing** instance, int type)
 {
+    if (instance == nullptr) {
+        VPE_LOGE("instance is null!");
+        return VIDEO_PROCESSING_ERROR_INVALID_INSTANCE;
+    }
     auto it = CREATORS.find(type);
-    if (instance == nullptr || it == CREATORS.end()) {
-        VPE_LOGE("instance is null or type is not supported!");
+    if (it == CREATORS.end()) {
+        VPE_LOGE("type is not supported!");
         return VIDEO_PROCESSING_ERROR_INVALID_PARAMETER;
     }
 
@@ -71,8 +75,12 @@ VideoProcessing_ErrorCode OH_VideoProcessing::Create(OH_VideoProcessing** instan
 
 VideoProcessing_ErrorCode OH_VideoProcessing::Destroy(OH_VideoProcessing* instance)
 {
-    if (instance == nullptr || instance->GetObj() == nullptr) {
-        VPE_LOGE("instance is null or invalid!");
+    if (instance == nullptr) {
+        VPE_LOGE("instance is null!");
+        return VIDEO_PROCESSING_ERROR_INVALID_INSTANCE;
+    }
+    if (instance->GetObj() == nullptr) {
+        VPE_LOGE("instance is invalid!");
         return VIDEO_PROCESSING_ERROR_INVALID_PARAMETER;
     }
 
