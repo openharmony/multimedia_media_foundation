@@ -17,7 +17,7 @@
 #include "common/log.h"
 
 namespace {
-constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "PluginManagerV2" };
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
 }
 
 namespace OHOS {
@@ -25,27 +25,27 @@ namespace Media {
 namespace Plugins {
 PluginManagerV2::PluginManagerV2()
 {
-    MEDIA_LOG_D("PluginManagerV2");
+    MEDIA_LOG_I("PluginManagerV2");
     cachedPluginPackage_ = std::make_shared<CachedPluginPackage>();
 }
 
 std::shared_ptr<PluginBase> PluginManagerV2::CreatePluginByMime(PluginType pluginType, std::string mime)
 {
-    MEDIA_LOG_D("CreatePluginByMime pluginType: " PUBLIC_LOG_D32 " mime: " PUBLIC_LOG_S, pluginType, mime.c_str());
+    MEDIA_LOG_I("CreatePluginByMime pluginType: " PUBLIC_LOG_D32 " mime: " PUBLIC_LOG_S, pluginType, mime.c_str());
     PluginDescription pluginDescription = PluginList::GetInstance().GetPluginByCap(pluginType, mime);
     return cachedPluginPackage_->CreatePlugin(pluginDescription);
 }
 
 std::shared_ptr<PluginBase> PluginManagerV2::CreatePluginByName(std::string name)
 {
-    MEDIA_LOG_D("CreatePluginByName pluginName: " PUBLIC_LOG_S, name.c_str());
+    MEDIA_LOG_I("CreatePluginByName pluginName: " PUBLIC_LOG_S, name.c_str());
     PluginDescription pluginDescription = PluginList::GetInstance().GetPluginByName(name);
     return cachedPluginPackage_->CreatePlugin(pluginDescription);
 }
 
 std::string PluginManagerV2::SnifferPlugin(PluginType pluginType, std::shared_ptr<DataSource> dataSource)
 {
-    MEDIA_LOG_D("SnifferPlugin pluginType: " PUBLIC_LOG_D32, pluginType);
+    MEDIA_LOG_I("SnifferPlugin pluginType: " PUBLIC_LOG_D32, pluginType);
     std::vector<PluginDescription> matchedPluginsDescriptions =
         PluginList::GetInstance().GetPluginsByType(pluginType);
     int maxProb = 0;

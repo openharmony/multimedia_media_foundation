@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-#ifndef HISTREAMER_PLUGIN_INTF_PLUGIN_BASE_H
-#define HISTREAMER_PLUGIN_INTF_PLUGIN_BASE_H
+#ifndef HISTREAMER_PLUGINS_INTF_PLUGIN_BASE_H
+#define HISTREAMER_PLUGINS_INTF_PLUGIN_BASE_H
 
 #include <memory>
 #include "plugin_event.h"
@@ -56,7 +56,7 @@ struct Callback {
     {
         (void)flag;
     }
-
+ 
     virtual bool CanAutoSelectBitRate()
     {
         return false;
@@ -236,4 +236,4 @@ protected:
 } // namespace Plugins
 } // namespace Media
 } // namespace OHOS
-#endif // HISTREAMER_PLUGIN_INTF_PLUGIN_BASE_H
+#endif // HISTREAMER_PLUGINS_INTF_PLUGIN_BASE_H

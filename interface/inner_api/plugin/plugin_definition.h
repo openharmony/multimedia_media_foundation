@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-#ifndef HISTREAMER_PLUGIN_INTF_PLUGIN_DEFINITION_H
-#define HISTREAMER_PLUGIN_INTF_PLUGIN_DEFINITION_H
+#ifndef HISTREAMER_PLUGINS_INTF_PLUGIN_DEFINITION_H
+#define HISTREAMER_PLUGINS_INTF_PLUGIN_DEFINITION_H
 
 #include <functional>
 #include <string>
@@ -126,7 +126,7 @@ struct DataSource {
     virtual Seekable GetSeekable() = 0;
 
     virtual int32_t GetStreamID() = 0;
-
+ 
     virtual bool IsDash() = 0;
 };
 
@@ -323,4 +323,4 @@ using UnregisterFunc = void (*)();
 } // namespace Plugins
 } // namespace Media
 } // namespace OHOS
-#endif // HISTREAMER_PLUGIN_INTF_PLUGIN_DEFINITION_H
+#endif // HISTREAMER_PLUGINS_INTF_PLUGIN_DEFINITION_H

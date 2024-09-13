@@ -33,7 +33,7 @@ public:
     ~Pipeline();
 
     void Init(const std::shared_ptr<EventReceiver>& receiver,
-        const std::shared_ptr<FilterCallback>& callback, const std::string& groupId);
+        const std::shared_ptr<FilterCallback>& callback, const std::string &playerId);
 
     Status Prepare();
 

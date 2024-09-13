@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-#ifndef HISTREAMER_PLUGIN_COMMON_VIDEO_TAGS_H
-#define HISTREAMER_PLUGIN_COMMON_VIDEO_TAGS_H
+#ifndef HISTREAMER_PLUGINS_COMMON_VIDEO_TAGS_H
+#define HISTREAMER_PLUGINS_COMMON_VIDEO_TAGS_H
 
 #include <cstdint> // NOLINT: using uint32_t
 
@@ -84,4 +84,4 @@ enum struct VideoBitStreamFormat : uint32_t {
 } // namespace Plugins
 } // namespace Media
 } // namespace OHOS
-#endif // HISTREAMER_PLUGIN_COMMON_VIDEO_TAGS_H
+#endif // HISTREAMER_PLUGINS_COMMON_VIDEO_TAGS_H

@@ -37,11 +37,11 @@ Thread::Thread(Thread&& other) noexcept
 Thread& Thread::operator=(Thread&& other) noexcept
 {
     if (this != &other) {
-        AutoLock lock(mutex_);
-        id_ = other.id_;
-        name_ = std::move(other.name_);
-        priority_ = other.priority_;
-        state_ = std::move(other.state_);
+    AutoLock lock(mutex_);
+    id_ = other.id_;
+    name_ = std::move(other.name_);
+    priority_ = other.priority_;
+    state_ = std::move(other.state_);
     }
     return *this;
 }
@@ -88,7 +88,7 @@ bool Thread::CreateThread(const std::function<void()>& func)
 #endif
     int rtv = pthread_create(&id_, &attr, Thread::Run, this);
     if (rtv == 0) {
-        MEDIA_LOG_D("thread " PUBLIC_LOG_S " create success", name_.c_str());
+        MEDIA_LOG_I("thread " PUBLIC_LOG_S " create success", name_.c_str());
         isExistThread_.store(true);
         SetNameInternal();
     } else {

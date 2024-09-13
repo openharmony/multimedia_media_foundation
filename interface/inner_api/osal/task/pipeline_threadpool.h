@@ -57,8 +57,8 @@ private:
 class PipeLineThreadPool {
 public:
     static PipeLineThreadPool &GetInstance();
-    std::shared_ptr<PipeLineThread> FindThread(std::string groupId, TaskType taskType, TaskPriority priority);
-    void DestroyThread(std::string groupId);
+    std::shared_ptr<PipeLineThread> FindThread(const std::string &groupId, TaskType taskType, TaskPriority priority);
+    void DestroyThread(const std::string &groupId);
 private:
     PipeLineThreadPool() = default;
     ~PipeLineThreadPool() = default;
