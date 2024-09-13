@@ -298,7 +298,7 @@ if (hst_is_lite_sys) {
   }
 } else {
   ohos_shared_library("media_monitor_client") {
-  branch_protector_ret = "pac_ret"
+    branch_protector_ret = "pac_ret"
     sanitize = {
       ubsan = true
       boundary_sanitize = true
