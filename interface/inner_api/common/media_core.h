@@ -33,6 +33,9 @@ enum MediaServiceErrCode : ErrCode {
     MSERR_INVALID_OPERATION = MS_ERR_OFFSET + ENOSYS, // opertation not be permitted
     MSERR_INVALID_VAL       = MS_ERR_OFFSET + EINVAL, // invalid argument
     MSERR_UNKNOWN           = MS_ERR_OFFSET + 0x200,  // unkown error.
+    MSERR_MANDATORY_PARAMETER_UNSPECIFIED,            // mandatory parameters are left unspecified
+    MSERR_INCORRECT_PARAMETER_TYPE,                   // Incorrect parameter types
+    MSERR_PARAMETER_VERIFICATION_FAILED,              // Parameter verification failed
     MSERR_SERVICE_DIED,                               // media service died
     MSERR_CREATE_REC_ENGINE_FAILED,                   // create recorder engine failed.
     MSERR_CREATE_PLAYER_ENGINE_FAILED,                // create player engine failed.
@@ -74,9 +77,6 @@ enum MediaServiceErrCode : ErrCode {
     MSERR_DATA_SOURCE_OBTAIN_MEM_ERROR,               // media data source get mem failed.
     MSERR_DATA_SOURCE_ERROR_UNKNOWN,                  // media data source error unknow.
     MSERR_AUD_INTERRUPT,                              // audio interrupted.
-    MSERR_MANDATORY_PARAMETER_UNSPECIFIED,            // mandatory parameters are left unspecified
-    MSERR_INCORRECT_PARAMETER_TYPE,                   // Incorrect parameter types
-    MSERR_PARAMETER_VERIFICATION_FAILED,              // Parameter verification failed
     MSERR_USER_NO_PERMISSION,                         // user permission denied (AccessToken).
     MSERR_DRM_VERIFICATION_FAILED,                    // DRM verification failed
     MSERR_UNSUPPORT_WATER_MARK,                       // unsupported watermark
