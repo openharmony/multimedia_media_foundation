@@ -242,8 +242,8 @@ bool AVBuffer::ReadFromMessageParcel(MessageParcel &parcel, bool isSurfaceBuffer
     int64_t duration = 0;
     uint32_t flag = 0;
     Meta meta;
-    bool ret = parcel.ReadUint64(uid) && parcel.ReadInt64(pts) && parcel.ReadInt64(dts) &&
-               parcel.ReadInt64(duration) && parcel.ReadUint32(flag) && meta.FromParcel(parcel);
+    bool ret = parcel.ReadUint64(uid) && parcel.ReadInt64(pts) && parcel.ReadInt64(dts) && parcel.ReadInt64(duration) &&
+               parcel.ReadUint32(flag) && meta.FromParcel(parcel);
     FALSE_RETURN_V_MSG_E(ret, false, "Unmarshalling buffer info failed");
 
     if (memory_ != nullptr) {

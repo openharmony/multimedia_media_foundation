@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-#ifndef HISTREAMER_PLUGIN_COMMON_SOURCE_TAG_H
-#define HISTREAMER_PLUGIN_COMMON_SOURCE_TAG_H
+#ifndef HISTREAMER_PLUGINS_COMMON_SOURCE_TAG_H
+#define HISTREAMER_PLUGINS_COMMON_SOURCE_TAG_H
 
 #include <cstdint> // NOLINT: using uint32_t
 
@@ -38,4 +38,4 @@ enum struct SrcInputType : uint32_t {
 } // namespace Plugins
 } // namespace Media
 } // namespace OHOS
-#endif // HISTREAMER_PLUGIN_COMMON_SOURCE_TAG_H
+#endif // HISTREAMER_PLUGINS_COMMON_SOURCE_TAG_H

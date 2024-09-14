@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-#ifndef HISTREAMER_PLUGIN_COMMON_BUFFER_H
-#define HISTREAMER_PLUGIN_COMMON_BUFFER_H
+#ifndef HISTREAMER_PLUGINS_COMMON_BUFFER_H
+#define HISTREAMER_PLUGINS_COMMON_BUFFER_H
 
 #include <memory>
 #include <map>
@@ -105,4 +105,4 @@ private:
 } // namespace Plugins
 } // namespace Media
 } // namespace OHOS
-#endif // HISTREAMER_PLUGIN_COMMON_BUFFER_H
+#endif // HISTREAMER_PLUGINS_COMMON_BUFFER_H

@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-#ifndef HISTREAMER_PLUGIN_COMMON_CAPS_BUILDER_H
-#define HISTREAMER_PLUGIN_COMMON_CAPS_BUILDER_H
+#ifndef HISTREAMER_PLUGINS_COMMON_CAPS_BUILDER_H
+#define HISTREAMER_PLUGINS_COMMON_CAPS_BUILDER_H
 #include <string>
 #include <vector>
 #include "plugin_audio_tags.h"
@@ -131,7 +131,7 @@ private:
 #undef DECL_SET_RNG_CAP_FUNC
 #undef DECL_SET_LIST_CAP_FUNC
 };
-} // Plugin
-} // Media
-} // OHOS
-#endif // HISTREAMER_PLUGIN_COMMON_CAPS_BUILDER_H
+} // namespace Plugins
+} // namespace Media
+} // namespace OHOS
+#endif // HISTREAMER_PLUGINS_COMMON_CAPS_BUILDER_H
