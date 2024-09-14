@@ -343,7 +343,7 @@ Status Filter::ProcessInputBuffer(int sendArg, int64_t delayUs)
         filterTask_->SubmitJob([this, sendArg]() {
             processIdx_++;
             DoProcessInputBuffer(sendArg, processIdx_ <= jobIdxBase_);  // drop frame after flush
-        }, delayUs, 0);
+        }, delayUs, false);
     } else {
         Task::SleepInTask(delayUs / 1000); // 1000 convert to ms
         DoProcessInputBuffer(sendArg, false);
@@ -361,7 +361,7 @@ Status Filter::ProcessOutputBuffer(int sendArg, int64_t delayUs, bool byIdx, uin
             processIdx_++;
             // drop frame after flush
             DoProcessOutputBuffer(sendArg, processIdx <= jobIdxBase_, byIdx, idx, renderTime);
-        }, delayUs, 0);
+        }, delayUs, false);
     } else {
         Task::SleepInTask(delayUs / 1000); // 1000 convert to ms
         DoProcessOutputBuffer(sendArg, false, false, idx, renderTime);
