@@ -53,7 +53,7 @@ void DumpAVBufferToFile(const std::string& para, const std::string& fileName, co
     size_t ret =
         fwrite(reinterpret_cast<const char*>(buffer->memory_->GetAddr()), DUMP_DATA_UNIT, bufferSize, dumpFile);
     if (ret < 0) {
-        MEDIA_LOG_w("dump is fail.");
+        MEDIA_LOG_W("dump is fail.");
     }
     std::fclose(dumpFile);
 }
