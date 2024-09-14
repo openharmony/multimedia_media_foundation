@@ -56,7 +56,7 @@ if (hst_is_standard_sys) {
   }
 
   ohos_shared_library("media_foundation") {
-    stack_protector_ret = true
+    branch_protector_ret = "pac_ret"
     install_enable = true
 
     public_configs = [ ":media_foundation_public_config" ]
