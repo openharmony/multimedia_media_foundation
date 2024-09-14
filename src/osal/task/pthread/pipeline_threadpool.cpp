@@ -95,7 +95,7 @@ std::shared_ptr<PipeLineThread> PipeLineThreadPool::FindThread(const std::string
     return newThread;
 }
 
-void PipeLineThreadPool::DestroyThread(cosnt std::string &groupId)
+void PipeLineThreadPool::DestroyThread(const std::string &groupId)
 {
     MEDIA_LOG_I("DestroyThread groupId:" PUBLIC_LOG_S, groupId.c_str());
     std::shared_ptr<std::list<std::shared_ptr<PipeLineThread>>> threadList;
