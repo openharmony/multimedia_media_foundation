@@ -26,7 +26,7 @@ ohos_ndk_library("libimage_processing_ndk") {
   ndk_description_file = "./libimage_processing.ndk.json"
   output_name = "image_processing"
   output_extension = "so"
-  min_compact_version = "12"
+  min_compact_version = "13"
   system_capability = "SystemCapability.Multimedia.VideoProcessingEngine"
   system_capability_headers = [
     "multimedia/video_processing_engine/image_processing_types.h",
