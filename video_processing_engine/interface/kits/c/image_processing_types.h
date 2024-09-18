@@ -19,7 +19,7 @@
  *
  * @brief Provide image processing including color space conversion and metadata generation.
  *
- * @since 12
+ * @since 13
  */
 
 /**
@@ -30,7 +30,7 @@
  * @library libimage_processing.so
  * @syscap SystemCapability.Multimedia.VideoProcessingEngine
  * @kit ImageKit
- * @since 12
+ * @since 13
  */
 
 #ifndef VIDEO_PROCESSING_ENGINE_C_API_IMAGE_PROCESSING_TYPES_H
@@ -49,21 +49,21 @@ extern "C" {
  * instance. The pointer should be null before creating instance.
  * User can create multiple image processing instances for different processing types.
  *
- * @since 12
+ * @since 13
  */
 typedef struct OH_ImageProcessing OH_ImageProcessing;
 
 /**
  * @brief Forward declaration of OH_PixelmapNative.
  *
- * @since 12
+ * @since 13
  */
 typedef struct OH_PixelmapNative OH_PixelmapNative;
 
 /**
  * @brief Forward declaration of OH_AVFormat.
  *
- * @since 12
+ * @since 13
  */
 typedef struct OH_AVFormat OH_AVFormat;
 
@@ -76,7 +76,7 @@ typedef struct OH_AVFormat OH_AVFormat;
  * the conversion is supported between single-layer images.
  *
  * @see OH_ImageProcessing_Create
- * @since 12
+ * @since 13
  */
 extern const int32_t IMAGE_PROCESSING_TYPE_COLOR_SPACE_CONVERSION;
 
@@ -88,7 +88,7 @@ extern const int32_t IMAGE_PROCESSING_TYPE_COLOR_SPACE_CONVERSION;
  * query if the composition is supported from dual-layer HDR image to single-layer HDR image.
  *
  * @see OH_ImageProcessing_Create
- * @since 12
+ * @since 13
  */
 extern const int32_t IMAGE_PROCESSING_TYPE_COMPOSITION;
 
@@ -100,7 +100,7 @@ extern const int32_t IMAGE_PROCESSING_TYPE_COMPOSITION;
  * query if the decomposition is supported from single-layer image to dual-layer HDR image.
  *
  * @see OH_ImageProcessing_Create
- * @since 12
+ * @since 13
  */
 extern const int32_t IMAGE_PROCESSING_TYPE_DECOMPOSITION;
 
@@ -111,7 +111,7 @@ extern const int32_t IMAGE_PROCESSING_TYPE_DECOMPOSITION;
  * supported, {@link OH_ImageProcessing_Create} returns {@link IMAGE_PROCESSING_ERROR_UNSUPPORTED_PROCESSING}.
  *
  * @see OH_ImageProcessing_Create
- * @since 12
+ * @since 13
  */
 extern const int32_t IMAGE_PROCESSING_TYPE_METADATA_GENERATION;
 
@@ -122,7 +122,7 @@ extern const int32_t IMAGE_PROCESSING_TYPE_METADATA_GENERATION;
  * its resolution.
  *
  * @see OH_ImageProcessing_Create
- * @since 12
+ * @since 13
  */
 extern const int32_t IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER;
 
@@ -135,7 +135,7 @@ extern const int32_t IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER;
  *
  * @see OH_VideoProcessing_SetParameter
  * @see OH_VideoProcessing_GetParameter
- * @since 12
+ * @since 13
  */
 extern const char* IMAGE_DETAIL_ENHANCER_PARAMETER_KEY_QUALITY_LEVEL;
 
@@ -145,14 +145,14 @@ extern const char* IMAGE_DETAIL_ENHANCER_PARAMETER_KEY_QUALITY_LEVEL;
  * @see OH_ImageProcessing_IsColorSpaceConversionSupported
  * @see OH_ImageProcessing_IsCompositionSupported
  * @see OH_ImageProcessing_IsDecompositionSupported
- * @since 12
+ * @since 13
  */
 typedef struct ImageProcessing_ColorSpaceInfo {
-    /** define metadata type */
+    /** define metadata type, {@link enum OH_Pixelmap_HdrMetadataKey} */
     int32_t metadataType;
-    /** define color space, {@link enum OH_NativeBuffer_ColorSpace} */
+    /** define color space, {@link enum ColorSpaceName} */
     int32_t colorSpace;
-    /** define pixel format, {@link enum OH_NativeBuffer_Format} */
+    /** define pixel format, {@link enum PIXEL_FORMAT} */
     int32_t pixelFormat;
 } ImageProcessing_ColorSpaceInfo;
 
@@ -163,7 +163,7 @@ typedef struct ImageProcessing_ColorSpaceInfo {
  *
  * @see OH_ImageProcessing_SetParameter
  * @see OH_ImageProcessing_GetParameter
- * @since 12
+ * @since 13
  */
 typedef enum ImageDetailEnhancer_QualityLevel {
     /** No detail enhancement */
@@ -179,7 +179,7 @@ typedef enum ImageDetailEnhancer_QualityLevel {
 /**
  * @brief Image processing error code.
  *
- * @since 12
+ * @since 13
  */
 typedef enum ImageProcessing_ErrorCode {
     /** @error Operation is successful. */

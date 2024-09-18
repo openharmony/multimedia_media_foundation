@@ -19,7 +19,7 @@
  *
  * @brief Provide APIs for image quality processing.
  *
- * @since 12
+ * @since 13
  */
 
 /**
@@ -33,7 +33,7 @@
  * @library libimage_processing.so
  * @syscap SystemCapability.Multimedia.VideoProcessingEngine
  * @kit ImageKit
- * @since 12
+ * @since 13
  */
 
 #ifndef VIDEO_PROCESSING_ENGINE_C_API_IMAGE_PROCESSING_H
@@ -58,7 +58,7 @@ extern "C" {
  * @return {@link IMAGE_PROCESSING_SUCCESS} if initialization is successful. \n
  * {@link IMAGE_PROCESSING_ERROR_INITIALIZE_FAILED} if initialization is failed. \n
  * You can check if the device GPU is working properly.
- * @since 12
+ * @since 13
  */
 ImageProcessing_ErrorCode OH_ImageProcessing_InitializeEnvironment(void);
 
@@ -74,7 +74,7 @@ ImageProcessing_ErrorCode OH_ImageProcessing_InitializeEnvironment(void);
  * @return {@link IMAGE_PROCESSING_SUCCESS} if deinitialization is successful. \n
  * {@link IMAGE_PROCESSING_ERROR_OPERATION_NOT_PERMITTED} if some image processing instance is not destroyed or
  * {@link OH_ImageProcessing_InitializeEnvironment} is not called. \n
- * @since 12
+ * @since 13
  */
 ImageProcessing_ErrorCode OH_ImageProcessing_DeinitializeEnvironment(void);
 
@@ -85,7 +85,7 @@ ImageProcessing_ErrorCode OH_ImageProcessing_DeinitializeEnvironment(void);
  * @param destinationImageInfo Output image color space information pointer.
  * @return <b>true</b> if the color space conversion is supported. \n
  * <b>false</b> if the the color space conversion is unsupported.
- * @since 12
+ * @since 13
  */
 bool OH_ImageProcessing_IsColorSpaceConversionSupported(
     const ImageProcessing_ColorSpaceInfo* sourceImageInfo,
@@ -99,7 +99,7 @@ bool OH_ImageProcessing_IsColorSpaceConversionSupported(
  * @param destinationImageInfo Output image color space information pointer.
  * @return <b>true</b> if the image composition is supported. \n
  * <b>false</b> if the image composition is unsupported.
- * @since 12
+ * @since 13
  */
 bool OH_ImageProcessing_IsCompositionSupported(
     const ImageProcessing_ColorSpaceInfo* sourceImageInfo,
@@ -114,7 +114,7 @@ bool OH_ImageProcessing_IsCompositionSupported(
  * @param destinationGainmapInfo Output gainmap information pointer.
  * @return <b>true</b> if the image decomposition is supported. \n
  * <b>false</b> if the image decomposition is unsupported.
- * @since 12
+ * @since 13
  */
 bool OH_ImageProcessing_IsDecompositionSupported(
     const ImageProcessing_ColorSpaceInfo* sourceImageInfo,
@@ -127,11 +127,11 @@ bool OH_ImageProcessing_IsDecompositionSupported(
  * @param sourceImageInfo Input image color space information pointer.
  * @return <b>true</b> if the image metadata generation is supported.. \n
  * <b>false</b> if the image metadata generation is unsupported.
- * @since 12
+ * @since 13
  */
 bool OH_ImageProcessing_IsMetadataGenerationSupported(
     const ImageProcessing_ColorSpaceInfo* sourceImageInfo);
-
+    
 /**
  * @brief Create an image processing instance.
  *
@@ -145,7 +145,7 @@ bool OH_ImageProcessing_IsMetadataGenerationSupported(
  * {@link IMAGE_PROCESSING_ERROR_CREATE_FAILED} if failed to create an image processing. \n
  * {@link IMAGE_PROCESSING_ERROR_INVALID_INSTANCE} if instance is null or <b>*</b>instance is <b>not</b> null. \n
  * {@link IMAGE_PROCESSING_ERROR_INVALID_PARAMETER} if type is invalid. \n
- * @since 12
+ * @since 13
  */
 ImageProcessing_ErrorCode OH_ImageProcessing_Create(OH_ImageProcessing** imageProcessor, int32_t type);
 
@@ -156,7 +156,7 @@ ImageProcessing_ErrorCode OH_ImageProcessing_Create(OH_ImageProcessing** imagePr
  * instance pointer to null after the instance is destroyed.
  * @return {@link IMAGE_PROCESSING_SUCCESS} if the instance is destroyed successfully. \n
  * {@link IMAGE_PROCESSING_ERROR_INVALID_INSTANCE} if instance is null or not an image processing instance.
- * @since 12
+ * @since 13
  */
 ImageProcessing_ErrorCode OH_ImageProcessing_Destroy(OH_ImageProcessing* imageProcessor);
 
@@ -173,7 +173,7 @@ ImageProcessing_ErrorCode OH_ImageProcessing_Destroy(OH_ImageProcessing* imagePr
  * {@link IMAGE_PROCESSING_ERROR_INVALID_VALUE} if some property of the parameter is invalid. For example, the parameter
  * contains unsupported parameter key or value. \n
  * {@link IMAGE_PROCESSING_ERROR_NO_MEMORY} if memory allocation failed.
- * @since 12
+ * @since 13
  */
 ImageProcessing_ErrorCode OH_ImageProcessing_SetParameter(OH_ImageProcessing* imageProcessor,
     const OH_AVFormat* parameter);
@@ -188,7 +188,7 @@ ImageProcessing_ErrorCode OH_ImageProcessing_SetParameter(OH_ImageProcessing* im
  * @return {@link IMAGE_PROCESSING_SUCCESS} if getting parameter is successful. \n
  * {@link IMAGE_PROCESSING_ERROR_INVALID_INSTANCE} if instance is null or not an image processing instance. \n
  * {@link IMAGE_PROCESSING_ERROR_INVALID_PARAMETER} if the parameter is null. \n
- * @since 12
+ * @since 13
  */
 ImageProcessing_ErrorCode OH_ImageProcessing_GetParameter(OH_ImageProcessing* imageProcessor,
     OH_AVFormat* parameter);
@@ -211,7 +211,7 @@ ImageProcessing_ErrorCode OH_ImageProcessing_GetParameter(OH_ImageProcessing* im
  * {@link IMAGE_PROCESSING_ERROR_UNSUPPORTED_PROCESSING} if the processing is not supported. \n
  * {@link IMAGE_PROCESSING_ERROR_PROCESS_FAILED} if processing error occurs. \n
  * {@link IMAGE_PROCESSING_ERROR_NO_MEMORY} if memory allocation failed.
- * @since 12
+ * @since 13
  */
 ImageProcessing_ErrorCode OH_ImageProcessing_ConvertColorSpace(OH_ImageProcessing* imageProcessor,
     OH_PixelmapNative* sourceImage, OH_PixelmapNative* destinationImage);
@@ -234,7 +234,7 @@ ImageProcessing_ErrorCode OH_ImageProcessing_ConvertColorSpace(OH_ImageProcessin
  * {@link IMAGE_PROCESSING_ERROR_UNSUPPORTED_PROCESSING} if the processing is not supported. \n
  * {@link IMAGE_PROCESSING_ERROR_PROCESS_FAILED} if processing error occurs. \n
  * {@link IMAGE_PROCESSING_ERROR_NO_MEMORY} if memory allocation failed.
- * @since 12
+ * @since 13
  */
 ImageProcessing_ErrorCode OH_ImageProcessing_Compose(OH_ImageProcessing* imageProcessor,
     OH_PixelmapNative* sourceImage, OH_PixelmapNative* sourceGainmap, OH_PixelmapNative* destinationImage);
@@ -257,7 +257,7 @@ ImageProcessing_ErrorCode OH_ImageProcessing_Compose(OH_ImageProcessing* imagePr
  * {@link IMAGE_PROCESSING_ERROR_UNSUPPORTED_PROCESSING} if the processing is not supported. \n
  * {@link IMAGE_PROCESSING_ERROR_PROCESS_FAILED} if processing error occurs. \n
  * {@link IMAGE_PROCESSING_ERROR_NO_MEMORY} if memory allocation failed.
- * @since 12
+ * @since 13
  */
 ImageProcessing_ErrorCode OH_ImageProcessing_Decompose(OH_ImageProcessing* imageProcessor,
     OH_PixelmapNative* sourceImage, OH_PixelmapNative* destinationImage, OH_PixelmapNative* destinationGainmap);
@@ -278,7 +278,7 @@ ImageProcessing_ErrorCode OH_ImageProcessing_Decompose(OH_ImageProcessing* image
  * {@link IMAGE_PROCESSING_ERROR_UNSUPPORTED_PROCESSING} if the processing is not supported. \n
  * {@link IMAGE_PROCESSING_ERROR_PROCESS_FAILED} if processing error occurs. \n
  * {@link IMAGE_PROCESSING_ERROR_NO_MEMORY} if memory allocation failed.
- * @since 12
+ * @since 13
  */
 ImageProcessing_ErrorCode OH_ImageProcessing_GenerateMetadata(OH_ImageProcessing* imageProcessor,
     OH_PixelmapNative* sourceImage);
@@ -302,7 +302,7 @@ ImageProcessing_ErrorCode OH_ImageProcessing_GenerateMetadata(OH_ImageProcessing
  * {@link IMAGE_PROCESSING_ERROR_UNSUPPORTED_PROCESSING} if the processing is not supported. \n
  * {@link IMAGE_PROCESSING_ERROR_PROCESS_FAILED} if processing error occurs. \n
  * {@link IMAGE_PROCESSING_ERROR_NO_MEMORY} if memory allocation failed.
- * @since 12
+ * @since 13
  */
 ImageProcessing_ErrorCode OH_ImageProcessing_EnhanceDetail(OH_ImageProcessing* imageProcessor,
     OH_PixelmapNative* sourceImage, OH_PixelmapNative* destinationImage);
