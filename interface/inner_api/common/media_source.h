@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-#ifndef HISTREAMER_PLUGIN_MEDIA_SOURCE_H
-#define HISTREAMER_PLUGIN_MEDIA_SOURCE_H
+#ifndef HISTREAMER_PLUGINS_MEDIA_SOURCE_H
+#define HISTREAMER_PLUGINS_MEDIA_SOURCE_H
 
 #include <map>
 #include <memory>
@@ -46,11 +46,16 @@ enum class SourceType : int32_t {
 };
 
 typedef struct PlayStrategy {
-    uint32_t width {0};
-    uint32_t height {0};
-    uint32_t duration {0};
-    bool preferHDR {false};
+    uint32_t width;
+    uint32_t height;
+    uint32_t duration;
+    bool preferHDR;
 } PlayStrategy;
+
+class AVMimeTypes {
+public:
+    static constexpr std::string_view APPLICATION_M3U8 = "application/m3u8";
+};
 
 typedef struct DownloadInfo {
     int32_t avgDownloadRate {0};
@@ -58,11 +63,6 @@ typedef struct DownloadInfo {
     uint64_t totalDownLoadBits {0};
     bool isTimeOut {false};
 } DownloadInfo;
-
-class AVMimeTypes {
-public:
-    static constexpr std::string_view APPLICATION_M3U8 = "application/m3u8";
-};
 
 typedef struct PlaybackInfo {
     std::string serverIpAddress {};
@@ -120,4 +120,4 @@ private:
 } // namespace Plugins
 } // namespace Media
 } // namespace OHOS
-#endif
+#endif // HISTREAMER_PLUGINS_MEDIA_SOURCE_H
