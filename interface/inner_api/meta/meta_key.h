@@ -304,6 +304,9 @@ public:
         "video_encoder_mse"; ///< double, key for describing video frame mean squared error. This is a part of a video
                              ///< encoder statistics export feature. This value is emitted from video encoder for a
                              ///< video frame.
+    static constexpr const char VIDEO_ENCODER_FRAME_TEMPORAL_ID[] =
+        "video_encoder_frame_temporal_id"; ///< int32_t, key for describing the temporal ID of the frame when SVC is
+                                           ///< enabled. This value is emitted from video encoder for a video frame.
     static constexpr const char VIDEO_ENCODER_PER_FRAME_DISCARD[] =
         "video_encoder_per_frame_discard"; ///< bool, key for describing whether the current frame is not encoded.
     static constexpr const char VIDEO_ENCODER_ENABLE_WATERMARK[] =
@@ -335,9 +338,6 @@ public:
         "video_decoder_output_colorspace"; ///< int32_t, Key for video color space of the video decoder output.
                                            ///< See {@link OH_NativeBuffer_ColorSpace} for value, and only
                                            ///< {@link OH_COLORSPACE_BT709_LIMIT} is valid. It is used in configure.
-    static constexpr const char VIDEO_ENCODER_FRAME_TEMPORAL_ID[] =
-        "video_encoder_frame_temporal_id"; ///< int32_t, key for describing the temporal ID of the frame when SVC is
-                                           ///< enabled. This value is emitted from video encoder for a video frame.
 
     /* -------------------- video specific tag -------------------- */
     static constexpr const char VIDEO_H264_PROFILE[] = "video.h264.profile"; ///< @see VideoH264Profile
@@ -440,7 +440,7 @@ public:
     static constexpr const char AV_PLAYER_MAX_LAG_DURATION[] = "av_player_max_lag_duration";
     static constexpr const char AV_PLAYER_AVG_LAG_DURATION[] = "av_player_avg_lag_duration";
     static constexpr const char AV_PLAYER_MAX_SURFACESWAP_LATENCY[] = "av_player_max_surfaceswap_latency";
-    static constexpr const char AV_PLAYER_DOWNLOAD_TOTAL_BITS[] = "av_player_total_download_bits";
+    static constexpr const char AV_PLAYER_DOWNLOAD_TOTAL_BITS[] = "av_player_totol_download_bits";
     static constexpr const char AV_PLAYER_DOWNLOAD_TIME_OUT[] = "av_player_download_time_out";
 };
 
