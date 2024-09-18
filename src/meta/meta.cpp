@@ -441,10 +441,10 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK, defaultBool},
     {Tag::VIDEO_ENCODER_ENABLE_PARAMS_FEEDBACK, defaultBool},
     {Tag::VIDEO_BUFFER_CAN_DROP, defaultBool},
-    {Tag::AUDIO_RENDER_SET_FLAG, defaultBool},
     {Tag::SCREEN_CAPTURE_USER_AGREE, defaultBool},
     {Tag::SCREEN_CAPTURE_REQURE_MIC, defaultBool},
     {Tag::SCREEN_CAPTURE_ENABLE_MIC, defaultBool},
+    {Tag::AUDIO_RENDER_SET_FLAG, defaultBool},
     {Tag::AV_PLAYER_IS_DRM_PROTECTED, defaultBool},
     {Tag::AV_PLAYER_DOWNLOAD_TIME_OUT, defaultBool},
     {Tag::VIDEO_ENCODER_PER_FRAME_DISCARD, defaultBool},
@@ -575,9 +575,9 @@ bool Meta::ToParcel(MessageParcel &parcel) const
     bool ret = true;
     for (auto iter = begin(); iter != end(); ++iter) {
         ++metaSize;
-        ret &= metaParcel.WriteString(iter->first);
-        ret &= metaParcel.WriteInt32(static_cast<int32_t>(GetValueType(iter->first)));
-        ret &= iter->second.ToParcel(metaParcel);
+        ret = ret && metaParcel.WriteString(iter->first);
+        ret = ret && metaParcel.WriteInt32(static_cast<int32_t>(GetValueType(iter->first)));
+        ret = ret && iter->second.ToParcel(metaParcel);
         if (!ret) {
             MEDIA_LOG_E("fail to Marshalling Key: " PUBLIC_LOG_S, iter->first.c_str());
             return false;
