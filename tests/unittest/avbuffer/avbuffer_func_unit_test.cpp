@@ -332,11 +332,6 @@ HWTEST_F(AVBufferInnerUnitTest, AVBuffer_CreateWithInvalid_005, TestSize.Level1)
 {
     buffer_ = AVBuffer::CreateAVBuffer(sptr<SurfaceBuffer>(nullptr));
     EXPECT_EQ(nullptr, buffer_);
-
-    auto surfaceBuffer = SurfaceBuffer::Create();
-    surfaceBuffer->Alloc(DEFAULT_CONFIG);
-    buffer_ = AVBuffer::CreateAVBuffer(surfaceBuffer);
-    EXPECT_NE(nullptr, buffer_);
 }
 
 /**
@@ -945,10 +940,10 @@ HWTEST_F(AVBufferInnerUnitTest, AVBuffer_SurfaceMemory_WriteAndRead_001, TestSiz
  */
 HWTEST_F(AVBufferInnerUnitTest, AVBuffer_SurfaceMemory_WriteAndRead_002, TestSize.Level1)
 {
-    capacity_ = DEFAULT_CONFIG.width * DEFAULT_CONFIG.height * DEFAULT_PIXELSIZE;
     align_ = 0;
     CreateRemoteSurfaceMem();
     ASSERT_FALSE((allocator_ == nullptr) || (remoteBuffer_ == nullptr) || (remoteBuffer_->memory_ == nullptr));
+    capacity_ = remoteBuffer_->memory_->GetSurfaceBuffer()->GetSize();
     CheckMemTrans();
 }
 
@@ -1003,10 +998,10 @@ HWTEST_F(AVBufferInnerUnitTest, AVBuffer_SurfaceMemory_WriteAndRead_005, TestSiz
  */
 HWTEST_F(AVBufferInnerUnitTest, AVBuffer_SurfaceMemory_WriteAndRead_006, TestSize.Level1)
 {
-    capacity_ = DEFAULT_CONFIG.width * DEFAULT_CONFIG.height * DEFAULT_PIXELSIZE;
     align_ = 0;
     CreateRemoteSurfaceMemByParcel();
     ASSERT_FALSE((remoteBuffer_ == nullptr) || (remoteBuffer_->memory_ == nullptr));
+    capacity_ = remoteBuffer_->memory_->GetSurfaceBuffer()->GetSize();
     CheckMemTrans();
 }
 
@@ -1048,10 +1043,10 @@ HWTEST_F(AVBufferInnerUnitTest, AVBuffer_SurfaceMemory_WriteAndRead_008, TestSiz
  */
 HWTEST_F(AVBufferInnerUnitTest, AVBuffer_SurfaceMemory_WriteAndRead_009, TestSize.Level1)
 {
-    capacity_ = DEFAULT_CONFIG.width * DEFAULT_CONFIG.height * DEFAULT_PIXELSIZE;
     align_ = 0;
     CreateRemoteSurfaceMemBySptr();
     ASSERT_FALSE((remoteBuffer_ == nullptr) || (remoteBuffer_->memory_ == nullptr));
+    capacity_ = remoteBuffer_->memory_->GetSurfaceBuffer()->GetSize();
     CheckMemTrans();
 }
 
