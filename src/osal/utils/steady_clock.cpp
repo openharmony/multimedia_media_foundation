@@ -19,7 +19,7 @@
 #include "osal/utils/steady_clock.h"
 
 namespace {
-constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "SteadyClock" };
 }
 
 namespace OHOS {
