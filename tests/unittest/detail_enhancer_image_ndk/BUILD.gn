@@ -66,6 +66,8 @@ ohos_unittest("detail_enhancer_image_ndk_inner_unit_test") {
 
   cflags = detail_enhancer_image_ndk_unit_test_cflags
 
+  defines = []
+
   deps = [
     "$histreamer_root_dir/interface/kits/ndk/core:libnative_media_core",
     "$histreamer_root_dir/src:media_foundation",
@@ -81,4 +83,8 @@ ohos_unittest("detail_enhancer_image_ndk_inner_unit_test") {
     "image_framework:pixelmap",
     "media_foundation:native_media_core",
   ]
+
+  if (has_skia) {
+    defines += [ "SKIA_ENABLE" ]
+  }
 }

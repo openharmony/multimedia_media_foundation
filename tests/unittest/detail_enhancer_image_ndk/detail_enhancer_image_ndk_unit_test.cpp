@@ -732,7 +732,11 @@ HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_41_1, TestSize.Level1)
     CreateEmptyPixelmap(&dstImg, 1440, 1920, PIXEL_FORMAT_RGBA_8888);
     OH_ImageProcessing::Create(&instance, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
     ImageProcessing_ErrorCode ret = instance->GetObj()->EnhanceDetail(srcImg, dstImg);
+#ifdef SKIA_ENABLE
     EXPECT_EQ(ret, IMAGE_PROCESSING_SUCCESS);
+#else
+    EXPECT_NE(ret, IMAGE_PROCESSING_SUCCESS);
+#endif
     OH_ImageProcessing::Destroy(instance);
     OH_ImageProcessing_DeinitializeEnvironment();
 }
@@ -764,7 +768,11 @@ HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_42_1, TestSize.Level1)
     CreateEmptyPixelmap(&dstImg, 1440, 1920, PIXEL_FORMAT_BGRA_8888);
     OH_ImageProcessing::Create(&instance, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
     ImageProcessing_ErrorCode ret = instance->GetObj()->EnhanceDetail(srcImg, dstImg);
+#ifdef SKIA_ENABLE
     EXPECT_EQ(ret, IMAGE_PROCESSING_SUCCESS);
+#else
+    EXPECT_NE(ret, IMAGE_PROCESSING_SUCCESS);
+#endif
     OH_ImageProcessing::Destroy(instance);
     OH_ImageProcessing_DeinitializeEnvironment();
 }
