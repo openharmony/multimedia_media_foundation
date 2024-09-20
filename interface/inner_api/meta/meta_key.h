@@ -442,6 +442,32 @@ public:
     static constexpr const char AV_PLAYER_MAX_SURFACESWAP_LATENCY[] = "av_player_max_surfaceswap_latency";
     static constexpr const char AV_PLAYER_DOWNLOAD_TOTAL_BITS[] = "av_player_total_download_bits";
     static constexpr const char AV_PLAYER_DOWNLOAD_TIME_OUT[] = "av_player_download_time_out";
+/* -------------------- av transcoder tag -------------------- */
+    static constexpr const char AV_TRANSCODER_ERR_CODE[] = "av_transcoder_errCode";
+    static constexpr const char AV_TRANSCODER_ERR_MSG[] = "av_transcoder_errMsg";
+    static constexpr const char AV_TRANSCODER_SOURCE_DURATION[] = "av_transcoder_source_duration";
+    static constexpr const char AV_TRANSCODER_TRANSCODER_DURATION[] = "av_transcoder_transcoder_duration";
+    static constexpr const char AV_TRANSCODER_SRC_FORMAT[] = "av_transcoder_src_format";
+    static constexpr const char AV_TRANSCODER_SRC_AUDIO_MIME[] = "av_transcoder_src_audio_mime";
+    static constexpr const char AV_TRANSCODER_SRC_VIDEO_MIME[] = "av_transcoder_src_video_mime";
+    static constexpr const char AV_TRANSCODER_SRC_VIDEO_FRAME_RATE[] = "av_transcoder_src_video_frame_rate";
+    static constexpr const char AV_TRANSCODER_SRC_VIDEO_BITRATE[] = "av_transcoder_src_video_bitrate";
+    static constexpr const char AV_TRANSCODER_SRC_HDR_TYPE[] = "av_transcoder_src_hdr_type";
+    static constexpr const char AV_TRANSCODER_SRC_AUDIO_SAMPLE_RATE[] = "av_transcoder_src_audio_sample_rate";
+    static constexpr const char AV_TRANSCODER_SRC_AUDIO_CHANNEL_COUNT[] = "av_transcoder_src_audio_channel_count";
+    static constexpr const char AV_TRANSCODER_SRC_AUDIO_BITRATE[] = "av_transcoder_src_audio_bitrate";
+    static constexpr const char AV_TRANSCODER_DST_FORMAT[] = "av_transcoder_dst_format";
+    static constexpr const char AV_TRANSCODER_DST_AUDIO_MIME[] = "av_transcoder_dst_audio_mime";
+    static constexpr const char AV_TRANSCODER_DST_VIDEO_MIME[] = "av_transcoder_dst_video_mime";
+    static constexpr const char AV_TRANSCODER_DST_VIDEO_FRAME_RATE[] = "av_transcoder_dst_video_frame_rate";
+    static constexpr const char AV_TRANSCODER_DST_VIDEO_BITRATE[] = "av_transcoder_dst_video_bitrate";
+    static constexpr const char AV_TRANSCODER_DST_HDR_TYPE[] = "av_transcoder_dst_hdr_type";
+    static constexpr const char AV_TRANSCODER_DST_AUDIO_SAMPLE_RATE[] = "av_transcoder_dst_audio_sample_rate";
+    static constexpr const char AV_TRANSCODER_DST_AUDIO_CHANNEL_COUNT[] = "av_transcoder_dst_audio_channel_count";
+    static constexpr const char AV_TRANSCODER_DST_AUDIO_BITRATE[] = "av_transcoder_dst_audio_bitrate";
+    static constexpr const char AV_TRANSCODER_VIDEO_DECODER_DURATION[] = "av_transcoder_video_decoder_duration";
+    static constexpr const char AV_TRANSCODER_VIDEO_ENCODER_DURATION[] = "av_transcoder_video_encoder_duration";
+    static constexpr const char AV_TRANSCODER_VIDEO_VPE_DURATION[] = "av_transcoder_video_vpe_duration";
 };
 
 using TagTypeCharSeq = const char *;
