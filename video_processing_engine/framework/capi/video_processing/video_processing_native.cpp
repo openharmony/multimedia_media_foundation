@@ -53,7 +53,7 @@ VideoProcessing_ErrorCode VideoProcessingNative::Initialize()
         return VIDEO_PROCESSING_ERROR_OPERATION_NOT_PERMITTED;
     }
     worker_ = std::thread([this]() {
-        while (state_.load() != VPEState::IDLE) {
+        while (!isExit_.load()) {
             {
                 std::unique_lock<std::mutex> lock(bufferLock_);
                 if (!WaitCV([this] {
@@ -101,6 +101,7 @@ VideoProcessing_ErrorCode VideoProcessingNative::Deinitialize()
     if (worker_.joinable()) {
         worker_.join();
     }
+    CheckStopping();
     return errorCode;
 }
 
@@ -184,8 +185,8 @@ VideoProcessing_ErrorCode VideoProcessingNative::GetParameter(OH_AVFormat* param
 VideoProcessing_ErrorCode VideoProcessingNative::Start()
 {
     auto errorCode = ExecuteWhenIdle([this]() {
-        if (consumer_ == nullptr || producer_ == nullptr) {
-            VPE_LOGE("The consumer and producer surfaces are not ready!");
+        if (consumer_ == nullptr || producer_ == nullptr || callback_ == nullptr) {
+            VPE_LOGE("The consumer, producer surfaces and callback are not ready!");
             return VIDEO_PROCESSING_ERROR_OPERATION_NOT_PERMITTED;
         }
         callback_->LockModifiers();
@@ -333,6 +334,8 @@ GSError VideoProcessingNative::OnConsumerBufferAvailable()
         if (!isBufferQueueReady_) {
             isBufferQueueReady_ = true;
             requestCfg_.usage |= bufferInfo.buffer->GetUsage();
+            requestCfg_.timeout = 0;
+            requestCfg_.strideAlignment = 32; // 32 内存对齐
             UpdateRequestCfg(bufferInfo.buffer, requestCfg_);
             PrepareBuffers();
         }

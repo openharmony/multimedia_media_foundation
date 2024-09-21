@@ -1,0 +1,87 @@
+[
+    {
+        "first_introduced": "13",
+        "name": "OH_ImageProcessing_InitializeEnvironment"
+    },
+    {
+        "first_introduced": "13",
+        "name": "OH_ImageProcessing_DeinitializeEnvironment"
+    },
+    {
+        "first_introduced": "13",
+        "name": "OH_ImageProcessing_IsColorSpaceConversionSupported"
+    },
+    {
+        "first_introduced": "13",
+        "name": "OH_ImageProcessing_IsCompositionSupported"
+    },
+    {
+        "first_introduced": "13",
+        "name": "OH_ImageProcessing_IsDecompositionSupported"
+    },
+    {
+        "first_introduced": "13",
+        "name": "OH_ImageProcessing_IsMetadataGenerationSupported"
+    },
+    {
+        "first_introduced": "13",
+        "name": "OH_ImageProcessing_Create"
+    },
+    {
+        "first_introduced": "13",
+        "name": "OH_ImageProcessing_Destroy"
+    },
+    {
+        "first_introduced": "13",
+        "name": "OH_ImageProcessing_SetParameter"
+    },
+    {
+        "first_introduced": "13",
+        "name": "OH_ImageProcessing_GetParameter"
+    },
+    {
+        "first_introduced": "13",
+        "name": "OH_ImageProcessing_ConvertColorSpace"
+    },
+    {
+        "first_introduced": "13",
+        "name": "OH_ImageProcessing_Compose"
+    },
+    {
+        "first_introduced": "13",
+        "name": "OH_ImageProcessing_Decompose"
+    },
+    {
+        "first_introduced": "13",
+        "name": "OH_ImageProcessing_GenerateMetadata"
+    },
+    {
+        "first_introduced": "13",
+        "name": "OH_ImageProcessing_EnhanceDetail"
+    },
+    {
+        "first_introduced": "13",
+        "name": "IMAGE_PROCESSING_TYPE_COLOR_SPACE_CONVERSION",
+        "type": "variable"
+    },
+    {
+        "first_introduced": "13",
+        "name": "IMAGE_PROCESSING_TYPE_COMPOSITION",
+        "type": "variable"
+    },
+    {
+        "first_introduced": "13",
+        "name": "IMAGE_PROCESSING_TYPE_DECOMPOSITION",
+        "type": "variable"
+    },
+    {
+        "first_introduced": "13",
+        "name": "IMAGE_PROCESSING_TYPE_METADATA_GENERATION",
+        "type": "variable"
+    },
+    {
+        "first_introduced": "13",
+        "name": "IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER",
+        "type": "variable"
+    }
+]

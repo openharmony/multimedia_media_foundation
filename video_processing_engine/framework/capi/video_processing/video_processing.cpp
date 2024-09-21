@@ -38,15 +38,16 @@ std::atomic<bool> g_isInit = false;
 bool CallVideoProcessingSupport(std::function<bool(void)>&& operation,
     std::function<bool(VideoProcessingNdkLoader&)>&& operationLoader)
 {
-    if (VideoProcessingNdkLoader::Get().IsValid()) {
-        return operationLoader(VideoProcessingNdkLoader::Get());
+    if (VideoProcessingNdkLoader::Get().LoadLibrary()) {
+        auto support = operationLoader(VideoProcessingNdkLoader::Get());
+        VideoProcessingNdkLoader::Get().UnloadLibrary();
+        return support;
     }
     return operation();
 }
 
-template <typename T1, typename T2>
-VideoProcessing_ErrorCode CallVideoProcessing(T2* instance,
-    std::function<VideoProcessing_ErrorCode(std::shared_ptr<T1>&)>&& operation,
+VideoProcessing_ErrorCode CallVideoProcessing(OH_VideoProcessing* instance,
+    std::function<VideoProcessing_ErrorCode(std::shared_ptr<VideoProcessingNative>&)>&& operation,
     std::function<VideoProcessing_ErrorCode(VideoProcessingNdkLoader&)>&& operationLoader)
 {
     if (VideoProcessingNdkLoader::Get().IsValid()) {
@@ -54,12 +55,31 @@ VideoProcessing_ErrorCode CallVideoProcessing(T2* instance,
     }
     if (instance == nullptr) {
         VPE_LOGE("instance is null!");
-        return VIDEO_PROCESSING_ERROR_INVALID_PARAMETER;
+        return VIDEO_PROCESSING_ERROR_INVALID_INSTANCE;
     }
     auto obj = instance->GetObj();
     if (obj == nullptr) {
         VPE_LOGE("instance is invalid!");
         return VIDEO_PROCESSING_ERROR_INVALID_INSTANCE;
+    }
+    return operation(obj);
+}
+
+VideoProcessing_ErrorCode CallVideoProcessingCallback(VideoProcessing_Callback* callback,
+    std::function<VideoProcessing_ErrorCode(std::shared_ptr<VideoProcessingCallbackNative>&)>&& operation,
+    std::function<VideoProcessing_ErrorCode(VideoProcessingNdkLoader&)>&& operationLoader)
+{
+    if (VideoProcessingNdkLoader::Get().IsValid()) {
+        return operationLoader(VideoProcessingNdkLoader::Get());
+    }
+    if (callback == nullptr) {
+        VPE_LOGE("callback is null!");
+        return VIDEO_PROCESSING_ERROR_INVALID_PARAMETER;
+    }
+    auto obj = callback->GetObj();
+    if (obj == nullptr) {
+        VPE_LOGE("callback is invalid!");
+        return VIDEO_PROCESSING_ERROR_INVALID_PARAMETER;
     }
     return operation(obj);
 }
@@ -148,7 +168,7 @@ VideoProcessing_ErrorCode OH_VideoProcessing_Destroy(OH_VideoProcessing* videoPr
 VideoProcessing_ErrorCode OH_VideoProcessing_RegisterCallback(OH_VideoProcessing* videoProcessor,
     const VideoProcessing_Callback* callback, void* userData)
 {
-    return CallVideoProcessing<VideoProcessingNative, OH_VideoProcessing>(videoProcessor,
+    return CallVideoProcessing(videoProcessor,
         [callback, userData](std::shared_ptr<VideoProcessingNative>& obj) {
         return obj->RegisterCallback(callback, userData);
     }, [videoProcessor, callback, userData](VideoProcessingNdkLoader& loader) {
@@ -159,7 +179,7 @@ VideoProcessing_ErrorCode OH_VideoProcessing_RegisterCallback(OH_VideoProcessing
 VideoProcessing_ErrorCode OH_VideoProcessing_SetSurface(OH_VideoProcessing* videoProcessor,
     const OHNativeWindow* window)
 {
-    return CallVideoProcessing<VideoProcessingNative, OH_VideoProcessing>(videoProcessor,
+    return CallVideoProcessing(videoProcessor,
         [window](std::shared_ptr<VideoProcessingNative>& obj) {
         return obj->SetSurface(window);
     }, [videoProcessor, window](VideoProcessingNdkLoader& loader) {
@@ -169,7 +189,7 @@ VideoProcessing_ErrorCode OH_VideoProcessing_SetSurface(OH_VideoProcessing* vide
 
 VideoProcessing_ErrorCode OH_VideoProcessing_GetSurface(OH_VideoProcessing* videoProcessor, OHNativeWindow** window)
 {
-    return CallVideoProcessing<VideoProcessingNative, OH_VideoProcessing>(videoProcessor,
+    return CallVideoProcessing(videoProcessor,
         [window](std::shared_ptr<VideoProcessingNative>& obj) {
         return obj->GetSurface(window);
     }, [videoProcessor, window](VideoProcessingNdkLoader& loader) {
@@ -180,7 +200,7 @@ VideoProcessing_ErrorCode OH_VideoProcessing_GetSurface(OH_VideoProcessing* vide
 VideoProcessing_ErrorCode OH_VideoProcessing_SetParameter(OH_VideoProcessing* videoProcessor,
     const OH_AVFormat* parameter)
 {
-    return CallVideoProcessing<VideoProcessingNative, OH_VideoProcessing>(videoProcessor,
+    return CallVideoProcessing(videoProcessor,
         [parameter](std::shared_ptr<VideoProcessingNative>& obj) {
         return obj->SetParameter(parameter);
     }, [videoProcessor, parameter](VideoProcessingNdkLoader& loader) {
@@ -190,7 +210,7 @@ VideoProcessing_ErrorCode OH_VideoProcessing_SetParameter(OH_VideoProcessing* vi
 
 VideoProcessing_ErrorCode OH_VideoProcessing_GetParameter(OH_VideoProcessing* videoProcessor, OH_AVFormat* parameter)
 {
-    return CallVideoProcessing<VideoProcessingNative, OH_VideoProcessing>(videoProcessor,
+    return CallVideoProcessing(videoProcessor,
         [parameter](std::shared_ptr<VideoProcessingNative>& obj) {
         return obj->GetParameter(parameter);
     }, [videoProcessor, parameter](VideoProcessingNdkLoader& loader) {
@@ -200,7 +220,7 @@ VideoProcessing_ErrorCode OH_VideoProcessing_GetParameter(OH_VideoProcessing* vi
 
 VideoProcessing_ErrorCode OH_VideoProcessing_Start(OH_VideoProcessing* videoProcessor)
 {
-    return CallVideoProcessing<VideoProcessingNative, OH_VideoProcessing>(videoProcessor,
+    return CallVideoProcessing(videoProcessor,
         [](std::shared_ptr<VideoProcessingNative>& obj) {
         return obj->Start();
     }, [videoProcessor](VideoProcessingNdkLoader& loader) {
@@ -210,7 +230,7 @@ VideoProcessing_ErrorCode OH_VideoProcessing_Start(OH_VideoProcessing* videoProc
 
 VideoProcessing_ErrorCode OH_VideoProcessing_Stop(OH_VideoProcessing* videoProcessor)
 {
-    return CallVideoProcessing<VideoProcessingNative, OH_VideoProcessing>(videoProcessor,
+    return CallVideoProcessing(videoProcessor,
         [](std::shared_ptr<VideoProcessingNative>& obj) {
             return obj->Stop();
         }, [videoProcessor](VideoProcessingNdkLoader& loader) {
@@ -220,7 +240,7 @@ VideoProcessing_ErrorCode OH_VideoProcessing_Stop(OH_VideoProcessing* videoProce
 
 VideoProcessing_ErrorCode OH_VideoProcessing_RenderOutputBuffer(OH_VideoProcessing* videoProcessor, uint32_t index)
 {
-    return CallVideoProcessing<VideoProcessingNative, OH_VideoProcessing>(videoProcessor,
+    return CallVideoProcessing(videoProcessor,
         [index](std::shared_ptr<VideoProcessingNative>& obj) {
             return obj->RenderOutputBuffer(index);
         }, [videoProcessor, index](VideoProcessingNdkLoader& loader) {
@@ -243,7 +263,7 @@ VideoProcessing_ErrorCode OH_VideoProcessingCallback_Destroy(VideoProcessing_Cal
 VideoProcessing_ErrorCode OH_VideoProcessingCallback_BindOnError(VideoProcessing_Callback* callback,
     OH_VideoProcessingCallback_OnError onError)
 {
-    return CallVideoProcessing<VideoProcessingCallbackNative, VideoProcessing_Callback>(callback,
+    return CallVideoProcessingCallback(callback,
         [onError](std::shared_ptr<VideoProcessingCallbackNative>& obj) {
             return obj->BindOnError(onError);
         }, [callback, onError](VideoProcessingNdkLoader& loader) {
@@ -254,7 +274,7 @@ VideoProcessing_ErrorCode OH_VideoProcessingCallback_BindOnError(VideoProcessing
 VideoProcessing_ErrorCode OH_VideoProcessingCallback_BindOnState(VideoProcessing_Callback* callback,
     OH_VideoProcessingCallback_OnState onState)
 {
-    return CallVideoProcessing<VideoProcessingCallbackNative, VideoProcessing_Callback>(callback,
+    return CallVideoProcessingCallback(callback,
         [onState](std::shared_ptr<VideoProcessingCallbackNative>& obj) {
             return obj->BindOnState(onState);
         }, [callback, onState](VideoProcessingNdkLoader& loader) {
@@ -265,7 +285,7 @@ VideoProcessing_ErrorCode OH_VideoProcessingCallback_BindOnState(VideoProcessing
 VideoProcessing_ErrorCode OH_VideoProcessingCallback_BindOnNewOutputBuffer(VideoProcessing_Callback* callback,
     OH_VideoProcessingCallback_OnNewOutputBuffer onNewOutputBuffer)
 {
-    return CallVideoProcessing<VideoProcessingCallbackNative, VideoProcessing_Callback>(callback,
+    return CallVideoProcessingCallback(callback,
         [onNewOutputBuffer](std::shared_ptr<VideoProcessingCallbackNative>& obj) {
             return obj->BindOnNewOutputBuffer(onNewOutputBuffer);
         }, [callback, onNewOutputBuffer](VideoProcessingNdkLoader& loader) {
