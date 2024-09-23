@@ -43,6 +43,69 @@ if (hst_is_standard_sys) {
     ]
   }
 
+  ohos_shared_library("image_processing") {
+    stack_protector_ret = true
+    install_enable = true
+
+    sanitize = {
+      boundary_sanitize = true
+      cfi = true
+      cfi_cross_dso = true
+      integer_overflow = true
+      ubsan = true
+      debug = false
+    }
+
+    configs = [ ":vpe_capi_config" ]
+    public_configs = [ ":vpe_capi_public_config" ]
+
+    include_dirs = [
+      "$vpe_interface_capi_dir",
+      "$vpe_interface_inner_dir",
+      "$vpe_dfx_dir/include",
+      "$vpe_capi_image_dir/include",
+      "$vpe_capi_image_dir/detail_enhancer/include",
+      "$vpe_algorithm_dir/include",
+      "$vpe_algorithm_dir/detail_enhancer/include",
+    ]
+
+    sources = [
+      "$vpe_algorithm_dir/detail_enhancer/detail_enhancer.cpp",
+      "$vpe_capi_image_dir/detail_enhancer/detail_enhancer_image_native.cpp",
+      "$vpe_capi_image_dir/image_processing.cpp",
+      "$vpe_capi_image_dir/image_processing_capability.cpp",
+      "$vpe_capi_image_dir/image_processing_impl.cpp",
+      "$vpe_capi_image_dir/image_processing_loader.cpp",
+      "$vpe_capi_image_dir/image_processing_native.cpp",
+    ]
+
+    defines = []
+
+    deps = [ "$vpe_base_root_dir/src:media_foundation" ]
+
+    external_deps = [
+      "c_utils:utils",
+      "graphic_2d:2d_graphics",
+      "hilog:libhilog",
+      "hitrace:hitrace_meter",
+      "image_framework:image_native",
+      "image_framework:pixelmap",
+      "ipc:ipc_single",
+    ]
+
+    if (has_skia) {
+      defines += [ "SKIA_ENABLE" ]
+      external_deps += [ "skia:skia_canvaskit" ]
+      include_dirs += [ "$vpe_algorithm_dir/detail_enhancer/skia/include" ]
+      sources += [ "$vpe_algorithm_dir/detail_enhancer/skia/skia_impl.cpp" ]
+    }
+
+    innerapi_tags = [ "ndk" ]
+    output_extension = "so"
+    subsystem_name = "multimedia"
+    part_name = "media_foundation"
+  }
+
   ohos_shared_library("video_processing") {
     stack_protector_ret = true
     install_enable = true
@@ -67,12 +130,10 @@ if (hst_is_standard_sys) {
       "$vpe_capi_video_dir/detail_enhancer/include",
       "$vpe_algorithm_dir/include",
       "$vpe_algorithm_dir/detail_enhancer/include",
-      "$vpe_algorithm_dir/detail_enhancer/skia/include",
     ]
 
     sources = [
       "$vpe_algorithm_dir/detail_enhancer/detail_enhancer.cpp",
-      "$vpe_algorithm_dir/detail_enhancer/skia/skia_impl.cpp",
       "$vpe_capi_video_dir/detail_enhancer/detail_enhancer_video_native.cpp",
       "$vpe_capi_video_dir/video_processing.cpp",
       "$vpe_capi_video_dir/video_processing_callback_impl.cpp",
@@ -83,6 +144,8 @@ if (hst_is_standard_sys) {
       "$vpe_capi_video_dir/video_processing_native.cpp",
     ]
 
+    defines = []
+
     deps = [ "$vpe_base_root_dir/src:media_foundation" ]
 
     external_deps = [
@@ -91,8 +154,14 @@ if (hst_is_standard_sys) {
       "hilog:libhilog",
       "hitrace:hitrace_meter",
       "ipc:ipc_single",
-      "skia:skia_canvaskit",
     ]
+
+    if (has_skia) {
+      defines += [ "SKIA_ENABLE" ]
+      external_deps += [ "skia:skia_canvaskit" ]
+      include_dirs += [ "$vpe_algorithm_dir/detail_enhancer/skia/include" ]
+      sources += [ "$vpe_algorithm_dir/detail_enhancer/skia/skia_impl.cpp" ]
+    }
 
     innerapi_tags = [ "ndk" ]
     output_extension = "so"
@@ -100,6 +169,8 @@ if (hst_is_standard_sys) {
     part_name = "media_foundation"
   }
 } else {
+  group("image_processing") {
+  }
   group("video_processing") {
   }
 }

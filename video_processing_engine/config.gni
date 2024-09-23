@@ -22,6 +22,7 @@ vpe_algorithm_dir = "$vpe_framework_dir/algorithm"
 vpe_capi_dir = "$vpe_framework_dir/capi"
 vpe_dfx_dir = "$vpe_framework_dir/dfx"
 
+vpe_capi_image_dir = "$vpe_capi_dir/image_processing"
 vpe_capi_video_dir = "$vpe_capi_dir/video_processing"
 
 vpe_interface_dir = "$vpe_capi_root_dir/interface"
