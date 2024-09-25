@@ -468,6 +468,11 @@ Status Filter::WaitAllState(FilterState state)
     return Status::OK;
 }
 
+bool Filter::IsDesignatedState(FilterState state)
+{
+    return curState_ == state;
+}
+
 void Filter::SetErrCode(Status errCode)
 {
     errCode_ = errCode;
