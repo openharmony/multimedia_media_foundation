@@ -29,7 +29,7 @@
 #define HARDWARE_ALLOCATOR std::static_pointer_cast<AVHardwareAllocator>(allocator_)
 
 namespace {
-constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "AVHardwareMemory" };
 }
 
 namespace OHOS {
