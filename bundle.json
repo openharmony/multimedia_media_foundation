@@ -29,7 +29,6 @@
           "media_foundation_enable_plugin_minimp4_demuxer",
           "media_foundation_enable_plugin_aac_demuxer",
           "media_foundation_enable_plugin_std_audio_capture",
-          "media_foundation_enable_plugin_file_sink",
           "media_foundation_enable_plugin_audio_server_sink",
           "media_foundation_enable_plugin_lite_aac_decoder",
           "media_foundation_enable_plugin_std_video_surface_sink",
