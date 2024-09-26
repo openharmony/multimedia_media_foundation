@@ -118,7 +118,7 @@ private:
     SourceType type_ {};
     std::map<std::string, std::string> header_ {};
     std::shared_ptr<PlayStrategy> playStrategy_ {};
-    int32_t appUid_;
+    int32_t appUid_ {-1};
     //std::shared_ptr<DataConsumer> dataConsumer_ {};
 #ifndef OHOS_LITE
     std::shared_ptr<IMediaDataSource> dataSrc_ {};
