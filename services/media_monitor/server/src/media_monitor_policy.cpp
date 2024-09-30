@@ -136,6 +136,9 @@ void MediaMonitorPolicy::WriteBehaviorEvent(EventId eventId, std::shared_ptr<Eve
         case STREAM_STANDBY:
             mediaEventBaseWriter_.WriteStreamStandby(bean);
             break;
+        case AI_VOICE_NOISE_SUPPRESSION:
+            mediaEventBaseWriter_.WriteNoiseSuppression(bean);
+            break;
         default:
             break;
     }

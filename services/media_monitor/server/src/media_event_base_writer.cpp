@@ -132,6 +132,23 @@ void MediaEventBaseWriter::WriteDeviceChange(std::shared_ptr<EventBean> &bean)
 #endif
 }
 
+void MediaEventBaseWriter::WriteNoiseSuppression(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Write noise suppression");
+    if (bean == nullptr) {
+        MEDIA_LOG_E("eventBean is nullptr");
+        return;
+    }
+#ifdef MONITOR_ENABLE_HISYSEVENT
+    auto ret = HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "AI_VOICE_NOISE_SUPPRESSION",
+        HiviewDFX::HiSysEvent::EventType::BEHAVIOR,
+        "CURRENT_VALUE", bean->GetIntValue("CURRENT_VALUE"));
+    if (ret) {
+        MEDIA_LOG_E("write event fail: AI_VOICE_NOISE_SUPPRESSION, ret = %{public}d", ret);
+    }
+#endif
+}
+
 void MediaEventBaseWriter::WriteLoadConfigError(std::shared_ptr<EventBean> &bean)
 {
     MEDIA_LOG_D("Write load config error");
