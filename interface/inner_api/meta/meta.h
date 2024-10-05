@@ -336,7 +336,8 @@ public:
         tagCharSeq == Tag::USER_PUSH_DATA_TIME or
         tagCharSeq == Tag::MEDIA_FILE_SIZE or
         tagCharSeq == Tag::MEDIA_POSITION or
-        tagCharSeq == Tag::MEDIA_TIME_STAMP, int64_t, AnyValueType::INT64_T);
+        tagCharSeq == Tag::MEDIA_TIME_STAMP or
+        tagCharSeq == Tag::VIDEO_DECODER_DESIRED_PRESENT_TIMESTAMP, int64_t, AnyValueType::INT64_T);
 
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::AV_PLAYER_DOWNLOAD_TOTAL_BITS, uint64_t, AnyValueType::UINT64_T);
