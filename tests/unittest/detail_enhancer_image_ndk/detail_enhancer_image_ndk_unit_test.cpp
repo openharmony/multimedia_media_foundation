@@ -716,7 +716,7 @@ HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_41, TestSize.Level1)
     CreateEmptyPixelmap(&dstImg, 1440, 1920, PIXEL_FORMAT_RGBA_8888);
     OH_ImageProcessing_Create(&instance, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
     ImageProcessing_ErrorCode ret = OH_ImageProcessing_EnhanceDetail(instance, srcImg, dstImg);
-    if (!access("/system/lib64", 0)) {
+    if (!access("/system/lib64/", 0)) {
         EXPECT_EQ(ret, IMAGE_PROCESSING_SUCCESS);
     } else {
 #ifdef SKIA_ENABLE
@@ -760,7 +760,7 @@ HWTEST_F(DetailEnhancerImageNdkUnitTest, vpeImageNdk_42, TestSize.Level1)
     CreateEmptyPixelmap(&dstImg, 1440, 1920, PIXEL_FORMAT_BGRA_8888);
     OH_ImageProcessing_Create(&instance, IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER);
     ImageProcessing_ErrorCode ret = OH_ImageProcessing_EnhanceDetail(instance, srcImg, dstImg);
-    if (!access("/system/lib64", 0)) {
+    if (!access("/system/lib64/", 0)) {
         EXPECT_EQ(ret, IMAGE_PROCESSING_SUCCESS);
     } else {
 #ifdef SKIA_ENABLE
