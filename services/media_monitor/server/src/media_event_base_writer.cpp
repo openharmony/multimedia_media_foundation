@@ -91,6 +91,24 @@ void MediaEventBaseWriter::WriteStreamChange(std::shared_ptr<EventBean> &bean)
 #endif
 }
 
+void MediaEventBaseWriter::WriteStreamStandby(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Write stream standby");
+    if (bean == nullptr) {
+        MEDIA_LOG_E("eventBean is nullptr");
+        return;
+    }
+#ifdef MONITOR_ENABLE_HISYSEVENT
+    auto ret = HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "STREAM_STANDBY",
+        HiviewDFX::HiSysEvent::EventType::BEHAVIOR,
+        "STREAMID", bean->GetIntValue("STREAMID"),
+        "STANDBY", bean->GetIntValue("STANDBY"));
+    if (ret) {
+        MEDIA_LOG_E("write event fail: STREAM_STANDBY, ret = %{public}d", ret);
+    }
+#endif
+}
+
 void MediaEventBaseWriter::WriteDeviceChange(std::shared_ptr<EventBean> &bean)
 {
     MEDIA_LOG_D("Write device Change");

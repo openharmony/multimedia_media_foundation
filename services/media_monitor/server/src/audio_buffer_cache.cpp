@@ -24,7 +24,19 @@ constexpr OHOS::HiviewDFX::HiLogLabel LABEL = {LOG_CORE, LOG_DOMAIN_FOUNDATION, 
 namespace OHOS {
 namespace Media {
 namespace MediaMonitor {
-int32_t AudioBufferCache::RequestBuffer(std::shared_ptr<AudioBuffer>& buffer, int32_t size)
+
+AudioBufferCache::AudioBufferCache(std::shared_ptr<DumpBufferWrap> wrap)
+{
+    dumpBufferWrap_ = wrap;
+}
+
+AudioBufferCache::~AudioBufferCache()
+{
+    Clear();
+    dumpBufferWrap_ = nullptr;
+}
+
+int32_t AudioBufferCache::RequestBuffer(std::shared_ptr<AudioBuffer> &buffer, int32_t size)
 {
     std::unique_lock<std::mutex> lock(mutex_);
     auto status = RequestCacheBuffer(buffer, size);
@@ -39,14 +51,14 @@ int32_t AudioBufferCache::RequestBuffer(std::shared_ptr<AudioBuffer>& buffer, in
     return SUCCESS;
 }
 
-int32_t AudioBufferCache::ReleaseBuffer(std::shared_ptr<AudioBuffer>& buffer)
+int32_t AudioBufferCache::ReleaseBuffer(std::shared_ptr<AudioBuffer> &buffer)
 {
-    if (buffer == nullptr) {
+    if (buffer == nullptr || dumpBufferWrap_ == nullptr) {
         MEDIA_LOG_E("release buffer error");
         return ERROR;
     }
     std::unique_lock<std::mutex> lock(mutex_);
-    auto bufferId = buffer->GetUniqueId();
+    auto bufferId = dumpBufferWrap_->GetUniqueId(buffer.get());
     for (auto it = freeBufferList_.begin(); it != freeBufferList_.end(); it++) {
         if (*it == bufferId) {
             return SUCCESS;
@@ -77,7 +89,7 @@ int32_t AudioBufferCache::Clear()
     return SUCCESS;
 }
 
-int32_t AudioBufferCache::GetBufferById(std::shared_ptr<AudioBuffer>& buffer, uint64_t bufferId)
+int32_t AudioBufferCache::GetBufferById(std::shared_ptr<AudioBuffer> &buffer, uint64_t bufferId)
 {
     std::unique_lock<std::mutex> lock(mutex_);
     auto it = bufferMap_.find(bufferId);
@@ -88,7 +100,15 @@ int32_t AudioBufferCache::GetBufferById(std::shared_ptr<AudioBuffer>& buffer, ui
     return ERROR;
 }
 
-int32_t AudioBufferCache::RequestCacheBuffer(std::shared_ptr<AudioBuffer>& buffer, int32_t size)
+int32_t AudioBufferCache::SetBufferSize(std::shared_ptr<AudioBuffer> &buffer, int32_t size)
+{
+    if (dumpBufferWrap_ && dumpBufferWrap_->SetSize(buffer.get(), size)) {
+        return SUCCESS;
+    }
+    return ERROR;
+}
+
+int32_t AudioBufferCache::RequestCacheBuffer(std::shared_ptr<AudioBuffer> &buffer, int32_t size)
 {
     for (auto it = freeBufferList_.begin(); it != freeBufferList_.end(); it++) {
         if (size <= bufferMap_[*it].size) {
@@ -110,21 +130,19 @@ int32_t AudioBufferCache::RequestCacheBuffer(std::shared_ptr<AudioBuffer>& buffe
     return status;
 }
 
-int32_t AudioBufferCache::AllocBuffer(std::shared_ptr<AudioBuffer>& buffer, int32_t size)
+int32_t AudioBufferCache::AllocBuffer(std::shared_ptr<AudioBuffer> &buffer, int32_t size)
 {
-    AVBufferConfig avBufferConfig;
-    avBufferConfig.size = size;
-    avBufferConfig.memoryType = MemoryType::SHARED_MEMORY;
-    avBufferConfig.memoryFlag = MemoryFlag::MEMORY_READ_WRITE;
-
-    buffer = AVBuffer::CreateAVBuffer(avBufferConfig);
+    AudioBuffer *ptr = dumpBufferWrap_->CreateDumpBuffer(size);
+    buffer = std::shared_ptr<AudioBuffer>(ptr, [this](AudioBuffer* ptr) {
+         dumpBufferWrap_->DestroyDumpBuffer(ptr);
+    });
     if (buffer == nullptr) {
         return ERROR;
     }
     return SUCCESS;
 }
 
-int32_t AudioBufferCache::AllocAudioBuffer(std::shared_ptr<AudioBuffer>& buffer, int32_t size)
+int32_t AudioBufferCache::AllocAudioBuffer(std::shared_ptr<AudioBuffer> &buffer, int32_t size)
 {
     int32_t status = AllocBuffer(buffer, size);
     if (status != SUCCESS || buffer == nullptr) {
@@ -135,7 +153,8 @@ int32_t AudioBufferCache::AllocAudioBuffer(std::shared_ptr<AudioBuffer>& buffer,
         .size = size,
         .buffer = buffer
     };
-    bufferMap_[buffer->GetUniqueId()] = ele;
+    auto bufferId = dumpBufferWrap_->GetUniqueId(buffer.get());
+    bufferMap_[bufferId] = ele;
     return SUCCESS;
 }
 
@@ -148,6 +167,7 @@ int32_t AudioBufferCache::DeleteAudioBuffer(uint64_t bufferId, int32_t size)
     }
     return ERROR;
 }
+
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS

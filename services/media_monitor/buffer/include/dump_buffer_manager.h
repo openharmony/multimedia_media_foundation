@@ -12,24 +12,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef I_MEDIA_MONITOR_INTERFACE_H
-#define I_MEDIA_MONITOR_INTERFACE_H
-namespace OHOS {
-namespace Media {
-namespace MediaMonitor {
 
-enum class MediaMonitorInterfaceCode {
-    WRITE_LOG_MSG,
-    GET_AUDIO_ROUTE_MSG,
-    SET_MEDIA_PARAMS,
-    GET_INPUT_BUFFER,
-    INPUT_BUFFER_FILL,
-    ERASE_PREFERRED_DEVICE,
-    MEDIA_MONITOR_CODE_MAX = ERASE_PREFERRED_DEVICE,
-};
+#ifndef DUMP_BUFFER_MANAGER_H
+#define DUMP_BUFFER_MANAGER_H
 
-} // namespace MediaMonitor
-} // namespace Media
-} // namespace OHOS
+#include <stdint.h>
+#include <stdio.h>
 
-#endif // I_MEDIA_MONITOR_INTERFACE_H
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+typedef struct DumpBuffer DumpBuffer;
+
+#ifdef __cplusplus
+}
+#endif
+#endif // DUMP_BUFFER_MANAGER_H

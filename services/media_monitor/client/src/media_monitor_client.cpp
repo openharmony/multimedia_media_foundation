@@ -77,26 +77,33 @@ int32_t MediaMonitorClient::GetAudioRouteMsg(std::map<PerferredType,
     return reply.ReadInt32();
 }
 
-int32_t MediaMonitorClient::WriteAudioBuffer(const std::string &fileName, std::shared_ptr<AVBuffer> &buffer)
+int32_t MediaMonitorClient::WriteAudioBuffer(const std::string &fileName, void *ptr, size_t size)
+{
+    std::shared_ptr<DumpBuffer> bufferPtr = nullptr;
+
+    int32_t ret = GetInputBuffer(bufferPtr, size);
+    FALSE_RETURN_V_MSG_E(ret == SUCCESS, ERROR, "get buffer failed.");
+    FALSE_RETURN_V_MSG_E(bufferPtr != nullptr, ERROR, "get buffer is nullptr.");
+
+    std::shared_ptr<DumpBufferWrap> tmpBufferWrap = dumpBufferWrap_;
+    FALSE_RETURN_V_MSG_E(tmpBufferWrap != nullptr, ERROR, "buffer wrap is nullptr.");
+
+    int32_t bufferCapacitySize = tmpBufferWrap->GetCapacity(bufferPtr.get());
+    FALSE_RETURN_V_MSG_E(bufferCapacitySize > 0, ERROR, "get buffer capacity error");
+    int32_t writeSize = tmpBufferWrap->Write(bufferPtr.get(), static_cast<uint8_t*>(ptr), size);
+    FALSE_RETURN_V_MSG_E(writeSize > 0, ERROR, "write buffer error");
+
+    uint64_t bufferId = tmpBufferWrap->GetUniqueId(bufferPtr.get());
+    ret = InputBufferFilled(fileName, bufferId, writeSize);
+    FALSE_RETURN_V_MSG_E(ret == SUCCESS, ERROR, "write buffer error %{public}d", ret);
+    return SUCCESS;
+}
+
+int32_t MediaMonitorClient::GetInputBuffer(std::shared_ptr<DumpBuffer> &buffer, int32_t size)
 {
     MessageParcel data;
     MessageParcel reply;
     MessageOption option;
-    FALSE_RETURN_V_MSG_E(buffer != nullptr, ERR_INVALID_DATA, "input buffer nullptr");
-    data.WriteInterfaceToken(GetDescriptor());
-    buffer->WriteToMessageParcel(data);
-    data.WriteString(fileName);
-    int32_t error = Remote()->SendRequest(
-        static_cast<uint32_t>(MediaMonitorInterfaceCode::WRITE_AUDIO_BUFFER), data, reply, option);
-    FALSE_RETURN_V_MSG_E(error == ERR_NONE, error, "send pcm buffer failed %{public}d", error);
-    return reply.ReadInt32();
-}
-
-int32_t MediaMonitorClient::GetInputBuffer(std::shared_ptr<AVBuffer> &buffer, int32_t size)
-{
-    MessageParcel data;
-    MessageParcel reply;
-    MessageOption option(MessageOption::TF_SYNC);
 
     data.WriteInterfaceToken(GetDescriptor());
     data.WriteInt32(size);
@@ -104,17 +111,27 @@ int32_t MediaMonitorClient::GetInputBuffer(std::shared_ptr<AVBuffer> &buffer, in
         static_cast<uint32_t>(MediaMonitorInterfaceCode::GET_INPUT_BUFFER), data, reply, option);
     FALSE_RETURN_V_MSG_E(error == ERR_NONE, error, "get pcm buffer failed %{public}d", error);
 
-    buffer = AVBuffer::CreateAVBuffer();
-    FALSE_RETURN_V_MSG_E(buffer != nullptr, ERR_INVALID_DATA, "create buffer failed");
-    if (buffer->ReadFromMessageParcel(reply) == false) {
+    std::shared_ptr<DumpBufferWrap> tmpBufferWrap = dumpBufferWrap_;
+    FALSE_RETURN_V_MSG_E(tmpBufferWrap != nullptr, ERROR, "buffer wrap is nullptr.");
+
+    DumpBuffer *bufferPtr = tmpBufferWrap->NewDumpBuffer();
+    FALSE_RETURN_V_MSG_E(bufferPtr != nullptr, error, "new dump buffer error");
+
+    buffer = std::shared_ptr<DumpBuffer>(bufferPtr, [tmpBufferWrap](DumpBuffer *ptr) {
+        if (tmpBufferWrap != nullptr && ptr != nullptr) {
+            tmpBufferWrap->DestroyDumpBuffer(ptr);
+        }
+    });
+
+    void *replyPtr = reinterpret_cast<void *>(&reply);
+    if (tmpBufferWrap->ReadFromParcel(buffer.get(), replyPtr) == false) {
         MEDIA_LOG_E("read data failed");
         return reply.ReadInt32();
     }
-    FALSE_RETURN_V_MSG_E(buffer != nullptr, ERR_INVALID_DATA, "get input buffer failed");
     return reply.ReadInt32();
 }
 
-int32_t MediaMonitorClient::InputBufferFilled(std::string fileName, uint64_t bufferId)
+int32_t MediaMonitorClient::InputBufferFilled(const std::string &fileName, uint64_t bufferId, int32_t size)
 {
     MessageParcel data;
     MessageParcel reply;
@@ -123,17 +140,30 @@ int32_t MediaMonitorClient::InputBufferFilled(std::string fileName, uint64_t buf
     data.WriteInterfaceToken(GetDescriptor());
     data.WriteString(fileName);
     data.WriteUint64(bufferId);
+    data.WriteInt32(size);
     int32_t error = Remote()->SendRequest(
         static_cast<uint32_t>(MediaMonitorInterfaceCode::INPUT_BUFFER_FILL), data, reply, option);
     FALSE_RETURN_V_MSG_E(error == ERR_NONE, error, "send request error %{public}d", error);
     return reply.ReadInt32();
 }
 
-int32_t MediaMonitorClient::SetMediaParameters(const std::string& dumpType, const std::string& dumpEnable)
+int32_t MediaMonitorClient::SetMediaParameters(const std::string &dumpType, const std::string &dumpEnable)
 {
     MessageParcel data;
     MessageParcel reply;
-    MessageOption option(MessageOption::TF_SYNC);
+    MessageOption option;
+
+    if (dumpEnable == "true") {
+        dumpBufferWrap_ = std::make_shared<DumpBufferWrap>();
+        bool ret = dumpBufferWrap_->Open();
+        if (!ret) {
+            MEDIA_LOG_E("load dumpbuffer failed");
+            dumpBufferWrap_ = nullptr;
+            return ERROR;
+        }
+    } else {
+        dumpBufferWrap_ = nullptr;
+    }
 
     data.WriteInterfaceToken(GetDescriptor());
     data.WriteString(dumpType);
@@ -141,6 +171,20 @@ int32_t MediaMonitorClient::SetMediaParameters(const std::string& dumpType, cons
     int32_t error = Remote()->SendRequest(
         static_cast<uint32_t>(MediaMonitorInterfaceCode::SET_MEDIA_PARAMS), data, reply, option);
     FALSE_RETURN_V_MSG_E(error == ERR_NONE, error, "set media param error %{public}d", error);
+    return reply.ReadInt32();
+}
+
+int32_t MediaMonitorClient::ErasePreferredDeviceByType(const PerferredType preferredType)
+{
+    MessageParcel data;
+    MessageParcel reply;
+    MessageOption option;
+
+    data.WriteInterfaceToken(GetDescriptor());
+    data.WriteInt32(static_cast<int32_t>(preferredType));
+    int32_t error = Remote()->SendRequest(
+        static_cast<uint32_t>(MediaMonitorInterfaceCode::ERASE_PREFERRED_DEVICE), data, reply, option);
+    FALSE_RETURN_V_MSG_E(error == ERR_NONE, error, "erase preferred device error %{public}d", error);
     return reply.ReadInt32();
 }
 } // namespace MediaMonitor
