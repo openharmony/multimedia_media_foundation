@@ -183,6 +183,21 @@ Status Filter::Pause()
     return ret;
 }
 
+Status Filter::PauseDragging()
+{
+    MEDIA_LOG_D("PauseDragging %{public}s, pState:%{public}d", name_.c_str(), curState_);
+    auto ret = DoPauseDragging();
+    if (filterTask_) {
+        filterTask_->Pause();
+    }
+    for (auto iter : nextFiltersMap_) {
+        for (auto filter : iter.second) {
+            filter->PauseDragging();
+        }
+    }
+    return ret;
+}
+
 Status Filter::PauseDone()
 {
     MEDIA_LOG_I("Pause in %{public}s", name_.c_str());
@@ -391,6 +406,11 @@ Status Filter::DoStart()
 }
 
 Status Filter::DoPause()
+{
+    return Status::OK;
+}
+
+Status Filter::DoPauseDragging()
 {
     return Status::OK;
 }

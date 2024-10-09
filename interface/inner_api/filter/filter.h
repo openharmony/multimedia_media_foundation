@@ -119,6 +119,8 @@ public:
 
     virtual Status Pause() final;
 
+    virtual Status PauseDragging() final;
+
     virtual Status Resume() final;
 
     virtual Status ResumeDragging() final;
@@ -147,6 +149,8 @@ public:
     virtual Status DoStart();
 
     virtual Status DoPause();
+
+    virtual Status DoPauseDragging();
 
     virtual Status DoResume();
 
