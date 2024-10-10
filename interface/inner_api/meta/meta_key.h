@@ -338,6 +338,10 @@ public:
     static constexpr const char VIDEO_ENCODER_FRAME_TEMPORAL_ID[] =
         "video_encoder_frame_temporal_id"; ///< int32_t, key for describing the temporal ID of the frame when SVC is
                                            ///< enabled. This value is emitted from video encoder for a video frame.
+    static constexpr const char VIDEO_DECODER_DESIRED_PRESENT_TIMESTAMP[] =
+        "video_decoder_desired_present_timestamp"; ///< int64_t, key for describing the desired present timestamp of
+                                                   ///< video decoder frame set by the caller. This is an optional key
+                                                   ///< that applies only to video decoder surface mode.
 
     /* -------------------- video specific tag -------------------- */
     static constexpr const char VIDEO_H264_PROFILE[] = "video.h264.profile"; ///< @see VideoH264Profile
