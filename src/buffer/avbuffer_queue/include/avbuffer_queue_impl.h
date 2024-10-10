@@ -86,7 +86,7 @@ public:
     virtual Status RemoveBrokerListener(sptr<IBrokerListener>& listener);
     virtual Status SetProducerListener(sptr<IProducerListener>& listener);
     virtual Status SetConsumerListener(sptr<IConsumerListener>& listener);
-
+    virtual Status SetQueueSizeAndAttachBuffer(uint32_t size, std::shared_ptr<AVBuffer>& buffer, bool isFilled);
 protected:
     std::string name_;
 
@@ -110,6 +110,7 @@ protected:
     wptr<AVBufferQueueConsumerImpl> consumer_;
 
 private:
+    void SetQueueSizeBeforeAttachBuffer(uint32_t size);
     uint32_t size_;
     MemoryType memoryType_;
     bool disableAlloc_;

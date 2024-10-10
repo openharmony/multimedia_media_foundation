@@ -445,6 +445,74 @@ Status AVBufferQueueImpl::ReturnBuffer(const std::shared_ptr<AVBuffer>& buffer, 
     return ReturnBuffer(buffer->GetUniqueId(), available);
 }
 
+Status AVBufferQueueImpl::SetQueueSizeAndAttachBuffer(uint32_t size,
+    std::shared_ptr<AVBuffer>& buffer, bool isFilled)
+{
+    FALSE_RETURN_V(size >= 0 && size <= AVBUFFER_QUEUE_MAX_QUEUE_SIZE && size != size_,
+                   Status::ERROR_INVALID_BUFFER_SIZE);
+    FALSE_RETURN_V(buffer != nullptr, Status::ERROR_NULL_POINT_BUFFER);
+
+    auto config = buffer->GetConfig();
+    auto uniqueId = buffer->GetUniqueId();
+    {
+        std::lock_guard<std::mutex> lockGuard(queueMutex_);
+        SetQueueSizeBeforeAttachBuffer(size);
+        FALSE_RETURN_V(cachedBufferMap_.find(uniqueId) == cachedBufferMap_.end(),
+                       Status::ERROR_INVALID_BUFFER_ID);
+
+        NOK_RETURN(CheckConfig(config));
+
+        AVBufferElement ele = {
+            .config = config,
+            .state = AVBUFFER_STATE_ATTACHED,
+            .isDeleting = false,
+            .buffer = buffer
+        };
+
+        auto cachedCount = GetCachedBufferCount();
+        auto queueSize = GetQueueSize();
+        if (cachedCount >= queueSize) {
+            auto validCount = static_cast<uint32_t>(dirtyBufferList_.size() + freeBufferList_.size());
+            auto toBeDeleteCount = cachedCount - queueSize;
+            // 这里表示有可以删除的buffer，或者
+            if (validCount > toBeDeleteCount) {
+                // 在什么场景下需要在此处删除buffer？
+                DeleteBuffers(toBeDeleteCount + 1); // 多删除一个，用于attach当前buffer
+                cachedBufferMap_[uniqueId] = ele;
+                MEDIA_LOG_D("uniqueId(%llu) attached with delete", uniqueId);
+            } else {
+                MEDIA_LOG_E("attach failed, out of range");
+                return Status::ERROR_OUT_OF_RANGE;
+            }
+        } else {
+            cachedBufferMap_[uniqueId] = ele;
+            MEDIA_LOG_I("uniqueId(%llu) attached without delete", uniqueId);
+        }
+    }
+    if (isFilled) {
+        auto ret = PushBuffer(uniqueId, isFilled);
+        if (ret != Status::OK) {
+            // PushBuffer失败，强制Detach
+            DetachBuffer(uniqueId, true);
+        }
+        return ret;
+    }
+    return ReleaseBuffer(uniqueId);
+}
+
+void AVBufferQueueImpl::SetQueueSizeBeforeAttachBuffer(uint32_t size)
+{
+    if (size > size_) {
+        size_ = size;
+        if (!disableAlloc_) {
+            requestCondition.notify_all();
+        }
+    } else {
+        DeleteBuffers(size_ - size);
+        size_ = size;
+    }
+}
+
 Status AVBufferQueueImpl::AttachBuffer(std::shared_ptr<AVBuffer>& buffer, bool isFilled)
 {
     FALSE_RETURN_V(buffer != nullptr, Status::ERROR_NULL_POINT_BUFFER);
