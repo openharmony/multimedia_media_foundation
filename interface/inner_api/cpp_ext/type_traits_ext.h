@@ -15,7 +15,7 @@
 #ifndef HISTREAMER_FOUNDATION_CPP_EXT_TYPE_TRAITS_EXT_H
 #define HISTREAMER_FOUNDATION_CPP_EXT_TYPE_TRAITS_EXT_H
 
-#include<type_traits>
+#include <type_traits>
 
 namespace OHOS {
 namespace Media {
