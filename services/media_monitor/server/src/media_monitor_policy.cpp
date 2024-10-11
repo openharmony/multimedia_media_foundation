@@ -152,6 +152,12 @@ void MediaMonitorPolicy::WriteBehaviorEvent(EventId eventId, std::shared_ptr<Eve
     }
 }
 
+void MediaMonitorPolicy::setAppNameToEventVector(const std::string key, std::shared_ptr<EventBean> &bean)
+{
+    BundleInfo bundleInfo = GetBundleInfo(bean->GetIntValue(key));
+    bean->Add("APP_NAME", bundleInfo.appName);
+}
+
 BundleInfo MediaMonitorPolicy::GetBundleInfo(int32_t appUid)
 {
     auto cachedBundleInfo = cachedBundleInfoMap_.find(appUid);
@@ -166,12 +172,6 @@ BundleInfo MediaMonitorPolicy::GetBundleInfo(int32_t appUid)
     }
     cachedBundleInfoMap_.insert(std::make_pair(appUid, bundleInfo));
     return bundleInfo;
-}
-
-void setAppNameToEventVector(const std::string key, std::shared_ptr<EventBean> &bean)
-{
-    BundleInfo bundleInfo = GetBundleInfo(bean->GetIntValue(key));
-    bean->Add("APP_NAME", bundleInfo.appName);
 }
 
 void MediaMonitorPolicy::WriteFaultEvent(EventId eventId, std::shared_ptr<EventBean> &bean)
