@@ -83,5 +83,10 @@
         "first_introduced": "13",
         "name": "IMAGE_PROCESSING_TYPE_DETAIL_ENHANCER",
         "type": "variable"
+    },
+    {
+        "first_introduced": "13",
+        "name": "IMAGE_DETAIL_ENHANCER_PARAMETER_KEY_QUALITY_LEVEL",
+        "type": "variable"
     }
 ]
