@@ -125,23 +125,19 @@ void MediaMonitorPolicy::WriteBehaviorEvent(EventId eventId, std::shared_ptr<Eve
             mediaEventBaseWriter_.WriteAudioRouteChange(bean);
             break;
         case AUDIO_PIPE_CHANGE:
-            bundleInfo = GetBundleInfo(bean->GetIntValue("CLIENT_UID"));
-            bean->Add("APP_NAME", bundleInfo.appName);
+            setAppNameToEventVector(bundleInfo, bean);
             mediaEventBaseWriter_.WriteAudioPipeChange(bean);
             break;
         case AUDIO_FOCUS_MIGRATE:
-            bundleInfo = GetBundleInfo(bean->GetIntValue("CLIENT_UID"));
-            bean->Add("APP_NAME", bundleInfo.appName);
+            setAppNameToEventVector(bundleInfo, bean);
             mediaEventBaseWriter_.WriteFocusMigrate(bean);
             break;
         case SET_FORCE_USE_AUDIO_DEVICE:
-            bundleInfo = GetBundleInfo(bean->GetIntValue("CLIENT_UID"));
-            bean->Add("APP_NAME", bundleInfo.appName);
+            setAppNameToEventVector(bundleInfo, bean);
             mediaEventBaseWriter_.WriteSetForceDevice(bean);
             break;
         case BACKGROUND_SILENT_PLAYBACK:
-            bundleInfo = GetBundleInfo(bean->GetIntValue("CLIENT_UID"));
-            bean->Add("APP_NAME", bundleInfo.appName);
+            setAppNameToEventVector(bundleInfo, bean);
             bean->Add("APP_VERSION_CODE", bundleInfo.versionCode);
             mediaEventBaseWriter_.WriteBGSilentPlayback(bean);
             break;
@@ -170,6 +166,12 @@ BundleInfo MediaMonitorPolicy::GetBundleInfo(int32_t appUid)
     }
     cachedBundleInfoMap_.insert(std::make_pair(appUid, bundleInfo));
     return bundleInfo;
+}
+
+void setAppNameToEventVector(BundleInfo &bundleInfo, std::shared_ptr<EventBean> &bean)
+{
+    bundleInfo = GetBundleInfo(bean->GetIntValue("CLIENT_UID"));
+    bean->Add("APP_NAME", bundleInfo.appName);
 }
 
 void MediaMonitorPolicy::WriteFaultEvent(EventId eventId, std::shared_ptr<EventBean> &bean)

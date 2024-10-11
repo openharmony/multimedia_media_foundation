@@ -72,6 +72,7 @@ private:
     void TimeFunc();
     void HandleToHiSysEvent();
     BundleInfo GetBundleInfo(int32_t appUid);
+    void setAppNameToEventVector(BundleInfo &bundleInfo, std::shared_ptr<EventBean> &bean);
 
     uint64_t curruntTime_ = 0;
     std::unique_ptr<std::thread> timeThread_ = nullptr;
