@@ -463,7 +463,7 @@ Status AVBufferQueueImpl::SetQueueSizeAndAttachBuffer(uint32_t size,
         FALSE_RETURN_V(result == Status::OK, result);
     }
     if (isFilled) {
-        return PushBufferOnFilled(uniqueId);
+        return PushBufferOnFilled(uniqueId, isFilled);
     }
     return ReleaseBuffer(uniqueId);
 }
@@ -496,12 +496,12 @@ Status AVBufferQueueImpl::AttachAvailableBuffer(std::shared_ptr<AVBuffer>& buffe
         }
     } else {
         cachedBufferMap_[uniqueId] = ele;
-        MEDIA_LOG_I("uniqueId(%llu) attached without delete", uniqueId);
+        MEDIA_LOG_D("uniqueId(%llu) attached without delete", uniqueId);
     }
     return Status::OK;
 }
 
-Status AVBufferQueueImpl::PushBufferOnFilled(uint64_t uniqueId)
+Status AVBufferQueueImpl::PushBufferOnFilled(uint64_t uniqueId, bool isFilled)
 {
     auto ret = PushBuffer(uniqueId, isFilled);
     if (ret != Status::OK) {
@@ -542,7 +542,7 @@ Status AVBufferQueueImpl::AttachBuffer(std::shared_ptr<AVBuffer>& buffer, bool i
     }
 
     if (isFilled) {
-        return PushBufferOnFilled(uniqueId);
+        return PushBufferOnFilled(uniqueId, isFilled);
     }
 
     return ReleaseBuffer(uniqueId);

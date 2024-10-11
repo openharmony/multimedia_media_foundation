@@ -112,7 +112,7 @@ protected:
 
 private:
     Status AttachAvailableBuffer(std::shared_ptr<AVBuffer>& buffer);
-    Status PushBufferOnFilled(uint64_t uniqueId);
+    Status PushBufferOnFilled(uint64_t uniqueId, bool isFilled);
     void SetQueueSizeBeforeAttachBuffer(uint32_t size);
     uint32_t size_;
     MemoryType memoryType_;
