@@ -114,8 +114,7 @@ void MediaMonitorPolicy::WriteBehaviorEvent(EventId eventId, std::shared_ptr<Eve
             mediaEventBaseWriter_.WriteHeasetChange(bean);
             break;
         case STREAM_CHANGE:
-            bundleInfo = GetBundleInfo(bean->GetIntValue("UID"));
-            bean->Add("APP_NAME", bundleInfo.appName);
+            setAppNameToEventVector("UID", bean);
             mediaEventBaseWriter_.WriteStreamChange(bean);
             break;
         case VOLUME_CHANGE:
@@ -125,19 +124,20 @@ void MediaMonitorPolicy::WriteBehaviorEvent(EventId eventId, std::shared_ptr<Eve
             mediaEventBaseWriter_.WriteAudioRouteChange(bean);
             break;
         case AUDIO_PIPE_CHANGE:
-            setAppNameToEventVector(bundleInfo, bean);
+            setAppNameToEventVector("CLIENT_UID", bean);
             mediaEventBaseWriter_.WriteAudioPipeChange(bean);
             break;
         case AUDIO_FOCUS_MIGRATE:
-            setAppNameToEventVector(bundleInfo, bean);
+            setAppNameToEventVector("CLIENT_UID", bean);
             mediaEventBaseWriter_.WriteFocusMigrate(bean);
             break;
         case SET_FORCE_USE_AUDIO_DEVICE:
-            setAppNameToEventVector(bundleInfo, bean);
+            setAppNameToEventVector("CLIENT_UID", bean);
             mediaEventBaseWriter_.WriteSetForceDevice(bean);
             break;
         case BACKGROUND_SILENT_PLAYBACK:
-            setAppNameToEventVector(bundleInfo, bean);
+            bundleInfo = GetBundleInfo(bean->GetIntValue("CLIENT_UID"));
+            bean->Add("APP_NAME", bundleInfo.appName);
             bean->Add("APP_VERSION_CODE", bundleInfo.versionCode);
             mediaEventBaseWriter_.WriteBGSilentPlayback(bean);
             break;
@@ -168,9 +168,9 @@ BundleInfo MediaMonitorPolicy::GetBundleInfo(int32_t appUid)
     return bundleInfo;
 }
 
-void setAppNameToEventVector(BundleInfo &bundleInfo, std::shared_ptr<EventBean> &bean)
+void setAppNameToEventVector(const std::string key, std::shared_ptr<EventBean> &bean)
 {
-    bundleInfo = GetBundleInfo(bean->GetIntValue("CLIENT_UID"));
+    BundleInfo bundleInfo = GetBundleInfo(bean->GetIntValue(key));
     bean->Add("APP_NAME", bundleInfo.appName);
 }
 
