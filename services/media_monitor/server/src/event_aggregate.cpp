@@ -20,8 +20,6 @@
 #include "audio_system_manager.h"
 #include "audio_device_info.h"
 
-#include "bundle_mgr_interface.h"
-#include "bundle_mgr_proxy.h"
 #include "iservice_registry.h"
 
 namespace {
@@ -36,32 +34,6 @@ namespace MediaMonitor {
 
 static constexpr int32_t NEED_INCREASE_FREQUENCY = 30;
 static constexpr int32_t UNINITIALIZED = -1;
-
-static AppExecFwk::BundleInfo GetBundleInfoFromUid(int32_t appUid)
-{
-    std::string bundleName {""};
-    AppExecFwk::BundleInfo bundleInfo;
-    auto systemAbilityManager = SystemAbilityManagerClient::GetInstance().GetSystemAbilityManager();
-    FALSE_RETURN_V_MSG_E(systemAbilityManager != nullptr, bundleInfo, "systemAbilityManager is nullptr");
-
-    sptr<IRemoteObject> remoteObject = systemAbilityManager->GetSystemAbility(BUNDLE_MGR_SERVICE_SYS_ABILITY_ID);
-    FALSE_RETURN_V_MSG_E(remoteObject != nullptr, bundleInfo, "remoteObject is nullptr");
-
-    sptr<AppExecFwk::IBundleMgr> bundleMgrProxy = OHOS::iface_cast<AppExecFwk::IBundleMgr>(remoteObject);
-    FALSE_RETURN_V_MSG_E(bundleMgrProxy != nullptr, bundleInfo, "bundleMgrProxy is nullptr");
-
-    bundleMgrProxy->GetNameForUid(appUid, bundleName);
-
-    bundleMgrProxy->GetBundleInfoV9(bundleName, AppExecFwk::BundleFlag::GET_BUNDLE_DEFAULT |
-        AppExecFwk::BundleFlag::GET_BUNDLE_WITH_ABILITIES |
-        AppExecFwk::BundleFlag::GET_BUNDLE_WITH_REQUESTED_PERMISSION |
-        AppExecFwk::BundleFlag::GET_BUNDLE_WITH_EXTENSION_INFO |
-        AppExecFwk::BundleFlag::GET_BUNDLE_WITH_HASH_VALUE,
-        bundleInfo,
-        AppExecFwk::Constants::ALL_USERID);
-
-    return bundleInfo;
-}
 
 EventAggregate::EventAggregate()
     :audioMemo_(AudioMemo::GetAudioMemo()),
@@ -239,8 +211,6 @@ void EventAggregate::HandleStreamChangeEvent(std::shared_ptr<EventBean> &bean)
     if (bean->GetIntValue("STATE") == AudioStandard::State::RUNNING) {
         MEDIA_LOG_D("Stream State RUNNING");
         uint64_t curruntTime = TimeUtils::GetCurSec();
-        AppExecFwk::BundleInfo bundleInfo = GetBundleInfoFromUid(bean->GetIntValue("UID"));
-        bean->Add("APP_NAME", bundleInfo.name);
         AddToDeviceUsage(bean, curruntTime);
         AddToStreamUsage(bean, curruntTime);
         AddToStreamPropertyVector(bean, curruntTime);
@@ -250,8 +220,6 @@ void EventAggregate::HandleStreamChangeEvent(std::shared_ptr<EventBean> &bean)
                 bean->GetIntValue("STATE") == AudioStandard::State::PAUSED ||
                 bean->GetIntValue("STATE") == AudioStandard::State::RELEASED) {
         MEDIA_LOG_D("Stream State STOPPED/PAUSED/RELEASED");
-        AppExecFwk::BundleInfo bundleInfo = GetBundleInfoFromUid(bean->GetIntValue("UID"));
-        bean->Add("APP_NAME", bundleInfo.name);
         HandleDeviceUsage(bean);
         HandleStreamUsage(bean);
         HandleCaptureMuted(bean);
@@ -617,24 +585,18 @@ void EventAggregate::HandleVolumeChange(std::shared_ptr<EventBean> &bean)
 void EventAggregate::HandlePipeChange(std::shared_ptr<EventBean> &bean)
 {
     MEDIA_LOG_D("Handle pipe change");
-    AppExecFwk::BundleInfo bundleInfo = GetBundleInfoFromUid(bean->GetIntValue("CLIENT_UID"));
-    bean->Add("APP_NAME", bundleInfo.name);
     mediaMonitorPolicy_.WriteEvent(bean->GetEventId(), bean);
 }
 
 void EventAggregate::HandleStreamExhaustedErrorEvent(std::shared_ptr<EventBean> &bean)
 {
     MEDIA_LOG_D("Handle stream exhausted error event");
-    AppExecFwk::BundleInfo bundleInfo = GetBundleInfoFromUid(bean->GetIntValue("CLIENT_UID"));
-    mediaMonitorPolicy_.HandleExhaustedToEventVector(bundleInfo.name);
     mediaMonitorPolicy_.WhetherToHiSysEvent();
 }
 
 void EventAggregate::HandleStreamCreateErrorEvent(std::shared_ptr<EventBean> &bean)
 {
     MEDIA_LOG_D("Handle stream create error event");
-    AppExecFwk::BundleInfo bundleInfo = GetBundleInfoFromUid(bean->GetIntValue("CLIENT_UID"));
-    bean->Add("APP_NAME", bundleInfo.name);
     mediaMonitorPolicy_.HandleCreateErrorToEventVector(bean);
     mediaMonitorPolicy_.WhetherToHiSysEvent();
 }
@@ -642,9 +604,6 @@ void EventAggregate::HandleStreamCreateErrorEvent(std::shared_ptr<EventBean> &be
 void EventAggregate::HandleBackgroundSilentPlayback(std::shared_ptr<EventBean> &bean)
 {
     MEDIA_LOG_D("Handle background silent playback");
-    AppExecFwk::BundleInfo bundleInfo = GetBundleInfoFromUid(bean->GetIntValue("CLIENT_UID"));
-    bean->Add("APP_NAME", bundleInfo.name);
-    bean->Add("APP_VERSION_CODE", static_cast<int32_t>(bundleInfo.versionCode));
     mediaMonitorPolicy_.HandleSilentPlaybackToEventVector(bean);
     mediaMonitorPolicy_.WhetherToHiSysEvent();
     bean->SetEventType(Media::MediaMonitor::BEHAVIOR_EVENT); // report behavior event BG_SILENT_PLAYBACK
@@ -654,8 +613,6 @@ void EventAggregate::HandleBackgroundSilentPlayback(std::shared_ptr<EventBean> &
 void EventAggregate::HandleUnderrunStatistic(std::shared_ptr<EventBean> &bean)
 {
     MEDIA_LOG_D("Handle underrun statistic");
-    AppExecFwk::BundleInfo bundleInfo = GetBundleInfoFromUid(bean->GetIntValue("CLIENT_UID"));
-    bean->Add("APP_NAME", bundleInfo.name);
     mediaMonitorPolicy_.HandleUnderrunToEventVector(bean);
     mediaMonitorPolicy_.WhetherToHiSysEvent();
 }
@@ -663,8 +620,6 @@ void EventAggregate::HandleUnderrunStatistic(std::shared_ptr<EventBean> &bean)
 void EventAggregate::HandleForceUseDevice(std::shared_ptr<EventBean> &bean)
 {
     MEDIA_LOG_D("Handle force use device");
-    AppExecFwk::BundleInfo bundleInfo = GetBundleInfoFromUid(bean->GetIntValue("CLIENT_UID"));
-    bean->Add("APP_NAME", bundleInfo.name);
     audioMemo_.UpdataRouteInfo(bean);
     mediaMonitorPolicy_.WriteEvent(bean->GetEventId(), bean);
 }
@@ -672,8 +627,6 @@ void EventAggregate::HandleForceUseDevice(std::shared_ptr<EventBean> &bean)
 void EventAggregate::HandleFocusMigrate(std::shared_ptr<EventBean> &bean)
 {
     MEDIA_LOG_D("Handle focus use migrate");
-    AppExecFwk::BundleInfo bundleInfo = GetBundleInfoFromUid(bean->GetIntValue("CLIENT_UID"));
-    bean->Add("APP_NAME", bundleInfo.name);
     mediaMonitorPolicy_.WriteEvent(bean->GetEventId(), bean);
 }
 

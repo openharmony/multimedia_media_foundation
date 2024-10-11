@@ -105,6 +105,7 @@ void MediaMonitorPolicy::WriteEvent(EventId eventId, std::shared_ptr<EventBean> 
 void MediaMonitorPolicy::WriteBehaviorEvent(EventId eventId, std::shared_ptr<EventBean> &bean)
 {
     MEDIA_LOG_D("Write behavior event");
+    BundleInfo bundleInfo = {};
     switch (eventId) {
         case DEVICE_CHANGE:
             mediaEventBaseWriter_.WriteDeviceChange(bean);
@@ -113,6 +114,8 @@ void MediaMonitorPolicy::WriteBehaviorEvent(EventId eventId, std::shared_ptr<Eve
             mediaEventBaseWriter_.WriteHeasetChange(bean);
             break;
         case STREAM_CHANGE:
+            bundleInfo = GetBundleInfo(bean->GetIntValue("UID"));
+            bean->Add("APP_NAME", bundleInfo.appName);
             mediaEventBaseWriter_.WriteStreamChange(bean);
             break;
         case VOLUME_CHANGE:
@@ -122,15 +125,24 @@ void MediaMonitorPolicy::WriteBehaviorEvent(EventId eventId, std::shared_ptr<Eve
             mediaEventBaseWriter_.WriteAudioRouteChange(bean);
             break;
         case AUDIO_PIPE_CHANGE:
+            bundleInfo = GetBundleInfo(bean->GetIntValue("CLIENT_UID"));
+            bean->Add("APP_NAME", bundleInfo.appName);
             mediaEventBaseWriter_.WriteAudioPipeChange(bean);
             break;
         case AUDIO_FOCUS_MIGRATE:
+            bundleInfo = GetBundleInfo(bean->GetIntValue("CLIENT_UID"));
+            bean->Add("APP_NAME", bundleInfo.appName);
             mediaEventBaseWriter_.WriteFocusMigrate(bean);
             break;
         case SET_FORCE_USE_AUDIO_DEVICE:
+            bundleInfo = GetBundleInfo(bean->GetIntValue("CLIENT_UID"));
+            bean->Add("APP_NAME", bundleInfo.appName);
             mediaEventBaseWriter_.WriteSetForceDevice(bean);
             break;
         case BACKGROUND_SILENT_PLAYBACK:
+            bundleInfo = GetBundleInfo(bean->GetIntValue("CLIENT_UID"));
+            bean->Add("APP_NAME", bundleInfo.appName);
+            bean->Add("APP_VERSION_CODE", bundleInfo.versionCode);
             mediaEventBaseWriter_.WriteBGSilentPlayback(bean);
             break;
         case STREAM_STANDBY:
@@ -142,6 +154,22 @@ void MediaMonitorPolicy::WriteBehaviorEvent(EventId eventId, std::shared_ptr<Eve
         default:
             break;
     }
+}
+
+BundleInfo MediaMonitorPolicy::GetBundleInfo(int32_t appUid)
+{
+    auto cachedBundleInfo = cachedBundleInfoMap_.find(appUid);
+    if (cachedBundleInfo != cachedBundleInfoMap_.end()) {
+        return cachedBundleInfo->second;
+    }
+    MediaMonitorWrapper mediaMonitorWrapper;
+    BundleInfo bundleInfo;
+    MediaMonitorErr err = mediaMonitorWrapper.GetBundleInfo(appUid, &bundleInfo);
+    if (err != MediaMonitorErr::SUCCESS) {
+        return bundleInfo;
+    }
+    cachedBundleInfoMap_.insert(std::make_pair(appUid, bundleInfo));
+    return bundleInfo;
 }
 
 void MediaMonitorPolicy::WriteFaultEvent(EventId eventId, std::shared_ptr<EventBean> &bean)
@@ -165,14 +193,20 @@ void MediaMonitorPolicy::WriteFaultEvent(EventId eventId, std::shared_ptr<EventB
 void MediaMonitorPolicy::WriteAggregationEvent(EventId eventId, std::shared_ptr<EventBean> &bean)
 {
     MEDIA_LOG_D("Write aggregation event");
+    BundleInfo bundleInfo = {};
     switch (eventId) {
         case AUDIO_STREAM_EXHAUSTED_STATS:
+            bundleInfo = GetBundleInfo(bean->GetIntValue("CLIENT_UID"));
+            bean->Add("APP_NAME", bundleInfo.appName);
             mediaEventBaseWriter_.WriteStreamExhastedError(bean);
             break;
         case AUDIO_STREAM_CREATE_ERROR_STATS:
             mediaEventBaseWriter_.WriteStreamCreateError(bean);
             break;
         case BACKGROUND_SILENT_PLAYBACK:
+            bundleInfo = GetBundleInfo(bean->GetIntValue("CLIENT_UID"));
+            bean->Add("APP_NAME", bundleInfo.appName);
+            bean->Add("APP_VERSION_CODE", bundleInfo.versionCode);
             mediaEventBaseWriter_.WriteBackgoundSilentPlayback(bean);
             break;
         case STREAM_UTILIZATION_STATS:
@@ -188,6 +222,8 @@ void MediaMonitorPolicy::WriteAggregationEvent(EventId eventId, std::shared_ptr<
             mediaEventBaseWriter_.WriteBtUsageStatistic(bean);
             break;
         case PERFORMANCE_UNDER_OVERRUN_STATS:
+            bundleInfo = GetBundleInfo(bean->GetIntValue("CLIENT_UID"));
+            bean->Add("APP_NAME", bundleInfo.appName);
             mediaEventBaseWriter_.WriteUnderrunStatistic(bean);
             break;
         case PLAYBACK_VOLUME_STATS:
@@ -433,14 +469,14 @@ void MediaMonitorPolicy::HandleCaptureMutedToEventVector(std::shared_ptr<EventBe
     }
 }
 
-void MediaMonitorPolicy::HandleExhaustedToEventVector(const std::string &appName)
+void MediaMonitorPolicy::HandleExhaustedToEventVector(int32_t uid)
 {
     MEDIA_LOG_I("Handle exhausted to event map");
     bool isInEventMap = false;
-    auto isExist = [&appName](const std::shared_ptr<EventBean> &eventBean) {
+    auto isExist = [&uid](const std::shared_ptr<EventBean> &eventBean) {
         if (eventBean->GetEventId() == AUDIO_STREAM_EXHAUSTED_STATS &&
-            appName == eventBean->GetStringValue("DUBIOUS_APP")) {
-            MEDIA_LOG_I("Find the existing DUBIOUS_APP");
+            uid == eventBean->GetIntValue("CLIENT_UID")) {
+            MEDIA_LOG_I("Find the existing CLIENT_UID");
             return true;
         }
         return false;
@@ -455,7 +491,7 @@ void MediaMonitorPolicy::HandleExhaustedToEventVector(const std::string &appName
     if (!isInEventMap) {
         std::shared_ptr<EventBean> eventBean = std::make_shared<EventBean>(ModuleId::AUDIO,
             EventId::AUDIO_STREAM_EXHAUSTED_STATS, EventType::FREQUENCY_AGGREGATION_EVENT);
-        eventBean->Add("DUBIOUS_APP", appName);
+        eventBean->Add("CLIENT_UID", uid);
         eventBean->Add("TIMES", INITIAL_VALUE);
         AddToEventVector(eventBean);
     }
@@ -467,7 +503,7 @@ void MediaMonitorPolicy::HandleCreateErrorToEventVector(std::shared_ptr<EventBea
     bool isInEventMap = false;
     auto isExist = [&bean](const std::shared_ptr<EventBean> &eventBean) {
         if (eventBean->GetEventId() == AUDIO_STREAM_CREATE_ERROR_STATS &&
-            bean->GetStringValue("APP_NAME") == eventBean->GetStringValue("APP_NAME") &&
+            bean->GetIntValue("CLIENT_UID") == eventBean->GetIntValue("CLIENT_UID") &&
             bean->GetIntValue("IS_PLAYBACK") == eventBean->GetIntValue("IS_PLAYBACK") &&
             bean->GetIntValue("STREAM_TYPE") == eventBean->GetIntValue("STREAM_TYPE") &&
             bean->GetIntValue("ERROR_CODE") == eventBean->GetIntValue("ERROR_CODE")) {
@@ -487,7 +523,7 @@ void MediaMonitorPolicy::HandleCreateErrorToEventVector(std::shared_ptr<EventBea
     if (!isInEventMap) {
         std::shared_ptr<EventBean> eventBean = std::make_shared<EventBean>(ModuleId::AUDIO,
             EventId::AUDIO_STREAM_CREATE_ERROR_STATS, EventType::FREQUENCY_AGGREGATION_EVENT);
-        eventBean->Add("APP_NAME", bean->GetStringValue("APP_NAME"));
+        eventBean->Add("CLIENT_UID", bean->GetIntValue("CLIENT_UID"));
         eventBean->Add("IS_PLAYBACK", bean->GetIntValue("IS_PLAYBACK"));
         eventBean->Add("STREAM_TYPE", bean->GetIntValue("STREAM_TYPE"));
         eventBean->Add("ERROR_CODE", bean->GetIntValue("ERROR_CODE"));
@@ -500,10 +536,11 @@ void MediaMonitorPolicy::HandleSilentPlaybackToEventVector(std::shared_ptr<Event
 {
     MEDIA_LOG_I("Handle silent playback to event vector");
     bool isInEventMap = false;
-    auto isExist = [&bean](const std::shared_ptr<EventBean> &eventBean) {
+    BundleInfo bundleInfo = GetBundleInfo(bean->GetIntValue("UID"));
+    auto isExist = [&bundleInfo](const std::shared_ptr<EventBean> &eventBean) {
         if (eventBean->GetEventId() == BACKGROUND_SILENT_PLAYBACK &&
-            bean->GetStringValue("APP_NAME") == eventBean->GetStringValue("APP_NAME") &&
-            bean->GetIntValue("APP_VERSION_CODE") == eventBean->GetIntValue("APP_VERSION_CODE")) {
+            bundleInfo.appName == eventBean->GetStringValue("APP_NAME") &&
+            bundleInfo.versionCode == eventBean->GetIntValue("APP_VERSION_CODE")) {
             MEDIA_LOG_I("Find the existing silent playback app");
             return true;
         }
@@ -519,8 +556,8 @@ void MediaMonitorPolicy::HandleSilentPlaybackToEventVector(std::shared_ptr<Event
     if (!isInEventMap) {
         std::shared_ptr<EventBean> eventBean = std::make_shared<EventBean>(ModuleId::AUDIO,
             EventId::BACKGROUND_SILENT_PLAYBACK, EventType::FREQUENCY_AGGREGATION_EVENT);
-        eventBean->Add("APP_NAME", bean->GetStringValue("APP_NAME"));
-        eventBean->Add("APP_VERSION_CODE", bean->GetIntValue("APP_VERSION_CODE"));
+        eventBean->Add("APP_NAME", bundleInfo.appName);
+        eventBean->Add("APP_VERSION_CODE", bundleInfo.versionCode);
         eventBean->Add("TIMES", INITIAL_VALUE);
         AddToEventVector(eventBean);
     }
@@ -532,7 +569,7 @@ void MediaMonitorPolicy::HandleUnderrunToEventVector(std::shared_ptr<EventBean> 
     bool isInEventMap = false;
     auto isExist = [&bean](const std::shared_ptr<EventBean> &eventBean) {
         if (eventBean->GetEventId() == PERFORMANCE_UNDER_OVERRUN_STATS &&
-            bean->GetStringValue("APP_NAME") == eventBean->GetStringValue("APP_NAME") &&
+            bean->GetIntValue("CLIENT_UID") == eventBean->GetIntValue("CLIENT_UID") &&
             bean->GetIntValue("IS_PLAYBACK") == eventBean->GetIntValue("IS_PLAYBACK") &&
             bean->GetIntValue("PIPE_TYPE") == eventBean->GetIntValue("PIPE_TYPE") &&
             bean->GetIntValue("STREAM_TYPE") == eventBean->GetIntValue("STREAM_TYPE")) {
@@ -551,7 +588,7 @@ void MediaMonitorPolicy::HandleUnderrunToEventVector(std::shared_ptr<EventBean> 
     if (!isInEventMap) {
         std::shared_ptr<EventBean> eventBean = std::make_shared<EventBean>(ModuleId::AUDIO,
             EventId::PERFORMANCE_UNDER_OVERRUN_STATS, EventType::FREQUENCY_AGGREGATION_EVENT);
-        eventBean->Add("APP_NAME", bean->GetStringValue("APP_NAME"));
+        eventBean->Add("CLIENT_UID", bean->GetIntValue("CLIENT_UID"));
         eventBean->Add("IS_PLAYBACK", bean->GetIntValue("IS_PLAYBACK"));
         eventBean->Add("PIPE_TYPE", bean->GetIntValue("PIPE_TYPE"));
         eventBean->Add("STREAM_TYPE", bean->GetIntValue("STREAM_TYPE"));

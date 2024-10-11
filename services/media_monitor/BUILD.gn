@@ -247,7 +247,61 @@ if (hst_is_lite_sys) {
       "server/src/media_monitor_policy.cpp",
       "server/src/media_monitor_service.cpp",
       "server/src/media_monitor_stub.cpp",
+      "server/src/media_monitor_wrapper.cpp",
     ]
+
+    configs = []
+
+    include_dirs = [
+      "buffer/include",
+      "client/include",
+      "server/include",
+      "common/include",
+      "../../interface/inner_api/common/",
+    ]
+
+    deps = [
+      ":media_monitor.para",
+      ":media_monitor.para.dac",
+      ":media_monitor_common",
+    ]
+
+    external_deps = [
+      "ability_base:want",
+      "audio_framework:audio_client",
+      "c_utils:utils",
+      "hilog:libhilog",
+      "init:libbegetutil",
+      "ipc:ipc_single",
+      "safwk:system_ability_fwk",
+      "samgr:samgr_proxy",
+    ]
+
+    public_external_deps = [ "ffmpeg:libohosffmpeg" ]
+
+    defines = []
+
+    if (has_hisysevent_part) {
+      defines += [ "MONITOR_ENABLE_HISYSEVENT" ]
+      external_deps += [ "hisysevent:libhisysevent" ]
+    }
+
+    subsystem_name = "multimedia"
+    part_name = "media_foundation"
+  }
+  ohos_shared_library("media_monitor_wrapper") {
+    stack_protector_ret = true
+    sanitize = {
+      ubsan = true
+      boundary_sanitize = true
+      cfi = true
+      cfi_cross_dso = true
+      debug = false
+      integer_overflow = true
+    }
+    install_enable = true
+
+    sources = [ "server/src/boundle_mgr_wrap_to_c.cpp" ]
 
     configs = []
 
