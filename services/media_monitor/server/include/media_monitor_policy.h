@@ -24,6 +24,7 @@
 #include "event_bean.h"
 #include "monitor_utils.h"
 #include "media_event_base_writer.h"
+#include "media_monitor_wrapper.h"
 
 namespace OHOS {
 namespace Media {
@@ -50,7 +51,7 @@ public:
     void HandStreamUsageToEventVector(std::shared_ptr<EventBean> &streamUsage);
     void HandBtUsageToEventVector(std::shared_ptr<EventBean> &btUsage);
     void AddToEventVector(std::shared_ptr<EventBean> &bean);
-    void HandleExhaustedToEventVector(const std::string &appName);
+    void HandleExhaustedToEventVector(int32_t appUid);
     void HandleCreateErrorToEventVector(std::shared_ptr<EventBean> &bean);
     void HandleSilentPlaybackToEventVector(std::shared_ptr<EventBean> &bean);
     void HandleUnderrunToEventVector(std::shared_ptr<EventBean> &bean);
@@ -70,6 +71,7 @@ private:
     void StopTimeThread();
     void TimeFunc();
     void HandleToHiSysEvent();
+    BundleInfo GetBundleInfo(int32_t appUid);
 
     uint64_t curruntTime_ = 0;
     std::unique_ptr<std::thread> timeThread_ = nullptr;
@@ -79,6 +81,7 @@ private:
 
     std::mutex eventVectorMutex_;
     std::vector<std::shared_ptr<EventBean>> eventVector_;
+    std::map<int32_t, BundleInfo> cachedBundleInfoMap_;
 
     int32_t aggregationFrequency_ = DEFAULT_AGGREGATION_FREQUENCY;
     int32_t aggregationTime_ = DEFAULT_AGGREGATION_TIME;
