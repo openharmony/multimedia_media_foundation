@@ -19,7 +19,7 @@
 #include <string_view>
 #include <memory>
 #include <typeinfo>
-#include<string>
+#include <string>
 
 namespace OHOS {
 namespace Media {
