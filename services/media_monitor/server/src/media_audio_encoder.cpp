@@ -17,7 +17,6 @@
 #include <filesystem>
 #include <sstream>
 #include <map>
-#include <vector>
 #include <sys/stat.h>
 #include "log.h"
 #include "securec.h"
@@ -32,72 +31,98 @@ namespace OHOS {
 namespace Media {
 namespace MediaMonitor {
 
-enum SampleFormat : uint8_t {
-    U8 = 0,
-    S16LE = 1,
-    S24LE = 2,
-    S32LE = 3,
-    F32LE = 4,
-};
+const int MAX_AUDIO_ARGS = 3;
+const int ARGS_SAMPLERATE_POS = 3;
+const int ARGS_CHANNEL_POS = 2;
+const int ARGS_SAMPLEFORMAT_POS = 1;
+const uint32_t DEFAULT_SAMPLERATE = 48000;
+const uint32_t DEFAULT_CHANNELS = 1;
+
+const int S24LE_SAMPLESIZE = 3;
+const int S24LE_BYTE_SHIFT_8 = 8;
+const int S24LE_BYTE_SHIFT_16 = 16;
+const int S24LE_BYTE_SHIFT_24 = 24;
+const int S24LE_BYTE_INDEX_0 = 0;
+const int S24LE_BYTE_INDEX_1 = 1;
+const int S24LE_BYTE_INDEX_2 = 2;
+
+const mode_t MODE = 0775;
+const std::string PCM_FILE = ".pcm";
+const std::string FLAC_FILE = ".flac";
+const std::string BLUETOOTCH_FILE = "bluetooth";
+const int BLUETOOTH_SAMPLE_FORMAT_OFFSET = 1;
+// samples(flac: 4608) * formatSize(f32: 4) * channles(6)
+constexpr size_t MAX_BUFFER_LEN = 4608 * 4 * 6;
+// samples(flac: 4608) * formatSize(s16: 2) * channles(2)
+constexpr size_t DEFALUT_BUFFER_LEN = 4608 * 2 * 2;
 
 static std::map<SampleFormat, AVSampleFormat> AudioSampleMap = {
     {SampleFormat::U8, AV_SAMPLE_FMT_U8},
     {SampleFormat::S16LE, AV_SAMPLE_FMT_S16},
-    {SampleFormat::S24LE, AV_SAMPLE_FMT_S16},
+    {SampleFormat::S24LE, AV_SAMPLE_FMT_S32},
     {SampleFormat::S32LE, AV_SAMPLE_FMT_S32},
     {SampleFormat::F32LE, AV_SAMPLE_FMT_FLT}
 };
+// encoder support sample rate
+const std::vector<std::string> SupportedSampleRates = {
+    "8000", "11025", "12000", "16000", "22050", "24000", "32000",
+    "44100", "48000", "64000", "88200", "96000", "192000"
+};
+// encoder support audio channels
+const std::vector<std::string> SupportedChannels = {"1", "2", "3", "4", "5", "6"};
+// encoder support sample format 1 S16le, 2 S24le, 3 S32le, 4 F32le
+const std::vector<std::string> SupportedSampleFormats = {"1", "2", "3", "4"};
 
-const std::vector<std::string> SupportedSampleRates = {"16000", "32000", "44100", "48000", "96000"};
-const std::vector<std::string> SupportedChannels = {"1", "2"};
-const std::vector<std::string> SupportedSampleFormats = {"1", "3", "4"};
-const size_t MAX_AUDIO_ARGS = 3;
-const size_t ARGS_SAMPLERATE_POS = 3;
-const size_t ARGS_CHANNEL_POS = 2;
-const size_t ARGS_SAMPLEFORMAT_POS = 1;
-const uint32_t DEFAULT_SAMPLERATE = 48000;
-const mode_t MODE = 0775;
-const std::string PCM_FILE = ".pcm";
-const std::string FLAC_FILE = ".flac";
-constexpr size_t MAX_BUFFER_LEN = 4608 * 2 * 10;
-constexpr size_t DEFALUT_BUFFER_LEN = 4608 * 2 * 2;
+SampleConvert::SampleConvert(std::shared_ptr<FFmpegApiWrap> apiWrap)
+    : apiWrap_(apiWrap)
+{
+}
 
-int32_t SampleConvert::Init(const ResamplePara& param)
+SampleConvert::~SampleConvert()
+{
+    Release();
+}
+
+int32_t SampleConvert::Init(const ResamplePara &param)
 {
     resamplePara_ = param;
-    auto swrContext = swr_alloc();
+    if (apiWrap_ == nullptr) {
+        MEDIA_LOG_E("api load failed");
+        return ERROR;
+    }
+    auto swrContext = apiWrap_->SwrAlloc();
     if (swrContext == nullptr) {
         MEDIA_LOG_E("cannot allocate swr context");
         return ERROR;
     }
-    swrContext = swr_alloc_set_opts(swrContext,
-                                    resamplePara_.channelLayout, resamplePara_.destFmt, resamplePara_.sampleRate,
-                                    resamplePara_.channelLayout, resamplePara_.srcFfFmt, resamplePara_.sampleRate,
-                                    0, nullptr);
-    if (swr_init(swrContext) != 0) {
+    swrContext = apiWrap_->SwrSetOpts(swrContext,
+        resamplePara_.channelLayout, resamplePara_.destFmt, resamplePara_.sampleRate,
+        resamplePara_.channelLayout, resamplePara_.srcFfFmt, resamplePara_.sampleRate,
+        0, nullptr);
+    if (apiWrap_->SwrInit(swrContext) != 0) {
         MEDIA_LOG_E("swr init error");
         return ERROR;
     }
-    swrCtx_ = std::shared_ptr<SwrContext>(swrContext, [](SwrContext *ptr) {
-        if (ptr) {
-            swr_free(&ptr);
-        }
+    swrCtx_ = std::shared_ptr<SwrContext>(swrContext, [this](SwrContext* ptr) {
+        apiWrap_->SwrFree(&ptr);
     });
     isInit_ = true;
     return SUCCESS;
 }
 
-int32_t SampleConvert::Convert(const uint8_t* src, size_t size, std::shared_ptr<AVFrame>& dstFrame)
+int32_t SampleConvert::Convert(const uint8_t *src, size_t size, AVFrame *dstFrame)
 {
+    FALSE_RETURN_V_MSG_E(isInit_ == true, ERROR, "init error convert failed");
+    FALSE_RETURN_V_MSG_E(dstFrame != nullptr, ERROR, "dst frame is nullptr");
     size_t lineSize = size / resamplePara_.channels;
     std::vector<const uint8_t*> tmpInput(resamplePara_.channels);
     tmpInput[0] = src;
-    if (av_sample_fmt_is_planar(resamplePara_.srcFfFmt)) {
+    if (apiWrap_->SampleFmtIsPlannar(resamplePara_.srcFfFmt)) {
         for (size_t i = 1; i < tmpInput.size(); ++i) {
             tmpInput[i] = tmpInput[i-1] + lineSize;
         }
     }
-    auto res = swr_convert(swrCtx_.get(),
+    auto res = apiWrap_->SwrConvert(swrCtx_.get(),
         dstFrame->extended_data, dstFrame->nb_samples,
         tmpInput.data(), dstFrame->nb_samples);
     if (res < 0) {
@@ -107,13 +132,30 @@ int32_t SampleConvert::Convert(const uint8_t* src, size_t size, std::shared_ptr<
     return SUCCESS;
 }
 
-int32_t MediaAudioEncoder::EncodePcmFiles(const std::string& fileDir)
+void SampleConvert::Release()
+{
+    swrCtx_ = nullptr;
+    isInit_ = false;
+}
+
+int32_t MediaAudioEncoder::EncodePcmFiles(const std::string &fileDir)
 {
     int32_t status = SUCCESS;
-    MEDIA_LOG_I("start encode dir: %{public}s pcm file", fileDir.c_str());
-    status = CheckFilePath(fileDir);
-    FALSE_RETURN_V_MSG_E(status == SUCCESS, status, "check path failed");
-    for (const auto& elem : std::filesystem::directory_iterator(fileDir)) {
+    apiWrap_ = std::make_shared<FFmpegApiWrap>();
+    if (!apiWrap_->Open()) {
+        apiWrap_->Close();
+        MEDIA_LOG_E("load encoder api failed");
+        apiWrap_ = nullptr;
+        return ERROR;
+    }
+
+    std::error_code errorCode;
+    std::filesystem::directory_iterator iter(fileDir, errorCode);
+    if (errorCode) {
+        MEDIA_LOG_E("get file failed");
+        return ERROR;
+    }
+    for (const auto &elem : iter) {
         if (std::filesystem::is_regular_file(elem.status())) {
             if (elem.path().extension() != PCM_FILE) {
                 continue;
@@ -125,75 +167,83 @@ int32_t MediaAudioEncoder::EncodePcmFiles(const std::string& fileDir)
             }
         }
     }
+
+    apiWrap_->Close();
+    apiWrap_ = nullptr;
     return SUCCESS;
 }
 
-int32_t MediaAudioEncoder::EncodePcmToFlac(const std::string& in)
+int32_t MediaAudioEncoder::EncodePcmToFlac(const std::string &in)
 {
     int32_t status = SUCCESS;
+    FALSE_RETURN_V_MSG_E(IsRealPath(in), ERROR, "check path failed");
     status = Init(in);
-    FALSE_RETURN_V_MSG_E(status == SUCCESS, status, "start encode flac failed");
-
-    FILE* pcmFile = fopen(in.c_str(), "rb");
-    FALSE_RETURN_V_MSG_E(pcmFile != nullptr, ERROR, "open pcm file failed");
-
-    size_t bufferLen = PcmDataSize();
-    if (bufferLen <= 0 || bufferLen > MAX_BUFFER_LEN) {
+    if (status != SUCCESS) {
+        Release();
         return ERROR;
     }
-    uint8_t* buffer = reinterpret_cast<uint8_t *>(malloc(bufferLen));
-    FALSE_RETURN_V_MSG_E(buffer != nullptr, ERROR, "alloc buffer failed");
-
+    size_t bufferLen = PcmDataSize();
+    if (bufferLen <= 0 || bufferLen > MAX_BUFFER_LEN) {
+        Release();
+        return ERROR;
+    }
+    uint8_t *buffer = reinterpret_cast<uint8_t *>(malloc(bufferLen));
+    if (buffer == nullptr) {
+        Release();
+        return ERROR;
+    }
+    FILE *pcmFile = fopen(in.c_str(), "rb");
+    if (pcmFile == nullptr) {
+        free(buffer);
+        Release();
+        return ERROR;
+    }
     while (!feof(pcmFile)) {
         errno_t err = memset_s(static_cast<void *>(buffer), bufferLen, 0, bufferLen);
         if (err != EOK) {
-            MEDIA_LOG_E("memset error");
             status = ERROR;
             break;
         }
         size_t bytesToWrite = fread(buffer, 1, bufferLen, pcmFile);
         if (bytesToWrite <= 0) {
-            MEDIA_LOG_E("read pcm bytes error");
             status = ERROR;
             break;
         }
         status = WritePcm(buffer, bufferLen);
         if (status != SUCCESS) {
-            MEDIA_LOG_E("read pcm bytes error");
             break;
         }
     }
-
-    status = Release();
-    free(buffer);
     (void)fclose(pcmFile);
-    FALSE_RETURN_V_MSG_E(status == SUCCESS, status, "encode flac release error");
-    return SUCCESS;
+    free(buffer);
+    Release();
+    return status;
 }
 
-int32_t MediaAudioEncoder::Init(const std::string& inputFile)
+int32_t MediaAudioEncoder::Init(const std::string &inputFile)
 {
+    FALSE_RETURN_V_MSG_E(apiWrap_ != nullptr, ERROR, "load wrap api failed");
     int32_t ret = SUCCESS;
-    ret = CheckFilePath(inputFile);
-    FALSE_RETURN_V_MSG_E(ret == SUCCESS, ret, "check path failed");
-    url_ = inputFile.substr(0, inputFile.length() - PCM_FILE.length()) + FLAC_FILE;
-    AudioEncodeConfig config = GetAudioConfig();
+    AudioEncodeConfig config;
+    ret = GetAudioConfig(inputFile, config);
+    FALSE_RETURN_V_MSG_E(ret == SUCCESS, ret, "get audio config failed");
     ret = InitAudioEncode(config);
     FALSE_RETURN_V_MSG_E(ret == SUCCESS, ret, "init encoder failed");
-    ret = InitMux(url_);
+    ret = InitMux();
     FALSE_RETURN_V_MSG_E(ret == SUCCESS, ret, "init muxer failed");
-    ret = InitFrame(avFrame_);
+    ret = InitFrame();
     FALSE_RETURN_V_MSG_E(ret == SUCCESS, ret, "init frame failed");
-    ret = InitPacket(avPacket_);
+    ret = InitPacket();
     FALSE_RETURN_V_MSG_E(ret == SUCCESS, ret, "init packet failed");
     ret = InitSampleConvert();
     FALSE_RETURN_V_MSG_E(ret == SUCCESS, ret, "init convert failed");
+    isInit_ = true;
     return ret;
 }
 
-bool MediaAudioEncoder::IsSupportAudioArgs(std::string& audioArg, const std::vector<std::string>& supportList)
+bool MediaAudioEncoder::IsSupportAudioArgs(std::string &audioArg, const std::vector<std::string> &supportList)
 {
-    for (auto& arg : supportList) {
+    for (auto &arg : supportList) {
         if (audioArg == arg) {
             return true;
         }
@@ -201,22 +251,21 @@ bool MediaAudioEncoder::IsSupportAudioArgs(std::string& audioArg, const std::vec
     return false;
 }
 
-int32_t MediaAudioEncoder::ParseAudioArgs(std::string& filename, AudioEncodeConfig& config)
+int32_t MediaAudioEncoder::ParseAudioArgs(const std::string &fileName, AudioEncodeConfig &config)
 {
     std::string sampleRate;
     std::string channel;
     std::string sampleFormat;
-    SampleFormat formatType = SampleFormat::S16LE;
 
     std::vector<std::string> res;
-    std::string nameStr = filename.substr(0, filename.rfind("."));
+    std::string nameStr = fileName.substr(0, fileName.rfind("."));
     std::istringstream iss(nameStr);
     std::string str;
     while (std::getline(iss, str, '_')) {
         res.push_back(str);
     }
     FALSE_RETURN_V_MSG_E(res.size() >= MAX_AUDIO_ARGS, ERROR,
-        "parse args error, %{public}s", filename.c_str());
+        "parse args error, %{public}s", fileName.c_str());
 
     // xxx_sampleRate_channel_sampleFormat.flac
     sampleRate = res[res.size() - ARGS_SAMPLERATE_POS];
@@ -225,161 +274,133 @@ int32_t MediaAudioEncoder::ParseAudioArgs(std::string& filename, AudioEncodeConf
     if (IsSupportAudioArgs(sampleRate, SupportedSampleRates) &&
         IsSupportAudioArgs(channel, SupportedChannels) &&
         IsSupportAudioArgs(sampleFormat, SupportedSampleFormats)) {
-        config.sampleRate = std::stoi(sampleRate);
-        config.channelLayout = av_get_default_channel_layout(std::stoi(channel));
-        formatType = (SampleFormat)std::stoi(sampleFormat);
-        config.sampleFmt = AudioSampleMap[formatType];
+        config.sampleRate = static_cast<uint32_t>(std::stoi(sampleRate));
+        config.channels =  static_cast<uint32_t>(std::stoi(channel));
+        config.sampleFmt = static_cast<SampleFormat>(std::stoi(sampleFormat));
         MEDIA_LOG_I("parser success %{public}s %{public}s %{public}s",
             sampleRate.c_str(), channel.c_str(), sampleFormat.c_str());
-        return SUCCESS;
-    }
-    return ERROR;
-}
-
-AudioEncodeConfig MediaAudioEncoder::GetAudioConfig()
-{
-    std::string filename = std::filesystem::path(url_).filename().string();
-    AudioEncodeConfig config;
-    config.sampleRate = DEFAULT_SAMPLERATE;
-    config.bitRate = 0;
-    config.channelLayout = (uint64_t)AV_CH_LAYOUT_MONO;
-    config.sampleFmt = AV_SAMPLE_FMT_S16;
-    config.audioCodecId = AV_CODEC_ID_FLAC;
-    ParseAudioArgs(filename, config);
-    srcSampleFormat_ = config.sampleFmt;
-    return config;
-}
-
-int32_t MediaAudioEncoder::InitMux(const std::string &url)
-{
-    int32_t ret = SUCCESS;
-    AVFormatContext* formatCtx = nullptr;
-    ret = avformat_alloc_output_context2(&formatCtx, nullptr, nullptr, url.c_str());
-    if (formatCtx == nullptr) {
-        MEDIA_LOG_E("could not deduce output format from file extension %{public}s", url.c_str());
+    } else {
+        MEDIA_LOG_I("parser error filename: %{public}s", fileName.c_str());
         return ERROR;
     }
-    formatContext_ = std::shared_ptr<AVFormatContext>(formatCtx, [](AVFormatContext *ptr) {
-        if (ptr) {
-            avformat_free_context(ptr);
-        }
+    if (fileName.find(BLUETOOTCH_FILE) != std::string::npos) {
+        config.sampleFmt = static_cast<SampleFormat>(std::stoi(sampleFormat) - BLUETOOTH_SAMPLE_FORMAT_OFFSET);
+    }
+    return SUCCESS;
+}
+
+int32_t MediaAudioEncoder::GetAudioConfig(const std::string &inFullName, AudioEncodeConfig &config)
+{
+    fileName_ = inFullName.substr(0, inFullName.length() - PCM_FILE.length()) + FLAC_FILE;
+    std::string filename = std::filesystem::path(fileName_).filename().string();
+    config.bitRate = 0;
+    config.sampleRate = DEFAULT_SAMPLERATE;
+    config.channels = DEFAULT_CHANNELS;
+    config.sampleFmt = S16LE;
+    config.audioCodecId = AV_CODEC_ID_FLAC;
+    int32_t ret = ParseAudioArgs(filename, config);
+    FALSE_RETURN_V_MSG_E(ret == SUCCESS, ERROR, "parse args error");
+    srcSampleFormat_ = config.sampleFmt;
+    return ret;
+}
+
+int32_t MediaAudioEncoder::InitMux()
+{
+    int32_t ret = SUCCESS;
+    AVFormatContext *formatCtx = nullptr;
+    ret = apiWrap_->FormatAllocOutputContext(&formatCtx, nullptr, nullptr, fileName_.c_str());
+    if (formatCtx == nullptr) {
+        MEDIA_LOG_E("could not deduce output format from file extension %{public}s", fileName_.c_str());
+        return ERROR;
+    }
+    formatContext_ = std::shared_ptr<AVFormatContext>(formatCtx, [this](AVFormatContext* ptr) {
+        apiWrap_->FormatFreeContext(ptr);
     });
     if (audioCodecContext_ != nullptr) {
-        AVStream* audioStream = avformat_new_stream(formatContext_.get(), nullptr);
-        AVCodecParameters* audioCodecPar = nullptr;
-        audioCodecPar = avcodec_parameters_alloc();
-        FALSE_RETURN_V_MSG_E(audioCodecPar != nullptr, ERROR, "could not alloc parameters");
-        avcodec_parameters_from_context(audioCodecPar, audioCodecContext_.get());
-        ret = avcodec_parameters_copy(audioStream->codecpar, audioCodecPar);
-        avcodec_parameters_free(&audioCodecPar);
+        AVStream *audioStream = nullptr;
+        audioStream = apiWrap_->FormatNewStream(formatContext_.get(), nullptr);
+        FALSE_RETURN_V_MSG_E(audioStream != nullptr, ERROR, "new audio stream error");
+        ret = apiWrap_->CodecParamFromContext(audioStream->codecpar, audioCodecContext_.get());
         FALSE_RETURN_V_MSG_E(ret >= 0, ERROR, "could not copy the stream parameters");
         audioStream->codecpar->codec_tag = 0;
     }
     if (videoCodecContext_ != nullptr) {
-        AVStream* videoStream = avformat_new_stream(formatContext_.get(), nullptr);
-        AVCodecParameters* videoCodecPar = nullptr;
-        videoCodecPar = avcodec_parameters_alloc();
-        FALSE_RETURN_V_MSG_E(videoCodecPar != nullptr, ERROR, "could not alloc parameters");
-        avcodec_parameters_from_context(videoCodecPar, videoCodecContext_.get());
-        ret = avcodec_parameters_copy(videoStream->codecpar, videoCodecPar);
-        avcodec_parameters_free(&videoCodecPar);
+        AVStream *videoStream = nullptr;
+        videoStream = apiWrap_->FormatNewStream(formatContext_.get(), nullptr);
+        FALSE_RETURN_V_MSG_E(videoStream != nullptr, ERROR, "new video stream error");
+        ret = apiWrap_->CodecParamFromContext(videoStream->codecpar, videoCodecContext_.get());
         FALSE_RETURN_V_MSG_E(ret >= 0, ERROR, "could not copy the stream parameters");
         videoStream->codecpar->codec_tag = 0;
     }
-    AVDictionary *opt = nullptr;
-    if (!(formatContext_->oformat->flags & AVFMT_NOFILE)) {
-        ret = avio_open2(&formatContext_->pb, url.c_str(), AVIO_FLAG_WRITE,
+    unsigned int formatCtxFlag = static_cast<unsigned int>(formatContext_->oformat->flags);
+    if (!(formatCtxFlag & AVFMT_NOFILE)) {
+        ret = apiWrap_->IoOpen(&formatContext_->pb, fileName_.c_str(), AVIO_FLAG_WRITE,
             &formatContext_->interrupt_callback, nullptr);
-        FALSE_RETURN_V_MSG_E(ret >= 0, ERROR, "open fail %{public}s", url.c_str());
+        FALSE_RETURN_V_MSG_E(ret >= 0, ERROR, "open fail %{public}s", fileName_.c_str());
     }
-    ret = avformat_write_header(formatContext_.get(), &opt);
+    ret = apiWrap_->FormatWriteHeader(formatContext_.get(), nullptr);
     if (ret < 0) {
         MEDIA_LOG_E("error occurred when write header: %{public}d", ret);
-        Release();
         return ERROR;
     }
-    isInit_ = true;
     return SUCCESS;
 }
 
-int32_t MediaAudioEncoder::InitAudioEncode(const AudioEncodeConfig& audioConfig)
+int32_t MediaAudioEncoder::InitAudioEncode(const AudioEncodeConfig &audioConfig)
 {
     int32_t ret = SUCCESS;
-    const AVCodec* codec = nullptr;
-    codec = avcodec_find_encoder(audioConfig.audioCodecId);
+    const AVCodec *codec = nullptr;
+    codec = apiWrap_->CodecFindEncoder(audioConfig.audioCodecId);
     FALSE_RETURN_V_MSG_E(codec != nullptr, ERROR, "find audio codec failed");
-    AVCodecContext* context = nullptr;
-    context = avcodec_alloc_context3(codec);
+    AVCodecContext *context = nullptr;
+    context = apiWrap_->CodecAllocContext(codec);
     FALSE_RETURN_V_MSG_E(context != nullptr, ERROR, "alloc audio encode context failed");
 
-    audioCodecContext_ = std::shared_ptr<AVCodecContext>(context, [](AVCodecContext* ptr) {
-        if (ptr) {
-            avcodec_free_context(&ptr);
-        }
+    audioCodecContext_ = std::shared_ptr<AVCodecContext>(context, [this](AVCodecContext* ptr) {
+        apiWrap_->CodecFreeContext(&ptr);
     });
 
     audioCodecContext_->sample_fmt = codec->sample_fmts ? codec->sample_fmts[0] : AV_SAMPLE_FMT_S16;
-    // sink to hal s32le
-    if (srcSampleFormat_ == AV_SAMPLE_FMT_S32 && audioConfig.audioCodecId == AV_CODEC_ID_FLAC) {
-        audioCodecContext_->sample_fmt = srcSampleFormat_;
+    if (srcSampleFormat_ > SampleFormat::S16LE && audioConfig.audioCodecId == AV_CODEC_ID_FLAC) {
+        audioCodecContext_->sample_fmt = AV_SAMPLE_FMT_S32;
     }
     audioCodecContext_->bit_rate = audioConfig.bitRate;
     audioCodecContext_->sample_rate = audioConfig.sampleRate;
-    if (codec->supported_samplerates) {
-        audioCodecContext_->sample_rate = codec->supported_samplerates[0];
-        for (int i = 0; codec->supported_samplerates[i]; i++) {
-            if (codec->supported_samplerates[i] == audioConfig.sampleRate) {
-                audioCodecContext_->sample_rate = audioConfig.sampleRate;
-                MEDIA_LOG_I("find supported sample rate matching config");
-            }
-        }
-    }
-    audioCodecContext_->channel_layout = audioConfig.channelLayout;
-    if (codec->channel_layouts) {
-        audioCodecContext_->channel_layout = codec->channel_layouts[0];
-        for (int i = 0; codec->channel_layouts[i]; i++) {
-            if (codec->channel_layouts[i] == audioConfig.channelLayout) {
-                audioCodecContext_->channel_layout = audioConfig.channelLayout;
-                MEDIA_LOG_I("find supported channel layout matching config");
-            }
-        }
-    }
-    audioCodecContext_->channels = av_get_channel_layout_nb_channels(audioCodecContext_->channel_layout);
-    audioCodecContext_->flags |= AV_CODEC_FLAG_GLOBAL_HEADER;
-    ret = avcodec_open2(audioCodecContext_.get(), codec, nullptr);
+    audioCodecContext_->channels = audioConfig.channels;
+    audioCodecContext_->channel_layout = static_cast<uint64_t>(apiWrap_->GetChannelLayout(audioConfig.channels));
+
+    unsigned int codecCtxFlag = static_cast<unsigned int>(audioCodecContext_->flags);
+    codecCtxFlag |= AV_CODEC_FLAG_GLOBAL_HEADER;
+    audioCodecContext_->flags = static_cast<int>(codecCtxFlag);
+    ret = apiWrap_->CodecOpen(audioCodecContext_.get(), codec, nullptr);
     FALSE_RETURN_V_MSG_E(ret >= 0, ERROR, "could not open audio codec %{public}d", ret);
     return SUCCESS;
 }
 
-int32_t MediaAudioEncoder::InitFrame(std::shared_ptr<AVFrame>& frame)
+int32_t MediaAudioEncoder::InitFrame()
 {
-    AVFrame* ffFrame = nullptr;
-    ffFrame = av_frame_alloc();
-    FALSE_RETURN_V_MSG_E(ffFrame != nullptr, ERROR, "init frame failed");
-    frame = std::shared_ptr<AVFrame>(ffFrame, [](AVFrame *ptr) {
-        if (ptr) {
-            av_frame_free(&ptr);
-        }
+    AVFrame* frame = apiWrap_->FrameAlloc();
+    FALSE_RETURN_V_MSG_E(frame != nullptr, ERROR, "alloc frame failed");
+    avFrame_ = std::shared_ptr<AVFrame>(frame, [this](AVFrame* frame) {
+        apiWrap_->FrameFree(&frame);
     });
-    frame->format = audioCodecContext_->sample_fmt;
-    frame->nb_samples = audioCodecContext_->frame_size;
-    frame->channel_layout = audioCodecContext_->channel_layout;
-    frame->sample_rate = audioCodecContext_->sample_rate;
-    frame->channels = av_get_channel_layout_nb_channels(frame->channel_layout);
-    int32_t ret = av_frame_get_buffer(frame.get(), 0);
+
+    avFrame_->format = audioCodecContext_->sample_fmt;
+    avFrame_->nb_samples = audioCodecContext_->frame_size;
+    avFrame_->channel_layout = audioCodecContext_->channel_layout;
+    avFrame_->sample_rate = audioCodecContext_->sample_rate;
+    avFrame_->channels = audioCodecContext_->channels;
+    int32_t ret = apiWrap_->FrameGetBuffer(avFrame_.get(), 0);
     FALSE_RETURN_V_MSG_E(ret >= 0, ERROR, "get frame buffer failed %{public}d", ret);
     return SUCCESS;
 }
 
-int32_t MediaAudioEncoder::InitPacket(std::shared_ptr<AVPacket>& packet)
+int32_t MediaAudioEncoder::InitPacket()
 {
-    AVPacket* ffPacket = nullptr;
-    ffPacket = av_packet_alloc();
-    FALSE_RETURN_V_MSG_E(ffPacket != nullptr, ERROR, "init packet failed");
-    packet = std::shared_ptr<AVPacket>(ffPacket, [](AVPacket *ptr) {
-        if (ptr) {
-            av_packet_free(&ptr);
-        }
+    AVPacket *packet = apiWrap_->PacketAlloc();
+    FALSE_RETURN_V_MSG_E(packet != nullptr, ERROR, "alloc packet failed");
+    avPacket_ = std::shared_ptr<AVPacket>(packet, [this](AVPacket *packet) {
+        apiWrap_->PacketFree(&packet);
     });
     return SUCCESS;
 }
@@ -387,55 +408,82 @@ int32_t MediaAudioEncoder::InitPacket(std::shared_ptr<AVPacket>& packet)
 int32_t MediaAudioEncoder::InitSampleConvert()
 {
     FALSE_RETURN_V_MSG_E(avFrame_ != nullptr, ERROR, "frame error.");
-    if (srcSampleFormat_ == AV_SAMPLE_FMT_S16 || srcSampleFormat_ == AV_SAMPLE_FMT_S32) {
+    if (srcSampleFormat_ > SampleFormat::U8 && srcSampleFormat_ < SampleFormat::F32LE) {
         MEDIA_LOG_I("in sample format no need convert %{public}d", srcSampleFormat_);
         sampleConvert_ = nullptr;
         return SUCCESS;
     }
 
-    sampleConvert_ = std::make_shared<SampleConvert>();
+    sampleConvert_ = std::make_shared<SampleConvert>(apiWrap_);
     ResamplePara param {
             avFrame_->channels,
             avFrame_->sample_rate,
             avFrame_->channel_layout,
-            srcSampleFormat_,
+            AudioSampleMap[srcSampleFormat_],
             (AVSampleFormat)avFrame_->format,
     };
     int32_t ret = sampleConvert_->Init(param);
     return ret;
 }
 
-int32_t MediaAudioEncoder::WritePcm(uint8_t* buffer, size_t size)
+void MediaAudioEncoder::CopyS24ToS32(int32_t *dst, const uint8_t *src, size_t count)
 {
-    if (isInit_ == false) {
-        MEDIA_LOG_E("encoder init state error");
-        return ERROR;
+    if (dst == nullptr || src == nullptr) {
+        return;
     }
-    FALSE_RETURN_V_MSG_E(buffer != nullptr, ERROR, "buffer nullptr");
-    if (avFrame_ == nullptr) {
-        return ERROR;
+
+    dst += count;
+    src += count * S24LE_SAMPLESIZE;
+    for (; count > 0; --count) {
+        src -= S24LE_SAMPLESIZE;
+        *--dst = (int32_t)((src[S24LE_BYTE_INDEX_0] << S24LE_BYTE_SHIFT_8) |
+            (src[S24LE_BYTE_INDEX_1] << S24LE_BYTE_SHIFT_16) |
+            (src[S24LE_BYTE_INDEX_2] << S24LE_BYTE_SHIFT_24));
     }
-    if (sampleConvert_) {
-        sampleConvert_->Convert(buffer, size, avFrame_);
+}
+
+int32_t MediaAudioEncoder::FillFrameFromBuffer(const uint8_t *buffer, size_t size)
+{
+    FALSE_RETURN_V_MSG_E(avFrame_->linesize[0] >= static_cast<int>(size), ERROR, "frame size error");
+    if (srcSampleFormat_ == SampleFormat::S24LE) {
+        size_t count = size / S24LE_SAMPLESIZE;
+        CopyS24ToS32(reinterpret_cast<int32_t*>(avFrame_->data[0]), buffer, count);
     } else {
         errno_t err = memcpy_s(avFrame_->data[0], avFrame_->linesize[0], buffer, size);
         FALSE_RETURN_V_MSG_E(err == EOK, ERROR, "memcpy error");
     }
-    return WriteFrame(avFrame_);
+    return SUCCESS;
 }
 
-int32_t MediaAudioEncoder::WriteFrame(std::shared_ptr<AVFrame>& frame)
+int32_t MediaAudioEncoder::WritePcm(const uint8_t *buffer, size_t size)
 {
     int32_t ret = SUCCESS;
-    FALSE_RETURN_V_MSG_E(frame != nullptr, ERROR, "frame nullptr");
+    FALSE_RETURN_V_MSG_E(isInit_ == true, ERROR, "init error");
+    FALSE_RETURN_V_MSG_E(buffer != nullptr, ERROR, "buffer nullptr");
+    FALSE_RETURN_V_MSG_E(avFrame_ != nullptr, ERROR, "frame nullptr");
+    if (sampleConvert_ != nullptr) {
+        ret = sampleConvert_->Convert(buffer, size, avFrame_.get());
+        FALSE_RETURN_V_MSG_E(ret == SUCCESS, ERROR, "resample frame error");
+    } else {
+        ret = FillFrameFromBuffer(buffer, size);
+        FALSE_RETURN_V_MSG_E(ret == SUCCESS, ERROR, "fill frame error");
+    }
+    ret = WriteFrame();
+    return ret;
+}
+
+int32_t MediaAudioEncoder::WriteFrame()
+{
+    int32_t ret = SUCCESS;
+    FALSE_RETURN_V_MSG_E(avFrame_ != nullptr, ERROR, "frame nullptr");
     FALSE_RETURN_V_MSG_E(avPacket_ != nullptr, ERROR, "packet nullptr");
-    ret = avcodec_send_frame(audioCodecContext_.get(), frame.get());
+    ret = apiWrap_->CodecSendFrame(audioCodecContext_.get(), avFrame_.get());
     FALSE_RETURN_V_MSG_E(ret >= 0, ERROR, "send frame failed %{public}d", ret);
     while (true) {
-        ret = avcodec_receive_packet(audioCodecContext_.get(), avPacket_.get());
+        ret = apiWrap_->CodecRecvPacket(audioCodecContext_.get(), avPacket_.get());
         if (ret == 0) {
-            ret = av_interleaved_write_frame(formatContext_.get(), avPacket_.get());
-            av_packet_unref(avPacket_.get());
+            ret = apiWrap_->FormatWriteFrame(formatContext_.get(), avPacket_.get());
+            apiWrap_->PacketUnref(avPacket_.get());
             FALSE_RETURN_V_MSG_E(ret >= 0, ERROR, "write packet error");
             continue;
         } else if ((ret == AVERROR(EAGAIN)) || (ret == AVERROR_EOF)) {
@@ -451,45 +499,58 @@ int32_t MediaAudioEncoder::WriteFrame(std::shared_ptr<AVFrame>& frame)
 
 void MediaAudioEncoder::ResetEncoderCtx()
 {
-    formatContext_ = nullptr;
-    audioCodecContext_ = nullptr;
-    videoCodecContext_ = nullptr;
     avPacket_ = nullptr;
     avFrame_ = nullptr;
+    audioCodecContext_ = nullptr;
+    videoCodecContext_ = nullptr;
+    formatContext_ = nullptr;
     sampleConvert_ = nullptr;
 }
 
-int32_t MediaAudioEncoder::Release()
+void MediaAudioEncoder::Release()
 {
+    FALSE_RETURN_MSG(apiWrap_ != nullptr, "load api error");
     if (formatContext_ == nullptr) {
         ResetEncoderCtx();
         isInit_ = false;
-        return SUCCESS;
+        return;
     }
     if (isInit_) {
-        av_write_trailer(formatContext_.get());
+        apiWrap_->FormatWriteTrailer(formatContext_.get());
+        apiWrap_->IoFlush(formatContext_->pb);
+        unsigned int formatCtxFlag = static_cast<unsigned int>(formatContext_->oformat->flags);
+        if (!(formatCtxFlag & AVFMT_NOFILE)) {
+            (void)apiWrap_->IoClose(formatContext_->pb);
+            formatContext_->pb = nullptr;
+        }
+        (void)apiWrap_->FormatFlush(formatContext_.get());
     }
-    if (!(formatContext_->oformat->flags & AVFMT_NOFILE)) {
-        avio_close(formatContext_->pb);
-    }
-    avformat_flush(formatContext_.get());
     ResetEncoderCtx();
     isInit_ = false;
-    return SUCCESS;
+    return;
 }
 
 size_t MediaAudioEncoder::PcmDataSize()
 {
     size_t size = DEFALUT_BUFFER_LEN;
-    if (audioCodecContext_ != nullptr) {
-        size = audioCodecContext_->frame_size
-        * av_get_channel_layout_nb_channels(audioCodecContext_->channel_layout)
-        * av_get_bytes_per_sample(srcSampleFormat_);
+    if (audioCodecContext_ == nullptr) {
+        return size;
     }
+
+    int bytesPerSample = 0;
+    if (srcSampleFormat_ == SampleFormat::S24LE) {
+        bytesPerSample = S24LE_SAMPLESIZE;
+    } else {
+        bytesPerSample = apiWrap_->GetBytesPerSample(AudioSampleMap[srcSampleFormat_]);
+    }
+
+    size = static_cast<size_t>(audioCodecContext_->frame_size
+        * audioCodecContext_->channels
+        * bytesPerSample);
     return size;
 }
 
-bool MediaAudioEncoder::DeleteSrcFile(const std::string& filePath)
+bool MediaAudioEncoder::DeleteSrcFile(const std::string &filePath)
 {
     if (!IsRealPath(filePath)) {
         return false;
@@ -500,15 +561,6 @@ bool MediaAudioEncoder::DeleteSrcFile(const std::string& filePath)
         return false;
     }
     return true;
-}
-
-int32_t MediaAudioEncoder::CheckFilePath(const std::string& inputFile)
-{
-    if (!IsRealPath(inputFile)) {
-        MEDIA_LOG_E("invalid url");
-        return ERROR;
-    }
-    return SUCCESS;
 }
 } // namespace MediaMonitor
 } // namespace Media

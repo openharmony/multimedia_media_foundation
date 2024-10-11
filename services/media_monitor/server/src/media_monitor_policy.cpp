@@ -133,6 +133,9 @@ void MediaMonitorPolicy::WriteBehaviorEvent(EventId eventId, std::shared_ptr<Eve
         case BACKGROUND_SILENT_PLAYBACK:
             mediaEventBaseWriter_.WriteBGSilentPlayback(bean);
             break;
+        case STREAM_STANDBY:
+            mediaEventBaseWriter_.WriteStreamStandby(bean);
+            break;
         default:
             break;
     }

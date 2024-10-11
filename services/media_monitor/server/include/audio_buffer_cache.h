@@ -22,13 +22,13 @@
 #include <mutex>
 #include <condition_variable>
 
-#include "buffer/avbuffer_queue.h"
+#include "dump_buffer_wrap.h"
 
 namespace OHOS {
 namespace Media {
 namespace MediaMonitor {
 
-using AudioBuffer = AVBuffer;
+using AudioBuffer = DumpBuffer;
 using AudioBufferElement = struct AudioBufferElement {
     int32_t size {0};
     std::shared_ptr<AudioBuffer> buffer {nullptr};
@@ -36,23 +36,25 @@ using AudioBufferElement = struct AudioBufferElement {
 
 class AudioBufferCache {
 public:
-    AudioBufferCache() {};
-    ~AudioBufferCache() {};
-    int32_t RequestBuffer(std::shared_ptr<AudioBuffer>& buffer, int32_t size);
-    int32_t ReleaseBuffer(std::shared_ptr<AudioBuffer>& buffer);
+    AudioBufferCache(std::shared_ptr<DumpBufferWrap> wrap);
+    ~AudioBufferCache();
+    int32_t RequestBuffer(std::shared_ptr<AudioBuffer> &buffer, int32_t size);
+    int32_t ReleaseBuffer(std::shared_ptr<AudioBuffer> &buffer);
     int32_t Clear();
-    int32_t GetBufferById(std::shared_ptr<AudioBuffer>& buffer, uint64_t bufferId);
-
+    int32_t GetBufferById(std::shared_ptr<AudioBuffer> &buffer, uint64_t bufferId);
+    int32_t SetBufferSize(std::shared_ptr<AudioBuffer> &buffer, int32_t size);
 private:
-    int32_t RequestCacheBuffer(std::shared_ptr<AudioBuffer>& buffer, int32_t size);
-    int32_t AllocAudioBuffer(std::shared_ptr<AudioBuffer>& buffer, int32_t size);
+    int32_t RequestCacheBuffer(std::shared_ptr<AudioBuffer> &buffer, int32_t size);
+    int32_t AllocAudioBuffer(std::shared_ptr<AudioBuffer> &buffer, int32_t size);
     int32_t DeleteAudioBuffer(uint64_t bufferId, int32_t size);
-    int32_t AllocBuffer(std::shared_ptr<AudioBuffer>& buffer, int32_t size);
+    int32_t AllocBuffer(std::shared_ptr<AudioBuffer> &buffer, int32_t size);
     std::mutex mutex_;
     std::list<uint64_t> freeBufferList_;
     std::map<uint64_t, AudioBufferElement> bufferMap_;
     int32_t bufferSize_ = 0;
+    std::shared_ptr<DumpBufferWrap> dumpBufferWrap_ = nullptr;
 };
+
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS

@@ -34,6 +34,10 @@ bool IsRealPath(const std::string& inputPath)
         MEDIA_LOG_E("invalid path");
         return false;
     }
+
+    char path[PATH_MAX] = {0};
+    auto realPath = realpath(inputPath.c_str(), path);
+    FALSE_RETURN_V(realPath != nullptr, false);
     return true;
 }
 
@@ -43,7 +47,7 @@ uint64_t TimeUtils::GetCurSec()
     struct timespec time;
     int ret = clock_gettime(CLOCK_MONOTONIC, &time);
     FALSE_RETURN_V_MSG_E(ret >= 0, result, "GetCurSec fail, result:%{public}d", ret);
-    MEDIA_LOG_I("GetCurSec success");
+    MEDIA_LOG_D("GetCurSec success");
     result = static_cast<uint64_t>((time.tv_sec) + (time.tv_nsec / NANOSECOND_TO_SECOND));
     return result;
 }

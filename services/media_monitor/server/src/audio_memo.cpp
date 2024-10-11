@@ -138,6 +138,17 @@ std::string AudioMemo::GetPerferredNameFromType(const PerferredType &type)
     return perferredName;
 }
 
+int32_t AudioMemo::ErasePreferredDeviceByType(const PerferredType &preferredType)
+{
+    MEDIA_LOG_D("Erase preferred device by type");
+    std::lock_guard<std::mutex> lockEventMap(perferredDeviceMutex_);
+    auto iter = perferredDevices_.find(preferredType);
+    if (iter != perferredDevices_.end()) {
+        perferredDevices_.erase(iter);
+        return SUCCESS;
+    }
+    return ERROR;
+}
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS

@@ -25,22 +25,23 @@ class MediaMonitorStub : public IRemoteStub<IMediaMonitor> {
 public:
     virtual int OnRemoteRequest(uint32_t code, MessageParcel &data, MessageParcel &reply,
         MessageOption &option) override;
+    std::shared_ptr<DumpBufferWrap> dumpBufferWrap_ = nullptr;
 
 private:
     void HandleWriteLogMsg(MessageParcel &data, MessageParcel &reply);
     void HandleGetAudioRouteMsg(MessageParcel &data, MessageParcel &reply);
     void HandleSetMediaParams(MessageParcel &data, MessageParcel &reply);
-    void HandleSendPcmBuffer(MessageParcel &data, MessageParcel &reply);
     void HandleGetInputBuffer(MessageParcel &data, MessageParcel &reply);
     void HandleInputBufferFilled(MessageParcel &data, MessageParcel &reply);
+    void HandleErasePreferredDeviceByType(MessageParcel &data, MessageParcel &reply);
     using HandlerFunc = void (MediaMonitorStub::*)(MessageParcel &data, MessageParcel &reply);
     static inline HandlerFunc handlers[] = {
         &MediaMonitorStub::HandleWriteLogMsg,
         &MediaMonitorStub::HandleGetAudioRouteMsg,
         &MediaMonitorStub::HandleSetMediaParams,
-        &MediaMonitorStub::HandleSendPcmBuffer,
         &MediaMonitorStub::HandleGetInputBuffer,
         &MediaMonitorStub::HandleInputBufferFilled,
+        &MediaMonitorStub::HandleErasePreferredDeviceByType,
     };
     static constexpr size_t handlersNums = sizeof(handlers) / sizeof(HandlerFunc);
 };

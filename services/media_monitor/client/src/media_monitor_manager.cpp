@@ -119,9 +119,11 @@ void MediaMonitorManager::WriteAudioBuffer(const std::string &fileName, void *pt
         MEDIA_LOG_D("dump status error return");
         return;
     }
-    if (versionType_ == COMMERCIAL_VERSION) {
+
+    if (versionType_ != BETA_VERSION) {
         return;
     }
+
     int duration = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()) - dumpStartTime_;
     if (duration > MAX_DUMP_TIME) {
         MEDIA_LOG_I("dump duration > 90 return");
@@ -129,27 +131,17 @@ void MediaMonitorManager::WriteAudioBuffer(const std::string &fileName, void *pt
         dumpStartTime_ = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
         return;
     }
-    FALSE_RETURN_MSG(ptr != nullptr, "inbuffer is nullptr.");
+
+    FALSE_RETURN_MSG(ptr != nullptr, "in data is empty");
     sptr<IMediaMonitor> gamp = GetMediaMonitorProxy();
-    FALSE_RETURN_MSG(gamp != nullptr, "gamp is nullptr.");
-    std::shared_ptr<AVBuffer> bufferPtr = nullptr;
-    int32_t ret = gamp->GetInputBuffer(bufferPtr, size);
-    FALSE_RETURN_MSG(ret == SUCCESS, "get buffer failed.");
-    FALSE_RETURN_MSG(bufferPtr != nullptr, "get buffer is nullptr.");
-    FALSE_RETURN_MSG(bufferPtr->memory_ != nullptr, "get memory is nullptr.");
-    if (bufferPtr->memory_->GetCapacity() > 0) {
-        ret = bufferPtr->memory_->Write(static_cast<uint8_t*>(ptr), size, 0);
-        MEDIA_LOG_D("write pcm buffer size  %{public}d", bufferPtr->memory_->GetSize());
-        FALSE_RETURN_MSG(ret > 0, "write to buffer failed");
-    } else {
-        MEDIA_LOG_E("create avbuffer failed");
-    }
-    ret = gamp->WriteAudioBuffer(fileName, bufferPtr);
+    FALSE_RETURN_MSG(gamp != nullptr, "gamp is nullptr");
+    int32_t ret = gamp->WriteAudioBuffer(fileName, ptr, size);
+    MEDIA_LOG_D("write audio buffer ret %{public}d", ret);
 }
 
-int32_t MediaMonitorManager::SetMediaParameters(const std::vector<std::pair<std::string, std::string>>& kvpairs)
+int32_t MediaMonitorManager::SetMediaParameters(const std::vector<std::pair<std::string, std::string>> &kvpairs)
 {
-    if (versionType_ == COMMERCIAL_VERSION) {
+    if (versionType_ != BETA_VERSION) {
         MEDIA_LOG_E("version type is commercial");
         return ERROR;
     }
@@ -177,7 +169,7 @@ int32_t MediaMonitorManager::SetMediaParameters(const std::vector<std::pair<std:
         dumpStartTime_ = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
     }
 
-    MEDIA_LOG_D("set dump media param, %{public}d %{public}s", dumpEnable_, dumpType_.c_str());
+    MEDIA_LOG_I("set dump media param, %{public}d %{public}s", dumpEnable_, dumpType_.c_str());
     sptr<IMediaMonitor> gamp = GetMediaMonitorProxy();
     if (gamp == nullptr) {
         MEDIA_LOG_E("gamp is nullptr.");
@@ -188,7 +180,18 @@ int32_t MediaMonitorManager::SetMediaParameters(const std::vector<std::pair<std:
     if (ret != SUCCESS) {
         MEDIA_LOG_E("set dump media param failed");
     }
+    return ret;
+}
 
+int32_t MediaMonitorManager::ErasePreferredDeviceByType(const PerferredType preferredType)
+{
+    MEDIA_LOG_D("Erase preferred device by type");
+    sptr<IMediaMonitor> gamp = GetMediaMonitorProxy();
+    if (gamp == nullptr) {
+        MEDIA_LOG_E("gamp is nullptr.");
+        return ERROR;
+    }
+    int32_t ret = gamp->ErasePreferredDeviceByType(preferredType);
     return ret;
 }
 } // namespace MediaMonitor

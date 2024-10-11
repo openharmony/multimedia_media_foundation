@@ -12,24 +12,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef I_MEDIA_MONITOR_INTERFACE_H
-#define I_MEDIA_MONITOR_INTERFACE_H
-namespace OHOS {
-namespace Media {
-namespace MediaMonitor {
 
-enum class MediaMonitorInterfaceCode {
-    WRITE_LOG_MSG,
-    GET_AUDIO_ROUTE_MSG,
-    SET_MEDIA_PARAMS,
-    GET_INPUT_BUFFER,
-    INPUT_BUFFER_FILL,
-    ERASE_PREFERRED_DEVICE,
-    MEDIA_MONITOR_CODE_MAX = ERASE_PREFERRED_DEVICE,
-};
+#include "dump_buffer_define.h"
 
-} // namespace MediaMonitor
-} // namespace Media
-} // namespace OHOS
+DumpBuffer::DumpBuffer(const std::shared_ptr<OHOS::Media::AVBuffer> &buffer)
+    : buffer_(buffer)
+{
+}
 
-#endif // I_MEDIA_MONITOR_INTERFACE_H
+DumpBuffer::~DumpBuffer()
+{
+    buffer_ = nullptr;
+}
