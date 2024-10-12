@@ -23,7 +23,11 @@ constexpr OHOS::HiviewDFX::HiLogLabel LABEL = {LOG_CORE, LOG_DOMAIN_FOUNDATION, 
 namespace OHOS {
 namespace Media {
 namespace MediaMonitor {
-static std::string WRAPPER_DL_PATH = "/sys/lib64/libmedia_monitor_wrapper.z.so";
+#if (defined(__aarch64__) || defined(__x86_64__))
+const std::string WRAPPER_DL_PATH = "/system/lib64/libmedia_monitor_wrapper.z.so";
+#else
+const std::string WRAPPER_DL_PATH = "/system/lib/libmedia_monitor_wrapper.z.so";
+#endif
 const char *GET_BUNDLE_INFO_FROM_UID = "GetBundleInfoFromUid";
 
 MediaMonitorWrapper::MediaMonitorWrapper()
@@ -46,7 +50,6 @@ MediaMonitorWrapper::~MediaMonitorWrapper()
         ::dlclose(soHandler_);
         soHandler_ = nullptr;
     }
-
 }
 
 MediaMonitorErr MediaMonitorWrapper::GetBundleInfo(int32_t appUid, BundleInfo *bundleInfo)
