@@ -31,6 +31,7 @@ MediaMonitorWrapper::MediaMonitorWrapper()
     auto soHandler_ = ::dlopen(WRAPPER_DL_PATH.c_str(), RTLD_NOW);
     if (!soHandler_) {
         MEDIA_LOG_E("dlopen failed due to " PUBLIC_LOG_S, ::dlerror());
+        return;
     }
     getBundleInfoFromUid_ =
         reinterpret_cast<GetBundleInfoFromUid *>(::dlsym(soHandler_, "GetBundleInfoFromUid"));
@@ -41,15 +42,18 @@ MediaMonitorWrapper::MediaMonitorWrapper()
 
 MediaMonitorWrapper::~MediaMonitorWrapper()
 {
-    (void)soHandler_;
-    ::dlclose(soHandler_);
-    soHandler_ = nullptr;
+    if (soHandler_) {
+        ::dlclose(soHandler_);
+        soHandler_ = nullptr;
+    }
+
 }
 
 MediaMonitorErr MediaMonitorWrapper::GetBundleInfo(int32_t appUid, BundleInfo *bundleInfo)
 {
-    if (!soHandler_) {
-        MEDIA_LOG_E("exec founction failed.check so exist." PUBLIC_LOG_S, ::dlerror());
+    if (!getBundleInfoFromUid_) {
+        MEDIA_LOG_E("getBundleInfoFromUid_ failed.");
+        return MediaMonitorErr::ERR_OPERATION_FAILED;
     }
     return getBundleInfoFromUid_(appUid, bundleInfo);
 }
