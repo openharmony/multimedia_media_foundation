@@ -111,9 +111,9 @@ protected:
     wptr<AVBufferQueueConsumerImpl> consumer_;
 
 private:
-    Status AttachAvailableBuffer(std::shared_ptr<AVBuffer>& buffer);
+    Status AttachAvailableBufferLocked(std::shared_ptr<AVBuffer>& buffer);
     Status PushBufferOnFilled(uint64_t uniqueId, bool isFilled);
-    void SetQueueSizeBeforeAttachBuffer(uint32_t size);
+    void SetQueueSizeBeforeAttachBufferLocked(uint32_t size);
     uint32_t size_;
     MemoryType memoryType_;
     bool disableAlloc_;

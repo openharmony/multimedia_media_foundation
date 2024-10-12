@@ -454,12 +454,12 @@ Status AVBufferQueueImpl::SetQueueSizeAndAttachBuffer(uint32_t size,
     {
         std::lock_guard<std::mutex> lockGuard(queueMutex_);
         if (size >= 0 && size <= AVBUFFER_QUEUE_MAX_QUEUE_SIZE && size != size_) {
-            SetQueueSizeBeforeAttachBuffer(size);
+            SetQueueSizeBeforeAttachBufferLocked(size);
         }
         FALSE_RETURN_V(cachedBufferMap_.find(uniqueId) == cachedBufferMap_.end(),
                        Status::ERROR_INVALID_BUFFER_ID);
         NOK_RETURN(CheckConfig(config));
-        Status result = AttachAvailableBuffer(buffer);
+        Status result = AttachAvailableBufferLocked(buffer);
         FALSE_RETURN_V(result == Status::OK, result);
     }
     if (isFilled) {
@@ -468,7 +468,7 @@ Status AVBufferQueueImpl::SetQueueSizeAndAttachBuffer(uint32_t size,
     return ReleaseBuffer(uniqueId);
 }
 
-Status AVBufferQueueImpl::AttachAvailableBuffer(std::shared_ptr<AVBuffer>& buffer)
+Status AVBufferQueueImpl::AttachAvailableBufferLocked(std::shared_ptr<AVBuffer>& buffer)
 {
     auto config = buffer->GetConfig();
     auto uniqueId = buffer->GetUniqueId();
@@ -511,7 +511,7 @@ Status AVBufferQueueImpl::PushBufferOnFilled(uint64_t uniqueId, bool isFilled)
     return ret;
 }
 
-void AVBufferQueueImpl::SetQueueSizeBeforeAttachBuffer(uint32_t size)
+void AVBufferQueueImpl::SetQueueSizeBeforeAttachBufferLocked(uint32_t size)
 {
     if (size > size_) {
         size_ = size;
@@ -537,7 +537,7 @@ Status AVBufferQueueImpl::AttachBuffer(std::shared_ptr<AVBuffer>& buffer, bool i
 
         NOK_RETURN(CheckConfig(config));
 
-        Status result = AttachAvailableBuffer(buffer);
+        Status result = AttachAvailableBufferLocked(buffer);
         FALSE_RETURN_V(result == Status::OK, result);
     }
 
