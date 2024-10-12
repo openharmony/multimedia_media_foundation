@@ -23,7 +23,11 @@ constexpr OHOS::HiviewDFX::HiLogLabel LABEL = {LOG_CORE, LOG_DOMAIN_FOUNDATION, 
 namespace OHOS {
 namespace Media {
 namespace MediaMonitor {
-static std::string WRAPPER_DL_PATH = "/sys/lib64/libmedia_monitor_wrapper.z.so";
+#if (defined(__aarch64__) || defined(__x86_64__))
+const std::string WRAPPER_DL_PATH = "/system/lib64/libmedia_monitor_wrapper.z.so";
+#else
+const std::string WRAPPER_DL_PATH = "/system/lib/libmedia_monitor_wrapper.z.so";
+#endif
 const char *GET_BUNDLE_INFO_FROM_UID = "GetBundleInfoFromUid";
 
 MediaMonitorWrapper::MediaMonitorWrapper()
@@ -31,6 +35,7 @@ MediaMonitorWrapper::MediaMonitorWrapper()
     auto soHandler_ = ::dlopen(WRAPPER_DL_PATH.c_str(), RTLD_NOW);
     if (!soHandler_) {
         MEDIA_LOG_E("dlopen failed due to " PUBLIC_LOG_S, ::dlerror());
+        return;
     }
     getBundleInfoFromUid_ =
         reinterpret_cast<GetBundleInfoFromUid *>(::dlsym(soHandler_, "GetBundleInfoFromUid"));
@@ -41,15 +46,17 @@ MediaMonitorWrapper::MediaMonitorWrapper()
 
 MediaMonitorWrapper::~MediaMonitorWrapper()
 {
-    (void)soHandler_;
-    ::dlclose(soHandler_);
-    soHandler_ = nullptr;
+    if (soHandler_) {
+        ::dlclose(soHandler_);
+        soHandler_ = nullptr;
+    }
 }
 
 MediaMonitorErr MediaMonitorWrapper::GetBundleInfo(int32_t appUid, BundleInfo *bundleInfo)
 {
-    if (!soHandler_) {
-        MEDIA_LOG_E("exec founction failed.check so exist." PUBLIC_LOG_S, ::dlerror());
+    if (!getBundleInfoFromUid_) {
+        MEDIA_LOG_E("getBundleInfoFromUid_ failed.");
+        return MediaMonitorErr::ERR_OPERATION_FAILED;
     }
     return getBundleInfoFromUid_(appUid, bundleInfo);
 }
