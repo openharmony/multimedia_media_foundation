@@ -541,7 +541,7 @@ void MediaMonitorPolicy::HandleSilentPlaybackToEventVector(std::shared_ptr<Event
 {
     MEDIA_LOG_I("Handle silent playback to event vector");
     bool isInEventMap = false;
-    BundleInfo bundleInfo = GetBundleInfo(bean->GetIntValue("CLIEN_UID"));
+    BundleInfo bundleInfo = GetBundleInfo(bean->GetIntValue("CLIENT_UID"));
     auto isExist = [&bundleInfo](const std::shared_ptr<EventBean> &eventBean) {
         if (eventBean->GetEventId() == BACKGROUND_SILENT_PLAYBACK &&
             bundleInfo.appName == eventBean->GetStringValue("APP_NAME") &&
