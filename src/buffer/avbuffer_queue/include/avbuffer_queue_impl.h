@@ -87,6 +87,7 @@ public:
     virtual Status SetProducerListener(sptr<IProducerListener>& listener);
     virtual Status SetConsumerListener(sptr<IConsumerListener>& listener);
 
+    Status SetQueueSizeAndAttachBuffer(uint32_t size, std::shared_ptr<AVBuffer>& buffer, bool isFilled) override;
 protected:
     std::string name_;
 
@@ -110,6 +111,9 @@ protected:
     wptr<AVBufferQueueConsumerImpl> consumer_;
 
 private:
+    Status AttachAvailableBufferLocked(std::shared_ptr<AVBuffer>& buffer);
+    Status PushBufferOnFilled(uint64_t uniqueId, bool isFilled);
+    void SetQueueSizeBeforeAttachBufferLocked(uint32_t size);
     uint32_t size_;
     MemoryType memoryType_;
     bool disableAlloc_;
