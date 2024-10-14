@@ -199,7 +199,7 @@ void MediaMonitorPolicy::WriteAggregationEvent(EventId eventId, std::shared_ptr<
     switch (eventId) {
         case AUDIO_STREAM_EXHAUSTED_STATS:
             bundleInfo = GetBundleInfo(bean->GetIntValue("CLIENT_UID"));
-            bean->Add("APP_NAME", bundleInfo.appName);
+            bean->Add("DUBIOUS_APP", bundleInfo.appName);
             mediaEventBaseWriter_.WriteStreamExhastedError(bean);
             break;
         case AUDIO_STREAM_CREATE_ERROR_STATS:
@@ -471,9 +471,11 @@ void MediaMonitorPolicy::HandleCaptureMutedToEventVector(std::shared_ptr<EventBe
     }
 }
 
-void MediaMonitorPolicy::HandleExhaustedToEventVector(int32_t uid)
+void MediaMonitorPolicy::HandleExhaustedToEventVector(std::shared_ptr<EventBean> &bean)
 {
     MEDIA_LOG_I("Handle exhausted to event map");
+    int32_t uid = bean->GetIntValue("CLIENT_UID");
+    int32_t appStreamNum = bean->GetIntValue("TIMES");
     bool isInEventMap = false;
     auto isExist = [&uid](const std::shared_ptr<EventBean> &eventBean) {
         if (eventBean->GetEventId() == AUDIO_STREAM_EXHAUSTED_STATS &&
@@ -486,15 +488,17 @@ void MediaMonitorPolicy::HandleExhaustedToEventVector(int32_t uid)
     std::lock_guard<std::mutex> lockEventVector(eventVectorMutex_);
     auto it = std::find_if(eventVector_.begin(), eventVector_.end(), isExist);
     if (it != eventVector_.end()) {
-        int32_t num = (*it)->GetIntValue("TIMES");
-        (*it)->UpdateIntMap("TIMES", ++num);
+        int32_t streamNum = (*it)->GetIntValue("TIMES");
+        if (appStreamNum > streamNum) {
+            (*it)->UpdateIntMap("TIMES", appStreamNum);
+        }
         isInEventMap = true;
     }
     if (!isInEventMap) {
         std::shared_ptr<EventBean> eventBean = std::make_shared<EventBean>(ModuleId::AUDIO,
             EventId::AUDIO_STREAM_EXHAUSTED_STATS, EventType::FREQUENCY_AGGREGATION_EVENT);
         eventBean->Add("CLIENT_UID", uid);
-        eventBean->Add("TIMES", INITIAL_VALUE);
+        eventBean->Add("TIMES", appStreamNum);
         AddToEventVector(eventBean);
     }
 }

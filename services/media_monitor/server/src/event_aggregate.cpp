@@ -591,6 +591,7 @@ void EventAggregate::HandlePipeChange(std::shared_ptr<EventBean> &bean)
 void EventAggregate::HandleStreamExhaustedErrorEvent(std::shared_ptr<EventBean> &bean)
 {
     MEDIA_LOG_D("Handle stream exhausted error event");
+    mediaMonitorPolicy_.HandleExhaustedToEventVector(bean);
     mediaMonitorPolicy_.WhetherToHiSysEvent();
 }
 
