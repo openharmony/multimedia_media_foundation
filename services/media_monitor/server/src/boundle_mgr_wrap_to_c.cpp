@@ -25,7 +25,7 @@ namespace {
 constexpr OHOS::HiviewDFX::HiLogLabel LABEL = {LOG_CORE, LOG_DOMAIN_FOUNDATION, "HiStreamer"};
 }
 
-MediaMonitorErr GetBundleInfoFromUid(int32_t appUid, BundleInfo *bundleInfoRes)
+extern "C" MediaMonitorErr GetBundleInfoFromUid(int32_t appUid, BundleInfo *bundleInfoRes)
 {
     std::string bundleName {""};
     OHOS::AppExecFwk::BundleInfo bundleInfo;

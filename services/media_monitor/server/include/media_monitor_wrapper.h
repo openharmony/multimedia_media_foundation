@@ -28,7 +28,7 @@ struct BundleInfo {
     int32_t versionCode;
 };
 
-typedef MediaMonitorErr GetBundleInfoFromUid(const int32_t appUid, const BundleInfo *bundleInfoRes);
+typedef MediaMonitorErr GetBundleInfoFromUid(int32_t appUid, BundleInfo *bundleInfoRes);
 
 class MediaMonitorWrapper {
 public:
@@ -43,4 +43,4 @@ private:
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS
-#endif // MEDIA_MONITOR_WRAPPER_H
+#endif // MEDIA_MONITOR_WRAPPER_H
