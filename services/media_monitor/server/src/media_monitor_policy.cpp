@@ -203,6 +203,9 @@ void MediaMonitorPolicy::WriteAggregationEvent(EventId eventId, std::shared_ptr<
             mediaEventBaseWriter_.WriteStreamExhastedError(bean);
             break;
         case AUDIO_STREAM_CREATE_ERROR_STATS:
+            bundleInfo = GetBundleInfo(bean->GetIntValue("CLIENT_UID"));
+            bean->Add("APP_NAME", bundleInfo.appName);
+            bean->Add("APP_VERSION_CODE", bundleInfo.versionCode);
             mediaEventBaseWriter_.WriteStreamCreateError(bean);
             break;
         case BACKGROUND_SILENT_PLAYBACK:
@@ -542,7 +545,7 @@ void MediaMonitorPolicy::HandleSilentPlaybackToEventVector(std::shared_ptr<Event
 {
     MEDIA_LOG_I("Handle silent playback to event vector");
     bool isInEventMap = false;
-    BundleInfo bundleInfo = GetBundleInfo(bean->GetIntValue("UID"));
+    BundleInfo bundleInfo = GetBundleInfo(bean->GetIntValue("CLIENT_UID"));
     auto isExist = [&bundleInfo](const std::shared_ptr<EventBean> &eventBean) {
         if (eventBean->GetEventId() == BACKGROUND_SILENT_PLAYBACK &&
             bundleInfo.appName == eventBean->GetStringValue("APP_NAME") &&
