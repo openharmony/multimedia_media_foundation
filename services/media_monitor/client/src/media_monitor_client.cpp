@@ -153,17 +153,7 @@ int32_t MediaMonitorClient::SetMediaParameters(const std::string &dumpType, cons
     MessageParcel reply;
     MessageOption option;
 
-    if (dumpEnable == "true") {
-        dumpBufferWrap_ = std::make_shared<DumpBufferWrap>();
-        bool ret = dumpBufferWrap_->Open();
-        if (!ret) {
-            MEDIA_LOG_E("load dumpbuffer failed");
-            dumpBufferWrap_ = nullptr;
-            return ERROR;
-        }
-    } else {
-        dumpBufferWrap_ = nullptr;
-    }
+    FALSE_RETURN_V_MSG_E(LoadDumpBufferWrap(dumpEnable) == SUCCESS, ERROR, "load buffer wrap error");
 
     data.WriteInterfaceToken(GetDescriptor());
     data.WriteString(dumpType);
@@ -171,6 +161,21 @@ int32_t MediaMonitorClient::SetMediaParameters(const std::string &dumpType, cons
     int32_t error = Remote()->SendRequest(
         static_cast<uint32_t>(MediaMonitorInterfaceCode::SET_MEDIA_PARAMS), data, reply, option);
     FALSE_RETURN_V_MSG_E(error == ERR_NONE, error, "set media param error %{public}d", error);
+    return reply.ReadInt32();
+}
+
+int32_t MediaMonitorClient::GetPcmDumpStatus(int32_t &dumpEnable)
+{
+    MessageParcel data;
+    MessageParcel reply;
+    MessageOption option;
+
+    data.WriteInterfaceToken(GetDescriptor());
+    int32_t error = Remote()->SendRequest(
+        static_cast<uint32_t>(MediaMonitorInterfaceCode::GET_DUMP_STATUS), data, reply, option);
+    FALSE_RETURN_V_MSG_E(error == ERR_NONE, error, "get media param error %{public}d", error);
+    dumpEnable = reply.ReadInt32();
+    MEDIA_LOG_I("get media param %d", dumpEnable);
     return reply.ReadInt32();
 }
 
@@ -186,6 +191,27 @@ int32_t MediaMonitorClient::ErasePreferredDeviceByType(const PerferredType prefe
         static_cast<uint32_t>(MediaMonitorInterfaceCode::ERASE_PREFERRED_DEVICE), data, reply, option);
     FALSE_RETURN_V_MSG_E(error == ERR_NONE, error, "erase preferred device error %{public}d", error);
     return reply.ReadInt32();
+}
+
+int32_t MediaMonitorClient::LoadDumpBufferWrap(const std::string &dumpEnable)
+{
+    bool flag = (dumpEnable == "true") ? true : false;
+    if (flag && dumpBufferWrap_ != nullptr) {
+        return SUCCESS;
+    }
+
+    if (flag) {
+        dumpBufferWrap_ = std::make_shared<DumpBufferWrap>();
+        bool ret = dumpBufferWrap_->Open();
+        if (!ret) {
+            MEDIA_LOG_E("load dumpbuffer failed");
+            dumpBufferWrap_ = nullptr;
+            return ERROR;
+        }
+    } else {
+        dumpBufferWrap_ = nullptr;
+    }
+    return SUCCESS;
 }
 } // namespace MediaMonitor
 } // namespace Media

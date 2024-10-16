@@ -234,6 +234,17 @@ int32_t MediaMonitorService::InputBufferFilled(const std::string &fileName, uint
     return SUCCESS;
 }
 
+int32_t MediaMonitorService::GetPcmDumpStatus(int32_t &dumpEnable)
+{
+    if (versionType_ != BETA_VERSION) {
+        return ERROR;
+    }
+
+    FALSE_RETURN_V_MSG_E(VerifyIsAudio(), ERROR, "client permissionn denied");
+    dumpEnable = dumpEnable_ ? 1 : 0;
+    return SUCCESS;
+}
+
 int32_t MediaMonitorService::SetMediaParameters(const std::string &dumpType, const std::string &dumpEnable)
 {
     if (versionType_ != BETA_VERSION) {

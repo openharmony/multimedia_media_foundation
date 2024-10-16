@@ -83,6 +83,8 @@ public:
 
     int32_t InputBufferFilled(const std::string &fileName, uint64_t bufferId, int32_t size) override;
 
+    int32_t GetPcmDumpStatus(int32_t &dumpEnable) override;
+
     int32_t ErasePreferredDeviceByType(const PerferredType preferredType) override;
 private:
     MediaMonitorService();

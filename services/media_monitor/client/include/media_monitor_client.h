@@ -42,8 +42,11 @@ public:
 
     int32_t SetMediaParameters(const std::string &dumpType, const std::string &dumpEnable) override;
 
+    int32_t GetPcmDumpStatus(int32_t &dumpEnable) override;
+
     int32_t ErasePreferredDeviceByType(const PerferredType preferredType) override;
 private:
+    int32_t LoadDumpBufferWrap(const std::string &dumpEnable);
     static inline BrokerDelegator<MediaMonitorClient> delegator_;
     std::shared_ptr<DumpBufferWrap> dumpBufferWrap_ = nullptr;
 };

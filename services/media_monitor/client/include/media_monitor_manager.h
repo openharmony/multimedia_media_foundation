@@ -34,6 +34,9 @@ public:
 
     void WriteAudioBuffer(const std::string &fileName, void *ptr, size_t size);
 
+    int32_t GetMediaParameters(const std::vector<std::string> &subKeys,
+        std::vector<std::pair<std::string, std::string>> &result);
+
     int32_t SetMediaParameters(const std::vector<std::pair<std::string, std::string>> &kvpairs);
 
     static void MediaMonitorDied(pid_t pid);
