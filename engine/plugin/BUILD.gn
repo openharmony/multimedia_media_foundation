@@ -249,8 +249,8 @@ ohos_source_set("histreamer_plugin_core") {
       "bounds_checking_function:libsec_shared",
       "c_utils:utilsbase",
       "graphic_surface:surface",
-      "ipc:ipc_single",
       "hilog:libhilog",
+      "ipc:ipc_single",
       "player_framework:media_client",
     ]
   }
