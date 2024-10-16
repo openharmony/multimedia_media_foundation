@@ -300,11 +300,7 @@ template<typename T>
 bool AssignParameterIfMatch(Tag tag, T& ret, const Plugin::ValueType& val)
 {
     if (Plugin::HasTagInfo(tag)) {
-        auto defaultValue = Plugin::GetTagDefValue(tag);
-        if (defaultValue == nullptr) {
-            return false;
-        }
-        if (val.SameTypeWith(*defaultValue) && Plugin::Any::IsSameTypeWith<T>(val)) {
+        if (val.SameTypeWith(*Plugin::GetTagDefValue(tag)) && Plugin::Any::IsSameTypeWith<T>(val)) {
             ret = Plugin::AnyCast<T>(val);
             return true;
         } else {

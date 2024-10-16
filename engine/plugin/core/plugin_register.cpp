@@ -431,7 +431,7 @@ void PluginRegister::DeletePlugin(std::map<std::string, std::shared_ptr<PluginRe
 }
 void PluginRegister::EraseRegisteredPluginsByLoader(const std::shared_ptr<PluginLoader>& loader)
 {
-    for (const auto& it : registerData_->registerTable) {
+    for (auto& it : registerData_->registerTable) {
         auto plugins = it.second;
         for (auto info = plugins.begin(); info != plugins.end();) {
             if (info->second->loader == loader) {

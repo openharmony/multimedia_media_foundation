@@ -40,7 +40,6 @@ ohos_source_set("histreamer_pipeline_base") {
     external_deps = [
       "graphic_surface:surface",
       "hilog:libhilog",
-      "hitrace:hitrace_meter",
       "ipc:ipc_single",
     ]
   }

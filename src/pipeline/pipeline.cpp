@@ -43,7 +43,7 @@ Pipeline::~Pipeline()
 }
 
 void Pipeline::Init(const std::shared_ptr<EventReceiver>& receiver, const std::shared_ptr<FilterCallback>& callback,
-    const std::string& groupId)
+    const std::string &groupId)
 {
     MEDIA_LOG_I("Pipeline::Init");
     eventReceiver_ = receiver;
@@ -88,14 +88,14 @@ Status Pipeline::PrepareFrame(bool renderFirstFrame)
             }
         }
         for (auto it = filters_.begin(); it != filters_.end(); ++it) {
-            Status waitRet = (*it)->WaitPrepareFrame();
-            if (waitRet != Status::OK) {
-                ret = waitRet;
+            auto rtv = (*it)->WaitPrepareFrame();
+            if (rtv != Status::OK) {
+                ret = rtv;
                 return;
             }
         }
     });
-    MEDIA_LOG_I("PrepareFrame done ret = %{public}d", ret);
+    MEDIA_LOG_D("PrepareFrame done ret = %{public}d", ret);
     return ret;
 }
 
@@ -205,7 +205,7 @@ Status Pipeline::Flush()
             (*it)->Flush();
         }
     });
-    MEDIA_LOG_I("Flush end.");
+    MEDIA_LOG_I("Flush done.");
     return Status::OK;
 }
 

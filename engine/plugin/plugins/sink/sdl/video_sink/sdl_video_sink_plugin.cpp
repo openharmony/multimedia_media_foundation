@@ -382,6 +382,7 @@ Status SdlVideoSinkPlugin::VideoImageDisaplay(const std::shared_ptr<Buffer>& inp
         // do something
     }
     int32_t ySize = 0;
+    int32_t uvSize = 0;
     auto bufferMem = inputInfo->GetMemory();
     auto ptr = bufferMem->GetReadOnlyData();
     data[0] = ptr;
@@ -393,7 +394,6 @@ Status SdlVideoSinkPlugin::VideoImageDisaplay(const std::shared_ptr<Buffer>& inp
             MEDIA_LOG_E("Invalid video buffer, planes: " PUBLIC_LOG_U32, videoMeta->planes);
             return Status::ERROR_INVALID_DATA;
         }
-        int32_t uvSize = 0;
         ret = UpdateYUVTexture(data, lineSize, videoMeta, ySize, uvSize);
     } else if (IsFormatNV()) {
         if (videoMeta->planes != 2) { // 2

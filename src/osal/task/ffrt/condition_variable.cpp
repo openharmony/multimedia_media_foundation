@@ -49,7 +49,7 @@ void ConditionVariable::Wait(AutoLock& lock, std::function<bool()> pred) noexcep
     }
 }
 
-bool ConditionVariable::WaitFor(AutoLock& lock, int timeoutMs)
+bool ConditionVariable::WaitFor(AutoLock& lock, int64_t timeoutMs)
 {
     auto status = cond_.wait_for(lock, std::chrono::milliseconds(timeoutMs));
     if (status == ffrt::cv_status::no_timeout) {
@@ -59,7 +59,7 @@ bool ConditionVariable::WaitFor(AutoLock& lock, int timeoutMs)
     }
 }
 
-bool ConditionVariable::WaitFor(AutoLock& lock, int timeoutMs, std::function<bool()> pred)
+bool ConditionVariable::WaitFor(AutoLock& lock, int64_t timeoutMs, std::function<bool()> pred)
 {
     return cond_.wait_for(lock, std::chrono::milliseconds(timeoutMs), pred);
 }

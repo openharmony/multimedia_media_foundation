@@ -43,7 +43,6 @@ const std::set<AVCodecID> g_supportedCodec = {
     AV_CODEC_ID_APE,
     AV_CODEC_ID_AMR_NB,
     AV_CODEC_ID_AMR_WB,
-    AV_CODEC_ID_OPUS,
 };
 
 std::map<AVCodecID, uint32_t> samplesPerFrameMap = {
@@ -55,7 +54,6 @@ std::map<AVCodecID, uint32_t> samplesPerFrameMap = {
     {AV_CODEC_ID_APE, 4608}, // 4608
     {AV_CODEC_ID_AMR_NB, 160}, // 160
     {AV_CODEC_ID_AMR_WB, 160}, // 160
-    {AV_CODEC_ID_OPUS, 960}, // 960
 };
 
 Status RegisterAudioDecoderPlugins(const std::shared_ptr<Register>& reg)
@@ -152,9 +150,6 @@ void SetCapMime(const AVCodec* codec, CapabilityBuilder& capBuilder)
         case AV_CODEC_ID_AMR_WB:
             capBuilder.SetMime(OHOS::Media::MEDIA_MIME_AUDIO_AMR_WB);
             break;
-        case AV_CODEC_ID_OPUS:
-            capBuilder.SetMime(OHOS::Media::MEDIA_MIME_AUDIO_OPUS);
-            break;
         default:
             MEDIA_LOG_I("codec is not supported right now");
     }
@@ -164,17 +159,6 @@ void UpdateOutCaps(const AVCodec* codec, CodecPluginDef& definition)
 {
     CapabilityBuilder capBuilder;
     capBuilder.SetMime(OHOS::Media::MEDIA_MIME_AUDIO_RAW);
-    switch(codec->id){
-        case AV_CODEC_ID_OPUS:
-        {
-            DiscreteCapability<AudioSampleFormat> values;
-            values.push_back(ConvFf2PSampleFmt(AV_SAMPLE_FMT_FLTP));
-            capBuilder.SetAudioSampleFormatList(values);
-            break;
-        }
-        default:
-            break;
-    }
     if (codec->sample_fmts != nullptr) {
         DiscreteCapability<AudioSampleFormat> values;
         size_t index {0};
@@ -272,7 +256,7 @@ Status AudioFfmpegDecoderPlugin::FindInParameterMapThenAssignLocked(Tag tag, T& 
 {
     if (audioParameter_.count(tag) == 0) {
         MEDIA_LOG_I("tag " PUBLIC_LOG_D32 "is not set", static_cast<int32_t>(tag));
-        return Status::ERROR_MISMATCHED_TYPE;
+        return Status::ERROR_NOT_EXISTED;
     }
     const auto& item = audioParameter_.at(tag);
     if (Any::IsSameTypeWith<T>(item)) {
@@ -306,13 +290,13 @@ do { \
     });
     {
         OSAL::ScopedLock lock1(parameterMutex_);
-        FAIL_RET_WHEN_ASSIGN_LOCKED(Tag::AUDIO_CHANNELS, uint32_t, tmpCtx->channels);
-        FAIL_RET_WHEN_ASSIGN_LOCKED(Tag::AUDIO_SAMPLE_RATE, uint32_t, tmpCtx->sample_rate);
+        FAIL_RET_WHEN_ASSIGN_LOCKED(Tag::AUDIO_CHANNELS, int32_t, tmpCtx->channels);
+        FAIL_RET_WHEN_ASSIGN_LOCKED(Tag::AUDIO_SAMPLE_RATE, int32_t, tmpCtx->sample_rate);
         FAIL_RET_WHEN_ASSIGN_LOCKED(Tag::MEDIA_BITRATE, int64_t, tmpCtx->bit_rate);
-        FAIL_RET_WHEN_ASSIGN_LOCKED(Tag::BITS_PER_CODED_SAMPLE, uint32_t, tmpCtx->bits_per_coded_sample);
+        FAIL_RET_WHEN_ASSIGN_LOCKED(Tag::BITS_PER_CODED_SAMPLE, int32_t, tmpCtx->bits_per_coded_sample);
         AudioSampleFormat audioSampleFormat = AudioSampleFormat::NONE;
         auto ret = FindInParameterMapThenAssignLocked(Tag::AUDIO_SAMPLE_FORMAT, audioSampleFormat);
-        FALSE_RETURN_V(ret == Status::OK, ret);
+        FALSE_RETURN_V(ret == Status::OK || ret == Status::ERROR_NOT_EXISTED, ret);
         auto tmpFmt = ConvP2FfSampleFmt(Plugin::AnyCast<AudioSampleFormat>(audioSampleFormat));
         FALSE_RETURN_V(tmpFmt != AV_SAMPLE_FMT_NONE, Status::ERROR_INVALID_PARAMETER);
         tmpCtx->sample_fmt = tmpFmt;
@@ -346,9 +330,6 @@ Status AudioFfmpegDecoderPlugin::AssignExtraDataIfExistsLocked(const std::shared
         return Status::ERROR_MISMATCHED_TYPE;
     }
     const auto* codecConfig = Plugin::AnyCast<CodecConfig>(&item);
-    if (codecConfig == nullptr) {
-        return Status::ERROR_UNKNOWN;
-    }
     if (!codecConfig->empty()) {
         auto configSize = codecConfig->size();
         auto allocSize = AlignUp(configSize + AV_INPUT_BUFFER_PADDING_SIZE, 16); // 16
@@ -455,7 +436,7 @@ Status AudioFfmpegDecoderPlugin::QueueInputBuffer(const std::shared_ptr<Buffer>&
         MEDIA_LOG_E("Decoder does not support fd buffer.");
         return Status::ERROR_INVALID_DATA;
     }
-    Status ret;
+    Status ret = Status::OK;
     {
         OSAL::ScopedLock lock(avMutex_);
         if (avCodecContext_ == nullptr) {
@@ -547,8 +528,8 @@ Status AudioFfmpegDecoderPlugin::ReceiveFrameSucc(const std::shared_ptr<Buffer>&
     int32_t samples = cachedFrame_->nb_samples;
     auto sampleFormat = static_cast<AVSampleFormat>(cachedFrame_->format);
     int32_t bytePerSample = av_get_bytes_per_sample(sampleFormat);
-    size_t outputSize =
-            static_cast<size_t>(samples) * static_cast<size_t>(bytePerSample) * static_cast<size_t>(channels);
+    size_t outputSize = static_cast<size_t>(samples) * static_cast<size_t>(bytePerSample)
+        * static_cast<size_t>(channels);
     auto ioInfoMem = ioInfo->GetMemory();
     if (ioInfoMem == nullptr) {
         MEDIA_LOG_E("ReceiveFrameSucc ioInfo GetMemory nullptr");

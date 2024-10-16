@@ -12,8 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef HISTREAMER_PLUGIN_FACTORY_H
-#define HISTREAMER_PLUGIN_FACTORY_H
+#ifndef HISTREAMER_PLUGINS_FACTORY_H
+#define HISTREAMER_PLUGINS_FACTORY_H
 
 #include "plugin/plugin_manager.h"
 #include "plugin/generic_plugin.h"
@@ -36,7 +36,7 @@ public:
 
     ~AutoRegisterPlugin() = default;
 };
-} // Plugin
-} // Media
-} // OHOS
-#endif //HISTREAMER_PLUGIN_FACTORY_H
+} // namespace Plugins
+} // namespace Media
+} // namespace OHOS
+#endif //HISTREAMER_PLUGINS_FACTORY_H

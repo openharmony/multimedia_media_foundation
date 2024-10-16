@@ -57,7 +57,7 @@ void* HttpSourceAllocator::Alloc(size_t size)
 void HttpSourceAllocator::Free(void* ptr) // NOLINT: void*
 {
     if (ptr != nullptr) {
-        delete[] static_cast<uint8_t*>(ptr);
+        delete[]static_cast<uint8_t*>(ptr);
     }
 }
 
@@ -313,7 +313,7 @@ Seekable HttpSourcePlugin::GetSeekable()
     return !isStream_ ? Seekable::SEEKABLE : Seekable::UNSEEKABLE;
 }
 
-Status HttpSourcePlugin::SeekToPos(int64_t offset)
+Status HttpSourcePlugin::SeekTo(uint64_t offset)
 {
     OSAL::ScopedLock lock(httpMutex_);
     unsigned int readPos = 0;

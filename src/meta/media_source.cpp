@@ -70,6 +70,16 @@ std::shared_ptr<PlayStrategy> MediaSource::GetPlayStrategy() const
     return playStrategy_;
 }
 
+void MediaSource::SetAppUid(int32_t appUid)
+{
+    appUid_ = appUid;
+}
+
+int32_t MediaSource::GetAppUid()
+{
+    return appUid_;
+}
+
 void MediaSource::SetMimeType(const std::string& mimeType)
 {
     mimeType_ = mimeType;

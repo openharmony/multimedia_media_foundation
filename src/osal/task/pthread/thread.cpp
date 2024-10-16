@@ -67,10 +67,10 @@ void Thread::SetName(const std::string& name)
 bool Thread::CreateThread(const std::function<void()>& func)
 {
     {
-        AutoLock lock(mutex_);
-        state_ = std::make_unique<State>();
-        state_->func = func;
-        state_->name = name_;
+    AutoLock lock(mutex_);
+    state_ = std::make_unique<State>();
+    state_->func = func;
+    state_->name = name_;
     }
     pthread_attr_t attr;
     pthread_attr_init(&attr);
@@ -88,7 +88,7 @@ bool Thread::CreateThread(const std::function<void()>& func)
 #endif
     int rtv = pthread_create(&id_, &attr, Thread::Run, this);
     if (rtv == 0) {
-        MEDIA_LOG_D("thread " PUBLIC_LOG_S " create success", name_.c_str());
+        MEDIA_LOG_I("thread " PUBLIC_LOG_S " create success", name_.c_str());
         isExistThread_.store(true);
         SetNameInternal();
     } else {

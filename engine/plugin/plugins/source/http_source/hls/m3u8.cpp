@@ -77,16 +77,16 @@ bool M3U8::Update(std::string& playList)
 
 void M3U8::InitTagUpdatersMap()
 {
-    tagUpdatersMap_[HlsTag::EXTXPLAYLISTTYPE] = [this](std::shared_ptr<Tag> &tag, M3U8Info &info) {
+    tagUpdatersMap_[HlsTag::EXTXPLAYLISTTYPE] = [this] (std::shared_ptr<Tag>& tag, M3U8Info& info) {
         bLive_ = !info.bVod && (std::static_pointer_cast<SingleValueTag>(tag)->GetValue().QuotedString() != "VOD");
     };
 
-    tagUpdatersMap_[HlsTag::EXTXTARGETDURATION] = [this](std::shared_ptr<Tag> &tag, M3U8Info &info) {
+    tagUpdatersMap_[HlsTag::EXTXTARGETDURATION] = [this] (std::shared_ptr<Tag>& tag, M3U8Info& info) {
         std::ignore = info;
         targetDuration_ = std::static_pointer_cast<SingleValueTag>(tag)->GetValue().FloatingPoint();
     };
 
-    tagUpdatersMap_[HlsTag::EXTXMEDIASEQUENCE] = [this](std::shared_ptr<Tag> &tag, M3U8Info &info) {
+    tagUpdatersMap_[HlsTag::EXTXMEDIASEQUENCE] = [this] (std::shared_ptr<Tag>& tag, M3U8Info& info) {
         std::ignore = info;
         sequence_ = std::static_pointer_cast<SingleValueTag>(tag)->GetValue().Decimal();
     };
@@ -176,9 +176,10 @@ M3U8VariantStream::M3U8VariantStream(std::string name, std::string uri, std::sha
 {
 }
 
-M3U8MasterPlaylist::M3U8MasterPlaylist(std::string& playList, const std::string& uri) : uri_(uri),
-                                                                                        playList_(playList)
+M3U8MasterPlaylist::M3U8MasterPlaylist(std::string& playList, const std::string& uri)
 {
+    playList_ = playList;
+    uri_ = uri;
     if (!StrHasPrefix(playList_, "#EXTM3U")) {
         MEDIA_LOG_I("playlist doesn't start with #EXTM3U " PUBLIC_LOG_S, uri.c_str());
     }
@@ -192,6 +193,7 @@ M3U8MasterPlaylist::M3U8MasterPlaylist(std::string& playList, const std::string&
 void M3U8MasterPlaylist::UpdateMediaPlaylist()
 {
     MEDIA_LOG_I("This is a simple media playlist, not a master playlist " PUBLIC_LOG_S, uri_.c_str());
+    isSimple_ = true;
     auto m3u8 = std::make_shared<M3U8>(uri_, "");
     auto stream = std::make_shared<M3U8VariantStream>(uri_, uri_, m3u8);
     variants_.emplace_back(stream);
@@ -199,7 +201,6 @@ void M3U8MasterPlaylist::UpdateMediaPlaylist()
     m3u8->Update(playList_);
     duration_ = m3u8->GetDuration();
     bLive_ = m3u8->IsLive();
-    isSimple_ = true;
     MEDIA_LOG_D("UpdateMediaPlaylist called, duration_ = " PUBLIC_LOG_F, duration_);
 }
 
@@ -230,7 +231,9 @@ void M3U8MasterPlaylist::UpdateMasterPlaylist()
                         stream->height_ = resolutionAttribute->GetResolution().second;
                     }
                     variants_.emplace_back(stream);
-                    defaultVariant_ = stream; // play last stream
+                    if (defaultVariant_ == nullptr) {
+                        defaultVariant_ = stream;
+                    }
                 }
                 break;
             }

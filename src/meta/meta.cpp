@@ -149,7 +149,8 @@ static std::vector<TagType> g_metadataBoolVector = {
     Tag::AV_PLAYER_IS_DRM_PROTECTED,
     Tag::AV_PLAYER_DOWNLOAD_TIME_OUT,
     Tag::VIDEO_ENCODER_PER_FRAME_DISCARD,
-    Tag::VIDEO_ENCODER_ENABLE_WATERMARK
+    Tag::VIDEO_ENCODER_ENABLE_WATERMARK,
+    Tag::VIDEO_ENCODER_ENABLE_PARAMS_FEEDBACK
 };
 
 bool SetMetaData(Meta& meta, const TagType& tag, int32_t value)
@@ -341,12 +342,6 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::RECORDER_AUDIO_BITRATE, defaultInt32},
     {Tag::RECORDER_START_LATENCY, defaultInt32},
     {Tag::TIMED_METADATA_SRC_TRACK, defaultInt32},
-    {Tag::VIDEO_ENCODER_FRAME_I_RATIO, defaultInt32},
-    {Tag::VIDEO_ENCODER_FRAME_MADI, defaultInt32},
-    {Tag::VIDEO_ENCODER_FRAME_MADP, defaultInt32},
-    {Tag::VIDEO_ENCODER_SUM_MADI, defaultInt32},
-    {Tag::VIDEO_ENCODER_REAL_BITRATE, defaultInt32},
-    {Tag::VIDEO_ENCODER_FRAME_QP, defaultInt32},
     {Tag::VIDEO_ENCODER_QP_AVERAGE, defaultInt32},
     {Tag::VIDEO_ENCODER_FRAME_TEMPORAL_ID, defaultInt32},
     {Tag::AV_PLAYER_ERR_CODE, defaultInt32},
@@ -363,6 +358,14 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::AV_PLAYER_MAX_LAG_DURATION, defaultInt32},
     {Tag::AV_PLAYER_AVG_LAG_DURATION, defaultInt32},
     {Tag::AV_PLAYER_MAX_SURFACESWAP_LATENCY, defaultInt32},
+    {Tag::DRM_ERROR_CODE, defaultInt32},
+    {Tag::RECORDER_ERR_CODE, defaultInt32},
+    {Tag::RECORDER_DURATION, defaultInt32},
+    {Tag::RECORDER_VIDEO_BITRATE, defaultInt32},
+    {Tag::RECORDER_AUDIO_SAMPLE_RATE, defaultInt32},
+    {Tag::RECORDER_AUDIO_CHANNEL_COUNT, defaultInt32},
+    {Tag::RECORDER_AUDIO_BITRATE, defaultInt32},
+    {Tag::RECORDER_START_LATENCY, defaultInt32},
     {Tag::VIDEO_COORDINATE_X, defaultInt32},
     {Tag::VIDEO_COORDINATE_Y, defaultInt32},
     {Tag::VIDEO_COORDINATE_W, defaultInt32},
@@ -430,6 +433,11 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::AV_PLAYER_VIDEO_MIME, defaultString},
     {Tag::AV_PLAYER_VIDEO_RESOLUTION, defaultString},
     {Tag::AV_PLAYER_AUDIO_MIME, defaultString},
+
+    {Tag::DRM_APP_NAME, defaultString},
+    {Tag::DRM_INSTANCE_ID, defaultString},
+    {Tag::DRM_ERROR_MESG, defaultString},
+
     {Tag::AV_TRANSCODER_ERR_MSG, defaultString},
     {Tag::AV_TRANSCODER_SRC_FORMAT, defaultString},
     {Tag::AV_TRANSCODER_SRC_AUDIO_MIME, defaultString},
@@ -437,6 +445,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::AV_TRANSCODER_DST_FORMAT, defaultString},
     {Tag::AV_TRANSCODER_DST_AUDIO_MIME, defaultString},
     {Tag::AV_TRANSCODER_DST_VIDEO_MIME, defaultString},
+
     // Float
     {Tag::MEDIA_LATITUDE, defaultFloat},
     {Tag::MEDIA_LONGITUDE, defaultFloat},
@@ -466,10 +475,10 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK, defaultBool},
     {Tag::VIDEO_ENCODER_ENABLE_PARAMS_FEEDBACK, defaultBool},
     {Tag::VIDEO_BUFFER_CAN_DROP, defaultBool},
-    {Tag::AUDIO_RENDER_SET_FLAG, defaultBool},
     {Tag::SCREEN_CAPTURE_USER_AGREE, defaultBool},
     {Tag::SCREEN_CAPTURE_REQURE_MIC, defaultBool},
     {Tag::SCREEN_CAPTURE_ENABLE_MIC, defaultBool},
+    {Tag::AUDIO_RENDER_SET_FLAG, defaultBool},
     {Tag::AV_PLAYER_IS_DRM_PROTECTED, defaultBool},
     {Tag::AV_PLAYER_DOWNLOAD_TIME_OUT, defaultBool},
     {Tag::VIDEO_ENCODER_PER_FRAME_DISCARD, defaultBool},
@@ -600,9 +609,9 @@ bool Meta::ToParcel(MessageParcel &parcel) const
     bool ret = true;
     for (auto iter = begin(); iter != end(); ++iter) {
         ++metaSize;
-        ret &= metaParcel.WriteString(iter->first);
-        ret &= metaParcel.WriteInt32(static_cast<int32_t>(GetValueType(iter->first)));
-        ret &= iter->second.ToParcel(metaParcel);
+        ret = ret && metaParcel.WriteString(iter->first);
+        ret = ret && metaParcel.WriteInt32(static_cast<int32_t>(GetValueType(iter->first)));
+        ret = ret && iter->second.ToParcel(metaParcel);
         if (!ret) {
             MEDIA_LOG_E("fail to Marshalling Key: " PUBLIC_LOG_S, iter->first.c_str());
             return false;

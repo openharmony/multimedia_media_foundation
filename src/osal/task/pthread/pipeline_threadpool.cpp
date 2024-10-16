@@ -45,7 +45,7 @@ static ThreadPriority ConvertPriorityType(TaskPriority priority)
         case TaskPriority::HIGHEST:
             return ThreadPriority::HIGHEST;
         default:
-            return ThreadPriority::HIGH;
+            return ThreadPriority::NORMAL;
     }
 }
 
@@ -62,7 +62,7 @@ static std::string TaskTypeConvert(TaskType type)
     if (it != table.end()) {
         return it->second;
     }
-    return "";
+    return "NA";
 }
 
 static int64_t GetNowUs()
@@ -77,7 +77,8 @@ PipeLineThreadPool& PipeLineThreadPool::GetInstance()
     return instance;
 }
 
-std::shared_ptr<PipeLineThread> PipeLineThreadPool::FindThread(std::string groupId, TaskType taskType, TaskPriority priority)
+std::shared_ptr<PipeLineThread> PipeLineThreadPool::FindThread(const std::string &groupId,
+    TaskType taskType, TaskPriority priority)
 {
     AutoLock lock(mutex_);
     if (workerGroupMap.find(groupId) == workerGroupMap.end()) {
@@ -94,14 +95,14 @@ std::shared_ptr<PipeLineThread> PipeLineThreadPool::FindThread(std::string group
     return newThread;
 }
 
-void PipeLineThreadPool::DestroyThread(std::string groupId)
+void PipeLineThreadPool::DestroyThread(const std::string &groupId)
 {
-    MEDIA_LOG_I("PipeLineThread " PUBLIC_LOG_S " destroy", groupId.c_str());
+    MEDIA_LOG_I("DestroyThread groupId:" PUBLIC_LOG_S, groupId.c_str());
     std::shared_ptr<std::list<std::shared_ptr<PipeLineThread>>> threadList;
     {
         AutoLock lock(mutex_);
         if (workerGroupMap.find(groupId) == workerGroupMap.end()) {
-            MEDIA_LOG_E("PipeLineThread  not exist");
+            MEDIA_LOG_E("DestroyThread groupId not exist");
             return;
         }
         threadList = workerGroupMap[groupId];
@@ -115,7 +116,7 @@ void PipeLineThreadPool::DestroyThread(std::string groupId)
 PipeLineThread::PipeLineThread(std::string groupId, TaskType type, TaskPriority priority)
     : groupId_(groupId), type_(type)
 {
-    MEDIA_LOG_I("PipeLineThread name:" PUBLIC_LOG_S " type:%{public}d created call", groupId_.c_str(), type);
+    MEDIA_LOG_I("PipeLineThread groupId:" PUBLIC_LOG_S " type:%{public}d created call", groupId_.c_str(), type);
     loop_ = CppExt::make_unique<Thread>(ConvertPriorityType(priority));
     name_ = groupId_ + "_" + TaskTypeConvert(type);
     loop_->SetName(name_);
@@ -156,7 +157,7 @@ void PipeLineThread::Exit()
 
 void PipeLineThread::Run()
 {
-    MEDIA_LOG_I("PipeLineThread " PUBLIC_LOG_S " run", name_.c_str());
+    MEDIA_LOG_I("PipeLineThread " PUBLIC_LOG_S " run enter", name_.c_str());
     while (true) {
         std::shared_ptr<TaskInner> nextTask;
         {
@@ -204,7 +205,7 @@ void PipeLineThread::RemoveTask(std::shared_ptr<TaskInner> task)
          "PipeLineThread " PUBLIC_LOG_S " remove all Task", name_.c_str());
     }
     if (type_ == TaskType::SINGLETON) {
-        PipeLineThreadPool::GetInstance().DestroyThread(name_);
+        PipeLineThreadPool::GetInstance().DestroyThread(groupId_);
     }
 }
 
@@ -221,10 +222,10 @@ void PipeLineThread::UnLockJobState(bool notifyChange)
     if (IsRunningInSelf()) {
         return;
     }
+    mutex_.unlock();
     if (notifyChange) {
         syncCond_.NotifyAll();
     }
-    mutex_.unlock();
 }
 
 bool PipeLineThread::IsRunningInSelf()

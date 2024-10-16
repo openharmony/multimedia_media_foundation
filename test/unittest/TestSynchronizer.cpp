@@ -73,7 +73,7 @@ HWTEST_F(TestSynchronizer, test_waitfor_fail, TestSize.Level1)
     auto end = std::chrono::high_resolution_clock::now();
     auto diff = static_cast<std::chrono::duration<double>>(end - start).count() * 1000;
     EXPECT_EQ(false, rtv);
-    EXPECT_TRUE((std::abs(static_cast<int>(diff) - timeoutMs) < 25) || (diff < 5));
+    EXPECT_TRUE((std::abs(static_cast<int>(diff) - timeoutMs) < 20) || (diff < 5));
     std::cout << "TestSynchronizer time diff: " << diff << std::endl;
 }
 

@@ -811,6 +811,7 @@ bool AnyCast(const Any* operand, ValueType& value) noexcept
         return false;
     }
 }
+
 /**
  * cast one Any pointer into ValueType pointer
  *

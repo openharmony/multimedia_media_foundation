@@ -60,7 +60,6 @@ StreamConvertor g_streamConvertors[] = {{AV_CODEC_ID_PCM_S16LE, ConvertRawAudioS
 #endif
                                         {AV_CODEC_ID_AMR_NB, ConvertAMRnbStreamToMetaInfo},
                                         {AV_CODEC_ID_AMR_WB, ConvertAMRwbStreamToMetaInfo},
-                                        {AV_CODEC_ID_OPUS, ConvertOPUSStreamToMetaInfo},
 };
 
 bool IsPcmStream(const AVStream& avStream)
@@ -195,13 +194,6 @@ void ConvertAMRwbStreamToMetaInfo(const AVStream& avStream, const std::shared_pt
                                   const std::shared_ptr<AVCodecContext>& avCodecContext, Meta& meta)
 {
     meta.Set<Tag::MIME>(MEDIA_MIME_AUDIO_AMR_WB);
-    ConvertCommonAudioStreamToMetaInfo(avStream, avFormatContext, avCodecContext, meta);
-}
-
-void ConvertOPUSStreamToMetaInfo(const AVStream& avStream, const std::shared_ptr<AVFormatContext>& avFormatContext,
-                                  const std::shared_ptr<AVCodecContext>& avCodecContext, Meta& meta)
-{
-    meta.Set<Tag::MIME>(MEDIA_MIME_AUDIO_OPUS);
     ConvertCommonAudioStreamToMetaInfo(avStream, avFormatContext, avCodecContext, meta);
 }
 

@@ -39,9 +39,9 @@ public:
 
     void Wait(AutoLock& lock, std::function<bool()> pred) noexcept;
 
-    bool WaitFor(AutoLock& lock, int timeoutMs);
+    bool WaitFor(AutoLock& lock, int64_t timeoutMs);
 
-    bool WaitFor(AutoLock& lock, int timeoutMs, std::function<bool()> pred);
+    bool WaitFor(AutoLock& lock, int64_t timeoutMs, std::function<bool()> pred);
 
 private:
 #ifdef MEDIA_FOUNDATION_FFRT
