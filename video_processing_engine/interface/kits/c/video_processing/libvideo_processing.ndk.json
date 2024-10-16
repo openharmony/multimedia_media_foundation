@@ -89,5 +89,10 @@
         "first_introduced": "12",
         "name": "VIDEO_PROCESSING_TYPE_DETAIL_ENHANCER",
         "type": "variable"
+    },
+    {
+        "first_introduced": "12",
+        "name": "VIDEO_DETAIL_ENHANCER_PARAMETER_KEY_QUALITY_LEVEL",
+        "type": "variable"
     }
 ]
