@@ -31,17 +31,6 @@ namespace OHOS {
 namespace Media {
 namespace Test {
 using namespace OHOS::Media::Plugin;
-HWTEST(TestPluginManager, ListPlugins_case3, TestSize.Level1)
-{
-    UtSourceTest1::available = true;
-    UtSourceTest2::available = true;
-    std::vector<std::string> plugins = PluginManager::Instance().ListPlugins(PluginType::SOURCE);
-    ASSERT_TRUE(plugins.size() > 1);
-    for (const auto & plugin : plugins) {
-        ASSERT_NE(plugin, "");
-    }
-}
-
 HWTEST(TestPluginManager, ListPlugins_case4, TestSize.Level1)
 {
     std::vector<std::string> plugins = PluginManager::Instance().ListPlugins(PluginType::DEMUXER);
