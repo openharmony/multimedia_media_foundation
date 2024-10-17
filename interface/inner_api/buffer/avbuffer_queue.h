@@ -51,6 +51,7 @@ public:
     virtual Status SetQueueSize(uint32_t size) = 0;
     virtual bool IsBufferInQueue(const std::shared_ptr<AVBuffer>& buffer) = 0;
     virtual Status Clear() = 0;
+    virtual Status SetQueueSizeAndAttachBuffer(uint32_t size, std::shared_ptr<AVBuffer>& buffer, bool isFilled);
 };
 
 } // namespace Media

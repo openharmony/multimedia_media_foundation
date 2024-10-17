@@ -39,6 +39,7 @@ public:
     Status DetachBuffer(const std::shared_ptr<AVBuffer>& buffer) override;
 
     Status SetBufferAvailableListener(sptr<IConsumerListener>& listener) override;
+    Status SetQueueSizeAndAttachBuffer(uint32_t size, std::shared_ptr<AVBuffer>& buffer, bool isFilled) override;
 
 private:
     std::shared_ptr<AVBufferQueueImpl> bufferQueue_;
