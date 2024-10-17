@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-#ifndef HISTREAMER_PLUGIN_EVENT_H
-#define HISTREAMER_PLUGIN_EVENT_H
+#ifndef HISTREAMER_PLUGINS_EVENT_H
+#define HISTREAMER_PLUGINS_EVENT_H
 
 #include <cstdint> // NOLINT: using int32_t in this file
 #include <string>
@@ -58,8 +58,7 @@ struct PluginEvent {
     Any param;
     std::string description;
 };
-
 } // namespace Plugins
 } // namespace Media
 } // namespace OHOS
-#endif // HISTREAMER_PLUGIN_TYPES_H
+#endif // HISTREAMER_PLUGINS_TYPES_H

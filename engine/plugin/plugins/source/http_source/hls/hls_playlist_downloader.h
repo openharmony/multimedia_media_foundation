@@ -33,12 +33,8 @@ public:
     void ParseManifest() override;
     void PlayListUpdateLoop() override;
     void SetPlayListCallback(PlayListChangeCallback* callback) override;
-    int64_t GetDuration() const override;
+    double GetDuration() const override;
     Seekable GetSeekable() const override;
-    void SelectBitRate(uint32_t bitRate) override;
-    std::vector<uint32_t> GetBitRates() override;
-    bool IsBitrateSame(uint32_t bitRate) override;
-    void NotifyListChange();
 
 private:
     std::string url_ {};

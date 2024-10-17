@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-#ifndef HISTREAMER_PLUGIN_CAPS_H
-#define HISTREAMER_PLUGIN_CAPS_H
+#ifndef HISTREAMER_PLUGINS_CAPS_H
+#define HISTREAMER_PLUGINS_CAPS_H
 
 #include <utility>
 #include <map> // NOLINT: used it
@@ -134,4 +134,4 @@ using ValueType = Any;
 } // namespace Plugins
 } // namespace Media
 } // namespace OHOS
-#endif // HISTREAMER_PLUGIN_CAPS_H
+#endif // HISTREAMER_PLUGINS_CAPS_H

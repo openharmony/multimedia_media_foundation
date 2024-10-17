@@ -54,7 +54,7 @@ AVHardwareAllocator::AVHardwareAllocator()
       isAllocated_(false),
       isSecure_(false)
 {
-    MEDIA_LOG_I("AVHardwareAllocator is allocatered");
+    MEDIA_LOG_D("AVHardwareAllocator is allocatered");
 };
 
 AVHardwareAllocator::~AVHardwareAllocator()

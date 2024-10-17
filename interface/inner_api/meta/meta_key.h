@@ -205,7 +205,7 @@ public:
                                        ///< wthether the capability is supported. This is an optional key that applies
                                        ///< only to video encoder. It is used in configure.
     static constexpr const char VIDEO_ENCODER_ENABLE_PARAMS_FEEDBACK[] =
-        "video_encoder_enable_params_feedback"; ///< int32_t, key for describing enable statistics params feedback with
+        "video_encoder_enable_params_feedback"; ///< bool, key for describing enable statistics params feedback with
                                                 ///< frame, This is an optional key that applies only to video encoder.
                                                 ///< It is used in configure.
     static constexpr const char VIDEO_ENCODER_PER_FRAME_MARK_LTR[] =
@@ -272,30 +272,6 @@ public:
     static constexpr const char VIDEO_BUFFER_CAN_DROP[] =
         "video_buffer_can_drop"; ///< bool, key to describe that encoded video buffer can be dropped or not befor
                                  ///< sent to decoder in video playing.
-    static constexpr const char VIDEO_ENCODER_FRAME_I_RATIO[] =
-        "video_encoder_frame_I_ratio"; ///< int32_t, key for describing the percent ratio of I macroblock num in all
-                                       ///< macroblock num of this frame. This is a part of a video encoder statistics
-                                       ///< export feature. This value is emitted from video encoder for a video frame.
-    static constexpr const char VIDEO_ENCODER_FRAME_MADI[] =
-        "video_encoder_frame_madi"; ///< int32_t, key for describing frame madi. This is a part of a video encoder
-                                    ///< statistic sexport feature. This value is emitted from video encoder for a video
-                                    ///< frame.
-    static constexpr const char VIDEO_ENCODER_FRAME_MADP[] =
-        "video_encoder_frame_madp"; ///< int32_t, key for describing frame madp. This is a part of a video encoder
-                                    ///< statistics export feature. This value is emitted from video encoder for a video
-                                    ///< frame.
-    static constexpr const char VIDEO_ENCODER_SUM_MADI[] =
-        "video_encoder_sum_madi"; ///< int32_t, key for describing the sum of the previous 10 frame madi. This is a part
-                                  ///< of a video encoder statistics export feature. This value is emitted from video
-                                  ///< encoder for a video frame.
-    static constexpr const char VIDEO_ENCODER_REAL_BITRATE[] =
-        "video_encoder_real_bit_rate"; ///< int32_t, key for describing the real bit rate. This is a part of a video
-                                       ///< encoder statistics export feature. This value is emitted from video
-                                       ///< encoder for a video frame.
-    static constexpr const char VIDEO_ENCODER_FRAME_QP[] =
-        "video_encoder_frame_qp"; ///< int32_t, key for describing frame qp. This is a part of a video encoder
-                                  ///< statistics export feature. This value is emitted from video encoder for
-                                  ///< a video frame.
     static constexpr const char VIDEO_ENCODER_QP_AVERAGE[] =
         "video_encoder_qp_average"; ///< int32_t, key for describing the video frame averge quantization parameter.
                                     ///< This is a part of a video encoder statistics export feature. This value is
@@ -304,6 +280,9 @@ public:
         "video_encoder_mse"; ///< double, key for describing video frame mean squared error. This is a part of a video
                              ///< encoder statistics export feature. This value is emitted from video encoder for a
                              ///< video frame.
+    static constexpr const char VIDEO_ENCODER_FRAME_TEMPORAL_ID[] =
+        "video_encoder_frame_temporal_id"; ///< int32_t, key for describing the temporal ID of the frame when SVC is
+                                           ///< enabled. This value is emitted from video encoder for a video frame.
     static constexpr const char VIDEO_ENCODER_PER_FRAME_DISCARD[] =
         "video_encoder_per_frame_discard"; ///< bool, key for describing whether the current frame is not encoded.
     static constexpr const char VIDEO_ENCODER_ENABLE_WATERMARK[] =
@@ -335,9 +314,6 @@ public:
         "video_decoder_output_colorspace"; ///< int32_t, Key for video color space of the video decoder output.
                                            ///< See {@link OH_NativeBuffer_ColorSpace} for value, and only
                                            ///< {@link OH_COLORSPACE_BT709_LIMIT} is valid. It is used in configure.
-    static constexpr const char VIDEO_ENCODER_FRAME_TEMPORAL_ID[] =
-        "video_encoder_frame_temporal_id"; ///< int32_t, key for describing the temporal ID of the frame when SVC is
-                                           ///< enabled. This value is emitted from video encoder for a video frame.
 
     /* -------------------- video specific tag -------------------- */
     static constexpr const char VIDEO_H264_PROFILE[] = "video.h264.profile"; ///< @see VideoH264Profile

@@ -15,7 +15,6 @@
 
 #include <memory>
 #include <iostream>
-#include "av_hardware_memory.h"
 #include "gtest/gtest.h"
 #include "osal/utils/dump_buffer.h"
 #include "common/media_core.h"
@@ -26,9 +25,8 @@ using namespace testing::ext;
 using namespace OHOS::Media;
 
 namespace {
-std::string DUMP_PARAM = "w";
-std::string DUMP_FILE_NAME = "DumpBufferTest.es";
-const int DUMP_SIZE = 1024;
+const std::string DUMP_PARAM = "w";
+const std::string DUMP_FILE_NAME = "DumpBufferTest.es";
 }
 
 namespace OHOS {
@@ -52,56 +50,5 @@ HWTEST_F(DumpBufferTest, DumpAVBufferToFile, TestSize.Level1)
     outputBuffer = std::make_shared<AVBuffer>();
     DumpAVBufferToFile(DUMP_PARAM, DUMP_FILE_NAME, outputBuffer);
 }
-
-HWTEST_F(DumpBufferTest, DumpAVBufferToFile_002, TestSize.Level1)
-{
-    std::shared_ptr<Media::AVBuffer> outputBuffer = std::make_shared<AVBuffer>();
-    outputBuffer->memory_ = nullptr;
-    DumpAVBufferToFile(DUMP_PARAM, DUMP_FILE_NAME, outputBuffer);
-}
-
-HWTEST_F(DumpBufferTest, DumpAVBufferToFile_003, TestSize.Level1)
-{
-    DUMP_PARAM = "invalid";
-    std::shared_ptr<Media::AVBuffer> outputBuffer = std::make_shared<AVBuffer>();
-    outputBuffer->memory_ = std::make_shared<AVHardwareMemory>();
-    DumpAVBufferToFile(DUMP_PARAM, DUMP_FILE_NAME, outputBuffer);
-    DUMP_PARAM = "w";
-}
-
-HWTEST_F(DumpBufferTest, DumpAVBufferToFile_004, TestSize.Level1)
-{
-    DUMP_FILE_NAME = "";
-    std::shared_ptr<Media::AVBuffer> outputBuffer = std::make_shared<AVBuffer>();
-    outputBuffer->memory_ = std::make_shared<AVHardwareMemory>();
-    DumpAVBufferToFile(DUMP_PARAM, DUMP_FILE_NAME, outputBuffer);
-    DUMP_FILE_NAME = "DumpBufferTest.es";
-}
-
-HWTEST_F(DumpBufferTest, DumpAVBufferToFile_005, TestSize.Level1)
-{
-    std::shared_ptr<Media::AVBuffer> outputBuffer = std::make_shared<AVBuffer>();
-    outputBuffer->memory_ = std::make_shared<AVHardwareMemory>();
-    outputBuffer->memory_->SetSize(0);
-    DumpAVBufferToFile(DUMP_PARAM, DUMP_FILE_NAME, outputBuffer);
-}
-
-HWTEST_F(DumpBufferTest, DumpAVBufferToFile_006, TestSize.Level1)
-{
-    std::shared_ptr<Media::AVBuffer> outputBuffer = std::make_shared<AVBuffer>();
-    outputBuffer->memory_ = std::make_shared<AVHardwareMemory>();
-    outputBuffer->memory_->SetSize(DUMP_SIZE);
-    DumpAVBufferToFile(DUMP_PARAM, DUMP_FILE_NAME, outputBuffer);
-}
-
-HWTEST_F(DumpBufferTest, DumpAVBufferToFile_007, TestSize.Level1)
-{
-    std::shared_ptr<Media::AVBuffer> outputBuffer = std::make_shared<AVBuffer>();
-    outputBuffer->memory_ = std::make_shared<AVHardwareMemory>();
-    outputBuffer->memory_->SetSize(DUMP_SIZE);
-    outputBuffer->memory_->base_ = new uint8_t[DUMP_SIZE];
-    DumpAVBufferToFile(DUMP_PARAM, DUMP_FILE_NAME, outputBuffer);
-}
-
 }
 }

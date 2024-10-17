@@ -169,7 +169,7 @@ Status AudioCapturePlugin::Prepare()
     MEDIA_LOG_D("IN");
     AudioStandard::AudioEncodingType audioEncoding = AudioStandard::ENCODING_INVALID;
     auto supportedEncodingTypes = OHOS::AudioStandard::AudioCapturer::GetSupportedEncodingTypes();
-    for (const auto& supportedEncodingType : supportedEncodingTypes) {
+    for (auto& supportedEncodingType : supportedEncodingTypes) {
         if (supportedEncodingType == AudioStandard::ENCODING_PCM) {
             audioEncoding = AudioStandard::ENCODING_PCM;
             break;
@@ -480,7 +480,7 @@ Seekable AudioCapturePlugin::GetSeekable()
     return Seekable::UNSEEKABLE;
 }
 
-Status AudioCapturePlugin::SeekToPos(int64_t offset)
+Status AudioCapturePlugin::SeekTo(uint64_t offset)
 {
     (void)offset;
     return Status::ERROR_UNIMPLEMENTED;

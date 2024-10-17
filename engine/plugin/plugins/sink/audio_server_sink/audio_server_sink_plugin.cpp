@@ -192,7 +192,7 @@ namespace AuSrSinkPlugin {
 using namespace OHOS::Media::Plugin;
 
 
-AudioServerSinkPlugin::AudioRendererCallbackImpl::AudioRendererCallbackImpl(Callback* cb, const bool& isPaused)
+AudioServerSinkPlugin::AudioRendererCallbackImpl::AudioRendererCallbackImpl(Callback* cb, bool& isPaused)
     : callback_(cb), isPaused_(isPaused)
 {
 }
@@ -736,6 +736,7 @@ Status AudioServerSinkPlugin::Write(const std::shared_ptr<Buffer>& input)
     MEDIA_LOG_DD("write data size " PUBLIC_LOG_ZU, destLength);
     while (isForcePaused_ && seekable_ == Seekable::SEEKABLE) {
         OSAL::SleepFor(5); // 5ms
+        continue;
     }
     int32_t ret = 0;
     OSAL::ScopedLock lock(renderMutex_);

@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-#ifndef HISTREAMER_PLUGIN_MEMORY_H
-#define HISTREAMER_PLUGIN_MEMORY_H
+#ifndef HISTREAMER_PLUGINS_MEMORY_H
+#define HISTREAMER_PLUGINS_MEMORY_H
 
 #include <cstdint>
 #include <memory>
@@ -161,4 +161,4 @@ private:
 } // namespace Plugins
 } // namespace Media
 } // namespace OHOS
-#endif // HISTREAMER_PLUGIN_MEMORY_H
+#endif // HISTREAMER_PLUGINS_MEMORY_H

@@ -275,14 +275,9 @@ public:
         tagCharSeq == Tag::RECORDER_AUDIO_CHANNEL_COUNT or
         tagCharSeq == Tag::RECORDER_AUDIO_BITRATE or
         tagCharSeq == Tag::RECORDER_START_LATENCY, int32_t, AnyValueType::INT32_T);
+
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::VIDEO_DECODER_RATE_UPPER_LIMIT or
-        tagCharSeq == Tag::VIDEO_ENCODER_FRAME_I_RATIO or
-        tagCharSeq == Tag::VIDEO_ENCODER_FRAME_MADI or
-        tagCharSeq == Tag::VIDEO_ENCODER_FRAME_MADP or
-        tagCharSeq == Tag::VIDEO_ENCODER_SUM_MADI or
-        tagCharSeq == Tag::VIDEO_ENCODER_REAL_BITRATE or
-        tagCharSeq == Tag::VIDEO_ENCODER_FRAME_QP or
         tagCharSeq == Tag::VIDEO_ENCODER_QP_AVERAGE or
         tagCharSeq == Tag::VIDEO_ENCODER_FRAME_TEMPORAL_ID or
         tagCharSeq == Tag::AV_PLAYER_ERR_CODE or
@@ -413,10 +408,10 @@ public:
         tagCharSeq == Tag::SCREEN_CAPTURE_DATA_TYPE or
         tagCharSeq == Tag::SCREEN_CAPTURE_STOP_REASON, uint8_t, AnyValueType::UINT8_T);
     DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::MEDIA_AVAILABLE_BITRATES, std::vector<uint8_t>, AnyValueType::VECTOR_UINT8);
+    DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::AV_PLAYER_VIDEO_BITDEPTH or
         tagCharSeq == Tag::AV_PLAYER_HDR_TYPE, int8_t, AnyValueType::INT8_T);
-    DEFINE_INSERT_GET_FUNC(
-        tagCharSeq == Tag::MEDIA_AVAILABLE_BITRATES, std::vector<uint8_t>, AnyValueType::VECTOR_UINT8);
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::TIMED_METADATA_SRC_TRACK_MIME or
         tagCharSeq == Tag::TIMED_METADATA_KEY or

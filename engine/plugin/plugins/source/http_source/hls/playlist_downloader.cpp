@@ -23,8 +23,6 @@ namespace HttpPlugin {
 PlayListDownloader::PlayListDownloader()
 {
     downloader_ = std::make_shared<Downloader>("hlsPlayList");
-    updateTask_ = std::make_shared<OSAL::Task>(std::string("FragmentListUpdate"));
-    updateTask_->RegisterHandler([this] { PlayListUpdateLoop(); });
     dataSave_ = [this] (uint8_t*&& data, uint32_t&& len) {
         return SaveData(std::forward<decltype(data)>(data), std::forward<decltype(len)>(len));
     };
@@ -34,6 +32,8 @@ PlayListDownloader::PlayListDownloader()
         OnDownloadStatus(std::forward<decltype(status)>(status), downloader_,
                          std::forward<decltype(request)>(request));
     };
+    updateTask_ = std::make_shared<OSAL::Task>(std::string("FragmentListUpdate"));
+    updateTask_->RegisterHandler([this] { PlayListUpdateLoop(); });
 }
 
 PlayListDownloader::~PlayListDownloader()
@@ -68,7 +68,7 @@ bool PlayListDownloader::SaveData(uint8_t* data, uint32_t len)
 }
 
 void PlayListDownloader::OnDownloadStatus(DownloadStatus status, std::shared_ptr<Downloader>&,
-    std::shared_ptr<DownloadRequest>& request)
+                                          std::shared_ptr<DownloadRequest>& request)
 {
     // This should not be called normally
     MEDIA_LOG_D("Should not call this OnDownloadStatus, should call monitor.");
@@ -104,16 +104,6 @@ void PlayListDownloader::Close()
 {
     updateTask_->Stop();
     downloader_->Stop();
-}
-
-void PlayListDownloader::Stop()
-{
-    downloader_->Stop();
-}
-
-void PlayListDownloader::Start()
-{
-    downloader_->Start();
 }
 }
 }

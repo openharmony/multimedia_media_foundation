@@ -43,6 +43,10 @@ inline bool IsFloatEqualZero(float value)
     return false;
 }
 
+inline bool IsFloatEqual(float p1, float p2)
+{
+    return fabs(p1 - p2) <= MEDIA_FOUNDATION_FLOAT_EPSILON;
+}
 } // namespace OSAL
 } // namespace Media
 } // namespace OHOS

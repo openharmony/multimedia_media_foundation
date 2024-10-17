@@ -27,15 +27,6 @@
 
 // If file name and line number is need, #define HST_DEBUG at the beginning of the cpp file.
 #define HST_DEBUG
-#ifdef HST_DEBUG
-inline std::string HstGetFileName(const std::string &file)
-{
-    if (file == "") {
-        return "Unknown File";
-    }
-    return file.substr(file.find_last_of("/\\") + 1);
-}
-#endif
 
 #ifdef MEDIA_OHOS
 #undef LOG_DOMAIN_SYSTEM_PLAYER
@@ -98,19 +89,17 @@ inline std::string HstGetFileName(const std::string &file)
         op(LOG_TYPE, PUBLIC_LOG_S ":" fmt, HST_LOG_TAG, ##args); \
     } while (0)
 #else
-#define HST_HILOG(op, fmt, args...)                                                                                 \
-    do {                                                                                                            \
-        op(LOG_TYPE, "(" PUBLIC_LOG_S ", " PUBLIC_LOG_D32 "): " fmt, HstGetFileName(std::string(__FILE__)).c_str(), \
-           __LINE__, ##args);                                                                                       \
+#define HST_HILOG(op, fmt, args...)                                                                     \
+    do {                                                                                                \
+        op(LOG_TYPE, "(" PUBLIC_LOG_S "(), " PUBLIC_LOG_D32 "): " fmt, __FUNCTION__, __LINE__, ##args); \
     } while (0)
 #define HST_HILOG_SHORT(op, fmt, args...)                           \
     do {                                                            \
         op(LOG_TYPE, "#" PUBLIC_LOG_D32 " " fmt, __LINE__, ##args); \
     } while (0)
-#define HST_HILOG_NO_RELEASE(op, fmt, args...)                                  \
-    do {                                                                        \
-        op(LOG_ONLY_PRERELEASE, "(" PUBLIC_LOG_S ", " PUBLIC_LOG_D32 "): " fmt, \
-           HstGetFileName(std::string(__FILE__)).c_str(), __LINE__, ##args);    \
+#define HST_HILOG_NO_RELEASE(op, fmt, args...)                                                                     \
+    do {                                                                                                           \
+        op(LOG_ONLY_PRERELEASE, "(" PUBLIC_LOG_S "(), " PUBLIC_LOG_D32 "): " fmt, __FUNCTION__, __LINE__, ##args); \
     } while (0)
 
 #define HST_HILOG_TAG(op, fmt, args...)                               \
@@ -118,15 +107,13 @@ inline std::string HstGetFileName(const std::string &file)
         op(LOG_TYPE, "[" PUBLIC_LOG_S "]:" fmt, HST_LOG_TAG, ##args); \
     } while (0)
 
-#define HST_HILOG_WITH_LEVEL_JUDGE(op1, op2, con, fmt, args...)                   \
-    do {                                                                          \
-        if (!con) {                                                               \
-            op2(LOG_TYPE, "(" PUBLIC_LOG_S ", " PUBLIC_LOG_D32 "): " fmt,         \
-                HstGetFileName(std::string(__FILE__)).c_str(), __LINE__, ##args); \
-        } else {                                                                  \
-            op1(LOG_TYPE, "(" PUBLIC_LOG_S ", " PUBLIC_LOG_D32 "): " fmt,         \
-                HstGetFileName(std::string(__FILE__)).c_str(), __LINE__, ##args); \
-        }                                                                         \
+#define HST_HILOG_WITH_LEVEL_JUDGE(op1, op2, con, fmt, args...)                                              \
+    do {                                                                                                     \
+        if (!con) {                                                                                          \
+            op2(LOG_TYPE, "(" PUBLIC_LOG_S "(), " PUBLIC_LOG_D32 "): " fmt, __FUNCTION__, __LINE__, ##args); \
+        } else {                                                                                             \
+            op1(LOG_TYPE, "(" PUBLIC_LOG_S "(), " PUBLIC_LOG_D32 "): " fmt, __FUNCTION__, __LINE__, ##args); \
+        }                                                                                                    \
     } while (0)
 #endif
 

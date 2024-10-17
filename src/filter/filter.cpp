@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023-2023 Huawei Device Co., Ltd.
+ * Copyright (c) 2023-2024 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -28,8 +28,8 @@ constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION,
 namespace OHOS {
 namespace Media {
 namespace Pipeline {
-Filter::Filter(std::string name, FilterType type, bool isAsyncMode)
-    : name_(std::move(name)), filterType_(type), isAsyncMode_(isAsyncMode)
+Filter::Filter(std::string name, FilterType type, bool isAyncMode)
+    : name_(std::move(name)), filterType_(type), isAsyncMode_(isAyncMode)
 {
 }
 
@@ -44,9 +44,11 @@ void Filter::Init(const std::shared_ptr<EventReceiver>& receiver, const std::sha
     callback_ = callback;
 }
 
-void Filter::LinkPipeLine(const std::string& groupId)
+void Filter::LinkPipeLine(const std::string &groupId)
 {
     groupId_ = groupId;
+    MEDIA_LOG_I("Filter %{public}s LinkPipeLine:%{public}s, isAsyncMode_:%{public}d",
+        name_.c_str(), groupId.c_str(), isAsyncMode_);
     if (isAsyncMode_) {
         TaskType taskType;
         switch (filterType_) {
@@ -65,12 +67,14 @@ void Filter::LinkPipeLine(const std::string& groupId)
         }
         filterTask_ = std::make_unique<Task>(name_, groupId_, taskType, TaskPriority::HIGH, false);
         filterTask_->SubmitJobOnce([this] {
-           DoInitAfterLink();
-           ChangeState(FilterState::INITIALIZED);
+            Status ret = DoInitAfterLink();
+            SetErrCode(ret);
+            ChangeState(ret == Status::OK ? FilterState::INITIALIZED : FilterState::ERROR);
         });
     } else {
-        DoInitAfterLink();
-        ChangeState(FilterState::INITIALIZED);
+        Status ret = DoInitAfterLink();
+        SetErrCode(ret);
+        ChangeState(ret == Status::OK ? FilterState::INITIALIZED : FilterState::ERROR);
     }
 }
 
@@ -89,16 +93,24 @@ Status Filter::Prepare()
 
 Status Filter::PrepareDone()
 {
-    MEDIA_LOG_I("Prepare in %{public}s", name_.c_str());
+    MEDIA_LOG_I("Prepare enter %{public}s", name_.c_str());
+    if (curState_ == FilterState::ERROR) {
+        // if DoInitAfterLink error, do not prepare.
+        return Status::ERROR_INVALID_OPERATION;
+    }
     // next filters maybe added in DoPrepare, so we must DoPrepare first
     Status ret = DoPrepare();
     SetErrCode(ret);
     if (ret != Status::OK) {
+        ChangeState(FilterState::ERROR);
         return ret;
     }
     for (auto iter : nextFiltersMap_) {
         for (auto filter : iter.second) {
-            filter->Prepare();
+            auto ret = filter->Prepare();
+            if (ret != Status::OK) {
+                return ret;
+            }
         }
     }
     ChangeState(FilterState::READY);
@@ -107,7 +119,6 @@ Status Filter::PrepareDone()
 
 Status Filter::PrepareFrame(bool renderFirstFrame)
 {
-    MEDIA_LOG_I("Filter::PrepareFrame %{public}s", name_.c_str());
     for (auto iter : nextFiltersMap_) {
         for (auto filter : iter.second) {
             auto rtv = filter->PrepareFrame(renderFirstFrame);
@@ -122,7 +133,6 @@ Status Filter::PrepareFrame(bool renderFirstFrame)
 
 Status Filter::WaitPrepareFrame()
 {
-    MEDIA_LOG_I("Filter::WaitPrepareFrame %{public}s", name_.c_str());
     for (auto iter : nextFiltersMap_) {
         for (auto filter : iter.second) {
             auto ret = filter->WaitPrepareFrame();
@@ -170,7 +180,7 @@ Status Filter::StartDone()
 Status Filter::Pause()
 {
     MEDIA_LOG_D("Pause %{public}s, pState:%{public}d", name_.c_str(), curState_);
-    // In offload case, we need pause to interrupt audio_sink_plugin write function,  so do not use filterTask_
+    // In offload case, we need pause to interrupt audio_sink_plugin write function,  so do not use asyncmode
     auto ret = PauseDone();
     if (filterTask_) {
         filterTask_->Pause();
@@ -252,7 +262,7 @@ Status Filter::ResumeDragging()
 Status Filter::Stop()
 {
     MEDIA_LOG_D("Stop %{public}s, pState:%{public}d", name_.c_str(), curState_);
-    // In offload case, we need stop to interrupt audio_sink_plugin write function,  so do not use filterTask_
+    // In offload case, we need stop to interrupt audio_sink_plugin write function,  so do not use asyncmode
     auto ret = StopDone();
     if (filterTask_) {
         filterTask_->Stop();
@@ -318,6 +328,12 @@ Status Filter::ReleaseDone()
     return ret;
 }
 
+Status Filter::ClearAllNextFilters()
+{
+    nextFiltersMap_.clear();
+    return Status::OK;
+}
+
 Status Filter::SetPlayRange(int64_t start, int64_t end)
 {
     MEDIA_LOG_D("SetPlayRange %{public}ld, pState:%{public}ld", name_.c_str(), curState_);
@@ -327,12 +343,6 @@ Status Filter::SetPlayRange(int64_t start, int64_t end)
         }
     }
     return DoSetPlayRange(start, end);
-}
-
-Status Filter::ClearAllNextFilters()
-{
-    nextFiltersMap_.clear();
-    return Status::OK;
 }
 
 Status Filter::ProcessInputBuffer(int sendArg, int64_t delayUs)
@@ -435,7 +445,6 @@ Status Filter::DoProcessOutputBuffer(int recvArg, bool dropFrame, bool byIdx, ui
     return Status::OK;
 }
 
-// should only call in this cpp
 void Filter::ChangeState(FilterState state)
 {
     MEDIA_LOG_I("%{public}s > %{public}d", name_.c_str(), state);
@@ -448,9 +457,13 @@ Status Filter::WaitAllState(FilterState state)
 {
     AutoLock lock(stateMutex_);
     if (curState_ != state) {
-        cond_.WaitFor(lock, 30000, [this, state] { // 30000 ms timeout
+        bool result = cond_.WaitFor(lock, 30000, [this, state] { // 30000 ms timeout
             return curState_ == state || curState_ == FilterState::ERROR;
         });
+        if (!result) {
+            SetErrCode(Status::ERROR_TIMED_OUT);
+            return Status::ERROR_TIMED_OUT;
+        }
         if (curState_ != state) {
             MEDIA_LOG_E("Filter(%{public}s) wait state %{public}d fail, curState %{public}d",
                 name_.c_str(), state, curState_);

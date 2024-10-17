@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-#ifndef HISTREAMER_PLUGIN_MEDIA_SOURCE_H
-#define HISTREAMER_PLUGIN_MEDIA_SOURCE_H
+#ifndef HISTREAMER_PLUGINS_MEDIA_SOURCE_H
+#define HISTREAMER_PLUGINS_MEDIA_SOURCE_H
 
 #include <map>
 #include <memory>
@@ -50,7 +50,14 @@ typedef struct PlayStrategy {
     uint32_t height {0};
     uint32_t duration {0};
     bool preferHDR {false};
+    std::string audioLanguage {""};
+    std::string subtitleLanguage {""};
 } PlayStrategy;
+
+class AVMimeTypes {
+public:
+    static constexpr std::string_view APPLICATION_M3U8 = "application/m3u8";
+};
 
 typedef struct DownloadInfo {
     int32_t avgDownloadRate {0};
@@ -58,11 +65,6 @@ typedef struct DownloadInfo {
     uint64_t totalDownLoadBits {0};
     bool isTimeOut {false};
 } DownloadInfo;
-
-class AVMimeTypes {
-public:
-    static constexpr std::string_view APPLICATION_M3U8 = "application/m3u8";
-};
 
 typedef struct PlaybackInfo {
     std::string serverIpAddress {};
@@ -102,6 +104,10 @@ public:
 
     std::string GetMimeType() const;
 
+    void SetAppUid(int32_t appUid);
+
+    int32_t GetAppUid();
+
     //std::shared_ptr<DataConsumer> GetDataConsumer() const;
 #ifndef OHOS_LITE
     std::shared_ptr<IMediaDataSource> GetDataSrc() const;
@@ -112,6 +118,7 @@ private:
     SourceType type_ {};
     std::map<std::string, std::string> header_ {};
     std::shared_ptr<PlayStrategy> playStrategy_ {};
+    int32_t appUid_ {-1};
     //std::shared_ptr<DataConsumer> dataConsumer_ {};
 #ifndef OHOS_LITE
     std::shared_ptr<IMediaDataSource> dataSrc_ {};
@@ -120,4 +127,4 @@ private:
 } // namespace Plugins
 } // namespace Media
 } // namespace OHOS
-#endif
+#endif // HISTREAMER_PLUGINS_MEDIA_SOURCE_H
