@@ -201,6 +201,8 @@ public:
         (void)isMuted;
         return Status::OK;
     }
+
+    virtual bool IsDesignatedState(FilterState state);
 protected:
     virtual Status PrepareDone() final;
 
