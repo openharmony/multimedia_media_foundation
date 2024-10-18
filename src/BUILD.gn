@@ -155,7 +155,6 @@ if (hst_is_standard_sys) {
     public_deps = []
 
     external_deps = [
-      "bounds_checking_function:libsec_static",
       "c_utils:utils",
       "ffmpeg:libohosffmpeg",
       "graphic_2d:libgraphic_utils",
@@ -166,7 +165,10 @@ if (hst_is_standard_sys) {
       "ipc:ipc_core",
     ]
 
-    public_external_deps = [ "graphic_surface:surface" ]
+    public_external_deps = [
+      "bounds_checking_function:libsec_static",
+      "graphic_surface:surface",
+    ]
 
     if (media_foundation_enable_ffrt) {
       external_deps += [ "ffrt:libffrt" ]
