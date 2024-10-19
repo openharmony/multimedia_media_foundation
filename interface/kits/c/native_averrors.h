@@ -122,19 +122,21 @@ typedef enum OH_AVErrCode {
      * @the client request parameters are incorrect or exceed the processing capacity.
      * @since 14
      */
-    AV_ERR_IO_REQUEST_DENID = 5411006,
+    AV_ERR_IO_NETWORK_ACCESS_DENIED = 5411006,
     /**
      * @cannot find available network resources.
      * @since 14
      */
     AV_ERR_IO_RESOURE_NOT_FOUND = 5411007,
     /**
-     * @client authentication failed and SSL client cert needed.
+     * @the server failS to verify the client certificate because the certificate is not carried,
+     *  the certificate is invalid, or the certificate is expired.
      * @since 14
      */
     AV_ERR_IO_SSL_CLIENT_CERT_NEEDED = 5411008,
     /**
-     * @IO SSL connect fail.
+     * @the client fails to verify the server certificate because the certificate is not carried,
+     *  the certificate is invalid, or the certificate is expired.
      * @since 14
      */
     AV_ERR_IO_SSL_CONNECT_FAIL = 5411009,
@@ -184,7 +186,7 @@ typedef enum OH_AVErrCode {
      */
     AV_ERR_IO_AUDIO_DEC_INIT_FAILED = 5411018,
     /**
-     * @audio decoder is unavailable.
+     * @the audio decoder is unavailable for handler incurrupt, or audio decoder subsystem abnormal.
      * @since 14
      */
     AV_ERR_IO_AUDIO_DEC_UNAVAILABLE = 5411019,
@@ -199,7 +201,7 @@ typedef enum OH_AVErrCode {
      */
     AV_ERR_IO_AUDIO_DEVICE_INVALID_STATE = 5411021,
     /**
-     * @audio device timeout.
+     * @audio device timeout when calling audio render interface.
      * @since 14
      */
     AV_ERR_IO_AUDIO_DEVICE_TIMEOUT = 5411022,
@@ -219,7 +221,7 @@ typedef enum OH_AVErrCode {
      */
     AV_ERR_IO_AUDIO_ENC_INIT_FAILED = 5411025,
     /**
-     * @audio encoder is unavailable.
+     * @audio encoder is unavailable for handler incurrupt, or audio encoder subsystem abnormal.
      * @since 14
      */
     AV_ERR_IO_AUDIO_ENC_UNAVAILABLE = 5411026,
@@ -234,7 +236,7 @@ typedef enum OH_AVErrCode {
      */
     AV_ERR_IO_VIDEO_DEC_INIT_FAILED = 5411028,
     /**
-     * @video decoder is unavailable.
+     * @video decoder is unavailable for handler incurrupt, or video decoder subsystem abnormal.
      * @since 14
      */
     AV_ERR_IO_VIDEO_DEC_UNAVAILABLE = 5411029,
@@ -254,7 +256,7 @@ typedef enum OH_AVErrCode {
      */
     AV_ERR_IO_VIDEO_ENC_INIT_FAILED = 5411032,
     /**
-     * @video encoder is unavailable.
+     * @video encoder is unavailable for handler incurrupt, or video encoder subsystem abnormal.
      * @since 14
      */
     AV_ERR_IO_VIDEO_ENC_UNAVAILABLE = 5411033,
