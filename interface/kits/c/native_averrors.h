@@ -94,42 +94,42 @@ typedef enum OH_AVErrCode {
      */
     AV_ERR_VIDEO_UNSUPPORTED_COLOR_SPACE_CONVERSION = 301,
     /**
-     * @IO cannot find host.
+     * @the address of server is incorrect, and IO can not find host.
      * @since 14
      */
     AV_ERR_IO_CANNOT_FIND_HOST = 5411001,
     /**
-     * @IO connection timeout.
+     * @network connection timeout.
      * @since 14
      */
     AV_ERR_IO_CONNECTION_TIMEOUT = 5411002,
     /**
-     * @IO network abnormal.
+     * @failed link due to abnormal network.
      * @since 14
      */
     AV_ERR_IO_NETWORK_ABNORMAL = 5411003,
     /**
-     * @IO network unavailable.
+     * @failed link due to unavailable network.
      * @since 14
      */
     AV_ERR_IO_NETWORK_UNAVAILABLE = 5411004,
     /**
-     * @IO no permission.
+     * @network permission dennied.
      * @since 14
      */
     AV_ERR_IO_NO_PERMISSION = 5411005,
     /**
-     * @IO request denied.
+     * @the client request parameters are incorrect or exceed the processing capacity.
      * @since 14
      */
     AV_ERR_IO_REQUEST_DENID = 5411006,
     /**
-     * @IO resource not found.
+     * @cannot find available network resources.
      * @since 14
      */
     AV_ERR_IO_RESOURE_NOT_FOUND = 5411007,
     /**
-     * @IO SSL client cert needed.
+     * @client authentication failed and SSL client cert needed.
      * @since 14
      */
     AV_ERR_IO_SSL_CLIENT_CERT_NEEDED = 5411008,
@@ -144,22 +144,22 @@ typedef enum OH_AVErrCode {
      */
     AV_ERR_IO_SSL_SERVER_CERT_UNTRUSTED = 5411010,
     /**
-     * @IO unsupported request.
+     * @unsupported request due to network protocols.
      * @since 14
      */
     AV_ERR_IO_UNSUPPORTTED_REQUEST = 5411011,
     /**
-     * @IO data abnormal.
+     * @file data is incorrect, and no specific data can be provided.
      * @since 14
      */
     AV_ERR_IO_DATA_ABNORMAL = 5411012,
     /**
-     * @IO file access denied.
+     * @file is occupied by other processes and cannot be accessed.
      * @since 14
      */
     AV_ERR_IO_FILE_ACCESS_DENIED = 5411013,
     /**
-     * @IO file bad handle.
+     * @the file handle is incorrect.
      * @since 14
      */
     AV_ERR_IO_FILE_BAD_HANDLE = 5411014,
@@ -169,22 +169,22 @@ typedef enum OH_AVErrCode {
      */
     AV_ERR_IO_FILE_NOT_FOUND = 5411015,
     /**
-     * @IO file permission denied.
+     * @IO file permission denied because API does not have permissions.
      * @since 14
      */
     AV_ERR_IO_FILE_PERMISSION_DENIED = 5411016,
     /**
-     * @audio decode failed.
+     * @fail to decode the audio data.
      * @since 14
      */
     AV_ERR_IO_AUDIO_DEC_FAILED = 5411017,
     /**
-     * @audio decode init failed.
+     * @fail to init the audio decoder.
      * @since 14
      */
     AV_ERR_IO_AUDIO_DEC_INIT_FAILED = 5411018,
     /**
-     * @audio decode unavailable.
+     * @audio decoder is unavailable.
      * @since 14
      */
     AV_ERR_IO_AUDIO_DEC_UNAVAILABLE = 5411019,
@@ -194,7 +194,7 @@ typedef enum OH_AVErrCode {
      */
     AV_ERR_IO_AUDIO_DEVICE_ERROR = 5411020,
     /**
-     * @audio device invalid state.
+     * @audio device state does not support the current operation.
      * @since 14
      */
     AV_ERR_IO_AUDIO_DEVICE_INVALID_STATE = 5411021,
@@ -204,37 +204,37 @@ typedef enum OH_AVErrCode {
      */
     AV_ERR_IO_AUDIO_DEVICE_TIMEOUT = 5411022,
     /**
-     * @audio device unavailable.
+     * @audio device unavailable, unable to create an audio device.
      * @since 14
      */
     AV_ERR_IO_AUDIO_DEVICE_UNAVAILABLE = 5411023,
     /**
-     * @audio encode failed.
+     * @fail to encode the audio data.
      * @since 14
      */
     AV_ERR_IO_AUDIO_ENC_FAILED = 5411024,
     /**
-     * @audio encode init failed.
+     * @fail to init the audio encoder.
      * @since 14
      */
     AV_ERR_IO_AUDIO_ENC_INIT_FAILED = 5411025,
     /**
-     * @audio encode unavailable.
+     * @audio encoder is unavailable.
      * @since 14
      */
     AV_ERR_IO_AUDIO_ENC_UNAVAILABLE = 5411026,
     /**
-     * @video decode failed.
+     * @fail to decode the video data.
      * @since 14
      */
     AV_ERR_IO_VIDEO_DEC_FAILED = 5411027,
     /**
-     * @video decode init failed.
+     * @fail to init the video decoder.
      * @since 14
      */
     AV_ERR_IO_VIDEO_DEC_INIT_FAILED = 5411028,
     /**
-     * @video decode unavailable.
+     * @video decoder is unavailable.
      * @since 14
      */
     AV_ERR_IO_VIDEO_DEC_UNAVAILABLE = 5411029,
@@ -244,17 +244,17 @@ typedef enum OH_AVErrCode {
      */
     AV_ERR_IO_VIDEO_DEVICE_ERROR = 5411030,
     /**
-     * @video encode failed.
+     * @fail to encode the video data.
      * @since 14
      */
     AV_ERR_IO_VIDEO_ENC_FAILED = 5411031,
     /**
-     * @video encode init failed.
+     * @fail to init the video encoder.
      * @since 14
      */
     AV_ERR_IO_VIDEO_ENC_INIT_FAILED = 5411032,
     /**
-     * @video encode unavailable.
+     * @video encoder is unavailable.
      * @since 14
      */
     AV_ERR_IO_VIDEO_ENC_UNAVAILABLE = 5411033,
