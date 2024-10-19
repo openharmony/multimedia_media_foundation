@@ -85,7 +85,7 @@ enum MediaServiceErrCode : ErrCode {
     MSERR_IO_NETWORK_ABNORMAL,                          // IO network abnormal.
     MSERR_IO_NETWORK_UNAVAILABLE,                       // IO network unavailable.
     MSERR_IO_NO_PERMISSION,                             // IO no permission.
-    MSERR_IO_REQUEST_DENID,                             // IO request denied.
+    MSERR_IO_NETWORK_ACCESS_DENIED,                     // IO request denied.
     MSERR_IO_RESOURE_NOT_FOUND,                         // IO resource not found.
     MSERR_IO_SSL_CLIENT_CERT_NEEDED,                    // IO SSL client cert needed.
     MSERR_IO_SSL_CONNECT_FAIL,                          // IO SSL connect fail.
