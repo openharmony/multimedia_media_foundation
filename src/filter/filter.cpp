@@ -352,12 +352,16 @@ Status Filter::WaitPrerollDone(bool render)
 
 void Filter::StartFilterTask()
 {
-    filterTask_->Start();
+    if (filterTask_) {
+        filterTask_->Start();
+    }
 }
 
 void Filter::PauseFilterTask()
 {
-    filterTask_->Pause();
+    if (filterTask_) {
+        filterTask_->Pause();
+    }
 }
 
 Status Filter::ClearAllNextFilters()
