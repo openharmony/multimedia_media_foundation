@@ -33,6 +33,7 @@ private:
     void HandleSetMediaParams(MessageParcel &data, MessageParcel &reply);
     void HandleGetInputBuffer(MessageParcel &data, MessageParcel &reply);
     void HandleInputBufferFilled(MessageParcel &data, MessageParcel &reply);
+    void HandleGetPcmDumpStatus(MessageParcel &data, MessageParcel &reply);
     void HandleErasePreferredDeviceByType(MessageParcel &data, MessageParcel &reply);
     using HandlerFunc = void (MediaMonitorStub::*)(MessageParcel &data, MessageParcel &reply);
     static inline HandlerFunc handlers[] = {
@@ -41,6 +42,7 @@ private:
         &MediaMonitorStub::HandleSetMediaParams,
         &MediaMonitorStub::HandleGetInputBuffer,
         &MediaMonitorStub::HandleInputBufferFilled,
+        &MediaMonitorStub::HandleGetPcmDumpStatus,
         &MediaMonitorStub::HandleErasePreferredDeviceByType,
     };
     static constexpr size_t handlersNums = sizeof(handlers) / sizeof(HandlerFunc);

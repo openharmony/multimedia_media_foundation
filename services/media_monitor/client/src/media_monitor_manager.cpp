@@ -139,6 +139,53 @@ void MediaMonitorManager::WriteAudioBuffer(const std::string &fileName, void *pt
     MEDIA_LOG_D("write audio buffer ret %{public}d", ret);
 }
 
+int32_t MediaMonitorManager::GetMediaParameters(const std::vector<std::string> &subKeys,
+    std::vector<std::pair<std::string, std::string>> &result)
+{
+    if (versionType_ != BETA_VERSION) {
+        MEDIA_LOG_E("version type is commercial");
+        return ERROR;
+    }
+
+    bool match = false;
+    std::string matchKey;
+    std::string value = "false";
+    for (auto it = subKeys.begin(); it != subKeys.end(); it++) {
+        if (*it == BETA_DUMP_TYPE || *it == DEFAULT_DUMP_TYPE) {
+            match = true;
+            matchKey = *it;
+            break;
+        }
+    }
+    FALSE_RETURN_V_MSG_E(match, ERROR, "get media param invalid param");
+
+    if (dumpEnable_ == false) {
+        result.emplace_back(std::make_pair(matchKey, value));
+        MEDIA_LOG_I("get media param: close");
+        return SUCCESS;
+    }
+
+    sptr<IMediaMonitor> gamp = GetMediaMonitorProxy();
+    if (gamp == nullptr) {
+        MEDIA_LOG_E("gamp is nullptr.");
+        return ERROR;
+    }
+
+    int32_t status = 0;
+    int32_t ret = gamp->GetPcmDumpStatus(status);
+    if (ret != SUCCESS) {
+        MEDIA_LOG_E("get dump media param failed");
+        return ERROR;
+    }
+    if (status > 0) {
+        value = "true";
+    }
+
+    result.emplace_back(std::make_pair(matchKey, value));
+    MEDIA_LOG_I("get media param: %{public}s", value.c_str());
+    return SUCCESS;
+}
+
 int32_t MediaMonitorManager::SetMediaParameters(const std::vector<std::pair<std::string, std::string>> &kvpairs)
 {
     if (versionType_ != BETA_VERSION) {

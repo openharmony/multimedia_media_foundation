@@ -122,6 +122,16 @@ HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_SetMediaParams_002, TestSize
     EXPECT_EQ(kvpairs.size(), size);
 }
 
+HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_GetMediaParams_001, TestSize.Level0)
+{
+    size_t size = 1;
+    std::vector<std::string> subKeys;
+    subKeys.emplace_back("BETA");
+    std::vector<std::pair<std::string, std::string>> result;
+    MediaMonitorManager::GetInstance().GetMediaParameters(subKeys, result);
+    EXPECT_EQ(result.size(), size);
+}
+
 HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_WriteAudioBuffer_001, TestSize.Level0)
 {
     std::string filename = "/data/log/audiodump/unit_test_48000_1_1.pcm";

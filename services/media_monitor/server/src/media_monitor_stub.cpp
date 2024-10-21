@@ -137,6 +137,14 @@ void MediaMonitorStub::HandleInputBufferFilled(MessageParcel &data, MessageParce
     reply.WriteInt32(ret);
 }
 
+void MediaMonitorStub::HandleGetPcmDumpStatus(MessageParcel &data, MessageParcel &reply)
+{
+    int32_t status = 0;
+    int32_t ret = GetPcmDumpStatus(status);
+    reply.WriteInt32(status);
+    reply.WriteInt32(ret);
+}
+
 void MediaMonitorStub::HandleErasePreferredDeviceByType(MessageParcel &data, MessageParcel &reply)
 {
     int32_t preferredType;
