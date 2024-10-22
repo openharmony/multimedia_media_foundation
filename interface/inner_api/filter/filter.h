@@ -111,10 +111,6 @@ public:
 
     virtual Status Prepare() final;
 
-    virtual Status PrepareFrame(bool renderFirstFrame);
-
-    virtual Status WaitPrepareFrame();
-
     virtual Status Start() final;
 
     virtual Status Pause() final;
@@ -131,6 +127,14 @@ public:
 
     virtual Status Release() final;
 
+    virtual Status Preroll() final;
+
+    virtual Status WaitPrerollDone(bool render) final;
+
+    virtual void StartFilterTask() final;
+
+    virtual void PauseFilterTask() final;
+
     virtual Status SetPlayRange(int64_t start, int64_t end) final;
 
     virtual Status ProcessInputBuffer(int sendArg = 0, int64_t delayUs = 0) final;
@@ -143,8 +147,6 @@ public:
     virtual Status DoInitAfterLink();
 
     virtual Status DoPrepare();
-
-    virtual Status DoPrepareFrame(bool renderFirstFrame);
 
     virtual Status DoStart();
 
@@ -161,6 +163,10 @@ public:
     virtual Status DoFlush();
 
     virtual Status DoRelease();
+
+    virtual Status DoPreroll();
+
+    virtual Status DoWaitPrerollDone(bool render);
 
     virtual Status DoSetPlayRange(int64_t start, int64_t end);
 

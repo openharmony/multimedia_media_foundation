@@ -226,55 +226,6 @@ HWTEST_F(FilterUnitTest, PrepareDone_002, TestSize.Level1)
 }
 
 /**
- * @tc.name: PrepareFrame_001
- * @tc.desc: Test PrepareFrame interface
- * @tc.type: FUNC
- */
-HWTEST_F(FilterUnitTest, PrepareFrame_001, TestSize.Level1)
-{
-    std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
-    std::shared_ptr<Filter> filter2 = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
-    filter->Init(nullptr, nullptr);
-    filter2->Init(nullptr, nullptr);
-    filter->LinkPipeLine("");
-    filter->nextFiltersMap_[StreamType::STREAMTYPE_PACKED].push_back(filter2);
-    EXPECT_EQ(Status::OK, filter->PrepareFrame(true));
-}
-
-/**
- * @tc.name: PrepareFrame_002
- * @tc.desc: Test PrepareFrame interface
- * @tc.type: FUNC
- */
-HWTEST_F(FilterUnitTest, PrepareFrame_002, TestSize.Level1)
-{
-    std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
-    std::shared_ptr<Filter> filter2 = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
-    filter->Init(nullptr, nullptr);
-    filter2->Init(nullptr, nullptr);
-    filter->LinkPipeLine("");
-    filter->PrepareFrame(true);
-    filter2->PrepareFrame(true);
-    EXPECT_EQ(Status::OK, filter->PrepareFrame(true));
-}
-
-/**
- * @tc.name: WaitPrepareFrame_001
- * @tc.desc: Test WaitPrepareFrame interface
- * @tc.type: FUNC
- */
-HWTEST_F(FilterUnitTest, WaitPrepareFrame_001, TestSize.Level1)
-{
-    std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
-    std::shared_ptr<Filter> filter2 = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
-    filter->Init(nullptr, nullptr);
-    filter2->Init(nullptr, nullptr);
-    filter->LinkPipeLine("");
-    filter->nextFiltersMap_[StreamType::STREAMTYPE_PACKED].push_back(filter2);
-    EXPECT_EQ(Status::OK, filter->WaitPrepareFrame());
-}
-
-/**
  * @tc.name: Release_001
  * @tc.desc: Test Release interface
  * @tc.type: FUNC
