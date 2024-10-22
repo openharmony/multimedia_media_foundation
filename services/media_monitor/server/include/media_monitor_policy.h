@@ -50,7 +50,7 @@ public:
     void HandStreamUsageToEventVector(std::shared_ptr<EventBean> &streamUsage);
     void HandBtUsageToEventVector(std::shared_ptr<EventBean> &btUsage);
     void AddToEventVector(std::shared_ptr<EventBean> &bean);
-    void HandleExhaustedToEventVector(const std::string &appName);
+    void HandleExhaustedToEventVector(std::shared_ptr<EventBean> &bean);
     void HandleCreateErrorToEventVector(std::shared_ptr<EventBean> &bean);
     void HandleSilentPlaybackToEventVector(std::shared_ptr<EventBean> &bean);
     void HandleUnderrunToEventVector(std::shared_ptr<EventBean> &bean);

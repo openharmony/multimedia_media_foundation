@@ -430,9 +430,13 @@ void MediaMonitorPolicy::HandleCaptureMutedToEventVector(std::shared_ptr<EventBe
     }
 }
 
-void MediaMonitorPolicy::HandleExhaustedToEventVector(const std::string &appName)
+void MediaMonitorPolicy::HandleExhaustedToEventVector(std::shared_ptr<EventBean> &bean)
 {
     MEDIA_LOG_I("Handle exhausted to event map");
+    std::string appName = bean->GetStringValue("APP_NAME");
+    int32_t appStreamNum = bean->GetIntValue("STREAM_NUM");
+    MEDIA_LOG_I("Handle exhausted to event map, appName:%{public}s, appStreamNum: %{public}d",
+        appName.c_str(), appStreamNum);
     bool isInEventMap = false;
     auto isExist = [&appName](const std::shared_ptr<EventBean> &eventBean) {
         if (eventBean->GetEventId() == AUDIO_STREAM_EXHAUSTED_STATS &&
@@ -445,15 +449,17 @@ void MediaMonitorPolicy::HandleExhaustedToEventVector(const std::string &appName
     std::lock_guard<std::mutex> lockEventVector(eventVectorMutex_);
     auto it = std::find_if(eventVector_.begin(), eventVector_.end(), isExist);
     if (it != eventVector_.end()) {
-        int32_t num = (*it)->GetIntValue("TIMES");
-        (*it)->UpdateIntMap("TIMES", ++num);
+        int32_t streamNum = (*it)->GetIntValue("TIMES");
+        if (appStreamNum > streamNum) {
+            (*it)->UpdateIntMap("TIMES", appStreamNum);
+        }
         isInEventMap = true;
     }
     if (!isInEventMap) {
         std::shared_ptr<EventBean> eventBean = std::make_shared<EventBean>(ModuleId::AUDIO,
             EventId::AUDIO_STREAM_EXHAUSTED_STATS, EventType::FREQUENCY_AGGREGATION_EVENT);
         eventBean->Add("DUBIOUS_APP", appName);
-        eventBean->Add("TIMES", INITIAL_VALUE);
+        eventBean->Add("TIMES", appStreamNum);
         AddToEventVector(eventBean);
     }
 }
