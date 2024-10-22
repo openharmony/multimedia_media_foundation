@@ -625,7 +625,8 @@ void EventAggregate::HandleStreamExhaustedErrorEvent(std::shared_ptr<EventBean> 
 {
     MEDIA_LOG_D("Handle stream exhausted error event");
     AppExecFwk::BundleInfo bundleInfo = GetBundleInfoFromUid(bean->GetIntValue("CLIENT_UID"));
-    mediaMonitorPolicy_.HandleExhaustedToEventVector(bundleInfo.name);
+    bean->Add("APP_NAME", bundleInfo.name);
+    mediaMonitorPolicy_.HandleExhaustedToEventVector(bean);
     mediaMonitorPolicy_.WhetherToHiSysEvent();
 }
 
