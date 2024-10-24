@@ -62,5 +62,10 @@ Status AVBufferQueueConsumerImpl::SetBufferAvailableListener(sptr<IConsumerListe
     return bufferQueue_->SetConsumerListener(listener);
 }
 
+Status AVBufferQueueConsumerImpl::SetQueueSizeAndAttachBuffer(uint32_t size,
+    std::shared_ptr<AVBuffer>& buffer, bool isFilled)
+{
+    return bufferQueue_->SetQueueSizeAndAttachBuffer(size, buffer, isFilled);
+}
 } // namespace Media
 } // namespace OHOS

@@ -38,6 +38,7 @@ public:
 
     virtual Status SetBufferAvailableListener(sptr<IConsumerListener>& listener) = 0;
 
+    virtual Status SetQueueSizeAndAttachBuffer(uint32_t size, std::shared_ptr<AVBuffer>& buffer, bool isFilled);
 protected:
     AVBufferQueueConsumer() = default;
 };
