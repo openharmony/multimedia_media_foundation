@@ -23,6 +23,7 @@ if (hst_is_lite_sys) {
       ":media_monitor",
       ":media_monitor_common",
       ":media_monitor_init",
+      ":media_monitor_wrapper",
       "sa_profile:media_monitor_sa_profile",
     ]
   }
@@ -289,6 +290,13 @@ if (hst_is_lite_sys) {
     subsystem_name = "multimedia"
     part_name = "media_foundation"
   }
+}
+
+if (hst_is_lite_sys) {
+  group("media_monitor_wrapper") {
+    deps = []
+  }
+} else {
   ohos_shared_library("media_monitor_wrapper") {
     stack_protector_ret = true
     sanitize = {
