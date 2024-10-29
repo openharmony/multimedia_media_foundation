@@ -314,6 +314,10 @@ public:
         "video_decoder_output_colorspace"; ///< int32_t, Key for video color space of the video decoder output.
                                            ///< See {@link OH_NativeBuffer_ColorSpace} for value, and only
                                            ///< {@link OH_COLORSPACE_BT709_LIMIT} is valid. It is used in configure.
+    static constexpr const char VIDEO_DECODER_DESIRED_PRESENT_TIMESTAMP[] =
+        "video_decoder_desired_present_timestamp"; ///< int64_t, key for describing the desired present timestamp of
+                                                   ///< video decoder frame set by the caller. This is an optional key
+                                                   ///< that applies only to video decoder surface mode.
 
     /* -------------------- video specific tag -------------------- */
     static constexpr const char VIDEO_H264_PROFILE[] = "video.h264.profile"; ///< @see VideoH264Profile
