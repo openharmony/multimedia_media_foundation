@@ -53,7 +53,7 @@ StreamConvertor g_streamConvertors[] = {{AV_CODEC_ID_PCM_S16LE, ConvertRawAudioS
                                         {AV_CODEC_ID_FLAC, ConvertFLACStreamToMetaInfo},
                                         {AV_CODEC_ID_APE, ConvertAPEStreamToMetaInfo},
 #ifdef AVS3DA_SUPPORT
-                                        {AV_CODEC_ID_AVS3DA, ConvertAVS3DAStreamToMetaInfo},
+                                        {AV_CODEC_ID_AV3A, ConvertAVS3DAStreamToMetaInfo},
 #endif
 #ifdef VIDEO_SUPPORT
                                         {AV_CODEC_ID_H264, ConvertAVCStreamToMetaInfo},

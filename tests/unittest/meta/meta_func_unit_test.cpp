@@ -368,6 +368,8 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::AUDIO_AAC_LEVEL, 12},
     {Tag::AUDIO_MAX_INPUT_SIZE, 21},
     {Tag::AUDIO_MAX_OUTPUT_SIZE, 32},
+    {Tag::AUDIO_SOUNDBED_CHANNELS_NUMBER, 6},
+    {Tag::AUDIO_HOA_ORDER, 6},
     {Tag::VIDEO_WIDTH, 12},
     {Tag::VIDEO_HEIGHT, 31},
     {Tag::VIDEO_DELAY, 54},

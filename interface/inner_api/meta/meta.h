@@ -224,6 +224,8 @@ public:
         tagCharSeq == Tag::AUDIO_AAC_LEVEL or
         tagCharSeq == Tag::AUDIO_MAX_INPUT_SIZE or
         tagCharSeq == Tag::AUDIO_MAX_OUTPUT_SIZE or
+        tagCharSeq == Tag::AUDIO_SOUNDBED_CHANNELS_NUMBER or
+        tagCharSeq == Tag::AUDIO_HOA_ORDER or
         tagCharSeq == Tag::VIDEO_WIDTH or
         tagCharSeq == Tag::VIDEO_HEIGHT or
         tagCharSeq == Tag::VIDEO_DELAY or
