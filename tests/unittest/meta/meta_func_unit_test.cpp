@@ -565,7 +565,8 @@ map<TagType, int64_t> testInt64Data = {
     {Tag::BUFFER_DECODING_TIMESTAMP, 1234567890011},
     {Tag::BUFFER_DURATION, 1234567890012},
     {Tag::AUDIO_CHANNEL_LAYOUT, static_cast<int64_t>(Plugins::AudioChannelLayout::CH_10POINT2)},
-    {Tag::AUDIO_OUTPUT_CHANNEL_LAYOUT, static_cast<int64_t>(Plugins::AudioChannelLayout::HOA_ORDER3_FUMA)}
+    {Tag::AUDIO_OUTPUT_CHANNEL_LAYOUT, static_cast<int64_t>(Plugins::AudioChannelLayout::HOA_ORDER3_FUMA)},
+    {Tag::VIDEO_DECODER_DESIRED_PRESENT_TIMESTAMP, 1234567890013}
 };
 
 /**
