@@ -471,14 +471,15 @@ Status Filter::WaitAllState(FilterState state)
         }
     }
 
+    Status res = Status::OK;
     for (auto iter : nextFiltersMap_) {
         for (auto filter : iter.second) {
             if (filter->WaitAllState(state) != Status::OK) {
-                return filter->GetErrCode();
+                res = filter->GetErrCode();
             }
         }
     }
-    return Status::OK;
+    return res;
 }
 
 void Filter::SetErrCode(Status errCode)
