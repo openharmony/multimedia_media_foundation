@@ -37,8 +37,6 @@ public:
 
     Status Prepare();
 
-    Status PrepareFrame(bool renderFirstFrame);
-
     Status Start();
 
     Status Pause();
@@ -50,6 +48,8 @@ public:
     Status Flush();
 
     Status Release();
+
+    Status Preroll(bool render);
 
     Status SetPlayRange(int64_t start, int64_t end);
 
