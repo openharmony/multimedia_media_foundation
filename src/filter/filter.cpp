@@ -117,33 +117,6 @@ Status Filter::PrepareDone()
     return ret;
 }
 
-Status Filter::PrepareFrame(bool renderFirstFrame)
-{
-    for (auto iter : nextFiltersMap_) {
-        for (auto filter : iter.second) {
-            auto rtv = filter->PrepareFrame(renderFirstFrame);
-            if (rtv != Status::OK) {
-                return rtv;
-            }
-        }
-    }
-    auto ret = DoPrepareFrame(renderFirstFrame);
-    return ret;
-}
-
-Status Filter::WaitPrepareFrame()
-{
-    for (auto iter : nextFiltersMap_) {
-        for (auto filter : iter.second) {
-            auto ret = filter->WaitPrepareFrame();
-            if (ret != Status::OK) {
-                return ret;
-            }
-        }
-    }
-    return Status::OK;
-}
-
 Status Filter::Start()
 {
     MEDIA_LOG_D("Start %{public}s, pState:%{public}d", name_.c_str(), curState_);
@@ -390,11 +363,6 @@ Status Filter::DoPrepare()
     return Status::OK;
 }
 
-Status Filter::DoPrepareFrame(bool renderFirstFrame)
-{
-    return Status::OK;
-}
-
 Status Filter::DoStart()
 {
     return Status::OK;
@@ -426,6 +394,16 @@ Status Filter::DoFlush()
 }
 
 Status Filter::DoRelease()
+{
+    return Status::OK;
+}
+
+Status Filter::DoPreroll()
+{
+    return Status::OK;
+}
+
+Status Filter::DoWaitPrerollDone(bool render)
 {
     return Status::OK;
 }

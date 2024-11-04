@@ -255,6 +255,16 @@
     } while (0)
 #endif
 
+#ifndef FALSE_RETURN_NOLOG
+#define FALSE_RETURN_NOLOG(exec)                                 \
+    do {                                                   \
+        bool returnValue = (exec);                         \
+        if (!returnValue) {                                \
+            return;                                        \
+        }                                                  \
+    } while (0)
+#endif
+
 #ifndef FALSE_RETURN_W
 #define FALSE_RETURN_W(exec)                    \
     do {                                        \
@@ -272,6 +282,16 @@
         bool returnValue = (exec);                           \
         if (!returnValue) {                                  \
             MEDIA_LOG_E_NO_RELEASE("FALSE_RETURN_V " #exec); \
+            return ret;                                      \
+        }                                                    \
+    } while (0)
+#endif
+
+#ifndef FALSE_RETURN_V_NOLOG
+#define FALSE_RETURN_V_NOLOG(exec, ret)                            \
+    do {                                                     \
+        bool returnValue = (exec);                           \
+        if (!returnValue) {                                  \
             return ret;                                      \
         }                                                    \
     } while (0)

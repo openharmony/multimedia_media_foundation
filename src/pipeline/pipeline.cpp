@@ -74,31 +74,6 @@ Status Pipeline::Prepare()
     return ret;
 }
 
-Status Pipeline::PrepareFrame(bool renderFirstFrame)
-{
-    MEDIA_LOG_I("PrepareFrame enter.");
-    Status ret = Status::OK;
-    SubmitJobOnce([&] {
-        AutoLock lock(mutex_);
-        for (auto it = filters_.begin(); it != filters_.end(); ++it) {
-            auto rtv = (*it)->PrepareFrame(renderFirstFrame);
-            if (rtv != Status::OK) {
-                ret = rtv;
-                return;
-            }
-        }
-        for (auto it = filters_.begin(); it != filters_.end(); ++it) {
-            auto rtv = (*it)->WaitPrepareFrame();
-            if (rtv != Status::OK) {
-                ret = rtv;
-                return;
-            }
-        }
-    });
-    MEDIA_LOG_D("PrepareFrame done ret = %{public}d", ret);
-    return ret;
-}
-
 Status Pipeline::Start()
 {
     MEDIA_LOG_I("Start enter.");
@@ -224,6 +199,31 @@ Status Pipeline::Release()
     });
     MEDIA_LOG_I("Release done.");
     return Status::OK;
+}
+
+Status Pipeline::Preroll(bool render)
+{
+    MEDIA_LOG_I("Preroll enter.");
+    Status ret = Status::OK;
+    AutoLock lock(mutex_);
+    for (auto it = filters_.begin(); it != filters_.end(); ++it) {
+        auto rtv = (*it)->Preroll();
+        if (rtv != Status::OK) {
+            ret = rtv;
+            MEDIA_LOG_I("Preroll done ret = %{public}d", ret);
+            return ret;
+        }
+    }
+    for (auto it = filters_.begin(); it != filters_.end(); ++it) {
+        auto rtv = (*it)->WaitPrerollDone(render);
+        if (rtv != Status::OK) {
+            ret = rtv;
+            MEDIA_LOG_I("Preroll done ret = %{public}d", ret);
+            return ret;
+        }
+    }
+    MEDIA_LOG_I("Preroll done ret = %{public}d", ret);
+    return ret;
 }
 
 Status Pipeline::SetPlayRange(int64_t start, int64_t end)
