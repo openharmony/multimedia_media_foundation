@@ -16,6 +16,8 @@
 #ifndef HISTREAMER_PLUGIN_COMMON_TIME_H
 #define HISTREAMER_PLUGIN_COMMON_TIME_H
 
+#include <chrono>
+
 namespace OHOS {
 namespace Media {
 namespace Plugins {
@@ -96,6 +98,13 @@ inline int64_t Us2Ms(int64_t us)
 inline int64_t Ms2Us(int64_t ms)
 {
     return ms * HST_USECOND;
+}
+
+inline int64_t GetCurrentMillisecond()
+{
+    std::chrono::system_clock::duration duration = std::chrono::system_clock::now().time_since_epoch();
+    int64_t time = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
+    return time;
 }
 } // Plugins
 } // Media
