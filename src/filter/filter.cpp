@@ -301,6 +301,57 @@ Status Filter::ReleaseDone()
     return ret;
 }
 
+Status Filter::Preroll()
+{
+    Status ret = DoPreroll();
+    if (ret != Status::OK) {
+        return ret;
+    }
+    for (auto iter : nextFiltersMap_) {
+        for (auto filter : iter.second) {
+            ret = filter->Preroll();
+            if (ret != Status::OK) {
+                return ret;
+            }
+        }
+    }
+    return Status::OK;
+}
+
+Status Filter::WaitPrerollDone(bool render)
+{
+    Status ret = Status::OK;
+    for (auto iter : nextFiltersMap_) {
+        for (auto filter : iter.second) {
+            auto curRet = filter->WaitPrerollDone(render);
+            if (curRet != Status::OK) {
+                ret = curRet;
+            }
+        }
+    }
+    auto curRet = DoWaitPrerollDone(render);
+    if (curRet != Status::OK) {
+        ret = curRet;
+    }
+    return ret;
+}
+
+void Filter::StartFilterTask()
+{
+    if (filterTask_) {
+        filterTask_->Start();
+    }
+}
+
+void Filter::PauseFilterTask()
+{
+    if (filterTask_) {
+        filterTask_->Pause();
+
+
+    }
+}
+
 Status Filter::ClearAllNextFilters()
 {
     nextFiltersMap_.clear();
