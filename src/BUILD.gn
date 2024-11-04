@@ -124,7 +124,7 @@ if (hst_is_standard_sys) {
     ]
 
     sources += [
-      "$histreamer_root_dir/src/filter/filter.cpp",
+      "$histreamer_root_dir/src/filter/filter_bak.cpp",
       "$histreamer_root_dir/src/filter/filter_factory.cpp",
       "$histreamer_root_dir/src/pipeline/pipeline.cpp",
     ]
