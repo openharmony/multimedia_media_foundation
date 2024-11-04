@@ -151,7 +151,7 @@ public:
     static constexpr const char OH_MD_KEY_AUDIO_VIVID_METADATA[] =
         "audio_vivid_metadata_key"; ///< Key for audio vivid metadata
     static constexpr const char AUDIO_SOUNDBED_CHANNELS_NUMBER[] =
-        "audio.soundbed.chaneels.number"; ///< Key for audio soundbed chaneels number
+        "audio.soundbed.channels.number"; ///< Key for audio soundbed channels number
     static constexpr const char AUDIO_HOA_ORDER[] =
         "audio.hoa.order"; ///< Key for audio hoa order 
     /* -------------------- video universal tag -------------------- */
