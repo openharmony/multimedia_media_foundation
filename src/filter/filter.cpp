@@ -347,8 +347,6 @@ void Filter::PauseFilterTask()
 {
     if (filterTask_) {
         filterTask_->Pause();
-
-
     }
 }
 
