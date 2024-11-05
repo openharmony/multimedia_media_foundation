@@ -286,7 +286,6 @@ enum AudioChannelLayout : int64_t {
                 AudioChannelSet::AMBISONICS_ACN11 | AudioChannelSet::AMBISONICS_ACN12 |
                 AudioChannelSet::AMBISONICS_ACN13 | AudioChannelSet::AMBISONICS_ACN14 |
                 AudioChannelSet::AMBISONICS_ACN15,
-    AUDIO_OBJECT = 0x300,
 };
 
 enum AACProfile : int32_t {
