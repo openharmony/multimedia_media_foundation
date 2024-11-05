@@ -153,7 +153,7 @@ public:
     static constexpr const char AUDIO_SOUNDBED_CHANNELS_NUMBER[] =
         "audio.soundbed.channels.number"; ///< Key for audio soundbed channels number
     static constexpr const char AUDIO_HOA_ORDER[] =
-        "audio.hoa.order"; ///< Key for audio hoa order 
+        "audio.hoa.order"; ///< Key for audio hoa order
     /* -------------------- video universal tag -------------------- */
     static constexpr const char VIDEO_WIDTH[] = "width";                               ///< video width
     static constexpr const char VIDEO_HEIGHT[] = "height";                             ///< video height
