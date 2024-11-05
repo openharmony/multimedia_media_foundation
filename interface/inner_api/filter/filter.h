@@ -85,12 +85,18 @@ class EventReceiver {
 public:
     virtual ~EventReceiver() = default;
     virtual void OnEvent(const Event& event) = 0;
+    virtual void OnDfxEvent(const DfxEvent& event)
+    {
+        (void)event;
+    }
+    virtual void NotifyRelease() {}
 };
 
 class FilterCallback {
 public:
     virtual ~FilterCallback() = default;
     virtual Status OnCallback(const std::shared_ptr<Filter>& filter, FilterCallBackCommand cmd, StreamType outType) = 0;
+    virtual void NotifyRelease() {}
 };
 
 class FilterLinkCallback {
