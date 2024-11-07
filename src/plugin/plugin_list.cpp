@@ -302,6 +302,17 @@ void PluginList::AddMpegDemuxerPlugin()
     pluginDescriptionList_.push_back(mpegDemuxerPlugin);
 }
 
+void PluginList::AddAviDemuxerPlugin()
+{
+    PluginDescription aviDemuxerPlugin;
+    aviDemuxerPlugin.pluginName = "avdemux_avi";
+    aviDemuxerPlugin.packageName = "FFmpegDemuxer";
+    aviDemuxerPlugin.pluginType = PluginType::DEMUXER;
+    aviDemuxerPlugin.cap = "";
+    aviDemuxerPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(aviDemuxerPlugin);
+}
+
 void PluginList::AddFFmpegDemuxerPlugins()
 {
     AddAacDemuxerPlugin();
@@ -317,6 +328,7 @@ void PluginList::AddFFmpegDemuxerPlugins()
     AddMovDemuxerPlugin();
     AddMp3DemuxerPlugin();
     AddMpegDemuxerPlugin();
+    AddAviDemuxerPlugin();
 
     PluginDescription srtDemuxerPlugin;
     srtDemuxerPlugin.pluginName = "avdemux_srt";

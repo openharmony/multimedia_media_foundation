@@ -60,6 +60,7 @@ private:
     void AddMovDemuxerPlugin();
     void AddMp3DemuxerPlugin();
     void AddMpegDemuxerPlugin();
+    void AddAviDemuxerPlugin();
     void AddFFmpegDemuxerPlugins();
     void AddMpegAudioDecoderPlugin();
     void AddAacAudioDecoderPlugin();
