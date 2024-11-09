@@ -77,6 +77,7 @@ private:
     void AddAmrnbAudioEncoderPlugins();
     void AddMp3AudioEncoderPlugins();
     void AddFFmpegMuxerPlugins();
+    void AddAudioVendorAacEncodersPlugin();
 
     std::vector<PluginDescription> pluginDescriptionList_;
 };
