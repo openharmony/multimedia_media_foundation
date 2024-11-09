@@ -330,6 +330,9 @@ Status AudioFfmpegDecoderPlugin::AssignExtraDataIfExistsLocked(const std::shared
         return Status::ERROR_MISMATCHED_TYPE;
     }
     const auto* codecConfig = Plugin::AnyCast<CodecConfig>(&item);
+    if (codecConfig == nullptr) {
+        return Status::ERROR_UNKNOWN;
+    }
     if (!codecConfig->empty()) {
         auto configSize = codecConfig->size();
         auto allocSize = AlignUp(configSize + AV_INPUT_BUFFER_PADDING_SIZE, 16); // 16
