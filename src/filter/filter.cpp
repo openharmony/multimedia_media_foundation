@@ -169,6 +169,21 @@ Status Filter::PauseDragging()
     return ret;
 }
 
+Status Filter::PauseAudioAlign()
+{
+    MEDIA_LOG_D("PauseAudioAlign %{public}s, pState:%{public}d", name_.c_str(), curState_);
+    auto ret = DoPauseAudioAlign();
+    if (filterTask_) {
+        filterTask_->Pause();
+    }
+    for (auto iter : nextFiltersMap_) {
+        for (auto filter : iter.second) {
+            filter->PauseAudioAlign();
+        }
+    }
+    return ret;
+}
+
 Status Filter::PauseDone()
 {
     MEDIA_LOG_I("Pause in %{public}s", name_.c_str());
@@ -231,6 +246,30 @@ Status Filter::ResumeDragging()
             }
         }
         return DoResumeDragging();
+    }
+    return Status::OK;
+}
+
+Status Filter::ResumeAudioAlign()
+{
+    MEDIA_LOG_D("ResumeAudioAlign %{public}s, pState:%{public}d", name_.c_str(), curState_);
+    if (filterTask_) {
+        filterTask_->SubmitJobOnce([this]() {
+            DoResumeAudioAlign();
+            filterTask_->Start();
+        });
+        for (auto iter : nextFiltersMap_) {
+            for (auto filter : iter.second) {
+                filter->ResumeAudioAlign();
+            }
+        }
+    } else {
+        for (auto iter : nextFiltersMap_) {
+            for (auto filter : iter.second) {
+                filter->ResumeAudioAlign();
+            }
+        }
+        return DoResumeAudioAlign();
     }
     return Status::OK;
 }
@@ -430,12 +469,22 @@ Status Filter::DoPauseDragging()
     return Status::OK;
 }
 
+Status Filter::DoPauseAudioAlign()
+{
+    return Status::OK;
+}
+
 Status Filter::DoResume()
 {
     return Status::OK;
 }
 
 Status Filter::DoResumeDragging()
+{
+    return Status::OK;
+}
+
+Status Filter::DoResumeAudioAlign()
 {
     return Status::OK;
 }
