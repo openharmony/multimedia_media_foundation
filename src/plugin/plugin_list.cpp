@@ -93,6 +93,7 @@ PluginList::PluginList()
     AddFFmpegDemuxerPlugins();
     AddFFmpegAudioDecodersPlugins();
     AddAudioVividDecodersPlugins();
+    AddAudioVendorAacEncodersPlugin();
     AddG711muAudioDecoderPlugins();
     AddLbvcAudioDecoderPlugins();
     AddOpusAudioDecoderPlugins();
@@ -499,6 +500,17 @@ void PluginList::AddFFmpegAudioEncodersPlugins()
     flacAudioEncoderPlugin.cap = "audio/flac";
     flacAudioEncoderPlugin.rank = DEFAULT_RANK;
     pluginDescriptionList_.push_back(flacAudioEncoderPlugin);
+}
+
+void PluginList::AddAudioVendorAacEncodersPlugin()
+{
+    PluginDescription AacEncoderPlugin;
+    AacEncoderPlugin.pluginName = "OH.Media.Codec.Encoder.Audio.Vendor.AAC";
+    AacEncoderPlugin.packageName = "AudioVendorAacEncoder";
+    AacEncoderPlugin.pluginType = PluginType::AUDIO_ENCODER;
+    AacEncoderPlugin.cap = "audio/mp4a-latm";
+    AacEncoderPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(AacEncoderPlugin);
 }
 
 void PluginList::AddG711muAudioEncoderPlugins()
