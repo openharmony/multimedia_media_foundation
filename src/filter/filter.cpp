@@ -163,7 +163,10 @@ Status Filter::PauseDragging()
     }
     for (auto iter : nextFiltersMap_) {
         for (auto filter : iter.second) {
-            filter->PauseDragging();
+            auto curRet = filter->PauseDragging();
+            if (curRet != Status::OK) {
+                ret = curRet;
+            }
         }
     }
     return ret;
@@ -178,7 +181,10 @@ Status Filter::PauseAudioAlign()
     }
     for (auto iter : nextFiltersMap_) {
         for (auto filter : iter.second) {
-            filter->PauseAudioAlign();
+            auto curRet = filter->PauseAudioAlign();
+            if (curRet != Status::OK) {
+                ret = curRet;
+            }
         }
     }
     return ret;
@@ -229,14 +235,16 @@ Status Filter::ResumeDone()
 Status Filter::ResumeDragging()
 {
     MEDIA_LOG_D("ResumeDragging %{public}s, pState:%{public}d", name_.c_str(), curState_);
+    auto ret = Status::OK;
     if (filterTask_) {
-        filterTask_->SubmitJobOnce([this]() {
-            DoResumeDragging();
-            filterTask_->Start();
-        });
+        ret = DoResumeDragging();
+        filterTask_->Start();
         for (auto iter : nextFiltersMap_) {
             for (auto filter : iter.second) {
-                filter->ResumeDragging();
+                auto curRet = filter->ResumeDragging();
+                if (curRet != Status::OK) {
+                    ret = curRet;
+                }
             }
         }
     } else {
@@ -247,20 +255,22 @@ Status Filter::ResumeDragging()
         }
         return DoResumeDragging();
     }
-    return Status::OK;
+    return ret;
 }
 
 Status Filter::ResumeAudioAlign()
 {
     MEDIA_LOG_D("ResumeAudioAlign %{public}s, pState:%{public}d", name_.c_str(), curState_);
+    auto ret = Status::OK;
     if (filterTask_) {
-        filterTask_->SubmitJobOnce([this]() {
-            DoResumeAudioAlign();
-            filterTask_->Start();
-        });
+        ret = DoResumeAudioAlign();
+        filterTask_->Start();
         for (auto iter : nextFiltersMap_) {
             for (auto filter : iter.second) {
-                filter->ResumeAudioAlign();
+                auto curRet = filter->ResumeAudioAlign();
+                if (curRet != Status::OK) {
+                    ret = curRet;
+                }
             }
         }
     } else {
@@ -271,7 +281,7 @@ Status Filter::ResumeAudioAlign()
         }
         return DoResumeAudioAlign();
     }
-    return Status::OK;
+    return ret;
 }
 
 Status Filter::Stop()
