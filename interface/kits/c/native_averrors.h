@@ -156,110 +156,15 @@ typedef enum OH_AVErrCode {
      */
     AV_ERR_IO_DATA_ABNORMAL = 5411012,
     /**
-     * @error file is occupied by other processes and cannot be accessed.
-     * @since 14
-     */
-    AV_ERR_IO_FILE_ACCESS_DENIED = 5411013,
-    /**
-     * @error the file handle is incorrect.
-     * @since 14
-     */
-    AV_ERR_IO_FILE_BAD_HANDLE = 5411014,
-    /**
-     * @error IO file not found.
-     * @since 14
-     */
-    AV_ERR_IO_FILE_NOT_FOUND = 5411015,
-    /**
-     * @error IO file permission denied because API does not have permissions.
-     * @since 14
-     */
-    AV_ERR_IO_FILE_PERMISSION_DENIED = 5411016,
-    /**
-     * @error fail to decode the audio data.
-     * @since 14
-     */
-    AV_ERR_IO_AUDIO_DEC_FAILED = 5411017,
-    /**
-     * @error fail to init the audio decoder.
-     * @since 14
-     */
-    AV_ERR_IO_AUDIO_DEC_INIT_FAILED = 5411018,
-    /**
-     * @error audio decoder is unavailable for handler incurrupt, or audio decoder subsystem abnormal.
-     * @since 14
-     */
-    AV_ERR_IO_AUDIO_DEC_UNAVAILABLE = 5411019,
-    /**
      * @error audio device error.
      * @since 14
      */
     AV_ERR_IO_AUDIO_DEVICE_ERROR = 5411020,
     /**
-     * @error audio device state does not support the current operation.
-     * @since 14
-     */
-    AV_ERR_IO_AUDIO_DEVICE_INVALID_STATE = 5411021,
-    /**
-     * @error audio device timeout when calling audio render interface.
-     * @since 14
-     */
-    AV_ERR_IO_AUDIO_DEVICE_TIMEOUT = 5411022,
-    /**
-     * @error audio device unavailable, unable to create an audio device.
-     * @since 14
-     */
-    AV_ERR_IO_AUDIO_DEVICE_UNAVAILABLE = 5411023,
-    /**
-     * @error fail to encode the audio data.
-     * @since 14
-     */
-    AV_ERR_IO_AUDIO_ENC_FAILED = 5411024,
-    /**
-     * @error fail to init the audio encoder.
-     * @since 14
-     */
-    AV_ERR_IO_AUDIO_ENC_INIT_FAILED = 5411025,
-    /**
-     * @error audio encoder is unavailable for handler incurrupt, or audio encoder subsystem abnormal.
-     * @since 14
-     */
-    AV_ERR_IO_AUDIO_ENC_UNAVAILABLE = 5411026,
-    /**
-     * @error fail to decode the video data.
-     * @since 14
-     */
-    AV_ERR_IO_VIDEO_DEC_FAILED = 5411027,
-    /**
-     * @error fail to init the video decoder.
-     * @since 14
-     */
-    AV_ERR_IO_VIDEO_DEC_INIT_FAILED = 5411028,
-    /**
-     * @error video decoder is unavailable for handler incurrupt, or video decoder subsystem abnormal.
-     * @since 14
-     */
-    AV_ERR_IO_VIDEO_DEC_UNAVAILABLE = 5411029,
-    /**
      * @error video device error.
      * @since 14
      */
     AV_ERR_IO_VIDEO_DEVICE_ERROR = 5411030,
-    /**
-     * @error fail to encode the video data.
-     * @since 14
-     */
-    AV_ERR_IO_VIDEO_ENC_FAILED = 5411031,
-    /**
-     * @error fail to init the video encoder.
-     * @since 14
-     */
-    AV_ERR_IO_VIDEO_ENC_INIT_FAILED = 5411032,
-    /**
-     * @error video encoder is unavailable for handler incurrupt, or video encoder subsystem abnormal.
-     * @since 14
-     */
-    AV_ERR_IO_VIDEO_ENC_UNAVAILABLE = 5411033,
 } OH_AVErrCode;
 
 #ifdef __cplusplus
