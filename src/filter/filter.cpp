@@ -236,24 +236,17 @@ Status Filter::ResumeDragging()
 {
     MEDIA_LOG_D("ResumeDragging %{public}s, pState:%{public}d", name_.c_str(), curState_);
     auto ret = Status::OK;
+    ret = DoResumeDragging();
     if (filterTask_) {
-        ret = DoResumeDragging();
         filterTask_->Start();
-        for (auto iter : nextFiltersMap_) {
-            for (auto filter : iter.second) {
-                auto curRet = filter->ResumeDragging();
-                if (curRet != Status::OK) {
-                    ret = curRet;
-                }
+    }
+    for (auto iter : nextFiltersMap_) {
+        for (auto filter : iter.second) {
+            auto curRet = filter->ResumeDragging();
+            if (curRet != Status::OK) {
+                ret = curRet;
             }
         }
-    } else {
-        for (auto iter : nextFiltersMap_) {
-            for (auto filter : iter.second) {
-                filter->ResumeDragging();
-            }
-        }
-        return DoResumeDragging();
     }
     return ret;
 }
@@ -262,24 +255,17 @@ Status Filter::ResumeAudioAlign()
 {
     MEDIA_LOG_D("ResumeAudioAlign %{public}s, pState:%{public}d", name_.c_str(), curState_);
     auto ret = Status::OK;
+    ret = DoResumeAudioAlign();
     if (filterTask_) {
-        ret = DoResumeAudioAlign();
         filterTask_->Start();
-        for (auto iter : nextFiltersMap_) {
-            for (auto filter : iter.second) {
-                auto curRet = filter->ResumeAudioAlign();
-                if (curRet != Status::OK) {
-                    ret = curRet;
-                }
+    }
+    for (auto iter : nextFiltersMap_) {
+        for (auto filter : iter.second) {
+            auto curRet = filter->ResumeAudioAlign();
+            if (curRet != Status::OK) {
+                ret = curRet;
             }
         }
-    } else {
-        for (auto iter : nextFiltersMap_) {
-            for (auto filter : iter.second) {
-                filter->ResumeAudioAlign();
-            }
-        }
-        return DoResumeAudioAlign();
     }
     return ret;
 }
