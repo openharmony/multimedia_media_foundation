@@ -163,7 +163,10 @@ Status Filter::PauseDragging()
     }
     for (auto iter : nextFiltersMap_) {
         for (auto filter : iter.second) {
-            filter->PauseDragging();
+            auto curRet = filter->PauseDragging();
+            if (curRet != Status::OK) {
+                ret = curRet;
+            }
         }
     }
     return ret;
@@ -178,7 +181,10 @@ Status Filter::PauseAudioAlign()
     }
     for (auto iter : nextFiltersMap_) {
         for (auto filter : iter.second) {
-            filter->PauseAudioAlign();
+            auto curRet = filter->PauseAudioAlign();
+            if (curRet != Status::OK) {
+                ret = curRet;
+            }
         }
     }
     return ret;
@@ -229,49 +235,39 @@ Status Filter::ResumeDone()
 Status Filter::ResumeDragging()
 {
     MEDIA_LOG_D("ResumeDragging %{public}s, pState:%{public}d", name_.c_str(), curState_);
+    auto ret = Status::OK;
+    ret = DoResumeDragging();
     if (filterTask_) {
-        filterTask_->SubmitJobOnce([this]() {
-            DoResumeDragging();
-            filterTask_->Start();
-        });
-        for (auto iter : nextFiltersMap_) {
-            for (auto filter : iter.second) {
-                filter->ResumeDragging();
-            }
-        }
-    } else {
-        for (auto iter : nextFiltersMap_) {
-            for (auto filter : iter.second) {
-                filter->ResumeDragging();
-            }
-        }
-        return DoResumeDragging();
+        filterTask_->Start();
     }
-    return Status::OK;
+    for (auto iter : nextFiltersMap_) {
+        for (auto filter : iter.second) {
+            auto curRet = filter->ResumeDragging();
+            if (curRet != Status::OK) {
+                ret = curRet;
+            }
+        }
+    }
+    return ret;
 }
 
 Status Filter::ResumeAudioAlign()
 {
     MEDIA_LOG_D("ResumeAudioAlign %{public}s, pState:%{public}d", name_.c_str(), curState_);
+    auto ret = Status::OK;
+    ret = DoResumeAudioAlign();
     if (filterTask_) {
-        filterTask_->SubmitJobOnce([this]() {
-            DoResumeAudioAlign();
-            filterTask_->Start();
-        });
-        for (auto iter : nextFiltersMap_) {
-            for (auto filter : iter.second) {
-                filter->ResumeAudioAlign();
-            }
-        }
-    } else {
-        for (auto iter : nextFiltersMap_) {
-            for (auto filter : iter.second) {
-                filter->ResumeAudioAlign();
-            }
-        }
-        return DoResumeAudioAlign();
+        filterTask_->Start();
     }
-    return Status::OK;
+    for (auto iter : nextFiltersMap_) {
+        for (auto filter : iter.second) {
+            auto curRet = filter->ResumeAudioAlign();
+            if (curRet != Status::OK) {
+                ret = curRet;
+            }
+        }
+    }
+    return ret;
 }
 
 Status Filter::Stop()
