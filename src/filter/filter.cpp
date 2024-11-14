@@ -408,6 +408,7 @@ Status Filter::ClearAllNextFilters()
 Status Filter::ProcessInputBuffer(int sendArg, int64_t delayUs)
 {
     MEDIA_LOG_D("Filter::ProcessInputBuffer  %{public}s", name_.c_str());
+    FALSE_RETURN_V_MSG(!isAsyncMode_ || filterTask_, Status::ERROR_INVALID_OPERATION, "no filterTask in async mode");
     if (filterTask_) {
         jobIdx_++;
         filterTask_->SubmitJob([this, sendArg]() {
@@ -424,6 +425,7 @@ Status Filter::ProcessInputBuffer(int sendArg, int64_t delayUs)
 Status Filter::ProcessOutputBuffer(int sendArg, int64_t delayUs, bool byIdx, uint32_t idx, int64_t renderTime)
 {
     MEDIA_LOG_D("Filter::ProcessOutputBuffer  %{public}s", name_.c_str());
+    FALSE_RETURN_V_MSG(!isAsyncMode_ || filterTask_, Status::ERROR_INVALID_OPERATION, "no filterTask in async mode");
     if (filterTask_) {
         jobIdx_++;
         int64_t processIdx = jobIdx_;
