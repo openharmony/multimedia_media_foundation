@@ -51,14 +51,26 @@ enum struct EventType : uint32_t {
     EVENT_AUDIO_TRACK_CHANGE,
     EVENT_VIDEO_TRACK_CHANGE,
     EVENT_SUBTITLE_TRACK_CHANGE,
-    EVENT_VIDEO_LAG, // player lag event detected by video sink
-    EVENT_AUDIO_LAG, // player lag event detected by audio sink
-    EVENT_STREAM_LAG, // player lag event detected by sync manager
+};
+
+// DFX events and infos reported from filters, modules, and plugins
+enum struct DfxEventType : uint32_t {
+    DFX_INFO_START = 0,
+    DFX_INFO_PLAYER_VIDEO_LAG,
+    DFX_INFO_PLAYER_AUDIO_LAG,
+    DFX_INFO_PLAYER_STREAM_LAG,
+    DFX_EVENT_BUTT,
 };
 
 struct Event {
     std::string srcFilter;
     EventType type;
+    Any param;
+};
+
+struct DfxEvent {
+    std::string callerName;
+    DfxEventType type;
     Any param;
 };
 

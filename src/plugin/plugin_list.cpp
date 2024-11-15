@@ -93,6 +93,7 @@ PluginList::PluginList()
     AddFFmpegDemuxerPlugins();
     AddFFmpegAudioDecodersPlugins();
     AddAudioVividDecodersPlugins();
+    AddAudioVendorAacEncodersPlugin();
     AddG711muAudioDecoderPlugins();
     AddLbvcAudioDecoderPlugins();
     AddOpusAudioDecoderPlugins();
@@ -302,6 +303,72 @@ void PluginList::AddMpegDemuxerPlugin()
     pluginDescriptionList_.push_back(mpegDemuxerPlugin);
 }
 
+void PluginList::AddMpegtsDemuxerPlugin()
+{
+    PluginDescription mpegtsDemuxerPlugin;
+    mpegtsDemuxerPlugin.pluginName = "avdemux_mpegts";
+    mpegtsDemuxerPlugin.packageName = "FFmpegDemuxer";
+    mpegtsDemuxerPlugin.pluginType = PluginType::DEMUXER;
+    mpegtsDemuxerPlugin.cap = "";
+    mpegtsDemuxerPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(mpegtsDemuxerPlugin);
+}
+
+void PluginList::AddAviDemuxerPlugin()
+{
+    PluginDescription aviDemuxerPlugin;
+    aviDemuxerPlugin.pluginName = "avdemux_avi";
+    aviDemuxerPlugin.packageName = "FFmpegDemuxer";
+    aviDemuxerPlugin.pluginType = PluginType::DEMUXER;
+    aviDemuxerPlugin.cap = "";
+    aviDemuxerPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(aviDemuxerPlugin);
+}
+
+void PluginList::AddSrtDemuxerPlugin()
+{
+    PluginDescription srtDemuxerPlugin;
+    srtDemuxerPlugin.pluginName = "avdemux_srt";
+    srtDemuxerPlugin.packageName = "FFmpegDemuxer";
+    srtDemuxerPlugin.pluginType = PluginType::DEMUXER;
+    srtDemuxerPlugin.cap = "";
+    srtDemuxerPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(srtDemuxerPlugin);
+}
+
+void PluginList::AddWebvttDemuxerPlugin()
+{
+    PluginDescription vttDemuxerPlugin;
+    vttDemuxerPlugin.pluginName = "avdemux_webvtt";
+    vttDemuxerPlugin.packageName = "FFmpegDemuxer";
+    vttDemuxerPlugin.pluginType = PluginType::DEMUXER;
+    vttDemuxerPlugin.cap = "";
+    vttDemuxerPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(vttDemuxerPlugin);
+}
+
+void PluginList::AddOggDemuxerPlugin()
+{
+    PluginDescription oggDemuxerPlugin;
+    oggDemuxerPlugin.pluginName = "avdemux_ogg";
+    oggDemuxerPlugin.packageName = "FFmpegDemuxer";
+    oggDemuxerPlugin.pluginType = PluginType::DEMUXER;
+    oggDemuxerPlugin.cap = "";
+    oggDemuxerPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(oggDemuxerPlugin);
+}
+
+void PluginList::AddWavDemuxerPlugin()
+{
+    PluginDescription wavDemuxerPlugin;
+    wavDemuxerPlugin.pluginName = "avdemux_wav";
+    wavDemuxerPlugin.packageName = "FFmpegDemuxer";
+    wavDemuxerPlugin.pluginType = PluginType::DEMUXER;
+    wavDemuxerPlugin.cap = "";
+    wavDemuxerPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(wavDemuxerPlugin);
+}
+
 void PluginList::AddFFmpegDemuxerPlugins()
 {
     AddAacDemuxerPlugin();
@@ -317,46 +384,12 @@ void PluginList::AddFFmpegDemuxerPlugins()
     AddMovDemuxerPlugin();
     AddMp3DemuxerPlugin();
     AddMpegDemuxerPlugin();
-
-    PluginDescription srtDemuxerPlugin;
-    srtDemuxerPlugin.pluginName = "avdemux_srt";
-    srtDemuxerPlugin.packageName = "FFmpegDemuxer";
-    srtDemuxerPlugin.pluginType = PluginType::DEMUXER;
-    srtDemuxerPlugin.cap = "";
-    srtDemuxerPlugin.rank = DEFAULT_RANK;
-    pluginDescriptionList_.push_back(srtDemuxerPlugin);
-
-    PluginDescription vttDemuxerPlugin;
-    vttDemuxerPlugin.pluginName = "avdemux_webvtt";
-    vttDemuxerPlugin.packageName = "FFmpegDemuxer";
-    vttDemuxerPlugin.pluginType = PluginType::DEMUXER;
-    vttDemuxerPlugin.cap = "";
-    vttDemuxerPlugin.rank = DEFAULT_RANK;
-    pluginDescriptionList_.push_back(vttDemuxerPlugin);
-
-    PluginDescription mpegtsDemuxerPlugin;
-    mpegtsDemuxerPlugin.pluginName = "avdemux_mpegts";
-    mpegtsDemuxerPlugin.packageName = "FFmpegDemuxer";
-    mpegtsDemuxerPlugin.pluginType = PluginType::DEMUXER;
-    mpegtsDemuxerPlugin.cap = "";
-    mpegtsDemuxerPlugin.rank = DEFAULT_RANK;
-    pluginDescriptionList_.push_back(mpegtsDemuxerPlugin);
-
-    PluginDescription oggDemuxerPlugin;
-    oggDemuxerPlugin.pluginName = "avdemux_ogg";
-    oggDemuxerPlugin.packageName = "FFmpegDemuxer";
-    oggDemuxerPlugin.pluginType = PluginType::DEMUXER;
-    oggDemuxerPlugin.cap = "";
-    oggDemuxerPlugin.rank = DEFAULT_RANK;
-    pluginDescriptionList_.push_back(oggDemuxerPlugin);
-
-    PluginDescription wavDemuxerPlugin;
-    wavDemuxerPlugin.pluginName = "avdemux_wav";
-    wavDemuxerPlugin.packageName = "FFmpegDemuxer";
-    wavDemuxerPlugin.pluginType = PluginType::DEMUXER;
-    wavDemuxerPlugin.cap = "";
-    wavDemuxerPlugin.rank = DEFAULT_RANK;
-    pluginDescriptionList_.push_back(wavDemuxerPlugin);
+    AddMpegtsDemuxerPlugin();
+    AddAviDemuxerPlugin();
+    AddSrtDemuxerPlugin();
+    AddWebvttDemuxerPlugin();
+    AddOggDemuxerPlugin();
+    AddWavDemuxerPlugin();
 }
 
 void PluginList::AddMpegAudioDecoderPlugin()
@@ -499,6 +532,17 @@ void PluginList::AddFFmpegAudioEncodersPlugins()
     flacAudioEncoderPlugin.cap = "audio/flac";
     flacAudioEncoderPlugin.rank = DEFAULT_RANK;
     pluginDescriptionList_.push_back(flacAudioEncoderPlugin);
+}
+
+void PluginList::AddAudioVendorAacEncodersPlugin()
+{
+    PluginDescription AacEncoderPlugin;
+    AacEncoderPlugin.pluginName = "OH.Media.Codec.Encoder.Audio.Vendor.AAC";
+    AacEncoderPlugin.packageName = "AudioVendorAacEncoder";
+    AacEncoderPlugin.pluginType = PluginType::AUDIO_ENCODER;
+    AacEncoderPlugin.cap = "audio/mp4a-latm";
+    AacEncoderPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(AacEncoderPlugin);
 }
 
 void PluginList::AddG711muAudioEncoderPlugins()

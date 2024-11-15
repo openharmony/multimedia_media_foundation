@@ -85,12 +85,18 @@ class EventReceiver {
 public:
     virtual ~EventReceiver() = default;
     virtual void OnEvent(const Event& event) = 0;
+    virtual void OnDfxEvent(const DfxEvent& event)
+    {
+        (void)event;
+    }
+    virtual void NotifyRelease() {}
 };
 
 class FilterCallback {
 public:
     virtual ~FilterCallback() = default;
     virtual Status OnCallback(const std::shared_ptr<Filter>& filter, FilterCallBackCommand cmd, StreamType outType) = 0;
+    virtual void NotifyRelease() {}
 };
 
 class FilterLinkCallback {
@@ -117,9 +123,13 @@ public:
 
     virtual Status PauseDragging() final;
 
+    virtual Status PauseAudioAlign() final;
+
     virtual Status Resume() final;
 
     virtual Status ResumeDragging() final;
+
+    virtual Status ResumeAudioAlign() final;
 
     virtual Status Stop() final;
 
@@ -154,9 +164,13 @@ public:
 
     virtual Status DoPauseDragging();
 
+    virtual Status DoPauseAudioAlign();
+
     virtual Status DoResume();
 
     virtual Status DoResumeDragging();
+
+    virtual Status DoResumeAudioAlign();
 
     virtual Status DoStop();
 
