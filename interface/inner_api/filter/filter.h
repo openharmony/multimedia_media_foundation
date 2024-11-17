@@ -119,9 +119,13 @@ public:
 
     virtual Status PauseDragging() final;
 
+    virtual Status PauseAudioAlign() final;
+
     virtual Status Resume() final;
 
     virtual Status ResumeDragging() final;
+
+    virtual Status ResumeAudioAlign() final;
 
     virtual Status Stop() final;
 
@@ -156,9 +160,13 @@ public:
 
     virtual Status DoPauseDragging();
 
+    virtual Status DoPauseAudioAlign();
+
     virtual Status DoResume();
 
     virtual Status DoResumeDragging();
+
+    virtual Status DoResumeAudioAlign();
 
     virtual Status DoStop();
 
