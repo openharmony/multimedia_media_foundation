@@ -548,6 +548,7 @@ void Filter::ChangeState(FilterState state)
 Status Filter::WaitAllState(FilterState state)
 {
     AutoLock lock(stateMutex_);
+    MEDIA_LOG_I("%{public}s wait %{public}d", name_.c_str(), state);
     if (curState_ != state) {
         bool result = cond_.WaitFor(lock, 30000, [this, state] { // 30000 ms timeout
             return curState_ == state || curState_ == FilterState::ERROR;
