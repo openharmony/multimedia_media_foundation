@@ -92,27 +92,8 @@ enum MediaServiceErrCode : ErrCode {
     MSERR_IO_SSL_SERVER_CERT_UNTRUSTED,                 // IO SSL server cert untrusted.
     MSERR_IO_UNSUPPORTTED_REQUEST,                      // IO unsupported request.
     MSERR_IO_DATA_ABNORMAL,                             // IO data abnormal.
-    MSERR_IO_FILE_ACCESS_DENIED,                        // IO file access denied.
-    MSERR_IO_FILE_BAD_HANDLE,                           // IO file bad handle.
-    MSERR_IO_FILE_NOT_FOUND,                            // IO file not found.
-    MSERR_IO_FILE_PERMISSION_DENIED,                    // IO file permission denied.
-    MSERR_IO_AUDIO_DEC_FAILED,                          // IO decode failed.
-    MSERR_IO_AUDIO_DEC_INIT_FAILED,                     // audio decode init failed.
-    MSERR_IO_AUDIO_DEC_UNAVAILABLE,                     // audio decode unavailable.
     MSERR_IO_AUDIO_DEVICE_ERROR,                        // audio device error.
-    MSERR_IO_AUDIO_DEVICE_INVALID_STATE,                // audio device invalid state.
-    MSERR_IO_AUDIO_DEVICE_TIMEOUT,                      // audio device timeout.
-    MSERR_IO_AUDIO_DEVICE_UNAVAILABLE,                  // audio device unavailable.
-    MSERR_IO_AUDIO_ENC_FAILED,                          // audio encode failed.
-    MSERR_IO_AUDIO_ENC_INIT_FAILED,                     // audio encode init failed.
-    MSERR_IO_AUDIO_ENC_UNAVAILABLE,                     // audio encode unavailable.
-    MSERR_IO_VIDEO_DEC_FAILED,                          // video decode failed.
-    MSERR_IO_VIDEO_DEC_INIT_FAILED,                     // video decode init failed.
-    MSERR_IO_VIDEO_DEC_UNAVAILABLE,                     // video decode unavailable.
     MSERR_IO_VIDEO_DEVICE_ERROR,                        // video device error.
-    MSERR_IO_VIDEO_ENC_FAILED,                          // video encode failed.
-    MSERR_IO_VIDEO_ENC_INIT_FAILED,                     // video encode init failed.
-    MSERR_IO_VIDEO_ENC_UNAVAILABLE,                     // video encode unavailable.
     MSERR_EXTEND_START      = MS_ERR_OFFSET + 0xF000,   // extend err start.
 };
 
@@ -157,27 +138,8 @@ enum MediaServiceExtErrCodeAPI9 : int32_t {
     MSERR_EXT_API14_IO_SSL_SERVER_CERT_UNTRUSTED = 5411010,     // IO SSL server cert untrusted.
     MSERR_EXT_API14_IO_UNSUPPORTTED_REQUEST = 5411011,          // IO unsupported request.
     MSERR_EXT_API14_IO_DATA_ABNORMAL = 5411012,                 // IO data abnormal.
-    MSERR_EXT_API14_IO_FILE_ACCESS_DENIED = 5411013,            // IO file access denied.
-    MSERR_EXT_API14_IO_FILE_BAD_HANDLE = 5411014,               // IO file bad handle.
-    MSERR_EXT_API14_IO_FILE_NOT_FOUND = 5411015,                // IO file not found.
-    MSERR_EXT_API14_IO_FILE_PERMISSION_DENIED = 5411016,        // IO file permission denied.
-    MSERR_EXT_API14_IO_AUDIO_DEC_FAILED = 5411017,              // IO decode failed.
-    MSERR_EXT_API14_IO_AUDIO_DEC_INIT_FAILED = 5411018,         // audio decode init failed.
-    MSERR_EXT_API14_IO_AUDIO_DEC_UNAVAILABLE = 5411019,         // audio decode unavailable.
     MSERR_EXT_API14_IO_AUDIO_DEVICE_ERROR = 5411020,            // audio device error.
-    MSERR_EXT_API14_IO_AUDIO_DEVICE_INVALID_STATE = 5411021,    // audio device invalid state.
-    MSERR_EXT_API14_IO_AUDIO_DEVICE_TIMEOUT = 5411022,          // audio device timeout.
-    MSERR_EXT_API14_IO_AUDIO_DEVICE_UNAVAILABLE = 5411023,      // audio device unavailable.
-    MSERR_EXT_API14_IO_AUDIO_ENC_FAILED = 5411024,              // audio encode failed.
-    MSERR_EXT_API14_IO_AUDIO_ENC_INIT_FAILED = 5411025,         // audio encode init failed.
-    MSERR_EXT_API14_IO_AUDIO_ENC_UNAVAILABLE = 5411026,         // audio encode unavailable.
-    MSERR_EXT_API14_IO_VIDEO_DEC_FAILED = 5411027,              // video decode failed.
-    MSERR_EXT_API14_IO_VIDEO_DEC_INIT_FAILED = 5411028,         // video decode init failed.
-    MSERR_EXT_API14_IO_VIDEO_DEC_UNAVAILABLE = 5411029,         // video decode unavailable.
     MSERR_EXT_API14_IO_VIDEO_DEVICE_ERROR = 5411030,            // video device error.
-    MSERR_EXT_API14_IO_VIDEO_ENC_FAILED = 5411031,              // video encode failed.
-    MSERR_EXT_API14_IO_VIDEO_ENC_INIT_FAILED = 5411032,         // video encode init failed.
-    MSERR_EXT_API14_IO_VIDEO_ENC_UNAVAILABLE = 5411033,         // video encode unavailable.
 };
 
 /**

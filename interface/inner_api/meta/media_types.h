@@ -145,6 +145,8 @@ enum class FileType : int32_t {
     MKV = 103,
     FLV = 104,
     MPEG = 106,
+    MOV = 107,
+    AVI = 105,
     AMR = 201,
     AAC = 202,
     MP3 = 203,
@@ -237,7 +239,9 @@ public:
     static constexpr std::string_view AUDIO_ENCODER_API9_AAC_NAME = "avenc_aac";
 
     static constexpr std::string_view VIDEO_DECODER_AVC_NAME = "OH.Media.Codec.Decoder.Video.AVC";
-
+    static constexpr std::string_view VIDEO_DECODER_MPEG2_NAME = "OH.Media.Codec.Decoder.Video.MPEG2";
+    static constexpr std::string_view VIDEO_DECODER_MPEG4_NAME = "OH.Media.Codec.Decoder.Video.MPEG4";
+    
 private:
     CodecName() = delete;
     ~CodecName() = delete;

@@ -60,6 +60,12 @@ private:
     void AddMovDemuxerPlugin();
     void AddMp3DemuxerPlugin();
     void AddMpegDemuxerPlugin();
+    void AddMpegtsDemuxerPlugin();
+    void AddAviDemuxerPlugin();
+    void AddSrtDemuxerPlugin();
+    void AddWebvttDemuxerPlugin();
+    void AddOggDemuxerPlugin();
+    void AddWavDemuxerPlugin();
     void AddFFmpegDemuxerPlugins();
     void AddMpegAudioDecoderPlugin();
     void AddAacAudioDecoderPlugin();
@@ -77,6 +83,7 @@ private:
     void AddAmrnbAudioEncoderPlugins();
     void AddMp3AudioEncoderPlugins();
     void AddFFmpegMuxerPlugins();
+    void AddAudioVendorAacEncodersPlugin();
 
     std::vector<PluginDescription> pluginDescriptionList_;
 };

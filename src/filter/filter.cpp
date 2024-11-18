@@ -163,7 +163,28 @@ Status Filter::PauseDragging()
     }
     for (auto iter : nextFiltersMap_) {
         for (auto filter : iter.second) {
-            filter->PauseDragging();
+            auto curRet = filter->PauseDragging();
+            if (curRet != Status::OK) {
+                ret = curRet;
+            }
+        }
+    }
+    return ret;
+}
+
+Status Filter::PauseAudioAlign()
+{
+    MEDIA_LOG_D("PauseAudioAlign %{public}s, pState:%{public}d", name_.c_str(), curState_);
+    auto ret = DoPauseAudioAlign();
+    if (filterTask_) {
+        filterTask_->Pause();
+    }
+    for (auto iter : nextFiltersMap_) {
+        for (auto filter : iter.second) {
+            auto curRet = filter->PauseAudioAlign();
+            if (curRet != Status::OK) {
+                ret = curRet;
+            }
         }
     }
     return ret;
@@ -214,25 +235,39 @@ Status Filter::ResumeDone()
 Status Filter::ResumeDragging()
 {
     MEDIA_LOG_D("ResumeDragging %{public}s, pState:%{public}d", name_.c_str(), curState_);
+    auto ret = Status::OK;
+    ret = DoResumeDragging();
     if (filterTask_) {
-        filterTask_->SubmitJobOnce([this]() {
-            DoResumeDragging();
-            filterTask_->Start();
-        });
-        for (auto iter : nextFiltersMap_) {
-            for (auto filter : iter.second) {
-                filter->ResumeDragging();
-            }
-        }
-    } else {
-        for (auto iter : nextFiltersMap_) {
-            for (auto filter : iter.second) {
-                filter->ResumeDragging();
-            }
-        }
-        return DoResumeDragging();
+        filterTask_->Start();
     }
-    return Status::OK;
+    for (auto iter : nextFiltersMap_) {
+        for (auto filter : iter.second) {
+            auto curRet = filter->ResumeDragging();
+            if (curRet != Status::OK) {
+                ret = curRet;
+            }
+        }
+    }
+    return ret;
+}
+
+Status Filter::ResumeAudioAlign()
+{
+    MEDIA_LOG_D("ResumeAudioAlign %{public}s, pState:%{public}d", name_.c_str(), curState_);
+    auto ret = Status::OK;
+    ret = DoResumeAudioAlign();
+    if (filterTask_) {
+        filterTask_->Start();
+    }
+    for (auto iter : nextFiltersMap_) {
+        for (auto filter : iter.second) {
+            auto curRet = filter->ResumeAudioAlign();
+            if (curRet != Status::OK) {
+                ret = curRet;
+            }
+        }
+    }
+    return ret;
 }
 
 Status Filter::Stop()
@@ -373,6 +408,7 @@ Status Filter::ClearAllNextFilters()
 Status Filter::ProcessInputBuffer(int sendArg, int64_t delayUs)
 {
     MEDIA_LOG_D("Filter::ProcessInputBuffer  %{public}s", name_.c_str());
+    FALSE_RETURN_V_MSG(!isAsyncMode_ || filterTask_, Status::ERROR_INVALID_OPERATION, "no filterTask in async mode");
     if (filterTask_) {
         jobIdx_++;
         filterTask_->SubmitJob([this, sendArg]() {
@@ -389,6 +425,7 @@ Status Filter::ProcessInputBuffer(int sendArg, int64_t delayUs)
 Status Filter::ProcessOutputBuffer(int sendArg, int64_t delayUs, bool byIdx, uint32_t idx, int64_t renderTime)
 {
     MEDIA_LOG_D("Filter::ProcessOutputBuffer  %{public}s", name_.c_str());
+    FALSE_RETURN_V_MSG(!isAsyncMode_ || filterTask_, Status::ERROR_INVALID_OPERATION, "no filterTask in async mode");
     if (filterTask_) {
         jobIdx_++;
         int64_t processIdx = jobIdx_;
@@ -430,12 +467,22 @@ Status Filter::DoPauseDragging()
     return Status::OK;
 }
 
+Status Filter::DoPauseAudioAlign()
+{
+    return Status::OK;
+}
+
 Status Filter::DoResume()
 {
     return Status::OK;
 }
 
 Status Filter::DoResumeDragging()
+{
+    return Status::OK;
+}
+
+Status Filter::DoResumeAudioAlign()
 {
     return Status::OK;
 }

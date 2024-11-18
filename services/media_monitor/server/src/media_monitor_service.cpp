@@ -162,6 +162,7 @@ void MediaMonitorService::AddMessageToQueue(std::shared_ptr<EventBean> &message)
 int32_t MediaMonitorService::GetAudioRouteMsg(std::map<PerferredType,
     std::shared_ptr<MonitorDeviceInfo>> &perferredDevices)
 {
+    FALSE_RETURN_V_MSG_E(VerifyIsAudio(), ERROR, "client permission denied");
     MEDIA_LOG_D("MediaMonitorService GetAudioRouteMsg");
     return audioMemo_.GetAudioRouteMsg(perferredDevices);
 }
@@ -505,6 +506,7 @@ bool MediaMonitorService::DeleteHistoryFile(const std::string &filePath)
 
 int32_t MediaMonitorService::ErasePreferredDeviceByType(const PerferredType preferredType)
 {
+    FALSE_RETURN_V_MSG_E(VerifyIsAudio(), ERROR, "client permission denied");
     MEDIA_LOG_D("ErasePreferredDeviceByType enter");
     return audioMemo_.ErasePreferredDeviceByType(preferredType);
 }

@@ -93,6 +93,78 @@ typedef enum OH_AVErrCode {
      * @since 12
      */
     AV_ERR_VIDEO_UNSUPPORTED_COLOR_SPACE_CONVERSION = 301,
+    /**
+     * @error the address of server is incorrect, and IO can not find host.
+     * @since 14
+     */
+    AV_ERR_IO_CANNOT_FIND_HOST = 5411001,
+    /**
+     * @error network connection timeout.
+     * @since 14
+     */
+    AV_ERR_IO_CONNECTION_TIMEOUT = 5411002,
+    /**
+     * @error failed link due to abnormal network.
+     * @since 14
+     */
+    AV_ERR_IO_NETWORK_ABNORMAL = 5411003,
+    /**
+     * @error failed link due to unavailable network.
+     * @since 14
+     */
+    AV_ERR_IO_NETWORK_UNAVAILABLE = 5411004,
+    /**
+     * @error network permission dennied.
+     * @since 14
+     */
+    AV_ERR_IO_NO_PERMISSION = 5411005,
+    /**
+     * @error the client request parameters are incorrect or exceed the processing capacity.
+     * @since 14
+     */
+    AV_ERR_IO_NETWORK_ACCESS_DENIED = 5411006,
+    /**
+     * @error cannot find available network resources.
+     * @since 14
+     */
+    AV_ERR_IO_RESOURCE_NOT_FOUND = 5411007,
+    /**
+     * @error the server fails to verify the client certificate because the certificate is not carried,
+     *  the certificate is invalid, or the certificate is expired.
+     * @since 14
+     */
+    AV_ERR_IO_SSL_CLIENT_CERT_NEEDED = 5411008,
+    /**
+     * @error the client fails to verify the server certificate because the certificate is not carried,
+     *  the certificate is invalid, or the certificate is expired.
+     * @since 14
+     */
+    AV_ERR_IO_SSL_CONNECT_FAIL = 5411009,
+    /**
+     * @error IO SSL server cert untrusted.
+     * @since 14
+     */
+    AV_ERR_IO_SSL_SERVER_CERT_UNTRUSTED = 5411010,
+    /**
+     * @error unsupported request due to network protocols.
+     * @since 14
+     */
+    AV_ERR_IO_UNSUPPORTED_REQUEST = 5411011,
+    /**
+     * @error file data is incorrect, and no specific data can be provided.
+     * @since 14
+     */
+    AV_ERR_IO_DATA_ABNORMAL = 5411012,
+    /**
+     * @error audio device error.
+     * @since 14
+     */
+    AV_ERR_IO_AUDIO_DEVICE_ERROR = 5411020,
+    /**
+     * @error video device error.
+     * @since 14
+     */
+    AV_ERR_IO_VIDEO_DEVICE_ERROR = 5411030,
 } OH_AVErrCode;
 
 #ifdef __cplusplus
