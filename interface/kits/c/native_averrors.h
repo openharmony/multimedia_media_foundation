@@ -150,21 +150,6 @@ typedef enum OH_AVErrCode {
      * @since 14
      */
     AV_ERR_IO_UNSUPPORTED_REQUEST = 5411011,
-    /**
-     * @error file data is incorrect, and no specific data can be provided.
-     * @since 14
-     */
-    AV_ERR_IO_DATA_ABNORMAL = 5411012,
-    /**
-     * @error audio device error.
-     * @since 14
-     */
-    AV_ERR_IO_AUDIO_DEVICE_ERROR = 5411020,
-    /**
-     * @error video device error.
-     * @since 14
-     */
-    AV_ERR_IO_VIDEO_DEVICE_ERROR = 5411030,
 } OH_AVErrCode;
 
 #ifdef __cplusplus

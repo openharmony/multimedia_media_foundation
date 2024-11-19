@@ -91,9 +91,6 @@ enum MediaServiceErrCode : ErrCode {
     MSERR_IO_SSL_CONNECT_FAIL,                          // IO SSL connect fail.
     MSERR_IO_SSL_SERVER_CERT_UNTRUSTED,                 // IO SSL server cert untrusted.
     MSERR_IO_UNSUPPORTTED_REQUEST,                      // IO unsupported request.
-    MSERR_IO_DATA_ABNORMAL,                             // IO data abnormal.
-    MSERR_IO_AUDIO_DEVICE_ERROR,                        // audio device error.
-    MSERR_IO_VIDEO_DEVICE_ERROR,                        // video device error.
     MSERR_EXTEND_START      = MS_ERR_OFFSET + 0xF000,   // extend err start.
 };
 
@@ -137,9 +134,6 @@ enum MediaServiceExtErrCodeAPI9 : int32_t {
     MSERR_EXT_API14_IO_SSL_CONNECT_FAIL = 5411009,              // IO SSL connect fail.
     MSERR_EXT_API14_IO_SSL_SERVER_CERT_UNTRUSTED = 5411010,     // IO SSL server cert untrusted.
     MSERR_EXT_API14_IO_UNSUPPORTTED_REQUEST = 5411011,          // IO unsupported request.
-    MSERR_EXT_API14_IO_DATA_ABNORMAL = 5411012,                 // IO data abnormal.
-    MSERR_EXT_API14_IO_AUDIO_DEVICE_ERROR = 5411020,            // audio device error.
-    MSERR_EXT_API14_IO_VIDEO_DEVICE_ERROR = 5411030,            // video device error.
 };
 
 /**
