@@ -32,7 +32,7 @@ const char *GET_BUNDLE_INFO_FROM_UID = "GetBundleInfoFromUid";
 
 MediaMonitorWrapper::MediaMonitorWrapper()
 {
-    auto soHandler_ = ::dlopen(WRAPPER_DL_PATH.c_str(), RTLD_NOW);
+    soHandler_ = ::dlopen(WRAPPER_DL_PATH.c_str(), RTLD_NOW);
     if (!soHandler_) {
         MEDIA_LOG_E("dlopen failed due to " PUBLIC_LOG_S, ::dlerror());
         return;
