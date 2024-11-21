@@ -37,7 +37,7 @@ public:
     ~PluginList();
     static PluginList &GetInstance();
     std::vector<PluginDescription> GetAllPlugins();
-    PluginDescription GetPluginByCap(PluginType pluginType, std::string needCap);
+    std::vector<PluginDescription> GetPluginsByCap(PluginType pluginType, std::string needCap);
     PluginDescription GetPluginByName(std::string name);
     std::vector<PluginDescription> GetPluginsByType(PluginType pluginType);
 private:
