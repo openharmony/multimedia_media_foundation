@@ -148,6 +148,23 @@ void MediaMonitorPolicy::WriteBehaviorEvent(EventId eventId, std::shared_ptr<Eve
             mediaEventBaseWriter_.WriteNoiseSuppression(bean);
             break;
         default:
+            WriteBehaviorEventExpansion(eventId, bean);
+            break;
+    }
+}
+
+void MediaMonitorPolicy::WriteBehaviorEventExpansion(EventId eventId, std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Write behavior event expansion");
+    BundleInfo bundleInfo = {};
+    switch (eventId) {
+        case VOLUME_SUBSCRIBE:
+            bundleInfo = GetBundleInfo(bean->GetIntValue("CLIENT_UID"));
+            bean->Add("SUBSCRIBE_KEY", bundleInfo.subscrbeKey);
+            bean->Add("SUBSCRIBE_RESULT", bundleInfo.subscrbeResult);
+            mediaEventBaseWriter_.WriteVolumeSubscribe(bean);
+            break;
+        default:
             break;
     }
 }

@@ -451,6 +451,24 @@ void MediaEventBaseWriter::WritePlaybackVolume(std::shared_ptr<EventBean> &bean)
         "DURATION", static_cast<uint32_t>(bean->GetUint64Value("DURATION")));
 #endif
 }
+
+void MediaEventBaseWriter::WriteVolumeSubscribe(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Write volume subscription");
+    if (bean == nullptr) {
+        MEDIA_LOG_E("eventBean is nullptr");
+        return;
+    }
+#ifdef MONITOR_ENABLE_HISYSEVENT
+    auto ret = HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "VOLUME_SUBSCRIBE",
+        HiviewDFX::HiSysEvent::EventType::BEHAVIOR,
+        "SUBSCRIBE_KEY", bean->GetStringValue("SUBSCRIBE_KEY"),
+        "SUBSCRIBE_RESULT", static_cast<uint32_t>(bean->GetIntValue("SUBSCRIBE_RESULT")));
+    if (ret) {
+        MEDIA_LOG_E("write event fail: VOLUME_SUBSCRIBE, ret = %{public}d", ret);
+    }
+#endif
+}
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS

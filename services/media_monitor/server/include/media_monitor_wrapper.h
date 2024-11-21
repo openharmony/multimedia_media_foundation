@@ -26,6 +26,8 @@ namespace MediaMonitor {
 struct BundleInfo {
     std::string appName;
     int32_t versionCode;
+    std::string subscrbeKey;
+    int32_t subscrbeResult;
 };
 
 typedef MediaMonitorErr GetBundleInfoFromUid(int32_t appUid, BundleInfo *bundleInfoRes);
