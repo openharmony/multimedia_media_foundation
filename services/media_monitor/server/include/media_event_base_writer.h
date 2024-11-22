@@ -57,6 +57,7 @@ public:
     void WriteMutedCapture(std::shared_ptr<EventBean> &bean);
     void WritePlaybackVolume(std::shared_ptr<EventBean> &bean);
     void WriteStreamPropertyStatistic(std::shared_ptr<EventBean> &bean);
+    void WriteVolumeSubscribe(std::shared_ptr<EventBean> &bean);
 };
 
 } // namespace MediaMonitor

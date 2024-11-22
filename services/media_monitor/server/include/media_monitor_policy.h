@@ -44,6 +44,7 @@ public:
     void WriteEvent(EventId eventId, std::shared_ptr<EventBean> &bean);
 
     void WriteBehaviorEvent(EventId eventId, std::shared_ptr<EventBean> &bean);
+    void WriteBehaviorEventExpansion(EventId eventId, std::shared_ptr<EventBean> &bean);
     void WriteFaultEvent(EventId eventId, std::shared_ptr<EventBean> &bean);
     void WriteAggregationEvent(EventId eventId, std::shared_ptr<EventBean> &bean);
 
