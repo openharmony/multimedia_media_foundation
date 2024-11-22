@@ -36,7 +36,7 @@ std::vector<PluginDescription> PluginList::GetAllPlugins()
     return pluginDescriptionList_;
 }
 
-PluginDescription PluginList::GetPluginByCap(PluginType pluginType, std::string needCap)
+std::vector<PluginDescription> PluginList::GetPluginsByCap(PluginType pluginType, std::string needCap)
 {
     std::vector<PluginDescription> matchedPlugins;
     std::vector<PluginDescription>::iterator it;
@@ -47,15 +47,11 @@ PluginDescription PluginList::GetPluginByCap(PluginType pluginType, std::string 
             matchedPlugins.push_back(temp);
         }
     }
-    int32_t maxRank = 0;
-    PluginDescription bestMatchedPlugin;
-    for (it = matchedPlugins.begin(); it != matchedPlugins.end(); it++) {
-        PluginDescription temp = *it;
-        if (temp.rank > maxRank) {
-            bestMatchedPlugin = temp;
-        }
-    }
-    return bestMatchedPlugin;
+    std::sort(matchedPlugins.begin(), matchedPlugins.end(),
+        [](PluginDescription a, PluginDescription b) {
+            return a.rank > b.rank;
+        });
+    return matchedPlugins;
 }
 
 PluginDescription PluginList::GetPluginByName(std::string name)
@@ -541,7 +537,7 @@ void PluginList::AddAudioVendorAacEncodersPlugin()
     AacEncoderPlugin.packageName = "AudioVendorAacEncoder";
     AacEncoderPlugin.pluginType = PluginType::AUDIO_ENCODER;
     AacEncoderPlugin.cap = "audio/mp4a-latm";
-    AacEncoderPlugin.rank = DEFAULT_RANK;
+    AacEncoderPlugin.rank = DEFAULT_RANK + 1; // larger than default aac plugin
     pluginDescriptionList_.push_back(AacEncoderPlugin);
 }
 
