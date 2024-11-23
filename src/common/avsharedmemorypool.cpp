@@ -70,7 +70,6 @@ AVSharedMemory *AVSharedMemoryPool::AllocMemory(int32_t size)
     AVSharedMemoryBase *memory = new (std::nothrow) AVSharedMemoryBase(size, option_.flags, name_);
     FALSE_RETURN_V_MSG_E(memory != nullptr, nullptr, "create object failed");
     ON_SCOPE_EXIT(0) { delete memory; };
-    memory->Init();
     int32_t ret = memory->Init();
     FALSE_RETURN_V_MSG_E(ret == 0, nullptr, "init avsharedmemorybase failed");
 
