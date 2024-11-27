@@ -129,7 +129,7 @@ enum MediaServiceExtErrCodeAPI9 : int32_t {
     MSERR_EXT_API14_IO_NETWORK_ABNORMAL = 5411003,              // IO network abnormal.
     MSERR_EXT_API14_IO_NETWORK_UNAVAILABLE = 5411004,           // IO network unavailable.
     MSERR_EXT_API14_IO_NO_PERMISSION = 5411005,                 // IO no permission.
-    MSERR_EXT_API14_IO_NETWORK_ACCESS_DENIED = 5411006,                 // IO request denied.
+    MSERR_EXT_API14_IO_NETWORK_ACCESS_DENIED = 5411006,         // IO request denied.
     MSERR_EXT_API14_IO_RESOURE_NOT_FOUND = 5411007,             // IO resource not found.
     MSERR_EXT_API14_IO_SSL_CLIENT_CERT_NEEDED = 5411008,        // IO SSL client cert needed.
     MSERR_EXT_API14_IO_SSL_CONNECT_FAIL = 5411009,              // IO SSL connect fail.
