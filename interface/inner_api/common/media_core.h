@@ -86,7 +86,7 @@ enum MediaServiceErrCode : ErrCode {
     MSERR_IO_NETWORK_ABNORMAL,                          // IO network abnormal.
     MSERR_IO_NETWORK_UNAVAILABLE,                       // IO network unavailable.
     MSERR_IO_NO_PERMISSION,                             // IO no permission.
-    MSERR_IO_REQUEST_DENID,                             // IO request denied.
+    MSERR_IO_NETWORK_ACCESS_DENIED,                     // IO request denied.
     MSERR_IO_RESOURE_NOT_FOUND,                         // IO resource not found.
     MSERR_IO_SSL_CLIENT_CERT_NEEDED,                    // IO SSL client cert needed.
     MSERR_IO_SSL_CONNECT_FAIL,                          // IO SSL connect fail.
@@ -129,7 +129,7 @@ enum MediaServiceExtErrCodeAPI9 : int32_t {
     MSERR_EXT_API14_IO_NETWORK_ABNORMAL = 5411003,              // IO network abnormal.
     MSERR_EXT_API14_IO_NETWORK_UNAVAILABLE = 5411004,           // IO network unavailable.
     MSERR_EXT_API14_IO_NO_PERMISSION = 5411005,                 // IO no permission.
-    MSERR_EXT_API14_IO_REQUEST_DENID = 5411006,                 // IO request denied.
+    MSERR_EXT_API14_IO_NETWORK_ACCESS_DENIED = 5411006,                 // IO request denied.
     MSERR_EXT_API14_IO_RESOURE_NOT_FOUND = 5411007,             // IO resource not found.
     MSERR_EXT_API14_IO_SSL_CLIENT_CERT_NEEDED = 5411008,        // IO SSL client cert needed.
     MSERR_EXT_API14_IO_SSL_CONNECT_FAIL = 5411009,              // IO SSL connect fail.
