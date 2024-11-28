@@ -79,6 +79,18 @@ public:
      * @return the memory's flags if the memory is valid, otherwise 0.
      */
     virtual uint32_t GetFlags() const = 0;
+
+    /**
+     * @brief Identifies different AVSharedMemory
+     * @return unique SharedMemory ID
+     */
+    virtual uint64_t GetSharedMemoryID() const
+    {
+        return uniqueSharedMemoryID_;
+    }
+
+public:
+    uint64_t uniqueSharedMemoryID_;
 };
 } // namespace Media
 } // namespace OHOS
