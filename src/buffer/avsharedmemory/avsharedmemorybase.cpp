@@ -24,7 +24,7 @@
 
 namespace {
 constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "AVSharedMemoryBase" };
-static uint64_t g_uniqueSharedMemoryID = 0;
+static std::atomic<uint64_t> g_uniqueSharedMemoryID(0);
 }
 
 namespace OHOS {
