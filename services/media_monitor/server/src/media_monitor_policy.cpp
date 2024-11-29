@@ -164,6 +164,9 @@ void MediaMonitorPolicy::WriteBehaviorEventExpansion(EventId eventId, std::share
             bean->Add("SUBSCRIBE_RESULT", bundleInfo.subscrbeResult);
             mediaEventBaseWriter_.WriteVolumeSubscribe(bean);
             break;
+        case SMARTPA_STATUS:
+            mediaEventBaseWriter_.WriteSmartPAStatus(bean);
+            break;
         default:
             break;
     }

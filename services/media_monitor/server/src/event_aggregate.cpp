@@ -62,6 +62,7 @@ void EventAggregate::WriteEvent(std::shared_ptr<EventBean> &bean)
         case LOAD_CONFIG_ERROR:
         case AUDIO_SERVICE_STARTUP_ERROR:
         case STREAM_STANDBY:
+        case SMARTPA_STATUS:
         case AI_VOICE_NOISE_SUPPRESSION:
             mediaMonitorPolicy_.WriteEvent(bean->GetEventId(), bean);
             break;
