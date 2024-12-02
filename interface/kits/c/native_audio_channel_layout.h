@@ -14,8 +14,7 @@
  */
 
 /**
- * @brief The channel layout indicates the appearance and order of the speakers
- * for recording or playback.
+ * @brief The channel layout during recording and playback.
  *
  * @library NA
  * @syscap SystemCapability.Multimedia.Media.Core

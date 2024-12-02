@@ -29,67 +29,88 @@ typedef struct OH_AVBuffer OH_AVBuffer;
 typedef struct OH_NativeBuffer OH_NativeBuffer;
 
 /**
- * @brief Create an OH_AVBuffer instance, It should be noted that the life cycle of the OH_AVBuffer instance pointed
- * to by the return value * needs to be manually released by {@link OH_AVBuffer_Destroy}.
+ * @brief Create an OH_AVBuffer instance, It should be noted that the OH_AVBuffer instance pointed
+ * to by the return value * needs to be released by {@link OH_AVBuffer_Destroy}.
  * @syscap SystemCapability.Multimedia.Media.Core
  * @param capacity the buffer's capacity, bytes
- * @return Returns a pointer to an OH_AVBuffer instance if the execution is successful, otherwise returns nullptr
+ * @return Returns a pointer to an OH_AVBuffer instance if the execution is successful, otherwise returns NULL.
+ * Possible failure causes:
+ * 1. capacity <= 0;
+ * 2. internal error occurred, the system has no resources.
  * @since 11
  */
 OH_AVBuffer *OH_AVBuffer_Create(int32_t capacity);
 
 /**
  * @brief Clear the internal resources of the buffer and destroy the buffer instance.
+ * The same buffer can not be destroyed repeatedly.
  * @syscap SystemCapability.Multimedia.Media.Core
  * @param buffer Encapsulate OH_AVBuffer structure instance pointer
- * @return Returns AV_ERR_OK if the execution is successful, otherwise returns a specific error code, refer to
- * {@link OH_AVErrCode}
+ * @return Function result code.
+ *         {@link AV_ERR_OK} if the execution is successful.
+ *         {@link AV_ERR_INVALID_VAL} if input buffer is nullptr or structure verification failed of the buffer.
+ *         {@link AV_ERR_OPERATE_NOT_PERMIT} if input buffer is not user created.
  * @since 11
  */
 OH_AVErrCode OH_AVBuffer_Destroy(OH_AVBuffer *buffer);
 
 /**
- * @brief Get the buffer's attribute.
+ * @brief Get the buffer's attribute, such as pts, size, offset, and flags.
  * @syscap SystemCapability.Multimedia.Media.Core
  * @param buffer Encapsulate OH_AVBuffer structure instance pointer
  * @param attr Encapsulate OH_AVCodecBufferAttr structure instance pointer, please refer to
  * {@link OH_AVCodecBufferAttr}
- * @return Returns AV_ERR_OK if the execution is successful, otherwise returns a specific error code, refer to
- * {@link OH_AVErrCode}
+ * @return Function result code.
+ *         {@link AV_ERR_OK} if the execution is successful.
+ *         {@link AV_ERR_INVALID_VAL}
+ *         1. input buffer or attr is nullptr;
+ *         2. structure verification failed of the buffer.
  * @since 11
  */
 OH_AVErrCode OH_AVBuffer_GetBufferAttr(OH_AVBuffer *buffer, OH_AVCodecBufferAttr *attr);
 
 /**
- * @brief Set the buffer's attribute.
+ * @brief Set the buffer's attribute, such as pts, size, offset, and flags.
  * @syscap SystemCapability.Multimedia.Media.Core
  * @param buffer Encapsulate OH_AVBuffer structure instance pointer
  * @param attr Encapsulate OH_AVCodecBufferAttr structure instance pointer, please refer to
  * {@link OH_AVCodecBufferAttr}
- * @return Returns AV_ERR_OK if the execution is successful, otherwise returns a specific error code, refer to
- * {@link OH_AVErrCode}
+ * @return Function result code.
+ *         {@link AV_ERR_OK} if the execution is successful.
+ *         {@link AV_ERR_INVALID_VAL}
+ *         1. input buffer or attr is nullptr;
+ *         2. structure verification failed of the buffer;
+ *         3. the size or offset of input buffer's memory is invalid.
  * @since 11
  */
 OH_AVErrCode OH_AVBuffer_SetBufferAttr(OH_AVBuffer *buffer, const OH_AVCodecBufferAttr *attr);
 
 /**
- * @brief Get the buffer's parameter. It should be noted that the life cycle of the OH_AVFormat instance pointed to
- * by the return value * needs to be manually released by {@link OH_AVFormat_Destroy}.
+ * @brief Get parameters except basic attributes, the information is carried in OH_AVFormat.
+ * It should be noted that the OH_AVFormat instance pointed to
+ * by the return value * needs to be released by {@link OH_AVFormat_Destroy}.
  * @syscap SystemCapability.Multimedia.Media.Core
  * @param buffer Encapsulate OH_AVBuffer structure instance pointer
  * @return Returns Encapsulate OH_AVFormat structure instance pointer if the execution is successful,
- * otherwise returns nullptr
+ * otherwise returns nullptr. Possible failure causes:
+ * 1. input buffer is nullptr;
+ * 2. structure verification failed of the buffer;
+ * 3. buffer's meta is nullptr.
  * @since 11
  */
 OH_AVFormat *OH_AVBuffer_GetParameter(OH_AVBuffer *buffer);
 
 /**
- * @brief Set the buffer's parameter.
+ * @brief Set parameters except basic attributes, the information is carried in OH_AVFormat.
  * @syscap SystemCapability.Multimedia.Media.Core
  * @param buffer Encapsulate OH_AVBuffer structure instance pointer
  * @param format Encapsulate OH_AVFormat structure instance pointer
- * @return Returns AV_ERR_OK if the execution is successful, otherwise returns a specific error code, refer to
- * {@link OH_AVErrCode}
+ * @return Function result code.
+ *         {@link AV_ERR_OK} if the execution is successful.
+ *         {@link AV_ERR_INVALID_VAL}
+ *         1. input buffer or format is nullptr;
+ *         2. structure verification failed of the buffer;
+ *         3. input meta is nullptr.
  * @since 11
  */
 OH_AVErrCode OH_AVBuffer_SetParameter(OH_AVBuffer *buffer, const OH_AVFormat *format);
@@ -98,27 +119,38 @@ OH_AVErrCode OH_AVBuffer_SetParameter(OH_AVBuffer *buffer, const OH_AVFormat *fo
  * @brief Get the buffer's virtual address.
  * @syscap SystemCapability.Multimedia.Media.Core
  * @param buffer Encapsulate OH_AVBuffer structure instance pointer
- * @return the buffer's virtual address if the buffer is valid, otherwise nullptr
+ * @return the buffer's virtual address if the buffer is valid, otherwise NULL
+ * Possible failure causes:
+ * 1. input buffer is nullptr;
+ * 2. structure verification failed of the OH_AVBuffer;
+ * 3. internal error has occurred.
  * @since 11
  */
 uint8_t *OH_AVBuffer_GetAddr(OH_AVBuffer *buffer);
 
 /**
- * @brief Get the buffer's capacity
+ * @brief Get the buffer's capacity(byte).
  * @syscap SystemCapability.Multimedia.Media.Core
  * @param buffer Encapsulate OH_AVBuffer structure instance pointer
- * @return the buffer's capacity if the buffer is valid, otherwise -1
+ * @return The buffer's capacity if the buffer is valid, otherwise -1
+ * Possible failure causes:
+ * 1. input buffer is nullptr;
+ * 2. structure verification failed of the OH_AVBuffer;
+ * 3. internal error has occurred.
  * @since 11
  */
 int32_t OH_AVBuffer_GetCapacity(OH_AVBuffer *buffer);
 
 /**
- * @brief Get the OH_NativeBuffer instance pointer,It should be noted that the life cycle of the OH_AVBuffer
- * instance pointed to by the return value * needs to be manually released by {@link OH_NativeBuffer_Unreference}.
+ * @brief Get the OH_NativeBuffer instance pointer. It should be noted that the OH_AVBuffer
+ * instance pointed to by the return value * needs to be released by {@link OH_NativeBuffer_Unreference}.
  * @syscap SystemCapability.Multimedia.Media.Core
  * @param buffer Encapsulate OH_AVBuffer structure instance pointer
- * @return Returns Encapsulate OH_NativeBuffer structure instance pointer is successful,
- * otherwise returns nullptr
+ * @return Returns Encapsulate OH_NativeBuffer structure instance pointer is successful, otherwise returns NULL
+ * Possible failure causes:
+ * 1. input buffer is nullptr;
+ * 2. structure verification failed of the OH_AVBuffer;
+ * 3. internal error has occurred.
  * @since 11
  */
 OH_NativeBuffer *OH_AVBuffer_GetNativeBuffer(OH_AVBuffer *buffer);
