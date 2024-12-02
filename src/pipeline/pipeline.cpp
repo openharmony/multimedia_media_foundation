@@ -43,7 +43,7 @@ Pipeline::~Pipeline()
 }
 
 void Pipeline::Init(const std::shared_ptr<EventReceiver>& receiver, const std::shared_ptr<FilterCallback>& callback,
-    const std::string& groupId)
+    const std::string &groupId)
 {
     MEDIA_LOG_I("Pipeline::Init");
     eventReceiver_ = receiver;
@@ -180,7 +180,7 @@ Status Pipeline::Flush()
             (*it)->Flush();
         }
     });
-    MEDIA_LOG_I("Flush end.");
+    MEDIA_LOG_I("Flush done.");
     return Status::OK;
 }
 

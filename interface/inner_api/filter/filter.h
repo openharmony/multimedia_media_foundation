@@ -39,8 +39,8 @@ enum class FilterType {
     FILTERTYPE_ADEC,
     FILTERTYPE_VENC,
     FILTERTYPE_VDEC,
-    FILTERTYPE_VIDEODEC,
     FILTERTYPE_MUXER,
+    FILTERTYPE_VIDEODEC,
     FILTERTYPE_ASINK,
     FILTERTYPE_FSINK,
     FILTERTYPE_SSINK,
@@ -110,10 +110,12 @@ public:
 class Filter {
 public:
     explicit Filter(std::string name, FilterType type, bool asyncMode = false);
+
     virtual ~Filter();
+
     virtual void Init(const std::shared_ptr<EventReceiver>& receiver, const std::shared_ptr<FilterCallback>& callback);
 
-    virtual void LinkPipeLine(const std::string& groupId) final;
+    virtual void LinkPipeLine(const std::string &groupId) final;
 
     virtual Status Prepare() final;
 
@@ -208,12 +210,6 @@ public:
 
     virtual Status OnUnLinked(StreamType inType, const std::shared_ptr<FilterLinkCallback>& callback);
 
-    virtual void ChangeState(FilterState state);
-
-    virtual void SetErrCode(Status errCode);
-
-    virtual Status GetErrCode();
-
     virtual Status ClearAllNextFilters();
 
     virtual Status SetMuted(bool isMuted)
@@ -222,30 +218,14 @@ public:
         return Status::OK;
     }
 protected:
-    virtual Status PrepareDone() final;
-
-    virtual Status StartDone() final;
-
-    virtual Status PauseDone() final;
-
-    virtual Status ResumeDone() final;
-
-    virtual Status StopDone() final;
-
-    virtual Status ReleaseDone() final;
-
     std::string name_;
 
     std::shared_ptr<Meta> meta_;
 
     FilterType filterType_;
-    FilterState curState_;
 
     std::vector<StreamType> supportedInStreams_;
     std::vector<StreamType> supportedOutStreams_;
-
-    OHOS::Media::Mutex stateMutex_{};
-    OHOS::Media::ConditionVariable cond_{};
 
     std::map<StreamType, std::vector<std::shared_ptr<Filter>>> nextFiltersMap_;
 
@@ -255,9 +235,34 @@ protected:
 
     std::map<StreamType, std::vector<std::shared_ptr<FilterLinkCallback>>> linkCallbackMaps_;
 
-    Status errCode_ = Status::OK;
+    std::string groupId_;
 
-    std::unique_ptr<Task> filterTask_;
+private:
+    void ChangeState(FilterState state);
+
+    void SetErrCode(Status errCode);
+
+    Status GetErrCode();
+
+    Status PrepareDone();
+
+    Status StartDone();
+
+    Status PauseDone();
+
+    Status ResumeDone();
+
+    Status StopDone();
+
+    Status ReleaseDone();
+
+    OHOS::Media::Mutex stateMutex_{};
+
+    OHOS::Media::ConditionVariable cond_{};
+
+    FilterState curState_{FilterState::CREATED};
+
+    Status errCode_ = Status::OK;
 
     int64_t jobIdx_ = 0;
 
@@ -265,24 +270,10 @@ protected:
 
     int64_t jobIdxBase_ = 0;
 
-    std::string groupId_;
+    std::unique_ptr<Task> filterTask_;
 
     bool isAsyncMode_;
 };
-
-enum FilterPlaybackCommand {
-    INIT = 0,
-    PREPARE,
-    START,
-    PAUSE,
-    RESUME,
-    STOP,
-    RELEASE,
-    FLUSH,
-    PROCESS_INPUT_BUFFER,
-    PROCESS_OUTPUT_BUFFER,
-};
-
 } // namespace Pipeline
 } // namespace Media
 } // namespace OHOS

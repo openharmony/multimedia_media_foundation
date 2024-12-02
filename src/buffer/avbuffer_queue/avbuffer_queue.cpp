@@ -303,13 +303,14 @@ Status AVBufferQueueImpl::RequestBuffer(
             MEDIA_LOG_D("FALSE_RETURN_V wait_for(lock, timeoutMs)");
             return Status::ERROR_WAIT_TIMEOUT;
         }
-
         // 被条件唤醒后，再次尝试从freeBufferList中取buffer
         ret = PopFromFreeBufferList(buffer, configCopy);
         if (ret == Status::OK) {
             return RequestReuseBuffer(buffer, configCopy);
         }
-        if (GetCachedBufferCount() >= GetQueueSize()) return Status::ERROR_NO_FREE_BUFFER;
+        if (GetCachedBufferCount() >= GetQueueSize()) {
+            return Status::ERROR_NO_FREE_BUFFER;
+        }
     }
 
     NOK_RETURN(AllocBuffer(buffer, configCopy));
@@ -589,7 +590,7 @@ Status AVBufferQueueImpl::AcquireBuffer(std::shared_ptr<AVBuffer>& buffer)
     std::lock_guard<std::mutex> lockGuard(queueMutex_);
     auto ret = PopFromDirtyBufferList(buffer);
     if (ret != Status::OK) {
-        MEDIA_LOG_D("acquire buffer failed");
+        MEDIA_LOG_E("acquire buffer failed");
         return ret;
     }
 
@@ -636,7 +637,7 @@ Status AVBufferQueueImpl::ReleaseBuffer(const std::shared_ptr<AVBuffer>& buffer)
 
 Status AVBufferQueueImpl::Clear()
 {
-    MEDIA_LOG_D("AVBufferQueueImpl Clear");
+    MEDIA_LOG_E("AVBufferQueueImpl Clear");
     std::lock_guard<std::mutex> lockGuard(queueMutex_);
     dirtyBufferList_.clear();
     for (auto it = cachedBufferMap_.begin(); it != cachedBufferMap_.end(); it++) {

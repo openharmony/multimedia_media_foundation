@@ -32,7 +32,7 @@
 #include "osal/task/pipeline_threadpool.h"
 
 namespace {
-constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "TaskFuncUnitTest" };
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_ONLY_PRERELEASE, LOG_DOMAIN_FOUNDATION, "TaskFuncUnitTest" };
 }
 
 using namespace std;

@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-#ifndef HISTREAMER_PIPELINE_PLUGIN_CAP_DESC_H
-#define HISTREAMER_PIPELINE_PLUGIN_CAP_DESC_H
+#ifndef HISTREAMER_PIPELINE_PLUGINS_CAP_DESC_H
+#define HISTREAMER_PIPELINE_PLUGINS_CAP_DESC_H
 #include <tuple>
 #include "common/plugin_audio_tags.h"
 #include "common/plugin_source_tags.h"
@@ -340,7 +340,7 @@ inline const char* Tag2String(const Tag tag)
     }
     return std::get<0>(mapIte->second);
 }
-} // Plugin
-} // Media
-} // OHOS
-#endif // HISTREAMER_PIPELINE_PLUGIN_CAP_DESC_H
+} // namespace Plugins
+} // namespace Media
+} // namespace OHOS
+#endif // HISTREAMER_PIPELINE_PLUGINS_CAP_DESC_H

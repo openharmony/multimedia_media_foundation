@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-#ifndef HISTREAMER_PLUGIN_INTF_GENERIC_PLUGIN_H
-#define HISTREAMER_PLUGIN_INTF_GENERIC_PLUGIN_H
+#ifndef HISTREAMER_PLUGINS_INTF_GENERIC_PLUGIN_H
+#define HISTREAMER_PLUGINS_INTF_GENERIC_PLUGIN_H
 
 #include "plugin_caps.h"
 #include "plugin_base.h"
@@ -46,4 +46,4 @@ struct GenericPluginDef : public PluginDefBase {
 } // namespace Plugins
 } // namespace Media
 } // namespace OHOS
-#endif
+#endif // HISTREAMER_PLUGINS_INTF_GENERIC_PLUGIN_H
