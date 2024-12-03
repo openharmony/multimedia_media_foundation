@@ -26,7 +26,7 @@ HWTEST(TestDefs, check_mime_defs, TestSize.Level1)
     ASSERT_STREQ(MEDIA_MIME_AUDIO_MPEG, "audio/mpeg");
     ASSERT_STREQ(MEDIA_MIME_AUDIO_FLAC, "audio/flac");
     ASSERT_STREQ(MEDIA_MIME_AUDIO_RAW, "audio/raw");
-    ASSERT_STREQ(MEDIA_MIME_AUDIO_APE, "audio/x-ape");
+    ASSERT_STREQ(MEDIA_MIME_AUDIO_APE, "audio/ape");
     ASSERT_STREQ(MEDIA_MIME_AUDIO_WAV, "audio/wav");
     ASSERT_STREQ(MEDIA_MIME_AUDIO_AAC, "audio/mp4a-latm");
     ASSERT_STREQ(MEDIA_MIME_AUDIO_AAC_ADTS, "audio/aac-adts");

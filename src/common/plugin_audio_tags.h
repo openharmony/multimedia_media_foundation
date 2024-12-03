@@ -13,17 +13,15 @@
  * limitations under the License.
  */
 
-#ifndef HISTREAMER_PLUGIN_COMMON_AUDIO_TAGS_H
-#define HISTREAMER_PLUGIN_COMMON_AUDIO_TAGS_H
+#ifndef HISTREAMER_PLUGINS_COMMON_AUDIO_TAGS_H
+#define HISTREAMER_PLUGINS_COMMON_AUDIO_TAGS_H
 
 #include <cstdint>  // NOLINT: used it
 
 namespace OHOS {
 namespace Media {
 namespace Plugins {
-
-
 } // namespace Plugins
 } // namespace Media
 } // namespace OHOS
-#endif // HISTREAMER_PLUGIN_COMMON_AUDIO_TAGS_H
+#endif // HISTREAMER_PLUGINS_COMMON_AUDIO_TAGS_H

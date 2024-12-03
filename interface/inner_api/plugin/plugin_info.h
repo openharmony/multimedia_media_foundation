@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-#ifndef HISTREAMER_PLUGIN_INFO_H
-#define HISTREAMER_PLUGIN_INFO_H
+#ifndef HISTREAMER_PLUGINS_INFO_H
+#define HISTREAMER_PLUGINS_INFO_H
 
 #include "meta/meta.h"
 #include "plugin_caps.h"
@@ -105,4 +105,4 @@ struct MediaInfo {
 } // namespace Plugins
 } // namespace Media
 } // namespace OHOS
-#endif // HISTREAMER_PLUGIN_INFO_H
+#endif // HISTREAMER_PLUGINS_INFO_H

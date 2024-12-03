@@ -58,7 +58,7 @@ public:
 
     FairMutex(const FairMutex&) = delete;
 
-    FairMutex& operator=(const FairMutex&) = delete;
+    FairMutex operator=(const FairMutex&) = delete;
 
     void lock() override;
 

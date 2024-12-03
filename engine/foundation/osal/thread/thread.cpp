@@ -90,6 +90,7 @@ bool Thread::CreateThread(const std::function<void()>& func)
 
 void Thread::SetNameInternal()
 {
+#ifdef SUPPORT_PTHREAD_NAME
     if (state_ && !name_.empty()) {
         constexpr int threadNameMaxSize = 15;
         if (name_.size() > threadNameMaxSize) {
@@ -99,6 +100,7 @@ void Thread::SetNameInternal()
         }
         pthread_setname_np(id_, name_.c_str());
     }
+#endif
 }
 
 void* Thread::Run(void* arg) // NOLINT: void*

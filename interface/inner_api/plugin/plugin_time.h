@@ -95,11 +95,6 @@ inline int64_t Us2Ms(int64_t us)
     return us / HST_USECOND;
 }
 
-inline int64_t Ms2Us(int64_t ms)
-{
-    return ms * HST_USECOND;
-}
-
 inline int64_t GetCurrentMillisecond()
 {
     std::chrono::system_clock::duration duration = std::chrono::system_clock::now().time_since_epoch();

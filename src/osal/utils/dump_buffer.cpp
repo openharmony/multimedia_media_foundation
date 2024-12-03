@@ -29,7 +29,7 @@ constexpr size_t DUMP_DATA_UNIT = 1; // data unit is 1 byte
 
 namespace OHOS {
 namespace Media {
-std::map<std::string, FILE*> allDumpFileFds;
+// std::map<std::string, FILE*> allDumpFileFds;
 void DumpAVBufferToFile(const std::string& para, const std::string& fileName, const std::shared_ptr<AVBuffer>& buffer)
 {
     MEDIA_LOG_D("dump avbuffer to %{public}s", fileName.c_str());
@@ -53,7 +53,7 @@ void DumpAVBufferToFile(const std::string& para, const std::string& fileName, co
     size_t ret =
         fwrite(reinterpret_cast<const char*>(buffer->memory_->GetAddr()), DUMP_DATA_UNIT, bufferSize, dumpFile);
     if (ret < 0) {
-        MEDIA_LOG_I("dump is fail.");
+        MEDIA_LOG_W("dump is fail.");
     }
     std::fclose(dumpFile);
 }
