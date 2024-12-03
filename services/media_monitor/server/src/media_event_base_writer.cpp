@@ -109,6 +109,23 @@ void MediaEventBaseWriter::WriteStreamStandby(std::shared_ptr<EventBean> &bean)
 #endif
 }
 
+void MediaEventBaseWriter::WriteSmartPAStatus(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Write smartPA status");
+    if (bean == nullptr) {
+        MEDIA_LOG_E("eventBean is nullptr");
+        return;
+    }
+#ifdef MONITOR_ENABLE_HISYSEVENT
+    auto ret = HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "SMARTPA_STATUS",
+        HiviewDFX::HiSysEvent::EventType::BEHAVIOR,
+        "STATUS", bean->GetIntValue("STATUS"));
+    if (ret) {
+        MEDIA_LOG_E("write event fail: SMARTPA_STATUS, ret = %{public}d", ret);
+    }
+#endif
+}
+
 void MediaEventBaseWriter::WriteDeviceChange(std::shared_ptr<EventBean> &bean)
 {
     MEDIA_LOG_D("Write device Change");
