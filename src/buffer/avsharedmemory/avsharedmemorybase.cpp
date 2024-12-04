@@ -24,6 +24,7 @@
 
 namespace {
 constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "AVSharedMemoryBase" };
+static std::atomic<uint64_t> g_uniqueSharedMemoryID = 0;
 }
 
 namespace OHOS {
@@ -65,6 +66,7 @@ AVSharedMemoryBase::AVSharedMemoryBase(int32_t size, uint32_t flags, const std::
 {
     MEDIA_LOG_DD(LOGD_FREQUENCY, "enter ctor, instance: 0x%{public}06" PRIXPTR ", name = %{public}s",
                FAKE_POINTER(this), name_.c_str());
+    uniqueSharedMemoryID_ = g_uniqueSharedMemoryID++;
 }
 
 AVSharedMemoryBase::AVSharedMemoryBase(int32_t fd, int32_t size, uint32_t flags, const std::string &name)
@@ -72,6 +74,7 @@ AVSharedMemoryBase::AVSharedMemoryBase(int32_t fd, int32_t size, uint32_t flags,
 {
     MEDIA_LOG_DD(LOGD_FREQUENCY, "enter ctor, instance: 0x%{public}06" PRIXPTR ", name = %{public}s",
                FAKE_POINTER(this), name_.c_str());
+    uniqueSharedMemoryID_ = g_uniqueSharedMemoryID++;
 }
 
 AVSharedMemoryBase::~AVSharedMemoryBase()
