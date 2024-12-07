@@ -111,7 +111,7 @@ int32_t AVSharedMemoryBase::Init(bool isMapVirAddr)
         int32_t ret = MapMemory(isRemote);
         FALSE_RETURN_V_MSG_E(ret == static_cast<int32_t>(Status::OK),
                              static_cast<int32_t>(Status::ERROR_INVALID_PARAMETER),
-                             "MapMemory failed, ret = %{plublic}d", ret);
+                             "MapMemory failed, ret = %{public}d", ret);
     }
     CANCEL_SCOPE_EXIT_GUARD(0);
     return static_cast<int32_t>(Status::OK);
