@@ -28,7 +28,7 @@ using RxBody = size_t(*)(void* buffer, size_t size, size_t nitems, void* userPar
 using RxHeader = size_t(*)(void* buffer, size_t size, size_t nitems, void* userParam);
 using RequestCompletedFunc = std::function<void(const Status&)>;
 using HandleResponseCbFunc = std::function<void(
-    const NetworkClientErrorCode clientCode, const NetworkServerErrorCode serverCode, const Status ret)>;
+    const int32_t clientCode, const int32_t serverCode, const Status ret)>;
 
 struct RequestInfo {
     std::string url;
