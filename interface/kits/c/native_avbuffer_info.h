@@ -24,6 +24,16 @@
  * @since 9
  */
 
+/**
+ * @file native_avbuffer_info.h
+ *
+ * @brief Declared the definition of the AVBuffer property for media data structures.
+ * 
+ * @library libnative_media_core.so
+ * @syscap SystemCapability.Multimedia.Media.Core
+ * @since 9
+ */
+
 #ifndef NATIVE_AVBUFFER_INFO_H
 #define NATIVE_AVBUFFER_INFO_H
 

@@ -24,6 +24,17 @@
  * @since 9
  */
 
+/**
+ * @file native_avmemory.h
+ *
+ * @brief Declared the definition of media data structure AVMemory.
+ *
+ * @kit AVCodecKit
+ * @library libnative_media_core.so
+ * @syscap SystemCapability.Multimedia.Media.Core
+ * @since 9
+ */
+
 #ifndef NATIVE_AVMEMORY_H
 #define NATIVE_AVMEMORY_H
 

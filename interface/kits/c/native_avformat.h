@@ -24,6 +24,17 @@
  * @since 9
  */
 
+/**
+ * @file native_avformat.h
+ *
+ * @brief Declared functions and enumerations related to OH_AVFormat.
+ *
+ * @kit AVCodecKit
+ * @library libnative_media_core.so
+ * @syscap SystemCapability.Multimedia.Media.Core
+ * @since 9
+ */
+
 #ifndef NATIVE_AVFORMAT_H
 #define NATIVE_AVFORMAT_H
 

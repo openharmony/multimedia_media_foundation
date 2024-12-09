@@ -24,6 +24,17 @@
  * @since 9
  */
 
+/**
+ * @file native_averrors.h
+ *
+ * @brief Media framework error code.
+ *
+ * @kit AVCodecKit
+ * @library libnative_media_core.so
+ * @syscap SystemCapability.Multimedia.Media.Core
+ * @since 9
+ */
+
 #ifndef NATIVE_AVERRORS_H
 #define NATIVE_AVERRORS_H
 
