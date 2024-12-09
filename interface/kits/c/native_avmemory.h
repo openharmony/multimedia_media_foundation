@@ -13,6 +13,17 @@
  * limitations under the License.
  */
 
+/**
+ * @addtogroup Core
+ * @{
+ *
+ * @brief The Core module provides basic backbone capabilities for media frameworks,
+ * including functions such as memory, error codes, and media data structures.
+ * 
+ * @syscap SystemCapability.Multimedia.Media.Core
+ * @since 9
+ */
+
 #ifndef NATIVE_AVMEMORY_H
 #define NATIVE_AVMEMORY_H
 
@@ -43,9 +54,9 @@ OH_AVMemory *OH_AVMemory_Create(int32_t size);
  * @param mem Encapsulate OH_AVMemory structure instance pointer
  * @return the memory's virtual address if the memory is valid, otherwise NULL.
  * Possible failure causes:
- * 1. input mem is nullptr;
+ * 1. input mem is NULL;
  * 2. structure verification failed of the mem;
- * 3. mem's memory is nullptr.
+ * 3. mem's memory is NULL.
  * @deprecated since 11
  * @useinstead OH_AVBuffer_GetAddr
  * @since 9
@@ -59,9 +70,9 @@ uint8_t *OH_AVMemory_GetAddr(struct OH_AVMemory *mem);
  * @param mem Encapsulate OH_AVMemory structure instance pointer
  * @return the memory's size if the memory is valid, otherwise -1.
  * Possible failure causes:
- * 1. input mem is nullptr;
+ * 1. input mem is NULL;
  * 2. structure verification failed of the mem;
- * 3. mem's memory is nullptr.
+ * 3. mem's memory is NULL.
  * @deprecated since 11
  * @useinstead OH_AVBuffer_GetCapacity
  * @since 9
@@ -77,9 +88,9 @@ int32_t OH_AVMemory_GetSize(struct OH_AVMemory *mem);
  * @return Function result code.
  *         {@link AV_ERR_OK} if the execution is successful.
  *         {@link AV_ERR_INVALID_VAL}
- *         1. input mem is nullptr;
+ *         1. input mem is NULL;
  *         2. structure verification failed of the mem;
- *         3. mem's memory is nullptr.
+ *         3. mem's memory is NULL.
  * @deprecated since 11
  * @useinstead OH_AVBuffer_Destroy
  * @since 10
@@ -91,3 +102,4 @@ OH_AVErrCode OH_AVMemory_Destroy(struct OH_AVMemory *mem);
 #endif
 
 #endif // NATIVE_AVMEMORY_H
+/** @} */

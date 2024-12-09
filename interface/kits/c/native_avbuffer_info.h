@@ -13,6 +13,17 @@
  * limitations under the License.
  */
 
+/**
+ * @addtogroup Core
+ * @{
+ *
+ * @brief The Core module provides basic backbone capabilities for media frameworks,
+ * including functions such as memory, error codes, and media data structures.
+ * 
+ * @syscap SystemCapability.Multimedia.Media.Core
+ * @since 9
+ */
+
 #ifndef NATIVE_AVBUFFER_INFO_H
 #define NATIVE_AVBUFFER_INFO_H
 
@@ -70,3 +81,4 @@ typedef struct OH_AVCodecBufferAttr {
 #endif
 
 #endif // NATIVE_AVBUFFER_INFO_H
+/** @} */
