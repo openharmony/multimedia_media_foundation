@@ -19,7 +19,7 @@
  *
  * @brief The Core module provides basic backbone capabilities for media frameworks,
  * including functions such as memory, error codes, and media data structures.
- * 
+ *
  * @syscap SystemCapability.Multimedia.Media.Core
  * @since 9
  */
