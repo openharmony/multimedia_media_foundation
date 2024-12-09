@@ -28,7 +28,7 @@
  * @file native_avbuffer.h
  *
  * @brief Declared the function interface of media data structure AVBuffer.
- * 
+ *
  * @library libnative_media_core.so
  * @syscap SystemCapability.Multimedia.Media.Core
  * @since 11
