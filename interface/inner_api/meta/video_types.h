@@ -232,15 +232,15 @@ enum MPEG4Profile : int32_t {
 };
 
 enum H263Profile : int32_t {
-    H263_PROFILE_BACKWARD_COMPATIBLE = 0,
-    H263_PROFILE_BASELINE = 1,
-    H263_PROFILE_H320_CODING = 2,
-    H263_PROFILE_HIGH_COMPRESSION = 3,
-    H263_PROFILE_HIGH_LATENCY = 4,
-    H263_PROFILE_ISW_V2 = 5,
-    H263_PROFILE_ISW_V3 = 6,
-    H263_PROFILE_INTERLACE = 7,
-    H263_PROFILE_INTERNET = 8,
+    H263_PROFILE_0_BASELINE = 0,
+    H263_PROFILE_1_H320_CODING_EFFICIENCY_VERSION_2_BACKWARD_COMPATIBILITY = 1, // ffmpeg does not support
+    H263_PROFILE_2_VERSION_1_BACKWARD_COMPATIBILITY = 2,
+    H263_PROFILE_3_VERSION_2_INTERACTIVE_AND_STREAMING_WIRELESS = 3, // ffmpeg does not support
+    H263_PROFILE_4_VERSION_3_INTERACTIVE_AND_STREAMING_WIRELESS = 4, // ffmpeg does not support
+    H263_PROFILE_5_CONVERSATIONAL_HIGH_COMPRESSION = 5, // ffmpeg does not support
+    H263_PROFILE_6_CONVERSATIONAL_INTERNET = 6, // ffmpeg does not support
+    H263_PROFILE_7_CONVERSATIONAL_INTERLACE = 7, // ffmpeg does not support
+    H263_PROFILE_8_HIGH_LATENCY = 8 // ffmpeg does not support
 };
 
 enum VP8Profile : int32_t {
@@ -306,6 +306,18 @@ enum MPEG4Level : int32_t {
     MPEG4_LEVEL_5  = 8,
     MPEG4_LEVEL_6  = 9,
 };
+
+enum H263Level : int32_t {
+    H263_LEVEL_10 = 0,
+    H263_LEVEL_20 = 1,
+    H263_LEVEL_30 = 2,
+    H263_LEVEL_40 = 3,
+    H263_LEVEL_45 = 4,
+    H263_LEVEL_50 = 5,
+    H263_LEVEL_60 = 6,
+    H263_LEVEL_70 = 7
+};
+
 /**
  * @enum Temporal group of picture reference mode.
  *
