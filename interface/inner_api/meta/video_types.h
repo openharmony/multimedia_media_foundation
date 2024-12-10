@@ -233,14 +233,7 @@ enum MPEG4Profile : int32_t {
 
 enum H263Profile : int32_t {
     H263_PROFILE_0_BASELINE = 0,
-    H263_PROFILE_1_H320_CODING_EFFICIENCY_VERSION_2_BACKWARD_COMPATIBILITY = 1, // ffmpeg does not support
     H263_PROFILE_2_VERSION_1_BACKWARD_COMPATIBILITY = 2,
-    H263_PROFILE_3_VERSION_2_INTERACTIVE_AND_STREAMING_WIRELESS = 3, // ffmpeg does not support
-    H263_PROFILE_4_VERSION_3_INTERACTIVE_AND_STREAMING_WIRELESS = 4, // ffmpeg does not support
-    H263_PROFILE_5_CONVERSATIONAL_HIGH_COMPRESSION = 5, // ffmpeg does not support
-    H263_PROFILE_6_CONVERSATIONAL_INTERNET = 6, // ffmpeg does not support
-    H263_PROFILE_7_CONVERSATIONAL_INTERLACE = 7, // ffmpeg does not support
-    H263_PROFILE_8_HIGH_LATENCY = 8 // ffmpeg does not support
 };
 
 enum VP8Profile : int32_t {
