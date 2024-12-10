@@ -13,6 +13,27 @@
  * limitations under the License.
  */
 
+/**
+ * @addtogroup Core
+ * @{
+ *
+ * @brief The Core module provides basic backbone capabilities for media frameworks,
+ * including functions such as memory, error codes, and media data structures.
+ *
+ * @syscap SystemCapability.Multimedia.Media.Core
+ * @since 9
+ */
+
+/**
+ * @file native_avbuffer.h
+ *
+ * @brief Declared the function interface of media data structure AVBuffer.
+ *
+ * @library libnative_media_core.so
+ * @syscap SystemCapability.Multimedia.Media.Core
+ * @since 11
+ */
+
 #ifndef NATIVE_AVBUFFER_H
 #define NATIVE_AVBUFFER_H
 
@@ -48,7 +69,7 @@ OH_AVBuffer *OH_AVBuffer_Create(int32_t capacity);
  * @param buffer Encapsulate OH_AVBuffer structure instance pointer
  * @return Function result code.
  *         {@link AV_ERR_OK} if the execution is successful.
- *         {@link AV_ERR_INVALID_VAL} if input buffer is nullptr or structure verification failed of the buffer.
+ *         {@link AV_ERR_INVALID_VAL} if input buffer is NULL or structure verification failed of the buffer.
  *         {@link AV_ERR_OPERATE_NOT_PERMIT} if input buffer is not user created.
  * @since 11
  */
@@ -63,7 +84,7 @@ OH_AVErrCode OH_AVBuffer_Destroy(OH_AVBuffer *buffer);
  * @return Function result code.
  *         {@link AV_ERR_OK} if the execution is successful.
  *         {@link AV_ERR_INVALID_VAL}
- *         1. input buffer or attr is nullptr;
+ *         1. input buffer or attr is NULL;
  *         2. structure verification failed of the buffer.
  * @since 11
  */
@@ -78,7 +99,7 @@ OH_AVErrCode OH_AVBuffer_GetBufferAttr(OH_AVBuffer *buffer, OH_AVCodecBufferAttr
  * @return Function result code.
  *         {@link AV_ERR_OK} if the execution is successful.
  *         {@link AV_ERR_INVALID_VAL}
- *         1. input buffer or attr is nullptr;
+ *         1. input buffer or attr is NULL;
  *         2. structure verification failed of the buffer;
  *         3. the size or offset of input buffer's memory is invalid.
  * @since 11
@@ -92,10 +113,10 @@ OH_AVErrCode OH_AVBuffer_SetBufferAttr(OH_AVBuffer *buffer, const OH_AVCodecBuff
  * @syscap SystemCapability.Multimedia.Media.Core
  * @param buffer Encapsulate OH_AVBuffer structure instance pointer
  * @return Returns Encapsulate OH_AVFormat structure instance pointer if the execution is successful,
- * otherwise returns nullptr. Possible failure causes:
- * 1. input buffer is nullptr;
+ * otherwise returns NULL. Possible failure causes:
+ * 1. input buffer is NULL;
  * 2. structure verification failed of the buffer;
- * 3. buffer's meta is nullptr.
+ * 3. buffer's meta is NULL.
  * @since 11
  */
 OH_AVFormat *OH_AVBuffer_GetParameter(OH_AVBuffer *buffer);
@@ -108,9 +129,9 @@ OH_AVFormat *OH_AVBuffer_GetParameter(OH_AVBuffer *buffer);
  * @return Function result code.
  *         {@link AV_ERR_OK} if the execution is successful.
  *         {@link AV_ERR_INVALID_VAL}
- *         1. input buffer or format is nullptr;
+ *         1. input buffer or format is NULL;
  *         2. structure verification failed of the buffer;
- *         3. input meta is nullptr.
+ *         3. input meta is NULL.
  * @since 11
  */
 OH_AVErrCode OH_AVBuffer_SetParameter(OH_AVBuffer *buffer, const OH_AVFormat *format);
@@ -121,7 +142,7 @@ OH_AVErrCode OH_AVBuffer_SetParameter(OH_AVBuffer *buffer, const OH_AVFormat *fo
  * @param buffer Encapsulate OH_AVBuffer structure instance pointer
  * @return the buffer's virtual address if the buffer is valid, otherwise NULL
  * Possible failure causes:
- * 1. input buffer is nullptr;
+ * 1. input buffer is NULL;
  * 2. structure verification failed of the OH_AVBuffer;
  * 3. internal error has occurred.
  * @since 11
@@ -134,7 +155,7 @@ uint8_t *OH_AVBuffer_GetAddr(OH_AVBuffer *buffer);
  * @param buffer Encapsulate OH_AVBuffer structure instance pointer
  * @return The buffer's capacity if the buffer is valid, otherwise -1
  * Possible failure causes:
- * 1. input buffer is nullptr;
+ * 1. input buffer is NULL;
  * 2. structure verification failed of the OH_AVBuffer;
  * 3. internal error has occurred.
  * @since 11
@@ -148,7 +169,7 @@ int32_t OH_AVBuffer_GetCapacity(OH_AVBuffer *buffer);
  * @param buffer Encapsulate OH_AVBuffer structure instance pointer
  * @return Returns Encapsulate OH_NativeBuffer structure instance pointer is successful, otherwise returns NULL
  * Possible failure causes:
- * 1. input buffer is nullptr;
+ * 1. input buffer is NULL;
  * 2. structure verification failed of the OH_AVBuffer;
  * 3. internal error has occurred.
  * @since 11
@@ -160,3 +181,4 @@ OH_NativeBuffer *OH_AVBuffer_GetNativeBuffer(OH_AVBuffer *buffer);
 #endif
 
 #endif // NATIVE_AVBUFFER_H
+/** @} */

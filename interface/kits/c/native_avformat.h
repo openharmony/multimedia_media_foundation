@@ -13,6 +13,28 @@
  * limitations under the License.
  */
 
+/**
+ * @addtogroup Core
+ * @{
+ *
+ * @brief The Core module provides basic backbone capabilities for media frameworks,
+ * including functions such as memory, error codes, and media data structures.
+ *
+ * @syscap SystemCapability.Multimedia.Media.Core
+ * @since 9
+ */
+
+/**
+ * @file native_avformat.h
+ *
+ * @brief Declared functions and enumerations related to OH_AVFormat.
+ *
+ * @kit AVCodecKit
+ * @library libnative_media_core.so
+ * @syscap SystemCapability.Multimedia.Media.Core
+ * @since 9
+ */
+
 #ifndef NATIVE_AVFORMAT_H
 #define NATIVE_AVFORMAT_H
 
@@ -70,8 +92,8 @@ struct OH_AVFormat *OH_AVFormat_Create(void);
  * @param mimeType mime type
  * @param sampleRate sample rate
  * @param channelCount channel count
- * @return Returns a pointer to an OH_AVFormat instance if the execution is successful, otherwise nullptr
- * Possible failure causes: 1. mimeType is nullptr; 2. new format is nullptr.
+ * @return Returns a pointer to an OH_AVFormat instance if the execution is successful, otherwise NULL
+ * Possible failure causes: 1. mimeType is NULL; 2. new format is NULL.
  * @since 10
  * @version 1.0
  */
@@ -85,8 +107,8 @@ struct OH_AVFormat *OH_AVFormat_CreateAudioFormat(const char *mimeType,
  * @param mimeType mime type
  * @param width width
  * @param height height
- * @return Returns a pointer to an OH_AVFormat instance if the execution is successful, otherwise nullptr
- * Possible failure causes: 1. mimeType is nullptr; 2. new format is nullptr.
+ * @return Returns a pointer to an OH_AVFormat instance if the execution is successful, otherwise NULL
+ * Possible failure causes: 1. mimeType is NULL; 2. new format is NULL.
  * @since 10
  * @version 1.0
  */
@@ -111,7 +133,7 @@ void OH_AVFormat_Destroy(struct OH_AVFormat *format);
  * @param from pointer to the OH_AVFormat handle of the copied data
  * @return The return value is TRUE for success, FALSE for failure
  * Possible failure causes:
- * 1. input parameter is nullptr;
+ * 1. input parameter is NULL;
  * 2. structure verification failed of the input OH_AVFormat.
  * @since 9
  * @version 1.0
@@ -126,9 +148,9 @@ bool OH_AVFormat_Copy(struct OH_AVFormat *to, struct OH_AVFormat *from);
  * @param value written data
  * @return The return value is TRUE for success, FALSE for failure
  * Possible failure causes:
- * 1. input format is nullptr;
+ * 1. input format is NULL;
  * 2. structure verification failed of the input format;
- * 3. input key is nullptr;
+ * 3. input key is NULL;
  * 4. value type corresponding to the key is incorrect.
  * @since 9
  * @version 1.0
@@ -143,9 +165,9 @@ bool OH_AVFormat_SetIntValue(struct OH_AVFormat *format, const char *key, int32_
  * @param value written data
  * @return The return value is TRUE for success, FALSE for failure
  * Possible failure causes:
- * 1. input format is nullptr;
+ * 1. input format is NULL;
  * 2. structure verification failed of the input format;
- * 3. input key is nullptr;
+ * 3. input key is NULL;
  * 4. value type corresponding to the key is incorrect.
  * @since 9
  * @version 1.0
@@ -160,9 +182,9 @@ bool OH_AVFormat_SetLongValue(struct OH_AVFormat *format, const char *key, int64
  * @param value written data
  * @return The return value is TRUE for success, FALSE for failure
  * Possible failure causes:
- * 1. input format is nullptr;
+ * 1. input format is NULL;
  * 2. structure verification failed of the input format;
- * 3. input key is nullptr;
+ * 3. input key is NULL;
  * 4. value type corresponding to the key is incorrect.
  * @since 9
  * @version 1.0
@@ -177,9 +199,9 @@ bool OH_AVFormat_SetFloatValue(struct OH_AVFormat *format, const char *key, floa
  * @param value written data
  * @return The return value is TRUE for success, FALSE for failure
  * Possible failure causes:
- * 1. input format is nullptr;
+ * 1. input format is NULL;
  * 2. structure verification failed of the input format;
- * 3. input key is nullptr;
+ * 3. input key is NULL;
  * 4. value type corresponding to the key is incorrect.
  * @since 9
  * @version 1.0
@@ -194,10 +216,10 @@ bool OH_AVFormat_SetDoubleValue(struct OH_AVFormat *format, const char *key, dou
  * @param value written data
  * @return The return value is TRUE for success, FALSE for failure
  * Possible failure causes:
- * 1. input format is nullptr;
+ * 1. input format is NULL;
  * 2. structure verification failed of the input format;
- * 3. input key is nullptr;
- * 4. input value is nullptr;
+ * 3. input key is NULL;
+ * 4. input value is NULL;
  * 5. value type corresponding to the key is incorrect;
  * @since 9
  * @version 1.0
@@ -213,10 +235,10 @@ bool OH_AVFormat_SetStringValue(struct OH_AVFormat *format, const char *key, con
  * @param size written data length, range is(0, 1)MB
  * @return The return value is TRUE for success, FALSE for failure
  * Possible failure causes:
- * 1. input format is nullptr;
+ * 1. input format is NULL;
  * 2. structure verification failed of the input format;
- * 3. input key is nullptr;
- * 4. input addr is nullptr;
+ * 3. input key is NULL;
+ * 4. input addr is NULL;
  * 5. size is 0 or exceeds the upper limit, which is 1MB;
  * 6. value type corresponding to the key is incorrect.
  * @since 9
@@ -232,10 +254,10 @@ bool OH_AVFormat_SetBuffer(struct OH_AVFormat *format, const char *key, const ui
  * @param out read data
  * @return The return value is TRUE for success, FALSE for failure
  * Possible failure causes:
- * 1. input format is nullptr;
+ * 1. input format is NULL;
  * 2. structure verification failed of the input format;
- * 3. input key is nullptr;
- * 4. input out is nullptr;
+ * 3. input key is NULL;
+ * 4. input out is NULL;
  * 5. the obtained key does not exist or is not set.
  * @since 9
  * @version 1.0
@@ -250,10 +272,10 @@ bool OH_AVFormat_GetIntValue(struct OH_AVFormat *format, const char *key, int32_
  * @param out read data
  * @return The return value is TRUE for success, FALSE for failure
  * Possible failure causes:
- * 1. input format is nullptr;
+ * 1. input format is NULL;
  * 2. structure verification failed of the input format;
- * 3. input key is nullptr;
- * 4. input out is nullptr;
+ * 3. input key is NULL;
+ * 4. input out is NULL;
  * 5. the obtained key does not exist or is not set.
  * @since 9
  * @version 1.0
@@ -268,10 +290,10 @@ bool OH_AVFormat_GetLongValue(struct OH_AVFormat *format, const char *key, int64
  * @param out read data
  * @return The return value is TRUE for success, FALSE for failure
  * Possible failure causes:
- * 1. input format is nullptr;
+ * 1. input format is NULL;
  * 2. structure verification failed of the input format;
- * 3. input key is nullptr;
- * 4. input out is nullptr;
+ * 3. input key is NULL;
+ * 4. input out is NULL;
  * 5. the obtained key does not exist or is not set.
  * @since 9
  * @version 1.0
@@ -286,10 +308,10 @@ bool OH_AVFormat_GetFloatValue(struct OH_AVFormat *format, const char *key, floa
  * @param out read data
  * @return The return value is TRUE for success, FALSE for failure
  * Possible failure causes:
- * 1. input format is nullptr;
+ * 1. input format is NULL;
  * 2. structure verification failed of the input format;
- * 3. input key is nullptr;
- * 4. input out is nullptr;
+ * 3. input key is NULL;
+ * 4. input out is NULL;
  * 5. the obtained key does not exist or is not set.
  * @since 9
  * @version 1.0
@@ -305,10 +327,10 @@ bool OH_AVFormat_GetDoubleValue(struct OH_AVFormat *format, const char *key, dou
  * and Format is destroyed. If the caller needs to hold it for a long time, it must copy the memory
  * @return The return value is TRUE for success, FALSE for failure
  * Possible failure causes:
- * 1. input format is nullptr;
+ * 1. input format is NULL;
  * 2. structure verification failed of the input format;
- * 3. input key is nullptr;
- * 4. input out is nullptr;
+ * 3. input key is NULL;
+ * 4. input out is NULL;
  * 5. the resources of out string generated by malloc is insufficient;
  * 6. the obtained key does not exist or is not set.
  * @since 9
@@ -326,11 +348,11 @@ bool OH_AVFormat_GetStringValue(struct OH_AVFormat *format, const char *key, con
  * @param size Length of read data
  * @return The return value is TRUE for success, FALSE for failure
  * Possible failure causes:
- * 1. input format is nullptr;
+ * 1. input format is NULL;
  * 2. structure verification failed of the input format;
- * 3. input key is nullptr;
- * 4. input addr is nullptr;
- * 5. input size is nullptr;
+ * 3. input key is NULL;
+ * 4. input addr is NULL;
+ * 5. input size is NULL;
  * 6. the obtained key does not exist or is not set.
  * @since 9
  * @version 1.0
@@ -344,7 +366,7 @@ bool OH_AVFormat_GetBuffer(struct OH_AVFormat *format, const char *key, uint8_t 
  * @syscap SystemCapability.Multimedia.Media.Core
  * @param format pointer to an OH_AVFormat instance
  * @return Returns a string consisting of key and data for success, NULL for failure
- * Possible failure causes: 1. input format is nullptr; 2. system resources are insufficient.
+ * Possible failure causes: 1. input format is NULL; 2. system resources are insufficient.
  * @since 9
  * @version 1.0
  */
@@ -355,3 +377,4 @@ const char *OH_AVFormat_DumpInfo(struct OH_AVFormat *format);
 #endif
 
 #endif // NATIVE_AVFORMAT_H
+/** @} */
