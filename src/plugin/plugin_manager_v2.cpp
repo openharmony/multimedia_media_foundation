@@ -32,8 +32,14 @@ PluginManagerV2::PluginManagerV2()
 std::shared_ptr<PluginBase> PluginManagerV2::CreatePluginByMime(PluginType pluginType, std::string mime)
 {
     MEDIA_LOG_I("CreatePluginByMime pluginType: " PUBLIC_LOG_D32 " mime: " PUBLIC_LOG_S, pluginType, mime.c_str());
-    PluginDescription pluginDescription = PluginList::GetInstance().GetPluginByCap(pluginType, mime);
-    return cachedPluginPackage_->CreatePlugin(pluginDescription);
+    std::vector<PluginDescription> pluginDescriptions = PluginList::GetInstance().GetPluginsByCap(pluginType, mime);
+    for (auto desc: pluginDescriptions) {
+        std::shared_ptr<PluginBase> plugin = cachedPluginPackage_->CreatePlugin(desc);
+        if (plugin != nullptr) {
+            return plugin;
+        }
+    }
+    return nullptr;
 }
 
 std::shared_ptr<PluginBase> PluginManagerV2::CreatePluginByName(std::string name)
