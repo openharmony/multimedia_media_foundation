@@ -286,6 +286,8 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::AUDIO_MPEG_LAYER, defaultInt32},
     {Tag::AUDIO_AAC_LEVEL, defaultInt32},
     {Tag::AUDIO_OBJECT_NUMBER, defaultInt32},
+    {Tag::AUDIO_SOUNDBED_CHANNELS_NUMBER, defaultInt32},
+    {Tag::AUDIO_HOA_ORDER, defaultInt32},
     {Tag::AUDIO_MAX_INPUT_SIZE, defaultInt32},
     {Tag::AUDIO_MAX_OUTPUT_SIZE, defaultInt32},
     {Tag::VIDEO_WIDTH, defaultInt32},
