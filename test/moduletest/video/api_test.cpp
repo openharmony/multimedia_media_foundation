@@ -72,7 +72,7 @@ const VideoProcessing_ColorSpaceInfo DST_INFO = {OH_VIDEO_HDR_VIVID,
 
 namespace {
 static int32_t g_userValue = 1;
-static int32_t g_Index = 1;
+static int32_t g_index = 1;
 
 static void onErrorEmptyCallback(OH_VideoProcessing* videoProcessor, VideoProcessing_ErrorCode error,
     void* userData)
@@ -760,7 +760,7 @@ HWTEST_F(VpeVideoApiTest, VPE_VIDEO_API_TEST_0350, TestSize.Level0)
 HWTEST_F(VpeVideoApiTest, VPE_VIDEO_API_TEST_0360, TestSize.Level0)
 {
     OH_VideoProcessing_InitializeEnvironment();
-    VideoProcessing_ErrorCode ret = OH_VideoProcessing_RenderOutputBuffer(nullptr, g_Index);
+    VideoProcessing_ErrorCode ret = OH_VideoProcessing_RenderOutputBuffer(nullptr, g_index);
     ASSERT_EQ(ret, VIDEO_PROCESSING_ERROR_INVALID_INSTANCE);
 }
 

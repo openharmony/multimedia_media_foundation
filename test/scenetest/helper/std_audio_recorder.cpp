@@ -70,7 +70,7 @@ std::unique_ptr<TestRecorder> TestRecorder::CreateAudioRecorder()
 
 std::string TestRecorder::GetOutputDir()
 {
-    return std::string(HST_WORKING_DIR) + "/" + outputDirName;
+    return std::string(HST_WORKING_DIR) + "/" + OUTPUT_DIR_NAME;
 }
 
 int32_t TestRecorderImpl::Configure(const AudioRecordSource& recordSource)

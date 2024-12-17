@@ -20,7 +20,7 @@
 #include "i_recorder_engine.h"
 
 namespace OHOS::Media::Test {
-const std::string outputDirName = "audio_record_result";
+const std::string OUTPUT_DIR_NAME = "audio_record_result";
 
 class AudioRecordSource {
 public:
