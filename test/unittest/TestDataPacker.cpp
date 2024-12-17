@@ -43,8 +43,7 @@ public:
 
 AVBufferPtr CreateBuffer(size_t size, uint64_t offset = 0)
 {
-    const uint8_t* data = static_cast<uint8_t*>(
-        "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    const uint8_t* data = (uint8_t*)"1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     auto buffer = std::make_shared<AVBuffer>();
     buffer->AllocMemory(nullptr, size);
     buffer->GetMemory()->Write(data + offset, size);
@@ -55,8 +54,7 @@ AVBufferPtr CreateEmptyBuffer(size_t size)
 {
     auto buffer = std::make_shared<AVBuffer>();
     buffer->AllocMemory(nullptr, size);
-    buffer->GetMemory()->Write(static_cast<uint8_t*>(
-        "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"), size);
+    buffer->GetMemory()->Write((uint8_t*)"\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0", size);
     return buffer;
 }
 
