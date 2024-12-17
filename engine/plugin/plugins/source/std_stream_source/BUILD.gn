@@ -27,7 +27,6 @@ if (hst_is_standard_sys) {
       "//foundation/multimedia/player_framework/interfaces/inner_api/native",
       "//foundation/multimedia/player_framework/services/utils/include",
       "//foundation/multimedia/media_foundation/engine/include",
-      "//commonlibrary/c_utils/base/include",
     ]
     sources = [ "std_stream_source_plugin.cpp" ]
     public_configs = [
@@ -39,6 +38,7 @@ if (hst_is_standard_sys) {
       "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",
     ]
     external_deps = [
+      "c_utils:utils",
       "graphic_surface:surface",
       "hilog:libhilog",
       "player_framework:media_service_utils",
