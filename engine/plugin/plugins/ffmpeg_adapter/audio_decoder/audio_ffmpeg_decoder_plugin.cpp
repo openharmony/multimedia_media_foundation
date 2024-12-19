@@ -531,8 +531,8 @@ Status AudioFfmpegDecoderPlugin::ReceiveFrameSucc(const std::shared_ptr<Buffer>&
     int32_t samples = cachedFrame_->nb_samples;
     auto sampleFormat = static_cast<AVSampleFormat>(cachedFrame_->format);
     int32_t bytePerSample = av_get_bytes_per_sample(sampleFormat);
-    size_t outputSize = static_cast<size_t>(samples) * static_cast<size_t>(bytePerSample)
-        * static_cast<size_t>(channels);
+    size_t outputSize = static_cast<size_t>(samples) * static_cast<size_t>(bytePerSample) *
+        static_cast<size_t>(channels);
     auto ioInfoMem = ioInfo->GetMemory();
     if (ioInfoMem == nullptr) {
         MEDIA_LOG_E("ReceiveFrameSucc ioInfo GetMemory nullptr");

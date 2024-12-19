@@ -121,7 +121,7 @@ namespace OHOS {
 namespace Media {
 namespace Plugin {
 namespace Ffmpeg {
-AudioFfmpegEncoderPlugin::AudioFfmpegEncoderPlugin(std::string name) : CodecPlugin(std::move(name)), prev_pts_(0)
+AudioFfmpegEncoderPlugin::AudioFfmpegEncoderPlugin(std::string name) : CodecPlugin(std::move(name)), prevPts_(0)
 {
 }
 
@@ -232,7 +232,7 @@ Status AudioFfmpegEncoderPlugin::Reset()
     OSAL::ScopedLock lock1(parameterMutex_);
     fullInputFrameSize_ = 0;
     needReformat_ = false;
-    prev_pts_ = 0;
+    prevPts_ = 0;
     srcBytesPerSample_ = 0;
     return ResetLocked();
 }
@@ -459,11 +459,11 @@ Status AudioFfmpegEncoderPlugin::ReceiveFrameSucc(const std::shared_ptr<Buffer>&
     ioInfoMem->Write(packet->data, packet->size);
     // how get perfect pts with upstream pts ?
     ioInfo->duration = ConvertTimeFromFFmpeg(packet->duration, avCodecContext_->time_base);
-    uint64_t res = (UINT64_MAX - prev_pts_ < static_cast<uint64_t>(packet->duration)) ?
-                   (static_cast<uint64_t>(ioInfo->duration) - (UINT64_MAX - prev_pts_)) :
-                   (prev_pts_ + static_cast<uint64_t>(ioInfo->duration));
+    uint64_t res = (UINT64_MAX - prevPts_ < static_cast<uint64_t>(packet->duration)) ?
+                   (static_cast<uint64_t>(ioInfo->duration) - (UINT64_MAX - prevPts_)) :
+                   (prevPts_ + static_cast<uint64_t>(ioInfo->duration));
     ioInfo->pts = static_cast<int64_t>(res);
-    prev_pts_ = static_cast<uint64_t>(ioInfo->pts);
+    prevPts_ = static_cast<uint64_t>(ioInfo->pts);
     return Status::OK;
 }
 
