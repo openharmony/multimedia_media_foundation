@@ -103,7 +103,7 @@ private:
     std::shared_ptr<AVFrame> cachedFrame_ {nullptr};
     uint32_t fullInputFrameSize_ {0};
     std::shared_ptr<Buffer> outBuffer_ {nullptr};
-    uint64_t prev_pts_;
+    uint64_t prevPts_;
     bool needReformat_ {false};
     AVSampleFormat srcFmt_ {AVSampleFormat::AV_SAMPLE_FMT_NONE};
     uint32_t srcBytesPerSample_ {0};

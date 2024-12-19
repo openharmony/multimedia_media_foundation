@@ -51,7 +51,7 @@ public:
     Status GetSize(uint64_t& size) override;
     Seekable GetSeekable() override;
     Status SeekTo(uint64_t offset) override;
-    static void OnError(int httpError, int localError, void *param, int support_retry);
+    static void OnError(int httpError, int localError, void *param, int supportRetry);
     Status OnHttpEvent(void *priv, int errorType, int32_t errorCode);
 
 private:
