@@ -35,9 +35,9 @@ namespace {
 std::vector<int> sampleRateVec {
     96000, 88200, 64000, 48000, 44100, 32000, 24000, 22050, 16000, 12000, 11025, 8000, 7350
 };
-uint32_t durationMs = 0;
-uint32_t fileSize = 0;
-uint32_t readDataSize = 0;
+uint32_t g_durationMs = 0;
+uint32_t g_fileSize = 0;
+uint32_t g_readDataSize = 0;
 constexpr int8_t ADTS_HEADER_SIZE = 7;
 constexpr int8_t MP4_HEADER_OFFSET = 4;
 constexpr int8_t RANK_MAX = 100;
@@ -71,7 +71,7 @@ Status MiniMP4DemuxerPlugin::SetDataSource(const std::shared_ptr<DataSource> &so
     if (ioContext_.dataSource != nullptr) {
         ioContext_.dataSource->GetSize(fileSize_);
     }
-    fileSize = fileSize_;
+    g_fileSize = fileSize_;
     MEDIA_LOG_I("FileSize_ " PUBLIC_LOG_U64, fileSize_);
     return Status::OK;
 }
@@ -218,7 +218,7 @@ Status MiniMP4DemuxerPlugin::GetDataFromSource()
         // 将剩余数据移动到buffer的起始位置
         auto ret = memmove_s(inIoBuffer_,
                              ioDataRemainSize_,
-                             inIoBuffer_ + readDataSize,
+                             inIoBuffer_ + g_readDataSize,
                              ioDataRemainSize_);
         if (ret != 0) {
             MEDIA_LOG_E("copy buffer error(" PUBLIC_LOG_D32 ")", ret);
@@ -309,8 +309,8 @@ void MiniMP4DemuxerPlugin::FillADTSHead(std::shared_ptr<Memory> &data, unsigned 
 int MiniMP4DemuxerPlugin::ReadCallback(int64_t offset, void* buffer, size_t size, void* token)
 {
     MiniMP4DemuxerPlugin* mp4Demuxer = reinterpret_cast<MiniMP4DemuxerPlugin*>(token);
-    unsigned int file_size = mp4Demuxer->GetFileSize();
-    if (offset >= file_size) {
+    unsigned int tempFileSize = mp4Demuxer->GetFileSize();
+    if (offset >= tempFileSize) {
         MEDIA_LOG_E("ReadCallback offset is bigger");
         return -1;
     }
@@ -328,7 +328,7 @@ int MiniMP4DemuxerPlugin::ReadCallback(int64_t offset, void* buffer, size_t size
         mp4Demuxer->ioDataRemainSize_ = 0;
         mp4Demuxer->ioContext_.offset = offset;
         Status status = Status::ERROR_UNKNOWN;
-        readDataSize = mp4Demuxer->inIoBufferSize_;
+        g_readDataSize = mp4Demuxer->inIoBufferSize_;
         status = mp4Demuxer->GetDataFromSource();
         if (status != Status::OK) {
             return (int)status;
@@ -380,7 +380,7 @@ Status MiniMP4DemuxerPlugin::ReadFrame(Buffer &outBuffer, int32_t timeOutMs)
     sampleIndex_++;
     MEDIA_LOG_D("writeSize " PUBLIC_LOG_ZU " mp4FrameData size " PUBLIC_LOG_ZU, writeSize, mp4FrameData->GetSize());
     ioDataRemainSize_ -= frameSize;
-    readDataSize = frameSize;
+    g_readDataSize = frameSize;
 
     return Status::OK;
 }
