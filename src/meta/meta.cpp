@@ -375,6 +375,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_ENCODER_REPEAT_PREVIOUS_FRAME_AFTER, defaultInt32},
     {Tag::VIDEO_ENCODER_REPEAT_PREVIOUS_MAX_COUNT, defaultInt32},
     {Tag::VIDEO_DECODER_OUTPUT_COLOR_SPACE, defaultInt32},
+    {Tag::VIDEO_DECODER_OUTPUT_ENABLE_VRR, defaultInt32},
     {Tag::AV_TRANSCODER_ERR_CODE, defaultInt32},
     {Tag::AV_TRANSCODER_SOURCE_DURATION, defaultInt32},
     {Tag::AV_TRANSCODER_TRANSCODER_DURATION, defaultInt32},

@@ -424,6 +424,8 @@ public:
         tagCharSeq == Tag::TIMED_METADATA_SRC_TRACK, int32_t, AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::VIDEO_DECODER_OUTPUT_COLOR_SPACE, int32_t, AnyValueType::INT32_T);
+    DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::VIDEO_DECODER_OUTPUT_ENABLE_VRR, int32_t, AnyValueType::INT32_T);
 
     Meta &operator=(const Meta &other)
     {

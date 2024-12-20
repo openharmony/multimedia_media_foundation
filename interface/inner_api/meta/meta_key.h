@@ -451,6 +451,9 @@ public:
     static constexpr const char AV_TRANSCODER_VIDEO_DECODER_DURATION[] = "av_transcoder_video_decoder_duration";
     static constexpr const char AV_TRANSCODER_VIDEO_ENCODER_DURATION[] = "av_transcoder_video_encoder_duration";
     static constexpr const char AV_TRANSCODER_VIDEO_VPE_DURATION[] = "av_transcoder_video_vpe_duration";
+/* -------------------- vrr tag -------------------- */
+    // int32_t, 1 is enabled, 0 is unabled
+    static constexpr const char VIDEO_DECODER_OUTPUT_ENABLE_VRR[] = "video_decoder_output_enable_vrr";
 };
 
 using TagTypeCharSeq = const char *;
