@@ -44,6 +44,7 @@ enum struct PluginEventType : int32_t {
     EVENT_BUFFER_PROGRESS,
     INITIAL_BUFFER_SUCCESS,
     DASH_SEEK_READY,
+    AUDIO_OUTPUT_FORMAT_CHANGED,
 };
 
 enum class NetworkClientErrorCode : int32_t {
