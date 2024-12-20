@@ -112,8 +112,8 @@ Status WavDemuxerPlugin::GetMediaInfo(MediaInfo& mediaInfo)
     mediaInfo.tracks[0].Set<Tag::MIME>(MEDIA_MIME_AUDIO_RAW);
     mediaInfo.tracks[0].Set<Tag::AUDIO_MPEG_VERSION>(1);
     mediaInfo.tracks[0].Set<Tag::AUDIO_SAMPLE_PER_FRAME>(WAV_PER_FRAME_SIZE);
-    if (wavHeader_.audioFormat == static_cast<uint16_t>(WavAudioFormat::WAVE_FORMAT_PCM)
-        || wavHeader_.audioFormat == static_cast<uint16_t>(WavAudioFormat::WAVE_FORMAT_EXTENSIBLE)) {
+    if (wavHeader_.audioFormat == static_cast<uint16_t>(WavAudioFormat::WAVE_FORMAT_PCM) ||
+        wavHeader_.audioFormat == static_cast<uint16_t>(WavAudioFormat::WAVE_FORMAT_EXTENSIBLE)) {
         mediaInfo.tracks[0].Set<Tag::AUDIO_SAMPLE_FORMAT>
             (g_WavAudioSampleFormatPacked[static_cast<uint32_t>(wavHeader_.bitsPerSample)]);
     } else if (wavHeader_.audioFormat == static_cast<uint16_t>(WavAudioFormat::WAVE_FORMAT_IEEE_FLOAT)) {

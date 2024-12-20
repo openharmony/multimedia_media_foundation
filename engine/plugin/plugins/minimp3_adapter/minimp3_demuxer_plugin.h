@@ -113,11 +113,9 @@ private:
     };
     void AudioDemuxerMp3IgnoreTailZero(uint8_t *data, uint32_t *dataLen);
     static int  AudioDemuxerMp3IterateCallback(void *userData, const uint8_t *frame, int frameSize,
-                                               int freeFormatBytes, size_t bufSize, uint64_t offset,
-                                               Mp3DemuxerFrameInfo *info);
+                                               uint64_t offset, Mp3DemuxerFrameInfo *info);
     static int  AudioDemuxerMp3IterateCallbackForPrepare(void *userData, const uint8_t *frame,
-                                                         int frameSize, int freeFormatBytes, size_t bufSize,
-                                                         uint64_t offset, Mp3DemuxerFrameInfo *info);
+                                                         int frameSize, Mp3DemuxerFrameInfo *info);
     void AudioDemuxerMp3Open();
     int  AudioDemuxerMp3Close();
     Status AudioDemuxerMp3Prepare(AudioDemuxerMp3Attr *mp3DemuxerAttr, uint8_t *inputBuffer,
