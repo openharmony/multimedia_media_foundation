@@ -24,7 +24,6 @@ class Tag {
 public:
     /* -------------------- regular tag -------------------- */
     static constexpr const char REGULAR_TRACK_ID[] = "track_index"; ///< track id
-    static constexpr const char BUFFER_INDEX[] = "buffer_index";
     static constexpr const char REQUIRED_IN_BUFFER_CNT[] =
         "max_input_buffer_count"; ///< required buffer count of plugin; read only tag
     static constexpr const char REQUIRED_IN_BUFFER_SIZE[] =
@@ -106,6 +105,7 @@ public:
     /* -------------------- buffer meta tag -------------------- */
     static constexpr const char BUFFER_DECODING_TIMESTAMP[] = "decoding_timestamp";  ///< int64_t, decoding timestamp.
     static constexpr const char BUFFER_DURATION[] = "buffer_duration";               ///< int64_t, buffer duration
+    static constexpr const char BUFFER_INDEX[] = "private_buffer_index";
 
     /* -------------------- timed metadata tag -------------------- */
     static constexpr const char TIMED_METADATA_SRC_TRACK_MIME[] =
