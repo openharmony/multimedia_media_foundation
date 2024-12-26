@@ -381,6 +381,7 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::AUDIO_BITS_PER_RAW_SAMPLE, 44},
     {Tag::MEDIA_TRACK_COUNT, 11},
     {Tag::REGULAR_TRACK_ID, 13},
+    {Tag::BUFFER_INDEX, 13},
     {Tag::VIDEO_SCALE_TYPE, 14},
     {Tag::VIDEO_I_FRAME_INTERVAL, 11},
     {Tag::MEDIA_PROFILE, 13},
