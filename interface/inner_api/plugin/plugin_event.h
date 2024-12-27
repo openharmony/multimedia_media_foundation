@@ -43,6 +43,7 @@ enum struct PluginEventType : int32_t {
     SOURCE_BITRATE_START,
     EVENT_BUFFER_PROGRESS,
     INITIAL_BUFFER_SUCCESS,
+    DASH_SEEK_READY,
 };
 
 enum class NetworkClientErrorCode : int32_t {

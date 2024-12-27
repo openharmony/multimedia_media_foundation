@@ -105,6 +105,7 @@ public:
     /* -------------------- buffer meta tag -------------------- */
     static constexpr const char BUFFER_DECODING_TIMESTAMP[] = "decoding_timestamp";  ///< int64_t, decoding timestamp.
     static constexpr const char BUFFER_DURATION[] = "buffer_duration";               ///< int64_t, buffer duration
+    static constexpr const char BUFFER_INDEX[] = "private_buffer_index";
 
     /* -------------------- timed metadata tag -------------------- */
     static constexpr const char TIMED_METADATA_SRC_TRACK_MIME[] =
@@ -345,13 +346,6 @@ public:
         "video_decoder_desired_present_timestamp"; ///< int64_t, key for describing the desired present timestamp of
                                                    ///< video decoder frame set by the caller. This is an optional key
                                                    ///< that applies only to video decoder surface mode.
-    static constexpr const char VIDEO_ENCODER_ENABLE_QP_MAP[] =
-        "video_encoder_enable_qp_map"; ///< bool, key for enable config frame qp map,
-                                        ///< true is enabled, false otherwise. The default value is false.
-                                        ///< This is an optional key that applies only to video encoder. It
-                                        ///< is used in configure.
-    static constexpr const char VIDEO_ENCODER_PER_FRAME_QP_MAP[] =
-        "video_encoder_frame_block_qp"; ///< vector<uint8_t>, Key for video encoder frame qp map.
 
     /* -------------------- video specific tag -------------------- */
     static constexpr const char VIDEO_H264_PROFILE[] = "video.h264.profile"; ///< @see VideoH264Profile

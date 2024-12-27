@@ -228,7 +228,7 @@ std::shared_ptr<Allocator> HttpSourcePlugin::GetAllocator()
     return mAllocator_;
 }
 
-void HttpSourcePlugin::OnError(int httpError, int localError, void *param, int support_retry)
+void HttpSourcePlugin::OnError(int httpError, int localError, void *param, int supportRetry)
 {
     MEDIA_LOG_D("httpError " PUBLIC_LOG_D32 " localError " PUBLIC_LOG_D32, httpError, localError);
     auto plugin = reinterpret_cast<HttpSourcePlugin *>(param);
