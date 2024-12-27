@@ -513,9 +513,7 @@ map<TagType, bool> testBoolData = {
     {Tag::AUDIO_RENDER_SET_FLAG, true},
     {Tag::VIDEO_BUFFER_CAN_DROP, true},
     {Tag::VIDEO_ENCODER_PER_FRAME_DISCARD, true},
-    {Tag::VIDEO_ENCODER_ENABLE_WATERMARK, true},
-    {Tag::VIDEO_ENCODER_ENABLE_QP_MAP, true},
-};
+    {Tag::VIDEO_ENCODER_ENABLE_WATERMARK, true}};
 
 
 /**
@@ -745,7 +743,6 @@ map<TagType, std::vector<uint8_t>> testVetcorInt8Data = {
     {Tag::AUDIO_VORBIS_IDENTIFICATION_HEADER, vectorUint8MediaCover},
     {Tag::AUDIO_VORBIS_SETUP_HEADER, vectorUint8MediaCover},
     {Tag::AUDIO_VIVID_METADATA, vectorUint8MediaCover},
-    {Tag::VIDEO_ENCODER_PER_FRAME_QP_MAP, vectorUint8MediaCover},
 };
 
 /**
