@@ -42,6 +42,7 @@ enum struct PluginEventType : int32_t {
     VIDEO_SIZE_CHANGE,
     SOURCE_BITRATE_START,
     EVENT_BUFFER_PROGRESS,
+    INITIAL_BUFFER_SUCCESS,
     DASH_SEEK_READY,
 };
 
