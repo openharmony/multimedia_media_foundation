@@ -68,6 +68,7 @@ private:
     void HandleStreamChangeForVolume(std::shared_ptr<EventBean> &bean);
     void HandlePipeChange(std::shared_ptr<EventBean> &bean);
     void HandleFocusMigrate(std::shared_ptr<EventBean> &bean);
+    void HandleJankPlaybackEvent(std::shared_ptr<EventBean> &bean);
 
     void AddToDeviceUsage(std::shared_ptr<EventBean> &bean, uint64_t curruntTime);
     void AddToStreamUsage(std::shared_ptr<EventBean> &bean, uint64_t curruntTime);
