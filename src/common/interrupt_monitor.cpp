@@ -41,7 +41,8 @@ void InterruptMonitor::DeregisterListener(std::shared_ptr<InterruptListener> lis
     }
     for (auto it = vec_.begin(); it != vec_.end();) {
         if (it->lock() == listener) {
-            it = vec_.erase(it);
+            vec_.erase(it);
+            break;
         } else {
             ++it;
         }
