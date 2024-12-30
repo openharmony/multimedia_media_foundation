@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023-2023 Huawei Device Co., Ltd.
+ * Copyright (c) 2023-2025 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -162,6 +162,10 @@ public:
 
     virtual Status WaitAllState(FilterState state) final;
 
+    virtual Status SetPerfRecEnabled(bool isPerfRecEnabled) final;
+
+    virtual Status DoSetPerfRecEnabled(bool isPerfRecEnabled);
+
     virtual Status DoInitAfterLink();
 
     virtual Status DoPrepare();
@@ -244,6 +248,8 @@ protected:
     std::map<StreamType, std::vector<std::shared_ptr<FilterLinkCallback>>> linkCallbackMaps_;
 
     std::string groupId_;
+
+    bool isPerfRecEnabled_ { false };
 
 private:
     void ChangeState(FilterState state);
