@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023-2023 Huawei Device Co., Ltd.
+ * Copyright (c) 2023-2025 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -60,6 +60,7 @@ enum struct DfxEventType : uint32_t {
     DFX_INFO_PLAYER_AUDIO_LAG,
     DFX_INFO_PLAYER_STREAM_LAG,
     DFX_INFO_PLAYER_EOS_SEEK,
+    DFX_INFO_PERF_REPORT,
     DFX_EVENT_BUTT,
 };
 
