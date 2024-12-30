@@ -98,11 +98,13 @@ if (hst_is_standard_sys) {
     ]
 
     sources += [ 
+      "$histreamer_root_dir/src/buffer/avsharedmemory/avsharedmemorybase.cpp",
+    ]
+
+    sources += [
       "$histreamer_root_dir/src/common/avsharedmemorypool.cpp",
       "$histreamer_root_dir/src/common/interrupt_monitor.cpp",
     ]
-
-    sources += [ "$histreamer_root_dir/src/common/avsharedmemorypool.cpp" ]
 
     sources += [
       "$histreamer_root_dir/src/meta/any.cpp",
