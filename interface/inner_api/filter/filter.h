@@ -22,6 +22,7 @@
 #include "meta/meta.h"
 #include "buffer/avbuffer_queue_producer.h"
 #include "common/event.h"
+#include "common/interrupt_monitor.h"
 #include "osal/task/mutex.h"
 #include "osal/task/condition_variable.h"
 #include "osal/task/task.h"
@@ -114,6 +115,10 @@ public:
     virtual ~Filter();
 
     virtual void Init(const std::shared_ptr<EventReceiver>& receiver, const std::shared_ptr<FilterCallback>& callback);
+
+    // override this func if you need to use InterruptMonitor instance in your class
+    virtual void Init(const std::shared_ptr<EventReceiver>& receiver, const std::shared_ptr<FilterCallback>& callback,
+                      const std::shared_ptr<InterruptMonitor>& monitor);
 
     virtual void LinkPipeLine(const std::string &groupId) final;
 
@@ -232,6 +237,8 @@ protected:
     std::shared_ptr<EventReceiver> receiver_;
 
     std::shared_ptr<FilterCallback> callback_;
+
+    std::shared_ptr<InterruptMonitor> interruptMonitor_;
 
     std::map<StreamType, std::vector<std::shared_ptr<FilterLinkCallback>>> linkCallbackMaps_;
 

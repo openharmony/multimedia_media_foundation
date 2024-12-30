@@ -159,6 +159,8 @@
                     "meta/mime_type.h",
                     "cpp_ext/type_cast_ext.h",
                     "common/avsharedmemorypool.h",
+                    "common/interrupt_listener.h",
+                    "common/interrupt_monitor.h",
                     "common/status.h",
                     "common/native_mfmagic.h",
                     "osal/filesystem/file_system.h",
