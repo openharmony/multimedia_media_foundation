@@ -97,7 +97,7 @@ if (hst_is_standard_sys) {
       "$histreamer_root_dir/src/buffer/avbuffer_queue/avbuffer_queue_producer_stub.cpp",
     ]
 
-    sources += [ 
+    sources += [
       "$histreamer_root_dir/src/buffer/avsharedmemory/avsharedmemorybase.cpp",
     ]
 
