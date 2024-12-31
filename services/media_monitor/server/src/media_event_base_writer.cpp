@@ -194,6 +194,23 @@ void MediaEventBaseWriter::WriteLoadEffectEngineError(std::shared_ptr<EventBean>
 #endif
 }
 
+void MediaEventBaseWriter::WriteJankPlaybackError(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Write jank playback error");
+    if (bean == nullptr) {
+        MEDIA_LOG_E("eventBean is nullptr");
+        return;
+    }
+#ifdef MONITOR_ENABLE_HISYSEVENT
+    HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "JANK_PLAYBACK",
+        HiviewDFX::HiSysEvent::EventType::FAULT,
+        "REASON", static_cast<uint8_t>(bean->GetIntValue("REASON")),
+        "PERIOD_MS", static_cast<uint32_t>(bean->GetIntValue("PERIOD_MS")),
+        "PIPE_TYPE", static_cast<uint8_t>(bean->GetIntValue("PIPE_TYPE")),
+        "HDI_ADAPTER", static_cast<uint8_t>(bean->GetIntValue("HDI_ADAPTER")));
+#endif
+}
+
 void MediaEventBaseWriter::WriteAudioStartupError(std::shared_ptr<EventBean> &bean)
 {
     MEDIA_LOG_D("Write audio startup error");

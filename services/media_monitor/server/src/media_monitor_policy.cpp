@@ -207,6 +207,9 @@ void MediaMonitorPolicy::WriteFaultEvent(EventId eventId, std::shared_ptr<EventB
         case LOAD_EFFECT_ENGINE_ERROR:
             mediaEventBaseWriter_.WriteLoadEffectEngineError(bean);
             break;
+        case JANK_PLAYBACK:
+            mediaEventBaseWriter_.WriteJankPlaybackError(bean);
+            break;
         default:
             break;
     }

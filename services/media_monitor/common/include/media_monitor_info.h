@@ -62,7 +62,8 @@ enum EventId {
     STREAM_STANDBY = 22,
     AI_VOICE_NOISE_SUPPRESSION = 23,
     VOLUME_SUBSCRIBE = 24,
-    SMARTPA_STATUS = 25
+    SMARTPA_STATUS = 25,
+    JANK_PLAYBACK = 26
 };
 
 enum EventType {

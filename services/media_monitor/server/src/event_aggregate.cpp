@@ -113,6 +113,9 @@ void EventAggregate::UpdateAggregateEventList(std::shared_ptr<EventBean> &bean)
         case AUDIO_FOCUS_MIGRATE:
             HandleFocusMigrate(bean);
             break;
+        case JANK_PLAYBACK:
+            HandleJankPlaybackEvent(bean);
+            break;
         default:
             break;
     }
@@ -629,6 +632,12 @@ void EventAggregate::HandleForceUseDevice(std::shared_ptr<EventBean> &bean)
 void EventAggregate::HandleFocusMigrate(std::shared_ptr<EventBean> &bean)
 {
     MEDIA_LOG_D("Handle focus use migrate");
+    mediaMonitorPolicy_.WriteEvent(bean->GetEventId(), bean);
+}
+
+void EventAggregate::HandleJankPlaybackEvent(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Handle jank playback event");
     mediaMonitorPolicy_.WriteEvent(bean->GetEventId(), bean);
 }
 
