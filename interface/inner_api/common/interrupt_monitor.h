@@ -18,6 +18,7 @@
  
 #include "interrupt_listener.h"
 #include <vector>
+#include <mutex>
  
 namespace OHOS {
  
@@ -32,6 +33,7 @@ private:
     void NotifyInterrupt(bool isInterruptNeeded);
     std::atomic<bool> interruptState_ = false;
     std::vector<std::weak_ptr<InterruptListener>> vec_{};
+    std::mutex mutex_;
 };
 } // namespace Media
  
