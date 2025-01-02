@@ -31,6 +31,7 @@ void InterruptMonitor::SetInterruptState(bool isInterruptNeeded)
  
 void InterruptMonitor::RegisterListener(const shared_ptr<InterruptListener> listener)
 {
+    std::unique_lock<std::mutex> interruptLock(mutex_);
     vec_.push_back(std::weak_ptr<InterruptListener>(listener));
 }
  
@@ -39,6 +40,7 @@ void InterruptMonitor::DeregisterListener(std::shared_ptr<InterruptListener> lis
     if (listener == nullptr) {
         return;
     }
+    std::unique_lock<std::mutex> interruptLock(mutex_);
     for (auto it = vec_.begin(); it != vec_.end();) {
         if (it->lock() == listener) {
             vec_.erase(it);
@@ -51,6 +53,7 @@ void InterruptMonitor::DeregisterListener(std::shared_ptr<InterruptListener> lis
  
 void InterruptMonitor::CleanUnusedListener()
 {
+    std::unique_lock<std::mutex> interruptLock(mutex_);
     for (auto it = vec_.begin(); it != vec_.end();) {
         if (!(it->expired())) {
             it = vec_.erase(it);
@@ -62,6 +65,7 @@ void InterruptMonitor::CleanUnusedListener()
  
 void InterruptMonitor::NotifyInterrupt(bool isInterruptNeeded)
 {
+    std::unique_lock<std::mutex> interruptLock(mutex_);
     for (auto listener : vec_) {
         if (auto interruptListener = listener.lock()) {
             interruptListener->OnInterrupted(isInterruptNeeded);
