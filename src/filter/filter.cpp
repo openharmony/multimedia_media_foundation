@@ -44,6 +44,13 @@ void Filter::Init(const std::shared_ptr<EventReceiver>& receiver, const std::sha
     callback_ = callback;
 }
 
+void Filter::Init(const std::shared_ptr<EventReceiver>& receiver,
+                  const std::shared_ptr<FilterCallback>& callback, const std::shared_ptr<InterruptMonitor>& monitor)
+{
+    Init(receiver, callback);
+    interruptMonitor_ = monitor;
+}
+
 void Filter::LinkPipeLine(const std::string &groupId)
 {
     groupId_ = groupId;
