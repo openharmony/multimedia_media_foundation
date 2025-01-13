@@ -66,11 +66,9 @@ private:
     void AddWebvttDemuxerPlugin();
     void AddOggDemuxerPlugin();
     void AddWavDemuxerPlugin();
-    void AddRmDemuxerPlugin();
     void AddFFmpegDemuxerPlugins();
     void AddMpegAudioDecoderPlugin();
     void AddAacAudioDecoderPlugin();
-    void AddCookAudioDecoderPlugin();
     void AddFFmpegAudioDecodersPlugins();
     void AddAudioVividDecodersPlugins();
     void AddG711muAudioDecoderPlugins();
@@ -86,6 +84,10 @@ private:
     void AddMp3AudioEncoderPlugins();
     void AddFFmpegMuxerPlugins();
     void AddAudioVendorAacEncodersPlugin();
+#ifdef SUPPORT_CUSTOMIZATION_CODEC
+    void AddRmDemuxerPlugin();
+    void AddAc3DemuxerPlugin();
+#endif
 
     std::vector<PluginDescription> pluginDescriptionList_;
 };
