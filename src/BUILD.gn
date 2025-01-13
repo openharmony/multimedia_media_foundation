@@ -35,6 +35,10 @@ if (hst_is_standard_sys) {
       defines += [ "MEDIA_FOUNDATION_FFRT" ]
     }
 
+    if (media_foundation_enable_customization_codec) {
+      defines += [ "SUPPORT_CUSTOMIZATION_CODEC" ]
+    }
+
     include_dirs = [
       "$histreamer_root_dir/osal/base",
       "$histreamer_root_dir/plugin",

@@ -147,6 +147,8 @@ enum class FileType : int32_t {
     MPEGPS = 106,
     MOV = 107,
     AVI = 105,
+    RM = 108,
+    AC3 = 109,
     AMR = 201,
     AAC = 202,
     MP3 = 203,

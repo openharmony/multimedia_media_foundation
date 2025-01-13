@@ -66,9 +66,11 @@ private:
     void AddWebvttDemuxerPlugin();
     void AddOggDemuxerPlugin();
     void AddWavDemuxerPlugin();
+    void AddRmDemuxerPlugin();
     void AddFFmpegDemuxerPlugins();
     void AddMpegAudioDecoderPlugin();
     void AddAacAudioDecoderPlugin();
+    void AddCookAudioDecoderPlugin();
     void AddFFmpegAudioDecodersPlugins();
     void AddAudioVividDecodersPlugins();
     void AddG711muAudioDecoderPlugins();

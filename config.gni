@@ -65,6 +65,8 @@ declare_args() {
   media_foundation_enable_video = false
   media_foundation_enable_avs3da = false
 
+  media_foundation_enable_customization_codec = false
+
   # enable ffrt task instead of pthread task
   media_foundation_enable_ffrt = false
 
