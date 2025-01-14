@@ -181,6 +181,7 @@ if (hst_is_lite_sys) {
       "common/src/dump_buffer_wrap.cpp",
       "common/src/event_bean.cpp",
       "common/src/monitor_utils.cpp",
+      "common/src/string_converter.cpp",
     ]
 
     cflags = [
