@@ -22,6 +22,8 @@
 
 namespace {
 constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "Format" };
+constexpr size_t SIZE_OFFSET = 3;
+const std::string IPC_PADDING_SIZE = "_ipc_magic_padding_size";
 }
 
 namespace {
@@ -80,7 +82,11 @@ bool PutStringValueToFormatMap(FormatDataMap &formatMap, const std::string_view 
     return ret.second;
 }
 
-bool PutBufferToFormatMap(FormatDataMap &formatMap, const std::string_view &key, uint8_t *addr, size_t size)
+/**
+ * @tag SupportTranferBufferWithFormatThroughIPC
+ */
+bool PutBufferToFormatMap(FormatDataMap &formatMap, const std::string_view &key, uint8_t *addr, size_t size,
+    int32_t paddingSize = -1)
 {
     FormatData data;
     FALSE_RETURN_V_MSG_E(addr != nullptr, false, "PutBuffer error, addr is nullptr");
@@ -88,6 +94,13 @@ bool PutBufferToFormatMap(FormatDataMap &formatMap, const std::string_view &key,
     data.addr = addr;
     data.size = size;
     auto ret = formatMap.insert(std::make_pair(std::string(key), data));
+
+    // DO add padding size info for buffer type, DO NOT update for format copy
+    FALSE_RETURN_V_NOLOG(paddingSize >= 0, ret.second);
+    FormatData paddingSizeData;
+    paddingSizeData.type = FORMAT_TYPE_INT32;
+    paddingSizeData.val.int32Val = paddingSize;
+    ret = formatMap.insert(std::make_pair(std::string(key) + IPC_PADDING_SIZE, paddingSizeData));
     return ret.second;
 }
 #endif
@@ -201,6 +214,12 @@ bool Format::PutStringValue(const std::string_view &key, const std::string_view 
     return true;
 }
 
+/*
+ * MessageParcel::WriteBuffer need buffer size aligned to 4Bytes for IPC
+ * @tag SupportTranferBufferWithFormatThroughIPC
+ * @link commonlibrary/c_utils/base/include/parcel.h #GetPadSize(size_t size)
+ * @link foundation/communication/ipc/native/src/core/source/message_parcel.cpp
+ */
 bool Format::PutBuffer(const std::string_view &key, const uint8_t *addr, size_t size)
 {
     auto defaultValue = GetDefaultAnyValueOpt(key.data());
@@ -210,18 +229,22 @@ bool Format::PutBuffer(const std::string_view &key, const uint8_t *addr, size_t 
     }
     FALSE_RETURN_V_MSG_E(addr != nullptr, false, "PutBuffer error, addr is nullptr");
     FALSE_RETURN_V_MSG_E(size <= BUFFER_SIZE_MAX, false, "PutBuffer input size failed. Key: " PUBLIC_LOG_S, key.data());
+    // padding buffer for ipc
+    size_t paddingSize = (size + SIZE_OFFSET) & (~SIZE_OFFSET);
+    FALSE_RETURN_V_MSG_E(paddingSize >= size, false, "memory size too large, padding failed");
 
     auto iter = meta_->Find(std::string(key));
     if (iter == meta_->end()) {
-        std::vector<uint8_t> value(addr, addr + size);
+        std::vector<uint8_t> value(addr, addr + paddingSize);
         meta_->SetData(std::string(key), std::move(value));
+        meta_->SetData(std::string(key) + IPC_PADDING_SIZE, paddingSize - size);
         return true;
     }
     Any *value = const_cast<Any *>(&(iter->second));
     auto tmpVector = AnyCast<std::vector<uint8_t>>(value);
     FALSE_RETURN_V_MSG_E(tmpVector != nullptr, false, "Any value is invalid. Key: " PUBLIC_LOG_S, key.data());
 
-    tmpVector->resize(size);
+    tmpVector->resize(paddingSize);
     uint8_t *anyAddr = tmpVector->data();
     auto error = memcpy_s(anyAddr, size, addr, size);
     FALSE_RETURN_V_MSG_E(error == EOK, false, "PutBuffer memcpy_s failed, error: %{public}s", strerror(error));
@@ -229,7 +252,7 @@ bool Format::PutBuffer(const std::string_view &key, const uint8_t *addr, size_t 
     auto formatMapIter = formatMap_.find(key);
     if (formatMapIter != formatMap_.end()) {
         formatMap_.erase(formatMapIter);
-        PutBufferToFormatMap(formatMap_, key, anyAddr, size);
+        PutBufferToFormatMap(formatMap_, key, anyAddr, paddingSize, paddingSize - size);
     }
     return true;
 }
@@ -261,13 +284,16 @@ bool Format::GetStringValue(const std::string_view &key, std::string &value) con
 
 bool Format::GetBuffer(const std::string_view &key, uint8_t **addr, size_t &size) const
 {
+    int32_t paddingSize = 0;
+    GetIntValue(std::string(key) + IPC_PADDING_SIZE, paddingSize);
+
     using Buf = std::vector<uint8_t>;
     auto iter = meta_->Find(std::string(key));
     if ((iter != meta_->end()) && Any::IsSameTypeWith<Buf>(iter->second)) {
         Any *value = const_cast<Any *>(&(iter->second));
         if (AnyCast<Buf>(value) != nullptr) {
             *addr = (AnyCast<Buf>(value))->data();
-            size = (AnyCast<Buf>(value))->size();
+            size = (AnyCast<Buf>(value))->size() - paddingSize;
             return true;
         }
     }

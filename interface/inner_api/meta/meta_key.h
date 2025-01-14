@@ -450,6 +450,11 @@ public:
     static constexpr const char AV_PLAYER_MAX_SURFACESWAP_LATENCY[] = "av_player_max_surfaceswap_latency";
     static constexpr const char AV_PLAYER_DOWNLOAD_TOTAL_BITS[] = "av_player_total_download_bits";
     static constexpr const char AV_PLAYER_DOWNLOAD_TIME_OUT[] = "av_player_download_time_out";
+
+    static constexpr const char AV_PLAYER_SEI_PAYLOAD[] = "payload";
+    static constexpr const char AV_PLAYER_SEI_PAYLOAD_TYPE[] = "payloadType";
+    static constexpr const char AV_PLAYER_SEI_PLAYBACK_POSITION[] = "av_player_sei_playback_position";
+    static constexpr const char AV_PLAYER_SEI_PLAYBACK_GROUP[] = "av_player_sei_playback_group";
 /* -------------------- av transcoder tag -------------------- */
     static constexpr const char AV_TRANSCODER_ERR_CODE[] = "av_transcoder_errCode";
     static constexpr const char AV_TRANSCODER_ERR_MSG[] = "av_transcoder_errMsg";

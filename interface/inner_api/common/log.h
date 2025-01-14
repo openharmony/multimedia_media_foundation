@@ -265,6 +265,17 @@
     } while (0)
 #endif
 
+#ifndef FALSE_CONTINUE_NOLOG
+#define FALSE_CONTINUE_NOLOG(exec)                                     \
+    if (1) {                                                           \
+        bool returnValue = (exec);                                     \
+        if (!returnValue) {                                            \
+            continue;                                                  \
+        }                                                              \
+    } else                                                             \
+        void(0)
+#endif
+
 #ifndef FALSE_RETURN_W
 #define FALSE_RETURN_W(exec)                    \
     do {                                        \

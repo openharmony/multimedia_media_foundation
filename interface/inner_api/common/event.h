@@ -51,6 +51,7 @@ enum struct EventType : uint32_t {
     EVENT_AUDIO_TRACK_CHANGE,
     EVENT_VIDEO_TRACK_CHANGE,
     EVENT_SUBTITLE_TRACK_CHANGE,
+    EVENT_SEI_INFO,
 };
 
 // DFX events and infos reported from filters, modules, and plugins
