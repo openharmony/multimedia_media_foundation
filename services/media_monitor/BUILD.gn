@@ -181,6 +181,7 @@ if (hst_is_lite_sys) {
       "common/src/dump_buffer_wrap.cpp",
       "common/src/event_bean.cpp",
       "common/src/monitor_utils.cpp",
+      "common/src/string_converter.cpp",
     ]
 
     cflags = [
@@ -258,7 +259,6 @@ if (hst_is_lite_sys) {
       "client/include",
       "server/include",
       "common/include",
-      "../../engine/include/foundation/utils/",
       "../../interface/inner_api/common/",
     ]
 
@@ -266,7 +266,6 @@ if (hst_is_lite_sys) {
       ":media_monitor.para",
       ":media_monitor.para.dac",
       ":media_monitor_common",
-      "../../engine/foundation:histreamer_foundation",
     ]
 
     external_deps = [

@@ -22,7 +22,6 @@
 #include "foundation/log.h"
 #include "foundation/utils/constants.h"
 #include "securec.h"
-#include "foundation/utils/string_converter.h"
 
 namespace {
 using namespace OHOS::Media::Plugin;
@@ -152,10 +151,7 @@ Status SurfaceSinkPlugin::Prepare()
         MEDIA_LOG_E("surface can not support decode output pixel fmt: " PUBLIC_LOG_U32, decodeOutputPixelFmt_);
         return Status::ERROR_UNKNOWN;
     }
-    int32_t pixelFormatCode = 0;
-    FALSE_RETURN_V_MSG_E(StringConverter(surface_->GetUserData("SURFACE_FORMAT"), pixelFormatCode),
-        Status::ERROR_INVALID_PARAMETER, "Invalid SURFACE_FORMAT");
-    auto surfacePixelFmt = static_cast<PixelFormat>(pixelFormatCode);
+    auto surfacePixelFmt = static_cast<PixelFormat>(std::stoi(surface_->GetUserData("SURFACE_FORMAT")));
     if (decodeOutputSurfacePixelFmt != surfacePixelFmt) {
         MEDIA_LOG_W("decode output surface pixel fmt: " PUBLIC_LOG_U32 " is diff from surface pixel fmt: "
             PUBLIC_LOG_U32, static_cast<uint32_t>(decodeOutputSurfacePixelFmt), static_cast<uint32_t>(surfacePixelFmt));

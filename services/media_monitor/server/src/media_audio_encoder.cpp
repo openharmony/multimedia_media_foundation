@@ -22,7 +22,7 @@
 #include "securec.h"
 #include "monitor_error.h"
 #include "monitor_utils.h"
-#include "foundation/utils/string_converter.h"
+#include "string_converter.h"
 
 namespace {
 constexpr OHOS::HiviewDFX::HiLogLabel LABEL = {LOG_CORE, LOG_DOMAIN_FOUNDATION, "HiStreamer"};

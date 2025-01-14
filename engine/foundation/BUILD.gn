@@ -39,7 +39,6 @@ if (hst_is_lite_sys) {
       "utils/dump_buffer.cpp",
       "utils/hitrace_utils.cpp",
       "utils/steady_clock.cpp",
-      "utils/string_converter.cpp",
     ]
     public_configs = [
       ":histreamer_foundation_config",
@@ -75,7 +74,6 @@ if (hst_is_lite_sys) {
       "utils/dump_buffer.cpp",
       "utils/hitrace_utils.cpp",
       "utils/steady_clock.cpp",
-      "utils/string_converter.cpp",
     ]
     public_configs = [
       ":histreamer_foundation_config",
