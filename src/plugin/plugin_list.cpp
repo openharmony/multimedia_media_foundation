@@ -580,7 +580,7 @@ void PluginList::AddAmrwbAudioEncoderPlugins()
     amrwbAudioEncoderPlugin.pluginName = "OH.Media.Codec.Encoder.Audio.Amrwb";
     amrwbAudioEncoderPlugin.packageName = "AmrWbAudioEncoder";
     amrwbAudioEncoderPlugin.pluginType = PluginType::AUDIO_ENCODER;
-    amrwbAudioEncoderPlugin.cap = "audio/amrwb";
+    amrwbAudioEncoderPlugin.cap = "audio/amr-wb";
     amrwbAudioEncoderPlugin.rank = DEFAULT_RANK;
     pluginDescriptionList_.push_back(amrwbAudioEncoderPlugin);
 }
@@ -590,7 +590,7 @@ void PluginList::AddAmrnbAudioEncoderPlugins()
     amrnbAudioEncoderPlugin.pluginName = "OH.Media.Codec.Encoder.Audio.Amrnb";
     amrnbAudioEncoderPlugin.packageName = "AmrNbAudioEncoder";
     amrnbAudioEncoderPlugin.pluginType = PluginType::AUDIO_ENCODER;
-    amrnbAudioEncoderPlugin.cap = "audio/amrnb";
+    amrnbAudioEncoderPlugin.cap = "audio/3gpp";
     amrnbAudioEncoderPlugin.rank = DEFAULT_RANK;
     pluginDescriptionList_.push_back(amrnbAudioEncoderPlugin);
 }
