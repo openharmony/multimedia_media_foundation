@@ -258,6 +258,7 @@ if (hst_is_lite_sys) {
       "client/include",
       "server/include",
       "common/include",
+      "../../engine/include/foundation/utils/",
       "../../interface/inner_api/common/",
     ]
 
@@ -265,6 +266,7 @@ if (hst_is_lite_sys) {
       ":media_monitor.para",
       ":media_monitor.para.dac",
       ":media_monitor_common",
+      "../../engine/foundation:histreamer_foundation",
     ]
 
     external_deps = [

@@ -28,6 +28,7 @@
 #include <sys/stat.h>
 #include "foundation/log.h"
 #include "foundation/osal/filesystem/file_system.h"
+#include "foundation/utils/string_converter.h"
 
 namespace OHOS {
 namespace Media {
@@ -44,6 +45,11 @@ uint64_t GetFileSize(int32_t fd)
     }
     return fileSize;
 }
+
+constexpr size_t FIRST_ELEMENT = 1;
+constexpr size_t SECOND_ELEMENT = 2;
+constexpr size_t THIRD_ELEMENT = 3;
+
 }
 Status FileFdSourceRegister(const std::shared_ptr<Register>& reg)
 {
@@ -143,16 +149,18 @@ Status FileFdSourcePlugin::ParseUriInfo(const std::string& uri)
     FALSE_RETURN_V_MSG_E(std::regex_match(uri, fdUriMatch, std::regex("^fd://(.*)?offset=(.*)&size=(.*)")) ||
         std::regex_match(uri, fdUriMatch, std::regex("^fd://(.*)")),
         Status::ERROR_INVALID_PARAMETER, "Invalid fd uri format: " PUBLIC_LOG_S, uri.c_str());
-    fd_ = std::stoi(fdUriMatch[1].str()); // 1: sub match fd subscript
-    FALSE_RETURN_V_MSG_E(fd_ != -1 && OSAL::FileSystem::IsRegularFile(fd_),
+    bool ret = StringConverter(fdUriMatch[FIRST_ELEMENT].str(), fd_); // 1: sub match fd subscript
+    FALSE_RETURN_V_MSG_E(ret && fd_ != -1 && OSAL::FileSystem::IsRegularFile(fd_),
         Status::ERROR_INVALID_PARAMETER, "Invalid fd: " PUBLIC_LOG_D32, fd_);
     fileSize_ = GetFileSize(fd_);
-    if (fdUriMatch.size() == 4) { // 4：4 sub match
-        offset_ = std::stoll(fdUriMatch[2].str()); // 2: sub match offset subscript
+    if (fdUriMatch.size() == 4) { // 4: 4 sub match
+        FALSE_RETURN_V_MSG_E(StringConverter(fdUriMatch[SECOND_ELEMENT].str(), offset_),
+            Status::ERROR_INVALID_PARAMETER, "Invalid offset"); // 2: sub match offset subscript
         if (static_cast<uint64_t>(offset_) > fileSize_) {
             offset_ = fileSize_;
         }
-        size_ = static_cast<uint64_t>(std::stoll(fdUriMatch[3].str())); // 3: sub match size subscript
+        FALSE_RETURN_V_MSG_E(StringConverter(fdUriMatch[THIRD_ELEMENT].str(), size_),
+            Status::ERROR_INVALID_PARAMETER, "Invalid size"); // 3: sub match size subscript
         uint64_t remainingSize = fileSize_ - offset_;
         if (size_ > remainingSize) {
             size_ = remainingSize; 

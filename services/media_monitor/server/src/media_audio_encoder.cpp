@@ -22,6 +22,7 @@
 #include "securec.h"
 #include "monitor_error.h"
 #include "monitor_utils.h"
+#include "foundation/utils/string_converter.h"
 
 namespace {
 constexpr OHOS::HiviewDFX::HiLogLabel LABEL = {LOG_CORE, LOG_DOMAIN_FOUNDATION, "HiStreamer"};
@@ -50,7 +51,7 @@ const mode_t MODE = 0775;
 const std::string PCM_FILE = ".pcm";
 const std::string FLAC_FILE = ".flac";
 const std::string BLUETOOTCH_FILE = "bluetooth";
-const int BLUETOOTH_SAMPLE_FORMAT_OFFSET = 1;
+const uint8_t BLUETOOTH_SAMPLE_FORMAT_OFFSET = 1;
 // samples(flac: 4608) * formatSize(f32: 4) * channles(6)
 constexpr size_t MAX_BUFFER_LEN = 4608 * 4 * 6;
 // samples(flac: 4608) * formatSize(s16: 2) * channles(2)
@@ -273,9 +274,14 @@ int32_t MediaAudioEncoder::ParseAudioArgs(const std::string &fileName, AudioEnco
     if (IsSupportAudioArgs(sampleRate, SupportedSampleRates) &&
         IsSupportAudioArgs(channel, SupportedChannels) &&
         IsSupportAudioArgs(sampleFormat, SupportedSampleFormats)) {
-        config.sampleRate = static_cast<uint32_t>(std::stoi(sampleRate));
-        config.channels =  static_cast<uint32_t>(std::stoi(channel));
-        config.sampleFmt = static_cast<SampleFormat>(std::stoi(sampleFormat));
+        FALSE_RETURN_V_MSG_E(StringConverter(sampleRate, config.sampleRate), ERROR,
+            "parse sampleRate error, %{public}s", sampleRate.c_str());
+        FALSE_RETURN_V_MSG_E(StringConverter(channel, config.channels), ERROR,
+            "parse channel error, %{public}s", channel.c_str());
+        uint8_t sampleFormatValue = 0;
+        FALSE_RETURN_V_MSG_E(StringConverter(sampleFormat, sampleFormatValue), ERROR,
+            "parse sampleFormat error, %{public}s", sampleFormat.c_str());
+        config.sampleFmt = static_cast<SampleFormat>(sampleFormatValue);
         MEDIA_LOG_I("parser success %{public}s %{public}s %{public}s",
             sampleRate.c_str(), channel.c_str(), sampleFormat.c_str());
     } else {
@@ -283,7 +289,10 @@ int32_t MediaAudioEncoder::ParseAudioArgs(const std::string &fileName, AudioEnco
         return ERROR;
     }
     if (fileName.find(BLUETOOTCH_FILE) != std::string::npos) {
-        config.sampleFmt = static_cast<SampleFormat>(std::stoi(sampleFormat) - BLUETOOTH_SAMPLE_FORMAT_OFFSET);
+        uint8_t sampleFormatValue = 0;
+        FALSE_RETURN_V_MSG_E(StringConverter(sampleFormat, sampleFormatValue), ERROR,
+            "parse sampleFormat error, %{public}s", sampleFormat.c_str());
+        config.sampleFmt = static_cast<SampleFormat>(sampleFormatValue - BLUETOOTH_SAMPLE_FORMAT_OFFSET);
     }
     return SUCCESS;
 }
