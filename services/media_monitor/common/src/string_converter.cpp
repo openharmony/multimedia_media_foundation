@@ -15,7 +15,7 @@
 
 #define HST_LOG_TAG "StringConverter"
 
-#include "foundation/utils/string_converter.h"
+#include "string_converter.h"
 #include <charconv>
 
 namespace OHOS {
