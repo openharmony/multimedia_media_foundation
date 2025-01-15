@@ -647,6 +647,14 @@ void PluginList::AddFFmpegMuxerPlugins()
     wavMuxerPlugin.cap = "media/wav";
     wavMuxerPlugin.rank = DEFAULT_RANK;
     pluginDescriptionList_.push_back(wavMuxerPlugin);
+
+    PluginDescription aacMuxerPlugin;
+    wavMuxerPlugin.pluginName = "ffmpegMux_adts";
+    wavMuxerPlugin.packageName = "FFmpegMuxer";
+    wavMuxerPlugin.pluginType = PluginType::MUXER;
+    wavMuxerPlugin.cap = "media/aac";
+    wavMuxerPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(aacMuxerPlugin);
 }
 
 } // namespace Plugins
