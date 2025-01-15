@@ -38,7 +38,10 @@
           "media_foundation_enable_recorder",
           "media_foundation_enable_video",
           "media_foundation_enable_avs3da",
-          "media_foundation_enable_plugin_codec_adapter"
+          "media_foundation_enable_plugin_codec_adapter",
+          "media_foundation_enable_codec_rm",
+          "media_foundation_enable_codec_cook",
+          "media_foundation_enable_codec_ac3"
         ],
         "adapted_system_type": [
             "mini",
