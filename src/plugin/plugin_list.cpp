@@ -102,6 +102,12 @@ PluginList::PluginList()
     AddAmrnbAudioEncoderPlugins();
     AddMp3AudioEncoderPlugins();
     AddFFmpegMuxerPlugins();
+#ifdef SUPPORT_CODEC_COOK
+    AddCookAudioDecoderPlugins();
+#endif
+#ifdef SUPPORT_CODEC_AC3
+    AddAc3AudioDecoderPlugins();
+#endif
 }
 
 void PluginList::AddDataSourceStreamPlugins()
@@ -365,7 +371,7 @@ void PluginList::AddWavDemuxerPlugin()
     pluginDescriptionList_.push_back(wavDemuxerPlugin);
 }
 
-#ifdef SUPPORT_CUSTOMIZATION_CODEC
+#ifdef SUPPORT_CODEC_RM
 void PluginList::AddRmDemuxerPlugin()
 {
     PluginDescription rmDemuxerPlugin;
@@ -376,7 +382,9 @@ void PluginList::AddRmDemuxerPlugin()
     rmDemuxerPlugin.rank = DEFAULT_RANK;
     pluginDescriptionList_.push_back(rmDemuxerPlugin);
 }
+#endif
 
+#ifdef SUPPORT_CODEC_AC3
 void PluginList::AddAc3DemuxerPlugin()
 {
     PluginDescription ac3DemuxerPlugin;
@@ -410,8 +418,10 @@ void PluginList::AddFFmpegDemuxerPlugins()
     AddWebvttDemuxerPlugin();
     AddOggDemuxerPlugin();
     AddWavDemuxerPlugin();
-#ifdef SUPPORT_CUSTOMIZATION_CODEC
+#ifdef SUPPORT_CODEC_RM
     AddRmDemuxerPlugin();
+#endif
+#ifdef SUPPORT_CODEC_AC3
     AddAc3DemuxerPlugin();
 #endif
 }
@@ -527,6 +537,32 @@ void PluginList::AddOpusAudioDecoderPlugins()
     opusAudioDecoderPlugin.rank = DEFAULT_RANK;
     pluginDescriptionList_.push_back(opusAudioDecoderPlugin);
 }
+
+#ifdef SUPPORT_CODEC_COOK
+void PluginList::AddCookAudioDecoderPlugins()
+{
+    PluginDescription cookAudioDecoderPlugin;
+    cookAudioDecoderPlugin.pluginName = "OH.Media.Codec.Decoder.Audio.COOK";
+    cookAudioDecoderPlugin.packageName = "CookAudioDecoder";
+    cookAudioDecoderPlugin.pluginType = PluginType::AUDIO_DECODER;
+    cookAudioDecoderPlugin.cap = "audio/cook";
+    cookAudioDecoderPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(cookAudioDecoderPlugin);
+}
+#endif
+
+#ifdef SUPPORT_CODEC_AC3
+void PluginList::AddAc3AudioDecoderPlugins()
+{
+    PluginDescription ac3AudioDecoderPlugin;
+    ac3AudioDecoderPlugin.pluginName = "OH.Media.Codec.Decoder.Audio.AC3";
+    ac3AudioDecoderPlugin.packageName = "Ac3AudioDecoder";
+    ac3AudioDecoderPlugin.pluginType = PluginType::AUDIO_DECODER;
+    ac3AudioDecoderPlugin.cap = "audio/ac3";
+    ac3AudioDecoderPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(ac3AudioDecoderPlugin);
+}
+#endif
 
 void PluginList::AddAudioServerSinkPlugins()
 {

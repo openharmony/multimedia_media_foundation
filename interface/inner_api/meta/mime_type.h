@@ -29,6 +29,8 @@ public:
     static constexpr const char VIDEO_VP8[] = "video/x-vnd.on2.vp8";
     static constexpr const char VIDEO_VP9[] = "video/x-vnd.on2.vp9";
     static constexpr const char VIDEO_VVC[] = "video/vvc";
+    static constexpr const char VIDEO_RV30[] = "video/rv30";
+    static constexpr const char VIDEO_RV40[] = "video/rv40";
 
     static constexpr const char AUDIO_AMR_NB[] = "audio/3gpp";
     static constexpr const char AUDIO_AMR_WB[] = "audio/amr-wb";
@@ -42,6 +44,8 @@ public:
     static constexpr const char AUDIO_AVS3DA[] = "audio/av3a";
     static constexpr const char AUDIO_LBVC[] = "audio/lbvc";
     static constexpr const char AUDIO_APE[] = "audio/x-ape";
+    static constexpr const char AUDIO_COOK[] = "audio/cook";
+    static constexpr const char AUDIO_AC3[] = "audio/ac3";
 
     static constexpr const char IMAGE_JPG[] = "image/jpeg";
     static constexpr const char IMAGE_PNG[] = "image/png";

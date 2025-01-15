@@ -35,8 +35,14 @@ if (hst_is_standard_sys) {
       defines += [ "MEDIA_FOUNDATION_FFRT" ]
     }
 
-    if (media_foundation_enable_customization_codec) {
-      defines += [ "SUPPORT_CUSTOMIZATION_CODEC" ]
+    if (media_foundation_enable_codec_rm) {
+      defines += [ "SUPPORT_CODEC_RM" ]
+    }
+    if (media_foundation_enable_codec_cook) {
+      defines += [ "SUPPORT_CODEC_COOK" ]
+    }
+    if (media_foundation_enable_codec_ac3) {
+      defines += [ "SUPPORT_CODEC_AC3" ]
     }
 
     include_dirs = [

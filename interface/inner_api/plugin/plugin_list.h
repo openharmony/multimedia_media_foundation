@@ -84,9 +84,15 @@ private:
     void AddMp3AudioEncoderPlugins();
     void AddFFmpegMuxerPlugins();
     void AddAudioVendorAacEncodersPlugin();
-#ifdef SUPPORT_CUSTOMIZATION_CODEC
+#ifdef SUPPORT_CODEC_RM
     void AddRmDemuxerPlugin();
+#endif
+#ifdef SUPPORT_CODEC_COOK
+    void AddCookAudioDecoderPlugins();
+#endif
+#ifdef SUPPORT_CODEC_AC3
     void AddAc3DemuxerPlugin();
+    void AddAc3AudioDecoderPlugins();
 #endif
 
     std::vector<PluginDescription> pluginDescriptionList_;
