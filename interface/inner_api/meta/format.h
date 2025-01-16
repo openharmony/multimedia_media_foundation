@@ -39,8 +39,6 @@ enum FormatDataType : uint32_t {
     FORMAT_TYPE_STRING,
     /* Addr */
     FORMAT_TYPE_ADDR,
-    /* AVbuffer */
-    FORMAT_TYPE_VECTOR
 };
 
 struct FormatData {
