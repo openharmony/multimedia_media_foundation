@@ -74,6 +74,8 @@ enum struct Status : int32_t {
 
     ERROR_IPC_WRITE_INTERFACE_TOKEN = 0xF101,
     ERROR_IPC_SEND_REQUEST = 0xF102,
+
+    ERROR_NOT_SEI_FORAMT = 0xF201,
 };
 } // namespace Media
 } // namespace OHOS
