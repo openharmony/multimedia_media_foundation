@@ -209,6 +209,7 @@ HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_00, TestSize.Level1)
     ndkLoader.Destroy(instance);
     ndkLoader.UnloadLibrary();
     ndkLoader.UnloadLibrary();
+    EXPECT_EQ(ret, VIDEO_PROCESSING_SUCCESS);
 }
 
 // initialize context with nullptr
@@ -1153,7 +1154,8 @@ HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_35, TestSize.Level1)
     OH_VideoProcessing_Create(&instance, CREATE_TYPE);
     OH_VideoProcessing_RenderOutputBuffer(instance, 0);
     OH_VideoProcessing_Destroy(instance);
-    OH_VideoProcessing_DeinitializeEnvironment();
+    VideoProcessing_ErrorCode ret = OH_VideoProcessing_DeinitializeEnvironment();
+    EXPECT_EQ(ret, VIDEO_PROCESSING_SUCCESS);
 }
 
 // call output buffer impl
@@ -1164,14 +1166,16 @@ HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_35_1, TestSize.Level1)
     OH_VideoProcessing::Create(&instance, CREATE_TYPE);
     instance->GetObj()->RenderOutputBuffer(0);
     OH_VideoProcessing::Destroy(instance);
-    OH_VideoProcessing_DeinitializeEnvironment();
+    VideoProcessing_ErrorCode ret = OH_VideoProcessing_DeinitializeEnvironment();
+    EXPECT_EQ(ret, VIDEO_PROCESSING_SUCCESS);
 }
 
 // callback native
 HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_36, TestSize.Level1)
 {
     OH_VideoProcessing* instance = nullptr;
-    OH_VideoProcessing_Create(&instance, CREATE_TYPE);
+    VideoProcessing_ErrorCode ret = OH_VideoProcessing_Create(&instance, CREATE_TYPE);
+    EXPECT_EQ(ret, VIDEO_PROCESSING_SUCCESS);
     auto callback = std::make_shared<VideoProcessingEngine::VideoProcessingCallbackNative>();
     callback->OnError(instance, VIDEO_PROCESSING_SUCCESS, nullptr);
     callback->OnState(instance, VIDEO_PROCESSING_STATE_RUNNING, nullptr);
@@ -1263,7 +1267,8 @@ HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_41, TestSize.Level1)
     enhancer.Initialize();
     sptr<SurfaceBuffer> input = CreateSurfaceBuffer(OHOS::GRAPHIC_PIXEL_FMT_RGBA_8888, 1024, 1024);
     sptr<SurfaceBuffer> output = CreateSurfaceBuffer(OHOS::GRAPHIC_PIXEL_FMT_RGBA_8888, 1024, 1024);
-    enhancer.Process(input, output);
+    AlgoErrorCode ret = enhancer.Process(input, output);
+    EXPECT_NE(ret, ALGO_SUCCESS);
     enhancer.Deinitialize();
     enhancer.Deinitialize();
 }
@@ -1361,7 +1366,8 @@ HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_44, TestSize.Level1)
     VideoProcessingNdkLoader::Get().LoadLibrary();
     VideoProcessingNdkLoader::Get().UnloadLibrary();
     VideoProcessingNdkLoader::Get().LoadLibrary();
-    VideoProcessingNdkLoader::Get().LoadLibrary();
+    bool ret = VideoProcessingNdkLoader::Get().LoadLibrary();
+    EXPECT_EQ(ret, true);
     VideoProcessingNdkLoader::Get().UnloadLibrary();
     VideoProcessingNdkLoader::Get().UnloadLibrary();
     VideoProcessingNdkLoader::Get().UnloadLibrary();
