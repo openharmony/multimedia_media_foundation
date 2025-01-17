@@ -24,6 +24,7 @@ constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION,
 
 namespace {
     constexpr int32_t MAX_MEM_SIZE = 100 * 1024 * 1024;
+    constexpr uint32_t MAX_MEM_CNT = 10 * 1024;
 }
 
 namespace OHOS {
@@ -45,7 +46,7 @@ int32_t AVSharedMemoryPool::Init(const InitializeOption &option)
 
     FALSE_RETURN_V_MSG_E(!inited_, -1, "memory pool has inited.");
     FALSE_RETURN_V_MSG_E(option.memSize < MAX_MEM_SIZE, -1, "memSize is larger than MAX_MEM_SIZE.");
-    FALSE_RETURN_V_MSG_E(option.maxMemCnt != 0, -1, "maxMemCnt is equal to zero.");
+    FALSE_RETURN_V_MSG_E(option.maxMemCnt > 0 && option.maxMemCnt <= MAX_MEM_CNT, -1, "maxMemCnt is invalid.");
 
     option_ = option;
     option_.preAllocMemCnt = std::min(option.preAllocMemCnt, option.maxMemCnt);
