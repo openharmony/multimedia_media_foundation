@@ -101,6 +101,13 @@ inline int64_t GetCurrentMillisecond()
     int64_t time = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
     return time;
 }
+
+inline int64_t GetCurrentMicrosecond()
+{
+    std::chrono::system_clock::duration duration = std::chrono::system_clock::now().time_since_epoch();
+    int64_t time = std::chrono::duration_cast<std::chrono::microseconds>(duration).count();
+    return time;
+}
 } // Plugins
 } // Media
 } // OHOS
