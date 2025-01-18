@@ -577,6 +577,7 @@ public:
         }
     }
 
+    bool IsDefinedKey(const TagType &tag) const;
     AnyValueType GetValueType(const TagType& key) const;
     bool ToParcel(MessageParcel &parcel) const;
     bool FromParcel(MessageParcel &parcel);
