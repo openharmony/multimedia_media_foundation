@@ -568,6 +568,15 @@ Any GetDefaultAnyValue(const TagType &tag, AnyValueType type)
     return iter->second;
 }
 
+bool Meta::IsDefinedKey(const TagType &tag) const
+{
+    auto iter = g_metadataDefaultValueMap.find(tag);
+    if (iter == g_metadataDefaultValueMap.end()) {
+        return false;
+    }
+    return true;
+}
+
 AnyValueType Meta::GetValueType(const TagType& key) const
 {
     auto iter = map_.find(key);
