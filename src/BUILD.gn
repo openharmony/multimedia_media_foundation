@@ -151,7 +151,11 @@ if (hst_is_standard_sys) {
       "ipc:ipc_core",
     ]
 
-    public_external_deps = [ "graphic_surface:surface" ]
+    public_external_deps = [
+      "graphic_surface:surface",
+      "qos_manager:qos",
+      "resource_schedule_service:ressched_client",
+    ]
 
     innerapi_tags = [
       "platformsdk",

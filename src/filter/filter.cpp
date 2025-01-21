@@ -23,6 +23,7 @@
 
 namespace {
 constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "Filter" };
+constexpr uint32_t THREAD_PRIORITY_41 = 7;
 }
 
 namespace OHOS {
@@ -44,7 +45,7 @@ void Filter::Init(const std::shared_ptr<EventReceiver>& receiver, const std::sha
     callback_ = callback;
 }
 
-void Filter::LinkPipeLine(const std::string &groupId)
+void Filter::LinkPipeLine(const std::string &groupId, bool needTurbo)
 {
     groupId_ = groupId;
     MEDIA_LOG_I("Filter %{public}s LinkPipeLine:%{public}s, isAsyncMode_:%{public}d",
@@ -66,6 +67,9 @@ void Filter::LinkPipeLine(const std::string &groupId)
                 break;
         }
         filterTask_ = std::make_unique<Task>(name_, groupId_, taskType, TaskPriority::HIGH, false);
+        if (needTurbo) {
+            filterTask_->UpdateThreadPriority(THREAD_PRIORITY_41, "media_service");
+        }
         filterTask_->SubmitJobOnce([this] {
             Status ret = DoInitAfterLink();
             SetErrCode(ret);

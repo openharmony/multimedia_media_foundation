@@ -54,6 +54,8 @@ public:
 
     bool IsRunningInSelf();
 
+    void UpdateThreadPriority(const uint32_t newPriority, const std::string &strBundleName);
+
 private:
     struct State {
         virtual ~State() = default;

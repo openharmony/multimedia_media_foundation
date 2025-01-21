@@ -42,6 +42,7 @@ public:
     void UnLockJobState(bool notifyChange);
     void Exit();
     bool IsRunningInSelf();
+    void UpdateThreadPriority(const uint32_t newPriority, const std::string &strBundleName);
 
     std::string groupId_;
     std::string name_;

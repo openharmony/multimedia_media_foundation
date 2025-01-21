@@ -70,6 +70,9 @@ public:
     static void SleepInTask(unsigned ms);
 
     void SetEnableStateChangeLog(bool enable);
+
+    void UpdateThreadPriority(const uint32_t newPriority, const std::string &strBundleName);
+
 private:
     std::shared_ptr<TaskInner> taskInner_;
 };
