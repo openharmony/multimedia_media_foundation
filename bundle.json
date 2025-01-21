@@ -84,7 +84,9 @@
               "skia",
               "bundle_framework",
               "openmax",
-              "image_framework"
+              "image_framework",
+              "qos_manager",
+              "resource_schedule_service"
           ]
         },
         "build": {

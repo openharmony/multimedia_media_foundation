@@ -325,6 +325,17 @@ void TaskInner::HandleJob()
     }
 }
 
+void TaskInner::UpdateThreadPriority(const uint32_t newPriority, const std::string &strBundleName)
+{
+    FALSE_RETURN(pipelineThread_ != nullptr);
+    bool tmpFlag = singleLoop_;
+    singleLoop_ = false;
+    SubmitJobOnce(
+        [this, newPriority, strBundleName] { pipelineThread_->UpdateThreadPriority(newPriority, strBundleName); },
+        0, true);
+    singleLoop_ = tmpFlag;
+}
+
 int64_t TaskInner::InsertJob(const std::function<void()>& job, int64_t delayUs, bool inJobQueue)
 {
     pipelineThread_->LockJobState();

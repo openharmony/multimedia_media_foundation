@@ -130,6 +130,12 @@ PipeLineThread::PipeLineThread(std::string groupId, TaskType type, TaskPriority 
     }
 }
 
+void PipeLineThread::UpdateThreadPriority(const uint32_t newPriority, const std::string &strBundleName)
+{
+    FALSE_RETURN_W(!threadExit_.load() && loop_);
+    loop_->UpdateThreadPriority(newPriority, strBundleName);
+}
+
 PipeLineThread::~PipeLineThread()
 {
     Exit();

@@ -181,6 +181,8 @@ if (hst_is_standard_sys) {
     public_external_deps = [
       "bounds_checking_function:libsec_static",
       "graphic_surface:surface",
+      "qos_manager:qos",
+      "resource_schedule_service:ressched_client",
     ]
 
     if (media_foundation_enable_ffrt) {
