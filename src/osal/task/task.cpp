@@ -91,5 +91,13 @@ void Task::UpdateDelayTime(int64_t delayUs)
 {
     taskInner_->UpdateDelayTime(delayUs);
 }
+
+void Task::UpdateThreadPriority(const uint32_t newPriority, const std::string &strBundleName)
+{
+    if (taskInner_ == nullptr) {
+        return;
+    }
+    taskInner_->UpdateThreadPriority(newPriority, strBundleName);
+}
 } // namespace Media
 } // namespace OHOS

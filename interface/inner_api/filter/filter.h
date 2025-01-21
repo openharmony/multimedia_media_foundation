@@ -121,7 +121,7 @@ public:
     virtual void Init(const std::shared_ptr<EventReceiver>& receiver, const std::shared_ptr<FilterCallback>& callback,
                       const std::shared_ptr<InterruptMonitor>& monitor);
 
-    virtual void LinkPipeLine(const std::string &groupId) final;
+    virtual void LinkPipeLine(const std::string &groupId, bool needTurbo = false) final;
 
     virtual Status Prepare() final;
 
