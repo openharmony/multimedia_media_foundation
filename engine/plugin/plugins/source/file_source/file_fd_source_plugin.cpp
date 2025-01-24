@@ -44,6 +44,22 @@ uint64_t GetFileSize(int32_t fd)
     }
     return fileSize;
 }
+
+template<typename T, typename = std::enable_if_t<std::is_same_v<int64_t, T> || std::is_same_v<int32_t, T>>>
+bool StrToLong(const std::string_view& str, T& value)
+{
+    FALSE_RETURN_V_MSG_E(!str.empty() && (isdigit(str.front()) || (str.front() == '-')),
+        false, "no valid string.");
+    std::string valStr(str);
+    char* end = nullptr;
+    errno = 0;
+    const char* addr = valStr.c_str();
+    long long result = strtoll(addr, &end, 10); /* 10 means decimal */
+    FALSE_RETURN_V_MSG_E(end != addr && end[0] == '\0' && errno != ERANGE, false,
+        "call StrToLong func false,  input str is: %{public}s!", valStr.c_str());
+    value = result;
+    return true;
+}
 }
 Status FileFdSourceRegister(const std::shared_ptr<Register>& reg)
 {
