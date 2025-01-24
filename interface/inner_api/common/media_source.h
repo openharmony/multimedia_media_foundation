@@ -52,6 +52,7 @@ typedef struct PlayStrategy {
     bool preferHDR {false};
     std::string audioLanguage {""};
     std::string subtitleLanguage {""};
+    double bufferDurationForPlaying {0};
 } PlayStrategy;
 
 typedef struct DownloadInfo {
