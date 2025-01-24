@@ -164,7 +164,9 @@ Status FileFdSourcePlugin::ParseUriInfo(const std::string& uri)
         Status::ERROR_INVALID_PARAMETER, "Invalid fd: " PUBLIC_LOG_D32, fd_);
     fileSize_ = GetFileSize(fd_);
     if (fdUriMatch.size() == 4) { // 4：4 sub match
-        offset_ = std::stoll(fdUriMatch[2].str()); // 2: sub match offset subscript
+        std::string offsetStr = fdUriMatch[2].str(); // 2: sub match offset subscript
+        FALSE_RETURN_V_MSG_E(StrToLong(offsetStr, offset_), Status::ERROR_INVALID_PARAMETER,
+            "Failed to read offset.");
         if (static_cast<uint64_t>(offset_) > fileSize_) {
             offset_ = fileSize_;
         }
