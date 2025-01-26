@@ -46,6 +46,7 @@ public:
 private:
     MediaMonitorManager();
     ~MediaMonitorManager() {}
+    int32_t LoadDumpBufferWrap(const std::string &dumpEnable);
     bool dumpEnable_ = false;
     std::string dumpType_ = DEFAULT_DUMP_TYPE;
     std::string versionType_ = COMMERCIAL_VERSION;

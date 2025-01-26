@@ -19,9 +19,9 @@
 #include "iservice_registry.h"
 #include "system_ability_definition.h"
 #include "monitor_error.h"
-#include "media_monitor_base.h"
-#include "media_monitor_client.h"
+#include "media_monitor_proxy.h"
 #include "media_monitor_death_recipient.h"
+#include "dump_buffer_wrap.h"
 
 namespace {
 constexpr OHOS::HiviewDFX::HiLogLabel LABEL = {LOG_CORE, LOG_DOMAIN_FOUNDATION, "MediaMonitorManager"};
@@ -35,6 +35,7 @@ using namespace std;
 
 static mutex g_mmProxyMutex;
 static sptr<IMediaMonitor> g_mmProxy = nullptr;
+static std::shared_ptr<DumpBufferWrap> dumpBufferWrap_ = nullptr;
 constexpr int MAX_DUMP_TIME = 90;
 
 MediaMonitorManager::MediaMonitorManager()
@@ -94,23 +95,31 @@ void MediaMonitorManager::MediaMonitorDied(pid_t pid)
 void MediaMonitorManager::WriteLogMsg(std::shared_ptr<EventBean> &bean)
 {
     MEDIA_LOG_D("Write event to media monitor");
-    sptr<IMediaMonitor> gamp = GetMediaMonitorProxy();
-    if (gamp == nullptr) {
-        MEDIA_LOG_E("gamp is nullptr.");
+    sptr<IMediaMonitor> proxy = GetMediaMonitorProxy();
+    if (proxy == nullptr) {
+        MEDIA_LOG_E("proxy is nullptr.");
         return;
     }
-    gamp->WriteLogMsg(bean);
+    proxy->WriteLogMsg(*bean);
 }
 
 void MediaMonitorManager::GetAudioRouteMsg(std::map<PerferredType, shared_ptr<MonitorDeviceInfo>> &perferredDevices)
 {
     MEDIA_LOG_D("Get audio route devices");
-    sptr<IMediaMonitor> gamp = GetMediaMonitorProxy();
-    if (gamp == nullptr) {
-        MEDIA_LOG_E("gamp is nullptr.");
+    sptr<IMediaMonitor> proxy = GetMediaMonitorProxy();
+    if (proxy == nullptr) {
+        MEDIA_LOG_E("proxy is nullptr.");
         return;
     }
-    gamp->GetAudioRouteMsg(perferredDevices);
+
+    int32_t ret;
+    std::unordered_map<int32_t, MonitorDeviceInfo> deviceInfos;
+    proxy->GetAudioRouteMsg(deviceInfos, ret);
+    for (auto &deviceInfo : deviceInfos) {
+        PerferredType perferredType = static_cast<PerferredType>(deviceInfo.first);
+        shared_ptr<MonitorDeviceInfo> info = std::make_shared<MonitorDeviceInfo>(deviceInfo.second);
+        perferredDevices.emplace(perferredType, info);
+    }
 }
 
 void MediaMonitorManager::WriteAudioBuffer(const std::string &fileName, void *ptr, size_t size)
@@ -133,9 +142,26 @@ void MediaMonitorManager::WriteAudioBuffer(const std::string &fileName, void *pt
     }
 
     FALSE_RETURN_MSG(ptr != nullptr, "in data is empty");
-    sptr<IMediaMonitor> gamp = GetMediaMonitorProxy();
-    FALSE_RETURN_MSG(gamp != nullptr, "gamp is nullptr");
-    int32_t ret = gamp->WriteAudioBuffer(fileName, ptr, size);
+    sptr<IMediaMonitor> proxy = GetMediaMonitorProxy();
+    FALSE_RETURN_MSG(proxy != nullptr, "proxy is nullptr");
+
+    int32_t ret;
+    std::shared_ptr<DumpBuffer> bufferPtr = std::make_shared<DumpBuffer>();
+    proxy->GetInputBuffer(*bufferPtr, size, ret);
+    FALSE_RETURN_MSG(ret == SUCCESS, "get buffer failed.");
+    FALSE_RETURN_MSG(bufferPtr != nullptr, "get buffer is nullptr.");
+
+    std::shared_ptr<DumpBufferWrap> tmpBufferWrap = dumpBufferWrap_;
+    FALSE_RETURN_MSG(tmpBufferWrap != nullptr, "buffer wrap is nullptr.");
+
+    int32_t bufferCapacitySize = tmpBufferWrap->GetCapacity(bufferPtr.get());
+    FALSE_RETURN_MSG(bufferCapacitySize > 0, "get buffer capacity error");
+    int32_t writeSize = tmpBufferWrap->Write(bufferPtr.get(), static_cast<uint8_t*>(ptr), size);
+    FALSE_RETURN_MSG(writeSize > 0, "write buffer error");
+
+    uint64_t bufferId = tmpBufferWrap->GetUniqueId(bufferPtr.get());
+    proxy->InputBufferFilled(fileName, bufferId, writeSize, ret);
+    FALSE_RETURN_MSG(ret == SUCCESS, "write buffer error %{public}d", ret);
     MEDIA_LOG_D("write audio buffer ret %{public}d", ret);
 }
 
@@ -165,14 +191,15 @@ int32_t MediaMonitorManager::GetMediaParameters(const std::vector<std::string> &
         return SUCCESS;
     }
 
-    sptr<IMediaMonitor> gamp = GetMediaMonitorProxy();
-    if (gamp == nullptr) {
-        MEDIA_LOG_E("gamp is nullptr.");
+    sptr<IMediaMonitor> proxy = GetMediaMonitorProxy();
+    if (proxy == nullptr) {
+        MEDIA_LOG_E("proxy is nullptr.");
         return ERROR;
     }
 
     int32_t status = 0;
-    int32_t ret = gamp->GetPcmDumpStatus(status);
+    int32_t ret;
+    proxy->GetPcmDumpStatus(status, ret);
     if (ret != SUCCESS) {
         MEDIA_LOG_E("get dump media param failed");
         return ERROR;
@@ -217,13 +244,16 @@ int32_t MediaMonitorManager::SetMediaParameters(const std::vector<std::pair<std:
     }
 
     MEDIA_LOG_I("set dump media param, %{public}d %{public}s", dumpEnable_, dumpType_.c_str());
-    sptr<IMediaMonitor> gamp = GetMediaMonitorProxy();
-    if (gamp == nullptr) {
-        MEDIA_LOG_E("gamp is nullptr.");
+    sptr<IMediaMonitor> proxy = GetMediaMonitorProxy();
+    if (proxy == nullptr) {
+        MEDIA_LOG_E("proxy is nullptr.");
         return ERROR;
     }
 
-    int32_t ret = gamp->SetMediaParameters(dumpType, dumpEnable);
+    FALSE_RETURN_V_MSG_E(LoadDumpBufferWrap(dumpEnable) == SUCCESS, ERROR, "load buffer wrap error");
+
+    int32_t ret;
+    proxy->SetMediaParameters(dumpType, dumpEnable, ret);
     if (ret != SUCCESS) {
         MEDIA_LOG_E("set dump media param failed");
     }
@@ -233,13 +263,35 @@ int32_t MediaMonitorManager::SetMediaParameters(const std::vector<std::pair<std:
 int32_t MediaMonitorManager::ErasePreferredDeviceByType(const PerferredType preferredType)
 {
     MEDIA_LOG_D("Erase preferred device by type");
-    sptr<IMediaMonitor> gamp = GetMediaMonitorProxy();
-    if (gamp == nullptr) {
-        MEDIA_LOG_E("gamp is nullptr.");
+    sptr<IMediaMonitor> proxy = GetMediaMonitorProxy();
+    if (proxy == nullptr) {
+        MEDIA_LOG_E("proxy is nullptr.");
         return ERROR;
     }
-    int32_t ret = gamp->ErasePreferredDeviceByType(preferredType);
+    int32_t ret;
+    proxy->ErasePreferredDeviceByType(preferredType, ret);
     return ret;
+}
+
+int32_t MediaMonitorManager::LoadDumpBufferWrap(const std::string &dumpEnable)
+{
+    bool flag = (dumpEnable == "true") ? true : false;
+    if (flag && dumpBufferWrap_ != nullptr) {
+        return SUCCESS;
+    }
+
+    if (flag) {
+        dumpBufferWrap_ = std::make_shared<DumpBufferWrap>();
+        bool ret = dumpBufferWrap_->Open();
+        if (!ret) {
+            MEDIA_LOG_E("load dumpbuffer failed");
+            dumpBufferWrap_ = nullptr;
+            return ERROR;
+        }
+    } else {
+        dumpBufferWrap_ = nullptr;
+    }
+    return SUCCESS;
 }
 } // namespace MediaMonitor
 } // namespace Media

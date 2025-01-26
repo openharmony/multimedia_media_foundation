@@ -95,14 +95,16 @@ void MediaMonitorService::OnRemoveSystemAbility(int32_t systemAbilityId, const s
     MEDIA_LOG_I("OnRemoveSystemAbility systemAbilityId:%{public}d removed", systemAbilityId);
 }
 
-void MediaMonitorService::WriteLogMsg(std::shared_ptr<EventBean> &bean)
+ErrCode MediaMonitorService::WriteLogMsg(const EventBean &bean)
 {
     MEDIA_LOG_D("Write event");
-    if (bean == nullptr) {
+    auto eventBean = std::make_shared<EventBean>(bean);
+    if (eventBean == nullptr) {
         MEDIA_LOG_E("eventBean is nullptr");
-        return;
+        return ERROR;
     }
-    AddMessageToQueue(bean);
+    AddMessageToQueue(eventBean);
+    return SUCCESS;
 }
 
 void MediaMonitorService::MessageLoopFunc()
@@ -159,12 +161,17 @@ void MediaMonitorService::AddMessageToQueue(std::shared_ptr<EventBean> &message)
     signal_->messageCond_.notify_all();
 }
 
-int32_t MediaMonitorService::GetAudioRouteMsg(std::map<PerferredType,
-    std::shared_ptr<MonitorDeviceInfo>> &perferredDevices)
+ErrCode MediaMonitorService::GetAudioRouteMsg(std::unordered_map<int32_t,
+    MonitorDeviceInfo> &perferredDevices, int32_t &funcResult)
 {
-    FALSE_RETURN_V_MSG_E(VerifyIsAudio(), ERROR, "client permission denied");
+    FALSE_UPDATE_RETURN_V_MSG_E(VerifyIsAudio(), funcResult, ERROR, "client permission denied");
     MEDIA_LOG_D("MediaMonitorService GetAudioRouteMsg");
-    return audioMemo_.GetAudioRouteMsg(perferredDevices);
+    std::map<PerferredType, shared_ptr<MonitorDeviceInfo>> perferredDevicePtrs;
+    funcResult = audioMemo_.GetAudioRouteMsg(perferredDevicePtrs);
+    for (auto &devicePtr : perferredDevicePtrs) {
+        perferredDevices[static_cast<int32_t>(devicePtr.first)] = *devicePtr.second;
+    }
+    return funcResult;
 }
 
 void MediaMonitorService::AudioEncodeDump()
@@ -196,74 +203,90 @@ bool MediaMonitorService::IsNeedDump()
     return false;
 }
 
-int32_t MediaMonitorService::WriteAudioBuffer(const std::string &fileName, void *ptr, size_t size)
+ErrCode MediaMonitorService::WriteAudioBuffer(const std::string &fileName, uint64_t ptr, uint32_t size,
+    int32_t &funcResult)
 {
-    return SUCCESS;
+    funcResult = SUCCESS;
+    return funcResult;
 }
 
-int32_t MediaMonitorService::GetInputBuffer(std::shared_ptr<DumpBuffer> &buffer, int32_t size)
+ErrCode MediaMonitorService::GetInputBuffer(DumpBuffer &buffer, int32_t size, int32_t &funcResult)
 {
     if (versionType_ != BETA_VERSION) {
-        return ERROR;
+        funcResult = ERROR;
+        return funcResult;
     }
 
     if (!IsNeedDump()) {
-        return ERR_ILLEGAL_STATE;
+        funcResult = ERR_ILLEGAL_STATE;
+        return funcResult;
     }
 
-    FALSE_RETURN_V_MSG_E(VerifyIsAudio(), ERROR, "client permissionn denied");
+    FALSE_UPDATE_RETURN_V_MSG_E(VerifyIsAudio(), funcResult, ERROR, "client permissionn denied");
     unique_lock<mutex> lock(bufferMutex_);
     if (audioBufferCache_) {
-        audioBufferCache_->RequestBuffer(buffer, size);
+        shared_ptr<DumpBuffer> dumpBuffer = std::make_shared<DumpBuffer>();
+        audioBufferCache_->RequestBuffer(dumpBuffer, size);
+        buffer = *dumpBuffer;
     }
-    return SUCCESS;
+    funcResult = SUCCESS;
+    return funcResult;
 }
 
-int32_t MediaMonitorService::InputBufferFilled(const std::string &fileName, uint64_t bufferId, int32_t size)
+ErrCode MediaMonitorService::InputBufferFilled(const std::string &fileName, uint64_t bufferId, uint32_t size,
+    int32_t &funcResult)
 {
     if (versionType_ != BETA_VERSION) {
-        return ERROR;
+        funcResult = ERROR;
+        return funcResult;
     }
 
-    FALSE_RETURN_V_MSG_E(VerifyIsAudio(), ERROR, "client permissionn denied");
-    FALSE_RETURN_V_MSG_E(audioBufferCache_ != nullptr, ERROR, "buffer cahce nullptr");
+    FALSE_UPDATE_RETURN_V_MSG_E(VerifyIsAudio(), funcResult, ERROR, "client permissionn denied");
+    FALSE_UPDATE_RETURN_V_MSG_E(audioBufferCache_ != nullptr, funcResult, ERROR, "buffer cahce nullptr");
     std::shared_ptr<DumpBuffer> buffer = nullptr;
     audioBufferCache_->GetBufferById(buffer, bufferId);
     FALSE_RETURN_V_MSG_E(buffer != nullptr, ERROR, "get buffer falied");
     audioBufferCache_->SetBufferSize(buffer, size);
     AddBufferToQueue(fileName, buffer);
-    return SUCCESS;
+    funcResult = SUCCESS;
+    return funcResult;
 }
 
-int32_t MediaMonitorService::GetPcmDumpStatus(int32_t &dumpEnable)
+ErrCode MediaMonitorService::GetPcmDumpStatus(int32_t &dumpEnable, int32_t &funcResult)
 {
     if (versionType_ != BETA_VERSION) {
-        return ERROR;
+        funcResult = ERROR;
+        return funcResult;
     }
 
-    FALSE_RETURN_V_MSG_E(VerifyIsAudio(), ERROR, "client permissionn denied");
+    FALSE_UPDATE_RETURN_V_MSG_E(VerifyIsAudio(), funcResult, ERROR, "client permissionn denied");
     dumpEnable = dumpEnable_ ? 1 : 0;
-    return SUCCESS;
+    funcResult = SUCCESS;
+    return funcResult;
 }
 
-int32_t MediaMonitorService::SetMediaParameters(const std::string &dumpType, const std::string &dumpEnable)
+ErrCode MediaMonitorService::SetMediaParameters(const std::string &dumpType, const std::string &dumpEnable,
+    int32_t &funcResult)
 {
     if (versionType_ != BETA_VERSION) {
-        return ERROR;
+        funcResult = ERROR;
+        return funcResult;
     }
 
-    FALSE_RETURN_V_MSG_E(VerifyIsAudio(), ERROR, "client permissionn denied");
+    FALSE_UPDATE_RETURN_V_MSG_E(VerifyIsAudio(), funcResult, ERROR, "client permissionn denied");
     MEDIA_LOG_D("SetMediaParameters dumpEnable: %{public}s", dumpEnable.c_str());
     unique_lock<mutex> lock(paramMutex_);
     if (dumpType != DEFAULT_DUMP_TYPE && dumpType != BETA_DUMP_TYPE) {
         MEDIA_LOG_E("dumpType:%{public}s isvaild", dumpType.c_str());
-        return ERROR;
+        funcResult = ERROR;
+        return funcResult;
     }
 
     bool isDumpEnable = (dumpEnable == "true") ? true : false;
     if (dumpEnable_ == isDumpEnable) {
         MEDIA_LOG_D("set dumpType is repeate, current enable:%{public}d", dumpEnable_);
-        return ERROR;
+        funcResult = ERROR;
+        return funcResult;
     }
 
     dumpType_ = dumpType;
@@ -271,8 +294,8 @@ int32_t MediaMonitorService::SetMediaParameters(const std::string &dumpType, con
     fileFloader_ = (dumpType_ == BETA_DUMP_TYPE) ? BETA_DUMP_DIR : DEFAULT_DUMP_DIR;
     dumpThreadTime_ = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
 
-    int32_t ret = DumpThreadProcess();
-    return ret;
+    funcResult = DumpThreadProcess();
+    return funcResult;
 }
 
 int32_t MediaMonitorService::DumpThreadProcess()
@@ -504,11 +527,12 @@ bool MediaMonitorService::DeleteHistoryFile(const std::string &filePath)
     return true;
 }
 
-int32_t MediaMonitorService::ErasePreferredDeviceByType(const PerferredType preferredType)
+ErrCode MediaMonitorService::ErasePreferredDeviceByType(int32_t preferredType, int32_t &funcResult)
 {
-    FALSE_RETURN_V_MSG_E(VerifyIsAudio(), ERROR, "client permission denied");
+    FALSE_UPDATE_RETURN_V_MSG_E(VerifyIsAudio(), funcResult, ERROR, "client permission denied");
     MEDIA_LOG_D("ErasePreferredDeviceByType enter");
-    return audioMemo_.ErasePreferredDeviceByType(preferredType);
+    funcResult = audioMemo_.ErasePreferredDeviceByType(static_cast<PerferredType>(preferredType));
+    return funcResult;
 }
 } // namespace MediaMonitor
 } // namespace Media
