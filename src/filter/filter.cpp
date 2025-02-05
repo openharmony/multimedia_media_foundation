@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023-2024 Huawei Device Co., Ltd.
+ * Copyright (c) 2023-2025 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -461,6 +461,23 @@ Status Filter::ProcessOutputBuffer(int sendArg, int64_t delayUs, bool byIdx, uin
         Task::SleepInTask(delayUs / 1000); // 1000 convert to ms
         DoProcessOutputBuffer(sendArg, false, false, idx, renderTime);
     }
+    return Status::OK;
+}
+
+Status Filter::SetPerfRecEnabled(bool perfRecNeeded)
+{
+    auto ret = DoSetPerfRecEnabled(perfRecNeeded);
+    for (auto iter : nextFiltersMap_) {
+        for (auto filter : iter.second) {
+            filter->SetPerfRecEnabled(perfRecNeeded);
+        }
+    }
+    return ret;
+}
+
+Status Filter::DoSetPerfRecEnabled(bool perfRecNeeded)
+{
+    isPerfRecEnabled_ = perfRecNeeded;
     return Status::OK;
 }
 

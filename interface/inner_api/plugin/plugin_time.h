@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2021-2025 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -60,6 +60,11 @@ inline bool Us2HstTime (int64_t us, int64_t& hTime)
     }
     hTime = us * HST_USECOND;
     return true;
+}
+
+inline bool Ms2Us(int64_t ms, int64_t& us)
+{
+    return Us2HstTime(ms, us);
 }
 
 inline int64_t HstTime2Ms(int64_t hTime)
