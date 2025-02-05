@@ -556,9 +556,9 @@ Status Filter::DoProcessOutputBuffer(int recvArg, bool dropFrame, bool byIdx, ui
 
 void Filter::ChangeState(FilterState state)
 {
-    MEDIA_LOG_I("%{public}s > %{public}d", name_.c_str(), state);
     AutoLock lock(stateMutex_);
-    curState_ = state;
+    curState_ = curState_ == FilterState::ERROR ? FilterState::ERROR : state;
+    MEDIA_LOG_I("%{public}s > %{public}d", name_.c_str(), curState_);
     cond_.NotifyOne();
 }
 
