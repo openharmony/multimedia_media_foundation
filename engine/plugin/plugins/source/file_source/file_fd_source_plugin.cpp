@@ -55,6 +55,8 @@ bool StrToLong(const std::string_view& str, T& value)
     errno = 0;
     const char* addr = valStr.c_str();
     long long result = strtoll(addr, &end, 10); /* 10 means decimal */
+    FALSE_RETURN_V_MSG_E(result >= LLONG_MIN && result <= LLONG_MAX, false,
+        "call StrToLong func false,  input str is: %{public}s!", valStr.c_str());
     FALSE_RETURN_V_MSG_E(end != addr && end[0] == '\0' && errno != ERANGE, false,
         "call StrToLong func false,  input str is: %{public}s!", valStr.c_str());
     value = result;
