@@ -19,7 +19,6 @@
 #include <cerrno>
 #include <cstring>
 #include <regex>
-#include <type_traits>
 #ifdef WIN32
 #include <fcntl.h>
 #else
@@ -46,7 +45,7 @@ uint64_t GetFileSize(int32_t fd)
     return fileSize;
 }
 
-template<typename T, typename = std::enable_if_t<std::is_same_v<int64_t, T> || std::is_same_v<int32_t, T>>>
+template<typename T, typename = std::enable_if<std::is_same<int64_t, T> || std::is_same<int32_t, T>>>
 bool StrToLong(const std::string_view& str, T& value)
 {
     FALSE_RETURN_V_MSG_E(!str.empty() && (isdigit(str.front()) || (str.front() == '-')),
