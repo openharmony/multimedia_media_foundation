@@ -20,6 +20,7 @@
 #include <string>
 #include "plugin/common/plugin_types.h"
 #include "plugin/interface/source_plugin.h"
+#include "uri_helper.h"
 
 namespace OHOS {
 namespace Media {
