@@ -466,7 +466,6 @@ Status Filter::ProcessOutputBuffer(int sendArg, int64_t delayUs, bool byIdx, uin
 
 Status Filter::SetPerfRecEnabled(bool perfRecNeeded)
 {
-    MEDIA_LOG_I("perfRecNeeded %{public}d", perfRecNeeded);
     auto ret = DoSetPerfRecEnabled(perfRecNeeded);
     for (auto iter : nextFiltersMap_) {
         for (auto filter : iter.second) {

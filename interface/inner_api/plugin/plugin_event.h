@@ -63,14 +63,20 @@ struct PluginEvent {
 };
 
 enum PluginDfxEventType : int32_t {
-    SOURCE,
-    DEMUXER,
-    VIDEO_DECODER,
-    AUDIO_DECODER,
-    VIDEO_SINK,
-    AUDIO_SINK,
-    VIDEO_RENDERER,
-    AUDIO_RENDERER,
+    EVENT_START = 0,
+
+    PERF_START = 200,
+    PERF_SOURCE,
+    PERF_DEMUXER,
+    PERF_VIDEO_DECODER,
+    PERF_AUDIO_DECODER,
+    PERF_VIDEO_SINK,
+    PERF_AUDIO_SINK,
+    PERF_VIDEO_RENDERER,
+    PERF_AUDIO_RENDERER,
+    PERF_MAX,
+
+    EVENT_MAX,
 };
 
 struct PluginDfxEvent {
