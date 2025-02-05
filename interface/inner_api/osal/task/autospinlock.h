@@ -51,14 +51,11 @@ namespace Media {
 
         ~AutoSpinLock()
         {
-            if (!moved_) {
-                spinLock_.clear(std::memory_order_release);
-            }
+            spinLock_.clear(std::memory_order_release);
         }
 
     private:
         SpinLock& spinLock_;
-        bool moved_ = false;
     };
 
 } // namespace Media
