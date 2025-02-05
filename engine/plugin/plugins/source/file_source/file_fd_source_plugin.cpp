@@ -19,6 +19,7 @@
 #include <cerrno>
 #include <cstring>
 #include <regex>
+#include <type_traits>
 #ifdef WIN32
 #include <fcntl.h>
 #else
