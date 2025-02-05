@@ -44,6 +44,22 @@ uint64_t GetFileSize(int32_t fd)
     }
     return fileSize;
 }
+bool StrToLong(const std::string_view& str, int64_t& value)
+{
+    FALSE_RETURN_V_MSG_E(!str.empty() && (isdigit(str.front()) || (str.front() == '-')),
+        false, "no valid string.");
+    std::string valStr(str);
+    char* end = nullptr;
+    errno = 0;
+    const char* addr = valStr.c_str();
+    long long result = strtoll(addr, &end, 10); /* 10 means decimal */
+    FALSE_RETURN_V_MSG_E(result >= LLONG_MIN && result <= LLONG_MAX, false,
+        "call StrToLong func false,  input str is: %{public}s!", valStr.c_str());
+    FALSE_RETURN_V_MSG_E(end != addr && end[0] == '\0' && errno != ERANGE, false,
+        "call StrToLong func false,  input str is: %{public}s!", valStr.c_str());
+    value = result;
+    return true;
+}
 }
 Status FileFdSourceRegister(const std::shared_ptr<Register>& reg)
 {
@@ -149,7 +165,7 @@ Status FileFdSourcePlugin::ParseUriInfo(const std::string& uri)
     fileSize_ = GetFileSize(fd_);
     if (fdUriMatch.size() == 4) { // 4：4 sub match
         std::string offsetStr = fdUriMatch[2].str(); // 2: sub match offset subscript
-        FALSE_RETURN_V_MSG_E(StrToInt(offsetStr, offset_), Status::ERROR_INVALID_PARAMETER,
+        FALSE_RETURN_V_MSG_E(StrToLong(offsetStr, offset_), Status::ERROR_INVALID_PARAMETER,
             "Failed to read offset.");
         if (static_cast<uint64_t>(offset_) > fileSize_) {
             offset_ = fileSize_;
