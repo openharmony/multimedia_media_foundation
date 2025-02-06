@@ -372,7 +372,7 @@ int32_t AVMemory::Read(uint8_t *out, int32_t readSize, int32_t position)
     uint8_t *srcPtr = addr + start;
     FALSE_RETURN_V_MSG_E(srcPtr != nullptr, 0, "Inner srcPtr is nullptr");
     auto error = memcpy_s(out, length, srcPtr, length);
-    FALSE_RETURN_V_MSG_E(error == EOK, 0, "Inner memcpy_s failed, uid:%" PUBLIC_LOG_U64 ", %{public}s", uid_,
+    FALSE_RETURN_V_MSG_E(error == EOK, 0, "Inner memcpy_s failed, uid:" PUBLIC_LOG_U64 ", %{public}s", uid_,
                          strerror(error));
     return length;
 }
