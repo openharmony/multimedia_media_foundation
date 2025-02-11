@@ -75,6 +75,8 @@ public:
 
     static void SleepInTask(unsigned ms);
 
+    void UpdateThreadPriority(const uint32_t newPriority, const std::string &strBundleName);
+
 private:
     enum class RunningState : int {
         STARTED,
