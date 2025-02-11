@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023-2023 Huawei Device Co., Ltd.
+ * Copyright (c) 2023-2025 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -59,6 +59,28 @@ struct PluginEvent {
     PluginEventType type;
     Any param;
     std::string description;
+};
+
+enum PluginDfxEventType : int32_t {
+    EVENT_START = 0,
+
+    PERF_START = 200,
+    PERF_SOURCE,
+    PERF_DEMUXER,
+    PERF_VIDEO_DECODER,
+    PERF_AUDIO_DECODER,
+    PERF_VIDEO_SINK,
+    PERF_AUDIO_SINK,
+    PERF_VIDEO_RENDERER,
+    PERF_AUDIO_RENDERER,
+    PERF_MAX,
+
+    EVENT_MAX,
+};
+
+struct PluginDfxEvent {
+    PluginDfxEventType type;
+    Any param;
 };
 } // namespace Plugins
 } // namespace Media

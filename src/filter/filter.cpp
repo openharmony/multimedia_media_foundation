@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023-2024 Huawei Device Co., Ltd.
+ * Copyright (c) 2023-2025 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -455,6 +455,23 @@ Status Filter::ProcessOutputBuffer(int sendArg, int64_t delayUs, bool byIdx, uin
     return Status::OK;
 }
 
+Status Filter::SetPerfRecEnabled(bool perfRecNeeded)
+{
+    auto ret = DoSetPerfRecEnabled(perfRecNeeded);
+    for (auto iter : nextFiltersMap_) {
+        for (auto filter : iter.second) {
+            filter->SetPerfRecEnabled(perfRecNeeded);
+        }
+    }
+    return ret;
+}
+
+Status Filter::DoSetPerfRecEnabled(bool perfRecNeeded)
+{
+    isPerfRecEnabled_ = perfRecNeeded;
+    return Status::OK;
+}
+
 Status Filter::DoInitAfterLink()
 {
     MEDIA_LOG_I("Filter::DoInitAfterLink");
@@ -543,9 +560,9 @@ Status Filter::DoProcessOutputBuffer(int recvArg, bool dropFrame, bool byIdx, ui
 
 void Filter::ChangeState(FilterState state)
 {
-    MEDIA_LOG_I("%{public}s > %{public}d", name_.c_str(), state);
     AutoLock lock(stateMutex_);
-    curState_ = state;
+    curState_ = curState_ == FilterState::ERROR ? FilterState::ERROR : state;
+    MEDIA_LOG_I("%{public}s > %{public}d", name_.c_str(), curState_);
     cond_.NotifyOne();
 }
 
