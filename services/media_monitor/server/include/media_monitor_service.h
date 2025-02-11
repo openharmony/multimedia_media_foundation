@@ -71,21 +71,26 @@ public:
 
     int32_t Dump(int32_t fd, const std::vector<std::u16string> &args) override;
 
-    void WriteLogMsg(std::shared_ptr<EventBean> &bean)  override;
+    ErrCode WriteLogMsg(const EventBean &bean)  override;
 
-    int32_t GetAudioRouteMsg(std::map<PerferredType, std::shared_ptr<MonitorDeviceInfo>> &perferredDevices) override;
+    ErrCode GetAudioRouteMsg(std::unordered_map<int32_t, MonitorDeviceInfo> &perferredDevices,
+        int32_t &funcResult) override;
 
-    int32_t SetMediaParameters(const std::string &dumpType, const std::string &dumpEnable) override;
+    ErrCode SetMediaParameters(const std::string &dumpType, const std::string &dumpEnable,
+        int32_t &funcResult) override;
 
-    int32_t WriteAudioBuffer(const std::string &fileName, void *ptr, size_t size) override;
+    ErrCode WriteAudioBuffer(const std::string &fileName, uint64_t ptr, uint32_t size, int32_t &funcResult) override;
 
-    int32_t GetInputBuffer(std::shared_ptr<DumpBuffer> &buffer, int32_t size) override;
+    ErrCode GetInputBuffer(DumpBuffer &buffer, int32_t size, int32_t &funcResult) override;
 
-    int32_t InputBufferFilled(const std::string &fileName, uint64_t bufferId, int32_t size) override;
+    ErrCode InputBufferFilled(const std::string &fileName, uint64_t bufferId, uint32_t size,
+        int32_t &funcResult) override;
 
-    int32_t GetPcmDumpStatus(int32_t &dumpEnable) override;
+    ErrCode GetPcmDumpStatus(int32_t &dumpEnable, int32_t &funcResult) override;
 
-    int32_t ErasePreferredDeviceByType(const PerferredType preferredType) override;
+    ErrCode ErasePreferredDeviceByType(int32_t preferredType, int32_t &funcResult) override;
+
+    std::shared_ptr<DumpBufferWrap> dumpBufferWrap_ = nullptr;
 private:
     MediaMonitorService();
     void MessageLoopFunc();

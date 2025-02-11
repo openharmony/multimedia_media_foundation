@@ -357,6 +357,23 @@
 #define FALSE_RETURN_V_MSG_E(exec, ret, fmt, args...) FALSE_RETURN_V_MSG_IMPL(MEDIA_LOG_E, exec, ret, fmt, ##args)
 #endif
 
+#ifndef FALSE_UPDATE_RETURN_V_MSG_IMPL
+#define FALSE_UPDATE_RETURN_V_MSG_IMPL(loglevel, val, exec, ret, fmt, args...) \
+    do {                                                                       \
+        bool returnValue = (exec);                                             \
+        if (!returnValue) {                                                    \
+            val = ret;                                                         \
+            loglevel(fmt, ##args);                                             \
+            return ret;                                                        \
+        }                                                                      \
+    } while (0)
+#endif
+
+#ifndef FALSE_UPDATE_RETURN_V_MSG_E
+#define FALSE_UPDATE_RETURN_V_MSG_E(exec, val, ret, fmt, args...) \
+    FALSE_UPDATE_RETURN_V_MSG_IMPL(MEDIA_LOG_E, val, exec, ret, fmt, ##args)
+#endif
+
 #ifndef FALSE_LOG
 #define FALSE_LOG(exec)                       \
     do {                                      \
