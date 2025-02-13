@@ -35,13 +35,13 @@ if (hst_is_standard_sys) {
       defines += [ "MEDIA_FOUNDATION_FFRT" ]
     }
 
-    if (media_foundation_enable_codec_rm) {
+    if (media_foundation_enable_rm_demuxer) {
       defines += [ "SUPPORT_CODEC_RM" ]
     }
-    if (media_foundation_enable_codec_cook) {
+    if (media_foundation_enable_cook_audio_decoder) {
       defines += [ "SUPPORT_CODEC_COOK" ]
     }
-    if (media_foundation_enable_codec_ac3) {
+    if (media_foundation_enable_ac3_audio_decoder) {
       defines += [ "SUPPORT_CODEC_AC3" ]
     }
 
