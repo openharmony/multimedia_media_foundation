@@ -30,7 +30,6 @@ config("histreamer_player_config") {
       "//foundation/multimedia/player_framework/services/include",
       "//foundation/multimedia/player_framework/services/services/engine_intf",
       "//foundation/multimedia/audio_framework/interfaces/inner_api/native/audiocommon/include",
-      "//commonlibrary/c_utils/base/include",
     ]
   }
 }
@@ -82,6 +81,7 @@ if (hst_is_lite_sys) {
       "//foundation/multimedia/media_foundation/engine/scene/player/standard/hiplayer_impl.cpp",
       "//foundation/multimedia/media_foundation/engine/scene/player/standard/media_utils.cpp",
     ]
+    public_external_deps = [ "c_utils:utils" ]
     external_deps = [
       "graphic_surface:surface",
       "hilog:libhilog",

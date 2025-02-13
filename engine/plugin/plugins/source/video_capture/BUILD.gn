@@ -26,17 +26,16 @@ if (hst_is_standard_sys) {
     include_dirs = [
       "//drivers/peripheral/display/interfaces/include",
       "//foundation/graphic/graphic_2d/interfaces/inner_api/common",
-      "//commonlibrary/c_utils/base/include",
       "//foundation/multimedia/media_foundation/engine/include",
     ]
     sources = [ "video_capture_plugin.cpp" ]
     public_configs =
         [ "//foundation/multimedia/media_foundation:histreamer_presets" ]
     public_deps = [
-      "//commonlibrary/c_utils/base:utilsbase",
       "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
       "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",
     ]
+    public_external_deps = [ "c_utils:utilsbase" ]
     external_deps = [
       "graphic_surface:surface",
       "graphic_surface:sync_fence",
