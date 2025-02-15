@@ -64,7 +64,9 @@ enum EventId {
     AI_VOICE_NOISE_SUPPRESSION = 23,
     VOLUME_SUBSCRIBE = 24,
     SMARTPA_STATUS = 25,
-    JANK_PLAYBACK = 26
+    JANK_PLAYBACK = 26,
+
+    EXCLUDE_OUTPUT_DEVICE = 27,
 };
 
 enum EventType {
@@ -77,18 +79,22 @@ enum EventType {
 
 struct MonitorDeviceInfo : public Parcelable {
     int32_t deviceType_ = -1;
-    std::string deviceName_ = "";
-    std::string address_ = "";
     int32_t deviceCategory_ = -1;
     int32_t usageOrSourceType_ = -1;
+    int32_t audioDeviceUsage_ = -1;
+    std::string deviceName_ = "";
+    std::string address_ = "";
+    std::string networkId_ = "";
 
     bool Marshalling(Parcel &parcel) const override
     {
         return parcel.WriteInt32(deviceType_) &&
+            parcel.WriteInt32(deviceCategory_) &&
+            parcel.WriteInt32(usageOrSourceType_) &&
+            parcel.WriteInt32(audioDeviceUsage_) &&
             parcel.WriteString(deviceName_) &&
             parcel.WriteString(address_) &&
-            parcel.WriteInt32(deviceCategory_) &&
-            parcel.WriteInt32(usageOrSourceType_);
+            parcel.WriteString(networkId_);
     }
 
     static MonitorDeviceInfo *Unmarshalling(Parcel &data)
@@ -98,10 +104,12 @@ struct MonitorDeviceInfo : public Parcelable {
             return nullptr;
         }
         data.ReadInt32(monitorDeviceInfo->deviceType_);
-        data.ReadString(monitorDeviceInfo->deviceName_);
-        data.ReadString(monitorDeviceInfo->address_);
         data.ReadInt32(monitorDeviceInfo->deviceCategory_);
         data.ReadInt32(monitorDeviceInfo->usageOrSourceType_);
+        data.ReadInt32(monitorDeviceInfo->audioDeviceUsage_);
+        data.ReadString(monitorDeviceInfo->deviceName_);
+        data.ReadString(monitorDeviceInfo->address_);
+        data.ReadString(monitorDeviceInfo->networkId_);
         return monitorDeviceInfo;
     }
 };
@@ -163,7 +171,7 @@ enum ServiceType {
     AUDIO_POLICY_SERVICE = 3,
 };
 
-enum PerferredType {
+enum PreferredType {
     MEDIA_RENDER = 0,
     CALL_RENDER = 1,
     CALL_CAPTURE = 2,
@@ -184,6 +192,16 @@ enum PipeChangeReason {
 enum EffectEngineType {
     AUDIO_EFFECT_PROCESS_ENGINE = 0,
     AUDIO_CONVERTER_ENGINE = 1,
+};
+
+enum AudioDeviceUsage {
+    MEDIA_OUTPUT_DEVICES = 1,
+    MEDIA_INPUT_DEVICES = 2,
+    ALL_MEDIA_DEVICES = 3,
+    CALL_OUTPUT_DEVICES = 4,
+    CALL_INPUT_DEVICES = 8,
+    ALL_CALL_DEVICES = 12,
+    D_ALL_DEVICES = 15,
 };
 } // namespace MediaMonitor
 } // namespace Media

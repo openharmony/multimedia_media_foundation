@@ -162,14 +162,31 @@ void MediaMonitorService::AddMessageToQueue(std::shared_ptr<EventBean> &message)
 }
 
 ErrCode MediaMonitorService::GetAudioRouteMsg(std::unordered_map<int32_t,
-    MonitorDeviceInfo> &perferredDevices, int32_t &funcResult)
+    MonitorDeviceInfo> &preferredDevices, int32_t &funcResult)
 {
     FALSE_UPDATE_RETURN_V_MSG_E(VerifyIsAudio(), funcResult, ERROR, "client permission denied");
     MEDIA_LOG_D("MediaMonitorService GetAudioRouteMsg");
-    std::map<PerferredType, shared_ptr<MonitorDeviceInfo>> perferredDevicePtrs;
-    funcResult = audioMemo_.GetAudioRouteMsg(perferredDevicePtrs);
-    for (auto &devicePtr : perferredDevicePtrs) {
-        perferredDevices[static_cast<int32_t>(devicePtr.first)] = *devicePtr.second;
+    std::map<PreferredType, shared_ptr<MonitorDeviceInfo>> preferredDevicePtrs;
+    funcResult = audioMemo_.GetAudioRouteMsg(preferredDevicePtrs);
+    for (auto &devicePtr : preferredDevicePtrs) {
+        preferredDevices[static_cast<int32_t>(devicePtr.first)] = *devicePtr.second;
+    }
+    return funcResult;
+}
+
+ErrCode MediaMonitorService::GetAudioExcludedDevicesMsg(std::unordered_map<int32_t,
+    std::vector<MonitorDeviceInfo>> &excludedDevices, int32_t &funcResult)
+{
+    FALSE_UPDATE_RETURN_V_MSG_E(VerifyIsAudio(), funcResult, ERROR, "client permission denied");
+    MEDIA_LOG_D("MediaMonitorService GetAudioExcludedDevicesMsg");
+    std::map<AudioDeviceUsage, std::vector<std::shared_ptr<MonitorDeviceInfo>>> excludedDevicesPtr;
+    funcResult = audioMemo_.GetAudioExcludedDevicesMsg(excludedDevicesPtr);
+    for (auto &devicePtr : excludedDevicesPtr) {
+        std::vector<MonitorDeviceInfo> deviceInfos;
+        for (auto &deviceInfo : devicePtr.second) {
+            deviceInfos.push_back(*deviceInfo);
+        }
+        excludedDevices[static_cast<int32_t>(devicePtr.first)] = deviceInfos;
     }
     return funcResult;
 }
@@ -531,7 +548,7 @@ ErrCode MediaMonitorService::ErasePreferredDeviceByType(int32_t preferredType, i
 {
     FALSE_UPDATE_RETURN_V_MSG_E(VerifyIsAudio(), funcResult, ERROR, "client permission denied");
     MEDIA_LOG_D("ErasePreferredDeviceByType enter");
-    funcResult = audioMemo_.ErasePreferredDeviceByType(static_cast<PerferredType>(preferredType));
+    funcResult = audioMemo_.ErasePreferredDeviceByType(static_cast<PreferredType>(preferredType));
     return funcResult;
 }
 } // namespace MediaMonitor

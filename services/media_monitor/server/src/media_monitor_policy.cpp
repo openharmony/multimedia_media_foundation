@@ -167,6 +167,10 @@ void MediaMonitorPolicy::WriteBehaviorEventExpansion(EventId eventId, std::share
         case SMARTPA_STATUS:
             mediaEventBaseWriter_.WriteSmartPAStatus(bean);
             break;
+        case EXCLUDE_OUTPUT_DEVICE:
+            setAppNameToEventVector("CLIENT_UID", bean);
+            mediaEventBaseWriter_.WriteExcludeOutputDevice(bean);
+            break;
         default:
             break;
     }

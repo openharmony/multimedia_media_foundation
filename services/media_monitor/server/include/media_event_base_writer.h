@@ -60,6 +60,7 @@ public:
     void WritePlaybackVolume(std::shared_ptr<EventBean> &bean);
     void WriteStreamPropertyStatistic(std::shared_ptr<EventBean> &bean);
     void WriteVolumeSubscribe(std::shared_ptr<EventBean> &bean);
+    void WriteExcludeOutputDevice(std::shared_ptr<EventBean> &bean);
 };
 
 } // namespace MediaMonitor

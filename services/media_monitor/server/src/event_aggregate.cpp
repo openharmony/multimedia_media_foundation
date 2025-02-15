@@ -116,6 +116,9 @@ void EventAggregate::UpdateAggregateEventList(std::shared_ptr<EventBean> &bean)
         case JANK_PLAYBACK:
             HandleJankPlaybackEvent(bean);
             break;
+        case EXCLUDE_OUTPUT_DEVICE:
+            HandleExcludedOutputDevices(bean);
+            break;
         default:
             break;
     }
@@ -638,6 +641,13 @@ void EventAggregate::HandleFocusMigrate(std::shared_ptr<EventBean> &bean)
 void EventAggregate::HandleJankPlaybackEvent(std::shared_ptr<EventBean> &bean)
 {
     MEDIA_LOG_D("Handle jank playback event");
+    mediaMonitorPolicy_.WriteEvent(bean->GetEventId(), bean);
+}
+
+void EventAggregate::HandleExcludedOutputDevices(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Handle exclude output devices");
+    audioMemo_.UpdateExcludedDevice(bean);
     mediaMonitorPolicy_.WriteEvent(bean->GetEventId(), bean);
 }
 

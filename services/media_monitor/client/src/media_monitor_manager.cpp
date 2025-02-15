@@ -103,7 +103,7 @@ void MediaMonitorManager::WriteLogMsg(std::shared_ptr<EventBean> &bean)
     proxy->WriteLogMsg(*bean);
 }
 
-void MediaMonitorManager::GetAudioRouteMsg(std::map<PerferredType, shared_ptr<MonitorDeviceInfo>> &perferredDevices)
+void MediaMonitorManager::GetAudioRouteMsg(std::map<PreferredType, shared_ptr<MonitorDeviceInfo>> &preferredDevices)
 {
     MEDIA_LOG_D("Get audio route devices");
     sptr<IMediaMonitor> proxy = GetMediaMonitorProxy();
@@ -116,9 +116,32 @@ void MediaMonitorManager::GetAudioRouteMsg(std::map<PerferredType, shared_ptr<Mo
     std::unordered_map<int32_t, MonitorDeviceInfo> deviceInfos;
     proxy->GetAudioRouteMsg(deviceInfos, ret);
     for (auto &deviceInfo : deviceInfos) {
-        PerferredType perferredType = static_cast<PerferredType>(deviceInfo.first);
+        PreferredType preferredType = static_cast<PreferredType>(deviceInfo.first);
         shared_ptr<MonitorDeviceInfo> info = std::make_shared<MonitorDeviceInfo>(deviceInfo.second);
-        perferredDevices.emplace(perferredType, info);
+        preferredDevices.emplace(preferredType, info);
+    }
+}
+
+void MediaMonitorManager::GetAudioExcludedDevicesMsg(std::map<AudioDeviceUsage,
+    std::vector<std::shared_ptr<MonitorDeviceInfo>>> &excludedDevices)
+{
+    MEDIA_LOG_D("Get audio excluded devices");
+    sptr<IMediaMonitor> proxy = GetMediaMonitorProxy();
+    if (proxy == nullptr) {
+        MEDIA_LOG_E("proxy is nullptr.");
+        return;
+    }
+    int32_t ret;
+    std::unordered_map<int32_t, std::vector<MonitorDeviceInfo>> deviceInfos;
+    proxy->GetAudioExcludedDevicesMsg(deviceInfos, ret);
+    for (auto &deviceInfo : deviceInfos) {
+        AudioDeviceUsage deviceUsage = static_cast<AudioDeviceUsage>(deviceInfo.first);
+        std::vector<std::shared_ptr<MonitorDeviceInfo>> infoList;
+        for (auto &info : deviceInfo.second) {
+            std::shared_ptr<MonitorDeviceInfo> infoPtr = std::make_shared<MonitorDeviceInfo>(info);
+            infoList.emplace_back(infoPtr);
+        }
+        excludedDevices.emplace(deviceUsage, infoList);
     }
 }
 
@@ -260,7 +283,7 @@ int32_t MediaMonitorManager::SetMediaParameters(const std::vector<std::pair<std:
     return ret;
 }
 
-int32_t MediaMonitorManager::ErasePreferredDeviceByType(const PerferredType preferredType)
+int32_t MediaMonitorManager::ErasePreferredDeviceByType(const PreferredType preferredType)
 {
     MEDIA_LOG_D("Erase preferred device by type");
     sptr<IMediaMonitor> proxy = GetMediaMonitorProxy();

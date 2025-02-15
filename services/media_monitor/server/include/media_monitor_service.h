@@ -73,7 +73,7 @@ public:
 
     ErrCode WriteLogMsg(const EventBean &bean)  override;
 
-    ErrCode GetAudioRouteMsg(std::unordered_map<int32_t, MonitorDeviceInfo> &perferredDevices,
+    ErrCode GetAudioRouteMsg(std::unordered_map<int32_t, MonitorDeviceInfo> &preferredDevices,
         int32_t &funcResult) override;
 
     ErrCode SetMediaParameters(const std::string &dumpType, const std::string &dumpEnable,
@@ -89,6 +89,9 @@ public:
     ErrCode GetPcmDumpStatus(int32_t &dumpEnable, int32_t &funcResult) override;
 
     ErrCode ErasePreferredDeviceByType(int32_t preferredType, int32_t &funcResult) override;
+
+    ErrCode GetAudioExcludedDevicesMsg(std::unordered_map<int32_t,
+        std::vector<MonitorDeviceInfo>> &excludedDevices, int32_t &funcResult) override;
 
     std::shared_ptr<DumpBufferWrap> dumpBufferWrap_ = nullptr;
 private:

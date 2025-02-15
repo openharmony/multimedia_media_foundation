@@ -37,20 +37,30 @@ public:
     ~AudioMemo() = default;
 
     void UpdataRouteInfo(std::shared_ptr<EventBean> &bean);
-    int32_t GetAudioRouteMsg(std::map<PerferredType, std::shared_ptr<MonitorDeviceInfo>> &perferredDevices);
+    int32_t GetAudioRouteMsg(std::map<PreferredType, std::shared_ptr<MonitorDeviceInfo>> &preferredDevices);
 
     void WriteInfo(int32_t fd, std::string &dumpString);
 
-    int32_t ErasePreferredDeviceByType(const PerferredType &preferredType);
+    int32_t ErasePreferredDeviceByType(const PreferredType &preferredType);
+
+    void UpdateExcludedDevice(std::shared_ptr<EventBean> &bean);
+    int32_t GetAudioExcludedDevicesMsg(std::map<AudioDeviceUsage,
+        std::vector<std::shared_ptr<MonitorDeviceInfo>>> &excludedDevices);
 private:
-    PerferredType GetPerferredType(std::shared_ptr<EventBean> &bean);
-    PerferredType GetPerferredRenderType(int32_t streamUsage);
-    PerferredType GetPerferredCaptureType(int32_t AudioScene);
+    PreferredType GetPreferredType(std::shared_ptr<EventBean> &bean);
+    PreferredType GetPreferredRenderType(int32_t streamUsage);
+    PreferredType GetPreferredCaptureType(int32_t AudioScene);
 
-    std::string GetPerferredNameFromType(const PerferredType &type);
+    std::string GetPreferredNameFromType(const PreferredType &type);
 
-    std::mutex perferredDeviceMutex_;
-    std::map<PerferredType, std::shared_ptr<MonitorDeviceInfo>> perferredDevices_;
+    void UpdateExcludedDeviceInner(AudioDeviceUsage audioDevUsage, std::shared_ptr<MonitorDeviceInfo> &deviceInfo,
+        int32_t exclusionStatus);
+
+    std::mutex preferredDeviceMutex_;
+    std::map<PreferredType, std::shared_ptr<MonitorDeviceInfo>> preferredDevices_;
+
+    std::mutex excludedDeviceMutex_;
+    std::map<AudioDeviceUsage, std::vector<std::shared_ptr<MonitorDeviceInfo>>> excludedDevices_;
 };
 
 } // namespace MediaMonitor

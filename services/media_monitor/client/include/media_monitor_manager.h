@@ -29,8 +29,8 @@ public:
 
     void WriteLogMsg(std::shared_ptr<EventBean> &bean);
 
-    void GetAudioRouteMsg(std::map<PerferredType,
-        std::shared_ptr<MonitorDeviceInfo>> &perferredDevices);
+    void GetAudioRouteMsg(std::map<PreferredType,
+        std::shared_ptr<MonitorDeviceInfo>> &preferredDevices);
 
     void WriteAudioBuffer(const std::string &fileName, void *ptr, size_t size);
 
@@ -41,7 +41,10 @@ public:
 
     static void MediaMonitorDied(pid_t pid);
 
-    int32_t ErasePreferredDeviceByType(const PerferredType preferredType);
+    int32_t ErasePreferredDeviceByType(const PreferredType preferredType);
+
+    void GetAudioExcludedDevicesMsg(std::map<AudioDeviceUsage,
+        std::vector<std::shared_ptr<MonitorDeviceInfo>>> &excludedDevices);
 
 private:
     MediaMonitorManager();
