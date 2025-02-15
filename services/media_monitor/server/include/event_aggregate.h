@@ -82,6 +82,7 @@ private:
     void HandleDeviceChangeForDuration(const DeviceChangeEvent &event,
         std::shared_ptr<EventBean> &bean, std::shared_ptr<EventBean> &beanInVector);
     void HandleStreamPropertyStats(std::shared_ptr<EventBean> &bean);
+    void HandleExcludedOutputDevices(std::shared_ptr<EventBean> &bean);
 
     AudioMemo& audioMemo_;
     MediaMonitorPolicy& mediaMonitorPolicy_;

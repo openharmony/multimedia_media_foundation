@@ -293,6 +293,23 @@ void MediaEventBaseWriter::WriteBGSilentPlayback(std::shared_ptr<EventBean> &bea
 #endif
 }
 
+void MediaEventBaseWriter::WriteExcludeOutputDevice(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Write exclude output device");
+    if (bean == nullptr) {
+        MEDIA_LOG_E("eventBean is nullptr");
+        return;
+    }
+#ifdef MONITOR_ENABLE_HISYSEVENT
+    HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "EXCLUDE_OUTPUT_DEVICE",
+        HiviewDFX::HiSysEvent::EventType::BEHAVIOR,
+        "APP_NAME", bean->GetStringValue("APP_NAME"),
+        "EXCLUSION_STATUS", static_cast<uint>(bean->GetIntValue("EXCLUSION_STATUS")),
+        "AUDIO_DEVICE_USAGE", static_cast<uint>(bean->GetIntValue("AUDIO_DEVICE_USAGE")),
+        "DEVICE_TYPE", bean->GetIntValue("DEVICE_TYPE"));
+#endif
+}
+
 void MediaEventBaseWriter::WriteSetForceDevice(std::shared_ptr<EventBean> &bean)
 {
     MEDIA_LOG_D("Write set force use device");
