@@ -30,7 +30,7 @@ namespace OHOS {
 namespace Media {
 namespace {
 constexpr size_t DEFAULT_CAPACITY = 30;
-constexpr size_t MIN_SIZE = 1;
+constexpr int32_t MIN_SIZE = 1;
 }
 #define CALC_EXPR_TIME_MS(expr)                                                                               \
     ({                                                                                                        \
@@ -53,7 +53,7 @@ class PerfRecorder {
 public:
     PerfRecorder() = default;
 
-    PerfRecorder(int32_t capacity) : capacity_(std::max(static_cast<int32_t>(MIN_SIZE), capacity)) {}
+    PerfRecorder(int32_t capacity) : capacity_(std::max(MIN_SIZE, capacity)) {}
 
     virtual bool Record(int32_t extra)
     {
@@ -86,7 +86,7 @@ public:
             max = std::max(max, pair.second);
             min = std::min(min, pair.second);
         }
-        int32_t avg = total / std::max(list_.size(), MIN_SIZE);
+        int32_t avg = total / std::max(static_cast<int32_t>(list_.size()), MIN_SIZE);
 
         return { .max = max, .min = min, .avg = avg };
     }
