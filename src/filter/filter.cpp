@@ -326,7 +326,10 @@ Status Filter::Flush()
             filter->Flush();
         }
     }
-    jobIdxBase_ = jobIdx_;
+    {
+        AutoLock lock(generationMutex_);
+        jobIdxBase_ = jobIdx_;
+    }
     return DoFlush();
 }
 
@@ -433,10 +436,19 @@ Status Filter::ProcessInputBuffer(int sendArg, int64_t delayUs)
     MEDIA_LOG_D("Filter::ProcessInputBuffer  %{public}s", name_.c_str());
     FALSE_RETURN_V_MSG(!isAsyncMode_ || filterTask_, Status::ERROR_INVALID_OPERATION, "no filterTask in async mode");
     if (filterTask_) {
-        jobIdx_++;
-        filterTask_->SubmitJob([this, sendArg]() {
-            processIdx_++;
-            DoProcessInputBuffer(sendArg, processIdx_ <= jobIdxBase_);  // drop frame after flush
+        int64_t processIdx;
+        {
+            AutoLock lock(generationMutex_);
+            processIdx = ++jobIdx_;
+        }
+        filterTask_->SubmitJob([this, sendArg, processIdx]() {
+            // drop frame after flush
+            bool isDrop;
+            {
+                AutoLock lock(generationMutex_);
+                isDrop = processIdx <= jobIdxBase_;
+            }
+            DoProcessInputBuffer(sendArg, isDrop);
             }, delayUs, false);
     } else {
         Task::SleepInTask(delayUs / 1000); // 1000 convert to ms
@@ -450,12 +462,19 @@ Status Filter::ProcessOutputBuffer(int sendArg, int64_t delayUs, bool byIdx, uin
     MEDIA_LOG_D("Filter::ProcessOutputBuffer  %{public}s", name_.c_str());
     FALSE_RETURN_V_MSG(!isAsyncMode_ || filterTask_, Status::ERROR_INVALID_OPERATION, "no filterTask in async mode");
     if (filterTask_) {
-        jobIdx_++;
-        int64_t processIdx = jobIdx_;
+        int64_t processIdx;
+        {
+            AutoLock lock(generationMutex_);
+            processIdx = ++jobIdx_;
+        }
         filterTask_->SubmitJob([this, sendArg, processIdx, byIdx, idx, renderTime]() {
-            processIdx_++;
             // drop frame after flush
-            DoProcessOutputBuffer(sendArg, processIdx <= jobIdxBase_, byIdx, idx, renderTime);
+            bool isDrop;
+            {
+                AutoLock lock(generationMutex_);
+                isDrop = processIdx <= jobIdxBase_;
+            }
+            DoProcessOutputBuffer(sendArg, isDrop, byIdx, idx, renderTime);
             }, delayUs, false);
     } else {
         Task::SleepInTask(delayUs / 1000); // 1000 convert to ms

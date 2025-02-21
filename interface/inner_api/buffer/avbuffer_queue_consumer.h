@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2021-2025 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -39,6 +39,12 @@ public:
     virtual Status SetBufferAvailableListener(sptr<IConsumerListener>& listener) = 0;
 
     virtual Status SetQueueSizeAndAttachBuffer(uint32_t size, std::shared_ptr<AVBuffer>& buffer, bool isFilled);
+
+    virtual uint32_t GetFilledBufferSize()
+    {
+        return 0;
+    }
+
 protected:
     AVBufferQueueConsumer() = default;
 };

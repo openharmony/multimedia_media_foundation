@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023-2023 Huawei Device Co., Ltd.
+ * Copyright (c) 2023-2025 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -319,15 +319,31 @@
     } while (0)
 #endif
 
-#ifndef FALSE_RETURN_MSG
-#define FALSE_RETURN_MSG(exec, fmt, args...) \
-    do {                                     \
-        bool returnValue = (exec);           \
-        if (!returnValue) {                  \
-            MEDIA_LOG_E(fmt, ##args);        \
-            return;                          \
-        }                                    \
+#ifndef FALSE_RETURN_MSG_IMPL
+#define FALSE_RETURN_MSG_IMPL(loglevel, exec, fmt, args...)         \
+    do {                                                            \
+        bool returnValue = (exec);                                  \
+        if (!returnValue) {                                         \
+            loglevel(fmt, ##args);                                  \
+            return;                                                 \
+        }                                                           \
     } while (0)
+#endif
+
+#ifndef FALSE_RETURN_MSG
+#define FALSE_RETURN_MSG(exec, fmt, args...) FALSE_RETURN_MSG_IMPL(MEDIA_LOG_E, exec, fmt, ##args)
+#endif
+
+#ifndef FALSE_RETURN_MSG_D
+#define FALSE_RETURN_MSG_D(exec, fmt, args...) FALSE_RETURN_MSG_IMPL(MEDIA_LOG_D, exec, fmt, ##args)
+#endif
+
+#ifndef FALSE_RETURN_MSG_I
+#define FALSE_RETURN_MSG_I(exec, fmt, args...) FALSE_RETURN_MSG_IMPL(MEDIA_LOG_I, exec, fmt, ##args)
+#endif
+
+#ifndef FALSE_RETURN_MSG_W
+#define FALSE_RETURN_MSG_W(exec, fmt, args...) FALSE_RETURN_MSG_IMPL(MEDIA_LOG_W, exec, fmt, ##args)
 #endif
 
 #ifndef FALSE_RETURN_V_MSG_IMPL
