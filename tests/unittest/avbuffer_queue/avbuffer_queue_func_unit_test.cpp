@@ -385,6 +385,55 @@ HWTEST_F(AVBufferQueueInnerUnitTest, ClearTest, TestSize.Level1)
     EXPECT_EQ(Status::OK, avBufferQueueImpl_->PushBuffer(buffer, true));
     EXPECT_EQ(Status::OK, avBufferQueueImpl_->Clear());
 }
+
+/**
+ * @tc.name: GetFilledBufferSize_001
+ * @tc.desc: Test GetFilledBufferSize interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferQueueInnerUnitTest, GetFilledBufferSize_001, TestSize.Level1)
+{
+    EXPECT_EQ(avBufferQueueImpl_->GetFilledBufferSize(), 0);
+    EXPECT_EQ(avBufferQueueImpl_->SetQueueSize(2), Status::OK);
+
+    sptr<IConsumerListener> listener = new ConsumerListener();
+    avBufferQueueImpl_->SetConsumerListener(listener);
+
+    AVBufferConfig config;
+    config.size = 100;
+    config.capacity = 100;
+    config.memoryType = MemoryType::VIRTUAL_MEMORY;
+    std::shared_ptr<AVBuffer> buffer = AVBuffer::CreateAVBuffer(config);
+    EXPECT_EQ(buffer->GetConfig().size, 0);
+
+    EXPECT_EQ(avBufferQueueImpl_->AttachBuffer(buffer, false), Status::OK);
+    EXPECT_EQ(buffer->GetConfig().size, 0);
+    EXPECT_EQ(avBufferQueueImpl_->GetFilledBufferSize(), 0);
+
+    EXPECT_EQ(avBufferQueueImpl_->RequestBuffer(buffer, config, 0), Status::OK);
+    EXPECT_EQ(buffer->GetConfig().size, 0);
+    EXPECT_EQ(avBufferQueueImpl_->GetFilledBufferSize(), 0);
+
+    EXPECT_EQ(avBufferQueueImpl_->PushBuffer(buffer, true), Status::ERROR_INVALID_BUFFER_SIZE);
+    EXPECT_EQ(buffer->GetConfig().size, 0);
+    EXPECT_EQ(avBufferQueueImpl_->GetFilledBufferSize(), 0);
+
+    EXPECT_EQ(avBufferQueueImpl_->RequestBuffer(buffer, config, 0), Status::OK);
+    EXPECT_EQ(buffer->GetConfig().size, 0);
+    EXPECT_EQ(avBufferQueueImpl_->GetFilledBufferSize(), 0);
+
+    buffer->memory_->SetSize(100);
+    EXPECT_EQ(avBufferQueueImpl_->PushBuffer(buffer, true), Status::OK);
+    EXPECT_EQ(buffer->GetConfig().size, 100);
+    EXPECT_EQ(avBufferQueueImpl_->GetFilledBufferSize(), 1);
+
+    std::shared_ptr<AVBuffer> bufferConsumer;
+    EXPECT_EQ(avBufferQueueImpl_->AcquireBuffer(bufferConsumer), Status::OK);
+    EXPECT_EQ(avBufferQueueImpl_->GetFilledBufferSize(), 0);
+
+    EXPECT_EQ(avBufferQueueImpl_->AcquireBuffer(bufferConsumer), Status::ERROR_NO_DIRTY_BUFFER);
+    EXPECT_EQ(avBufferQueueImpl_->GetFilledBufferSize(), 0);
+}
 } // namespace AVBufferQueueFuncUT
 } // namespace Media
 } // namespace OHOS

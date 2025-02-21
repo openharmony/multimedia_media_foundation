@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2021-2025 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -66,6 +66,11 @@ Status AVBufferQueueConsumerImpl::SetQueueSizeAndAttachBuffer(uint32_t size,
     std::shared_ptr<AVBuffer>& buffer, bool isFilled)
 {
     return bufferQueue_->SetQueueSizeAndAttachBuffer(size, buffer, isFilled);
+}
+
+uint32_t AVBufferQueueConsumerImpl::GetFilledBufferSize()
+{
+    return bufferQueue_->GetFilledBufferSize();
 }
 } // namespace Media
 } // namespace OHOS

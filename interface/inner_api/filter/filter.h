@@ -83,6 +83,11 @@ enum class FilterCallBackCommand {
     FILTER_CALLBACK_COMMAND_MAX,
 };
 
+enum class BufferQueueBufferAVailable : int {
+    BUFFER_AVAILABLE_IN_PORT = 0,
+    BUFFER_AVAILABLE_OUT_PORT = 1,
+};
+
 class EventReceiver {
 public:
     virtual ~EventReceiver() = default;
@@ -278,9 +283,9 @@ private:
 
     Status errCode_ = Status::OK;
 
-    int64_t jobIdx_ = 0;
+    OHOS::Media::Mutex generationMutex_{};
 
-    int64_t processIdx_ = 0;
+    int64_t jobIdx_ = 0;
 
     int64_t jobIdxBase_ = 0;
 
