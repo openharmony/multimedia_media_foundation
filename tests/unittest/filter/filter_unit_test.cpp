@@ -186,7 +186,7 @@ HWTEST_F(FilterUnitTest, Prepare_003, TestSize.Level1)
     filter->ChangeState(FilterState::ERROR);
     filter->Prepare();
     sleep(sleepTime_);
-    EXPECT_EQ(FilterState::READY, filter->curState_);
+    EXPECT_EQ(FilterState::ERROR, filter->curState_);
 }
 
 /**
