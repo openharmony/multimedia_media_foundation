@@ -98,7 +98,7 @@ enum class LoadingRequestError : int32_t {
 	
     /**
      * If resource not reay for access, client should return.
-     */	
+     */
     LOADING_ERROR_NOT_READY = 1,
 	
     /**
