@@ -47,6 +47,7 @@ public:
         if (!isActive_ || !isReadBlockingAllowed_) {
             return 0;
         }
+        MEDIA_LOG_D("ReadBuffer in current tail " PUBLIC_LOG_ZU ", head_ " PUBLIC_LOG_ZU, tail_, head_);
         auto available = tail_ - head_;
         while (waitTimes > 0 && available == 0) {
             MEDIA_LOG_DD("ReadBuffer wait , waitTimes is " PUBLIC_LOG_U64, waitTimes);
@@ -71,6 +72,7 @@ public:
         MEDIA_LOG_DD("ReadBuffer finish available is " PUBLIC_LOG_ZU ", mediaOffset_ " PUBLIC_LOG_U64, available,
             mediaOffset_);
         writeCondition_.NotifyAll();
+        MEDIA_LOG_D("ReadBuffer end current tail " PUBLIC_LOG_ZU ", head_ " PUBLIC_LOG_ZU, tail_, head_);
         return available;
     }
 
@@ -80,6 +82,7 @@ public:
         if (!isActive_) {
             return false;
         }
+        MEDIA_LOG_D("WriteBuffer in current tail " PUBLIC_LOG_ZU ", head_ " PUBLIC_LOG_ZU, tail_, head_);
         while (writeSize + tail_ > head_ + bufferSize_) {
             MEDIA_LOG_DD("WriteBuffer wait writeSize is " PUBLIC_LOG_U64, writeSize);
             writeCondition_.Wait(lck);
@@ -97,6 +100,7 @@ public:
         }
         tail_ += writeSize;
         writeCondition_.NotifyAll();
+        MEDIA_LOG_D("WriteBuffer out current tail " PUBLIC_LOG_ZU ", head_ " PUBLIC_LOG_ZU, tail_, head_);
         return true;
     }
 
@@ -125,6 +129,11 @@ public:
     size_t GetSize()
     {
         return (tail_ - head_);
+    }
+
+    size_t GetFreeSize()
+    {
+        return bufferSize_ - GetSize();
     }
 
     inline size_t GetHead()
@@ -164,6 +173,7 @@ public:
                 tail_ = newTail;
             }
         }
+        MEDIA_LOG_I("SetTail in current tail " PUBLIC_LOG_ZU ", head_ " PUBLIC_LOG_ZU, tail_, head_);
         writeCondition_.NotifyAll();
     }
 	
@@ -210,6 +220,7 @@ public:
                 result = true;
             }
         }
+        MEDIA_LOG_I("SetHead in current tail " PUBLIC_LOG_ZU ", head_ " PUBLIC_LOG_ZU, tail_, head_);
         writeCondition_.NotifyAll();
         return result;
     }
