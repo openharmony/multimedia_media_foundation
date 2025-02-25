@@ -108,7 +108,7 @@ enum class LoadingRequestError : int32_t {
 	
     /**
      * If the uuid of resource handle invalid, client should return.
-     */	
+     */
     LOADING_ERROR_INVAID_HANDLE = 3,
 	
     /**
