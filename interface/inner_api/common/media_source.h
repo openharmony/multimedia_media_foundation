@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-#ifndef HISTREAMER_PLUGINS_MEDIA_SOURCE_H
-#define HISTREAMER_PLUGINS_MEDIA_SOURCE_H
+#ifndef HISTREAMER_PLUGIN_MEDIA_SOURCE_H
+#define HISTREAMER_PLUGIN_MEDIA_SOURCE_H
 
 #include <map>
 #include <memory>
@@ -52,6 +52,7 @@ typedef struct PlayStrategy {
     bool preferHDR {false};
     std::string audioLanguage {""};
     std::string subtitleLanguage {""};
+    double bufferDurationForPlaying {0};
 } PlayStrategy;
 
 class AVMimeTypes {
@@ -214,4 +215,4 @@ private:
 } // namespace Plugins
 } // namespace Media
 } // namespace OHOS
-#endif // HISTREAMER_PLUGINS_MEDIA_SOURCE_H
+#endif // HISTREAMER_PLUGIN_MEDIA_SOURCE_H
