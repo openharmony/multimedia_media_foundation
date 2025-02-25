@@ -93,7 +93,9 @@ enum MediaServiceErrCode : ErrCode {
     MSERR_IO_SSL_SERVER_CERT_UNTRUSTED,                 // IO SSL server cert untrusted.
     MSERR_IO_UNSUPPORTTED_REQUEST,                      // IO unsupported request.
     MSERR_SEEK_CONTINUOUS_UNSUPPORTED,                  // seek continuous unsupported.
-    MSERR_EXTEND_START      = MS_ERR_OFFSET + 0xF000, // extend err start.
+    MSERR_SUPER_RESOLUTION_UNSUPPORTED,                 // super resolution unsupported.
+    MSERR_SUPER_RESOLUTION_NOT_ENABLED,                 // super resolution not enabled.
+    MSERR_EXTEND_START      = MS_ERR_OFFSET + 0xF000,   // extend err start.
 };
 
 // media api error code
@@ -125,6 +127,8 @@ enum MediaServiceExtErrCodeAPI9 : int32_t {
     MSERR_EXT_API9_SERVICE_DIED = 5400105,          // media service died.
     MSERR_EXT_API9_UNSUPPORT_FORMAT = 5400106,      // unsupport format.
     MSERR_EXT_API9_AUDIO_INTERRUPTED = 5400107,     // audio interrupted.
+    MSERR_EXT_API16_SUPER_RESOLUTION_UNSUPPORTED = 5410003,     // super resolution is not supported
+    MSERR_EXT_API16_SUPER_RESOLUTION_NOT_ENABLED = 5410004,     // super resolution is not enabled
     MSERR_EXT_API14_IO_CANNOT_FIND_HOST = 5411001,              // IO can not find host
     MSERR_EXT_API14_IO_CONNECTION_TIMEOUT = 5411002,            // IO connection timeout
     MSERR_EXT_API14_IO_NETWORK_ABNORMAL = 5411003,              // IO network abnormal.
