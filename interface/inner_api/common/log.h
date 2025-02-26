@@ -365,6 +365,10 @@
 #define FALSE_RETURN_V_MSG_D(exec, ret, fmt, args...) FALSE_RETURN_V_MSG_IMPL(MEDIA_LOG_D, exec, ret, fmt, ##args)
 #endif
 
+#ifndef FALSE_RETURN_V_MSG_I
+#define FALSE_RETURN_V_MSG_I(exec, ret, fmt, args...) FALSE_RETURN_V_MSG_IMPL(MEDIA_LOG_I, exec, ret, fmt, ##args)
+#endif
+
 #ifndef FALSE_RETURN_V_MSG_W
 #define FALSE_RETURN_V_MSG_W(exec, ret, fmt, args...) FALSE_RETURN_V_MSG_IMPL(MEDIA_LOG_W, exec, ret, fmt, ##args)
 #endif
