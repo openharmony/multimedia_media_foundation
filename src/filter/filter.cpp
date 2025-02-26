@@ -65,6 +65,9 @@ void Filter::LinkPipeLine(const std::string &groupId, bool needTurbo)
             case FilterType::VIDEO_CAPTURE:
                 taskType = TaskType::SINGLETON;
                 break;
+            case FilterType::FILTERTYPE_ASINK:
+                taskType = TaskType::SINGLETON;
+                break;
             case FilterType::AUDIO_CAPTURE:
                 taskType = TaskType::AUDIO;
                 break;
