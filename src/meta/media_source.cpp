@@ -90,6 +90,17 @@ std::string MediaSource::GetMimeType() const
     return mimeType_;
 }
 
+void MediaSource::SetSourceLoader(std::shared_ptr<IMediaSourceLoader> mediaSourceLoader)
+{
+    MEDIA_LOG_I("SetSourceLoader");
+    sourceLoader_ = std::move(mediaSourceLoader);
+}
+ 
+std::shared_ptr<IMediaSourceLoader> MediaSource::GetSourceLoader() const
+{
+    MEDIA_LOG_I("GetSourceLoader");
+    return sourceLoader_;
+}
 #ifndef OHOS_LITE
 std::shared_ptr<IMediaDataSource> MediaSource::GetDataSrc() const
 {
@@ -99,4 +110,3 @@ std::shared_ptr<IMediaDataSource> MediaSource::GetDataSrc() const
 } // namespace Plugins
 } // namespace Media
 } // namespace OHOS
-
