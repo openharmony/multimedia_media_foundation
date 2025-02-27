@@ -233,11 +233,6 @@ protected:
         return isAsyncMode_;
     }
 
-    inline void SetAsyncMode(bool isAsyncMode)
-    {
-        isAsyncMode_ = isAsyncMode;
-    }
-
     std::string name_;
 
     std::shared_ptr<Meta> meta_;
