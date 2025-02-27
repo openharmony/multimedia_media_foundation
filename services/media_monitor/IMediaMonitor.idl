@@ -16,7 +16,7 @@ sequenceable DumpBufferDefine..DumpBuffer;
 sequenceable OHOS.Media.MediaMonitor.EventBean;
 sequenceable MediaMonitorInfo..OHOS.Media.MediaMonitor.MonitorDeviceInfo;
 interface OHOS.Media.MediaMonitor.IMediaMonitor {
-    void WriteLogMsg([in] EventBean bean);
+    [oneway] void WriteLogMsg([in] EventBean bean);
     int GetAudioRouteMsg([out] Map<int, MonitorDeviceInfo> preferredDevices);
     int WriteAudioBuffer([in] String fileName, [in] unsigned long ptr, [in] unsigned int size);
     int SetMediaParameters([in] String dumpType, [in] String dumpEnable);
