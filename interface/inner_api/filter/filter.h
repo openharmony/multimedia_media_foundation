@@ -233,6 +233,11 @@ public:
         return Status::OK;
     }
 protected:
+    inline bool IsAsyncMode()
+    {
+        return isAsyncMode_;
+    }
+
     std::string name_;
 
     std::shared_ptr<Meta> meta_;
