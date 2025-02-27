@@ -243,6 +243,7 @@ void AVBufferQueueImpl::DeleteCachedBufferById(uint64_t uniqueId)
 {
     auto it = cachedBufferMap_.find(uniqueId);
     if (it != cachedBufferMap_.end()) {
+        MEDIA_LOG_D("DeleteCachedBufferById uniqueId:%llu, state:%d", uniqueId, it->second.state);
         cachedBufferMap_.erase(it);
     }
 }
