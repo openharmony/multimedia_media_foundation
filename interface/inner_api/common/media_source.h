@@ -222,6 +222,7 @@ private:
     std::shared_ptr<IMediaDataSource> dataSrc_ {};
 #endif
     std::shared_ptr<IMediaSourceLoader> sourceLoader_ {};
+    MediaStreamList playMediaStreamVec_;
 };
 } // namespace Plugins
 } // namespace Media
