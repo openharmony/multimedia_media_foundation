@@ -90,7 +90,6 @@ public:
     virtual Status SetConsumerListener(sptr<IConsumerListener>& listener);
 
     Status SetQueueSizeAndAttachBuffer(uint32_t size, std::shared_ptr<AVBuffer>& buffer, bool isFilled) override;
-    Status ClearBufferIf(std::function<bool(const std::shared_ptr<AVBuffer> &)> pred) override;
 
     uint32_t GetFilledBufferSize() override;
 
