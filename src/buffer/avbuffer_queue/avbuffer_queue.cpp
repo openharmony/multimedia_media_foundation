@@ -113,7 +113,7 @@ Status AVBufferQueueImpl::SetQueueSize(uint32_t size)
     return SetLargerQueueSize(size);
 }
 
-Status AVBufferQueueImpl::SetQueueSize(uint32_t size)
+Status AVBufferQueueImpl::SetLargerQueueSize(uint32_t size)
 {
     FALSE_RETURN_V(size >= 0 && size <= AVBUFFER_QUEUE_MAX_QUEUE_SIZE_FOR_LARGER  && size != size_,
                    Status::ERROR_INVALID_BUFFER_SIZE);
