@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2021-2025 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -41,6 +41,7 @@ public:
     Status RemoveBufferFilledListener(sptr<IBrokerListener>& listener) override = 0;
     Status SetBufferAvailableListener(sptr<IProducerListener>& listener) override = 0;
     Status Clear() override = 0;
+    virtual Status ClearBufferIf(std::function<bool(const std::shared_ptr<AVBuffer>&)> pred) override = 0;
 protected:
     explicit AVBufferQueueProducerProxy(const sptr<IRemoteObject>& object);
 };

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023-2023 Huawei Device Co., Ltd.
+ * Copyright (c) 2023-2025 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -54,6 +54,13 @@ typedef struct PlayStrategy {
     std::string subtitleLanguage {""};
     double bufferDurationForPlaying {0};
 } PlayStrategy;
+
+struct PlayMediaStream {
+    std::string url {""};
+    uint32_t width {0};
+    uint32_t height {0};
+    uint32_t bitrate {0};
+};
 
 class AVMimeTypes {
 public:
@@ -157,6 +164,7 @@ public:
     virtual int32_t Close(int64_t uuid) = 0;
 };
 
+using MediaStreamList = std::vector<std::shared_ptr<PlayMediaStream>>;
 class MediaSource {
 public:
     /// Construct an a specified URI.
@@ -178,6 +186,9 @@ public:
     const std::string &GetSourceUri() const;
 
     const std::map<std::string, std::string> &GetSourceHeader() const;
+
+    void AddMediaStream(const std::shared_ptr<PlayMediaStream>& playMediaStream);
+    MediaStreamList GetMediaStreamList() const;
 
     void SetPlayStrategy(const std::shared_ptr<PlayStrategy>& playStrategy);
 

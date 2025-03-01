@@ -89,6 +89,7 @@ public:
     Status RemoveBufferFilledListener(sptr<IBrokerListener>& listener) override;
     Status SetBufferAvailableListener(sptr<IProducerListener>& listener) override;
     Status Clear() override;
+    Status ClearBufferIf(std::function<bool(const std::shared_ptr<AVBuffer> &)> pred) override;
 protected:
     std::shared_ptr<AVBufferQueueImpl> bufferQueue_;
 

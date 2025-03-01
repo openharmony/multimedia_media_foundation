@@ -65,8 +65,10 @@ public:
 
     uint32_t GetQueueSize() override;
     Status SetQueueSize(uint32_t size) override;
+    virtual Status SetLargerQueueSize(uint32_t size) override;
     bool IsBufferInQueue(const std::shared_ptr<AVBuffer>& buffer) override;
     Status Clear() override;
+    Status ClearBufferIf(std::function<bool(const std::shared_ptr<AVBuffer>&)> pred) override;
 
     virtual Status RequestBuffer(std::shared_ptr<AVBuffer>& buffer,
                           const AVBufferConfig& config, int32_t timeoutMs);
@@ -88,6 +90,7 @@ public:
     virtual Status SetConsumerListener(sptr<IConsumerListener>& listener);
 
     Status SetQueueSizeAndAttachBuffer(uint32_t size, std::shared_ptr<AVBuffer>& buffer, bool isFilled) override;
+    Status ClearBufferIf(std::function<bool(const std::shared_ptr<AVBuffer> &)> pred) override;
 
     uint32_t GetFilledBufferSize() override;
 
