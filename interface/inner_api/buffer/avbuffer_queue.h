@@ -30,6 +30,8 @@ public:
         const std::string& name = "", bool disableAlloc = false);
     static std::shared_ptr<AVBufferQueue> CreateAsSurfaceProducer(
             sptr<Surface>& surface, const std::string& name = "");
+    static std::shared_ptr<AVBufferQueue> CreateAsSurfaceConsumer(
+            sptr<Surface>& surface, const std::string& name = "");
 
     AVBufferQueue() = default;
     virtual ~AVBufferQueue() = default;
