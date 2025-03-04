@@ -110,6 +110,14 @@ Status AVBufferQueueImpl::SetQueueSize(uint32_t size)
     FALSE_RETURN_V(size >= 0 && size <= AVBUFFER_QUEUE_MAX_QUEUE_SIZE && size != size_,
                    Status::ERROR_INVALID_BUFFER_SIZE);
 
+    return SetLargerQueueSize(size);
+}
+
+Status AVBufferQueueImpl::SetLargerQueueSize(uint32_t size)
+{
+    FALSE_RETURN_V(size >= 0 && size <= AVBUFFER_QUEUE_MAX_QUEUE_SIZE_FOR_LARGER  && size != size_,
+                   Status::ERROR_INVALID_BUFFER_SIZE);
+
     if (size > size_) {
         size_ = size;
         if (!disableAlloc_) {
@@ -121,6 +129,40 @@ Status AVBufferQueueImpl::SetQueueSize(uint32_t size)
         size_ = size;
     }
 
+    return Status::OK;
+}
+
+Status AVBufferQueueImpl::ClearBufferIf(std::function<bool(const std::shared_ptr<AVBuffer>&)> pred)
+{
+    std::lock_guard<std::mutex> lockGuard(queueMutex_);
+    for (auto dirtyIt = dirtyBufferList_.begin(); dirtyIt != dirtyBufferList_.end();) {
+        uint64_t uniqueId = *dirtyIt;
+        auto cacheIt = cachedBufferMap_.find(uniqueId);
+        if (cacheIt == cachedBufferMap_.end()) {
+            MEDIA_LOG_E("unexpected buffer uniqueId=" PUBLIC_LOG_U64, uniqueId);
+            ++dirtyIt;
+            continue;
+        }
+        if (cacheIt->second.state != AVBUFFER_STATE_PUSHED && cacheIt->second.state != AVBUFFER_STATE_RETURNED) {
+            MEDIA_LOG_I("ignore unexpected buffer status uniqueId=" PUBLIC_LOG_U64 ",state= " PUBLIC_LOG_D32,
+                uniqueId,
+                static_cast<int32_t>(cacheIt->second.state));
+            ++dirtyIt;
+            continue;
+        }
+ 
+        if (pred(cacheIt->second.buffer)) {
+            MEDIA_LOG_D("ClearBufferIf pred ok uniqueId=" PUBLIC_LOG_U64 ",pts=" PUBLIC_LOG_D64,
+                uniqueId,
+                cacheIt->second.buffer->pts_);
+            cacheIt->second.state = AVBUFFER_STATE_RELEASED;
+            InsertFreeBufferInOrder(uniqueId);
+            dirtyIt = dirtyBufferList_.erase(dirtyIt);
+        } else {
+            ++dirtyIt;
+        }
+    }
+    requestCondition.notify_all();
     return Status::OK;
 }
 

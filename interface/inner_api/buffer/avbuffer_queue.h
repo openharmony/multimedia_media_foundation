@@ -49,8 +49,11 @@ public:
 
     virtual uint32_t GetQueueSize() = 0;
     virtual Status SetQueueSize(uint32_t size) = 0;
+    // allow set larger size to AVBUFFER_QUEUE_MAX_QUEUE_SIZE_FOR_LARGER
+    virtual Status SetLargerQueueSize(uint32_t size) = 0;
     virtual bool IsBufferInQueue(const std::shared_ptr<AVBuffer>& buffer) = 0;
     virtual Status Clear() = 0;
+    virtual Status ClearBufferIf(std::function<bool(const std::shared_ptr<AVBuffer>&)> pred) = 0;
     virtual Status SetQueueSizeAndAttachBuffer(uint32_t size, std::shared_ptr<AVBuffer>& buffer, bool isFilled);
     virtual uint32_t GetFilledBufferSize()
     {

@@ -70,6 +70,16 @@ std::shared_ptr<PlayStrategy> MediaSource::GetPlayStrategy() const
     return playStrategy_;
 }
 
+void MediaSource::AddMediaStream(const std::shared_ptr<PlayMediaStream>& playMediaStream)
+{
+    playMediaStreamVec_.push_back(playMediaStream);
+}
+ 
+MediaStreamList MediaSource::GetMediaStreamList() const
+{
+    return playMediaStreamVec_;
+}
+
 void MediaSource::SetAppUid(int32_t appUid)
 {
     appUid_ = appUid;

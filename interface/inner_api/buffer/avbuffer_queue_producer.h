@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2021-2025 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -19,6 +19,7 @@
 #include "buffer/avbuffer_queue_define.h"
 #include "iremote_stub.h"
 #include "surface.h"
+#include <functional>
 
 namespace OHOS {
 namespace Media {
@@ -40,6 +41,7 @@ public:
     virtual Status RemoveBufferFilledListener(sptr<IBrokerListener>& listener) = 0;
     virtual Status SetBufferAvailableListener(sptr<IProducerListener>& listener) = 0;
     virtual Status Clear() = 0;
+    virtual Status ClearBufferIf(std::function<bool(const std::shared_ptr<AVBuffer>&)> pred) = 0;
     DECLARE_INTERFACE_DESCRIPTOR(u"Media.AVBufferQueueProducer");
 
 protected:
