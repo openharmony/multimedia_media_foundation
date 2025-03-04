@@ -67,6 +67,7 @@ enum EventId {
     JANK_PLAYBACK = 26,
 
     EXCLUDE_OUTPUT_DEVICE = 27,
+    MESSAGE_ZONE = 28,
 };
 
 enum EventType {
@@ -75,6 +76,7 @@ enum EventType {
     BEHAVIOR_EVENT = 1,
     FREQUENCY_AGGREGATION_EVENT = 2,
     DURATION_AGGREGATION_EVENT = 3,
+    MESSAGE_ZONE_EVENT = 4,
 };
 
 struct MonitorDeviceInfo : public Parcelable {
