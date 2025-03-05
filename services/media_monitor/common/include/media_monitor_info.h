@@ -67,7 +67,7 @@ enum EventId {
     JANK_PLAYBACK = 26,
 
     EXCLUDE_OUTPUT_DEVICE = 27,
-    HAPTIC_PLAYER = 28
+    HAPTIC_PLAYER = 28,
     MESSAGE_ZONE = 29,
 };
 
