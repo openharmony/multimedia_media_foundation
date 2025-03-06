@@ -70,6 +70,7 @@ struct AudioRenderInfo {
     int32_t contentType {0};
     int32_t streamUsage {0};
     int32_t rendererFlags {0};
+    int32_t volumeMode {0};
 };
 
 enum class AudioInterruptMode {
