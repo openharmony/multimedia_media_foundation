@@ -593,7 +593,7 @@ Status Filter::DoProcessOutputBuffer(int recvArg, bool dropFrame, bool byIdx, ui
 void Filter::ChangeState(FilterState state)
 {
     AutoLock lock(stateMutex_);
-    curState_ = state == FilterState::RELEASED ? state : (curstate_ ==
+    curState_ = state == FilterState::RELEASED ? state : (curState_ ==
         FilterState::ERROR ? FilterState::ERROR : state);
     MEDIA_LOG_I("%{public}s > %{public}d, target: %{public}d", name_.c_str(), curState_, state);
     cond_.NotifyOne();
