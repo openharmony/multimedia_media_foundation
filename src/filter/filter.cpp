@@ -604,7 +604,7 @@ Status Filter::WaitAllState(FilterState state)
     MEDIA_LOG_I("%{public}s wait %{public}d", name_.c_str(), state);
     if (curState_ != state) {
         bool result = cond_.WaitFor(lock, 30000, [this, state] { // 30000 ms timeout
-            return curState_ == state || (state != Filterstate::RELEASED && curState_ == FilterState::ERROR);
+            return curState_ == state || (state != FilterState::RELEASED && curState_ == FilterState::ERROR);
         });
         if (!result) {
             SetErrCode(Status::ERROR_TIMED_OUT);
