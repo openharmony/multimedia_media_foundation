@@ -363,7 +363,6 @@ Status Filter::ReleaseDone()
     MEDIA_LOG_I("Release in %{public}s", name_.c_str());
     Status ret = DoRelease();
     SetErrCode(ret);
-    ChangeState(ret == Status::OK ? FilterState::RELEASED : FilterState::ERROR);
     // at this point, the final state should be RELEASED
     ChangeState(FilterState::RELEASED);
     return ret;
