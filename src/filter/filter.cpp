@@ -363,7 +363,8 @@ Status Filter::ReleaseDone()
     MEDIA_LOG_I("Release in %{public}s", name_.c_str());
     Status ret = DoRelease();
     SetErrCode(ret);
-    ChangeState(ret == Status::OK ? FilterState::RELEASED : FilterState::ERROR);
+    // at this point, the final state should be RELEASED
+    ChangeState(FilterState::RELEASED);
     return ret;
 }
 
@@ -591,8 +592,9 @@ Status Filter::DoProcessOutputBuffer(int recvArg, bool dropFrame, bool byIdx, ui
 void Filter::ChangeState(FilterState state)
 {
     AutoLock lock(stateMutex_);
-    curState_ = curState_ == FilterState::ERROR ? FilterState::ERROR : state;
-    MEDIA_LOG_I("%{public}s > %{public}d", name_.c_str(), curState_);
+    curState_ = state == FilterState::RELEASED ? state : (curState_ ==
+        FilterState::ERROR ? FilterState::ERROR : state);
+    MEDIA_LOG_I("%{public}s > %{public}d, target: %{public}d", name_.c_str(), curState_, state);
     cond_.NotifyOne();
 }
 
@@ -602,7 +604,7 @@ Status Filter::WaitAllState(FilterState state)
     MEDIA_LOG_I("%{public}s wait %{public}d", name_.c_str(), state);
     if (curState_ != state) {
         bool result = cond_.WaitFor(lock, 30000, [this, state] { // 30000 ms timeout
-            return curState_ == state || curState_ == FilterState::ERROR;
+            return curState_ == state || (state != FilterState::RELEASED && curState_ == FilterState::ERROR);
         });
         if (!result) {
             SetErrCode(Status::ERROR_TIMED_OUT);
