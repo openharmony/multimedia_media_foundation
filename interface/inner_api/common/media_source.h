@@ -53,6 +53,7 @@ typedef struct PlayStrategy {
     std::string audioLanguage {""};
     std::string subtitleLanguage {""};
     double bufferDurationForPlaying {0};
+    double thresholdForAutoQuickPlay {0};
 } PlayStrategy;
 
 struct PlayMediaStream {
