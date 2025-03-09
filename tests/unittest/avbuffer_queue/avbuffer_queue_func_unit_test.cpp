@@ -126,6 +126,28 @@ HWTEST_F(AVBufferQueueInnerUnitTest, SetQueueSizeTest, TestSize.Level1)
 }
 
 /**
+ * @tc.name: SetLargerQueueSize
+ * @tc.desc: Test set Larger queue size
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferQueueInnerUnitTest, SetLargerQueueSize, TestSize.Level1)
+{
+    uint32_t size = AVBUFFER_QUEUE_MAX_QUEUE_SIZE + 1;
+    ASSERT_EQ(avBufferQueueImpl_->SetLargerQueueSize(size), Status::OK);
+    ASSERT_EQ(avBufferQueueImpl_->GetQueueSize(), size);
+ 
+    size = AVBUFFER_QUEUE_MAX_QUEUE_SIZE_FOR_LARGER;
+    ASSERT_EQ(avBufferQueueImpl_->SetLargerQueueSize(size), Status::OK);
+    ASSERT_EQ(avBufferQueueImpl_->GetQueueSize(), size);
+ 
+    ASSERT_EQ(avBufferQueueImpl_->SetLargerQueueSize(size + 1), Status::ERROR_INVALID_BUFFER_SIZE);
+ 
+    size = 0;
+    ASSERT_EQ(avBufferQueueImpl_->SetLargerQueueSize(size), Status::OK);
+    ASSERT_EQ(avBufferQueueImpl_->GetQueueSize(), size);
+}
+
+/**
  * @tc.name: DeleteBuffersTest
  * @tc.desc: Test delete buffers
  * @tc.type: FUNC
@@ -384,6 +406,42 @@ HWTEST_F(AVBufferQueueInnerUnitTest, ClearTest, TestSize.Level1)
     buffer->memory_->SetSize(1);
     EXPECT_EQ(Status::OK, avBufferQueueImpl_->PushBuffer(buffer, true));
     EXPECT_EQ(Status::OK, avBufferQueueImpl_->Clear());
+}
+
+/**
+ * @tc.name: ClearBufferIfTest
+ * @tc.desc: Test ClearBufferIf interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferQueueInnerUnitTest, ClearBufferIfTest, TestSize.Level1)
+{
+    sptr<IConsumerListener> listener = new ConsumerListener();
+    avBufferQueueImpl_->SetConsumerListener(listener);
+ 
+    AVBufferConfig config;
+    config.size = 1;
+    config.capacity = 1;
+    config.memoryType = MemoryType::VIRTUAL_MEMORY;
+ 
+    constexpr uint32_t totalBufferCount = 10;
+    for (uint32_t i = 0; i < totalBufferCount; i++) {
+        std::shared_ptr<AVAllocator> allocator =
+            AVAllocatorFactory::CreateSharedAllocator(MemoryFlag::MEMORY_READ_WRITE);
+        std::shared_ptr<AVBuffer> buffer = AVBuffer::CreateAVBuffer(allocator, 1, 1);
+        ASSERT_NE(nullptr, buffer);
+        EXPECT_EQ(Status::OK, avBufferQueueImpl_->AllocBuffer(buffer, config));
+        EXPECT_EQ(Status::OK, avBufferQueueImpl_->RequestReuseBuffer(buffer, config));
+        buffer->memory_->SetSize(1);
+        buffer->pts_ = static_cast<int64_t>(i);
+        EXPECT_EQ(Status::OK, avBufferQueueImpl_->PushBuffer(buffer, true));
+    }
+    constexpr uint32_t startPts = 4;
+    auto isNewerSample = [](const std::shared_ptr<AVBuffer>& buffer) {
+        return (buffer != nullptr) && (buffer->pts_ >= startPts);
+    };
+    // clear pts remain pts from 0 ~ (startPts - 1 )
+    EXPECT_EQ(Status::OK, avBufferQueueImpl_->ClearBufferIf(isNewerSample));
+    EXPECT_EQ(startPts, avBufferQueueImpl_->GetFilledBufferSize());
 }
 
 /**
