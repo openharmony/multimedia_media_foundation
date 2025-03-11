@@ -71,10 +71,15 @@ void TaskInner::DeInit()
     MEDIA_LOG_I_T(PUBLIC_LOG_S " DeInit", name_.c_str());
     pipelineThread_->RemoveTask(shared_from_this());
     {
-        AutoLock lock1(jobMutex_);
-        AutoLock lock2(stateMutex_);
-        runningState_ = RunningState::STOPPED;
-        topProcessUs_ = -1;
+        if (pipelineThread_->IsRunningInSelf()) {
+            runningState_ = RunningState::STOPPED;
+            topProcessUs_ = -1;
+        } else {
+            AutoLock lock1(jobMutex_);
+            AutoLock lock2(stateMutex_);
+            runningState_ = RunningState::STOPPED;
+            topProcessUs_ = -1;
+        }
     }
     MEDIA_LOG_I_T(PUBLIC_LOG_S " DeInit done", name_.c_str());
 }
