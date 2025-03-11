@@ -203,7 +203,7 @@ Status AVBufferQueueImpl::PopFromFreeBufferList(std::shared_ptr<AVBuffer>& buffe
 
 Status AVBufferQueueImpl::PopFromDirtyBufferList(std::shared_ptr<AVBuffer>& buffer)
 {
-    FALSE_RETURN_V(!dirtyBufferList_.empty(), Status::ERROR_NO_DIRTY_BUFFER);
+    FALSE_RETURN_V_NOLOG(!dirtyBufferList_.empty(), Status::ERROR_NO_DIRTY_BUFFER);
 
     buffer = cachedBufferMap_[dirtyBufferList_.front()].buffer;
     dirtyBufferList_.pop_front();
@@ -633,7 +633,7 @@ Status AVBufferQueueImpl::AcquireBuffer(std::shared_ptr<AVBuffer>& buffer)
     std::lock_guard<std::mutex> lockGuard(queueMutex_);
     auto ret = PopFromDirtyBufferList(buffer);
     if (ret != Status::OK) {
-        MEDIA_LOG_E("acquire buffer failed");
+        MEDIA_LOG_D("acquire buffer failed");
         return ret;
     }
 
