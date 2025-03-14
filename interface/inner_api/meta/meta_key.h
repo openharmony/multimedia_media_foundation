@@ -347,10 +347,10 @@ public:
                                                    ///< video decoder frame set by the caller. This is an optional key
                                                    ///< that applies only to video decoder surface mode.
     static constexpr const char VIDEO_ENCODER_MAX_BITRATE[] = "max_bitrate"; ///< int64_t, Key for max bitrate
-    static constexpr const char VIDEO_ENCODER_SQR_FACTOR[]
-        = "sqr_factor"; ///< uint32_t, key for the desired encoding quality, 
-                        ///< this key is only supported for encoders that
-                        ///< are configured in stable quality rate control mode.
+    static constexpr const char VIDEO_ENCODER_SQR_FACTOR[] =
+        "sqr_factor"; ///< uint32_t, key for the desired encoding quality, 
+                      ///< this key is only supported for encoders that
+                      ///< are configured in stable quality rate control mode.
     /* -------------------- video specific tag -------------------- */
     static constexpr const char VIDEO_H264_PROFILE[] = "video.h264.profile"; ///< @see VideoH264Profile
     static constexpr const char VIDEO_H264_LEVEL[] = "video.h264.level";     ///< h264 level
