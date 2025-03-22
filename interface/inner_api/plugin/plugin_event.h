@@ -45,6 +45,7 @@ enum struct PluginEventType : int32_t {
     INITIAL_BUFFER_SUCCESS,
     DASH_SEEK_READY,
     AUDIO_OUTPUT_FORMAT_CHANGED,
+    FLV_AUTO_SELECT_BITRATE,
 };
 
 enum class NetworkClientErrorCode : int32_t {
