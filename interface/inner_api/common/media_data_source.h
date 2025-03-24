@@ -34,6 +34,14 @@ enum MediaDataSourceError : int32_t {
     SOURCE_ERROR_EOF = -1,
 };
 
+enum AudioDataSourceReadAtActionState : int32_t {
+    OK = 0,
+    SKIP_WITHOUT_LOG = 1,
+    RETRY_IN_INTERVAL = 2,
+    RETRY_SKIP = 3,
+    INVALID = -1
+};
+
 /**
  * @brief the mediaDataSource instance need set to player.
  *
