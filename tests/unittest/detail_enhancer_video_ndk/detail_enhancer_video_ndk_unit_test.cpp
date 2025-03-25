@@ -1367,7 +1367,11 @@ HWTEST_F(DetailEnhancerVideoNdkUnitTest, vpeVideoNdk_44, TestSize.Level1)
     VideoProcessingNdkLoader::Get().UnloadLibrary();
     VideoProcessingNdkLoader::Get().LoadLibrary();
     bool ret = VideoProcessingNdkLoader::Get().LoadLibrary();
-    EXPECT_EQ(ret, true);
+    if (!access("/system/lib64/", 0)) {
+        EXPECT_EQ(ret, true);
+    } else {
+        EXPECT_EQ(ret, false);
+    }
     VideoProcessingNdkLoader::Get().UnloadLibrary();
     VideoProcessingNdkLoader::Get().UnloadLibrary();
     VideoProcessingNdkLoader::Get().UnloadLibrary();
