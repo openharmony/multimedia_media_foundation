@@ -24,6 +24,7 @@ if (hst_is_standard_sys) {
       "./",
       "./common",
       "$histreamer_root_dir/interface/inner_api",
+      "$histreamer_root_dir/interface/kits/c",
     ]
     defines = [
       "HST_ANY_WITH_NO_RTTI",
