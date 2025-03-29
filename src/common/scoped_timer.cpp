@@ -23,15 +23,15 @@ constexpr OHOS::HiviewDFX::HiLogLabel LABEL = {LOG_CORE, LOG_DOMAIN_PLAYER, "Sco
 
 namespace OHOS {
 namespace Media {
-ScopedTimer::ScopedTimer(const std::string& name, int64_t timeout)
-    : name_(name), timeout_(timeout), start_(Plugins::GetCurrentMillisecond()) {}
+ScopedTimer::ScopedTimer(const std::string& name, int64_t timeoutMs)
+    : name_(name), timeoutMs_(timeoutMs), start_(Plugins::GetCurrentMillisecond()) {}
 
 ScopedTimer::~ScopedTimer()
 {
     auto endTime = Plugins::GetCurrentMillisecond();
     auto duration = endTime - start_;
-    FALSE_RETURN(duration >= 0);
-    FALSE_RETURN(duration > timeout_);
+    if (duration >= 0) { return; }
+    FALSE_RETURN_W(duration > timeoutMs_);
     MEDIA_LOG_W("name: " PUBLIC_LOG_S ", time-taking: " PUBLIC_LOG_D64 " ms", name_.c_str(), duration);
 }
 

@@ -23,13 +23,13 @@ namespace OHOS {
 namespace Media {
 class ScopedTimer {
 public:
-    explicit ScopedTimer(const std::string& name, int64_t timeout = 20);
+    explicit ScopedTimer(const std::string& name, int64_t timeoutMs = 20);
 
     ~ScopedTimer();
 
 private:
     std::string name_;
-    int64_t timeout_;
+    int64_t timeoutMs_;
     int64_t start_;
 };
 }
