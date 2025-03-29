@@ -30,10 +30,9 @@ ScopedTimer::~ScopedTimer()
 {
     auto endTime = Plugins::GetCurrentMillisecond();
     auto duration = endTime - start_;
-    if (duration <= 0) {
+    if (duration <= 0 || duration <= timeoutMs_) {
         return;
     }
-    FALSE_RETURN_W(duration > timeoutMs_);
     MEDIA_LOG_W("name: " PUBLIC_LOG_S ", time-taking: " PUBLIC_LOG_D64 " ms", name_.c_str(), duration);
 }
 
