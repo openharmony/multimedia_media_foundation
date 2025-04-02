@@ -288,6 +288,12 @@ enum AACProfile : int32_t {
     AAC_PROFILE_LD = 5,
     AAC_PROFILE_MAIN = 6,
 };
+
+enum AudioEncodePtsMode : int32_t {
+    DEFAULT_ENCODE_PTS_MODE = 0,               // not use input pts, calculate by encoder, pts start in 0
+    GENERATE_ENCODE_PTS_BY_INPUT_MODE,         // use input pts, calculate start from input pts
+};
+
 } // namespace Plugins
 } // namespace Media
 } // namespace OHOS
