@@ -97,6 +97,10 @@ public:
         (void)event;
     }
     virtual void NotifyRelease() {}
+    virtual void OnMemoryUsageEvent(const DfxEvent& event)
+    {
+        (void)event;
+    }
 };
 
 class FilterCallback {
