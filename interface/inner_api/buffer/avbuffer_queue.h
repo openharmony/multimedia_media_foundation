@@ -59,6 +59,11 @@ public:
     {
         return 0;
     }
+    // MemoryUsage xxx B
+    virtual uint32_t GetMemoryUsage()
+    {
+        return 0;
+    }
 };
 
 } // namespace Media
