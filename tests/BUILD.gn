@@ -19,8 +19,6 @@ group("media_foundation_unit_test") {
       "unittest/avbuffer:avbuffer_unit_test",
       "unittest/avbuffer_queue:avbuffer_queue_unit_test",
       "unittest/avshared_memory_pool:avshared_pool_unit_test",
-      "unittest/detail_enhancer_image_ndk:detail_enhancer_image_ndk_unit_test",
-      "unittest/detail_enhancer_video_ndk:detail_enhancer_video_ndk_unit_test",
       "unittest/event_bean:event_bean_unit_test",
       "unittest/filter:filter_unit_test",
       "unittest/format:format_unit_test",

@@ -17,7 +17,6 @@ group("histreamer_test") {
   deps = []
   if (!hst_is_lite_sys) {
     deps += [
-      "moduletest:vpe_video_native_module_test",
       "scenetest:histreamer_scene_test",
       "unittest:histreamer_unit_test",
     ]
