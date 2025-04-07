@@ -65,6 +65,7 @@ enum struct DfxEventType : uint32_t {
     DFX_INFO_PLAYER_STREAM_LAG,
     DFX_INFO_PLAYER_EOS_SEEK,
     DFX_INFO_PERF_REPORT,
+    DFX_INFO_MEMORY_USAGE,
     DFX_EVENT_BUTT,
 };
 

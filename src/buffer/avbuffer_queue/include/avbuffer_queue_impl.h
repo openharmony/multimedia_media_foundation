@@ -89,6 +89,8 @@ public:
     virtual Status SetProducerListener(sptr<IProducerListener>& listener);
     virtual Status SetConsumerListener(sptr<IConsumerListener>& listener);
 
+    virtual uint32_t GetMemoryUsage() override;
+
     Status SetQueueSizeAndAttachBuffer(uint32_t size, std::shared_ptr<AVBuffer>& buffer, bool isFilled) override;
 
     uint32_t GetFilledBufferSize() override;
@@ -116,6 +118,7 @@ protected:
     wptr<AVBufferQueueConsumerImpl> consumer_;
 
 private:
+    void TotalMemoryCalculation(bool isAdd, int32_t capacity);
     Status AttachAvailableBufferLocked(std::shared_ptr<AVBuffer>& buffer);
     Status PushBufferOnFilled(uint64_t uniqueId, bool isFilled);
     void SetQueueSizeBeforeAttachBufferLocked(uint32_t size);
@@ -127,6 +130,8 @@ private:
 
     std::list<uint64_t> freeBufferList_;  // 记录已分配的且处于空闲状态的buffer uniqueId，按bufferSize升序排列
     std::list<uint64_t> dirtyBufferList_;
+
+    std::atomic<uint32_t> memoryUsage_ = 0;
 
     std::condition_variable requestCondition;
 

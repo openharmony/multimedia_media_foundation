@@ -224,6 +224,7 @@ Status AVBufferQueueImpl::AllocBuffer(std::shared_ptr<AVBuffer>& buffer, const A
     };
     cachedBufferMap_[uniqueId] = ele;
     buffer = bufferImpl;
+    TotalMemoryCalculation(true, ele.config.capacity);
 
     return Status::OK;
 }
@@ -286,6 +287,7 @@ void AVBufferQueueImpl::DeleteCachedBufferById(uint64_t uniqueId)
     auto it = cachedBufferMap_.find(uniqueId);
     if (it != cachedBufferMap_.end()) {
         MEDIA_LOG_D("DeleteCachedBufferById uniqueId:%llu, state:%d", uniqueId, it->second.state);
+        TotalMemoryCalculation(false, it->second.config.capacity);
         cachedBufferMap_.erase(it);
     }
 }
@@ -489,6 +491,11 @@ Status AVBufferQueueImpl::ReturnBuffer(const std::shared_ptr<AVBuffer>& buffer, 
     return ReturnBuffer(buffer->GetUniqueId(), available);
 }
 
+uint32_t AVBufferQueueImpl::GetMemoryUsage()
+{
+    return memoryUsage_.load();
+}
+
 Status AVBufferQueueImpl::SetQueueSizeAndAttachBuffer(uint32_t size,
     std::shared_ptr<AVBuffer>& buffer, bool isFilled)
 {
@@ -512,6 +519,18 @@ Status AVBufferQueueImpl::SetQueueSizeAndAttachBuffer(uint32_t size,
     return ReleaseBuffer(uniqueId);
 }
 
+void AVBufferQueueImpl::TotalMemoryCalculation(bool isAdd, int32_t capacity)
+{
+    FALSE_RETURN(capacity > 0);
+    uint32_t capacityUint = static_cast<uint32_t>(capacity);
+    if (isAdd) {
+        memoryUsage_.fetch_add(capacityUint);
+    } else {
+        FALSE_RETURN(capacityUint <= memoryUsage_.load());
+        memoryUsage_.fetch_sub(capacityUint);
+    }
+}
+
 Status AVBufferQueueImpl::AttachAvailableBufferLocked(std::shared_ptr<AVBuffer>& buffer)
 {
     auto config = buffer->GetConfig();
@@ -533,6 +552,7 @@ Status AVBufferQueueImpl::AttachAvailableBufferLocked(std::shared_ptr<AVBuffer>&
             // 在什么场景下需要在此处删除buffer？
             DeleteBuffers(toBeDeleteCount + 1); // 多删除一个，用于attach当前buffer
             cachedBufferMap_[uniqueId] = ele;
+            TotalMemoryCalculation(true, ele.config.capacity);
             MEDIA_LOG_D("uniqueId(%llu) attached with delete", uniqueId);
         } else {
             MEDIA_LOG_E("attach failed, out of range");
@@ -540,6 +560,7 @@ Status AVBufferQueueImpl::AttachAvailableBufferLocked(std::shared_ptr<AVBuffer>&
         }
     } else {
         cachedBufferMap_[uniqueId] = ele;
+        TotalMemoryCalculation(true, ele.config.capacity);
         MEDIA_LOG_D("uniqueId(%llu) attached without delete", uniqueId);
     }
     return Status::OK;
@@ -609,7 +630,7 @@ Status AVBufferQueueImpl::DetachBuffer(uint64_t uniqueId, bool force)
             return Status::ERROR_INVALID_BUFFER_STATE;
         }
     }
-
+    TotalMemoryCalculation(false, ele.config.capacity);
     cachedBufferMap_.erase(uniqueId);
 
     return Status::OK;
