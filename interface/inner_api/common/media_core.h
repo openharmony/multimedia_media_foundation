@@ -55,6 +55,7 @@ enum MediaServiceErrCode : ErrCode {
     MSERR_UNSUPPORT_STREAM,                           // internal data stream error.
     MSERR_UNSUPPORT_FILE,                             // this appears to be a text file.
     MSERR_UNSUPPORT_SOURCE,                           // unsupport source type.
+    MSERR_VID_RESIZE_FAILED,                          // video resize failed.
     MSERR_AUD_RENDER_FAILED,                          // audio render failed.
     MSERR_AUD_ENC_FAILED,                             // audio encode failed.
     MSERR_VID_ENC_FAILED,                             // video encode failed.
