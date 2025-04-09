@@ -221,7 +221,6 @@ void MediaMonitorPolicy::WriteFaultEvent(EventId eventId, std::shared_ptr<EventB
 
 void MediaMonitorPolicy::WriteAggregationEvent(EventId eventId, std::shared_ptr<EventBean> &bean)
 {
-    MEDIA_LOG_D("Write aggregation event");
     BundleInfo bundleInfo = {};
     switch (eventId) {
         case AUDIO_STREAM_EXHAUSTED_STATS:
@@ -242,6 +241,9 @@ void MediaMonitorPolicy::WriteAggregationEvent(EventId eventId, std::shared_ptr<
             mediaEventBaseWriter_.WriteBackgoundSilentPlayback(bean);
             break;
         case STREAM_UTILIZATION_STATS:
+            // update bundle name
+            bundleInfo = GetBundleInfo(bean->GetIntValue("UID"));
+            bean->UpdateStringMap("APP_NAME", bundleInfo.appName);
             mediaEventBaseWriter_.WriteStreamStatistic(bean);
             break;
         case STREAM_PROPERTY_STATS:
@@ -374,6 +376,7 @@ void MediaMonitorPolicy::HandStreamUsageToEventVector(std::shared_ptr<EventBean>
         std::shared_ptr<EventBean> eventBean = std::make_shared<EventBean>(ModuleId::AUDIO,
             EventId::STREAM_UTILIZATION_STATS, EventType::FREQUENCY_AGGREGATION_EVENT);
         eventBean->Add("PIPE_TYPE", streamUsage->GetIntValue("PIPE_TYPE"));
+        eventBean->Add("UID", streamUsage->GetIntValue("UID"));
         eventBean->Add("IS_PLAYBACK", streamUsage->GetIntValue("IS_PLAYBACK"));
         eventBean->Add("STREAM_TYPE", streamUsage->GetIntValue("STREAM_TYPE"));
         eventBean->Add("SAMPLE_RATE", streamUsage->GetIntValue("SAMPLE_RATE"));
