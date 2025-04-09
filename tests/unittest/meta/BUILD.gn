@@ -14,7 +14,7 @@
 import("//build/test.gni")
 import("//foundation/multimedia/media_foundation/config.gni")
 
-module_output_path = "media_foundation/unittest"
+module_output_path = "media_foundation/media_foundation/unittest"
 
 group("meta_unit_test") {
   testonly = true
