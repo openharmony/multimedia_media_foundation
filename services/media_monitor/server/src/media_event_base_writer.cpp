@@ -207,7 +207,9 @@ void MediaEventBaseWriter::WriteJankPlaybackError(std::shared_ptr<EventBean> &be
         "REASON", static_cast<uint8_t>(bean->GetIntValue("REASON")),
         "PERIOD_MS", static_cast<uint32_t>(bean->GetIntValue("PERIOD_MS")),
         "PIPE_TYPE", static_cast<uint8_t>(bean->GetIntValue("PIPE_TYPE")),
-        "HDI_ADAPTER", static_cast<uint8_t>(bean->GetIntValue("HDI_ADAPTER")));
+        "HDI_ADAPTER", static_cast<uint8_t>(bean->GetIntValue("HDI_ADAPTER")),
+        "POSITION", static_cast<uint8_t>(bean->GetIntValue("POSITION")),
+        "APP_NAME", bean->GetStringValue("APP_NAME"));
 #endif
 }
 

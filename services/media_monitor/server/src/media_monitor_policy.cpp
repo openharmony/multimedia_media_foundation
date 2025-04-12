@@ -201,6 +201,7 @@ BundleInfo MediaMonitorPolicy::GetBundleInfo(int32_t appUid)
 void MediaMonitorPolicy::WriteFaultEvent(EventId eventId, std::shared_ptr<EventBean> &bean)
 {
     MEDIA_LOG_D("Write fault event");
+    BundleInfo bundleInfo;
     switch (eventId) {
         case LOAD_CONFIG_ERROR:
             mediaEventBaseWriter_.WriteLoadConfigError(bean);
@@ -212,6 +213,10 @@ void MediaMonitorPolicy::WriteFaultEvent(EventId eventId, std::shared_ptr<EventB
             mediaEventBaseWriter_.WriteLoadEffectEngineError(bean);
             break;
         case JANK_PLAYBACK:
+            // update bundle name
+            bundleInfo = GetBundleInfo(bean->GetIntValue("UID"));
+            bean->Add("APP_NAME", bundleInfo.appName);
+            MEDIA_LOG_I("Handle jank event of app:" PUBLIC_LOG_S, bundleInfo.appName.c_str());
             mediaEventBaseWriter_.WriteJankPlaybackError(bean);
             break;
         default:
