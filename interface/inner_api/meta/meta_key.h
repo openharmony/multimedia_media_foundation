@@ -121,7 +121,7 @@ public:
         "channel_layout";                                            ///< @see AudioChannelLayout, stream channel layout
     static constexpr const char AUDIO_SAMPLE_RATE[] = "sample_rate"; ///< sample rate
     static constexpr const char AUDIO_SAMPLE_FORMAT[] = "audio_sample_format";        ///< @see AudioSampleFormat
-    static constexpr const char AUDIO_RAW_SAMPLE_FORMAT[] = "audio.raw.sample.format";        ///< @see AudioSampleFormat
+    static constexpr const char AUDIO_RAW_SAMPLE_FORMAT[] = "audio.raw.sample.format";///< @see AudioSampleFormat
     static constexpr const char AUDIO_SAMPLE_PER_FRAME[] = "audio_samples_per_frame"; ///< sample per frame
     static constexpr const char AUDIO_OUTPUT_CHANNELS[] = "audio.output.channels";    ///< sink output channel num
     static constexpr const char AUDIO_OUTPUT_CHANNEL_LAYOUT[] =
