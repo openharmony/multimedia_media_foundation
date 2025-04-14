@@ -149,8 +149,9 @@ public:
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_CHANNEL_LAYOUT or
                            tagCharSeq == Tag::AUDIO_OUTPUT_CHANNEL_LAYOUT,
                            Plugins::AudioChannelLayout, AnyValueType::INT64_T);
-    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_SAMPLE_FORMAT or
-                           tagCharSeq == Tag::AUDIO_RAW_SAMPLE_FORMAT, Plugins::AudioSampleFormat,
+    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_SAMPLE_FORMAT, Plugins::AudioSampleFormat,
+                           AnyValueType::INT32_T);
+    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_RAW_SAMPLE_FORMAT, Plugins::AudioSampleFormat,
                            AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_AAC_PROFILE, Plugins::AudioAacProfile, AnyValueType::UINT8_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_AAC_STREAM_FORMAT, Plugins::AudioAacStreamFormat,
