@@ -102,6 +102,11 @@ enum AudioSampleFormat : int32_t {
     SAMPLE_U64P = 21,
     SAMPLE_F64 = 22,
     SAMPLE_F64P = 23,
+    SAMPLE_S16BE = 24
+    SAMPLE_S24BE = 25,
+    SAMPLE_S32BE = 26,
+    SAMPLE_F32BE = 27,
+    SAMPLE_F64BE = 28,
     INVALID_WIDTH = -1
 };
 

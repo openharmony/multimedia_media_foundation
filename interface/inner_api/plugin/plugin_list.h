@@ -74,6 +74,7 @@ private:
     void AddG711muAudioDecoderPlugins();
     void AddLbvcAudioDecoderPlugins();
     void AddOpusAudioDecoderPlugins();
+    void AddRawAudioDecoderPlugins();
     void AddAudioServerSinkPlugins();
     void AddFFmpegAudioEncodersPlugins();
     void AddG711muAudioEncoderPlugins();
