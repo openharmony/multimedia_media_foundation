@@ -98,7 +98,7 @@ OH_AVFormat *OH_AVBuffer_GetParameter(OH_AVBuffer *buffer)
     FALSE_RETURN_V_MSG_E(buffer->buffer_->meta_ != nullptr, nullptr, "buffer's meta is nullptr!");
 
     OH_AVFormat *avFormat = OH_AVFormat_Create();
-    if (!avFormat->format_.SetMeta(buffer->buffer_->meta_)) {
+    if (avFormat != nullptr && !avFormat->format_.SetMeta(buffer->buffer_->meta_)) {
         MEDIA_LOG_E("set meta failed!");
         OH_AVFormat_Destroy(avFormat);
         avFormat = nullptr;
