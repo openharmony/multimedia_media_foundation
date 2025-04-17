@@ -200,7 +200,7 @@ void AudioMemo::UpdateExcludedDeviceInner(AudioDeviceUsage audioDevUsage,
 int32_t AudioMemo::GetAudioExcludedDevicesMsg(std::map<AudioDeviceUsage,
     std::vector<std::shared_ptr<MonitorDeviceInfo>>> &excludedDevices)
 {
-    MEDIA_LOG_D("Begin get excluded device");
+    MEDIA_LOG_I("Begin get excluded device");
     std::lock_guard<std::mutex> lockEventMap(excludedDeviceMutex_);
     excludedDevices = excludedDevices_;
     return SUCCESS;
