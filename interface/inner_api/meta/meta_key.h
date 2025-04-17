@@ -157,6 +157,8 @@ public:
     static constexpr const char AUDIO_HOA_ORDER[] =
         "audio.hoa.order"; ///< Key for audio hoa order
     static constexpr const char AUDIO_ENCODE_PTS_MODE[] = "audio_encode_pts_mode";     ///< @see AudioEncodePtsMode
+    static constexpr const char AUDIO_AAC_LC_PREFER_CODEC[] =
+        "audio_aac_lc_prefer_codec"; ///< @see AudioAACLCPreferCodec
     /* -------------------- video universal tag -------------------- */
     static constexpr const char VIDEO_WIDTH[] = "width";                               ///< video width
     static constexpr const char VIDEO_HEIGHT[] = "height";                             ///< video height
