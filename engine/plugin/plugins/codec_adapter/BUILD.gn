@@ -75,10 +75,10 @@ if (hst_is_lite_sys) {
     deps = [ ":std_plugin_codec_adapter" ]
 
     external_deps = [
-      "openmax:libopenmax_static",
       "drivers_interface_codec:libcodec_proxy_3.0",
       "drivers_interface_display:libdisplay_composer_hdi_impl_1.2",
       "hilog:libhilog",
+      "openmax:libopenmax_static",
     ]
     relative_install_dir = "media/histreamer_plugins"
     subsystem_name = "multimedia"
