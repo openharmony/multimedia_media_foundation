@@ -27,6 +27,8 @@ namespace OHOS {
 namespace Media {
 namespace Plugin {
 namespace CodecAdapter {
+using namespace CodecHDI;
+
 HdiCodecManager& HdiCodecManager::GetInstance()
 {
     static HdiCodecManager impl;
@@ -51,10 +53,10 @@ int32_t HdiCodecManager::CreateComponent(const Plugin::Any& component, uint32_t&
         Init();
         FALSE_RETURN_V_MSG(mgr_ != nullptr, HDF_FAILURE, "mgr is nullptr");
     }
-    auto codecComponent = Plugin::AnyCast<CodecComponentType**>(component);
+    sptr<CodecHDI::ICodecComponent> codecComponent = Plugin::AnyCast<sptr<CodecHDI::ICodecComponent>>(component);
     FALSE_RETURN_V_MSG(codecComponent != nullptr, HDF_FAILURE, "component is nullptr");
-    return mgr_->CreateComponent(codecComponent, &id, const_cast<char *>(name.c_str()),
-        Plugin::AnyCast<int64_t>(appData), Plugin::AnyCast<CodecCallbackType*>(callbacks));
+    return mgr_->CreateComponent(codecComponent, id, const_cast<char *>(name.c_str()),
+        Plugin::AnyCast<int64_t>(appData), Plugin::AnyCast<sptr<CodecHDI::ICodecCallback>>(callbacks));
 }
 
 int32_t HdiCodecManager::DestroyComponent(const Plugin::Any& component, uint32_t id)
@@ -109,17 +111,16 @@ Status HdiCodecManager::UnRegisterCodecPlugins()
 void HdiCodecManager::Init()
 {
     MEDIA_LOG_I("Init Start");
-    mgr_ = GetCodecComponentManager();
+    mgr_ = CodecHDI::ICodecComponentManager::Get(false);
 }
 
 void HdiCodecManager::Reset()
 {
     MEDIA_LOG_I("Reset Start");
-    CodecComponentManagerRelease();
     mgr_ = nullptr;
 }
 
-void HdiCodecManager::AddHdiCap(const CodecCompCapability& hdiCap)
+void HdiCodecManager::AddHdiCap(const CodecHDI::CodecCompCapability& hdiCap)
 {
     MEDIA_LOG_DD("AddHdiCap Start");
     auto pluginType = GetCodecType(hdiCap.type);
@@ -155,21 +156,25 @@ void HdiCodecManager::AddHdiCap(const CodecCompCapability& hdiCap)
 void HdiCodecManager::InitCaps()
 {
     MEDIA_LOG_I("InitCaps Start");
-    auto len = mgr_->GetComponentNum();
-    CodecCompCapability hdiCaps[len];
-    auto ret = mgr_->GetComponentCapabilityList(hdiCaps, len);
+    int32_t compCnt = 0;
+    int32_t ret = mgr_->GetComponentNum(compCnt);
+    if (ret != HDF_SUCCESS || compCnt <= 0) {
+        MEDIA_LOG_E("failed to query component number, ret=%d", ret);
+        return;
+    }
+    std::vector<CodecCompCapability> capList(compCnt);
+    ret = mgr_->GetComponentCapabilityList(capList, compCnt);
     FALSE_RETURN_MSG(ret == HDF_SUCCESS, "GetComponentCapabilityList fail");
-    for (auto i = 0; i < len; ++i) {
-        AddHdiCap(hdiCaps[i]);
+    for (auto& cap : capList) {
+        AddHdiCap(cap);
     }
 }
 
-std::vector<VideoPixelFormat> HdiCodecManager::GetCodecFormats(const CodecVideoPortCap& port)
+std::vector<VideoPixelFormat> HdiCodecManager::GetCodecFormats(const CodecHDI::CodecVideoPortCap& port)
 {
-    int32_t index = 0;
     std::vector<VideoPixelFormat> formats;
-    while (index < PIX_FORMAT_NUM && port.supportPixFmts[index] > 0) {
-        switch (port.supportPixFmts[index]) {
+    for (int32_t fmt : port.supportPixFmts) {
+        switch (fmt) {
             case GRAPHIC_PIXEL_FMT_YCBCR_420_SP:
                 formats.push_back(VideoPixelFormat::NV12);
                 break;
@@ -186,14 +191,13 @@ std::vector<VideoPixelFormat> HdiCodecManager::GetCodecFormats(const CodecVideoP
                 formats.push_back(VideoPixelFormat::BGRA);
                 break;
             default:
-                MEDIA_LOG_W("Unknown Format" PUBLIC_LOG_D32, port.supportPixFmts[index]);
+                MEDIA_LOG_W("Unknown Format" PUBLIC_LOG_D32, fmt);
         }
-        index++;
     }
     return formats;
 }
 
-PluginType HdiCodecManager::GetCodecType(const CodecType& hdiType)
+PluginType HdiCodecManager::GetCodecType(const CodecHDI::CodecType& hdiType)
 {
     switch (hdiType) {
         case VIDEO_DECODER:
@@ -209,7 +213,7 @@ PluginType HdiCodecManager::GetCodecType(const CodecType& hdiType)
     }
 }
 
-std::string HdiCodecManager::GetCodecMime(const AvCodecRole& role)
+std::string HdiCodecManager::GetCodecMime(const CodecHDI::AvCodecRole& role)
 {
     switch (role) {
         case MEDIA_ROLETYPE_VIDEO_AVC:

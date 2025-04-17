@@ -17,10 +17,9 @@
 
 #ifndef HISTREAMER_PLUGIN_CODEC_BUFFER_POOL_H
 #define HISTREAMER_PLUGIN_CODEC_BUFFER_POOL_H
-
+#include "v3_0/icodec_component.h"
+#include "v3_0/codec_types.h"
 #include "codec_buffer.h"
-#include "codec_component_if.h"
-#include "codec_component_type.h"
 #include "foundation/osal/thread/mutex.h"
 #include "foundation/utils/blocking_queue.h"
 #include "plugin/common/plugin_types.h"
@@ -31,9 +30,13 @@ namespace OHOS {
 namespace Media {
 namespace Plugin {
 namespace CodecAdapter {
+
+namespace CodecHDI = OHOS::HDI::Codec::V3_0;
+
 class CodecBufferPool {
 public:
-    CodecBufferPool(CodecComponentType* compType, CompVerInfo& verInfo, uint32_t portIndex, uint32_t bufferCnt);
+    CodecBufferPool(sptr<CodecHDI::ICodecComponent>& compType, CodecHDI::CompVerInfo& verInfo,
+                    uint32_t portIndex, uint32_t bufferCnt);
 
     ~CodecBufferPool() = default;
 
@@ -60,8 +63,8 @@ private:
 
 private:
     OSAL::Mutex mutex_;
-    CodecComponentType* codecComp_ {nullptr};
-    CompVerInfo verInfo_;
+    sptr<CodecHDI::ICodecComponent> codecComp_ {nullptr};
+    CodecHDI::CompVerInfo verInfo_;
 
     uint32_t portIndex_;
     OHOS::Media::BlockingQueue<uint32_t> freeBufferId_;

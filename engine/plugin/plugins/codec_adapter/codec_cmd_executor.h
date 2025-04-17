@@ -19,7 +19,8 @@
 #define HISTREAMER_PLUGIN_CODEC_CMD_EXECUTOR_H
 #include <map>
 #include <vector>
-#include "codec_component_if.h"
+#include "v3_0/icodec_component.h"
+#include "v3_0/codec_types.h"
 #include "foundation/osal/thread/condition_variable.h"
 #include "foundation/osal/thread/mutex.h"
 #include "plugin/common/any.h"
@@ -31,6 +32,7 @@ namespace OHOS {
 namespace Media {
 namespace Plugin {
 namespace CodecAdapter {
+namespace CodecHDI = OHOS::HDI::Codec::V3_0;
 enum Result {
     INVALID,
     SUCCESS,
@@ -38,10 +40,10 @@ enum Result {
 };
 class CodecCmdExecutor {
 public:
-    CodecCmdExecutor(CodecComponentType* component, uint32_t inPortIndex);
+    CodecCmdExecutor(sptr<CodecHDI::ICodecComponent>& component, uint32_t inPortIndex);
     ~CodecCmdExecutor() = default;
 
-    Status OnEvent(OMX_EVENTTYPE event, EventInfo* info);
+    Status OnEvent(CodecHDI::CodecEventType event, const CodecHDI::EventInfo& info);
     Status SendCmd(OMX_COMMANDTYPE cmd, const Plugin::Any& param);
     bool WaitCmdResult(OMX_COMMANDTYPE cmd, const Plugin::Any& param);
     Status SetCallback(Callback* cb);
@@ -53,7 +55,7 @@ private:
 
     Callback* callback_ {nullptr};
 
-    CodecComponentType* codecComp_ {nullptr};
+    sptr<CodecHDI::ICodecComponent> codecComp_ {nullptr};
     uint32_t inPortIndex_;
     OSAL::Mutex mutex_;
     OSAL::ConditionVariable cond_;

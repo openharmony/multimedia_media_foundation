@@ -18,7 +18,6 @@
 #define HST_LOG_TAG "SurfaceAllocator"
 
 #include "common/surface_allocator.h"
-#include "display_type.h"
 #include "inner_api/common/log.h"
 #include "sync_fence.h"
 

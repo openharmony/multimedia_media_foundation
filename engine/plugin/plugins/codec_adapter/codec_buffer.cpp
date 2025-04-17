@@ -18,12 +18,14 @@
 
 #include "codec_buffer.h"
 #include "codec_utils.h"
+#include "hdf_base.h"
 #include "plugin/common/surface_memory.h"
 
 namespace OHOS {
 namespace Media {
 namespace Plugin {
 namespace CodecAdapter {
+using namespace CodecHDI;
 CodecBuffer::CodecBuffer(std::shared_ptr<Buffer>& buffer, CompVerInfo& verInfo,
     bool isInput, uint32_t bufferSize, MemoryType bufMemType)
     : buffer_(buffer), verInfo_(verInfo)
@@ -36,14 +38,14 @@ void CodecBuffer::Init(bool isInput, uint32_t bufferSize, MemoryType bufMemType)
     MEDIA_LOG_DD("CodecBuffer Init Start");
     omxBuffer_ = std::make_shared<OmxCodecBuffer>();
     omxBuffer_->size = sizeof(OmxCodecBuffer);
-    omxBuffer_->version.s.nVersionMajor = verInfo_.compVersion.s.nVersionMajor;
+    omxBuffer_->version.version.majorVersion = verInfo_.compVersion.version.majorVersion;
     omxBuffer_->fenceFd = -1; // check use -1 first with no window
     omxBuffer_->pts = 0;
     omxBuffer_->flag = 0;
     omxBuffer_->bufferType = GetOmxBufferType(bufMemType, isInput);
     omxBuffer_->allocLen = bufferSize;
-    omxBuffer_->bufferLen = 0;
-    omxBuffer_->buffer = nullptr;
+    omxBuffer_->filledLen = 0;
+    omxBuffer_->bufferhandle = nullptr;
     memory_ = buffer_->GetMemory();
     FALSE_RETURN(memory_ != nullptr);
     omxBuffer_->allocLen = memory_->GetCapacity();
@@ -55,16 +57,15 @@ void CodecBuffer::Init(bool isInput, uint32_t bufferSize, MemoryType bufMemType)
             if (bufferHandle == NULL) {
                 return;
             }
-            omxBuffer_->bufferLen =
+            omxBuffer_->filledLen =
                 sizeof(BufferHandle) + (sizeof(int32_t) * (bufferHandle->reserveFds + bufferHandle->reserveInts));
-            omxBuffer_->buffer = reinterpret_cast<uint8_t *>(bufferHandle);
+            omxBuffer_->bufferhandle = new NativeBuffer(bufferHandle);
             break;
         }
         case MemoryType::SHARE_MEMORY: {
-            omxBuffer_->bufferLen = sizeof(int);
+            omxBuffer_->filledLen = sizeof(int);
             omxBuffer_->type = isInput ? READ_ONLY_TYPE : READ_WRITE_TYPE;
-            omxBuffer_->buffer = reinterpret_cast<uint8_t *>(static_cast<long long>(
-                std::static_pointer_cast<Plugin::ShareMemory>(memory_)->GetShareMemoryFd()));
+            omxBuffer_->fd = std::static_pointer_cast<Plugin::ShareMemory>(memory_)->GetShareMemoryFd();
             MEDIA_LOG_D("share memory fd: " PUBLIC_LOG_D32,
                         std::static_pointer_cast<Plugin::ShareMemory>(memory_)->GetShareMemoryFd());
             break;
@@ -126,15 +127,14 @@ Status CodecBuffer::Rebind(const std::shared_ptr<Plugin::Buffer>& pluginBuffer)
             FALSE_RETURN_V_MSG_E(surfaceBuf != nullptr, Status::ERROR_NULL_POINTER, "GetSurfaceBuffer failed");
             BufferHandle* bufferHandle = surfaceBuf->GetBufferHandle();
             FALSE_RETURN_V_MSG_E(bufferHandle != nullptr, Status::ERROR_NULL_POINTER, "GetBufferHandle failed");
-            omxBuffer_->bufferLen =
+            omxBuffer_->filledLen =
                 sizeof(BufferHandle) + sizeof(int32_t) * (bufferHandle->reserveFds + bufferHandle->reserveInts);
-            omxBuffer_->buffer = reinterpret_cast<uint8_t *>(bufferHandle);
+            omxBuffer_->bufferhandle = new NativeBuffer(bufferHandle);
             break;
         }
         case MemoryType::SHARE_MEMORY:
-            omxBuffer_->bufferLen = sizeof(int);
-            omxBuffer_->buffer = reinterpret_cast<uint8_t *>(static_cast<long long>(
-                std::static_pointer_cast<Plugin::ShareMemory>(memory_)->GetShareMemoryFd()));
+            omxBuffer_->filledLen = sizeof(int);
+            omxBuffer_->fd = std::static_pointer_cast<Plugin::ShareMemory>(memory_)->GetShareMemoryFd();
             omxBuffer_->offset = 0;
             omxBuffer_->filledLen = 0;
             break;
@@ -157,17 +157,17 @@ Status CodecBuffer::Rebind(const std::shared_ptr<Plugin::Buffer>& pluginBuffer)
  * @param omxBuffer
  * @return
  */
-Status CodecBuffer::Unbind(std::shared_ptr<Plugin::Buffer>& buffer, const OmxCodecBuffer* omxBuffer)
+Status CodecBuffer::Unbind(std::shared_ptr<Plugin::Buffer>& buffer, const OmxCodecBuffer& omxBuffer)
 {
     // 因为Rebind()里面用buffer_保存了PluginBuf，所以这里的buffer_需要主动释放，减少智能指针的引用计数
     // decoder 时，PluginBuf 的真正释放时机应该是在sink节点，该数据送显后才能释放
     FALSE_RETURN_V_MSG_E(memory_ != nullptr, Status::ERROR_NULL_POINTER, "Param memory_ is nullptr");
     if (memory_->GetMemoryType() == MemoryType::SHARE_MEMORY) {
-        memory_->UpdateDataSize(static_cast<size_t>(omxBuffer->filledLen - omxBuffer->offset), 0);
+        memory_->UpdateDataSize(static_cast<size_t>(omxBuffer.filledLen - omxBuffer.offset), 0);
     }
     buffer = buffer_;
-    buffer->flag = Translate2PluginFlagSet(omxBuffer->flag);
-    buffer->pts = omxBuffer->pts;
+    buffer->flag = Translate2PluginFlagSet(omxBuffer.flag);
+    buffer->pts = omxBuffer.pts;
     buffer_ = nullptr;
     return Status::OK;
 }

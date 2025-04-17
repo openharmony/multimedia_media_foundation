@@ -25,7 +25,9 @@ namespace OHOS {
 namespace Media {
 namespace Plugin {
 namespace CodecAdapter {
-CodecCmdExecutor::CodecCmdExecutor(CodecComponentType* component, uint32_t inPortIndex)
+using namespace CodecHDI;
+
+CodecCmdExecutor::CodecCmdExecutor(sptr<CodecHDI::ICodecComponent>& component, uint32_t inPortIndex)
     : codecComp_(component), inPortIndex_(inPortIndex)
 {
     resultMap_[OMX_CommandStateSet] = OMX_StateInvalid;
@@ -34,22 +36,22 @@ CodecCmdExecutor::CodecCmdExecutor(CodecComponentType* component, uint32_t inPor
     resultMap_[OMX_CommandPortDisable] = std::pair<Result, Result>{Result::INVALID, Result::INVALID};
 }
 
-Status CodecCmdExecutor::OnEvent(OMX_EVENTTYPE event, EventInfo* info)
+Status CodecCmdExecutor::OnEvent(CodecEventType event, const CodecHDI::EventInfo& info)
 {
     MEDIA_LOG_I("OnEvent begin - eEvent: " PUBLIC_LOG_D32 ", nData1: " PUBLIC_LOG_U32 ", nData2: " PUBLIC_LOG_U32,
-        static_cast<int>(event), info->data1, info->data2);
+        static_cast<int>(event), info.data1, info.data2);
     switch (event) {
-        case OMX_EventCmdComplete:
-            HandleEventCmdComplete(info->data1, info->data2); // data2 indicates a state
+        case CODEC_EVENT_CMD_COMPLETE:
+            HandleEventCmdComplete(info.data1, info.data2); // data2 indicates a state
             break;
-        case OMX_EventPortSettingsChanged:
-            HandleEventPortSettingsChanged(info->data1, info->data2);
+        case CODEC_EVENT_PORT_SETTINGS_CHANGED:
+            HandleEventPortSettingsChanged(info.data1, info.data2);
             break;
-        case OMX_EventBufferFlag:
-            HandleEventBufferFlag(info->data1, info->data2);
+        case CODEC_EVENT_BUFFER_FLAG:
+            HandleEventBufferFlag(info.data1, info.data2);
             break;
-        case OMX_EventError:
-            HandleEventError(info->data1, info->data2);
+        case CODEC_EVENT_ERROR:
+            HandleEventError(info.data1, info.data2);
             break;
         default:
             break;
