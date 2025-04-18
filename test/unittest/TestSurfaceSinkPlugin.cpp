@@ -19,6 +19,7 @@
 #include "ui/rs_surface_node.h"
 #include "window.h"
 #include "window_option.h"
+#include "display/composer/v1_2/display_composer_type.h"
 
 using namespace testing::ext;
 using namespace OHOS::Media::Plugin;
