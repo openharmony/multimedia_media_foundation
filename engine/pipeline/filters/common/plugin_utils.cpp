@@ -497,7 +497,7 @@ std::string Capability2String(const Capability& capability)
         snprintf_truncated_s(buffer + pos, MAX_BUF_LEN - pos, " ...}");
     } else {
         pos -= 2; // 2 is length of ", "
-        snprintf_truncated_s(buffer + pos, MAX_BUF_LEN + 1 - pos, "}");
+        snprintf_truncated_s(buffer + pos, MAX_BUF_LEN - 1 - pos, "}");
     }
     return buffer;
 }
@@ -537,7 +537,7 @@ std::string Meta2String(const Plugin::Meta& meta)
         snprintf_truncated_s(buffer + pos, MAX_BUF_LEN + 1 - pos, " ...}");
     } else {
         pos -= 2; // 2 is length of ", "
-        snprintf_truncated_s(buffer + pos, MAX_BUF_LEN + 1 - pos, "}");
+        snprintf_truncated_s(buffer + pos, MAX_BUF_LEN - pos, "}");
     }
     return buffer;
 }
