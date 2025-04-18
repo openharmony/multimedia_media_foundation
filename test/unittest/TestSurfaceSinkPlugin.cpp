@@ -61,7 +61,8 @@ HWTEST(TestSurfaceSinkPlugin, find_surface_sink_plugins_process, TestSize.Level1
     ASSERT_TRUE(plugin != nullptr);
     sptr<Surface> surface = GetVideoSurface();
     ASSERT_TRUE(surface != nullptr);
-    surface->SetUserData("SURFACE_FORMAT", std::to_string(OHOS::HDI::Display::Composer::V1_2::PixelFormat::PIXEL_FMT_RGBA_8888));
+    surface->SetUserData("SURFACE_FORMAT",
+        std::to_string(OHOS::HDI::Display::Composer::V1_2::PixelFormat::PIXEL_FMT_RGBA_8888));
 
     plugin->SetParameter(Tag::VIDEO_SURFACE, surface);
     auto initStatus = plugin->Init();
