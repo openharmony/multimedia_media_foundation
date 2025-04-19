@@ -392,6 +392,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::AV_TRANSCODER_VIDEO_DECODER_DURATION, defaultInt32},
     {Tag::AV_TRANSCODER_VIDEO_ENCODER_DURATION, defaultInt32},
     {Tag::AV_TRANSCODER_VIDEO_VPE_DURATION, defaultInt32},
+    {Tag::MEDIA_EDITLIST, defaultInt32},
     // String
     {Tag::MIME_TYPE, defaultString},
     {Tag::MEDIA_FILE_URI, defaultString},

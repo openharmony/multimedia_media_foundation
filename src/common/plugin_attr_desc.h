@@ -75,6 +75,7 @@ const std::map<Tag, std::tuple<const char*, const ValueType&, const char*>> g_ta
     {Tag::MEDIA_FILE_URI, {"file_uri",                 g_emptyString,      "string"}},
     {Tag::MEDIA_CODEC_CONFIG, {"codec_config",         g_vecBufDef,        "std::vector<uint8_t>"}},
     {Tag::MEDIA_POSITION, {"position",                 g_u64Def,           "uint64_t"}},
+    {Tag::MEDIA_EDITLIST, {"editlist",                 g_d32Def,           "int32_t"}},
     {Tag::AUDIO_CHANNELS, {"channels",                 g_u32Def,           "uint32_t"}},
     {Tag::AUDIO_CHANNEL_LAYOUT, {"channel_layout",     g_channelLayoutDef, "AudioChannelLayout"}},
     {Tag::AUDIO_SAMPLE_RATE, {"sample_rate",           g_u32Def,           "uint32_t"}},
