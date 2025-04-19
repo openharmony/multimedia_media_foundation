@@ -105,16 +105,6 @@ void PlayListDownloader::Close()
     updateTask_->Stop();
     downloader_->Stop();
 }
-
-void PlayListDownloader::Stop()
-{
-    downloader_->Stop();
-}
-
-void PlayListDownloader::Start()
-{
-    downloader_->Start();
-}
 }
 }
 }

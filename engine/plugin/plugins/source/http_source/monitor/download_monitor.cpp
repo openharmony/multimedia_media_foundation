@@ -100,14 +100,14 @@ bool DownloadMonitor::Read(unsigned char *buff, unsigned int wantReadLength,
     return ret;
 }
 
-bool DownloadMonitor::SeekToPos(int64_t offset)
+bool DownloadMonitor::Seek(int offset)
 {
     isPlaying_ = true;
     {
         OSAL::ScopedLock lock(taskMutex_);
         retryTasks_.clear();
     }
-    return downloader_->SeekToPos(offset);
+    return downloader_->Seek(offset);
 }
 
 size_t DownloadMonitor::GetContentLength() const
@@ -115,7 +115,7 @@ size_t DownloadMonitor::GetContentLength() const
     return downloader_->GetContentLength();
 }
 
-int64_t DownloadMonitor::GetDuration() const
+double DownloadMonitor::GetDuration() const
 {
     return downloader_->GetDuration();
 }
@@ -123,26 +123,6 @@ int64_t DownloadMonitor::GetDuration() const
 Seekable DownloadMonitor::GetSeekable() const
 {
     return downloader_->GetSeekable();
-}
-
-bool DownloadMonitor::SeekToTime(int64_t offset)
-{
-    isPlaying_ = true;
-    {
-        OSAL::ScopedLock lock(taskMutex_);
-        retryTasks_.clear();
-    }
-    return downloader_->SeekToTime(offset);
-}
-
-std::vector<uint32_t> DownloadMonitor::GetBitRates()
-{
-    return downloader_->GetBitRates();
-}
-
-bool DownloadMonitor::SelectBitRate(uint32_t bitRate)
-{
-    return downloader_->SelectBitRate(bitRate);
 }
 
 void DownloadMonitor::SetCallback(Callback* cb)
