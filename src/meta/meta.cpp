@@ -151,7 +151,8 @@ static std::vector<TagType> g_metadataBoolVector = {
     Tag::AV_PLAYER_DOWNLOAD_TIME_OUT,
     Tag::VIDEO_ENCODER_PER_FRAME_DISCARD,
     Tag::VIDEO_ENCODER_ENABLE_WATERMARK,
-    Tag::VIDEO_ENCODER_ENABLE_PARAMS_FEEDBACK
+    Tag::VIDEO_ENCODER_ENABLE_PARAMS_FEEDBACK,
+    Tag::VIDEO_ENCODER_ENABLE_QP_MAP,
 };
 
 bool SetMetaData(Meta& meta, const TagType& tag, int32_t value)
@@ -327,6 +328,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_ENCODER_QP_MAX, defaultInt32},
     {Tag::VIDEO_ENCODER_QP_MIN, defaultInt32},
     {Tag::VIDEO_ENCODER_QP_START, defaultInt32},
+    {Tag::VIDEO_ENCODER_TARGET_QP, defaultInt32},
     {Tag::FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_COUNT, defaultInt32},
     {Tag::OH_MD_KEY_AUDIO_OBJECT_NUMBER, defaultInt32},
     {Tag::AV_CODEC_CALLER_PID, defaultInt32},
@@ -481,6 +483,8 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::AV_PLAYER_DOWNLOAD_TIME_OUT, defaultBool},
     {Tag::VIDEO_ENCODER_PER_FRAME_DISCARD, defaultBool},
     {Tag::VIDEO_ENCODER_ENABLE_WATERMARK, defaultBool},
+    {Tag::VIDEO_ENCODER_ENABLE_QP_MAP, defaultBool},
+    {Tag::VIDEO_ENCODER_PER_FRAME_ABS_QP_MAP, defaultBool},
     // Int64
     {Tag::MEDIA_FILE_SIZE, defaultUInt64},
     {Tag::MEDIA_POSITION, defaultUInt64},
@@ -515,6 +519,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     // vector<uint8_t>
     {Tag::DRM_CENC_INFO, defaultVectorUInt8},
     {Tag::MEDIA_AVAILABLE_BITRATES, defaultVectorUInt8},
+    {Tag::VIDEO_ENCODER_PER_FRAME_QP_MAP, defaultVectorUInt8},
     // Uint32
     {Tag::DRM_DECRYPT_AVG_SIZE, defaultUInt32},
     {Tag::DRM_DECRYPT_AVG_DURATION, defaultUInt32},

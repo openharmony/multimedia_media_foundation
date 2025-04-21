@@ -273,6 +273,8 @@ public:
     static constexpr const char VIDEO_ENCODER_QP_START[] =
         "video_encoder_qp_start"; ///< int32_t, key for describing the start quantization parameter allowed for video
                                   ///< encoder. This is an optional key that applies only to video encoder input loop.
+    static constexpr const char VIDEO_ENCODER_TARGET_QP[] =
+        "video_encoder_target_qp"; ///< int32_t, Key for video encoder target qp.
     static constexpr const char VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK[] =
         "video_encoder_enable_surface_input_callback"; ///< bool, the associated value is an bool (true or false): true
                                                        ///< is enabled, false is closed.
@@ -356,6 +358,18 @@ public:
         "sqr_factor"; ///< uint32_t, key for the desired encoding quality,
                       ///< this key is only supported for encoders that
                       ///< are configured in stable quality rate control mode.
+    static constexpr const char VIDEO_ENCODER_ENABLE_QP_MAP[] =
+        "video_encoder_enable_qp_map";  ///< bool, key for enable config frame qp map,
+                                        ///< true is enabled, false otherwise. The default value is false.
+                                        ///< This is an optional key that applies only to video encoder. It
+                                        ///< is used in configure.
+    static constexpr const char VIDEO_ENCODER_PER_FRAME_ABS_QP_MAP[] =
+        "video_encoder_frame_abs_block_qp";  ///< bool, Key for video encoder frame qp map type,
+                                             ///< true is abs qp, false is delta qp.
+                                             ///< The default value is false.
+    static constexpr const char VIDEO_ENCODER_PER_FRAME_QP_MAP[] =
+        "video_encoder_frame_block_qp"; ///< vector<uint8_t>, Key for video encoder frame qp map.
+
     /* -------------------- video specific tag -------------------- */
     static constexpr const char VIDEO_H264_PROFILE[] = "video.h264.profile"; ///< @see VideoH264Profile
     static constexpr const char VIDEO_H264_LEVEL[] = "video.h264.level";     ///< h264 level
