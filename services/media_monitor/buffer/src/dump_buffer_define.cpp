@@ -15,11 +15,6 @@
 
 #include "dump_buffer_define.h"
 
-DumpBuffer::DumpBuffer()
-{
-    buffer_ = std::make_shared<OHOS::Media::AVBuffer>();
-}
-
 DumpBuffer::DumpBuffer(const std::shared_ptr<OHOS::Media::AVBuffer> &buffer)
     : buffer_(buffer)
 {

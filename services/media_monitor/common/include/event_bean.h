@@ -19,13 +19,12 @@
 #include <map>
 #include "media_monitor_info.h"
 #include "iremote_proxy.h"
-#include "parcel.h"
 
 namespace OHOS {
 namespace Media {
 namespace MediaMonitor {
 
-class EventBean : public Parcelable {
+class EventBean {
 public:
     EventBean();
     EventBean(const ModuleId &mId, const EventId &eId,
@@ -60,10 +59,8 @@ public:
     void SetEventId(const EventId &eId);
     void SetEventType(const EventType &type);
 
+    bool WriteToParcel(MessageParcel &parcel);
     void ReadFromParcel(MessageParcel &parcel);
-
-    bool Marshalling(Parcel &parcel) const override;
-    static EventBean *Unmarshalling(Parcel &data);
 
 private:
     ModuleId moduleId_ = UNKNOW_MODULEID;

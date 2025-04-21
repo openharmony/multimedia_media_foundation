@@ -71,29 +71,24 @@ public:
 
     int32_t Dump(int32_t fd, const std::vector<std::u16string> &args) override;
 
-    ErrCode WriteLogMsg(const EventBean &bean)  override;
+    void WriteLogMsg(std::shared_ptr<EventBean> &bean)  override;
 
-    ErrCode GetAudioRouteMsg(std::unordered_map<int32_t, MonitorDeviceInfo> &preferredDevices,
-        int32_t &funcResult) override;
+    int32_t GetAudioRouteMsg(std::map<PreferredType, std::shared_ptr<MonitorDeviceInfo>> &preferredDevices) override;
 
-    ErrCode SetMediaParameters(const std::string &dumpType, const std::string &dumpEnable,
-        int32_t &funcResult) override;
+    int32_t SetMediaParameters(const std::string &dumpType, const std::string &dumpEnable) override;
 
-    ErrCode WriteAudioBuffer(const std::string &fileName, uint64_t ptr, uint32_t size, int32_t &funcResult) override;
+    int32_t WriteAudioBuffer(const std::string &fileName, void *ptr, size_t size) override;
 
-    ErrCode GetInputBuffer(DumpBuffer &buffer, int32_t size, int32_t &funcResult) override;
+    int32_t GetInputBuffer(std::shared_ptr<DumpBuffer> &buffer, int32_t size) override;
 
-    ErrCode InputBufferFilled(const std::string &fileName, uint64_t bufferId, uint32_t size,
-        int32_t &funcResult) override;
+    int32_t InputBufferFilled(const std::string &fileName, uint64_t bufferId, int32_t size) override;
 
-    ErrCode GetPcmDumpStatus(int32_t &dumpEnable, int32_t &funcResult) override;
+    int32_t GetPcmDumpStatus(int32_t &dumpEnable) override;
 
-    ErrCode ErasePreferredDeviceByType(int32_t preferredType, int32_t &funcResult) override;
+    int32_t ErasePreferredDeviceByType(const PreferredType preferredType) override;
 
-    ErrCode GetAudioExcludedDevicesMsg(std::unordered_map<int32_t,
-        std::vector<MonitorDeviceInfo>> &excludedDevices, int32_t &funcResult) override;
-
-    std::shared_ptr<DumpBufferWrap> dumpBufferWrap_ = nullptr;
+    int32_t GetAudioExcludedDevicesMsg(std::map<AudioDeviceUsage,
+        std::vector<std::shared_ptr<MonitorDeviceInfo>>> &excludedDevices) override;
 private:
     MediaMonitorService();
     void MessageLoopFunc();

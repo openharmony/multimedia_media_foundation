@@ -16,34 +16,11 @@
 #define DUMP_BUFFER_DEFINE_H
 
 #include "avbuffer_queue.h"
-#include "parcel.h"
-#include "message_parcel.h"
 
-struct DumpBuffer : public OHOS::Parcelable {
-    DumpBuffer();
+struct DumpBuffer {
     explicit DumpBuffer(const std::shared_ptr<OHOS::Media::AVBuffer> &buffer);
     virtual ~DumpBuffer();
     std::shared_ptr<OHOS::Media::AVBuffer> buffer_;
-
-    bool Marshalling(OHOS::Parcel &parcel) const
-    {
-        OHOS::MessageParcel *parcelIn = static_cast<OHOS::MessageParcel*>(&parcel);
-        bool ret = buffer_->WriteToMessageParcel(*parcelIn);
-        return ret;
-    }
-
-    static DumpBuffer *Unmarshalling(OHOS::Parcel &data)
-    {
-        std::shared_ptr<OHOS::Media::AVBuffer> buffer = OHOS::Media::AVBuffer::CreateAVBuffer();
-        struct DumpBuffer *dumpBuffer = new (std::nothrow) DumpBuffer(buffer);
-        if (dumpBuffer == nullptr) {
-            return nullptr;
-        }
-
-        OHOS::MessageParcel *parcelIn = static_cast<OHOS::MessageParcel*>(&data);
-        dumpBuffer->buffer_->ReadFromMessageParcel(*parcelIn);
-        return dumpBuffer;
-    }
 };
 
 #endif // DUMP_BUFFER_DEFINE_H

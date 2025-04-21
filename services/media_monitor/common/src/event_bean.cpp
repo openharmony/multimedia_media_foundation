@@ -33,6 +33,46 @@ EventBean::EventBean(const ModuleId &mId, const EventId &eId,
     const EventType &type)
     : moduleId_(mId), eventId_(eId), eventType_(type) {}
 
+bool EventBean::WriteToParcel(MessageParcel &parcel)
+{
+    FALSE_RETURN_V_MSG_E(parcel.WriteInt32(moduleId_), false, "write moduleId failed");
+    FALSE_RETURN_V_MSG_E(parcel.WriteInt32(eventId_), false, "write eventId failed");
+    FALSE_RETURN_V_MSG_E(parcel.WriteInt32(eventType_), false, "write eventId failed");
+
+    FALSE_RETURN_V_MSG_E(intMap_.size() < MAX_MAP_SIZE, false,
+        "The size of intMap_ exceeds the maximum value");
+    FALSE_RETURN_V_MSG_E(parcel.WriteInt32(intMap_.size()), false, "write intMap.size() failed");
+    for (auto &it : intMap_) {
+        FALSE_RETURN_V_MSG_E(parcel.WriteString(it.first), false, "intMap failed to WriteString for key");
+        FALSE_RETURN_V_MSG_E(parcel.WriteInt32(it.second), false, "intMap failed to WriteInt32 for value");
+    }
+
+    FALSE_RETURN_V_MSG_E(stringMap_.size() < MAX_MAP_SIZE, false,
+        "The size of stringMap_ exceeds the maximum value");
+    FALSE_RETURN_V_MSG_E(parcel.WriteInt32(stringMap_.size()), false, "write stringMap.size() failed");
+    for (auto &it : stringMap_) {
+        FALSE_RETURN_V_MSG_E(parcel.WriteString(it.first), false, "stringMap failed to WriteString for key");
+        FALSE_RETURN_V_MSG_E(parcel.WriteString(it.second), false, "stringMap failed to WriteString for value");
+    }
+
+    FALSE_RETURN_V_MSG_E(uint64Map_.size() < MAX_MAP_SIZE, false,
+        "The size of uint64Map_ exceeds the maximum value");
+    FALSE_RETURN_V_MSG_E(parcel.WriteInt32(uint64Map_.size()), false, "write uint64Map.size() failed");
+    for (auto &it : uint64Map_) {
+        FALSE_RETURN_V_MSG_E(parcel.WriteString(it.first), false, "uint64Map failed to WriteString for key");
+        FALSE_RETURN_V_MSG_E(parcel.WriteUint64(it.second), false, "uint64Map failed to WriteInt32 for value");
+    }
+
+    FALSE_RETURN_V_MSG_E(floatMap_.size() < MAX_MAP_SIZE, false,
+        "The size of floatMap_ exceeds the maximum value");
+    FALSE_RETURN_V_MSG_E(parcel.WriteInt32(floatMap_.size()), false, "write floatMap.size() failed");
+    for (auto &it : floatMap_) {
+        FALSE_RETURN_V_MSG_E(parcel.WriteString(it.first), false, "floatMap failed to WriteString for key");
+        FALSE_RETURN_V_MSG_E(parcel.WriteFloat(it.second), false, "floatMap failed to WriteInt32 for value");
+    }
+    return true;
+}
+
 void EventBean::ReadFromParcel(MessageParcel &parcel)
 {
     moduleId_ = static_cast<ModuleId>(parcel.ReadInt32());
@@ -74,55 +114,6 @@ void EventBean::ReadFromParcel(MessageParcel &parcel)
         float value = parcel.ReadFloat();
         Add(key, value);
     }
-}
-
-bool EventBean::Marshalling(Parcel &parcel) const
-{
-    FALSE_RETURN_V_MSG_E(parcel.WriteInt32(moduleId_), false, "write moduleId failed");
-    FALSE_RETURN_V_MSG_E(parcel.WriteInt32(eventId_), false, "write eventId failed");
-    FALSE_RETURN_V_MSG_E(parcel.WriteInt32(eventType_), false, "write eventId failed");
-
-    FALSE_RETURN_V_MSG_E(intMap_.size() < MAX_MAP_SIZE, false,
-        "The size of intMap_ exceeds the maximum value");
-    FALSE_RETURN_V_MSG_E(parcel.WriteInt32(intMap_.size()), false, "write intMap.size() failed");
-    for (auto &it : intMap_) {
-        FALSE_RETURN_V_MSG_E(parcel.WriteString(it.first), false, "intMap failed to WriteString for key");
-        FALSE_RETURN_V_MSG_E(parcel.WriteInt32(it.second), false, "intMap failed to WriteInt32 for value");
-    }
-
-    FALSE_RETURN_V_MSG_E(stringMap_.size() < MAX_MAP_SIZE, false,
-        "The size of stringMap_ exceeds the maximum value");
-    FALSE_RETURN_V_MSG_E(parcel.WriteInt32(stringMap_.size()), false, "write stringMap.size() failed");
-    for (auto &it : stringMap_) {
-        FALSE_RETURN_V_MSG_E(parcel.WriteString(it.first), false, "stringMap failed to WriteString for key");
-        FALSE_RETURN_V_MSG_E(parcel.WriteString(it.second), false, "stringMap failed to WriteString for value");
-    }
-
-    FALSE_RETURN_V_MSG_E(uint64Map_.size() < MAX_MAP_SIZE, false,
-        "The size of uint64Map_ exceeds the maximum value");
-    FALSE_RETURN_V_MSG_E(parcel.WriteInt32(uint64Map_.size()), false, "write uint64Map.size() failed");
-    for (auto &it : uint64Map_) {
-        FALSE_RETURN_V_MSG_E(parcel.WriteString(it.first), false, "uint64Map failed to WriteString for key");
-        FALSE_RETURN_V_MSG_E(parcel.WriteUint64(it.second), false, "uint64Map failed to WriteInt32 for value");
-    }
-
-    FALSE_RETURN_V_MSG_E(floatMap_.size() < MAX_MAP_SIZE, false,
-        "The size of floatMap_ exceeds the maximum value");
-    FALSE_RETURN_V_MSG_E(parcel.WriteInt32(floatMap_.size()), false, "write floatMap.size() failed");
-    for (auto &it : floatMap_) {
-        FALSE_RETURN_V_MSG_E(parcel.WriteString(it.first), false, "floatMap failed to WriteString for key");
-        FALSE_RETURN_V_MSG_E(parcel.WriteFloat(it.second), false, "floatMap failed to WriteInt32 for value");
-    }
-    return true;
-}
-
-EventBean *EventBean::Unmarshalling(Parcel &data)
-{
-    EventBean *eventBean = new (std::nothrow) EventBean();
-    FALSE_RETURN_V_MSG_E(eventBean != nullptr, nullptr, "Create failed.");
-    MessageParcel *parcelIn = static_cast<MessageParcel*>(&data);
-    eventBean->ReadFromParcel(*parcelIn);
-    return eventBean;
 }
 
 void EventBean::Add(const std::string &key, int32_t value)

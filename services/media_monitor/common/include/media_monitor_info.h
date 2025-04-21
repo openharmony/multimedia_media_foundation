@@ -17,7 +17,6 @@
 #define I_MEDIA_MONITOR_INFO_H
 
 #include <string>
-#include "parcel.h"
 #include "system_ability_definition.h"
 
 namespace OHOS {
@@ -77,7 +76,7 @@ enum EventType {
     DURATION_AGGREGATION_EVENT = 3,
 };
 
-struct MonitorDeviceInfo : public Parcelable {
+struct MonitorDeviceInfo {
     int32_t deviceType_ = -1;
     int32_t deviceCategory_ = -1;
     int32_t usageOrSourceType_ = -1;
@@ -85,33 +84,6 @@ struct MonitorDeviceInfo : public Parcelable {
     std::string deviceName_ = "";
     std::string address_ = "";
     std::string networkId_ = "";
-
-    bool Marshalling(Parcel &parcel) const override
-    {
-        return parcel.WriteInt32(deviceType_) &&
-            parcel.WriteInt32(deviceCategory_) &&
-            parcel.WriteInt32(usageOrSourceType_) &&
-            parcel.WriteInt32(audioDeviceUsage_) &&
-            parcel.WriteString(deviceName_) &&
-            parcel.WriteString(address_) &&
-            parcel.WriteString(networkId_);
-    }
-
-    static MonitorDeviceInfo *Unmarshalling(Parcel &data)
-    {
-        MonitorDeviceInfo *monitorDeviceInfo = new (std::nothrow) MonitorDeviceInfo();
-        if (monitorDeviceInfo == nullptr) {
-            return nullptr;
-        }
-        data.ReadInt32(monitorDeviceInfo->deviceType_);
-        data.ReadInt32(monitorDeviceInfo->deviceCategory_);
-        data.ReadInt32(monitorDeviceInfo->usageOrSourceType_);
-        data.ReadInt32(monitorDeviceInfo->audioDeviceUsage_);
-        data.ReadString(monitorDeviceInfo->deviceName_);
-        data.ReadString(monitorDeviceInfo->address_);
-        data.ReadString(monitorDeviceInfo->networkId_);
-        return monitorDeviceInfo;
-    }
 };
 
 enum RendererState {

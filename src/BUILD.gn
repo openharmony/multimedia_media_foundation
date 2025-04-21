@@ -170,6 +170,7 @@ if (hst_is_standard_sys) {
     external_deps = [
       "c_utils:utils",
       "ffmpeg:libohosffmpeg",
+      "graphic_2d:libgraphic_utils",
       "graphic_surface:sync_fence",
       "hilog:libhilog",
       "hitrace:hitrace_meter",

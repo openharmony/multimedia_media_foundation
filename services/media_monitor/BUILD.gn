@@ -12,21 +12,6 @@
 # limitations under the License.
 
 import("//foundation/multimedia/media_foundation/config.gni")
-if (!hst_is_lite_sys) {
-  import("//build/config/components/idl_tool/idl.gni")
-}
-
-if (!hst_is_lite_sys) {
-  idl_interface_sources = [
-    "${target_gen_dir}/media_monitor_proxy.cpp",
-    "${target_gen_dir}/media_monitor_stub.cpp",
-  ]
-
-  idl_gen_interface("media_monitor_interface") {
-    src_idl = rebase_path("IMediaMonitor.idl")
-    dst_file = string_join(",", idl_interface_sources)
-  }
-}
 
 if (hst_is_lite_sys) {
   group("media_monitor_packages") {
@@ -254,8 +239,6 @@ if (hst_is_lite_sys) {
     }
     install_enable = true
 
-    output_values = get_target_outputs(":media_monitor_interface")
-
     sources = [
       "server/src/audio_buffer_cache.cpp",
       "server/src/audio_memo.cpp",
@@ -265,11 +248,9 @@ if (hst_is_lite_sys) {
       "server/src/media_event_base_writer.cpp",
       "server/src/media_monitor_policy.cpp",
       "server/src/media_monitor_service.cpp",
+      "server/src/media_monitor_stub.cpp",
       "server/src/media_monitor_wrapper.cpp",
     ]
-    sources += filter_include(output_values, [ "*_stub.cpp" ])
-
-    cflags_cc = [ "-fno-rtti" ]
 
     configs = []
 
@@ -278,18 +259,13 @@ if (hst_is_lite_sys) {
       "client/include",
       "server/include",
       "common/include",
-      "../../interface/inner_api/buffer/",
       "../../interface/inner_api/common/",
-      "${target_gen_dir}",
     ]
 
     deps = [
       ":media_monitor.para",
       ":media_monitor.para.dac",
-      ":media_monitor_buffer",
       ":media_monitor_common",
-      ":media_monitor_interface",
-      "../../src:media_foundation",
     ]
 
     external_deps = [
@@ -397,32 +373,22 @@ if (hst_is_lite_sys) {
 
     public_configs = [ ":media_monitor_public_config" ]
 
-    output_values = get_target_outputs(":media_monitor_interface")
-
     install_enable = true
 
-    sources = [ "client/src/media_monitor_manager.cpp" ]
-    sources += filter_include(output_values, [ "*_proxy.cpp" ])
-
-    cflags_cc = [ "-fno-rtti" ]
+    sources = [
+      "client/src/media_monitor_client.cpp",
+      "client/src/media_monitor_manager.cpp",
+    ]
 
     include_dirs = [
       "buffer/include",
       "client/include",
       "server/include",
       "common/include",
-      "../../interface/inner_api/",
       "../../interface/inner_api/common/",
-      "../../interface/inner_api/buffer",
-      "${target_gen_dir}",
     ]
 
-    deps = [
-      ":media_monitor_buffer",
-      ":media_monitor_common",
-      ":media_monitor_interface",
-      "../../src:media_foundation",
-    ]
+    deps = [ ":media_monitor_common" ]
 
     external_deps = [
       "c_utils:utils",
