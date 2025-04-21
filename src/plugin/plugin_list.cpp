@@ -93,6 +93,7 @@ PluginList::PluginList()
     AddG711muAudioDecoderPlugins();
     AddLbvcAudioDecoderPlugins();
     AddOpusAudioDecoderPlugins();
+    AddRawAudioDecoderPlugins();
     AddAudioServerSinkPlugins();
     AddFFmpegAudioEncodersPlugins();
     AddG711muAudioEncoderPlugins();
@@ -496,6 +497,17 @@ void PluginList::AddOpusAudioDecoderPlugins()
     opusAudioDecoderPlugin.packageName = "OpusAudioDecoder";
     opusAudioDecoderPlugin.pluginType = PluginType::AUDIO_DECODER;
     opusAudioDecoderPlugin.cap = "audio/opus";
+    opusAudioDecoderPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(opusAudioDecoderPlugin);
+}
+
+void PluginList::AddRawAudioDecoderPlugins()
+{
+    PluginDescription opusAudioDecoderPlugin;
+    opusAudioDecoderPlugin.pluginName = "OH.Media.Codec.Decoder.Audio.Raw";
+    opusAudioDecoderPlugin.packageName = "RawAudioDecoder";
+    opusAudioDecoderPlugin.pluginType = PluginType::AUDIO_DECODER;
+    opusAudioDecoderPlugin.cap = "audio/raw";
     opusAudioDecoderPlugin.rank = DEFAULT_RANK;
     pluginDescriptionList_.push_back(opusAudioDecoderPlugin);
 }
