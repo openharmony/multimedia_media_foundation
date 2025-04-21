@@ -17,7 +17,6 @@
 #include "hls_media_downloader.h"
 #include "hls_playlist_downloader.h"
 #include "securec.h"
-#include "plugin/common/plugin_time.h"
 
 namespace OHOS {
 namespace Media {

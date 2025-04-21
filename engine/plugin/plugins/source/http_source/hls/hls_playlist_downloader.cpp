@@ -15,7 +15,6 @@
 #define HST_LOG_TAG "HlsPlayListDownloader"
 #include <mutex>
 #include "hls_playlist_downloader.h"
-#include "plugin/common/plugin_time.h"
 
 namespace OHOS {
 namespace Media {
