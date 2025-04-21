@@ -17,14 +17,16 @@
 #define HISTREAMER_PLUGIN_HDI_CODEC_MANAGER_H
 #include "codec_manager.h"
 #include <unordered_map>
-#include "codec_component_manager.h"
-#include "codec_callback_type_stub.h"
 #include "codec_omx_ext.h"
+#include "v3_0/icodec_component_manager.h"
+#include "v3_0/codec_types.h"
 
 namespace OHOS {
 namespace Media {
 namespace Plugin {
 namespace CodecAdapter {
+namespace CodecHDI = OHOS::HDI::Codec::V3_0;
+
 class HdiCodecManager : public CodecManager {
 public:
     static HdiCodecManager& GetInstance();
@@ -40,13 +42,13 @@ private:
     HdiCodecManager();
     void Init();
     void Reset();
-    void AddHdiCap(const CodecCompCapability& hdiCap);
+    void AddHdiCap(const CodecHDI::CodecCompCapability& hdiCap);
     void InitCaps();
-    static std::vector<VideoPixelFormat> GetCodecFormats(const CodecVideoPortCap& port);
-    static std::string GetCodecMime(const AvCodecRole& role);
-    static PluginType GetCodecType(const CodecType& hdiType);
+    static std::vector<VideoPixelFormat> GetCodecFormats(const CodecHDI::CodecVideoPortCap& port);
+    static std::string GetCodecMime(const CodecHDI::AvCodecRole& role);
+    static PluginType GetCodecType(const CodecHDI::CodecType& hdiType);
 
-    CodecComponentManager* mgr_ {nullptr};
+    sptr<CodecHDI::ICodecComponentManager> mgr_ {nullptr};
     std::vector<CodecCapability> codecCapabilitys_;
 };
 } // namespace CodecAdapter

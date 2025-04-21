@@ -19,8 +19,8 @@
 #define HISTREAMER_PLUGIN_PLUGINS_CODEC_UTILS_H
 
 #include <iostream>
+#include <vector>
 #include "codec_buffer_pool.h"
-#include "display_type.h"
 #include "OMX_Video.h"
 
 namespace OHOS {
@@ -43,49 +43,57 @@ OMX_COLOR_FORMATTYPE FormatHstToOmx(const VideoPixelFormat format);
 
 uint32_t GetOmxBufferType(const MemoryType& bufMemType, bool isInput);
 template <typename T>
-inline void InitHdiParam(T& param, CompVerInfo& verInfo)
+inline void InitHdiParam(T& param, CodecHDI::CompVerInfo& verInfo)
 {
     memset_s(&param, sizeof(param), 0x0, sizeof(param));
     param.size = sizeof(param);
-    param.version = verInfo.compVersion;
+    param.version.nVersion = verInfo.compVersion.nVersion;
 }
 
 template <typename T>
-inline void InitOmxParam(T& param, CompVerInfo& verInfo)
+inline void InitOmxParam(T& param, CodecHDI::CompVerInfo& verInfo)
 {
     memset_s(&param, sizeof(param), 0x0, sizeof(param));
     param.nSize = sizeof(param);
-    param.nVersion = verInfo.compVersion;
+    param.nVersion.nVersion = verInfo.compVersion.nVersion;
 }
 
 template <typename T, typename U>
-inline int32_t HdiSetParameter(T* component, uint32_t paramIndex, U& param)
+inline int32_t HdiSetParameter(T& component, uint32_t paramIndex, U& param)
 {
-    return component->SetParameter(component, paramIndex, reinterpret_cast<int8_t*>(&param), sizeof(param));
+    const int8_t* p = reinterpret_cast<const int8_t*>(&param);
+    std::vector<int8_t> inVec(p, p + sizeof(T));
+    return component->SetParameter(paramIndex, inVec);
 }
 
 template <typename T, typename U>
-inline int32_t HdiGetParameter(T* component, uint32_t paramIndex, U& param)
+inline int32_t HdiGetParameter(T& component, uint32_t paramIndex, U& param)
 {
-    return component->GetParameter(component, paramIndex, reinterpret_cast<int8_t*>(&param), sizeof(param));
+    std::vector<int8_t> inVec(reinterpret_cast<int8_t*>(&param), reinterpret_cast<int8_t*>(&param) + sizeof(T));
+    std::vector<int8_t> outVec;
+    auto ret = component->GetParameter(paramIndex, inVec, outVec);
+    if (ret != HDF_SUCCESS || outVec.size() != sizeof(T)) {
+        return HDF_FAILURE;
+    }
+    return (memcpy_s(&param, sizeof(T), outVec.data(), outVec.size()) == EOK) ? HDF_SUCCESS : HDF_FAILURE;
 }
 
 template <typename T, typename U>
-inline int32_t HdiSendCommand(T* component, OMX_COMMANDTYPE cmd, uint32_t param, U&& cmdData)
+inline int32_t HdiSendCommand(T& component, OMX_COMMANDTYPE cmd, uint32_t param, U&& cmdData)
 {
-    return component->SendCommand(component, cmd, param, reinterpret_cast<int8_t*>(&cmdData), sizeof(cmdData));
+    return component->SendCommand(static_cast<CodecHDI::CodecCommandType>(cmd), param, {});
 }
 
 template <typename T, typename U>
-inline int32_t HdiFillThisBuffer(T* component, U* buffer)
+inline int32_t HdiFillThisBuffer(T& component, U& buffer)
 {
-    return component->FillThisBuffer(component, buffer);
+    return component->FillThisBuffer(buffer);
 }
 
 template <typename T, typename U>
-inline int32_t HdiEmptyThisBuffer(T* component, U* buffer)
+inline int32_t HdiEmptyThisBuffer(T& component, U& buffer)
 {
-    return component->EmptyThisBuffer(component, buffer);
+    return component->EmptyThisBuffer(buffer);
 }
 
 } // namespace CodecAdapter

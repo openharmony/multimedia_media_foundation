@@ -69,12 +69,12 @@ ohos_unittest("histreamer_unit_test") {
   }
 
   external_deps = [
-    "drivers_peripheral_codec:libcodec_hdi_omx_client",
-    "drivers_peripheral_display:hdi_gralloc_client",
+    "drivers_interface_display:libdisplay_composer_hdi_impl_1.2",
     "graphic_2d:librender_service_client",
     "graphic_surface:surface",
     "hdf_core:libpub_utils",
     "hilog:libhilog",
+    "openmax:libopenmax_static",
     "window_manager:libwm",
   ]
 

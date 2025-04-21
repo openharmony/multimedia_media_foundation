@@ -20,12 +20,15 @@
 #include "codec_utils.h"
 #include "foundation/log.h"
 #include "hdf_base.h"
+#include "codec_port.h"
 
 namespace OHOS {
 namespace Media {
 namespace Plugin {
 namespace CodecAdapter {
-CodecBufferPool::CodecBufferPool(CodecComponentType* compType, CompVerInfo& verInfo,
+using namespace CodecHDI;
+
+CodecBufferPool::CodecBufferPool(sptr<ICodecComponent>& compType, CompVerInfo& verInfo,
     uint32_t portIndex, uint32_t bufferCnt)
     : codecComp_(compType), verInfo_(verInfo), portIndex_(portIndex), freeBufferId_("hdiFreeBufferId", bufferCnt)
 {
@@ -43,7 +46,8 @@ Status CodecBufferPool::UseBuffers(OHOS::Media::BlockingQueue<std::shared_ptr<Bu
         auto pluginBuffer = bufQue.Pop();
         auto codecBuffer = std::make_shared<CodecBuffer>(pluginBuffer, verInfo_, isInput, bufferSize, bufMemType);
         FALSE_RETURN_V_MSG(codecBuffer != nullptr, Status::ERROR_NULL_POINTER, "Create codec buffer failed");
-        auto err = codecComp_->UseBuffer(codecComp_, portIndex_, codecBuffer->GetOmxBuffer().get());
+        std::shared_ptr<OmxCodecBuffer> outBuffer = std::make_shared<OmxCodecBuffer>();
+        auto err = codecComp_->UseBuffer(portIndex_, *codecBuffer->GetOmxBuffer(), *outBuffer);
         if (err != HDF_SUCCESS) {
             MEDIA_LOG_E("failed to UseBuffer");
             return Status::ERROR_INVALID_DATA;
@@ -65,9 +69,9 @@ Status CodecBufferPool::FreeBuffers()
         auto& codecBuffer = codecBuf.second;
         FALSE_RETURN_V_MSG_E(codecComp_ != nullptr, Status::ERROR_NULL_POINTER, "Codec component is null.");
         FALSE_RETURN_V_MSG_E(codecBuffer != nullptr, Status::ERROR_NULL_POINTER, "Codec buffer is null.");
-        auto omxBuffer = codecBuffer->GetOmxBuffer().get();
+        auto omxBuffer = codecBuffer->GetOmxBuffer();
         FALSE_RETURN_V_MSG_E(omxBuffer != nullptr, Status::ERROR_NULL_POINTER, "Omx buffer is null.");
-        auto ret = codecComp_->FreeBuffer(codecComp_, portIndex_, omxBuffer);
+        auto ret = codecComp_->FreeBuffer(portIndex_, *omxBuffer);
         FALSE_RETURN_V_MSG_E(ret == HDF_SUCCESS, TransHdiRetVal2Status(ret),
             "codec component free buffer failed, omxBufId: " PUBLIC_LOG_U32, codecBuffer->GetBufferId());
     }
@@ -86,7 +90,7 @@ Status CodecBufferPool::ConfigBufType(const MemoryType& bufMemType, bool isInput
     InitHdiParam(bufType, verInfo_);
     bufType.portIndex = portIndex_;
     bufType.bufferType = GetOmxBufferType(bufMemType, isInput);
-    auto ret = codecComp_->SetParameter(codecComp_, OMX_IndexParamUseBufferType, (int8_t *)&bufType, sizeof(bufType));
+    auto ret = HdiSetParameter(codecComp_, OMX_IndexParamUseBufferType, bufType);
     FALSE_LOG_MSG(ret == HDF_SUCCESS, "isInput: " PUBLIC_LOG_D32 ", bufferTypes: " PUBLIC_LOG_D32 ", ret: "
             PUBLIC_LOG_S, static_cast<int32_t>(isInput), bufType.bufferType, OmxErrorType2String(ret).c_str());
     MEDIA_LOG_D("ConfigOutPortBufType end");

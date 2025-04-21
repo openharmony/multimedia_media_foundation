@@ -41,7 +41,7 @@ ohos_source_set("std_video_surface_sink") {
       "bounds_checking_function:libsec_shared",
       "c_utils:utils",
       "c_utils:utilsbase",
-      "drivers_peripheral_display:hdi_gralloc_client",
+      "drivers_interface_display:libdisplay_composer_proxy_1.2",
       "graphic_2d:libgraphic_utils",
       "graphic_surface:surface",
       "graphic_surface:sync_fence",

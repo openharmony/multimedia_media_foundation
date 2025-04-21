@@ -18,7 +18,8 @@
 #ifndef HISTREAMER_PLUGIN_CODEC_BUFFER_H
 #define HISTREAMER_PLUGIN_CODEC_BUFFER_H
 
-#include "codec_component_type.h"
+#include "v3_0/icodec_component.h"
+#include "v3_0/codec_types.h"
 #include "codec_omx_ext.h"
 #include "plugin/common/plugin_buffer.h"
 #include "plugin/common/share_memory.h"
@@ -27,14 +28,17 @@ namespace OHOS {
 namespace Media {
 namespace Plugin {
 namespace CodecAdapter {
+
+namespace CodecHDI = OHOS::HDI::Codec::V3_0;
+
 class CodecBuffer {
 public:
-    CodecBuffer(std::shared_ptr<Buffer>& buffer, CompVerInfo& verInfo,
+    CodecBuffer(std::shared_ptr<Buffer>& buffer, CodecHDI::CompVerInfo& verInfo,
         bool isInput, uint32_t bufferSize, MemoryType bufMemType);
 
     ~CodecBuffer() = default;
 
-    std::shared_ptr<OmxCodecBuffer> GetOmxBuffer();
+    std::shared_ptr<CodecHDI::OmxCodecBuffer> GetOmxBuffer();
 
     uint32_t GetBufferId() const;
 
@@ -42,15 +46,15 @@ public:
 
     Status Rebind(const std::shared_ptr<Plugin::Buffer>& pluginBuffer); // 重新申请内存时， CodecBuffer都要重新创建
 
-    Status Unbind(std::shared_ptr<Plugin::Buffer>& buffer, const OmxCodecBuffer* omxBuffer);
+    Status Unbind(std::shared_ptr<Plugin::Buffer>& buffer, const CodecHDI::OmxCodecBuffer& omxBuffer);
 
 private:
     void Init(bool isInput, uint32_t bufferSize, MemoryType bufMemType);
 
     std::shared_ptr<Buffer> buffer_;
-    CompVerInfo verInfo_ {};
+    CodecHDI::CompVerInfo verInfo_ {};
     std::shared_ptr<Memory> memory_;
-    std::shared_ptr<OmxCodecBuffer> omxBuffer_;
+    std::shared_ptr<CodecHDI::OmxCodecBuffer> omxBuffer_;
 };
 } // namespace CodecAdapter
 } // namespace Plugin

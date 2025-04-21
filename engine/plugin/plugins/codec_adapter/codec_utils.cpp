@@ -18,7 +18,6 @@
 
 #include "codec_utils.h"
 #include <map>
-#include "display_type.h"
 #include "foundation/log.h"
 #include "hdf_base.h"
 #include "OMX_Core.h"

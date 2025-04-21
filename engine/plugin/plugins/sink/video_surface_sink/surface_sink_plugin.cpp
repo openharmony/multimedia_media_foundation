@@ -19,6 +19,7 @@
 
 #include "surface_sink_plugin.h"
 #include <algorithm>
+#include "display/composer/v1_2/display_composer_type.h"
 #include "foundation/log.h"
 #include "foundation/utils/constants.h"
 #include "securec.h"
@@ -57,24 +58,25 @@ namespace OHOS {
 namespace Media {
 namespace Plugin {
 namespace VidSurfaceSinkPlugin {
-static PixelFormat TranslatePixelFormat(const VideoPixelFormat pixelFormat)
+static OHOS::HDI::Display::Composer::V1_2::PixelFormat TranslatePixelFormat(const VideoPixelFormat pixelFormat)
 {
-    PixelFormat surfaceFormat = PixelFormat::PIXEL_FMT_BUTT;
+    OHOS::HDI::Display::Composer::V1_2::PixelFormat surfaceFormat =
+        OHOS::HDI::Display::Composer::V1_2::PixelFormat::PIXEL_FMT_BUTT;
     switch (pixelFormat) {
         case VideoPixelFormat::YUV420P:
-            surfaceFormat = PixelFormat::PIXEL_FMT_YCBCR_420_P;
+            surfaceFormat = OHOS::HDI::Display::Composer::V1_2::PixelFormat::PIXEL_FMT_YCBCR_420_P;
             break;
         case VideoPixelFormat::YUYV422:
-            surfaceFormat = PixelFormat::PIXEL_FMT_YUYV_422_PKG;
+            surfaceFormat = OHOS::HDI::Display::Composer::V1_2::PixelFormat::PIXEL_FMT_YUYV_422_PKG;
             break;
         case VideoPixelFormat::RGBA:
-            surfaceFormat = PixelFormat::PIXEL_FMT_RGBA_8888;
+            surfaceFormat = OHOS::HDI::Display::Composer::V1_2::PixelFormat::PIXEL_FMT_RGBA_8888;
             break;
         case VideoPixelFormat::BGRA:
-            surfaceFormat = PixelFormat::PIXEL_FMT_BGRA_8888;
+            surfaceFormat = OHOS::HDI::Display::Composer::V1_2::PixelFormat::PIXEL_FMT_BGRA_8888;
             break;
         case VideoPixelFormat::YUV422P:
-            surfaceFormat = PixelFormat::PIXEL_FMT_YUV_422_I;
+            surfaceFormat = OHOS::HDI::Display::Composer::V1_2::PixelFormat::PIXEL_FMT_YUV_422_I;
             break;
         case VideoPixelFormat::ARGB:
         case VideoPixelFormat::ABGR:
@@ -92,10 +94,10 @@ static PixelFormat TranslatePixelFormat(const VideoPixelFormat pixelFormat)
         case VideoPixelFormat::YUVJ444P:
             break;
         case VideoPixelFormat::NV12:
-            surfaceFormat = PixelFormat::PIXEL_FMT_YCBCR_420_SP;
+            surfaceFormat = OHOS::HDI::Display::Composer::V1_2::PixelFormat::PIXEL_FMT_YCBCR_420_SP;
             break;
         case VideoPixelFormat::NV21:
-            surfaceFormat = PixelFormat::PIXEL_FMT_YCRCB_420_SP;
+            surfaceFormat = OHOS::HDI::Display::Composer::V1_2::PixelFormat::PIXEL_FMT_YCRCB_420_SP;
             break;
         default:
             break;
@@ -146,12 +148,14 @@ Status SurfaceSinkPlugin::Prepare()
                          Status::ERROR_UNKNOWN, "need surface config first");
     FALSE_RETURN_V_MSG_E(surface_->SetQueueSize(maxSurfaceNum_) == OHOS::SurfaceError::SURFACE_ERROR_OK,
                          Status::ERROR_UNKNOWN, "surface SetQueueSize fail");
-    PixelFormat decodeOutputSurfacePixelFmt = TranslatePixelFormat(decodeOutputPixelFmt_);
-    if (decodeOutputSurfacePixelFmt == PixelFormat::PIXEL_FMT_BUTT) {
+    OHOS::HDI::Display::Composer::V1_2::PixelFormat decodeOutputSurfacePixelFmt =
+        TranslatePixelFormat(decodeOutputPixelFmt_);
+    if (decodeOutputSurfacePixelFmt == OHOS::HDI::Display::Composer::V1_2::PixelFormat::PIXEL_FMT_BUTT) {
         MEDIA_LOG_E("surface can not support decode output pixel fmt: " PUBLIC_LOG_U32, decodeOutputPixelFmt_);
         return Status::ERROR_UNKNOWN;
     }
-    auto surfacePixelFmt = static_cast<PixelFormat>(std::stoi(surface_->GetUserData("SURFACE_FORMAT")));
+    auto surfacePixelFmt = static_cast<OHOS::HDI::Display::Composer::V1_2::PixelFormat>(
+        std::stoi(surface_->GetUserData("SURFACE_FORMAT")));
     if (decodeOutputSurfacePixelFmt != surfacePixelFmt) {
         MEDIA_LOG_W("decode output surface pixel fmt: " PUBLIC_LOG_U32 " is diff from surface pixel fmt: "
             PUBLIC_LOG_U32, static_cast<uint32_t>(decodeOutputSurfacePixelFmt), static_cast<uint32_t>(surfacePixelFmt));

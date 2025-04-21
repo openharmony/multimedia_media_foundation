@@ -70,7 +70,7 @@ if (hst_is_lite_sys) {
     if (media_foundation_enable_video) {
       public_external_deps += [
         "c_utils:utilsbase",
-        "drivers_peripheral_display:hdi_gralloc_client",
+        "drivers_interface_display:libdisplay_composer_proxy_1.2",
         "graphic_surface:surface",
         "graphic_surface:sync_fence",
       ]

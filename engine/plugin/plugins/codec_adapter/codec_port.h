@@ -16,7 +16,8 @@
 
 #ifndef HISTREAMER_PLUGIN_CODEC_PORT_H
 #define HISTREAMER_PLUGIN_CODEC_PORT_H
-#include "codec_component_if.h"
+#include "v3_0/icodec_component.h"
+#include "v3_0/codec_types.h"
 #include "foundation/osal/thread/condition_variable.h"
 #include "foundation/osal/thread/mutex.h"
 #include "plugin/common/plugin_types.h"
@@ -27,6 +28,7 @@ namespace OHOS {
 namespace Media {
 namespace Plugin {
 namespace CodecAdapter {
+namespace CodecHDI = OHOS::HDI::Codec::V3_0;
 struct PortInfo {
     uint32_t bufferCount{};
     uint32_t bufferSize{};
@@ -35,14 +37,14 @@ struct PortInfo {
 
 class CodecPort {
 public:
-    CodecPort(CodecComponentType* component, uint32_t portIndex, const CompVerInfo& verInfo);
+    CodecPort(sptr<CodecHDI::ICodecComponent> component, uint32_t portIndex, const CodecHDI::CompVerInfo& verInfo);
     ~CodecPort() = default;
     Status Config(Meta& meta);
     Status QueryParam(PortInfo& portInfo);
 private:
-    CodecComponentType* codecComp_ {nullptr};
+    sptr<CodecHDI::ICodecComponent> codecComp_ {nullptr};
     OMX_PARAM_PORTDEFINITIONTYPE portDef_ {};
-    CompVerInfo verInfo_ {};
+    CodecHDI::CompVerInfo verInfo_ {};
 };
 } // namespace CodecAdapter
 } // namespace Plugin

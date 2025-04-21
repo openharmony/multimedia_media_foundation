@@ -20,17 +20,21 @@
 #include <list>
 #include "codec_buffer_pool.h"
 #include "codec_cmd_executor.h"
-#include "codec_component_manager.h"
 #include "codec_manager.h"
 #include "codec_port.h"
 #include "foundation/utils/blocking_queue.h"
 #include "plugin/interface/codec_plugin.h"
+#include "v3_0/icodec_callback.h"
+#include "v3_0/icodec_component.h"
 
 namespace OHOS {
 namespace Media {
 namespace Plugin {
 namespace CodecAdapter {
-class HdiCodecAdapter : public CodecPlugin {
+
+namespace CodecHDI = OHOS::HDI::Codec::V3_0;
+
+class HdiCodecAdapter : public CodecPlugin, public std::enable_shared_from_this<HdiCodecAdapter> {
 public:
     HdiCodecAdapter(std::string componentName, std::string pluginMime);
     ~HdiCodecAdapter() override;
@@ -58,21 +62,28 @@ private:
     bool FillAllTheOutBuffer();
 
 private:
+
+    class HdiCallback : public CodecHDI::ICodecCallback {
+    public:
+        explicit HdiCallback(std::weak_ptr<HdiCodecAdapter> codecAdapter) : codecAdapter_(codecAdapter) { }
+        virtual ~HdiCallback() = default;
+        int32_t EventHandler(CodecHDI::CodecEventType event, const CodecHDI::EventInfo& info);
+        int32_t EmptyBufferDone(int64_t appData, const CodecHDI::OmxCodecBuffer& buffer);
+        int32_t FillBufferDone(int64_t appData, const CodecHDI::OmxCodecBuffer& buffer);
+    private:
+        std::weak_ptr<HdiCodecAdapter> codecAdapter_;
+    };
+
     void NotifyInputBufferDone(const std::shared_ptr<Buffer>& input);
     void NotifyOutputBufferDone(const std::shared_ptr<Buffer>& output);
-
-    // HDI callback
-    static int32_t EventHandler(CodecCallbackType* self, OMX_EVENTTYPE event, EventInfo* info);
-    static int32_t EmptyBufferDone(CodecCallbackType* self, int64_t appData, const OmxCodecBuffer* omxBuffer);
-    static int32_t FillBufferDone(CodecCallbackType* self, int64_t appData, const OmxCodecBuffer* omxBuffer);
 
     Status ConfigOmx();
 
     Status ChangeState(OMX_STATETYPE state);
     Status WaitForState(OMX_STATETYPE state);
 
-    CodecComponentType* codecComp_ {nullptr};
-    CodecCallbackType* codecCallback_ {nullptr};
+    sptr<CodecHDI::ICodecComponent> codecComp_ {nullptr};
+    sptr<CodecHDI::ICodecCallback> codecCallback_ {nullptr};
     std::string componentName_ {};
     uint32_t componentId_{};
     std::string pluginMime_{};
@@ -104,7 +115,7 @@ private:
     std::atomic<bool> isFlushing_ {false};
     uint32_t inPortIndex_{};
     uint32_t outPortIndex_{};
-    CompVerInfo verInfo_ {};
+    CodecHDI::CompVerInfo verInfo_ {};
     OMX_PORT_PARAM_TYPE portParam_ = {};
     std::shared_ptr<CodecPort> inCodecPort_{};
     std::shared_ptr<CodecPort> outCodecPort_{};

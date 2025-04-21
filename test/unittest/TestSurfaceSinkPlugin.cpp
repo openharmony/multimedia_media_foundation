@@ -19,6 +19,7 @@
 #include "ui/rs_surface_node.h"
 #include "window.h"
 #include "window_option.h"
+#include "display/composer/v1_2/display_composer_type.h"
 
 using namespace testing::ext;
 using namespace OHOS::Media::Plugin;
@@ -61,7 +62,8 @@ HWTEST(TestSurfaceSinkPlugin, find_surface_sink_plugins_process, TestSize.Level1
     ASSERT_TRUE(plugin != nullptr);
     sptr<Surface> surface = GetVideoSurface();
     ASSERT_TRUE(surface != nullptr);
-    surface->SetUserData("SURFACE_FORMAT", std::to_string(PIXEL_FMT_RGBA_8888));
+    surface->SetUserData("SURFACE_FORMAT",
+        std::to_string(OHOS::HDI::Display::Composer::V1_2::PixelFormat::PIXEL_FMT_RGBA_8888));
 
     plugin->SetParameter(Tag::VIDEO_SURFACE, surface);
     auto initStatus = plugin->Init();

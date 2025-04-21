@@ -21,7 +21,6 @@
 #include <atomic>
 #include <memory>
 #include "common/graphic_common.h"
-#include "display_type.h"
 #include "foundation/osal/thread/condition_variable.h"
 #include "foundation/osal/thread/mutex.h"
 #include "plugin/common/surface_allocator.h"

@@ -31,7 +31,8 @@ namespace OHOS {
 namespace Media {
 namespace Plugin {
 namespace CodecAdapter {
-CodecPort::CodecPort(CodecComponentType* component, uint32_t portIndex, const CompVerInfo& verInfo)
+CodecPort::CodecPort(
+    sptr<CodecHDI::ICodecComponent> component, uint32_t portIndex, const CodecHDI::CompVerInfo& verInfo)
     : codecComp_(component), verInfo_(verInfo)
 {
     InitOmxParam(portDef_, verInfo_);

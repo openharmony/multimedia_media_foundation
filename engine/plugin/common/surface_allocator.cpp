@@ -18,9 +18,11 @@
 #define HST_LOG_TAG "SurfaceAllocator"
 
 #include "plugin/common/surface_allocator.h"
-#include "display_type.h"
+#include "display/composer/v1_2/display_composer_type.h"
 #include "foundation/log.h"
 #include "sync_fence.h"
+
+using namespace OHOS::HDI::Display::Composer::V1_2;
 
 namespace OHOS {
 namespace Media {
@@ -48,7 +50,8 @@ SurfaceAllocator::SurfaceAllocator(sptr<Surface> surface)
 {
     requestConfig_ = {
         DEFAULT_SURFACE_WIDTH, DEFAULT_SURFACE_HEIGHT, DEFAULT_SURFACE_STRIDE_ALIGN,
-        PixelFormat::PIXEL_FMT_RGBA_8888, BUFFER_USAGE_CPU_READ | BUFFER_USAGE_CPU_WRITE | BUFFER_USAGE_MEM_DMA, 0};
+        OHOS::HDI::Display::Composer::V1_2::PixelFormat::PIXEL_FMT_RGBA_8888,
+        BUFFER_USAGE_CPU_READ | BUFFER_USAGE_CPU_WRITE | BUFFER_USAGE_MEM_DMA, 0};
 }
 
 sptr<SurfaceBuffer> SurfaceAllocator::AllocSurfaceBuffer()
