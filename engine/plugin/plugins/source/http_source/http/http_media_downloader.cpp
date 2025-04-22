@@ -112,7 +112,7 @@ bool HttpMediaDownloader::Read(unsigned char* buff, unsigned int wantReadLength,
     return true;
 }
 
-bool HttpMediaDownloader::SeekToPos(int64_t offset)
+bool HttpMediaDownloader::Seek(int offset)
 {
     FALSE_RETURN_V(buffer_ != nullptr, false);
     MEDIA_LOG_I("Seek: buffer size " PUBLIC_LOG_ZU ", offset " PUBLIC_LOG_D32, buffer_->GetSize(), offset);
@@ -136,7 +136,7 @@ size_t HttpMediaDownloader::GetContentLength() const
     return downloadRequest_->GetFileContentLength();
 }
 
-int64_t HttpMediaDownloader::GetDuration() const
+double HttpMediaDownloader::GetDuration() const
 {
     return 0;
 }
