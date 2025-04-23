@@ -407,6 +407,7 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::VIDEO_ENCODER_QP_MAX, 20},
     {Tag::VIDEO_ENCODER_QP_MIN, 21},
     {Tag::VIDEO_ENCODER_QP_START, 20},
+    {Tag::VIDEO_ENCODER_TARGET_QP, 20},
     {Tag::FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_COUNT, 22},
     {Tag::VIDEO_DECODER_RATE_UPPER_LIMIT, 120},
     {Tag::VIDEO_ENCODER_FRAME_I_RATIO, 10},
@@ -516,7 +517,9 @@ map<TagType, bool> testBoolData = {
     {Tag::AUDIO_RENDER_SET_FLAG, true},
     {Tag::VIDEO_BUFFER_CAN_DROP, true},
     {Tag::VIDEO_ENCODER_PER_FRAME_DISCARD, true},
-    {Tag::VIDEO_ENCODER_ENABLE_WATERMARK, true}};
+    {Tag::VIDEO_ENCODER_ENABLE_WATERMARK, true},
+    {Tag::VIDEO_ENCODER_ENABLE_QP_MAP, true},
+};
 
 
 /**
@@ -746,6 +749,7 @@ map<TagType, std::vector<uint8_t>> testVetcorInt8Data = {
     {Tag::AUDIO_VORBIS_IDENTIFICATION_HEADER, vectorUint8MediaCover},
     {Tag::AUDIO_VORBIS_SETUP_HEADER, vectorUint8MediaCover},
     {Tag::AUDIO_VIVID_METADATA, vectorUint8MediaCover},
+    {Tag::VIDEO_ENCODER_PER_FRAME_QP_MAP, vectorUint8MediaCover},
 };
 
 /**

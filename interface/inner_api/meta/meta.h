@@ -201,6 +201,7 @@ public:
         tagCharSeq == Tag::AV_PLAYER_IS_DRM_PROTECTED or
         tagCharSeq == Tag::AV_PLAYER_DOWNLOAD_TIME_OUT or
         tagCharSeq == Tag::VIDEO_ENCODER_PER_FRAME_DISCARD or
+        tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_QP_MAP or
         tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_WATERMARK, bool, AnyValueType::BOOL);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_BUFFER_CAN_DROP, bool, AnyValueType::BOOL);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_RENDER_SET_FLAG, bool, AnyValueType::BOOL);
@@ -273,6 +274,7 @@ public:
         tagCharSeq == Tag::VIDEO_ENCODER_QP_MAX or
         tagCharSeq == Tag::VIDEO_ENCODER_QP_MIN or
         tagCharSeq == Tag::VIDEO_ENCODER_QP_START or
+        tagCharSeq == Tag::VIDEO_ENCODER_TARGET_QP or
         tagCharSeq == Tag::FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_COUNT or
         tagCharSeq == Tag::SCREEN_CAPTURE_ERR_CODE or
         tagCharSeq == Tag::SCREEN_CAPTURE_DURATION or
@@ -440,6 +442,10 @@ public:
         tagCharSeq == Tag::VIDEO_DECODER_OUTPUT_ENABLE_VRR, int32_t, AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::MEDIA_EDITLIST, int32_t, AnyValueType::INT32_T);
+    DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::VIDEO_ENCODER_PER_FRAME_ABS_QP_MAP, bool, AnyValueType::BOOL);
+    DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::VIDEO_ENCODER_PER_FRAME_QP_MAP, std::vector<uint8_t>, AnyValueType::VECTOR_UINT8);
 
     Meta &operator=(const Meta &other)
     {
