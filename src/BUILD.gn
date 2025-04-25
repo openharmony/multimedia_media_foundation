@@ -176,6 +176,7 @@ if (hst_is_standard_sys) {
       "hitrace:hitrace_meter",
       "init:libbegetutil",
       "ipc:ipc_core",
+      "samgr:samgr_proxy",
     ]
 
     public_external_deps = [
