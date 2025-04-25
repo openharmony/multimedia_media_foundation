@@ -145,9 +145,9 @@ enum class FileType : int32_t {
     MPEGTS = 102,
     MKV = 103,
     FLV = 104,
+    AVI = 105,
     MPEGPS = 106,
     MOV = 107,
-    AVI = 105,
     RM = 108,
     AC3 = 109,
     AMR = 201,
@@ -245,7 +245,6 @@ public:
     static constexpr std::string_view VIDEO_DECODER_MPEG2_NAME = "OH.Media.Codec.Decoder.Video.MPEG2";
     static constexpr std::string_view VIDEO_DECODER_MPEG4_NAME = "OH.Media.Codec.Decoder.Video.MPEG4";
     static constexpr std::string_view VIDEO_DECODER_H263_NAME = "OH.Media.Codec.Decoder.Video.H263";
-    
 private:
     CodecName() = delete;
     ~CodecName() = delete;
