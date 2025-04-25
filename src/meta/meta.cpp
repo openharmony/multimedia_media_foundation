@@ -102,6 +102,7 @@ using  MetaGetterFunction = std::function<bool(const Meta&, const TagType&, int3
 static std::map<TagType, std::pair<MetaSetterFunction, MetaGetterFunction>> g_metadataGetterSetterMap = {
     DEFINE_METADATA_SETTER_GETTER(Tag::SRC_INPUT_TYPE, SrcInputType),
     DEFINE_METADATA_SETTER_GETTER(Tag::AUDIO_SAMPLE_FORMAT, AudioSampleFormat),
+    DEFINE_METADATA_SETTER_GETTER(Tag::AUDIO_RAW_SAMPLE_FORMAT, AudioSampleFormat),
     DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_PIXEL_FORMAT, VideoPixelFormat),
     DEFINE_METADATA_SETTER_GETTER(Tag::MEDIA_TYPE, MediaType),
     DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_H264_PROFILE, VideoH264Profile),
@@ -247,6 +248,7 @@ static Any defaultVectorVideoBitStreamFormat = std::vector<VideoBitStreamFormat>
 static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::SRC_INPUT_TYPE, defaultSrcInputType},
     {Tag::AUDIO_SAMPLE_FORMAT, defaultAudioSampleFormat},
+    {Tag::AUDIO_RAW_SAMPLE_FORMAT, defaultAudioSampleFormat},
     {Tag::VIDEO_PIXEL_FORMAT, defaultVideoPixelFormat},
     {Tag::MEDIA_TYPE, defaultMediaType},
     {Tag::VIDEO_H264_PROFILE, defaultVideoH264Profile},
