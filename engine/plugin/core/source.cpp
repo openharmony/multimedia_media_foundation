@@ -43,27 +43,7 @@ Seekable Source::GetSeekable()
     return source_->GetSeekable();
 }
 
-Status Source::SeekToPos(int64_t offset)
+Status Source::SeekTo(uint64_t offset)
 {
-    return source_->SeekToPos(offset);
-}
-
-Status Source::SeekToTime(int64_t offset)
-{
-	return source_->SeekToTime(offset);
-}
-
-Status Source::GetDuration(int64_t& duration)
-{
-    return source_->GetDuration(duration);
-}
-
-Status Source::GetBitRates(std::vector<uint32_t>& bitRates)
-{
-    return source_->GetBitRates(bitRates);
-}
-
-Status Source::SelectBitRate(uint32_t bitRate)
-{
-    return source_->SelectBitRate(bitRate);
+    return source_->SeekTo(offset);
 }

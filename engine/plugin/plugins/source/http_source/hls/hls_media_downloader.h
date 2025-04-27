@@ -33,19 +33,15 @@ public:
     void Pause() override;
     void Resume() override;
     bool Read(unsigned char* buff, unsigned int wantReadLength, unsigned int& realReadLength, bool& isEos) override;
-    bool SeekToTime(int64_t offset) override;
+    bool Seek(int offset) override;
 
     size_t GetContentLength() const override;
-    int64_t GetDuration() const override;
+    double GetDuration() const override;
     Seekable GetSeekable() const override;
     void SetCallback(Callback* cb) override;
-    void OnPlayListChanged(const std::vector<PlayInfo>& playList) override;
+    void OnPlayListChanged(const std::vector<std::string>& playList) override;
     void SetStatusCallback(StatusCallbackFunc cb) override;
     bool GetStartedStatus() override;
-    std::vector<uint32_t> GetBitRates() override;
-    bool SelectBitRate(uint32_t bitRate) override;
-    void FindSeekRequest(int64_t offset);
-    void PutRequestIntoDownloader(const PlayInfo& palyInfo);
 
 private:
     bool SaveData(uint8_t* data, uint32_t len);
@@ -64,9 +60,8 @@ private:
     std::shared_ptr<PlayListDownloader> playListDownloader_;
 
     std::shared_ptr<OSAL::Task> downloadTask_;
-    std::shared_ptr<BlockingQueue<PlayInfo>> playList_;
+    std::shared_ptr<BlockingQueue<std::string>> playList_;
     std::map<std::string, bool> fragmentDownloadStart;
-    std::deque<std::shared_ptr<DownloadRequest>> backPlayList_;
 };
 }
 }
