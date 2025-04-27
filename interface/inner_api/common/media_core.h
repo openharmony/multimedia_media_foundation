@@ -128,6 +128,7 @@ enum MediaServiceExtErrCodeAPI9 : int32_t {
     MSERR_EXT_API9_SERVICE_DIED = 5400105,          // media service died.
     MSERR_EXT_API9_UNSUPPORT_FORMAT = 5400106,      // unsupport format.
     MSERR_EXT_API9_AUDIO_INTERRUPTED = 5400107,     // audio interrupted.
+    MSERR_EXT_API20_PARAM_ERROR_OUT_OF_RANGE = 5400108,         // parameter value is out of the specified range.
     MSERR_EXT_API16_SUPER_RESOLUTION_UNSUPPORTED = 5410003,     // super resolution is not supported
     MSERR_EXT_API16_SUPER_RESOLUTION_NOT_ENABLED = 5410004,     // super resolution is not enabled
     MSERR_EXT_API14_IO_CANNOT_FIND_HOST = 5411001,              // IO can not find host
