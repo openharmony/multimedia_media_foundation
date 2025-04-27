@@ -61,7 +61,7 @@ double HlsPlayListDownloader::GetDuration() const
 }
 
 Seekable HlsPlayListDownloader::GetSeekable() const
-{   
+{
     if (!master_) {
         return Seekable::INVALID;
     }       

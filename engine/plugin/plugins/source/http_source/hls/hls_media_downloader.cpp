@@ -49,7 +49,7 @@ HlsMediaDownloader::HlsMediaDownloader() noexcept
 }
 
 void HlsMediaDownloader::FragmentDownloadLoop()
-{   
+{
     std::string url = playList_->Pop();
     if (url.empty()) { // when monitor pause, playList_ set active false, it's empty
         OSAL::SleepFor(10); // 10
@@ -133,7 +133,7 @@ size_t HlsMediaDownloader::GetContentLength() const
     return 0;
 }
 
-double  HlsMediaDownloader::GetDuration() const
+double HlsMediaDownloader::GetDuration() const
 {
     MEDIA_LOG_I("GetDuration " PUBLIC_LOG_D64 , playListDownloader_->GetDuration());
     return playListDownloader_->GetDuration();
