@@ -156,7 +156,9 @@ std::string FileSystem::GetTmpFileName()
     auto ret = GetTempFileName(tempPath, "hstTmp", 0, tempFileName);
     FALSE_RETURN_V_MSG_E(ret != 0, tempFileName, "get temp file name failed");
 #else
-    mkstemp(tempFileName);
+    auto fd = mkstemp(tempFileName);
+    FALSE_RETURN_V_MSG_E(fd != -1, tempFileName, "get temp file name failed");
+    close(fd);
 #endif
     return tempFileName;
 }
