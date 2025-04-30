@@ -69,9 +69,9 @@ void *AVHardwareAllocator::Alloc(int32_t capacity)
 {
     (void)capacity;
     FALSE_RETURN_V(!isSecure_, nullptr);
+    isAllocated_ = true;
     Status ret = MapMemoryAddr();
     FALSE_RETURN_V_MSG_E(ret == Status::OK, nullptr, "Map dma buffer failed");
-    isAllocated_ = true;
     return reinterpret_cast<void *>(allocBase_);
 }
 
