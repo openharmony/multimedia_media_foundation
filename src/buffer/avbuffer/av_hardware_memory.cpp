@@ -149,23 +149,15 @@ AVHardwareMemory::AVHardwareMemory() : isStartSync_(false), memFlag_(MemoryFlag:
 
 AVHardwareMemory::~AVHardwareMemory()
 {
-#ifdef MEDIA_OHOS
     if (allocator_ == nullptr) {
-        if (base_ != nullptr) {
-            (void)::munmap(base_, static_cast<size_t>(capacity_));
-        }
-        if (fd_ > 0) {
-            (void)::close(fd_);
-            fd_ = -1;
-        }
         return;
     }
-#endif
     allocator_->Free(base_);
 }
 
 Status AVHardwareMemory::Init()
 {
+    FALSE_RETURN_V_MSG_E(allocator_ != nullptr, Status::ERROR_NO_MEMORY, "allocator is nullptr");
     fd_ = HARDWARE_ALLOCATOR->GetFileDescriptor();
     memFlag_ = HARDWARE_ALLOCATOR->GetMemFlag();
     base_ = static_cast<uint8_t *>(allocator_->Alloc(0));
@@ -193,7 +185,6 @@ Status AVHardwareMemory::Init(MessageParcel &parcel)
     (void)::close(fd);
 
     base_ = static_cast<uint8_t *>(allocator_->Alloc(0));
-    allocator_ = nullptr;
 
     FALSE_RETURN_V_MSG_E(base_ != nullptr, Status::ERROR_NO_MEMORY, "dma memory alloc failed");
 #endif
