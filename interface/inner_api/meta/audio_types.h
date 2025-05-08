@@ -289,6 +289,13 @@ enum AACProfile : int32_t {
     AAC_PROFILE_LD = 5,
     AAC_PROFILE_MAIN = 6,
 };
+
+enum AudioEncodeBitrateMode : int32_t {
+    AUDIO_CBR = 0, // constant bit rate mode.
+    AUDIO_VBR = 1, // variable bit rate mode.
+    AUDIO_MBR = 2, // single frame multiple bit rate mode
+};
+
 } // namespace Plugins
 } // namespace Media
 } // namespace OHOS
