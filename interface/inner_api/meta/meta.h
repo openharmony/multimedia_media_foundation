@@ -151,6 +151,8 @@ public:
                            Plugins::AudioChannelLayout, AnyValueType::INT64_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_SAMPLE_FORMAT, Plugins::AudioSampleFormat,
                            AnyValueType::INT32_T);
+    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_BITRATE_MODE, Plugins::AudioEncodeBitrateMode,
+                           AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_AAC_PROFILE, Plugins::AudioAacProfile, AnyValueType::UINT8_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_AAC_STREAM_FORMAT, Plugins::AudioAacStreamFormat,
                            AnyValueType::UINT8_T);
