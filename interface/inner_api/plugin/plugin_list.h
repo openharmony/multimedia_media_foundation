@@ -95,6 +95,15 @@ private:
     void AddAc3DemuxerPlugin();
     void AddAc3AudioDecoderPlugins();
 #endif
+#ifdef SUPPORT_DEMUXER_LRC
+    void AddLrcDemuxerPlugin();
+#endif
+#ifdef SUPPORT_DEMUXER_SAMI
+    void AddSamiDemuxerPlugin();
+#endif
+#ifdef SUPPORT_DEMUXER_ASS
+    void AddAssDemuxerPlugin();
+#endif
 
     std::vector<PluginDescription> pluginDescriptionList_;
 };

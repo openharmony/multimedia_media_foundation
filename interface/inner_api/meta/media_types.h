@@ -160,6 +160,9 @@ enum class FileType : int32_t {
     APE = 208,
     SRT = 301,
     VTT = 302,
+    LRC = 303,
+    SAMI = 304,
+    ASS = 305
 };
 
 /**

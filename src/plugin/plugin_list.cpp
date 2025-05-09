@@ -350,6 +350,45 @@ void PluginList::AddWebvttDemuxerPlugin()
     pluginDescriptionList_.push_back(vttDemuxerPlugin);
 }
 
+#ifdef SUPPORT_DEMUXER_LRC
+void PluginList::AddLrcDemuxerPlugin()
+{
+    PluginDescription lrcDemuxerPlugin;
+    lrcDemuxerPlugin.pluginName = "avdemux_lrc";
+    lrcDemuxerPlugin.packageName = "FFmpegDemuxer";
+    lrcDemuxerPlugin.pluginType = PluginType::DEMUXER;
+    lrcDemuxerPlugin.cap = "";
+    lrcDemuxerPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(lrcDemuxerPlugin);
+}
+#endif
+
+#ifdef SUPPORT_DEMUXER_SAMI
+void PluginList::AddSamiDemuxerPlugin()
+{
+    PluginDescription samiDemuxerPlugin;
+    samiDemuxerPlugin.pluginName = "avdemux_sami";
+    samiDemuxerPlugin.packageName = "FFmpegDemuxer";
+    samiDemuxerPlugin.pluginType = PluginType::DEMUXER;
+    samiDemuxerPlugin.cap = "";
+    samiDemuxerPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(samiDemuxerPlugin);
+}
+#endif
+
+#ifdef SUPPORT_DEMUXER_ASS
+void PluginList::AddAssDemuxerPlugin()
+{
+    PluginDescription assDemuxerPlugin;
+    assDemuxerPlugin.pluginName = "avdemux_ass";
+    assDemuxerPlugin.packageName = "FFmpegDemuxer";
+    assDemuxerPlugin.pluginType = PluginType::DEMUXER;
+    assDemuxerPlugin.cap = "";
+    assDemuxerPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(assDemuxerPlugin);
+}
+#endif
+
 void PluginList::AddOggDemuxerPlugin()
 {
     PluginDescription oggDemuxerPlugin;
@@ -424,6 +463,15 @@ void PluginList::AddFFmpegDemuxerPlugins()
 #endif
 #ifdef SUPPORT_CODEC_AC3
     AddAc3DemuxerPlugin();
+#endif
+#ifdef SUPPORT_DEMUXER_LRC
+    AddLrcDemuxerPlugin();
+#endif
+#ifdef SUPPORT_DEMUXER_SAMI
+    AddSamiDemuxerPlugin();
+#endif
+#ifdef SUPPORT_DEMUXER_ASS
+    AddAssDemuxerPlugin();
 #endif
 }
 

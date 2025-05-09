@@ -60,6 +60,9 @@ public:
 
     static constexpr const char TEXT_SUBRIP[] = "application/x-subrip";
     static constexpr const char TEXT_WEBVTT[] = "text/vtt";
+    static constexpr const char TEXT_LRC[] = "text/plain";
+    static constexpr const char TEXT_SAMI[] = "application/x-sami";
+    static constexpr const char TEXT_ASS[] = "text/x-ass";
     static constexpr const char TIMED_METADATA[] = "meta/timed-metadata";
 
     static constexpr const char INVALID_TYPE[] = "invalid";
