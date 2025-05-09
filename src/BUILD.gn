@@ -45,13 +45,13 @@ if (hst_is_standard_sys) {
       defines += [ "SUPPORT_CODEC_AC3" ]
     }
     if (media_foundation_enable_lrc_demuxer) {
-      defines += [ "SUPPORT_CODEC_LRC" ]
+      defines += [ "SUPPORT_DEMUXER_LRC" ]
     }
     if (media_foundation_enable_sami_demuxer) {
-      defines += [ "SUPPORT_CODEC_SAMI" ]
+      defines += [ "SUPPORT_DEMUXER_SAMI" ]
     }
     if (media_foundation_enable_ass_demuxer) {
-      defines += [ "SUPPORT_CODEC_ASS" ]
+      defines += [ "SUPPORT_DEMUXER_ASS" ]
     }
 
     include_dirs = [

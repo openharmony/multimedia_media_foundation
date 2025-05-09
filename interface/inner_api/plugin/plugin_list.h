@@ -95,13 +95,13 @@ private:
     void AddAc3DemuxerPlugin();
     void AddAc3AudioDecoderPlugins();
 #endif
-#ifdef SUPPORT_CODEC_LRC
+#ifdef SUPPORT_DEMUXER_LRC
     void AddLrcDemuxerPlugin();
 #endif
-#ifdef SUPPORT_CODEC_SAMI
+#ifdef SUPPORT_DEMUXER_SAMI
     void AddSamiDemuxerPlugin();
 #endif
-#ifdef SUPPORT_CODEC_ASS
+#ifdef SUPPORT_DEMUXER_ASS
     void AddAssDemuxerPlugin();
 #endif
 

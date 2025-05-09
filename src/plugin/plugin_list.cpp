@@ -350,7 +350,7 @@ void PluginList::AddWebvttDemuxerPlugin()
     pluginDescriptionList_.push_back(vttDemuxerPlugin);
 }
 
-#ifdef SUPPORT_CODEC_LRC
+#ifdef SUPPORT_DEMUXER_LRC
 void PluginList::AddLrcDemuxerPlugin()
 {
     PluginDescription lrcDemuxerPlugin;
@@ -363,7 +363,7 @@ void PluginList::AddLrcDemuxerPlugin()
 }
 #endif
 
-#ifdef SUPPORT_CODEC_SAMI
+#ifdef SUPPORT_DEMUXER_SAMI
 void PluginList::AddSamiDemuxerPlugin()
 {
     PluginDescription samiDemuxerPlugin;
@@ -376,7 +376,7 @@ void PluginList::AddSamiDemuxerPlugin()
 }
 #endif
 
-#ifdef SUPPORT_CODEC_ASS
+#ifdef SUPPORT_DEMUXER_ASS
 void PluginList::AddAssDemuxerPlugin()
 {
     PluginDescription assDemuxerPlugin;
@@ -464,13 +464,13 @@ void PluginList::AddFFmpegDemuxerPlugins()
 #ifdef SUPPORT_CODEC_AC3
     AddAc3DemuxerPlugin();
 #endif
-#ifdef SUPPORT_CODEC_LRC
+#ifdef SUPPORT_DEMUXER_LRC
     AddLrcDemuxerPlugin();
 #endif
-#ifdef SUPPORT_CODEC_SAMI
+#ifdef SUPPORT_DEMUXER_SAMI
     AddSamiDemuxerPlugin();
 #endif
-#ifdef SUPPORT_CODEC_ASS
+#ifdef SUPPORT_DEMUXER_ASS
     AddAssDemuxerPlugin();
 #endif
 }
