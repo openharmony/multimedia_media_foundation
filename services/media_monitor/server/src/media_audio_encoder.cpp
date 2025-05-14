@@ -46,6 +46,7 @@ const int S24LE_BYTE_SHIFT_24 = 24;
 const int S24LE_BYTE_INDEX_0 = 0;
 const int S24LE_BYTE_INDEX_1 = 1;
 const int S24LE_BYTE_INDEX_2 = 2;
+const int MAX_FLUSH_CODEC_TIMES = 5;
 
 const mode_t MODE = 0775;
 const std::string PCM_FILE = ".pcm";
@@ -480,12 +481,10 @@ int32_t MediaAudioEncoder::WritePcm(const uint8_t *buffer, size_t size)
     return ret;
 }
 
-int32_t MediaAudioEncoder::WriteFrame()
+int32_t MediaAudioEncoder::EncodeFrame(std::shared_ptr<AVFrame> &frame)
 {
-    int32_t ret = SUCCESS;
-    FALSE_RETURN_V_MSG_E(avFrame_ != nullptr, ERROR, "frame nullptr");
     FALSE_RETURN_V_MSG_E(avPacket_ != nullptr, ERROR, "packet nullptr");
-    ret = apiWrap_->CodecSendFrame(audioCodecContext_.get(), avFrame_.get());
+    int32_t ret = apiWrap_->CodecSendFrame(audioCodecContext_.get(), frame.get());
     FALSE_RETURN_V_MSG_E(ret >= 0, ERROR, "send frame failed %{public}d", ret);
     while (true) {
         ret = apiWrap_->CodecRecvPacket(audioCodecContext_.get(), avPacket_.get());
@@ -503,6 +502,26 @@ int32_t MediaAudioEncoder::WriteFrame()
     }
     FALSE_RETURN_V_MSG_E(ret == SUCCESS, ERROR, "write packet error");
     return SUCCESS;
+}
+
+int32_t MediaAudioEncoder::WriteFrame()
+{
+    FALSE_RETURN_V_MSG_E(avFrame_ != nullptr, ERROR, "frame nullptr");
+    int32_t ret = EncodeFrame(avFrame_);
+    return ret;
+}
+
+void MediaAudioEncoder::FlushEncoder()
+{
+    std::shared_ptr<AVFrame> frame = nullptr;
+    int32_t ret = ERROR;
+    for (int i = 0; i < MAX_FLUSH_CODEC_TIMES; ++i) {
+        ret = EncodeFrame(frame);
+        if (ret != SUCCESS) {
+            break;
+        }
+    }
+    return;
 }
 
 void MediaAudioEncoder::ResetEncoderCtx()
@@ -524,6 +543,7 @@ void MediaAudioEncoder::Release()
         return;
     }
     if (isInit_) {
+        FlushEncoder();
         apiWrap_->FormatWriteTrailer(formatContext_.get());
         apiWrap_->IoFlush(formatContext_->pb);
         unsigned int formatCtxFlag = static_cast<unsigned int>(formatContext_->oformat->flags);
