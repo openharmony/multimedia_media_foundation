@@ -88,7 +88,9 @@ private:
     int32_t InitPacket();
     int32_t InitSampleConvert();
     int32_t FillFrameFromBuffer(const uint8_t *buffer, size_t size);
+    int32_t EncodeFrame(std::shared_ptr<AVFrame> &frame);
     int32_t WriteFrame();
+    void FlushEncoder();
     void CopyS24ToS32(int32_t *dst, const uint8_t *src, size_t count);
     void ResetEncoderCtx();
     bool DeleteSrcFile(const std::string &filePath);
