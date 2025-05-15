@@ -416,6 +416,7 @@ public:
         tagCharSeq == Tag::AV_TRANSCODER_SRC_VIDEO_MIME or
         tagCharSeq == Tag::AV_TRANSCODER_DST_FORMAT or
         tagCharSeq == Tag::AV_TRANSCODER_DST_AUDIO_MIME or
+        tagCharSeq == Tag::VIDEO_ENCODER_ROI_PARAMS or
         tagCharSeq == Tag::AV_TRANSCODER_DST_VIDEO_MIME, std::string, AnyValueType::STRING);
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::RECORDER_HDR_TYPE, int8_t, AnyValueType::INT8_T);
