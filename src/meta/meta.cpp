@@ -446,6 +446,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::AV_TRANSCODER_DST_FORMAT, defaultString},
     {Tag::AV_TRANSCODER_DST_AUDIO_MIME, defaultString},
     {Tag::AV_TRANSCODER_DST_VIDEO_MIME, defaultString},
+    {Tag::VIDEO_ENCODER_ROI_PARAMS, defaultString},
     // Float
     {Tag::MEDIA_LATITUDE, defaultFloat},
     {Tag::MEDIA_LONGITUDE, defaultFloat},
