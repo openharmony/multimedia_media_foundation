@@ -133,6 +133,8 @@ public:
     static constexpr const char AUDIO_MAX_OUTPUT_SIZE[] = "audio.max.output.size";       ///< max output size
     static constexpr const char AUDIO_BITS_PER_CODED_SAMPLE[] = "bits_per_coded_sample"; ///< bits per coded sample
     static constexpr const char AUDIO_BITS_PER_RAW_SAMPLE[] = "bits_per_raw_sample"; ///< bits per raw sample
+    static constexpr const char AUDIO_BITRATE_MODE[] = "audio_bitrate_mode"; ///< @see AudioEncodeBitrateMode
+    static constexpr const char AUDIO_L2HC_VERSION[] = "audio_l2hc_version"; ///< int32_t, L2HC algo version
 
     /* -------------------- audio specific tag -------------------- */
     static constexpr const char AUDIO_MPEG_VERSION[] = "audio.mpeg.version"; ///< mpeg version
@@ -158,8 +160,6 @@ public:
     static constexpr const char AUDIO_HOA_ORDER[] =
         "audio.hoa.order"; ///< Key for audio hoa order
     static constexpr const char AUDIO_ENCODE_PTS_MODE[] = "audio_encode_pts_mode";     ///< @see AudioEncodePtsMode
-    static constexpr const char AUDIO_AAC_LC_PREFER_CODEC[] =
-        "audio_aac_lc_prefer_codec"; ///< @see AudioAACLCPreferCodec
     /* -------------------- video universal tag -------------------- */
     static constexpr const char VIDEO_WIDTH[] = "width";                               ///< video width
     static constexpr const char VIDEO_HEIGHT[] = "height";                             ///< video height

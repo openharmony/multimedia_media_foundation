@@ -300,9 +300,10 @@ enum AudioEncodePtsMode : int32_t {
     GENERATE_ENCODE_PTS_BY_INPUT_MODE,         // use input pts, calculate start from input pts
 };
 
-enum AudioAACLCPreferCodec : int32_t {
-    DEFAULT_AAC_LC_CODEC,                      // inner setting, use default codec
-    VENDOR_AAC_LC_CODEC,                       // inner setting, use vendor codec
+enum AudioEncodeBitrateMode : int32_t {
+    AUDIO_CBR = 0, // constant bit rate mode.
+    AUDIO_VBR = 1, // variable bit rate mode.
+    AUDIO_MBR = 2, // single frame multiple bit rate mode
 };
 
 } // namespace Plugins

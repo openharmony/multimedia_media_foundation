@@ -153,12 +153,12 @@ public:
                            AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_RAW_SAMPLE_FORMAT, Plugins::AudioSampleFormat,
                            AnyValueType::INT32_T);
+    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_BITRATE_MODE, Plugins::AudioEncodeBitrateMode,
+                           AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_AAC_PROFILE, Plugins::AudioAacProfile, AnyValueType::UINT8_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_AAC_STREAM_FORMAT, Plugins::AudioAacStreamFormat,
                            AnyValueType::UINT8_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_ENCODE_PTS_MODE, Plugins::AudioEncodePtsMode,
-                           AnyValueType::INT32_T);
-    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_AAC_LC_PREFER_CODEC, Plugins::AudioAACLCPreferCodec,
                            AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_PIXEL_FORMAT, Plugins::VideoPixelFormat,
                            AnyValueType::INT32_T);
@@ -259,6 +259,7 @@ public:
         tagCharSeq == Tag::VIDEO_PIC_WIDTH or
         tagCharSeq == Tag::VIDEO_PIC_HEIGHT or
         tagCharSeq == Tag::OH_MD_KEY_AUDIO_OBJECT_NUMBER or
+        tagCharSeq == Tag::AUDIO_L2HC_VERSION or
         tagCharSeq == Tag::DRM_ERROR_CODE, int32_t, AnyValueType::INT32_T);
 
     DEFINE_INSERT_GET_FUNC(
