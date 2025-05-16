@@ -66,4 +66,8 @@ ohos_unittest("event_bean_inner_unit_test") {
     "$histreamer_root_dir/src:media_foundation",
     "../common:media_foundation_inner_unit_test",
   ]
+
+  external_deps = [
+    "samgr:samgr_proxy",
+  ]
 }
