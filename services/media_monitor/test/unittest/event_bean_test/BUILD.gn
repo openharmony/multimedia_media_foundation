@@ -63,5 +63,6 @@ ohos_unittest("bean_unit_test") {
     "c_utils:utils",
     "hilog:libhilog",
     "ipc:ipc_core",
+    "samgr:samgr_proxy",
   ]
 }
