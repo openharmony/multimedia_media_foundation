@@ -53,6 +53,9 @@ if (hst_is_standard_sys) {
     if (media_foundation_enable_ass_demuxer) {
       defines += [ "SUPPORT_DEMUXER_ASS" ]
     }
+    if (is_arkui_x) {
+      defines += [ "CROSS_PLATFORM" ]
+    }
 
     include_dirs = [
       "$histreamer_root_dir/osal/base",
