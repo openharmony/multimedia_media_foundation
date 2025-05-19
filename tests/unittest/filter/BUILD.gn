@@ -55,11 +55,15 @@ ohos_unittest("filter_unit_inner_test") {
 
   include_dirs = [
     "./",
+    "./mock",
     "../../../src/buffer/avbuffer_queue/include/",
     "../../../interface/innerapi/",
   ]
 
-  sources = [ "./filter_unit_test.cpp" ]
+  sources = [ 
+    "./filter_factory_mock_unit_test.cpp",
+    "./filter_unit_test.cpp",
+  ]
 
   cflags = filter_unit_inner_test_cflags
 
