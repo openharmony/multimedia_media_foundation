@@ -35,7 +35,7 @@ using namespace std;
 
 static mutex g_mmProxyMutex;
 static sptr<IMediaMonitor> g_mmProxy = nullptr;
-static std::shared_ptr<DumpBufferWrap> dumpBufferWrap_ = nullptr;
+static std::shared_ptr<DumpBufferWrap> g_dumpBufferWrap = nullptr;
 constexpr int MAX_DUMP_TIME = 90;
 
 MediaMonitorManager::MediaMonitorManager()
@@ -174,7 +174,7 @@ void MediaMonitorManager::WriteAudioBuffer(const std::string &fileName, void *pt
     FALSE_RETURN_MSG(ret == SUCCESS, "get buffer failed.");
     FALSE_RETURN_MSG(bufferPtr != nullptr, "get buffer is nullptr.");
 
-    std::shared_ptr<DumpBufferWrap> tmpBufferWrap = dumpBufferWrap_;
+    std::shared_ptr<DumpBufferWrap> tmpBufferWrap = g_dumpBufferWrap;
     FALSE_RETURN_MSG(tmpBufferWrap != nullptr, "buffer wrap is nullptr.");
 
     int32_t bufferCapacitySize = tmpBufferWrap->GetCapacity(bufferPtr.get());
@@ -299,20 +299,20 @@ int32_t MediaMonitorManager::ErasePreferredDeviceByType(const PreferredType pref
 int32_t MediaMonitorManager::LoadDumpBufferWrap(const std::string &dumpEnable)
 {
     bool flag = (dumpEnable == "true") ? true : false;
-    if (flag && dumpBufferWrap_ != nullptr) {
+    if (flag && g_dumpBufferWrap != nullptr) {
         return SUCCESS;
     }
 
     if (flag) {
-        dumpBufferWrap_ = std::make_shared<DumpBufferWrap>();
-        bool ret = dumpBufferWrap_->Open();
+        g_dumpBufferWrap = std::make_shared<DumpBufferWrap>();
+        bool ret = g_dumpBufferWrap->Open();
         if (!ret) {
             MEDIA_LOG_E("load dumpbuffer failed");
-            dumpBufferWrap_ = nullptr;
+            g_dumpBufferWrap = nullptr;
             return ERROR;
         }
     } else {
-        dumpBufferWrap_ = nullptr;
+        g_dumpBufferWrap = nullptr;
     }
     return SUCCESS;
 }

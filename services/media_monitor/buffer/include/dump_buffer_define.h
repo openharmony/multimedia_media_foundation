@@ -28,6 +28,9 @@ struct DumpBuffer : public OHOS::Parcelable {
     bool Marshalling(OHOS::Parcel &parcel) const
     {
         OHOS::MessageParcel *parcelIn = static_cast<OHOS::MessageParcel*>(&parcel);
+        if (buffer_ == nullptr) {
+            return false;
+        }
         bool ret = buffer_->WriteToMessageParcel(*parcelIn);
         return ret;
     }
@@ -35,6 +38,9 @@ struct DumpBuffer : public OHOS::Parcelable {
     static DumpBuffer *Unmarshalling(OHOS::Parcel &data)
     {
         std::shared_ptr<OHOS::Media::AVBuffer> buffer = OHOS::Media::AVBuffer::CreateAVBuffer();
+        if (buffer == nullptr) {
+            return nullptr;
+        }
         struct DumpBuffer *dumpBuffer = new (std::nothrow) DumpBuffer(buffer);
         if (dumpBuffer == nullptr) {
             return nullptr;
