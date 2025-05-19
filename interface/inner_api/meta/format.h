@@ -305,6 +305,7 @@ public:
      * @version 1.0
      */
     bool SetMeta(std::shared_ptr<Meta> meta);
+    bool SetMetaPtr(std::shared_ptr<Meta> meta);
 
 private:
     FormatDataMap formatMap_;

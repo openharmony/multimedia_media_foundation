@@ -178,6 +178,20 @@ typedef enum OH_AVErrCode {
      * @since 14
      */
     AV_ERR_IO_UNSUPPORTED_REQUEST = 5411011,
+    /**
+     * @error Indicates a stream change for synchronous mode.
+     * It's necessary to call {@link OH_VideoEncoder_GetOutputDescription} to retrieve steam information
+     * for the video encoder instance, call {@link OH_VideoDecoder_GetOutputDescription} for
+     * the video decoder instance.
+     * @since 20
+     */
+    AV_ERR_VIDEO_STREAM_CHANGED = 5413001,
+    /**
+     * @error Indicates buffer query failed within certain time for synchronous mode,
+     * it's recommended to wait for a while and try the query again.
+     * @since 20
+     */
+    AV_ERR_VIDEO_TRY_AGAIN_LATER = 5413002,
 } OH_AVErrCode;
 
 #ifdef __cplusplus
