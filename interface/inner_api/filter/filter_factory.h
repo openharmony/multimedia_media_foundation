@@ -61,6 +61,7 @@ private:
     template <typename T>
     void RegisterFilterPriv(const std::string& name, const FilterType type, const InstanceGenerator& generator)
     {
+        (void)name;
         if (generator == nullptr) {
             auto result = generators.emplace(
                 type, [](const std::string &aliaName, const FilterType type) {
