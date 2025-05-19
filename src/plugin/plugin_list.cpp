@@ -89,6 +89,8 @@ PluginList::PluginList()
     AddFFmpegDemuxerPlugins();
     AddFFmpegAudioDecodersPlugins();
     AddAudioVividDecodersPlugins();
+    AddL2hcEncodersPlugins();
+    AddL2hcDecodersPlugins();
     AddAudioVendorAacEncodersPlugin();
     AddG711muAudioDecoderPlugins();
     AddLbvcAudioDecoderPlugins();
@@ -552,6 +554,28 @@ void PluginList::AddAudioVividDecodersPlugins()
     audioVividDecoderPlugin.cap = "audio/av3a";
     audioVividDecoderPlugin.rank = DEFAULT_RANK;
     pluginDescriptionList_.push_back(audioVividDecoderPlugin);
+}
+
+void PluginList::AddL2hcEncodersPlugins()
+{
+    PluginDescription l2hcEncoderPlugin;
+    l2hcEncoderPlugin.pluginName = "OH.Media.Codec.Encoder.Audio.L2HC";
+    l2hcEncoderPlugin.packageName = "AudioL2hcEncoder";
+    l2hcEncoderPlugin.pluginType = PluginType::AUDIO_ENCODER;
+    l2hcEncoderPlugin.cap = "audio/l2hc";
+    l2hcEncoderPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(l2hcEncoderPlugin);
+}
+
+void PluginList::AddL2hcDecodersPlugins()
+{
+    PluginDescription l2hcDecoderPlugin;
+    l2hcDecoderPlugin.pluginName = "OH.Media.Codec.Decoder.Audio.L2HC";
+    l2hcDecoderPlugin.packageName = "AudioL2hcDecoder";
+    l2hcDecoderPlugin.pluginType = PluginType::AUDIO_DECODER;
+    l2hcDecoderPlugin.cap = "audio/l2hc";
+    l2hcDecoderPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(l2hcDecoderPlugin);
 }
 
 void PluginList::AddG711muAudioDecoderPlugins()

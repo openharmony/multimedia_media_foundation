@@ -487,7 +487,8 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::VIDEO_DECODER_OUTPUT_COLOR_SPACE, 8},
     {Tag::VIDEO_DECODER_OUTPUT_ENABLE_VRR, 0},
     {Tag::AUDIO_ENCODE_PTS_MODE, 1},
-    {Tag::AUDIO_AAC_LC_PREFER_CODEC, 1},
+    {Tag::AUDIO_BITRATE_MODE, Plugins::AudioEncodeBitrateMode::AUDIO_CBR},
+    {Tag::AUDIO_L2HC_VERSION, 1},
     // UINT8_T
     {Tag::AUDIO_AAC_PROFILE, static_cast<int32_t>(Plugins::AudioAacProfile::ELD)},
     {Tag::AUDIO_AAC_STREAM_FORMAT, static_cast<int32_t>(Plugins::AudioAacStreamFormat::ADIF)}};

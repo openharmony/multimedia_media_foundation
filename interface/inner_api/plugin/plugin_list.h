@@ -71,6 +71,8 @@ private:
     void AddAacAudioDecoderPlugin();
     void AddFFmpegAudioDecodersPlugins();
     void AddAudioVividDecodersPlugins();
+    void AddL2hcEncodersPlugins();
+    void AddL2hcDecodersPlugins();
     void AddG711muAudioDecoderPlugins();
     void AddLbvcAudioDecoderPlugins();
     void AddOpusAudioDecoderPlugins();
