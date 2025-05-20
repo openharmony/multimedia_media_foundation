@@ -173,6 +173,12 @@ public:
 
     virtual Status SetPerfRecEnabled(bool isPerfRecEnabled) final;
 
+    virtual Status HandleFormatChange(std::shared_ptr<Meta>& meta)
+    {
+        (void)meta;
+        return Status::OK;
+    }
+
     virtual Status DoSetPerfRecEnabled(bool isPerfRecEnabled);
 
     virtual Status DoInitAfterLink();
