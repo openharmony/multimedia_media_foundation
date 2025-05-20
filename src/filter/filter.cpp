@@ -434,6 +434,13 @@ void Filter::PauseFilterTask()
     }
 }
 
+void Filter::StopFilterTask()
+{
+    if (filterTask_) {
+        filterTask_->Stop();
+    }
+}
+
 Status Filter::ProcessInputBuffer(int sendArg, int64_t delayUs)
 {
     MEDIA_LOG_D("Filter::ProcessInputBuffer  %{public}s", name_.c_str());
