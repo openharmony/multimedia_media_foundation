@@ -162,6 +162,8 @@ public:
 
     virtual void PauseFilterTask() final;
 
+    virtual void StopFilterTask() final;
+
     virtual Status SetPlayRange(int64_t start, int64_t end) final;
 
     virtual Status ProcessInputBuffer(int sendArg = 0, int64_t delayUs = 0) final;
