@@ -94,9 +94,9 @@ enum VideoEncodeBitrateMode : int32_t {
     CBR = 0, // constant bit rate mode.
     VBR = 1, // variable bit rate mode.
     CQ = 2, // constant quality mode.
-    CRF = 3, // constant rate factor.
-    SQR = 4, // stable quality rate control mode.
+    SQR = 3, // stable quality rate control mode.
     CBR_VIDEOCALL = 10, // constant bit rate mode for video call or meeting scene.
+    CRF = 11, // constant rate factor.
 };
 
 enum class ColorPrimary : int32_t {
