@@ -91,6 +91,7 @@ DEFINE_METADATA_SETTER_GETTER_FUNC(ChromaLocation, int32_t)
 DEFINE_METADATA_SETTER_GETTER_FUNC(FileType, int32_t)
 DEFINE_METADATA_SETTER_GETTER_FUNC(VideoEncodeBitrateMode, int32_t)
 DEFINE_METADATA_SETTER_GETTER_FUNC(TemporalGopReferenceMode, int32_t)
+DEFINE_METADATA_SETTER_GETTER_FUNC(VideoEncodeBFrameGopMode, int32_t)
 
 DEFINE_METADATA_SETTER_GETTER_FUNC(AudioChannelLayout, int64_t)
 
@@ -116,6 +117,7 @@ static std::map<TagType, std::pair<MetaSetterFunction, MetaGetterFunction>> g_me
     DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_CHROMA_LOCATION, ChromaLocation),
     DEFINE_METADATA_SETTER_GETTER(Tag::MEDIA_FILE_TYPE, FileType),
     DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_ENCODE_BITRATE_MODE, VideoEncodeBitrateMode),
+    DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_ENCODE_B_FRAME_GOP_MODE, VideoEncodeBFrameGopMode),
     DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_ENCODER_TEMPORAL_GOP_REFERENCE_MODE, TemporalGopReferenceMode),
 };
 
@@ -238,6 +240,7 @@ static Any defaultHEVCLevel = HEVCLevel::HEVC_LEVEL_UNKNOW;
 static Any defaultChromaLocation = ChromaLocation::BOTTOM;
 static Any defaultFileType = FileType::UNKNOW;
 static Any defaultVideoEncodeBitrateMode = VideoEncodeBitrateMode::CBR;
+static Any defaultVideoEncodeBFrameGopMode = VideoEncodeBFrameGopMode::VIDEO_ENCODE_GOP_DEFAULT_P_MODE;
 static Any defaultTemporalGopReferenceMode = TemporalGopReferenceMode::ADJACENT_REFERENCE;
 
 static Any defaultAudioChannelLayout = AudioChannelLayout::UNKNOWN;
@@ -263,6 +266,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_CHROMA_LOCATION, defaultChromaLocation},
     {Tag::MEDIA_FILE_TYPE, defaultFileType},
     {Tag::VIDEO_ENCODE_BITRATE_MODE, defaultVideoEncodeBitrateMode},
+    {Tag::VIDEO_ENCODE_B_FRAME_GOP_MODE, defaultVideoEncodeBFrameGopMode},
     {Tag::VIDEO_ENCODER_TEMPORAL_GOP_REFERENCE_MODE, defaultTemporalGopReferenceMode},
     // Int8
     {Tag::RECORDER_HDR_TYPE, defaultInt8},

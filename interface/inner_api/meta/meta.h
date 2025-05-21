@@ -179,6 +179,8 @@ public:
                            AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_ENCODE_BITRATE_MODE,
         Plugins::VideoEncodeBitrateMode, AnyValueType::INT32_T);
+    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_ENCODE_B_FRAME_GOP_MODE,
+        Plugins::VideoEncodeBFrameGopMode, AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_COLOR_RANGE or
         tagCharSeq == Tag::VIDEO_REQUEST_I_FRAME or
         tagCharSeq == Tag::VIDEO_IS_HDR_VIVID or
