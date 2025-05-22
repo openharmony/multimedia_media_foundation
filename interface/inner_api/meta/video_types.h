@@ -99,6 +99,12 @@ enum VideoEncodeBitrateMode : int32_t {
     CRF = 11, // constant rate factor.
 };
 
+enum VideoEncodeBFrameGopMode : int32_t {
+    VIDEO_ENCODE_GOP_DEFAULT_P_MODE = 0, // defaulte p mode
+    VIDEO_ENCODE_GOP_ADAPTIVE_B_MODE  = 1, // adaptive gop mode for b frame
+    VIDEO_ENCODE_GOP_H3B_MODE = 2, // only h3b mode for b freme
+};
+
 enum class ColorPrimary : int32_t {
     BT709 = 1,
     UNSPECIFIED = 2,

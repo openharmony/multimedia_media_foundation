@@ -476,6 +476,8 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::VIDEO_CHROMA_LOCATION, static_cast<int32_t>(Plugins::ChromaLocation::BOTTOM)},
     {Tag::MEDIA_FILE_TYPE, static_cast<int32_t>(Plugins::FileType::AMR)},
     {Tag::VIDEO_ENCODE_BITRATE_MODE, static_cast<int32_t>(Plugins::VideoEncodeBitrateMode::CBR)},
+    {Tag::VIDEO_ENCODE_B_FRAME_GOP_MODE,
+        static_cast<int32_t>(Plugins::VideoEncodeBFrameGopMode::VIDEO_ENCODE_GOP_DEFAULT_P_MODE)},
     {Tag::VIDEO_ENCODER_TEMPORAL_GOP_REFERENCE_MODE,
      static_cast<int32_t>(Plugins::TemporalGopReferenceMode::JUMP_REFERENCE)},
     {Tag::VIDEO_COORDINATE_X, 10},
