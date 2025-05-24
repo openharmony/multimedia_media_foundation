@@ -36,7 +36,8 @@ enum class MediaType : int32_t {
     SUBTITLE = 2,
     ATTACHMENT,     ///< Opaque data information usually sparse
     DATA,           ///< Opaque data information usually continuous
-    TIMEDMETA
+    TIMEDMETA,
+    AUXILIARY = 6,
 };
 
 /**

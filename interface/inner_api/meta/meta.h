@@ -450,6 +450,11 @@ public:
         tagCharSeq == Tag::VIDEO_ENCODER_PER_FRAME_ABS_QP_MAP, bool, AnyValueType::BOOL);
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::VIDEO_ENCODER_PER_FRAME_QP_MAP, std::vector<uint8_t>, AnyValueType::VECTOR_UINT8);
+    DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::REFERENCE_TRACK_IDS, std::vector<uint8_t>, AnyValueType::VECTOR_UINT8);
+    DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::TRACK_REFERENCE_TYPE or
+        tagCharSeq == Tag::TRACK_DESCRIPTION, std::string, AnyValueType::STRING);
 
     Meta &operator=(const Meta &other)
     {

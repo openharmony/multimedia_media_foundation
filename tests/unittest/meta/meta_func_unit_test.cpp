@@ -718,7 +718,9 @@ map<TagType, std::string> testStringData = {
     {Tag::AV_TRANSCODER_SRC_VIDEO_MIME, "String AV_TRANSCODER_SRC_VIDEO_MIME"},
     {Tag::AV_TRANSCODER_DST_FORMAT, "String AV_TRANSCODER_DST_FORMAT"},
     {Tag::AV_TRANSCODER_DST_AUDIO_MIME, "String AV_TRANSCODER_DST_AUDIO_MIME"},
-    {Tag::AV_TRANSCODER_DST_VIDEO_MIME, "String AV_TRANSCODER_DST_VIDEO_MIME"}
+    {Tag::AV_TRANSCODER_DST_VIDEO_MIME, "String AV_TRANSCODER_DST_VIDEO_MIME"},
+    {Tag::TRACK_REFERENCE_TYPE, "String TRACK_REFERENCE_TYPE"},
+    {Tag::TRACK_DESCRIPTION, "String TRACK_DESCRIPTION"},
 };
 
 /**
@@ -753,6 +755,7 @@ map<TagType, std::vector<uint8_t>> testVetcorInt8Data = {
     {Tag::AUDIO_VORBIS_SETUP_HEADER, vectorUint8MediaCover},
     {Tag::AUDIO_VIVID_METADATA, vectorUint8MediaCover},
     {Tag::VIDEO_ENCODER_PER_FRAME_QP_MAP, vectorUint8MediaCover},
+    {Tag::REFERENCE_TRACK_IDS, vectorUint8MediaCover},
 };
 
 /**
