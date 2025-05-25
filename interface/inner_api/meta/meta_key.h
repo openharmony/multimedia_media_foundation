@@ -117,6 +117,11 @@ public:
     static constexpr const char TIMED_METADATA_LOCALE[] = "locale_timed_metadata";   ///< locale of timed metadata
     static constexpr const char TIMED_METADATA_SETUP[] = "setup_of_timed_metadata";  ///< set up info of timed metadata
 
+    /* -------------------- auxiliary track tag -------------------- */
+    static constexpr const char REFERENCE_TRACK_IDS[] = "reference_track_ids";
+    static constexpr const char TRACK_REFERENCE_TYPE[] = "track_reference_type";
+    static constexpr const char TRACK_DESCRIPTION[] = "track_description";
+
     /* -------------------- audio universal tag -------------------- */
     static constexpr const char AUDIO_CHANNEL_COUNT[] = "channel_count"; ///< audio channel count
     static constexpr const char AUDIO_CHANNEL_LAYOUT[] =
