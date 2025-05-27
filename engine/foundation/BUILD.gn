@@ -82,6 +82,7 @@ if (hst_is_lite_sys) {
     public_deps = [ "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_intf" ]
     external_deps = [
       "bounds_checking_function:libsec_shared",
+      "graphic_2d:librender_service_base",
       "graphic_surface:surface",
       "hilog:libhilog",
       "hitrace:hitrace_meter",
