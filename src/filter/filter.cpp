@@ -20,6 +20,7 @@
 #include "osal/utils/util.h"
 #include "common/log.h"
 #include <algorithm>
+#include "parameters.h"
 
 namespace {
 constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "Filter" };
