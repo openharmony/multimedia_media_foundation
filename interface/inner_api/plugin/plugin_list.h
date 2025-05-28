@@ -93,10 +93,8 @@ private:
 #ifdef SUPPORT_CODEC_COOK
     void AddCookAudioDecoderPlugins();
 #endif
-#ifdef SUPPORT_CODEC_AC3
     void AddAc3DemuxerPlugin();
     void AddAc3AudioDecoderPlugins();
-#endif
 #ifdef SUPPORT_DEMUXER_LRC
     void AddLrcDemuxerPlugin();
 #endif

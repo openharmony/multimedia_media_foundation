@@ -41,7 +41,6 @@
           "media_foundation_enable_plugin_codec_adapter",
           "media_foundation_enable_rm_demuxer",
           "media_foundation_enable_cook_audio_decoder",
-          "media_foundation_enable_ac3_audio_decoder",
           "media_foundation_enable_lrc_demuxer",
           "media_foundation_enable_sami_demuxer",
           "media_foundation_enable_ass_demuxer"
