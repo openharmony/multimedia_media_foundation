@@ -20,6 +20,7 @@
 #include "osal/utils/util.h"
 #include "common/log.h"
 #include <algorithm>
+#include "parameters.h"
 
 namespace {
 constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "Filter" };
@@ -65,9 +66,14 @@ void Filter::LinkPipeLine(const std::string &groupId, bool needTurbo)
             case FilterType::VIDEO_CAPTURE:
                 taskType = TaskType::SINGLETON;
                 break;
-            case FilterType::FILTERTYPE_ASINK:
-                taskType = TaskType::SINGLETON;
+            case FilterType::FILTERTYPE_ASINK: {
+                bool isCallback =
+                    system::GetParameter("debug.media_service.audio.audiosink_callback", "1") == "1";
+                MEDIA_LOG_I("Filter %{public}s LinkPipeLine:%{public}s, isAsyncMode_:%{public}d, isCallback:%{public}d",
+                    name_.c_str(), groupId.c_str(), isAsyncMode_, isCallback);
+                taskType = isCallback ? TaskType::SINGLETON : TaskType::AUDIO;
                 break;
+            }
             case FilterType::AUDIO_CAPTURE:
                 taskType = TaskType::AUDIO;
                 break;
