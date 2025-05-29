@@ -41,6 +41,7 @@ public:
     static constexpr const char AUDIO_FLAC[] = "audio/flac";
     static constexpr const char AUDIO_RAW[] = "audio/raw";
     static constexpr const char AUDIO_G711MU[] = "audio/g711mu";
+    static constexpr const char AUDIO_G711A[] = "audio/g711a";
     static constexpr const char AUDIO_AVS3DA[] = "audio/av3a";
     static constexpr const char AUDIO_LBVC[] = "audio/lbvc";
     static constexpr const char AUDIO_APE[] = "audio/x-ape";
