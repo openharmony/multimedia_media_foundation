@@ -522,6 +522,28 @@ void MediaEventBaseWriter::WriteVolumeSubscribe(std::shared_ptr<EventBean> &bean
     }
 #endif
 }
+
+void MediaEventBaseWriter::WriteSystemTonePlayback(const std::unique_ptr<DfxSystemTonePlaybackResult> &result)
+{
+#ifdef MONITOR_ENABLE_HISYSEVENT
+    MEDIA_LOG_I("Write system tone playback MONITOR_ENABLE_HISYSEVENT");
+    HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "SYSTEM_TONE_PLAYBACK",
+        HiviewDFX::HiSysEvent::EventType::BEHAVIOR,
+        "TIME_STAMP", result->timeStamp,
+        "SYSTEM_TONE_TYPE", result->systemToneType,
+        "CLIENT_UID", result->clientUid,
+        "DEVICE_TYPE", result->deviceType,
+        "ERROR_CODE", result->errorCode,
+        "ERROR_REASON", result->errorReason,
+        "MUTE_STATE", result->muteState,
+        "MUTE_HAPTICS", result->muteHaptics,
+        "RING_MODE", result->ringMode,
+        "STREAM_TYPE", result->streamType,
+        "VIBRATION_STATE", result->vibrationState,
+        "VOLUME_LEVEL", result->volumeLevel);
+    MEDIA_LOG_I("Write system tone playback end");
+#endif
+}
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS

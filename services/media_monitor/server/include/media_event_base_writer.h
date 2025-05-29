@@ -22,6 +22,21 @@ namespace OHOS {
 namespace Media {
 namespace MediaMonitor {
 
+struct DfxSystemTonePlaybackResult {
+    std::vector<uint64_t> timeStamp{};
+    std::vector<int32_t> systemToneType{};
+    std::vector<int32_t> clientUid{};
+    std::vector<int32_t> deviceType{};
+    std::vector<int32_t> errorCode{};
+    std::vector<std::string> errorReason{};
+    std::vector<bool> muteState{};
+    std::vector<bool> muteHaptics{};
+    std::vector<int32_t> ringMode{};
+    std::vector<int32_t> streamType{};
+    std::vector<bool> vibrationState{};
+    std::vector<int64_t> volumeLevel{};
+};
+
 class MediaEventBaseWriter {
 public:
     static MediaEventBaseWriter& GetMediaEventBaseWriter()
@@ -61,6 +76,7 @@ public:
     void WriteStreamPropertyStatistic(std::shared_ptr<EventBean> &bean);
     void WriteVolumeSubscribe(std::shared_ptr<EventBean> &bean);
     void WriteExcludeOutputDevice(std::shared_ptr<EventBean> &bean);
+    void WriteSystemTonePlayback(const std::unique_ptr<DfxSystemTonePlaybackResult> &result);
 };
 
 } // namespace MediaMonitor

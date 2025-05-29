@@ -69,6 +69,9 @@ void EventAggregate::WriteEvent(std::shared_ptr<EventBean> &bean)
         case LOAD_EFFECT_ENGINE_ERROR:
             mediaMonitorPolicy_.WriteEvent(bean->GetEventId(), bean);
             break;
+        case SYSTEM_TONE_PLAYBACK:
+            mediaMonitorPolicy_.WriteEvent(bean->GetEventId(), bean);
+            break;
         default:
             UpdateAggregateEventList(bean);
             break;
