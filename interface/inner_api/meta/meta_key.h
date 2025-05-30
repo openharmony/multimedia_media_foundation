@@ -507,6 +507,7 @@ public:
     static constexpr const char AV_TRANSCODER_DST_VIDEO_FRAME_RATE[] = "av_transcoder_dst_video_frame_rate";
     static constexpr const char AV_TRANSCODER_DST_VIDEO_BITRATE[] = "av_transcoder_dst_video_bitrate";
     static constexpr const char AV_TRANSCODER_DST_HDR_TYPE[] = "av_transcoder_dst_hdr_type";
+    static constexpr const char AV_TRANSCODER_DST_COLOR_SPACE[] = "av_transcoder_dst_color_space";
     static constexpr const char AV_TRANSCODER_DST_AUDIO_SAMPLE_RATE[] = "av_transcoder_dst_audio_sample_rate";
     static constexpr const char AV_TRANSCODER_DST_AUDIO_CHANNEL_COUNT[] = "av_transcoder_dst_audio_channel_count";
     static constexpr const char AV_TRANSCODER_DST_AUDIO_BITRATE[] = "av_transcoder_dst_audio_bitrate";
