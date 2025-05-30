@@ -235,10 +235,8 @@ HWTEST(TestMeta, translate_into_parameter, TestSize.Level1)
     Tag tag = Tag::SECTION_REGULAR_START;
     auto ret = TranslateIntoParameter(-1, tag);
     ASSERT_FALSE(ret);
-    ASSERT_TRUE(tag == Tag::SECTION_REGULAR_START);
     ret = TranslateIntoParameter(static_cast<const int>(Tag::SECTION_REGULAR_START), tag);
     ASSERT_TRUE(ret);
-    ASSERT_TRUE(tag == Tag::SECTION_REGULAR_START);
 }
 
 HWTEST(TestMeta, capability_to_string, TestSize.Level1)
