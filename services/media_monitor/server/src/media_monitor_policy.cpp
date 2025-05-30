@@ -211,6 +211,7 @@ void MediaMonitorPolicy::TriggerSystemTonePlaybackTimeEvent(std::shared_ptr<Even
     auto dfxResult = std::make_unique<DfxSystemTonePlaybackResult>();
     CollectDataToDfxResult(dfxResult.get());
     mediaEventBaseWriter_.WriteSystemTonePlayback(std::move(dfxResult));
+    systemTonePlayerCount_ = 0;
     systemTonePlayEventVector_.clear();
     return;
 }
