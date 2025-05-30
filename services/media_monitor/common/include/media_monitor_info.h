@@ -68,7 +68,7 @@ enum EventId {
 
     EXCLUDE_OUTPUT_DEVICE = 27,
     HAPTIC_PLAYER = 28,
-    MESSAGE_ZONE = 29,
+    SYSTEM_TONE_PLAYBACK = 29,
 };
 
 enum EventType {

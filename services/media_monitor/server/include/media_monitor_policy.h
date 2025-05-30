@@ -47,6 +47,9 @@ public:
     void WriteBehaviorEventExpansion(EventId eventId, std::shared_ptr<EventBean> &bean);
     void WriteFaultEvent(EventId eventId, std::shared_ptr<EventBean> &bean);
     void WriteAggregationEvent(EventId eventId, std::shared_ptr<EventBean> &bean);
+    void WriteSystemTonePlaybackEvent(EventId eventId, std::shared_ptr<EventBean> &bean);
+    void TriggerSystemTonePlaybackEvent(std::shared_ptr<EventBean> &bean);
+    void CollectDataToDfxResult(DfxSystemTonePlaybackResult* result);
 
     void HandDeviceUsageToEventVector(std::shared_ptr<EventBean> &deviceUsage);
     void HandStreamUsageToEventVector(std::shared_ptr<EventBean> &streamUsage);
@@ -59,6 +62,7 @@ public:
     void HandleCaptureMutedToEventVector(std::shared_ptr<EventBean> &bean);
     void HandleVolumeToEventVector(std::shared_ptr<EventBean> &bean);
     void HandStreamPropertyToEventVector(std::shared_ptr<EventBean> &streamProperty);
+    void TriggerSystemTonePlaybackTimeEvent(std::shared_ptr<EventBean> &bean);
 
     void WhetherToHiSysEvent();
     void WriteInfo(int32_t fd, std::string &dumpString);
@@ -66,16 +70,21 @@ public:
 private:
     static constexpr int32_t DEFAULT_AGGREGATION_FREQUENCY = 1000;
     static constexpr int32_t DEFAULT_AGGREGATION_TIME = 24 * 60;
+    static constexpr int32_t DEFAULT_TONE_PLAYBACK_TIME = 120;
+    static constexpr uint64_t DEFAULT_TONE_PLAYBACK_TIME_SECEND = 2*60*60;
 
     void ReadParameter();
     void StartTimeThread();
     void StopTimeThread();
     void TimeFunc();
     void HandleToHiSysEvent();
+    void HandleToSystemTonePlaybackEvent();
     void setAppNameToEventVector(const std::string key, std::shared_ptr<EventBean> &bean);
     BundleInfo GetBundleInfo(int32_t appUid);
 
     uint64_t curruntTime_ = 0;
+    uint64_t startAudioTime_ = 0;
+    uint64_t lastAudioTime_ = 0;
     std::unique_ptr<std::thread> timeThread_ = nullptr;
     std::atomic_bool startThread_ = true;
 
@@ -84,9 +93,13 @@ private:
     std::mutex eventVectorMutex_;
     std::vector<std::shared_ptr<EventBean>> eventVector_;
     std::map<int32_t, BundleInfo> cachedBundleInfoMap_;
+    std::vector<std::shared_ptr<EventBean>> systemTonePlayEventVector_;
 
+    int32_t systemTonePlayerCount_ = 0;
     int32_t aggregationFrequency_ = DEFAULT_AGGREGATION_FREQUENCY;
     int32_t aggregationTime_ = DEFAULT_AGGREGATION_TIME;
+    int32_t systemTonePlaybackTime_ = DEFAULT_TONE_PLAYBACK_TIME;
+    int32_t systemTonePlaybackSleepTime_ = DEFAULT_TONE_PLAYBACK_TIME_SECEND;
 };
 
 } // namespace MediaMonitor
