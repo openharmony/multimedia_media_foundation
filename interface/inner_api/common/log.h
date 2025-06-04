@@ -246,23 +246,21 @@
 #endif
 
 #ifndef FALSE_RETURN
-#define FALSE_RETURN(exec)                                 \
-    do {                                                   \
-        bool returnValue = (exec);                         \
-        if (!returnValue) {                                \
-            MEDIA_LOG_E_NO_RELEASE("FALSE_RETURN " #exec); \
-            return;                                        \
-        }                                                  \
+#define FALSE_RETURN(exec)                                              \
+    do {                                                                \
+        if (!(exec)) {                                                  \
+            MEDIA_LOG_E_NO_RELEASE("FALSE_RETURN " #exec);              \
+            return;                                                     \
+        }                                                               \
     } while (0)
 #endif
 
 #ifndef FALSE_RETURN_NOLOG
-#define FALSE_RETURN_NOLOG(exec)                                 \
-    do {                                                   \
-        bool returnValue = (exec);                         \
-        if (!returnValue) {                                \
-            return;                                        \
-        }                                                  \
+#define FALSE_RETURN_NOLOG(exec)                                        \
+    do {                                                                \
+        if (!(exec)) {                                                  \
+            return;                                                     \
+        }                                                               \
     } while (0)
 #endif
 
@@ -333,56 +331,51 @@
 #endif
 
 #ifndef FALSE_RETURN_W
-#define FALSE_RETURN_W(exec)                    \
-    do {                                        \
-        bool returnValue = (exec);              \
-        if (!returnValue) {                     \
-            MEDIA_LOG_W("FALSE_RETURN " #exec); \
-            return;                             \
-        }                                       \
+#define FALSE_RETURN_W(exec)                                            \
+    do {                                                                \
+        if (!(exec)) {                                                  \
+            MEDIA_LOG_W("FALSE_RETURN " #exec);                         \
+            return;                                                     \
+        }                                                               \
     } while (0)
 #endif
 
 #ifndef FALSE_RETURN_V
-#define FALSE_RETURN_V(exec, ret)                            \
-    do {                                                     \
-        bool returnValue = (exec);                           \
-        if (!returnValue) {                                  \
-            MEDIA_LOG_E_NO_RELEASE("FALSE_RETURN_V " #exec); \
-            return ret;                                      \
-        }                                                    \
+#define FALSE_RETURN_V(exec, ret)                                       \
+    do {                                                                \
+        if (!(exec)) {                                                  \
+            MEDIA_LOG_E_NO_RELEASE("FALSE_RETURN_V " #exec);            \
+            return ret;                                                 \
+        }                                                               \
     } while (0)
 #endif
 
 #ifndef FALSE_RETURN_V_NOLOG
-#define FALSE_RETURN_V_NOLOG(exec, ret)                      \
-    do {                                                     \
-        bool returnValue = (exec);                           \
-        if (!returnValue) {                                  \
-            return ret;                                      \
-        }                                                    \
+#define FALSE_RETURN_V_NOLOG(exec, ret)                                 \
+    do {                                                                \
+        if (!(exec)) {                                                  \
+            return ret;                                                 \
+        }                                                               \
     } while (0)
 #endif
 
 #ifndef FALSE_RETURN_V_W
-#define FALSE_RETURN_V_W(exec, ret)                 \
-    do {                                            \
-        bool returnValue = (exec);                  \
-        if (!returnValue) {                         \
-            MEDIA_LOG_W("FALSE_RETURN_V_W " #exec); \
-            return ret;                             \
-        }                                           \
+#define FALSE_RETURN_V_W(exec, ret)                                     \
+    do {                                                                \
+        if (!(exec)) {                                                  \
+            MEDIA_LOG_W("FALSE_RETURN_V_W " #exec);                     \
+            return ret;                                                 \
+        }                                                               \
     } while (0)
 #endif
 
 #ifndef FALSE_RETURN_MSG_IMPL
-#define FALSE_RETURN_MSG_IMPL(loglevel, exec, fmt, args...)         \
-    do {                                                            \
-        bool returnValue = (exec);                                  \
-        if (!returnValue) {                                         \
-            loglevel(fmt, ##args);                                  \
-            return;                                                 \
-        }                                                           \
+#define FALSE_RETURN_MSG_IMPL(loglevel, exec, fmt, args...)             \
+    do {                                                                \
+        if (!(exec)) {                                                  \
+            loglevel(fmt, ##args);                                      \
+            return;                                                     \
+        }                                                               \
     } while (0)
 #endif
 
@@ -403,13 +396,12 @@
 #endif
 
 #ifndef FALSE_RETURN_V_MSG_IMPL
-#define FALSE_RETURN_V_MSG_IMPL(loglevel, exec, ret, fmt, args...) \
-    do {                                                           \
-        bool returnValue = (exec);                                 \
-        if (!returnValue) {                                        \
-            loglevel(fmt, ##args);                                 \
-            return ret;                                            \
-        }                                                          \
+#define FALSE_RETURN_V_MSG_IMPL(loglevel, exec, ret, fmt, args...)      \
+    do {                                                                \
+        if (!(exec)) {                                                  \
+            loglevel(fmt, ##args);                                      \
+            return ret;                                                 \
+        }                                                               \
     } while (0)
 #endif
 
@@ -438,14 +430,13 @@
 #endif
 
 #ifndef FALSE_UPDATE_RETURN_V_MSG_IMPL
-#define FALSE_UPDATE_RETURN_V_MSG_IMPL(loglevel, val, exec, ret, fmt, args...) \
-    do {                                                                       \
-        bool returnValue = (exec);                                             \
-        if (!returnValue) {                                                    \
-            val = ret;                                                         \
-            loglevel(fmt, ##args);                                             \
-            return ret;                                                        \
-        }                                                                      \
+#define FALSE_UPDATE_RETURN_V_MSG_IMPL(loglevel, val, exec, ret, fmt, args...)  \
+    do {                                                                        \
+        if (!(exec)) {                                                          \
+            val = ret;                                                          \
+            loglevel(fmt, ##args);                                              \
+            return ret;                                                         \
+        }                                                                       \
     } while (0)
 #endif
 
@@ -455,12 +446,11 @@
 #endif
 
 #ifndef FALSE_LOG
-#define FALSE_LOG(exec)                       \
-    do {                                      \
-        bool returnValue = (exec);            \
-        if (!returnValue) {                   \
-            MEDIA_LOG_E("FALSE_LOG: " #exec); \
-        }                                     \
+#define FALSE_LOG(exec)                                     \
+    do {                                                    \
+        if (!(exec)) {                                      \
+            MEDIA_LOG_E("FALSE_LOG: " #exec);               \
+        }                                                   \
     } while (0)
 #endif
 
