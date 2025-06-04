@@ -292,15 +292,15 @@
 #endif
 
 #ifndef FALSE_CONTINUE_LOGDD
-#define FALSE_CONTINUE_LOGDD(loglevel, cond, fmt, args...) FALSE_CONTINUE_LOG_IMPL(MEDIA_LOG_DD, cond, fmt, ##args)
+#define FALSE_CONTINUE_LOGDD(cond, fmt, args...) FALSE_CONTINUE_LOG_IMPL(MEDIA_LOG_DD, cond, fmt, ##args)
 #endif
 
 #ifndef FALSE_CONTINUE_LOGD
-#define FALSE_CONTINUE_LOGD(loglevel, cond, fmt, args...) FALSE_CONTINUE_LOG_IMPL(MEDIA_LOG_D, cond, fmt, ##args)
+#define FALSE_CONTINUE_LOGD(cond, fmt, args...) FALSE_CONTINUE_LOG_IMPL(MEDIA_LOG_D, cond, fmt, ##args)
 #endif
 
 #ifndef FALSE_CONTINUE_LOGI
-#define FALSE_CONTINUE_LOGI(loglevel, cond, fmt, args...) FALSE_CONTINUE_LOG_IMPL(MEDIA_LOG_I, cond, fmt, ##args)
+#define FALSE_CONTINUE_LOGI(cond, fmt, args...) FALSE_CONTINUE_LOG_IMPL(MEDIA_LOG_I, cond, fmt, ##args)
 #endif
 
 #ifndef FALSE_BREAK_NOLOG
@@ -321,15 +321,15 @@
 #endif
 
 #ifndef FALSE_BREAK_LOGDD
-#define FALSE_BREAK_LOGDD(loglevel, cond, fmt, args...) FALSE_BREAK_LOG_IMPL(MEDIA_LOG_DD, cond, fmt, ##args)
+#define FALSE_BREAK_LOGDD(cond, fmt, args...) FALSE_BREAK_LOG_IMPL(MEDIA_LOG_DD, cond, fmt, ##args)
 #endif
 
 #ifndef FALSE_BREAK_LOGD
-#define FALSE_BREAK_LOGD(loglevel, cond, fmt, args...) FALSE_BREAK_LOG_IMPL(MEDIA_LOG_D, cond, fmt, ##args)
+#define FALSE_BREAK_LOGD(cond, fmt, args...) FALSE_BREAK_LOG_IMPL(MEDIA_LOG_D, cond, fmt, ##args)
 #endif
 
 #ifndef FALSE_BREAK_LOGI
-#define FALSE_BREAK_LOGI(loglevel, cond, fmt, args...) FALSE_BREAK_LOG_IMPL(MEDIA_LOG_I, cond, fmt, ##args)
+#define FALSE_BREAK_LOGI(cond, fmt, args...) FALSE_BREAK_LOG_IMPL(MEDIA_LOG_I, cond, fmt, ##args)
 #endif
 
 #ifndef FALSE_RETURN_W
@@ -355,7 +355,7 @@
 #endif
 
 #ifndef FALSE_RETURN_V_NOLOG
-#define FALSE_RETURN_V_NOLOG(exec, ret)                            \
+#define FALSE_RETURN_V_NOLOG(exec, ret)                      \
     do {                                                     \
         bool returnValue = (exec);                           \
         if (!returnValue) {                                  \
