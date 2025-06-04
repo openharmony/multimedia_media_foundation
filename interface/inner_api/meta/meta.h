@@ -448,6 +448,8 @@ public:
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::MEDIA_EDITLIST, int32_t, AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::MEDIA_ENABLE_MOOV_FRONT, int32_t, AnyValueType::INT32_T);
+    DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::VIDEO_ENCODER_PER_FRAME_ABS_QP_MAP, bool, AnyValueType::BOOL);
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::VIDEO_ENCODER_PER_FRAME_QP_MAP, std::vector<uint8_t>, AnyValueType::VECTOR_UINT8);
