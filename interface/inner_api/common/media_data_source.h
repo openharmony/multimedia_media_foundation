@@ -35,6 +35,20 @@ enum MediaDataSourceError : int32_t {
 };
 
 /**
+ * @brief Use with AudioDataSource::ReadAt.
+ */
+enum class AudioDataSourceReadAtActionState : int32_t {
+    /**
+     * use with ReadAt. Sync audio and skip log.
+     */
+    OK = 0,
+    SKIP_WITHOUT_LOG = 1,
+    RETRY_IN_INTERVAL = 2,
+    RETRY_SKIP = 3,
+    INVALID = -1,
+};
+
+/**
  * @brief the mediaDataSource instance need set to player.
  *
  */
@@ -73,24 +87,27 @@ public:
     virtual ~IAudioDataSource() = default;
 
     /**
-     * @brief Player use ReadAt to tell user the desired file position and length.(length is number of Bytes)
-     * Then usr filled the mem, and return the actual length of mem.
-     * @param mem The stream mem need to fill. see avsharedmemory.h.
-     * @param length The stream length player want to get.
-     * @param pos The stream pos player want get start.
+     * @brief use ReadAt to tell Screen capture the audio av buffer and length.(length is number of Bytes)
+     * @param buffer The Av buffer mem need to fill. see avsharedmemory.h.
+     * @param length The stream length.
      * The length of the filled memory must match the actual length returned.
-     * @return The actual length of stream mem filled, if failed or no mem return MediaDataSourceError.
+     * @return The action audio data source filter need to do.
      */
-    virtual int32_t ReadAt(std::shared_ptr<AVBuffer> buffer, uint32_t length) = 0;
+    virtual AudioDataSourceReadAtActionState ReadAt(std::shared_ptr<AVBuffer> buffer, uint32_t length) = 0;
 
     /**
      * @brief Get the total size of the stream.
      * If the user does not know the length of the stream, size should be assigned -1,
-     * player will use the datasource not seekable.
      * @param size Total size of the stream. If no size set -1.
-     * @return MSERR_OK if ok; others if failed. see media_errors.h
+     * @return 0 if ok; others if failed. see media_errors.h
      */
     virtual int32_t GetSize(int64_t& size) = 0;
+
+    /**
+     * @brief Set FirstFramePts to AudoDataSource.
+     * @param firstFramePts First video Frame Pts.
+     */
+    virtual void SetVideoFirstFramePts(int64_t firstFramePts) = 0;
 };
 
 } // namespace Media
