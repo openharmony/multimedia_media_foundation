@@ -185,6 +185,55 @@ Status Filter::Pause()
     return ret;
 }
 
+Status Filter::Freeze()
+{
+    MEDIA_LOG_I("Freeze %{public}s, pState:%{public}d, innerState:%{public}d",
+                name_.c_str(), curState_, state_);
+    // In offload case, we need pause to interrupt audio_sink_plugin write function,  so do not use asyncmode
+    auto ret = DoFreeze();
+    if (filterTask_) {
+        filterTask_->Pause();
+    }
+    for (auto iter : nextFiltersMap_) {
+        for (auto filter : iter.second) {
+            auto curRet = filter->Freeze();
+            if (curRet != Status::OK) {
+                ret = curRet;
+            }
+        }
+    }
+    return ret;
+}
+
+Status Filter::UnFreeze()
+{
+    MEDIA_LOG_I("UnFreeze %{public}s, pState:%{public}d, innerState:%{public}d",
+                name_.c_str(), curState_, state_);
+    auto ret =  DoUnFreeze();
+    if (filterTask_ && state_ == FilterState::FROZEN) {
+        filterTask_->Start();
+    }
+    for (auto iter : nextFiltersMap_) {
+        for (auto filter : iter.second) {
+            auto curRet = filter->UnFreeze();
+            if (curRet != Status::OK) {
+                ret = curRet;
+            }
+        }
+    }
+    return ret;
+}
+
+Status Filter::DoFreeze()
+{
+    return Status::OK;
+}
+
+Status Filter::DoUnFreeze()
+{
+    return Status::OK;
+}
+
 Status Filter::PauseDragging()
 {
     MEDIA_LOG_D("PauseDragging %{public}s, pState:%{public}d", name_.c_str(), curState_);

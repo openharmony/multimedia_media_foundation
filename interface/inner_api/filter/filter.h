@@ -71,6 +71,7 @@ enum class FilterState {
     READY,       // Ready Event reported
     RUNNING,     // Start called
     PAUSED,      // Pause called
+    FROZEN,      // Freeze called
     STOPPED,     // Stop called
     RELEASED,    // Release called
     ERROR,       // State fail
@@ -153,6 +154,10 @@ public:
     virtual Status Flush() final;
 
     virtual Status Release() final;
+    
+    virtual Status Freeze() final;
+
+    virtual Status UnFreeze() final;
 
     virtual Status Preroll() final;
 
@@ -207,6 +212,10 @@ public:
 
     virtual Status DoRelease();
 
+    virtual Status DoFreeze();
+
+    virtual Status DoUnFreeze();
+
     virtual Status DoPreroll();
 
     virtual Status DoWaitPrerollDone(bool render);
@@ -258,6 +267,8 @@ protected:
 
     std::vector<StreamType> supportedInStreams_;
     std::vector<StreamType> supportedOutStreams_;
+
+    FilterState state_ = FilterState::CREATED;
 
     std::map<StreamType, std::vector<std::shared_ptr<Filter>>> nextFiltersMap_;
 
