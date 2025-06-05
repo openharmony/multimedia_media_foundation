@@ -93,6 +93,7 @@ PluginList::PluginList()
     AddL2hcDecodersPlugins();
     AddAudioVendorAacEncodersPlugin();
     AddG711muAudioDecoderPlugins();
+    AddG711aAudioDecoderPlugins();
     AddLbvcAudioDecoderPlugins();
     AddOpusAudioDecoderPlugins();
     AddRawAudioDecoderPlugins();
@@ -581,6 +582,17 @@ void PluginList::AddG711muAudioDecoderPlugins()
     g711muAudioDecoderPlugin.cap = "audio/g711mu";
     g711muAudioDecoderPlugin.rank = DEFAULT_RANK;
     pluginDescriptionList_.push_back(g711muAudioDecoderPlugin);
+}
+
+void PluginList::AddG711aAudioDecoderPlugins()
+{
+    PluginDescription g711aAudioDecoderPlugin;
+    g711aAudioDecoderPlugin.pluginName = "OH.Media.Codec.Decoder.Audio.G711a";
+    g711aAudioDecoderPlugin.packageName = "G711aAudioDecoder";
+    g711aAudioDecoderPlugin.pluginType = PluginType::AUDIO_DECODER;
+    g711aAudioDecoderPlugin.cap = "audio/g711a";
+    g711aAudioDecoderPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(g711aAudioDecoderPlugin);
 }
 
 void PluginList::AddLbvcAudioDecoderPlugins()
