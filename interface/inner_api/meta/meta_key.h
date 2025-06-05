@@ -281,7 +281,7 @@ public:
     static constexpr const char VIDEO_ENCODER_QP_START[] =
         "video_encoder_qp_start"; ///< int32_t, key for describing the start quantization parameter allowed for video
                                   ///< encoder. This is an optional key that applies only to video encoder input loop.
-    static constexpr const char VIDEO_ENCODER_ROI_PARAMS[] = 
+    static constexpr const char VIDEO_ENCODER_ROI_PARAMS[] =
         "video_encoder_roi_params"; ///< string, key for video encoder roi params
     static constexpr const char VIDEO_ENCODER_TARGET_QP[] =
         "video_encoder_target_qp"; ///< int32_t, Key for video encoder target qp.
