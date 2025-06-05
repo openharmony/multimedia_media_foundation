@@ -80,9 +80,9 @@ HWTEST_F(FilterFactoryMockTest, Test_CreateFilter, TestSize.Level1)
     auto &factory = FilterFactory::Instance();
     AutoRegisterFilter<MockFilterForTest> reg1("TestSourceFilterA", FilterType::FILTERTYPE_SOURCE, GenerateOneFilter);
     auto filter1 = factory.CreateFilter<MockFilterForTest>("filter1", FilterType::FILTERTYPE_SOURCE);
-	EXPECT_FALSE(filter1 == nullptr);
+    EXPECT_FALSE(filter1 == nullptr);
     auto filter2 = factory.CreateFilter<MockFilterForTest>("filter2", FilterType::FILTERTYPE_DEMUXER);
-	EXPECT_TRUE(filter2 == nullptr);
+    EXPECT_TRUE(filter2 == nullptr);
 }
 } // namespace FilterUnitTest
 } // namespace Media
