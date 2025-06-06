@@ -75,7 +75,7 @@ public:
     void WritePlaybackVolume(std::shared_ptr<EventBean> &bean);
     void WriteStreamPropertyStatistic(std::shared_ptr<EventBean> &bean);
     void WriteVolumeSubscribe(std::shared_ptr<EventBean> &bean);
-    void WriteCustomizedToneChange(std::shared_ptr &bean);
+    void WriteCustomizedToneChange(std::shared_ptr<EventBean> &bean);
     void WriteExcludeOutputDevice(std::shared_ptr<EventBean> &bean);
     void WriteSystemTonePlayback(const std::unique_ptr<DfxSystemTonePlaybackResult> &result);
 };
