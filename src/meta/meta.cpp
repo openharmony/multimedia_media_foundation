@@ -155,7 +155,7 @@ static std::vector<TagType> g_metadataBoolVector = {
     Tag::VIDEO_ENCODER_ENABLE_WATERMARK,
     Tag::VIDEO_ENCODER_ENABLE_PARAMS_FEEDBACK,
     Tag::VIDEO_ENCODER_ENABLE_QP_MAP,
-    TAG::VIDEO_ENCODER_ENABLE_PTS_BASED_RATECONTROL,
+    Tag::VIDEO_ENCODER_ENABLE_PTS_BASED_RATECONTROL,
 };
 
 bool SetMetaData(Meta& meta, const TagType& tag, int32_t value)
