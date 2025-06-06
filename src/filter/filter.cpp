@@ -210,7 +210,7 @@ Status Filter::UnFreeze()
     MEDIA_LOG_I("UnFreeze %{public}s, pState:%{public}d, innerState:%{public}d",
                 name_.c_str(), curState_, state_);
     auto ret =  DoUnFreeze();
-    if (filterTask_ && state_ == FilterState::FROZEN) {
+    if (filterTask_ && state_ == FilterState::RUNNING) {
         filterTask_->Start();
     }
     for (auto iter : nextFiltersMap_) {
