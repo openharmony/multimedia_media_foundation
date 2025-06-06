@@ -492,6 +492,7 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::AUDIO_ENCODE_PTS_MODE, 1},
     {Tag::AUDIO_BITRATE_MODE, Plugins::AudioEncodeBitrateMode::AUDIO_CBR},
     {Tag::AUDIO_L2HC_VERSION, 1},
+    {Tag::VIDEO_ENCODER_ENABLE_PTS_BASED_RATECONTROL, 1},
     // UINT8_T
     {Tag::AUDIO_AAC_PROFILE, static_cast<int32_t>(Plugins::AudioAacProfile::ELD)},
     {Tag::AUDIO_AAC_STREAM_FORMAT, static_cast<int32_t>(Plugins::AudioAacStreamFormat::ADIF)}};
