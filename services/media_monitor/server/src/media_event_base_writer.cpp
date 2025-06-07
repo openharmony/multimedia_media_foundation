@@ -523,6 +523,30 @@ void MediaEventBaseWriter::WriteVolumeSubscribe(std::shared_ptr<EventBean> &bean
 #endif
 }
 
+void MediaEventBaseWriter::WriteCustomizedToneChange(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Write customzed tone change subscription");
+    if (bean == nullptr) {
+        MEDIA_LOG_E("eventBean is nullptr");
+        return;
+    }
+#ifdef MONITOR_ENABLE_HISYSEVENT
+    auto ret = HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "ADD_REMOVE_CUSTOMIZED_TONE",
+        HiviewDFX::HiSysEvent::EventType::BEHAVIOR,
+        "ADD_REMOVE_OPERATION", static_cast<bool>(bean->GetIntValue("ADD_REMOVE_OPERATION")),
+        "APP_NAME", bean->GetStringValue("APP_NAME"),
+        "FILE_SIZE", static_cast<uint32_t>(bean->GetUint64Value("FILE_SIZE")),
+        "RINGTONE_CATEGORY", bean->GetIntValue("RINGTONE_CATEGORY"),
+        "MEDIA_TYPE", static_cast<int8_t>(bean->GetIntValue("MEDIA_TYPE")),
+        "MIME_TYPE", bean->GetStringValue("MIME_TYPE"),
+        "TIMESTAMP", bean->GetUint64Value("TIMESTAMP"),
+        "RESULT", static_cast<int8_t>(bean->GetIntValue("RESULT")));
+    if (ret) {
+        MEDIA_LOG_E("write event fail: ADD_REMOVE_CUSTOMIZED_TONE, ret = %{public}d", ret);
+    }
+#endif
+}
+
 void MediaEventBaseWriter::WriteSystemTonePlayback(const std::unique_ptr<DfxSystemTonePlaybackResult> &result)
 {
 #ifdef MONITOR_ENABLE_HISYSEVENT

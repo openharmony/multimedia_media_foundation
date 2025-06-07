@@ -64,12 +64,9 @@ void EventAggregate::WriteEvent(std::shared_ptr<EventBean> &bean)
         case STREAM_STANDBY:
         case SMARTPA_STATUS:
         case AI_VOICE_NOISE_SUPPRESSION:
-            mediaMonitorPolicy_.WriteEvent(bean->GetEventId(), bean);
-            break;
         case LOAD_EFFECT_ENGINE_ERROR:
-            mediaMonitorPolicy_.WriteEvent(bean->GetEventId(), bean);
-            break;
         case SYSTEM_TONE_PLAYBACK:
+        case ADD_REMOVE_CUSTOMIZED_TONE:
             mediaMonitorPolicy_.WriteEvent(bean->GetEventId(), bean);
             break;
         default:
