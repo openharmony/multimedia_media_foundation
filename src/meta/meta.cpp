@@ -155,6 +155,7 @@ static std::vector<TagType> g_metadataBoolVector = {
     Tag::VIDEO_ENCODER_ENABLE_WATERMARK,
     Tag::VIDEO_ENCODER_ENABLE_PARAMS_FEEDBACK,
     Tag::VIDEO_ENCODER_ENABLE_QP_MAP,
+    Tag::VIDEO_ENCODER_ENABLE_PTS_BASED_RATECONTROL,
 };
 
 bool SetMetaData(Meta& meta, const TagType& tag, int32_t value)
@@ -492,6 +493,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_ENCODER_ENABLE_WATERMARK, defaultBool},
     {Tag::VIDEO_ENCODER_ENABLE_QP_MAP, defaultBool},
     {Tag::VIDEO_ENCODER_PER_FRAME_ABS_QP_MAP, defaultBool},
+    {Tag::VIDEO_ENCODER_ENABLE_PTS_BASED_RATECONTROL, defaultBool},
     // Int64
     {Tag::MEDIA_FILE_SIZE, defaultUInt64},
     {Tag::MEDIA_POSITION, defaultUInt64},

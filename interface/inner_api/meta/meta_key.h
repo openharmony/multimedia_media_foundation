@@ -380,6 +380,12 @@ public:
     static constexpr const char VIDEO_ENCODER_PER_FRAME_QP_MAP[] =
         "video_encoder_frame_block_qp"; ///< vector<uint8_t>, Key for video encoder frame qp map.
 
+    static constexpr const char VIDEO_ENCODER_ENABLE_PTS_BASED_RATECONTROL[] =
+        "video_encoder_enable_pts_based_ratecontrol"; ///< int32_t, Key to enable Bitrate Control Based on
+                                                      ///< Presentation Time Stamp(PTS). This is an optional key that
+                                                      ///< applies only to video encoder, default is 0.
+                                                      ///< It is used in configure.
+
     /* -------------------- video specific tag -------------------- */
     static constexpr const char VIDEO_H264_PROFILE[] = "video.h264.profile"; ///< @see VideoH264Profile
     static constexpr const char VIDEO_H264_LEVEL[] = "video.h264.level";     ///< h264 level

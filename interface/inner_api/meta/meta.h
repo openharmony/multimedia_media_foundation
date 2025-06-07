@@ -458,6 +458,8 @@ public:
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::TRACK_REFERENCE_TYPE or
         tagCharSeq == Tag::TRACK_DESCRIPTION, std::string, AnyValueType::STRING);
+    DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_PTS_BASED_RATECONTROL, int32_t, AnyValueType::INT32_T);
 
     Meta &operator=(const Meta &other)
     {
