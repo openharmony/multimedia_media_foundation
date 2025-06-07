@@ -78,6 +78,8 @@ public:
     void WriteCustomizedToneChange(std::shared_ptr<EventBean> &bean);
     void WriteExcludeOutputDevice(std::shared_ptr<EventBean> &bean);
     void WriteSystemTonePlayback(const std::unique_ptr<DfxSystemTonePlaybackResult> &result);
+    void WriteStreamOccupancy(std::shared_ptr<EventBean> &bean);
+    void WriteAudioRecordError(std::shared_ptr<EventBean> &bean);
 };
 
 } // namespace MediaMonitor

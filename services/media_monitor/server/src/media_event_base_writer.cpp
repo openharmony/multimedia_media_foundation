@@ -568,6 +568,52 @@ void MediaEventBaseWriter::WriteSystemTonePlayback(const std::unique_ptr<DfxSyst
     MEDIA_LOG_I("Write system tone playback end");
 #endif
 }
+
+void MediaEventBaseWriter::WriteStreamOccupancy(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Write stream occupancy");
+    if (bean == nullptr) {
+        MEDIA_LOG_E("eventBean is nullptr");
+        return;
+    }
+#ifdef MONITOR_ENABLE_HISYSEVENT
+    auto ret = HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "STREAM_OCCUPANCY",
+        HiviewDFX::HiSysEvent::EventType::STATISTIC,
+        "IS_PLAYBACK", static_cast<bool>(bean->GetIntValue("IS_PLAYBACK")),
+        "SESSIONID", bean->GetIntValue("SESSIONID"),
+        "UID", bean->GetIntValue("UID"),
+        "PKGNAME", bean->GetStringValue("PKGNAME"),
+        "STREAM_OR_SOURCE_TYPE", bean->GetIntValue("STREAM_OR_SOURCE_TYPE"),
+        "START_TIME", static_cast<int64_t>(bean->GetUint64Value("START_TIME")),
+        "UPLOAD_TIME", static_cast<int64_t>(bean->GetUint64Value("UPLOAD_TIME")));
+    if (ret) {
+        MEDIA_LOG_E("write event fail: STREAM_OCCUPANCY, ret = %{public}d", ret);
+    }
+#endif
+}
+
+void MediaEventBaseWriter::WriteAudioRecordError(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Write audio record error");
+    if (bean == nullptr) {
+        MEDIA_LOG_E("eventBean is nullptr");
+        return;
+    }
+#ifdef MONITOR_ENABLE_HISYSEVENT
+    auto ret = HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "AUUDIO_RECORD_ERROR",
+        HiviewDFX::HiSysEvent::EventType::FAULT,
+        "INCOMIMG_SOURCE", static_cast<uint8_t>(bean->GetIntValue("INCOMIMG_SOURCE")),
+        "INCOMIMG_PID", bean->GetIntValue("INCOMIMG_PID"),
+        "INCOMIMG_PKG", bean->GetStringValue("INCOMIMG_PKG"),
+        "ACTIVE_SOURCE", static_cast<uint8_t>(bean->GetIntValue("ACTIVE_SOURCE")),
+        "ACTIVE_PID", bean->GetIntValue("ACTIVE_PID"),
+        "ACTIVE_PKG", bean->GetStringValue("ACTIVE_PKG"),
+        "REASON", bean->GetIntValue("REASON"));
+    if (ret) {
+        MEDIA_LOG_E("write event fail: AUUDIO_RECORD_ERROR, ret = %{public}d", ret);
+    }
+#endif
+}
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS

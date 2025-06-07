@@ -244,6 +244,14 @@ void MediaMonitorPolicy::setAppNameToEventVector(const std::string key, std::sha
     bean->Add("APP_NAME", bundleInfo.appName);
 }
 
+void MediaMonitorPolicy::SetBundleNameToEvent(const std::string key, std::shared_ptr<EventBean> &bean,
+    const std::string &bundleNameKey)
+{
+    FALSE_LOG_MSG(bean != nullptr, "eventBean is nullptr");
+    BundleInfo bundleInfo = GetBundleInfo(bean->GetIntValue(key));
+    bean->Add(bundleNameKey, bundleInfo.appName);
+}
+
 BundleInfo MediaMonitorPolicy::GetBundleInfo(int32_t appUid)
 {
     auto cachedBundleInfo = cachedBundleInfoMap_.find(appUid);
@@ -280,6 +288,11 @@ void MediaMonitorPolicy::WriteFaultEvent(EventId eventId, std::shared_ptr<EventB
             bean->Add("APP_NAME", bundleInfo.appName);
             MEDIA_LOG_I("Handle jank event of app:" PUBLIC_LOG_S, bundleInfo.appName.c_str());
             mediaEventBaseWriter_.WriteJankPlaybackError(bean);
+            break;
+        case AUDIO_RECORD_ERROR:
+            SetBundleNameToEvent("INCOMIMG_UID", bean, "INCOMIMG_PKG");
+            SetBundleNameToEvent("ACTIVE_UID", bean, "ACTIVE_PKG");
+            mediaEventBaseWriter_.WriteAudioRecordError(bean);
             break;
         default:
             break;
@@ -332,6 +345,19 @@ void MediaMonitorPolicy::WriteAggregationEvent(EventId eventId, std::shared_ptr<
             break;
         case MUTED_CAPTURE_STATS:
             mediaEventBaseWriter_.WriteMutedCapture(bean);
+            break;
+        default:
+            WriteAggregationEventExpansion(eventId, bean);
+            break;
+    }
+}
+
+void MediaMonitorPolicy::WriteAggregationEventExpansion(EventId eventId, std::shared_ptr<EventBean> &bean)
+{
+    switch (eventId) {
+        case STREAM_OCCUPANCY:
+            SetBundleNameToEvent("UID", bean, "PKGNAME");
+            mediaEventBaseWriter_.WriteStreamOccupancy(bean);
             break;
         default:
             break;

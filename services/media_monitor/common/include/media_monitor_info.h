@@ -70,6 +70,8 @@ enum EventId {
     HAPTIC_PLAYER = 28,
     SYSTEM_TONE_PLAYBACK = 29,
     ADD_REMOVE_CUSTOMIZED_TONE = 30,
+    AUDIO_RECORD_ERROR = 31,
+    STREAM_OCCUPANCY = 32,
 };
 
 enum EventType {
