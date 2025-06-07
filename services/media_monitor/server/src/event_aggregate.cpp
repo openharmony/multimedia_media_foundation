@@ -67,6 +67,8 @@ void EventAggregate::WriteEvent(std::shared_ptr<EventBean> &bean)
         case LOAD_EFFECT_ENGINE_ERROR:
         case SYSTEM_TONE_PLAYBACK:
         case ADD_REMOVE_CUSTOMIZED_TONE:
+        case AUDIO_RECORD_ERROR:
+        case STREAM_OCCUPANCY:
             mediaMonitorPolicy_.WriteEvent(bean->GetEventId(), bean);
             break;
         default:

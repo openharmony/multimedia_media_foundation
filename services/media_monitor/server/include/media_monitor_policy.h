@@ -47,6 +47,7 @@ public:
     void WriteBehaviorEventExpansion(EventId eventId, std::shared_ptr<EventBean> &bean);
     void WriteFaultEvent(EventId eventId, std::shared_ptr<EventBean> &bean);
     void WriteAggregationEvent(EventId eventId, std::shared_ptr<EventBean> &bean);
+    void WriteAggregationEventExpansion(EventId eventId, std::shared_ptr<EventBean> &bean);
     void WriteSystemTonePlaybackEvent(EventId eventId, std::shared_ptr<EventBean> &bean);
     void TriggerSystemTonePlaybackEvent(std::shared_ptr<EventBean> &bean);
     void CollectDataToDfxResult(DfxSystemTonePlaybackResult* result);
@@ -81,6 +82,8 @@ private:
     void HandleToSystemTonePlaybackEvent();
     void setAppNameToEventVector(const std::string key, std::shared_ptr<EventBean> &bean);
     BundleInfo GetBundleInfo(int32_t appUid);
+    void SetBundleNameToEvent(const std::string key, std::shared_ptr<EventBean> &bean,
+        const std::string &bundleNameKey);
 
     uint64_t curruntTime_ = 0;
     uint64_t startAudioTime_ = 0;
