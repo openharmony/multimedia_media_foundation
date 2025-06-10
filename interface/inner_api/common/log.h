@@ -330,6 +330,40 @@
 #define FALSE_BREAK_LOGI(cond, fmt, args...) FALSE_BREAK_LOG_IMPL(MEDIA_LOG_I, cond, fmt, ##args)
 #endif
 
+#ifndef FALSE_EXEC_RETURN_MSG_IMPL
+#define FALSE_EXEC_RETURN_MSG_IMPL(loglevel, cond, exec, fmt, args...)                  \
+    if (!(cond)) {                                                                      \
+        (exec);                                                                         \
+        loglevel("FALSE RETURN " #cond ", " fmt, ##args);                               \
+        return;                                                                         \
+    } else                                                                              \
+        ((void)0)
+#endif
+
+#ifndef FALSE_EXEC_RETURN_MSG
+#define FALSE_EXEC_RETURN_MSG(MEDIA_LOG_W, cond, exec, fmt, args...)
+#endif
+
+#ifndef FALSE_EXEC_RETURN_MSG_DD
+#define FALSE_EXEC_RETURN_MSG_DD(MEDIA_LOG_DD, cond, exec, fmt, args...)
+#endif
+
+#ifndef FALSE_EXEC_RETURN_MSG_D
+#define FALSE_EXEC_RETURN_MSG_D(MEDIA_LOG_D, cond, exec, fmt, args...)
+#endif
+
+#ifndef FALSE_EXEC_RETURN_MSG_I
+#define FALSE_EXEC_RETURN_MSG_I(MEDIA_LOG_I, cond, exec, fmt, args...)
+#endif
+
+#ifndef FALSE_EXEC_RETURN_MSG_W
+#define FALSE_EXEC_RETURN_MSG_W(MEDIA_LOG_W, cond, exec, fmt, args...)
+#endif
+
+#ifndef FALSE_EXEC_RETURN_MSG_E
+#define FALSE_EXEC_RETURN_MSG_E(MEDIA_LOG_E, cond, exec, fmt, args...)
+#endif
+
 #ifndef FALSE_RETURN_W
 #define FALSE_RETURN_W(exec)                                            \
     do {                                                                \
