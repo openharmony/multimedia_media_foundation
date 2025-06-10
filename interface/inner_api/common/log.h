@@ -341,27 +341,33 @@
 #endif
 
 #ifndef FALSE_EXEC_RETURN_MSG
-#define FALSE_EXEC_RETURN_MSG(MEDIA_LOG_W, cond, exec, fmt, args...)
+#define FALSE_EXEC_RETURN_MSG(cond, exec, fmt, args...)                                 \
+        FALSE_EXEC_RETURN_MSG_IMPL(MEDIA_LOG_W, cond, exec, fmt, ##args)
 #endif
 
 #ifndef FALSE_EXEC_RETURN_MSG_DD
-#define FALSE_EXEC_RETURN_MSG_DD(MEDIA_LOG_DD, cond, exec, fmt, args...)
+#define FALSE_EXEC_RETURN_MSG_DD(cond, exec, fmt, args...)                              \
+        FALSE_EXEC_RETURN_MSG_IMPL(MEDIA_LOG_DD, cond, exec, fmt, ##args)
 #endif
 
 #ifndef FALSE_EXEC_RETURN_MSG_D
-#define FALSE_EXEC_RETURN_MSG_D(MEDIA_LOG_D, cond, exec, fmt, args...)
+#define FALSE_EXEC_RETURN_MSG_D(cond, exec, fmt, args...)                               \
+        FALSE_EXEC_RETURN_MSG_IMPL(MEDIA_LOG_D, cond, exec, fmt, ##args)
 #endif
 
 #ifndef FALSE_EXEC_RETURN_MSG_I
-#define FALSE_EXEC_RETURN_MSG_I(MEDIA_LOG_I, cond, exec, fmt, args...)
+#define FALSE_EXEC_RETURN_MSG_I(cond, exec, fmt, args...)                               \
+        FALSE_EXEC_RETURN_MSG_IMPL(MEDIA_LOG_I, cond, exec, fmt, ##args)
 #endif
 
 #ifndef FALSE_EXEC_RETURN_MSG_W
-#define FALSE_EXEC_RETURN_MSG_W(MEDIA_LOG_W, cond, exec, fmt, args...)
+#define FALSE_EXEC_RETURN_MSG_W(cond, exec, fmt, args...)                               \
+        FALSE_EXEC_RETURN_MSG_IMPL(MEDIA_LOG_W, cond, exec, fmt, ##args)
 #endif
 
 #ifndef FALSE_EXEC_RETURN_MSG_E
-#define FALSE_EXEC_RETURN_MSG_E(MEDIA_LOG_E, cond, exec, fmt, args...)
+#define FALSE_EXEC_RETURN_MSG_E(cond, exec, fmt, args...)                               \
+        FALSE_EXEC_RETURN_MSG_IMPL(MEDIA_LOG_E, cond, exec, fmt, ##args)
 #endif
 
 #ifndef FALSE_RETURN_W
