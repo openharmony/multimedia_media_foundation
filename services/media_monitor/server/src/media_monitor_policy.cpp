@@ -247,7 +247,7 @@ void MediaMonitorPolicy::setAppNameToEventVector(const std::string key, std::sha
 void MediaMonitorPolicy::SetBundleNameToEvent(const std::string key, std::shared_ptr<EventBean> &bean,
     const std::string &bundleNameKey)
 {
-    FALSE_LOG_MSG(bean != nullptr, "eventBean is nullptr");
+    FALSE_RETURN_MSG(bean != nullptr, "eventBean is nullptr");
     BundleInfo bundleInfo = GetBundleInfo(bean->GetIntValue(key));
     bean->Add(bundleNameKey, bundleInfo.appName);
 }
@@ -289,8 +289,8 @@ void MediaMonitorPolicy::WriteFaultEvent(EventId eventId, std::shared_ptr<EventB
             MEDIA_LOG_I("Handle jank event of app:" PUBLIC_LOG_S, bundleInfo.appName.c_str());
             mediaEventBaseWriter_.WriteJankPlaybackError(bean);
             break;
-        case AUDIO_RECORD_ERROR:
-            SetBundleNameToEvent("INCOMIMG_UID", bean, "INCOMIMG_PKG");
+        case RECORD_ERROR:
+            SetBundleNameToEvent("INCOMING_UID", bean, "INCOMING_PKG");
             SetBundleNameToEvent("ACTIVE_UID", bean, "ACTIVE_PKG");
             mediaEventBaseWriter_.WriteAudioRecordError(bean);
             break;
