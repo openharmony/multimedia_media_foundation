@@ -50,7 +50,7 @@ public:
     void WriteAggregationEventExpansion(EventId eventId, std::shared_ptr<EventBean> &bean);
     void WriteSystemTonePlaybackEvent(EventId eventId, std::shared_ptr<EventBean> &bean);
     void TriggerSystemTonePlaybackEvent(std::shared_ptr<EventBean> &bean);
-    void CollectDataToDfxResult(DfxSystemTonePlaybackResult* result);
+    void CollectDataToDfxResult(DfxSystemTonePlaybackResult *result);
 
     void HandDeviceUsageToEventVector(std::shared_ptr<EventBean> &deviceUsage);
     void HandStreamUsageToEventVector(std::shared_ptr<EventBean> &streamUsage);
@@ -72,7 +72,8 @@ private:
     static constexpr int32_t DEFAULT_AGGREGATION_FREQUENCY = 1000;
     static constexpr int32_t DEFAULT_AGGREGATION_TIME = 24 * 60;
     static constexpr int32_t DEFAULT_TONE_PLAYBACK_TIME = 120;
-    static constexpr uint64_t DEFAULT_TONE_PLAYBACK_TIME_SECEND = 2*60*60;
+    static constexpr uint64_t DEFAULT_AGGREGATION_TIME_SECEND = 24 * 60 * 60;
+    static constexpr uint64_t DEFAULT_TONE_PLAYBACK_TIME_SECEND = 2 * 60 * 60;
 
     void ReadParameter();
     void StartTimeThread();
@@ -86,8 +87,9 @@ private:
         const std::string &bundleNameKey);
 
     uint64_t curruntTime_ = 0;
-    uint64_t startAudioTime_ = 0;
     uint64_t lastAudioTime_ = 0;
+    uint64_t afterSleepTime_ = 0;
+    uint64_t lastSystemTonePlaybackTime_ = 0;
     std::unique_ptr<std::thread> timeThread_ = nullptr;
     std::atomic_bool startThread_ = true;
 
@@ -102,7 +104,8 @@ private:
     int32_t aggregationFrequency_ = DEFAULT_AGGREGATION_FREQUENCY;
     int32_t aggregationTime_ = DEFAULT_AGGREGATION_TIME;
     int32_t systemTonePlaybackTime_ = DEFAULT_TONE_PLAYBACK_TIME;
-    int32_t systemTonePlaybackSleepTime_ = DEFAULT_TONE_PLAYBACK_TIME_SECEND;
+    uint64_t systemTonePlaybackSleepTime_ = DEFAULT_TONE_PLAYBACK_TIME_SECEND;
+    uint64_t aggregationSleepTime_ = DEFAULT_AGGREGATION_TIME_SECEND;
 };
 
 } // namespace MediaMonitor
