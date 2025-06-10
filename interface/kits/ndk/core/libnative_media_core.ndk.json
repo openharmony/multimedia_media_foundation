@@ -16,6 +16,7 @@
     { "name": "OH_AVFormat_GetDoubleValue" },
     { "name": "OH_AVFormat_GetStringValue" },
     { "name": "OH_AVFormat_GetBuffer" },
+    { "name": "OH_AVFormat_GetIntBuffer" },
     { "name": "OH_AVFormat_DumpInfo" },
     { "name": "OH_AVMemory_Create" },
     { "name": "OH_AVMemory_GetAddr" },

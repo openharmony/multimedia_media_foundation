@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Huawei Device Co., Ltd.
+ * Copyright (C) 2023-2025 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -154,6 +154,14 @@ bool AVFormatCapiMock::PutBuffer(const std::string_view &key, const uint8_t *add
 {
     if (format_ != nullptr) {
         return OH_AVFormat_SetBuffer(format_, key.data(), addr, size);
+    }
+    return false;
+}
+
+bool AVFormatCapiMock::GetIntBuffer(const std::string_view &key, int32_t **addr, size_t &size)
+{
+    if (format_ != nullptr) {
+        return OH_AVFormat_GetIntBuffer(format_, key.data(), addr, &size);
     }
     return false;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023-2023 Huawei Device Co., Ltd.
+ * Copyright (c) 2023-2025 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -133,6 +133,7 @@ public:
         VECTOR_UINT8,
         VECTOR_UINT32,
         STRING,
+        VECTOR_INT32
     };
 
     DECLARE_INFO_CLASS;
@@ -188,6 +189,7 @@ public:
         tagCharSeq == Tag::MEDIA_HAS_AUDIO or
         tagCharSeq == Tag::MEDIA_HAS_SUBTITLE or
         tagCharSeq == Tag::MEDIA_HAS_TIMEDMETA or
+        tagCharSeq == Tag::MEDIA_HAS_AUXILIARY or
         tagCharSeq == Tag::MEDIA_END_OF_STREAM or
         tagCharSeq == Tag::VIDEO_ENCODER_PER_FRAME_MARK_LTR or
         tagCharSeq == Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE or
@@ -454,7 +456,7 @@ public:
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::VIDEO_ENCODER_PER_FRAME_QP_MAP, std::vector<uint8_t>, AnyValueType::VECTOR_UINT8);
     DEFINE_INSERT_GET_FUNC(
-        tagCharSeq == Tag::REFERENCE_TRACK_IDS, std::vector<uint8_t>, AnyValueType::VECTOR_UINT8);
+        tagCharSeq == Tag::REFERENCE_TRACK_IDS, std::vector<int32_t>, AnyValueType::VECTOR_INT32);
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::TRACK_REFERENCE_TYPE or
         tagCharSeq == Tag::TRACK_DESCRIPTION, std::string, AnyValueType::STRING);

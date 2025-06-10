@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Huawei Device Co., Ltd.
+ * Copyright (C) 2023-2025 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -210,6 +210,18 @@ public:
      * @version 1.0
      */
     bool GetBuffer(const std::string_view &key, uint8_t **addr, size_t &size) const;
+
+    /**
+     * @brief Obtains the metadata value of the string type.
+     *
+     * @param key Indicates the metadata key.
+     * @param addr Indicates the metadata addr to obtain, which is a int32_t **.
+     * @param size Indicates the metadata addr size to obtain, which is a size_t.
+     * @return Returns <b>true</b> if the string is successfully obtained; returns <b>false</b> otherwise.
+     * @since 10
+     * @version 1.0
+     */
+    bool GetIntBuffer(const std::string_view &key, int32_t **addr, size_t &size) const;
 
     /**
      * @brief Obtains the metadata value of the format vector type.

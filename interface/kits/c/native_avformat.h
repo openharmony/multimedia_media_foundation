@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Huawei Device Co., Ltd.
+ * Copyright (C) 2023-2025 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -358,6 +358,27 @@ bool OH_AVFormat_GetStringValue(struct OH_AVFormat *format, const char *key, con
  * @version 1.0
  */
 bool OH_AVFormat_GetBuffer(struct OH_AVFormat *format, const char *key, uint8_t **addr, size_t *size);
+
+/**
+ * @brief Read a block of data of specified length from OH_AVFormat
+ * @syscap SystemCapability.Multimedia.Media.Core
+ * @param format pointer to an OH_AVFormat instance
+ * @param key Key value for reading data
+ * @param addr The life cycle is held by the format, with the destruction of the format,
+ * if the caller needs to hold it for a long time, it must copy the memory
+ * @param size Length of read data
+ * @return The return value is TRUE for success, FALSE for failure
+ * Possible failure causes:
+ * 1. input format is NULL;
+ * 2. structure verification failed of the input format;
+ * 3. input key is NULL;
+ * 4. input addr is NULL;
+ * 5. input size is NULL;
+ * 6. the obtained key does not exist or is not set.
+ * @since 9
+ * @version 1.0
+ */
+bool OH_AVFormat_GetIntBuffer(struct OH_AVFormat *format, const char *key, int32_t **addr, size_t *size);
 
 /**
  * @brief Return a string consisting of key and values contained in OH_AVFormat.

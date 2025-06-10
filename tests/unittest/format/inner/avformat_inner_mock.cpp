@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Huawei Device Co., Ltd.
+ * Copyright (C) 2023-2025 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -90,6 +90,11 @@ bool AVFormatInnerMock::GetBuffer(const std::string_view &key, uint8_t **addr, s
 bool AVFormatInnerMock::PutBuffer(const std::string_view &key, const uint8_t *addr, size_t size)
 {
     return format_.PutBuffer(key, addr, size);
+}
+
+bool AVFormatInnerMock::GetIntBuffer(const std::string_view &key, int32_t **addr, size_t &size)
+{
+    return format_.GetIntBuffer(key, addr, size);
 }
 
 void AVFormatInnerMock::InitAudioTrackFormat(const std::string_view &mimeType, int32_t sampleRate, int32_t channelCount)

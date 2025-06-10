@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023-2023 Huawei Device Co., Ltd.
+ * Copyright (c) 2023-2025 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -136,6 +136,7 @@ static std::vector<TagType> g_metadataBoolVector = {
     Tag::MEDIA_HAS_AUDIO,
     Tag::MEDIA_HAS_SUBTITLE,
     Tag::MEDIA_HAS_TIMEDMETA,
+    Tag::MEDIA_HAS_AUXILIARY,
     Tag::MEDIA_END_OF_STREAM,
     Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE,
     Tag::VIDEO_ENCODER_ENABLE_TEMPORAL_SCALABILITY,
@@ -248,6 +249,7 @@ static Any defaultAudioChannelLayout = AudioChannelLayout::UNKNOWN;
 static Any defaultAudioAacProfile = AudioAacProfile::ELD;
 static Any defaultAudioAacStreamFormat = AudioAacStreamFormat::ADIF;
 static Any defaultVectorUInt8 = std::vector<uint8_t>();
+static Any defaultVectorInt32 = std::vector<int32_t>();
 static Any defaultVectorUInt32 = std::vector<uint32_t>();
 static Any defaultVectorVideoBitStreamFormat = std::vector<VideoBitStreamFormat>();
 static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
@@ -454,6 +456,8 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::AV_TRANSCODER_DST_AUDIO_MIME, defaultString},
     {Tag::AV_TRANSCODER_DST_VIDEO_MIME, defaultString},
     {Tag::VIDEO_ENCODER_ROI_PARAMS, defaultString},
+    {Tag::TRACK_REFERENCE_TYPE, defaultString},
+    {Tag::TRACK_DESCRIPTION, defaultString},
     // Float
     {Tag::MEDIA_LATITUDE, defaultFloat},
     {Tag::MEDIA_LONGITUDE, defaultFloat},
@@ -473,6 +477,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::MEDIA_HAS_AUDIO, defaultBool},
     {Tag::MEDIA_HAS_SUBTITLE, defaultBool},
     {Tag::MEDIA_HAS_TIMEDMETA, defaultBool},
+    {Tag::MEDIA_HAS_AUXILIARY, defaultBool},
     {Tag::MEDIA_END_OF_STREAM, defaultBool},
     {Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE, defaultBool},
     {Tag::VIDEO_ENCODER_ENABLE_TEMPORAL_SCALABILITY, defaultBool},
@@ -525,6 +530,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::OH_MD_KEY_AUDIO_VIVID_METADATA, defaultVectorUInt8},
     // vector<Plugins::VideoBitStreamFormat>
     {Tag::VIDEO_BIT_STREAM_FORMAT, defaultVectorVideoBitStreamFormat},
+    {Tag::REFERENCE_TRACK_IDS, defaultVectorInt32},
     // vector<uint8_t>
     {Tag::DRM_CENC_INFO, defaultVectorUInt8},
     {Tag::MEDIA_AVAILABLE_BITRATES, defaultVectorUInt8},
@@ -551,6 +557,7 @@ static std::map<AnyValueType, const Any &> g_ValueTypeDefaultValueMap = {
     {AnyValueType::FLOAT, defaultFloat},
     {AnyValueType::DOUBLE, defaultDouble},
     {AnyValueType::VECTOR_UINT8, defaultVectorUInt8},
+    {AnyValueType::VECTOR_INT32, defaultVectorInt32},
     {AnyValueType::VECTOR_UINT32, defaultVectorUInt32},
     {AnyValueType::STRING, defaultString},
 };
@@ -610,6 +617,8 @@ AnyValueType Meta::GetValueType(const TagType& key) const
             return AnyValueType::DOUBLE;
         } else if (Any::IsSameTypeWith<std::vector<uint8_t>>(iter->second)) {
             return AnyValueType::VECTOR_UINT8;
+        } else if (Any::IsSameTypeWith<std::vector<int32_t>>(iter->second)) {
+            return AnyValueType::VECTOR_INT32;
         } else if (Any::IsSameTypeWith<std::string>(iter->second)) {
             return AnyValueType::STRING;
         } else {
