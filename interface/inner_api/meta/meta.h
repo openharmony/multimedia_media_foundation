@@ -192,7 +192,6 @@ public:
         tagCharSeq == Tag::VIDEO_ENCODER_PER_FRAME_MARK_LTR or
         tagCharSeq == Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE or
         tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_TEMPORAL_SCALABILITY or
-        tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_INPUT_PARAMETER_SYNC_MODE or
         tagCharSeq == Tag::AV_CODEC_ENABLE_SYNC_MODE or
         tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_PARAMS_FEEDBACK or
         tagCharSeq == Tag::VIDEO_PER_FRAME_IS_LTR or

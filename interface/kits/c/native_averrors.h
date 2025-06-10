@@ -122,12 +122,6 @@ typedef enum OH_AVErrCode {
      */
     AV_ERR_VIDEO_UNSUPPORTED_COLOR_SPACE_CONVERSION = 301,
     /**
-     * @error Indicates buffer query failed within certain time for synchronous mode,
-     * it's recommended to wait for a while and try the query again.
-     * @since 20
-     */
-    AV_ERR_COMMON_TRY_AGAIN_LATER = 5410001,
-    /**
      * @error the address of server is incorrect, and IO can not find host.
      * @since 14
      */
@@ -185,13 +179,21 @@ typedef enum OH_AVErrCode {
      */
     AV_ERR_IO_UNSUPPORTED_REQUEST = 5411011,
     /**
-     * @error Indicates a stream change for synchronous mode.
-     * It's necessary to call {@link OH_VideoEncoder_GetOutputDescription} to retrieve steam information
-     * for the video encoder instance, call {@link OH_VideoDecoder_GetOutputDescription} for
-     * the video decoder instance.
+     * @error Signals a stream format change in synchronous mode.
+     * Required follow-up actions:
+     *    - For video encoders: Call {@link OH_VideoEncoder_GetOutputDescription}
+     *    - For video decoders: Call {@link OH_VideoDecoder_GetOutputDescription}
+     *    - For audio decoders : Call {@link OH_AudioCodec_GetOutputDescription}
+     * to retrieve updated stream configuration.
      * @since 20
      */
-    AV_ERR_VIDEO_STREAM_CHANGED = 5413001,
+    AV_ERR_STREAM_CHANGED = 5410005,
+    /**
+     * @error Indicates temporary buffer query failure in synchronous mode,
+     * it's recommended to wait and retry the operation after a short interval.
+     * @since 20
+     */
+    AV_ERR_TRY_AGAIN_LATER = 5410006,
 } OH_AVErrCode;
 
 #ifdef __cplusplus

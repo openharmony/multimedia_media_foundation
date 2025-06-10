@@ -385,8 +385,6 @@ public:
                                              ///< The default value is false.
     static constexpr const char VIDEO_ENCODER_PER_FRAME_QP_MAP[] =
         "video_encoder_frame_block_qp"; ///< vector<uint8_t>, Key for video encoder frame qp map.
-    static constexpr const char VIDEO_ENCODER_ENABLE_INPUT_PARAMETER_SYNC_MODE[] =
-        "video_encoder_enable_input_parameter_sync_mode"; ///< bool, Key for video encoder parameter sync mode
 
     static constexpr const char VIDEO_ENCODER_ENABLE_PTS_BASED_RATECONTROL[] =
         "video_encoder_enable_pts_based_ratecontrol"; ///< int32_t, Key to enable Bitrate Control Based on
