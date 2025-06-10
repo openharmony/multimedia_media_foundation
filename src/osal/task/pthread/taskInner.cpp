@@ -316,7 +316,8 @@ void TaskInner::HandleJob()
             // Without this check, job may be executed in NON STARTED state,
             // i.e. after Pause called, one job may be executed unexpectedly.
             FALSE_EXEC_RETURN_MSG(runningState_.load() == RunningState::STARTED, stateMutex_.unlock(),
-                "not execute job, " PUBLIC_LOG_S " in state " PUBLIC_LOG_D32, static_cast<int>(runningState_.load()));
+                "not execute job, " PUBLIC_LOG_S " in state " PUBLIC_LOG_D32,
+                name_.c_str(), static_cast<int>(runningState_.load()));
 
             nextJob = std::move(jobQueue_.begin()->second);
             jobQueue_.erase(jobQueue_.begin());
