@@ -600,17 +600,17 @@ void MediaEventBaseWriter::WriteAudioRecordError(std::shared_ptr<EventBean> &bea
         return;
     }
 #ifdef MONITOR_ENABLE_HISYSEVENT
-    auto ret = HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "AUUDIO_RECORD_ERROR",
+    auto ret = HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "RECORD_ERROR",
         HiviewDFX::HiSysEvent::EventType::FAULT,
-        "INCOMIMG_SOURCE", static_cast<uint8_t>(bean->GetIntValue("INCOMIMG_SOURCE")),
-        "INCOMIMG_PID", bean->GetIntValue("INCOMIMG_PID"),
-        "INCOMIMG_PKG", bean->GetStringValue("INCOMIMG_PKG"),
+        "INCOMING_SOURCE", static_cast<uint8_t>(bean->GetIntValue("INCOMING_SOURCE")),
+        "INCOMING_PID", bean->GetIntValue("INCOMING_PID"),
+        "INCOMING_PKG", bean->GetStringValue("INCOMING_PKG"),
         "ACTIVE_SOURCE", static_cast<uint8_t>(bean->GetIntValue("ACTIVE_SOURCE")),
         "ACTIVE_PID", bean->GetIntValue("ACTIVE_PID"),
         "ACTIVE_PKG", bean->GetStringValue("ACTIVE_PKG"),
         "REASON", bean->GetIntValue("REASON"));
     if (ret) {
-        MEDIA_LOG_E("write event fail: AUUDIO_RECORD_ERROR, ret = %{public}d", ret);
+        MEDIA_LOG_E("write event fail: RECORD_ERROR, ret = %{public}d", ret);
     }
 #endif
 }
