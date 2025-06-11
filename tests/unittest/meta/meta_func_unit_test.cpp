@@ -757,7 +757,6 @@ map<TagType, std::vector<uint8_t>> testVetcorInt8Data = {
     {Tag::AUDIO_VORBIS_SETUP_HEADER, vectorUint8MediaCover},
     {Tag::AUDIO_VIVID_METADATA, vectorUint8MediaCover},
     {Tag::VIDEO_ENCODER_PER_FRAME_QP_MAP, vectorUint8MediaCover},
-    {Tag::REFERENCE_TRACK_IDS, vectorUint8MediaCover},
 };
 
 /**
@@ -781,11 +780,42 @@ HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_All_As_VectorUint8_Using_ParcelPacka
     }
 }
 
+std::vector<int32_t> vectorInt32{1, 2, 3, 4};
+map<TagType, std::vector<int32_t>> testVetcorInt32Data = {
+    // vector<int32_t>
+    {Tag::REFERENCE_TRACK_IDS, vectorInt32},
+};
+
+/**
+ * @tc.name: SetGet_MetaData_All_As_VectorInt32_Using_ParcelPackage
+ * @tc.desc: SetGet_MetaData_All_As_VectorInt32_Using_ParcelPackage
+ * @tc.type: FUNC
+ */
+HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_All_As_VectorInt32_Using_ParcelPackage, TestSize.Level1)
+{
+    for (auto item : testVetcorInt32Data) {
+        std::vector<int32_t> valueIn = item.second;
+        metaIn->SetData(item.first, valueIn);
+    }
+    ASSERT_TRUE(metaIn->ToParcel(*parcel));
+    ASSERT_TRUE(metaOut->FromParcel(*parcel));
+    for (auto item : testVetcorInt32Data) {
+        std::vector<int32_t> valueIn = item.second;
+        std::vector<int32_t> valueOut;
+        metaOut->GetData(item.first, valueOut);
+        EXPECT_EQ(valueOut, valueIn);
+    }
+}
+
 void PrepareInMeta(std::shared_ptr<Meta>& inMeta)
 {
     for (auto item : testVetcorInt8Data) {
         std::vector<uint8_t> valueInVecInt8 = item.second;
         inMeta->SetData(item.first, valueInVecInt8);
+    }
+    for (auto item : testVetcorInt32Data) {
+        std::vector<int32_t> valueInVecInt32 = item.second;
+        inMeta->SetData(item.first, valueInVecInt32);
     }
     for (auto item : testFloatData) {
         float valueInFloat = item.second;
@@ -836,6 +866,12 @@ void CheckOutMeta(const std::shared_ptr<Meta>& outMeta)
         std::vector<uint8_t> valueOutVecInt8;
         outMeta->GetData(item.first, valueOutVecInt8);
         EXPECT_EQ(valueOutVecInt8, valueInVecInt8);
+    }
+    for (auto item : testVetcorInt32Data) {
+        std::vector<int32_t> valueInVecInt32 = item.second;
+        std::vector<int32_t> valueOutVecInt32;
+        outMeta->GetData(item.first, valueOutVecInt32);
+        EXPECT_EQ(valueOutVecInt32, valueInVecInt32);
     }
 }
 
@@ -1267,6 +1303,33 @@ HWTEST_F(MetaInnerUnitTest, Meta_GetData_All_As_VectorUint8_Using_ParcelPackage,
         ASSERT_TRUE(meta->FromParcel(parcel));
 
         std::vector<uint8_t> valueOut;
+        EXPECT_TRUE(meta->GetData(item.first, valueOut));
+        EXPECT_EQ(valueIn, valueOut);
+    }
+}
+
+/**
+ * @tc.name: Meta_GetData_All_As_VectorInt32_Using_ParcelPackage
+ * @tc.desc:
+ *     1. set vectorInt32 to format;
+ *     2. meta trans by parcel;
+ *     3. get meta value type;
+ * @tc.type: FUNC
+ */
+HWTEST_F(MetaInnerUnitTest, Meta_GetData_All_As_VectorInt32_Using_ParcelPackage, TestSize.Level1)
+{
+    for (auto item : testVetcorInt32Data) {
+        std::vector<int32_t> valueIn = item.second;
+        MessageParcel parcel;
+        std::shared_ptr<Format> format = std::make_shared<Format>();
+        std::shared_ptr<Meta> meta = std::make_shared<Meta>();
+
+        EXPECT_TRUE(format->PutIntBuffer(item.first, valueIn.data(), valueIn.size()));
+        meta = format->GetMeta();
+        ASSERT_TRUE(meta->ToParcel(parcel));
+        ASSERT_TRUE(meta->FromParcel(parcel));
+
+        std::vector<int32_t> valueOut;
         EXPECT_TRUE(meta->GetData(item.first, valueOut));
         EXPECT_EQ(valueIn, valueOut);
     }
