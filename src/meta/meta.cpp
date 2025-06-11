@@ -241,7 +241,7 @@ static Any defaultHEVCLevel = HEVCLevel::HEVC_LEVEL_UNKNOW;
 static Any defaultChromaLocation = ChromaLocation::BOTTOM;
 static Any defaultFileType = FileType::UNKNOW;
 static Any defaultVideoEncodeBitrateMode = VideoEncodeBitrateMode::CBR;
-static Any defaultVideoEncodeBFrameGopMode = VideoEncodeBFrameGopMode::VIDEO_ENCODE_GOP_DEFAULT_P_MODE;
+static Any defaultVideoEncodeBFrameGopMode = VideoEncodeBFrameGopMode::VIDEO_ENCODE_GOP_ADAPTIVE_B_MODE;
 static Any defaultTemporalGopReferenceMode = TemporalGopReferenceMode::ADJACENT_REFERENCE;
 
 static Any defaultAudioChannelLayout = AudioChannelLayout::UNKNOWN;
