@@ -18,6 +18,7 @@ group("media_foundation_unit_test") {
     deps = [
       "unittest/avbuffer:avbuffer_unit_test",
       "unittest/avbuffer_queue:avbuffer_queue_unit_test",
+      "unittest/avmemory_unittest:avmemory_unittest",
       "unittest/avshared_memory_pool:avshared_pool_unit_test",
       "unittest/event_bean:event_bean_unit_test",
       "unittest/filter:filter_unit_test",
@@ -25,6 +26,7 @@ group("media_foundation_unit_test") {
       "unittest/meta:meta_unit_test",
       "unittest/osal:osal_unit_test",
       "unittest/pipeline:pipline_unit_test",
+      "unittest/task_unittest:task_unittest",
     ]
   }
 }
