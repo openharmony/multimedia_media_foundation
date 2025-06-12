@@ -289,6 +289,14 @@
         ((void)0)
 #endif
 
+#define TRUE_LOG(cond, func, fmt, ...)         \
+    if (1) {                                   \
+        if ((cond)) {                          \
+            func(fmt, ##__VA_ARGS__);          \
+        }                                      \
+    } else                                     \
+        void(0)
+
 #ifndef FALSE_CONTINUE_LOGDD
 #define FALSE_CONTINUE_LOGDD(cond, fmt, args...) FALSE_CONTINUE_LOG_IMPL(MEDIA_LOG_DD, cond, fmt, ##args)
 #endif
