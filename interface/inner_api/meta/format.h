@@ -218,8 +218,7 @@ public:
      * @param addr Indicates the metadata addr to obtain, which is a int32_t **.
      * @param size Indicates the metadata addr size to obtain, which is a size_t.
      * @return Returns <b>true</b> if the string is successfully obtained; returns <b>false</b> otherwise.
-     * @since 10
-     * @version 1.0
+     * @since 6.0
      */
     bool GetIntBuffer(const std::string_view &key, int32_t **addr, size_t &size) const;
 
