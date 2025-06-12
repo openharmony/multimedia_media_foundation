@@ -513,6 +513,7 @@ map<TagType, bool> testBoolData = {
     {Tag::VIDEO_IS_HDR_VIVID, true},
     {Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE, true},
     {Tag::VIDEO_ENCODER_ENABLE_TEMPORAL_SCALABILITY, true},
+    {Tag::AV_CODEC_ENABLE_SYNC_MODE, true},
     {Tag::VIDEO_ENCODER_PER_FRAME_MARK_LTR, true},
     {Tag::VIDEO_PER_FRAME_IS_LTR, true},
     {Tag::VIDEO_PER_FRAME_IS_SKIP, true},

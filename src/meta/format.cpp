@@ -420,6 +420,13 @@ std::shared_ptr<Meta> Format::GetMeta()
     return meta_;
 }
 
+bool Format::SetMetaPtr(std::shared_ptr<Meta> meta)
+{
+    FALSE_RETURN_V(meta != nullptr, false);
+    meta_ = meta;
+    return true;
+}
+
 bool Format::SetMeta(std::shared_ptr<Meta> meta)
 {
     FALSE_RETURN_V(meta != nullptr, false);

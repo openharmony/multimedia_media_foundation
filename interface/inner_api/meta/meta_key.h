@@ -438,6 +438,9 @@ public:
     static constexpr const char AV_CODEC_CALLER_PID[]                   = "av_codec_caller_pid";
     static constexpr const char AV_CODEC_CALLER_UID[]                   = "av_codec_caller_uid";
     static constexpr const char AV_CODEC_CALLER_PROCESS_NAME[]          = "av_codec_caller_process_name";
+    ///bool, Key for codec sync mode
+    static constexpr const char AV_CODEC_ENABLE_SYNC_MODE[] = "enable_sync_mode";
+
 /* -------------------- screen captrue tag -------------------- */
     static constexpr const char SCREEN_CAPTURE_ERR_CODE[] = "errCode";
     static constexpr const char SCREEN_CAPTURE_ERR_MSG[] = "errMsg";
