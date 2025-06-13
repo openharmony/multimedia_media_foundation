@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023-2025 Huawei Device Co., Ltd.
+ * Copyright (c) 2023-2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -111,7 +111,7 @@ enum struct AnyValueType : int32_t {
     VECTOR_UINT8,
     VECTOR_UINT32,
     STRING,
-    VECTOR_INT32
+    VECTOR_INT32,
 };
 /**
  * @brief BadAnyCast exception, which is thrown when error occurs in AnyCast

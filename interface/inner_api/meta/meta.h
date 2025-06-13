@@ -133,7 +133,7 @@ public:
         VECTOR_UINT8,
         VECTOR_UINT32,
         STRING,
-        VECTOR_INT32
+        VECTOR_INT32,
     };
 
     DECLARE_INFO_CLASS;
