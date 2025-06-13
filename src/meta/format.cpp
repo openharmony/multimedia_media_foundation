@@ -90,6 +90,17 @@ bool PutBufferToFormatMap(FormatDataMap &formatMap, const std::string_view &key,
     auto ret = formatMap.insert(std::make_pair(std::string(key), data));
     return ret.second;
 }
+
+bool PutIntBufferToFormatMap(FormatDataMap &formatMap, const std::string_view &key, int32_t *addr, size_t size)
+{
+    FormatData data;
+    FALSE_RETURN_V_MSG_E(addr != nullptr, false, "PutBuffer error, addr is nullptr");
+    data.type = FORMAT_TYPE_ADDR;
+    data.addr = reinterpret_cast<uint8_t*>(addr);
+    data.size = size * sizeof(int32_t);
+    auto ret = formatMap.insert(std::make_pair(std::string(key), data));
+    return ret.second;
+}
 #endif
 } // namespace
 
@@ -230,6 +241,39 @@ bool Format::PutBuffer(const std::string_view &key, const uint8_t *addr, size_t 
     if (formatMapIter != formatMap_.end()) {
         formatMap_.erase(formatMapIter);
         PutBufferToFormatMap(formatMap_, key, anyAddr, size);
+    }
+    return true;
+}
+
+bool Format::PutIntBuffer(const std::string_view &key, const int32_t *addr, size_t size)
+{
+    auto defaultValue = GetDefaultAnyValueOpt(key.data());
+    if (defaultValue != std::nullopt) {
+        auto isSameType = Any::IsSameTypeWith<std::vector<int32_t>>(defaultValue.value());
+        FALSE_RETURN_V_MSG_E(isSameType, false, "Key's value type does not match buffer, key: %{public}s", key.data());
+    }
+    FALSE_RETURN_V_MSG_E(addr != nullptr, false, "PutBuffer error, addr is nullptr");
+    FALSE_RETURN_V_MSG_E(size <= BUFFER_SIZE_MAX, false, "PutBuffer input size failed. Key: " PUBLIC_LOG_S, key.data());
+
+    auto iter = meta_->Find(std::string(key));
+    if (iter == meta_->end()) {
+        std::vector<int32_t> value(addr, addr + size);
+        meta_->SetData(std::string(key), std::move(value));
+        return true;
+    }
+    Any *value = const_cast<Any *>(&(iter->second));
+    auto tmpVector = AnyCast<std::vector<int32_t>>(value);
+    FALSE_RETURN_V_MSG_E(tmpVector != nullptr, false, "Any value is invalid. Key: " PUBLIC_LOG_S, key.data());
+
+    tmpVector->resize(size);
+    int32_t *anyAddr = tmpVector->data();
+    auto error = memcpy_s(anyAddr, size * sizeof(int32_t), addr, size * sizeof(int32_t));
+    FALSE_RETURN_V_MSG_E(error == EOK, false, "PutBuffer memcpy_s failed, error: %{public}s", strerror(error));
+
+    auto formatMapIter = formatMap_.find(key);
+    if (formatMapIter != formatMap_.end()) {
+        formatMap_.erase(formatMapIter);
+        PutIntBufferToFormatMap(formatMap_, key, anyAddr, size);
     }
     return true;
 }
@@ -433,6 +477,13 @@ std::string Format::Stringify() const
 std::shared_ptr<Meta> Format::GetMeta()
 {
     return meta_;
+}
+
+bool Format::SetMetaPtr(std::shared_ptr<Meta> meta)
+{
+    FALSE_RETURN_V(meta != nullptr, false);
+    meta_ = meta;
+    return true;
 }
 
 bool Format::SetMeta(std::shared_ptr<Meta> meta)

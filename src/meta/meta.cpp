@@ -140,6 +140,7 @@ static std::vector<TagType> g_metadataBoolVector = {
     Tag::MEDIA_END_OF_STREAM,
     Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE,
     Tag::VIDEO_ENCODER_ENABLE_TEMPORAL_SCALABILITY,
+    Tag::AV_CODEC_ENABLE_SYNC_MODE,
     Tag::VIDEO_ENCODER_PER_FRAME_MARK_LTR,
     Tag::VIDEO_PER_FRAME_IS_LTR,
     Tag::VIDEO_PER_FRAME_IS_SKIP,
@@ -242,7 +243,7 @@ static Any defaultHEVCLevel = HEVCLevel::HEVC_LEVEL_UNKNOW;
 static Any defaultChromaLocation = ChromaLocation::BOTTOM;
 static Any defaultFileType = FileType::UNKNOW;
 static Any defaultVideoEncodeBitrateMode = VideoEncodeBitrateMode::CBR;
-static Any defaultVideoEncodeBFrameGopMode = VideoEncodeBFrameGopMode::VIDEO_ENCODE_GOP_DEFAULT_P_MODE;
+static Any defaultVideoEncodeBFrameGopMode = VideoEncodeBFrameGopMode::VIDEO_ENCODE_GOP_ADAPTIVE_B_MODE;
 static Any defaultTemporalGopReferenceMode = TemporalGopReferenceMode::ADJACENT_REFERENCE;
 
 static Any defaultAudioChannelLayout = AudioChannelLayout::UNKNOWN;
@@ -251,6 +252,7 @@ static Any defaultAudioAacStreamFormat = AudioAacStreamFormat::ADIF;
 static Any defaultVectorUInt8 = std::vector<uint8_t>();
 static Any defaultVectorInt32 = std::vector<int32_t>();
 static Any defaultVectorUInt32 = std::vector<uint32_t>();
+static Any defaultVectorInt32 = std::vector<int32_t>();
 static Any defaultVectorVideoBitStreamFormat = std::vector<VideoBitStreamFormat>();
 static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::SRC_INPUT_TYPE, defaultSrcInputType},
@@ -481,6 +483,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::MEDIA_END_OF_STREAM, defaultBool},
     {Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE, defaultBool},
     {Tag::VIDEO_ENCODER_ENABLE_TEMPORAL_SCALABILITY, defaultBool},
+    {Tag::AV_CODEC_ENABLE_SYNC_MODE, defaultBool},
     {Tag::VIDEO_ENCODER_PER_FRAME_MARK_LTR, defaultBool},
     {Tag::VIDEO_PER_FRAME_IS_LTR, defaultBool},
     {Tag::VIDEO_PER_FRAME_IS_SKIP, defaultBool},
@@ -544,6 +547,8 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     //int8
     {Tag::AV_PLAYER_VIDEO_BITDEPTH, defaultInt8},
     {Tag::AV_PLAYER_HDR_TYPE, defaultInt8},
+    // vector<int32_t>
+    {Tag::REFERENCE_TRACK_IDS, defaultVectorInt32},
 };
 
 static std::map<AnyValueType, const Any &> g_ValueTypeDefaultValueMap = {
@@ -560,6 +565,7 @@ static std::map<AnyValueType, const Any &> g_ValueTypeDefaultValueMap = {
     {AnyValueType::VECTOR_INT32, defaultVectorInt32},
     {AnyValueType::VECTOR_UINT32, defaultVectorUInt32},
     {AnyValueType::STRING, defaultString},
+    {AnyValueType::VECTOR_INT32, defaultVectorInt32},
 };
 
 Any GetDefaultAnyValue(const TagType& tag)
@@ -621,6 +627,8 @@ AnyValueType Meta::GetValueType(const TagType& key) const
             return AnyValueType::VECTOR_INT32;
         } else if (Any::IsSameTypeWith<std::string>(iter->second)) {
             return AnyValueType::STRING;
+        } else if (Any::IsSameTypeWith<std::vector<int32_t>>(iter->second)) {
+            return AnyValueType::VECTOR_INT32;
         } else {
             auto iter = g_metadataGetterSetterInt64Map.find(key);
             if (iter == g_metadataGetterSetterInt64Map.end()) {

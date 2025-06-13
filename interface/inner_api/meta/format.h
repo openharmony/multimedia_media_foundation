@@ -132,6 +132,18 @@ public:
     bool PutBuffer(const std::string_view &key, const uint8_t *addr, size_t size);
 
     /**
+     * @brief Sets metadata of the string type.
+     *
+     * @param key Indicates the metadata key.
+     * @param addr Indicates the metadata addr, which is a int32_t *.
+     * @param size Indicates the metadata addr size, which is a size_t.
+     * @return Returns <b>true</b> if the metadata is successfully set; returns <b>false</b> otherwise.
+     * @since 20
+     * @version 1.0
+     */
+    bool PutIntBuffer(const std::string_view &key, const int32_t *addr, size_t size);
+
+    /**
      * @brief Sets metadata of the format vector type.
      *
      * @param key Indicates the metadata key.
@@ -308,14 +320,32 @@ public:
     std::shared_ptr<Meta> GetMeta();
 
     /**
-     * @brief Set the metadata map to Format.
+     * @brief Set the metadata by copying or translating ownership.
      *
-     * @param meta the meta be set.
-     * @return Returns <b>true</b> if the metadata is successfully set; returns <b>false</b> otherwise.
+     * If the provided metadata is shared (use_count > 1), performs a deep copy to avoid
+     * unintended aliasing. Otherwise shares ownership of the provided shared_ptr.
+     *
+     * @param meta Shared pointer to the metadata.
+     * @return Returns <b>true</b> if metadata is non-null and successfully set;
+     *         <b>false</b> otherwise.
      * @since 10
      * @version 1.0
      */
     bool SetMeta(std::shared_ptr<Meta> meta);
+
+    /**
+     * @brief Set the metadata reference by taking shared ownership.
+     *
+     * Directly shares ownership of the provided shared_ptr without copying contents.
+     * Used to share the same metadata.
+     *
+     * @param meta Shared pointer to the metadata.
+     * @return Returns <b>true</b> if metadata is non-null and successfully set;
+     *         <b>false</b> otherwise.
+     * @since 20
+     * @version 1.0
+     */
+    bool SetMetaPtr(std::shared_ptr<Meta> meta);
 
 private:
     FormatDataMap formatMap_;

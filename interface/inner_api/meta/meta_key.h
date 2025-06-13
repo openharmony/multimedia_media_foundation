@@ -199,6 +199,12 @@ public:
         "video_encode_bitrate_mode"; ///<  Key for video encode bitrate mode, see {link @VideoEncodeBitrateMode}
     static constexpr const char VIDEO_ENCODE_B_FRAME_GOP_MODE[] =
         "video_encode_b_frame_gop_mode"; ///<  Key for video encode gop mode, see {link @VideoEncodeBFrameGopMode}
+    static constexpr const char VIDEO_SCENE_TYPE[] =
+        "video_scene_type"; ///<  Key for video encode carmera-recoder mode, see {link @VideoSceneType}
+    static constexpr const char VIDEO_ENCODER_ENABLE_B_FRAME[] =
+        "video_encoder_enable_b_frame"; ///<  bool,Key for video encode B-frame mode.
+    static constexpr const char VIDEO_ENCODER_MAX_B_FRAME[] =
+        "video_encoder_max_b_frame"; ///<  Key for video encode carmera-recoder mode, see {link @VideoSceneType}
     static constexpr const char VIDEO_ENCODE_QUALITY[] =
         "quality"; ///<  key for the desired encoding quality,  this key is only supported for encoders that are
                    ///<  configured in constant quality mode
@@ -433,6 +439,9 @@ public:
     static constexpr const char AV_CODEC_CALLER_PID[]                   = "av_codec_caller_pid";
     static constexpr const char AV_CODEC_CALLER_UID[]                   = "av_codec_caller_uid";
     static constexpr const char AV_CODEC_CALLER_PROCESS_NAME[]          = "av_codec_caller_process_name";
+    ///bool, Key for codec sync mode
+    static constexpr const char AV_CODEC_ENABLE_SYNC_MODE[] = "enable_sync_mode";
+
 /* -------------------- screen captrue tag -------------------- */
     static constexpr const char SCREEN_CAPTURE_ERR_CODE[] = "errCode";
     static constexpr const char SCREEN_CAPTURE_ERR_MSG[] = "errMsg";

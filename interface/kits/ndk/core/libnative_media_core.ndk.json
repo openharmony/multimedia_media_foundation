@@ -10,6 +10,7 @@
     { "name": "OH_AVFormat_SetDoubleValue" },
     { "name": "OH_AVFormat_SetStringValue" },
     { "name": "OH_AVFormat_SetBuffer" },
+    { "name": "OH_AVFormat_SetIntBuffer" },
     { "name": "OH_AVFormat_GetIntValue" },
     { "name": "OH_AVFormat_GetLongValue" },
     { "name": "OH_AVFormat_GetFloatValue" },

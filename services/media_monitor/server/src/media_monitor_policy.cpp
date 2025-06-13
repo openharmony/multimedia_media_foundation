@@ -71,15 +71,16 @@ void MediaMonitorPolicy::TimeFunc()
 {
     while (startThread_.load(std::memory_order_acquire)) {
         curruntTime_ = TimeUtils::GetCurSec();
-        startAudioTime_ = curruntTime_;
         std::this_thread::sleep_for(std::chrono::minutes(systemTonePlaybackTime_));
-        lastAudioTime_ = TimeUtils::GetCurSec();
-        if (lastAudioTime_ - startAudioTime_ >= systemTonePlaybackSleepTime_) {
-            HandleToSystemTonePlaybackEvent();
-            startAudioTime_ = TimeUtils::GetCurSec();
+        afterSleepTime_ = TimeUtils::GetCurSec();
+        if (afterSleepTime_ - lastAudioTime_ >= aggregationSleepTime_) {
+            HandleToHiSysEvent();
+            lastAudioTime_ = TimeUtils::GetCurSec();
         }
-        std::this_thread::sleep_for(std::chrono::minutes(aggregationTime_));
-        HandleToHiSysEvent();
+        if (afterSleepTime_ - lastSystemTonePlaybackTime_ >= systemTonePlaybackSleepTime_) {
+            HandleToSystemTonePlaybackEvent();
+            lastSystemTonePlaybackTime_ = TimeUtils::GetCurSec();
+        }
     }
 }
 
@@ -193,15 +194,18 @@ void MediaMonitorPolicy::WriteBehaviorEventExpansion(EventId eventId, std::share
 
 void MediaMonitorPolicy::TriggerSystemTonePlaybackEvent(std::shared_ptr<EventBean> &bean)
 {
-    MEDIA_LOG_D("Trigger system tone playback event .");
-    std::lock_guard<std::mutex> lockEventVector(eventVectorMutex_);
-    ++systemTonePlayerCount_;
+    MEDIA_LOG_D("Trigger system tone playback event . ");
 
+    std::lock_guard<std::mutex> lockEventVector(eventVectorMutex_);
+    systemTonePlayerCount_++;
+    MEDIA_LOG_I("systemTonePlayerCount_ . = %{public}d", systemTonePlayerCount_);
     if (systemTonePlayerCount_ >= MAX_PLAY_COUNT) {
         auto dfxResult = std::make_unique<DfxSystemTonePlaybackResult>();
         CollectDataToDfxResult(dfxResult.get());
+
         mediaEventBaseWriter_.WriteSystemTonePlayback(std::move(dfxResult));
         systemTonePlayerCount_ = 0;
+        lastSystemTonePlaybackTime_ = TimeUtils::GetCurSec();
         systemTonePlayEventVector_.clear();
         return;
     }
@@ -219,10 +223,14 @@ void MediaMonitorPolicy::TriggerSystemTonePlaybackTimeEvent(std::shared_ptr<Even
     return;
 }
 
- void MediaMonitorPolicy::CollectDataToDfxResult(DfxSystemTonePlaybackResult* result)
+ void MediaMonitorPolicy::CollectDataToDfxResult(DfxSystemTonePlaybackResult *result)
 {
     MEDIA_LOG_D("Collect data to dfx result .");
     for (const auto& bean : systemTonePlayEventVector_) {
+        if (bean == nullptr || result == nullptr) {
+            MEDIA_LOG_E("The incoming data is invalid or data is nullptr.");
+            return;
+        }
         result->timeStamp.push_back(bean->GetUint64Value("TIME_STAMP"));
         result->systemToneType.push_back(bean->GetIntValue("SYSTEM_TONE_TYPE"));
         result->clientUid.push_back(bean->GetIntValue("CLIENT_UID"));

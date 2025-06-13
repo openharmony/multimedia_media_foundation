@@ -247,6 +247,25 @@ bool OH_AVFormat_SetStringValue(struct OH_AVFormat *format, const char *key, con
 bool OH_AVFormat_SetBuffer(struct OH_AVFormat *format, const char *key, const uint8_t *addr, size_t size);
 
 /**
+ * @brief Write a list of int32_t data of a specified length to OH_AVFormat.
+ *
+ * @syscap SystemCapability.Multimedia.Media.Core
+ * @param format pointer to an OH_AVFormat instance
+ * @param key key to write data
+ * @param addr written data addr
+ * @param size written data length
+ * @return The return value is TRUE for success, FALSE for failure
+ * Possible failure causes:
+ * 1. input format is NULL.
+ * 2. input format's magic error.
+ * 3. key is nullptr.
+ * 4. addr is nullptr.
+ * 5. size is zero.
+ * @since 20
+ */
+bool OH_AVFormat_SetIntBuffer(struct OH_AVFormat *format, const char *key, const int32_t *addr, size_t size);
+
+/**
  * @brief Get the Int value from the key of OH_AVFormat.
  * @syscap SystemCapability.Multimedia.Media.Core
  * @param format pointer to an OH_AVFormat instance
