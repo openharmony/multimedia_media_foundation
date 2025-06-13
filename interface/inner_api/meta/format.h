@@ -132,6 +132,18 @@ public:
     bool PutBuffer(const std::string_view &key, const uint8_t *addr, size_t size);
 
     /**
+     * @brief Sets metadata of the string type.
+     *
+     * @param key Indicates the metadata key.
+     * @param addr Indicates the metadata addr, which is a int32_t *.
+     * @param size Indicates the metadata addr size, which is a size_t.
+     * @return Returns <b>true</b> if the metadata is successfully set; returns <b>false</b> otherwise.
+     * @since 20
+     * @version 1.0
+     */
+    bool PutIntBuffer(const std::string_view &key, const int32_t *addr, size_t size);
+
+    /**
      * @brief Sets metadata of the format vector type.
      *
      * @param key Indicates the metadata key.

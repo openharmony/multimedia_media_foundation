@@ -43,6 +43,8 @@ const BaseTypesMap &GetBaseTypesMap()
         typeMap[std::string(defaultString.TypeName())] = AnyValueType::STRING;
         Any defaultVecUint8 = std::vector<uint8_t>();
         typeMap[std::string(defaultVecUint8.TypeName())] = AnyValueType::VECTOR_UINT8;
+        Any defaultVecInt32 = std::vector<int32_t>();
+        typeMap[std::string(defaultVecInt32.TypeName())] = AnyValueType::VECTOR_INT32;
         return typeMap;
     }());
     return baseTypeMap;
@@ -81,6 +83,9 @@ bool Any::BaseTypesToParcel(const Any *operand, MessageParcel &parcel) noexcept
         case AnyValueType::VECTOR_UINT8:
             ret = ret && parcel.WriteUInt8Vector(*AnyCast<std::vector<uint8_t>>(operand));
             break;
+        case AnyValueType::VECTOR_INT32:
+            ret = ret && parcel.WriteInt32Vector(*AnyCast<std::vector<int32_t>>(operand));
+            break;
         default: {
             parcel.WriteInt32(static_cast<int32_t>(AnyValueType::INVALID_TYPE));
             return false;
@@ -94,6 +99,22 @@ enum class StatusCodeFromParcel {
     ENUM_RETRY = 1,
     NO_RETRY = 2,
 };
+
+static void BaseTypesVectorUint8(Any *operand, MessageParcel &parcel)
+{
+    std::vector<uint8_t> val;
+    (void)parcel.ReadUInt8Vector(&val);
+    Any tmp(val);
+    operand->Swap(tmp);
+}
+
+static void BaseTypesVectorInt32(Any *operand, MessageParcel &parcel)
+{
+    std::vector<int32_t> val;
+    (void)parcel.ReadInt32Vector(&val);
+    Any tmp(val);
+    operand->Swap(tmp);
+}
 
 // returnValue : 0 -- success; 1 -- retry for enum type; 2 -- failed no retry
 int Any::BaseTypesFromParcel(Any *operand, MessageParcel &parcel) noexcept
@@ -131,10 +152,11 @@ int Any::BaseTypesFromParcel(Any *operand, MessageParcel &parcel) noexcept
             break;
         }
         case AnyValueType::VECTOR_UINT8: {
-            std::vector<uint8_t> val;
-            (void)parcel.ReadUInt8Vector(&val);
-            Any tmp(val);
-            operand->Swap(tmp);
+            BaseTypesVectorUint8(operand, parcel);
+            break;
+        }
+        case AnyValueType::VECTOR_INT32: {
+            BaseTypesVectorInt32(operand, parcel);
             break;
         }
         case AnyValueType::INVALID_TYPE:

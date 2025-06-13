@@ -132,6 +132,17 @@ bool OH_AVFormat_SetBuffer(struct OH_AVFormat *format, const char *key, const ui
     return format->format_.PutBuffer(key, addr, size);
 }
 
+bool OH_AVFormat_SetIntBuffer(struct OH_AVFormat *format, const char *key, const int32_t *addr, size_t size)
+{
+    FALSE_RETURN_V_MSG_E(format != nullptr, false, "input format is nullptr!");
+    FALSE_RETURN_V_MSG_E(format->magic_ == MFMagic::MFMAGIC_FORMAT, false, "magic error!");
+    FALSE_RETURN_V_MSG_E(key != nullptr, false, "key is nullptr!");
+    FALSE_RETURN_V_MSG_E(addr != nullptr, false, "addr is nullptr!");
+    FALSE_RETURN_V_MSG_E(size != 0, false, "size is zero!");
+
+    return format->format_.PutIntBuffer(key, addr, size);
+}
+
 bool OH_AVFormat_GetIntValue(struct OH_AVFormat *format, const char *key, int32_t *out)
 {
     FALSE_RETURN_V_MSG_E(format != nullptr, false, "input format is nullptr!");

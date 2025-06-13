@@ -37,6 +37,7 @@ public:
     virtual bool GetStringValue(const std::string_view &key, std::string &value) = 0;
     virtual bool GetBuffer(const std::string_view &key, uint8_t **addr, size_t &size) = 0;
     virtual bool PutBuffer(const std::string_view &key, const uint8_t *addr, size_t size) = 0;
+    virtual bool PutIntBuffer(const std::string_view &key, const int32_t *addr, size_t size) = 0;
     virtual void InitTrackFormat() = 0;
     virtual void InitAudioTrackFormat(const std::string_view &mimeType, int32_t sampleRate, int32_t channelCount) = 0;
     virtual void InitVideoTrackFormat(const std::string_view &mimeType, int32_t width, int32_t height) = 0;

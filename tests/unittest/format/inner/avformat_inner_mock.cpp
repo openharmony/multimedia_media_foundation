@@ -92,6 +92,11 @@ bool AVFormatInnerMock::PutBuffer(const std::string_view &key, const uint8_t *ad
     return format_.PutBuffer(key, addr, size);
 }
 
+bool AVFormatInnerMock::PutIntBuffer(const std::string_view &key, const int32_t *addr, size_t size)
+{
+    return format_.PutIntBuffer(key, addr, size);
+}
+
 void AVFormatInnerMock::InitAudioTrackFormat(const std::string_view &mimeType, int32_t sampleRate, int32_t channelCount)
 {
     format_.PutStringValue(Tag::MIME_TYPE, mimeType);
