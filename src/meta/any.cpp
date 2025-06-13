@@ -100,6 +100,22 @@ enum class StatusCodeFromParcel {
     NO_RETRY = 2,
 };
 
+static void BaseTypesVectorUint8(Any *operand, MessageParcel &parcel)
+{
+    std::vector<uint8_t> val;
+    (void)parcel.ReadUInt8Vector(&val);
+    Any tmp(val);
+    operand->Swap(tmp);
+}
+
+static void BaseTypesVectorInt32(Any *operand, MessageParcel &parcel)
+{
+    std::vector<int32_t> val;
+    (void)parcel.ReadInt32Vector(&val);
+    Any tmp(val);
+    operand->Swap(tmp);
+}
+
 // returnValue : 0 -- success; 1 -- retry for enum type; 2 -- failed no retry
 int Any::BaseTypesFromParcel(Any *operand, MessageParcel &parcel) noexcept
 {
@@ -136,17 +152,11 @@ int Any::BaseTypesFromParcel(Any *operand, MessageParcel &parcel) noexcept
             break;
         }
         case AnyValueType::VECTOR_UINT8: {
-            std::vector<uint8_t> val;
-            (void)parcel.ReadUInt8Vector(&val);
-            Any tmp(val);
-            operand->Swap(tmp);
+            BaseTypesVectorUint8(operand, parcel);
             break;
         }
         case AnyValueType::VECTOR_INT32: {
-            std::vector<int32_t> val;
-            (void)parcel.ReadInt32Vector(&val);
-            Any tmp(val);
-            operand->Swap(tmp);
+            BaseTypesVectorInt32(operand, parcel);
             break;
         }
         case AnyValueType::INVALID_TYPE:
