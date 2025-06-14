@@ -162,6 +162,8 @@ bool AVFormatCapiMock::GetIntBuffer(const std::string_view &key, int32_t **addr,
 {
     if (format_ != nullptr) {
         return OH_AVFormat_GetIntBuffer(format_, key.data(), addr, &size);
+    }
+    return false;
 }
 
 bool AVFormatCapiMock::PutIntBuffer(const std::string_view &key, const int32_t *addr, size_t size)
