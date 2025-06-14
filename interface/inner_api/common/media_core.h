@@ -98,6 +98,7 @@ enum MediaServiceErrCode : ErrCode {
     MSERR_SUPER_RESOLUTION_NOT_ENABLED,                 // super resolution not enabled.
     MSERR_GET_INPUT_SURFACE_FAILED,                     // video encoder or resize get input surface failed.
     MSERR_SET_OUTPUT_SURFACE_FAILED,                    // video decoder or resize set output surface failed.
+    MSERR_VID_RENDER_FAILED,
     MSERR_EXTEND_START      = MS_ERR_OFFSET + 0xF000,   // extend err start.
 };
 
