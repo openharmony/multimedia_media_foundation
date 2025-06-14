@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025 Huawei Device Co., Ltd.
+ * Copyright (C) 2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -37,7 +37,6 @@ public:
     virtual bool GetStringValue(const std::string_view &key, std::string &value) = 0;
     virtual bool GetBuffer(const std::string_view &key, uint8_t **addr, size_t &size) = 0;
     virtual bool PutBuffer(const std::string_view &key, const uint8_t *addr, size_t size) = 0;
-    virtual bool GetIntBuffer(const std::string_view &key, int32_t **addr, size_t &size) = 0;
     virtual bool PutIntBuffer(const std::string_view &key, const int32_t *addr, size_t size) = 0;
     virtual void InitTrackFormat() = 0;
     virtual void InitAudioTrackFormat(const std::string_view &mimeType, int32_t sampleRate, int32_t channelCount) = 0;
