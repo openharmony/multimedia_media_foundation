@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025 Huawei Device Co., Ltd.
+ * Copyright (C) 2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -38,7 +38,6 @@ public:
     bool GetDoubleValue(const std::string_view &key, double &value) override;
     bool GetBuffer(const std::string_view &key, uint8_t **addr, size_t &size) override;
     bool PutBuffer(const std::string_view &key, const uint8_t *addr, size_t size) override;
-    bool GetIntBuffer(const std::string_view &key, int32_t **addr, size_t &size) override;
     bool PutIntBuffer(const std::string_view &key, const int32_t *addr, size_t size) override;
     void InitTrackFormat() override{};
     void InitAudioTrackFormat(const std::string_view &mimeType, int32_t sampleRate, int32_t channelCount) override;

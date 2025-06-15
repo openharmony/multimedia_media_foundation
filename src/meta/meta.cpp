@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023-2025 Huawei Device Co., Ltd.
+ * Copyright (c) 2023-2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -136,7 +136,6 @@ static std::vector<TagType> g_metadataBoolVector = {
     Tag::MEDIA_HAS_AUDIO,
     Tag::MEDIA_HAS_SUBTITLE,
     Tag::MEDIA_HAS_TIMEDMETA,
-    Tag::MEDIA_HAS_AUXILIARY,
     Tag::MEDIA_END_OF_STREAM,
     Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE,
     Tag::VIDEO_ENCODER_ENABLE_TEMPORAL_SCALABILITY,
@@ -478,7 +477,6 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::MEDIA_HAS_AUDIO, defaultBool},
     {Tag::MEDIA_HAS_SUBTITLE, defaultBool},
     {Tag::MEDIA_HAS_TIMEDMETA, defaultBool},
-    {Tag::MEDIA_HAS_AUXILIARY, defaultBool},
     {Tag::MEDIA_END_OF_STREAM, defaultBool},
     {Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE, defaultBool},
     {Tag::VIDEO_ENCODER_ENABLE_TEMPORAL_SCALABILITY, defaultBool},
