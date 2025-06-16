@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Huawei Device Co., Ltd.
+ * Copyright (C) 2023-2025 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -509,6 +509,7 @@ map<TagType, bool> testBoolData = {
     {Tag::MEDIA_HAS_VIDEO, true},
     {Tag::MEDIA_HAS_AUDIO, false},
     {Tag::MEDIA_HAS_TIMEDMETA, true},
+    {Tag::MEDIA_HAS_AUXILIARY, true},
     {Tag::MEDIA_END_OF_STREAM, true},
     {Tag::VIDEO_IS_HDR_VIVID, true},
     {Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE, true},
