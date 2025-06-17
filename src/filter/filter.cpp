@@ -87,11 +87,12 @@ void Filter::LinkPipeLine(const std::string &groupId, bool needTurbo, bool needI
     MEDIA_LOG_I("needInit is: " PUBLIC_LOG_U32, needInit);
     
     filterTask_->SubmitJobOnce([this, needInit] {
+        Status ret = Status::OK;
         if (needInit) {
-            Status ret = DoInitAfterLink();
-            SetErrCode(ret);
-            ChangeState(ret == Status::OK ? FilterState::INITIALIZED : FilterState::ERROR);
+            ret = DoInitAfterLink();
         }
+        SetErrCode(ret);
+        ChangeState(ret == Status::OK ? FilterState::INITIALIZED : FilterState::ERROR);
     });
 }
 
