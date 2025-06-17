@@ -79,6 +79,16 @@ PipeLineThreadPool& PipeLineThreadPool::GetInstance()
     return instance;
 }
 
+PipeLineThreadPool::~PipeLineThreadPool()
+{
+    std::map<std::string, std::shared_ptr<std::list<std::shared_ptr<PipeLineThread>>>> tempMap;
+    {
+        std::lock_guard<Mutex> lock(mutex_);
+        std::swap(tempMap, workerGroupMap);
+    }
+    tempMap.clear();
+}
+
 std::shared_ptr<PipeLineThread> PipeLineThreadPool::FindThread(const std::string &groupId,
     TaskType taskType, TaskPriority priority)
 {
