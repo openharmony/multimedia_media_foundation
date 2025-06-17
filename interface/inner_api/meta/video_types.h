@@ -24,7 +24,7 @@ namespace Plugins {
 enum class VideoScaleType {
     VIDEO_SCALE_TYPE_FIT,
     VIDEO_SCALE_TYPE_FIT_CROP,
-    VIDEO_SCALE_TYPE_FIT_ASPECT,
+    VIDEO_SCALE_TYPE_SCALED_ASPECT,
 };
 
 /**
