@@ -19,6 +19,7 @@
 
 namespace {
 constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "AVBufferQueueProducerProxy" };
+constexpr int64_t MILLISECONDS_TO_MICROSECONDS = 1000;
 }
 
 namespace OHOS {
@@ -52,6 +53,8 @@ public:
 
     Status RequestBuffer(std::shared_ptr<AVBuffer>& outBuffer,
         const AVBufferConfig& config, int32_t timeoutMs) override;
+    Status RequestBufferWaitUs(std::shared_ptr<AVBuffer>& outBuffer,
+        const AVBufferConfig& config, int64_t timeoutUs) override;
     Status PushBuffer(const std::shared_ptr<AVBuffer>& inBuffer, bool available) override;
     Status ReturnBuffer(const std::shared_ptr<AVBuffer>& inBuffer, bool available) override;
 
@@ -100,6 +103,12 @@ Status AVBufferQueueProducerProxyImpl::SetQueueSize(uint32_t size)
 
 Status AVBufferQueueProducerProxyImpl::RequestBuffer(std::shared_ptr<AVBuffer>& outBuffer,
                                                      const AVBufferConfig& config, int32_t timeoutMs)
+{
+    return RequestBufferWaitUs(outBuffer, config, static_cast<int64_t>(timeoutMs) * MILLISECONDS_TO_MICROSECONDS);
+}
+
+Status AVBufferQueueProducerProxyImpl::RequestBufferWaitUs(
+    std::shared_ptr<AVBuffer> &outBuffer, const AVBufferConfig &config, int64_t timeoutUs)
 {
     ABQ_IPC_DEFINE_VARIABLES;
 

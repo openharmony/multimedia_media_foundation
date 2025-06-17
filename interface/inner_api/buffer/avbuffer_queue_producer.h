@@ -31,6 +31,14 @@ public:
 
     virtual Status RequestBuffer(std::shared_ptr<AVBuffer>& outBuffer,
                                  const AVBufferConfig& config, int32_t timeoutMs) = 0;
+    virtual Status RequestBufferWaitUs(
+        std::shared_ptr<AVBuffer> &outBuffer, const AVBufferConfig &config, int64_t timeoutUs)
+    {
+        (void)outBuffer;
+        (void)config;
+        (void)timeoutUs;
+        return Status::ERROR_UNKNOWN;
+    }
     virtual Status PushBuffer(const std::shared_ptr<AVBuffer>& inBuffer, bool available) = 0;
     virtual Status ReturnBuffer(const std::shared_ptr<AVBuffer>& inBuffer, bool available) = 0;
 

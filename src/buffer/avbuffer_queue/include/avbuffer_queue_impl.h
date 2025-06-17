@@ -72,6 +72,8 @@ public:
 
     virtual Status RequestBuffer(std::shared_ptr<AVBuffer>& buffer,
                           const AVBufferConfig& config, int32_t timeoutMs);
+    virtual Status RequestBufferWaitUs(std::shared_ptr<AVBuffer>& buffer,
+                          const AVBufferConfig& config, int64_t timeoutUs);
     virtual Status PushBuffer(uint64_t uniqueId, bool available);
     virtual Status PushBuffer(const std::shared_ptr<AVBuffer>& buffer, bool available);
     virtual Status ReturnBuffer(uint64_t uniqueId, bool available);
@@ -137,7 +139,7 @@ private:
 
     Status CheckConfig(const AVBufferConfig& config);
 
-    bool wait_for(std::unique_lock<std::mutex>& lock, int32_t timeoutMs);
+    bool wait_for(std::unique_lock<std::mutex>& lock, int64_t timeoutUs);
 
     uint32_t GetCachedBufferCount() const;
     Status RequestReuseBuffer(std::shared_ptr<AVBuffer>& buffer, const AVBufferConfig& config);
