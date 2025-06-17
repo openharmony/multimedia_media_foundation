@@ -17,7 +17,7 @@
 #include "plugin/plugins/sink/video_surface_sink/surface_sink_plugin.h"
 #include "plugin_utils.h"
 #include "ui/rs_surface_node.h"
-#include "window.h"
+#include "wm/window.h"
 #include "window_option.h"
 #include "display/composer/v1_2/display_composer_type.h"
 
