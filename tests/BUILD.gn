@@ -21,6 +21,7 @@ group("media_foundation_unit_test") {
       "unittest/avshared_memory_pool:avshared_pool_unit_test",
       "unittest/event_bean:event_bean_unit_test",
       "unittest/filter:filter_unit_test",
+      "unittest/filter_unittest:filter_unittest",
       "unittest/format:format_unit_test",
       "unittest/meta:meta_unit_test",
       "unittest/osal:osal_unit_test",
