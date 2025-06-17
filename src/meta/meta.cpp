@@ -514,6 +514,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::BUFFER_DECODING_TIMESTAMP, defaultInt64},
     {Tag::BUFFER_DURATION, defaultInt64},
     {Tag::VIDEO_DECODER_DESIRED_PRESENT_TIMESTAMP, defaultInt64},
+    {Tag::VIDEO_ENCODE_SET_FRAME_PTS, defaultInt64},
     // AudioChannelLayout UINT64_T
     {Tag::AUDIO_CHANNEL_LAYOUT, defaultAudioChannelLayout},
     {Tag::AUDIO_OUTPUT_CHANNEL_LAYOUT, defaultAudioChannelLayout},
