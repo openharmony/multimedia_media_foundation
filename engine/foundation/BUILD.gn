@@ -26,7 +26,6 @@ config("histreamer_foundation_config") {
 
 if (hst_is_lite_sys) {
   source_set("histreamer_foundation") {
-    include_dirs = [ "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter" ]
     sources = [
       "osal/filesystem/file_system.cpp",
       "osal/thread/condition_variable.cpp",

@@ -69,5 +69,6 @@ ohos_unittest("event_bean_inner_unit_test") {
 
   external_deps = [
     "samgr:samgr_proxy",
+    "hilog:libhilog",
   ]
 }

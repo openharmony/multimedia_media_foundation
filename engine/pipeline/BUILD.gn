@@ -141,7 +141,10 @@ ohos_source_set("histreamer_pipeline") {
     "filters/source:media_source_filter",
   ]
   if (hst_is_standard_sys) {
-    external_deps = [ "hilog:libhilog" ]
+    external_deps = [ 
+      "hilog:libhilog",
+      "hitrace:hitrace_meter",
+    ]
   }
   if (media_foundation_enable_video) {
     public_deps += [ "filters/sink:video_sink_filter" ]
