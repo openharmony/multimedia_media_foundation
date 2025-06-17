@@ -55,7 +55,7 @@ ohos_source_set("std_plugin_codec_adapter") {
     "//foundation/multimedia/media_foundation:histreamer_presets",
   ]
   public_external_deps = [
-    "drivers_interface_codec:libcodec_proxy_3.0",
+    "drivers_interface_codec:libcodec_proxy_4.0",
     "drivers_interface_display:libdisplay_composer_hdi_impl_1.2",
     "openmax:libopenmax_static",
   ]
@@ -75,7 +75,7 @@ if (hst_is_lite_sys) {
     deps = [ ":std_plugin_codec_adapter" ]
 
     external_deps = [
-      "drivers_interface_codec:libcodec_proxy_3.0",
+      "drivers_interface_codec:libcodec_proxy_4.0",
       "drivers_interface_display:libdisplay_composer_hdi_impl_1.2",
       "hilog:libhilog",
       "openmax:libopenmax_static",

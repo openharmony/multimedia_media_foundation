@@ -19,8 +19,8 @@
 #define HISTREAMER_PLUGIN_CODEC_CMD_EXECUTOR_H
 #include <map>
 #include <vector>
-#include "v3_0/icodec_component.h"
-#include "v3_0/codec_types.h"
+#include "v4_0/icodec_component.h"
+#include "v4_0/codec_types.h"
 #include "foundation/osal/thread/condition_variable.h"
 #include "foundation/osal/thread/mutex.h"
 #include "plugin/common/any.h"
@@ -32,7 +32,7 @@ namespace OHOS {
 namespace Media {
 namespace Plugin {
 namespace CodecAdapter {
-namespace CodecHDI = OHOS::HDI::Codec::V3_0;
+namespace CodecHDI = OHOS::HDI::Codec::V4_0;
 enum Result {
     INVALID,
     SUCCESS,

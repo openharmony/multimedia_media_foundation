@@ -17,8 +17,8 @@
 
 #ifndef HISTREAMER_PLUGIN_CODEC_BUFFER_POOL_H
 #define HISTREAMER_PLUGIN_CODEC_BUFFER_POOL_H
-#include "v3_0/icodec_component.h"
-#include "v3_0/codec_types.h"
+#include "v4_0/icodec_component.h"
+#include "v4_0/codec_types.h"
 #include "codec_buffer.h"
 #include "foundation/osal/thread/mutex.h"
 #include "foundation/utils/blocking_queue.h"
@@ -31,7 +31,7 @@ namespace Media {
 namespace Plugin {
 namespace CodecAdapter {
 
-namespace CodecHDI = OHOS::HDI::Codec::V3_0;
+namespace CodecHDI = OHOS::HDI::Codec::V4_0;
 
 class CodecBufferPool {
 public:

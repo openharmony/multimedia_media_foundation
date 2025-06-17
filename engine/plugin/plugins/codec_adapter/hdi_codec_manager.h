@@ -18,14 +18,14 @@
 #include "codec_manager.h"
 #include <unordered_map>
 #include "codec_omx_ext.h"
-#include "v3_0/icodec_component_manager.h"
-#include "v3_0/codec_types.h"
+#include "v4_0/icodec_component_manager.h"
+#include "v4_0/codec_types.h"
 
 namespace OHOS {
 namespace Media {
 namespace Plugin {
 namespace CodecAdapter {
-namespace CodecHDI = OHOS::HDI::Codec::V3_0;
+namespace CodecHDI = OHOS::HDI::Codec::V4_0;
 
 class HdiCodecManager : public CodecManager {
 public:
