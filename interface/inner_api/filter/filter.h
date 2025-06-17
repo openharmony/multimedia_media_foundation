@@ -131,7 +131,7 @@ public:
     virtual void Init(const std::shared_ptr<EventReceiver>& receiver, const std::shared_ptr<FilterCallback>& callback,
                       const std::shared_ptr<InterruptMonitor>& monitor);
 
-    virtual void LinkPipeLine(const std::string &groupId, bool needTurbo = false) final;
+    virtual void LinkPipeLine(const std::string &groupId, bool needTurbo = false, bool needInit = true) final;
 
     virtual Status Prepare() final;
 
@@ -253,6 +253,14 @@ public:
         (void)isMuted;
         return Status::OK;
     }
+    
+    virtual Status ReleaseOnMuted() final;
+
+    virtual Status ReInitAndStart() final;
+
+    virtual Status DoReleaseOnMuted();
+
+    virtual Status DoReInitAndStart();
 protected:
     inline bool IsAsyncMode()
     {

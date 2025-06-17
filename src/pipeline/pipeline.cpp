@@ -287,11 +287,11 @@ Status Pipeline::RemoveHeadFilter(const std::shared_ptr<Filter>& filter)
 
 Status Pipeline::LinkFilters(const std::shared_ptr<Filter> &preFilter,
                              const std::vector<std::shared_ptr<Filter>> &nextFilters,
-                             StreamType type, bool needTurbo)
+                             StreamType type, bool needTurbo, bool needInit)
 {
     for (auto nextFilter : nextFilters) {
         auto ret = preFilter->LinkNext(nextFilter, type);
-        nextFilter->LinkPipeLine(groupId_, needTurbo);
+        nextFilter->LinkPipeLine(groupId_, needTurbo, needInit);
         FALSE_RETURN_V(ret == Status::OK, ret);
     }
     return Status::OK;

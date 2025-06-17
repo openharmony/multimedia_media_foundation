@@ -53,41 +53,46 @@ void Filter::Init(const std::shared_ptr<EventReceiver>& receiver,
     interruptMonitor_ = monitor;
 }
 
-void Filter::LinkPipeLine(const std::string &groupId, bool needTurbo)
+void Filter::LinkPipeLine(const std::string &groupId, bool needTurbo, bool needInit)
 {
     groupId_ = groupId;
     MEDIA_LOG_I("Filter %{public}s LinkPipeLine:%{public}s, isAsyncMode_:%{public}d",
         name_.c_str(), groupId.c_str(), isAsyncMode_);
-    if (isAsyncMode_) {
-        TaskType taskType;
-        switch (filterType_) {
-            case FilterType::FILTERTYPE_VENC:
-            case FilterType::FILTERTYPE_VDEC:
-            case FilterType::VIDEO_CAPTURE:
-                taskType = TaskType::SINGLETON;
-                break;
-            case FilterType::FILTERTYPE_ASINK: // fall-through
-            case FilterType::AUDIO_CAPTURE:
-                taskType = TaskType::AUDIO;
-                break;
-            default:
-                taskType = TaskType::SINGLETON;
-                break;
+    Status ret = Status::OK;
+    if (!isAsyncMode_) {
+        if (needInit) {
+            ret = DoInitAfterLink();
         }
-        filterTask_ = std::make_unique<Task>(name_, groupId_, taskType, TaskPriority::HIGH, false);
-        if (needTurbo) {
-            filterTask_->UpdateThreadPriority(THREAD_PRIORITY_41, "media_service");
-        }
-        filterTask_->SubmitJobOnce([this] {
+        SetErrCode(ret);
+        ChangeState(ret == Status::OK ? FilterState::INITIALIZED : FilterState::ERROR);
+        return;
+    }
+    
+    TaskType taskType = TaskType::SINGLETON;
+    switch (filterType_) {
+        case FilterType::FILTERTYPE_ASINK: // fall-through
+        case FilterType::AUDIO_CAPTURE:
+            taskType = TaskType::AUDIO;
+            break;
+        default:
+            break;
+    }
+    
+    filterTask_ = std::make_unique<Task>(name_, groupId_, taskType, TaskPriority::HIGH, false);
+    
+    if (needTurbo) {
+        filterTask_->UpdateThreadPriority(THREAD_PRIORITY_41, "media_service");
+    }
+    
+    MEDIA_LOG_I("needInit is: " PUBLIC_LOG_U32, needInit);
+    
+    filterTask_->SubmitJobOnce([this, needInit] {
+        if (needInit) {
             Status ret = DoInitAfterLink();
             SetErrCode(ret);
             ChangeState(ret == Status::OK ? FilterState::INITIALIZED : FilterState::ERROR);
-        });
-    } else {
-        Status ret = DoInitAfterLink();
-        SetErrCode(ret);
-        ChangeState(ret == Status::OK ? FilterState::INITIALIZED : FilterState::ERROR);
-    }
+        }
+    });
 }
 
 Status Filter::Prepare()
@@ -644,6 +649,16 @@ Status Filter::DoProcessOutputBuffer(int recvArg, bool dropFrame, bool byIdx, ui
     return Status::OK;
 }
 
+Status Filter::DoReleaseOnMuted()
+{
+    return Status::OK;
+}
+
+Status Filter::DoReInitAndStart()
+{
+    return Status::OK;
+}
+
 void Filter::ChangeState(FilterState state)
 {
     AutoLock lock(stateMutex_);
@@ -681,6 +696,52 @@ Status Filter::WaitAllState(FilterState state)
         }
     }
     return res;
+}
+
+Status Filter::ReleaseOnMuted()
+{
+    if (filterTask_) {
+        MEDIA_LOG_I("ReleaseOnMuted Async");
+        filterTask_->SubmitJobOnce([this] {
+            Status ret = DoReleaseOnMuted();
+            SetErrCode(ret);
+            ChangeState(ret == Status::OK ? FilterState::CREATED : FilterState::ERROR);
+            if (ret == Status::OK) {
+                MEDIA_LOG_I("ReleaseOnMuted success");
+            }
+        });
+    } else {
+        Status ret = DoReleaseOnMuted();
+        SetErrCode(ret);
+        ChangeState(ret == Status::OK ? FilterState::CREATED : FilterState::ERROR);
+        FALSE_RETURN_V_MSG(ret == Status::OK, ret, "ReleaseOnMuted failed");
+        return ret;
+    }
+
+    return Status::OK;
+}
+
+Status Filter::ReInitAndStart()
+{
+    if (filterTask_) {
+        MEDIA_LOG_I("ReInitAndStart Async");
+        filterTask_->SubmitJobOnce([this] {
+            Status ret = DoReInitAndStart();
+            SetErrCode(ret);
+            ChangeState(ret == Status::OK ? FilterState::RUNNING : FilterState::ERROR);
+            if (ret == Status::OK) {
+                MEDIA_LOG_I("DoReInitAndStart success");
+            }
+        });
+    } else {
+        Status ret = DoReInitAndStart();
+        SetErrCode(ret);
+        ChangeState(ret == Status::OK ? FilterState::RUNNING : FilterState::ERROR);
+        FALSE_RETURN_V_MSG(ret == Status::OK, ret, "ReInitAndStart failed");
+        return ret;
+    }
+
+    return Status::OK;
 }
 
 void Filter::SetErrCode(Status errCode)
