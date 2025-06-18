@@ -67,7 +67,6 @@ declare_args() {
 
   media_foundation_enable_rm_demuxer = false
   media_foundation_enable_cook_audio_decoder = false
-  media_foundation_enable_ac3_audio_decoder = false
 
   # enable ffrt task instead of pthread task
   media_foundation_enable_ffrt = false

@@ -103,11 +103,9 @@ PluginList::PluginList()
     AddAmrnbAudioEncoderPlugins();
     AddMp3AudioEncoderPlugins();
     AddFFmpegMuxerPlugins();
+    AddAc3AudioDecoderPlugins();
 #ifdef SUPPORT_CODEC_COOK
     AddCookAudioDecoderPlugins();
-#endif
-#ifdef SUPPORT_CODEC_AC3
-    AddAc3AudioDecoderPlugins();
 #endif
 }
 
@@ -385,7 +383,6 @@ void PluginList::AddRmDemuxerPlugin()
 }
 #endif
 
-#ifdef SUPPORT_CODEC_AC3
 void PluginList::AddAc3DemuxerPlugin()
 {
     PluginDescription ac3DemuxerPlugin;
@@ -396,7 +393,6 @@ void PluginList::AddAc3DemuxerPlugin()
     ac3DemuxerPlugin.rank = DEFAULT_RANK;
     pluginDescriptionList_.push_back(ac3DemuxerPlugin);
 }
-#endif
 
 void PluginList::AddFFmpegDemuxerPlugins()
 {
@@ -419,11 +415,9 @@ void PluginList::AddFFmpegDemuxerPlugins()
     AddWebvttDemuxerPlugin();
     AddOggDemuxerPlugin();
     AddWavDemuxerPlugin();
+    AddAc3DemuxerPlugin();
 #ifdef SUPPORT_CODEC_RM
     AddRmDemuxerPlugin();
-#endif
-#ifdef SUPPORT_CODEC_AC3
-    AddAc3DemuxerPlugin();
 #endif
 }
 
@@ -563,7 +557,6 @@ void PluginList::AddCookAudioDecoderPlugins()
 }
 #endif
 
-#ifdef SUPPORT_CODEC_AC3
 void PluginList::AddAc3AudioDecoderPlugins()
 {
     PluginDescription ac3AudioDecoderPlugin;
@@ -574,7 +567,6 @@ void PluginList::AddAc3AudioDecoderPlugins()
     ac3AudioDecoderPlugin.rank = DEFAULT_RANK;
     pluginDescriptionList_.push_back(ac3AudioDecoderPlugin);
 }
-#endif
 
 void PluginList::AddAudioServerSinkPlugins()
 {
