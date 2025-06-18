@@ -162,6 +162,18 @@ Status Filter::StartDone()
     return ret;
 }
 
+void Filter::SetIsInPrePausing(bool isInPrePausing)
+{
+    MEDIA_LOG_D("SetIsInPrePausing %{public}s, pState:%{public}d, isInPrePausing:%{public}d",
+        name_.c_str(), curState_, isInPrePausing);
+    DoSetIsInPrePausing(isInPrePausing);
+    for (auto iter : nextFiltersMap_) {
+        for (auto filter : iter.second) {
+            FALSE_GOON_NOEXEC(filter, filter->SetIsInPrePausing(isInPrePausing));
+        }
+    }
+}
+
 Status Filter::Pause()
 {
     MEDIA_LOG_D("Pause %{public}s, pState:%{public}d", name_.c_str(), curState_);

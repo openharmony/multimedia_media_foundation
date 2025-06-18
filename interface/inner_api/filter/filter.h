@@ -253,8 +253,26 @@ public:
         (void)isMuted;
         return Status::OK;
     }
+
+    // When the AudioDecoderFilter runs in non async mode, we should call this function to notify AudioSink
+    // to cache the decoded audio frames temporarily to accelerate the Pause/Stop procedure, especially for APE/FLAC.
+    // Otherwise, it will take long time about 1.5 seconds in average to perform Pause/Stop procedure,
+    // as that one encoded audio buffer may produce many decoded audio frames to be consumed.
+    // Call this function in Pause/Stop/Start/Resume procedure of DemuxerFilter.
+    virtual void SetIsInPrePausing(bool isInPrePausing) final;
+
 protected:
-    inline bool IsAsyncMode()
+    virtual void DoSetIsInPrePausing(bool isInPrePausing)
+    {
+        (void)isInPrePausing;
+    }
+
+    inline void SetIsAsyncMode(bool isAsyncMode)
+    {
+        isAsyncMode_ = isAsyncMode;
+    }
+
+    inline bool IsAsyncMode() const
     {
         return isAsyncMode_;
     }
