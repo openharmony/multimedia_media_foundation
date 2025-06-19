@@ -18,8 +18,8 @@
 #ifndef HISTREAMER_PLUGIN_CODEC_BUFFER_H
 #define HISTREAMER_PLUGIN_CODEC_BUFFER_H
 
-#include "v3_0/icodec_component.h"
-#include "v3_0/codec_types.h"
+#include "v4_0/icodec_component.h"
+#include "v4_0/codec_types.h"
 #include "codec_omx_ext.h"
 #include "plugin/common/plugin_buffer.h"
 #include "plugin/common/share_memory.h"
@@ -29,7 +29,7 @@ namespace Media {
 namespace Plugin {
 namespace CodecAdapter {
 
-namespace CodecHDI = OHOS::HDI::Codec::V3_0;
+namespace CodecHDI = OHOS::HDI::Codec::V4_0;
 
 class CodecBuffer {
 public:

@@ -36,7 +36,6 @@ ohos_source_set("histreamer_recorder") {
   subsystem_name = "multimedia"
   part_name = "media_foundation"
   if (media_foundation_enable_recorder) {
-    include_dirs = [ "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter" ]
     sources = [
       "internal/state.cpp",
       "internal/state_machine.cpp",
@@ -59,6 +58,7 @@ ohos_source_set("histreamer_recorder") {
       external_deps = [
         "graphic_surface:surface",
         "hilog:libhilog",
+        "hitrace:hitrace_meter",
       ]
     }
   }

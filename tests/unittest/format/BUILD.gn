@@ -67,6 +67,10 @@ ohos_unittest("format_capi_unit_test") {
   ]
 
   public_deps = [ "../common:media_foundation_capi_unit_test" ]
+  external_deps = [
+    "c_utils:utils",
+    "ipc:ipc_single",
+  ]
 }
 
 ##################################################################################################################
@@ -87,6 +91,10 @@ ohos_unittest("format_inner_unit_test") {
     "MEDIA_OHOS",
   ]
   public_deps = [ "../common:media_foundation_inner_unit_test" ]
+  external_deps = [
+    "c_utils:utils",
+    "ipc:ipc_single",
+  ]
 }
 
 ##################################################################################################################
@@ -107,4 +115,8 @@ ohos_unittest("format_unit_channel_layout_test") {
     "MEDIA_OHOS",
   ]
   public_deps = [ "../common:media_foundation_inner_unit_test" ]
+  external_deps = [
+    "c_utils:utils",
+    "ipc:ipc_single",
+  ]
 }

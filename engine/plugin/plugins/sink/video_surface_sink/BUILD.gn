@@ -48,6 +48,7 @@ ohos_source_set("std_video_surface_sink") {
       "graphic_surface:surface",
       "graphic_surface:sync_fence",
       "hilog:libhilog",
+      "hitrace:hitrace_meter",
       "init:libbeget_proxy",
       "ipc:ipc_core",
     ]

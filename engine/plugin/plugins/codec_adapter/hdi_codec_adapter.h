@@ -24,15 +24,15 @@
 #include "codec_port.h"
 #include "foundation/utils/blocking_queue.h"
 #include "plugin/interface/codec_plugin.h"
-#include "v3_0/icodec_callback.h"
-#include "v3_0/icodec_component.h"
+#include "v4_0/icodec_callback.h"
+#include "v4_0/icodec_component.h"
 
 namespace OHOS {
 namespace Media {
 namespace Plugin {
 namespace CodecAdapter {
 
-namespace CodecHDI = OHOS::HDI::Codec::V3_0;
+namespace CodecHDI = OHOS::HDI::Codec::V4_0;
 
 class HdiCodecAdapter : public CodecPlugin, public std::enable_shared_from_this<HdiCodecAdapter> {
 public:

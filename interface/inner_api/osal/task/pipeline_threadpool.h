@@ -62,7 +62,7 @@ public:
     void DestroyThread(const std::string &groupId);
 private:
     PipeLineThreadPool() = default;
-    ~PipeLineThreadPool() = default;
+    ~PipeLineThreadPool();
     std::map<std::string, std::shared_ptr<std::list<std::shared_ptr<PipeLineThread>>>> workerGroupMap;
     Mutex mutex_;
 };
