@@ -180,9 +180,6 @@ void MediaMonitorPolicy::WriteBehaviorEventExpansion(EventId eventId, std::share
             setAppNameToEventVector("CLIENT_UID", bean);
             mediaEventBaseWriter_.WriteExcludeOutputDevice(bean);
             break;
-        case ADD_REMOVE_CUSTOMIZED_TONE:
-            mediaEventBaseWriter_.WriteCustomizedToneChange(bean);
-            break;
         case SYSTEM_TONE_PLAYBACK:
             systemTonePlayEventVector_.push_back(bean);
             TriggerSystemTonePlaybackEvent(bean);
@@ -353,6 +350,9 @@ void MediaMonitorPolicy::WriteAggregationEvent(EventId eventId, std::shared_ptr<
             break;
         case MUTED_CAPTURE_STATS:
             mediaEventBaseWriter_.WriteMutedCapture(bean);
+            break;
+        case ADD_REMOVE_CUSTOMIZED_TONE:
+            mediaEventBaseWriter_.WriteCustomizedToneChange(bean);
             break;
         default:
             WriteAggregationEventExpansion(eventId, bean);
