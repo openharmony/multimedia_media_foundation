@@ -21,7 +21,7 @@
 
 namespace {
 constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "AVBufferQueue" };
-static constexpr uint8_t LOG_LIMIT_HUNDRED = 100;
+static constexpr uint8_t LOG_LIMIT_HUNDRED = 64;
 }
 
 namespace OHOS {
