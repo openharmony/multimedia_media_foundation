@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023-2023 Huawei Device Co., Ltd.
+ * Copyright (c) 2023-2025 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -189,6 +189,7 @@ public:
         tagCharSeq == Tag::MEDIA_HAS_AUDIO or
         tagCharSeq == Tag::MEDIA_HAS_SUBTITLE or
         tagCharSeq == Tag::MEDIA_HAS_TIMEDMETA or
+        tagCharSeq == Tag::MEDIA_HAS_AUXILIARY or
         tagCharSeq == Tag::MEDIA_END_OF_STREAM or
         tagCharSeq == Tag::AV_CODEC_ENABLE_SYNC_MODE or
         tagCharSeq == Tag::VIDEO_ENCODER_PER_FRAME_MARK_LTR or
