@@ -56,6 +56,7 @@ enum struct EventType : uint32_t {
     EVENT_VIDEO_FIRST_FRAME,
     EVENT_FLV_AUTO_SELECT_BITRATE,
     EVENT_RELEASE_VIDEO_DECODER,
+    EVENT_VIDEO_NO_NEED_INIT,
 };
 
 // DFX events and infos reported from filters, modules, and plugins
