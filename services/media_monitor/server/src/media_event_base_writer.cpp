@@ -490,7 +490,7 @@ void MediaEventBaseWriter::WriteMutedCapture(std::shared_ptr<EventBean> &bean)
 
 void MediaEventBaseWriter::WriteCustomizedToneChange(std::shared_ptr<EventBean> &bean)
 {
-    MEDIA_LOG_D("Write customzed tone change subscription");
+    MEDIA_LOG_I("Write customzed tone change subscription");
     if (bean == nullptr) {
         MEDIA_LOG_E("eventBean is nullptr");
         return;

@@ -351,9 +351,6 @@ void MediaMonitorPolicy::WriteAggregationEvent(EventId eventId, std::shared_ptr<
         case MUTED_CAPTURE_STATS:
             mediaEventBaseWriter_.WriteMutedCapture(bean);
             break;
-        case ADD_REMOVE_CUSTOMIZED_TONE:
-            mediaEventBaseWriter_.WriteCustomizedToneChange(bean);
-            break;
         default:
             WriteAggregationEventExpansion(eventId, bean);
             break;
@@ -366,6 +363,9 @@ void MediaMonitorPolicy::WriteAggregationEventExpansion(EventId eventId, std::sh
         case STREAM_OCCUPANCY:
             SetBundleNameToEvent("UID", bean, "PKGNAME");
             mediaEventBaseWriter_.WriteStreamOccupancy(bean);
+            break;
+        case ADD_REMOVE_CUSTOMIZED_TONE:
+            mediaEventBaseWriter_.WriteCustomizedToneChange(bean);
             break;
         default:
             break;
