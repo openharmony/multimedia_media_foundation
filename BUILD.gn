@@ -15,7 +15,6 @@ import("//foundation/multimedia/media_foundation/config.gni")
 config("histreamer_presets") {
   include_dirs = [
     "//foundation/multimedia/media_foundation/engine",
-    "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter",
   ]
   defines = [
     "HST_ANY_WITH_NO_RTTI",

@@ -61,6 +61,7 @@ ohos_source_set("ffmpeg_adapter_common") {
     external_deps = [
       "graphic_surface:surface",
       "hilog:libhilog",
+      "hitrace:hitrace_meter",
       "ipc:ipc_core",
     ]
   }
@@ -88,6 +89,7 @@ ohos_source_set("ffmpeg_audio_decoders") {
     external_deps = [
       "graphic_surface:surface",
       "hilog:libhilog",
+      "hitrace:hitrace_meter",
       "ipc:ipc_core",
     ]
   }
@@ -122,6 +124,7 @@ ohos_source_set("ffmpeg_demuxers") {
     external_deps = [
       "graphic_surface:surface",
       "hilog:libhilog",
+      "hitrace:hitrace_meter",
       "ipc:ipc_core",
     ]
   }
@@ -154,6 +157,7 @@ ohos_source_set("ffmpeg_audio_encoders") {
     external_deps = [
       "graphic_surface:surface",
       "hilog:libhilog",
+      "hitrace:hitrace_meter",
       "ipc:ipc_core",
     ]
   }
@@ -182,6 +186,7 @@ ohos_source_set("ffmpeg_video_decoders") {
     external_deps = [
       "graphic_surface:surface",
       "hilog:libhilog",
+      "hitrace:hitrace_meter",
       "ipc:ipc_core",
     ]
   }
@@ -212,6 +217,7 @@ ohos_source_set("ffmpeg_video_encoders") {
     external_deps = [
       "graphic_surface:surface",
       "hilog:libhilog",
+      "hitrace:hitrace_meter",
       "ipc:ipc_core",
     ]
   }
@@ -242,6 +248,7 @@ ohos_source_set("ffmpeg_muxers") {
     external_deps = [
       "graphic_surface:surface",
       "hilog:libhilog",
+      "hitrace:hitrace_meter",
       "ipc:ipc_core",
     ]
   }

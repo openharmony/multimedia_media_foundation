@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Huawei Device Co., Ltd.
+ * Copyright (C) 2023-2025 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -225,6 +225,17 @@ bool OH_AVFormat_GetBuffer(struct OH_AVFormat *format, const char *key, uint8_t 
     FALSE_RETURN_V_MSG_E(size != nullptr, false, "size is nullptr!");
 
     return format->format_.GetBuffer(key, addr, *size);
+}
+
+bool OH_AVFormat_GetIntBuffer(struct OH_AVFormat *format, const char *key, int32_t **addr, size_t *size)
+{
+    FALSE_RETURN_V_MSG_E(format != nullptr, false, "input format is nullptr!");
+    FALSE_RETURN_V_MSG_E(format->magic_ == MFMagic::MFMAGIC_FORMAT, false, "magic error!");
+    FALSE_RETURN_V_MSG_E(key != nullptr, false, "key is nullptr!");
+    FALSE_RETURN_V_MSG_E(addr != nullptr, false, "addr is nullptr!");
+    FALSE_RETURN_V_MSG_E(size != nullptr, false, "size is nullptr!");
+    
+    return format->format_.GetIntBuffer(key, addr, *size);
 }
 
 const char *OH_AVFormat_DumpInfo(struct OH_AVFormat *format)

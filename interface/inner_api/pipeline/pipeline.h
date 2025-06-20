@@ -58,7 +58,8 @@ public:
     Status RemoveHeadFilter(const std::shared_ptr<Filter>& filter);
 
     Status LinkFilters(const std::shared_ptr<Filter>& preFilter,
-                       const std::vector<std::shared_ptr<Filter>>& filters, StreamType type, bool needTurbo = false);
+                       const std::vector<std::shared_ptr<Filter>>& filters, StreamType type, bool needTurbo = false,
+                       bool needInit = true);
 
     Status UpdateFilters(const std::shared_ptr<Filter>& preFilter,
                          const std::vector<std::shared_ptr<Filter>>& filters, StreamType type);

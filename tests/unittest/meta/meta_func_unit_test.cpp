@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Huawei Device Co., Ltd.
+ * Copyright (C) 2023-2025 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -509,6 +509,7 @@ map<TagType, bool> testBoolData = {
     {Tag::MEDIA_HAS_VIDEO, true},
     {Tag::MEDIA_HAS_AUDIO, false},
     {Tag::MEDIA_HAS_TIMEDMETA, true},
+    {Tag::MEDIA_HAS_AUXILIARY, true},
     {Tag::MEDIA_END_OF_STREAM, true},
     {Tag::VIDEO_IS_HDR_VIVID, true},
     {Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE, true},
@@ -588,7 +589,11 @@ map<TagType, int64_t> testInt64Data = {
     {Tag::BUFFER_DURATION, 1234567890012},
     {Tag::AUDIO_CHANNEL_LAYOUT, static_cast<int64_t>(Plugins::AudioChannelLayout::CH_10POINT2)},
     {Tag::AUDIO_OUTPUT_CHANNEL_LAYOUT, static_cast<int64_t>(Plugins::AudioChannelLayout::HOA_ORDER3_FUMA)},
-    {Tag::VIDEO_DECODER_DESIRED_PRESENT_TIMESTAMP, 1234567890013}
+    {Tag::VIDEO_DECODER_DESIRED_PRESENT_TIMESTAMP, 1234567890013},
+    {Tag::VIDEO_ENCODE_SET_FRAME_PTS, 1234567890014},
+    {Tag::VIDEO_SCENE_TYPE, 1234567890015},
+    {Tag::VIDEO_ENCODER_ENABLE_B_FRAME, 1234567890016},
+    {Tag::VIDEO_ENCODER_MAX_B_FRAME, 1234567890017},
 };
 
 /**

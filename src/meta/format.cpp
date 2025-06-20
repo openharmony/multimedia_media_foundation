@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Huawei Device Co., Ltd.
+ * Copyright (C) 2023-2025 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -306,6 +306,21 @@ bool Format::GetStringValue(const std::string_view &key, std::string &value) con
 bool Format::GetBuffer(const std::string_view &key, uint8_t **addr, size_t &size) const
 {
     using Buf = std::vector<uint8_t>;
+    auto iter = meta_->Find(std::string(key));
+    if ((iter != meta_->end()) && Any::IsSameTypeWith<Buf>(iter->second)) {
+        Any *value = const_cast<Any *>(&(iter->second));
+        if (AnyCast<Buf>(value) != nullptr) {
+            *addr = (AnyCast<Buf>(value))->data();
+            size = (AnyCast<Buf>(value))->size();
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Format::GetIntBuffer(const std::string_view &key, int32_t **addr, size_t &size) const
+{
+    using Buf = std::vector<int32_t>;
     auto iter = meta_->Find(std::string(key));
     if ((iter != meta_->end()) && Any::IsSameTypeWith<Buf>(iter->second)) {
         Any *value = const_cast<Any *>(&(iter->second));

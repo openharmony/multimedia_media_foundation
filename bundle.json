@@ -89,7 +89,8 @@
               "openmax",
               "image_framework",
               "qos_manager",
-              "resource_schedule_service"
+              "resource_schedule_service",
+              "memory_utils"
           ]
         },
         "build": {

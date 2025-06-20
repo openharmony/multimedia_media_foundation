@@ -36,7 +36,6 @@ config("histreamer_player_config") {
 
 if (hst_is_lite_sys) {
   source_set("histreamer_player") {
-    include_dirs = [ "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter" ]
     sources = [
       "//foundation/multimedia/media_foundation/engine/scene/player/internal/state.cpp",
       "//foundation/multimedia/media_foundation/engine/scene/player/internal/state_machine.cpp",
@@ -61,7 +60,6 @@ if (hst_is_lite_sys) {
   ohos_source_set("histreamer_player") {
     subsystem_name = "multimedia"
     part_name = "media_foundation"
-    include_dirs = [ "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter" ]
     sources = [
       "//foundation/multimedia/media_foundation/engine/scene/player/internal/state.cpp",
       "//foundation/multimedia/media_foundation/engine/scene/player/internal/state_machine.cpp",
@@ -85,6 +83,7 @@ if (hst_is_lite_sys) {
     external_deps = [
       "graphic_surface:surface",
       "hilog:libhilog",
+      "hitrace:hitrace_meter",
     ]
   }
 }

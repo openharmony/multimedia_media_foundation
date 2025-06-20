@@ -45,6 +45,7 @@ ohos_source_set("codec_filters") {
     external_deps = [
       "graphic_surface:surface",
       "hilog:libhilog",
+      "hitrace:hitrace_meter",
       "ipc:ipc_single",
     ]
   }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2021-2025 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -94,6 +94,7 @@ public:
     static constexpr const char MEDIA_HAS_AUDIO[] = "has_audio";               ///< has audio track in file
     static constexpr const char MEDIA_HAS_SUBTITLE[] = "has_subtitle";         ///< has subtitle track in file
     static constexpr const char MEDIA_HAS_TIMEDMETA[] = "has_timed_meta";      ///< has timed metadata track in file
+    static constexpr const char MEDIA_HAS_AUXILIARY[] = "has_auxiliary";       ///< has auxiliary track in file
     static constexpr const char MEDIA_COVER[] = "cover";                       ///< cover in file
     static constexpr const char MEDIA_PROTOCOL_TYPE[] = "media.protocol.type"; ///< Source protocol type
     static constexpr const char MEDIA_PROFILE[] = "codec_profile";             ///< codec profile, Compatible 4.0
@@ -198,6 +199,8 @@ public:
         "video_encode_bitrate_mode"; ///<  Key for video encode bitrate mode, see {link @VideoEncodeBitrateMode}
     static constexpr const char VIDEO_ENCODE_B_FRAME_GOP_MODE[] =
         "video_encode_b_frame_gop_mode"; ///<  Key for video encode gop mode, see {link @VideoEncodeBFrameGopMode}
+    static constexpr const char VIDEO_ENCODE_SET_FRAME_PTS[] =
+        "video_encode_set_frame_pts"; ///<  Key for video encode set frame pts.
     static constexpr const char VIDEO_SCENE_TYPE[] =
         "video_scene_type"; ///<  Key for video encode carmera-recoder mode, see {link @VideoSceneType}
     static constexpr const char VIDEO_ENCODER_ENABLE_B_FRAME[] =

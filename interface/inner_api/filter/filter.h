@@ -131,7 +131,7 @@ public:
     virtual void Init(const std::shared_ptr<EventReceiver>& receiver, const std::shared_ptr<FilterCallback>& callback,
                       const std::shared_ptr<InterruptMonitor>& monitor);
 
-    virtual void LinkPipeLine(const std::string &groupId, bool needTurbo = false) final;
+    virtual void LinkPipeLine(const std::string &groupId, bool needTurbo = false, bool needInit = true) final;
 
     virtual Status Prepare() final;
 
@@ -253,8 +253,34 @@ public:
         (void)isMuted;
         return Status::OK;
     }
+    
+    virtual Status ReleaseOnMuted() final;
+
+    virtual Status ReInitAndStart() final;
+
+    virtual Status DoReleaseOnMuted();
+
+    virtual Status DoReInitAndStart();
+
+    // When the AudioDecoderFilter runs in non async mode, we should call this function to notify AudioSink
+    // to cache the decoded audio frames temporarily to accelerate the Pause/Stop procedure, especially for APE/FLAC.
+    // Otherwise, it will take long time about 1.5 seconds in average to perform Pause/Stop procedure,
+    // as that one encoded audio buffer may produce many decoded audio frames to be consumed.
+    // Call this function in Pause/Stop/Start/Resume procedure of DemuxerFilter.
+    virtual void SetIsInPrePausing(bool isInPrePausing) final;
+
 protected:
-    inline bool IsAsyncMode()
+    virtual void DoSetIsInPrePausing(bool isInPrePausing)
+    {
+        (void)isInPrePausing;
+    }
+
+    inline void SetIsAsyncMode(bool isAsyncMode)
+    {
+        isAsyncMode_ = isAsyncMode;
+    }
+
+    inline bool IsAsyncMode() const
     {
         return isAsyncMode_;
     }
