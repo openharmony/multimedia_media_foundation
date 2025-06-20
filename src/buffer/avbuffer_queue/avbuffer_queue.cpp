@@ -21,6 +21,7 @@
 
 namespace {
 constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "AVBufferQueue" };
+static constexpr uint8_t LOG_LIMIT_LOW_FREQ = 64;
 }
 
 namespace OHOS {
@@ -615,7 +616,8 @@ Status AVBufferQueueImpl::AttachBuffer(std::shared_ptr<AVBuffer>& buffer, bool i
 
 Status AVBufferQueueImpl::DetachBuffer(uint64_t uniqueId, bool force)
 {
-    FALSE_RETURN_V(cachedBufferMap_.find(uniqueId) != cachedBufferMap_.end(), Status::ERROR_INVALID_BUFFER_ID);
+    FALSE_RETURN_V_NOLOG(cachedBufferMap_.find(uniqueId) != cachedBufferMap_.end(),
+        Status::ERROR_INVALID_BUFFER_ID);
 
     const auto& ele = cachedBufferMap_[uniqueId];
 
@@ -626,7 +628,8 @@ Status AVBufferQueueImpl::DetachBuffer(uint64_t uniqueId, bool force)
         } else if (ele.state == AVBUFFER_STATE_ACQUIRED) {
             MEDIA_LOG_D("detach buffer(%llu) on state acquired", uniqueId);
         } else {
-            MEDIA_LOG_W("detach buffer(%llu) on state %d forbidden", uniqueId, ele.state);
+            MEDIA_LOGW_LIMIT(LOG_LIMIT_LOW_FREQ, "detach buffer(" PUBLIC_LOG_U64 ") on state "
+                PUBLIC_LOG_D32 "forbidden", uniqueId, ele.state);
             return Status::ERROR_INVALID_BUFFER_STATE;
         }
     }
