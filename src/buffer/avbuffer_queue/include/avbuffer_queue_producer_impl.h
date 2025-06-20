@@ -79,6 +79,8 @@ public:
 
     Status RequestBuffer(std::shared_ptr<AVBuffer>& buffer,
                           const AVBufferConfig& config, int32_t timeoutMs) override;
+    Status RequestBufferWaitUs(std::shared_ptr<AVBuffer>& buffer,
+                          const AVBufferConfig& config, int64_t timeoutUs) override;
     Status PushBuffer(const std::shared_ptr<AVBuffer>& buffer, bool available) override;
     Status ReturnBuffer(const std::shared_ptr<AVBuffer>& buffer, bool available) override;
 
