@@ -87,6 +87,7 @@ private:
     void AddAmrnbAudioEncoderPlugins();
     void AddMp3AudioEncoderPlugins();
     void AddFFmpegMuxerPlugins();
+    void AddFFmpegFlacMuxerplugins();
     void AddAudioVendorAacEncodersPlugin();
 #ifdef SUPPORT_CODEC_RM
     void AddRmDemuxerPlugin();

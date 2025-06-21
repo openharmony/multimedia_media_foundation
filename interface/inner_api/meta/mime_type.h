@@ -59,6 +59,7 @@ public:
     static constexpr const char MEDIA_MP3[] = "media/mp3";
     static constexpr const char MEDIA_WAV[] = "media/wav";
     static constexpr const char MEDIA_AAC[] = "media/aac";
+    static constexpr const char MEDIA_FLAC[] = "media/flac";
 
     static constexpr const char TEXT_SUBRIP[] = "application/x-subrip";
     static constexpr const char TEXT_WEBVTT[] = "text/vtt";

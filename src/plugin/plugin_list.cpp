@@ -106,6 +106,7 @@ PluginList::PluginList()
     AddAmrnbAudioEncoderPlugins();
     AddMp3AudioEncoderPlugins();
     AddFFmpegMuxerPlugins();
+    AddFFmpegFlacMuxerplugins();
     AddAc3AudioDecoderPlugins();
 #ifdef SUPPORT_CODEC_COOK
     AddCookAudioDecoderPlugins();
@@ -756,6 +757,17 @@ void PluginList::AddMp3AudioEncoderPlugins()
     mp3AudioEncoderPlugin.cap = "audio/mpeg";
     mp3AudioEncoderPlugin.rank = DEFAULT_RANK;
     pluginDescriptionList_.push_back(mp3AudioEncoderPlugin);
+}
+
+void PluginList::AddFFmpegFlacMuxerplugins()
+{
+    PluginDescription flacMuxerPlugin;
+    flacMuxerPlugin.pluginName = "ffmpegMux_flac";
+    flacMuxerPlugin.packageName = "FFmpegMuxer";
+    flacMuxerPlugin.pluginType = PluginType::MUXER;
+    flacMuxerPlugin.cap = "media/flac";
+    flacMuxerPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(flacMuxerPlugin);
 }
 
 void PluginList::AddFFmpegMuxerPlugins()
