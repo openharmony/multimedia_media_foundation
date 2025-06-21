@@ -21,6 +21,8 @@
 
 namespace {
 constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "AVBufferQueue" };
+static constexpr uint8_t LOG_LIMIT_LOW_FREQ = 64;
+constexpr int64_t MILLISECONDS_TO_MICROSECONDS = 1000;
 }
 
 namespace OHOS {
@@ -307,15 +309,15 @@ Status AVBufferQueueImpl::CheckConfig(const AVBufferConfig& config)
     return Status::OK;
 }
 
-bool AVBufferQueueImpl::wait_for(std::unique_lock<std::mutex>& lock, int32_t timeoutMs)
+bool AVBufferQueueImpl::wait_for(std::unique_lock<std::mutex>& lock, int64_t timeoutUs)
 {
-    MEDIA_LOG_D("wait for free buffer, timeout = %d", timeoutMs);
-    if (timeoutMs > 0) {
+    MEDIA_LOG_D("wait for free buffer, timeout = %d", timeoutUs);
+    if (timeoutUs > 0) {
         return requestCondition.wait_for(
-            lock, std::chrono::milliseconds(timeoutMs), [this]() {
+            lock, std::chrono::microseconds(timeoutUs), [this]() {
                 return !freeBufferList_.empty() || (GetCachedBufferCount() < GetQueueSize());
             });
-    } else if (timeoutMs < 0) {
+    } else if (timeoutUs < 0) {
         requestCondition.wait(lock);
     }
     return true;
@@ -323,6 +325,12 @@ bool AVBufferQueueImpl::wait_for(std::unique_lock<std::mutex>& lock, int32_t tim
 
 Status AVBufferQueueImpl::RequestBuffer(
     std::shared_ptr<AVBuffer>& buffer, const AVBufferConfig& config, int32_t timeoutMs)
+{
+    return RequestBufferWaitUs(buffer, config, static_cast<int64_t>(timeoutMs) * MILLISECONDS_TO_MICROSECONDS);
+}
+
+Status AVBufferQueueImpl::RequestBufferWaitUs(
+    std::shared_ptr<AVBuffer>& buffer, const AVBufferConfig& config, int64_t timeoutUs)
 {
     auto configCopy = config;
     if (config.memoryType == MemoryType::UNKNOWN_MEMORY) {
@@ -344,8 +352,8 @@ Status AVBufferQueueImpl::RequestBuffer(
 
     // check queue size
     if (GetCachedBufferCount() >= GetQueueSize()) {
-        if (!wait_for(lock, timeoutMs)) {
-            MEDIA_LOG_D("FALSE_RETURN_V wait_for(lock, timeoutMs)");
+        if (!wait_for(lock, timeoutUs)) {
+            MEDIA_LOG_D("FALSE_RETURN_V wait_for(lock, timeoutUs)");
             return Status::ERROR_WAIT_TIMEOUT;
         }
         // 被条件唤醒后，再次尝试从freeBufferList中取buffer
@@ -615,7 +623,8 @@ Status AVBufferQueueImpl::AttachBuffer(std::shared_ptr<AVBuffer>& buffer, bool i
 
 Status AVBufferQueueImpl::DetachBuffer(uint64_t uniqueId, bool force)
 {
-    FALSE_RETURN_V(cachedBufferMap_.find(uniqueId) != cachedBufferMap_.end(), Status::ERROR_INVALID_BUFFER_ID);
+    FALSE_RETURN_V_NOLOG(cachedBufferMap_.find(uniqueId) != cachedBufferMap_.end(),
+        Status::ERROR_INVALID_BUFFER_ID);
 
     const auto& ele = cachedBufferMap_[uniqueId];
 
@@ -626,7 +635,8 @@ Status AVBufferQueueImpl::DetachBuffer(uint64_t uniqueId, bool force)
         } else if (ele.state == AVBUFFER_STATE_ACQUIRED) {
             MEDIA_LOG_D("detach buffer(%llu) on state acquired", uniqueId);
         } else {
-            MEDIA_LOG_W("detach buffer(%llu) on state %d forbidden", uniqueId, ele.state);
+            MEDIA_LOGW_LIMIT(LOG_LIMIT_LOW_FREQ, "detach buffer(" PUBLIC_LOG_U64 ") on state "
+                PUBLIC_LOG_D32 "forbidden", uniqueId, ele.state);
             return Status::ERROR_INVALID_BUFFER_STATE;
         }
     }

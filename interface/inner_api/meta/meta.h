@@ -148,7 +148,8 @@ public:
                            tagCharSeq == Tag::DRM_CENC_INFO,
                            std::vector<uint8_t>, AnyValueType::VECTOR_UINT8);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_CHANNEL_LAYOUT or
-                           tagCharSeq == Tag::AUDIO_OUTPUT_CHANNEL_LAYOUT,
+                           tagCharSeq == Tag::AUDIO_OUTPUT_CHANNEL_LAYOUT or
+                           tagCharSeq == Tag::VIDEO_ENCODE_SET_FRAME_PTS,
                            Plugins::AudioChannelLayout, AnyValueType::INT64_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_SAMPLE_FORMAT, Plugins::AudioSampleFormat,
                            AnyValueType::INT32_T);

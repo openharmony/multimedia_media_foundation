@@ -39,6 +39,12 @@ Status AVBufferQueueProducerImpl::RequestBuffer(std::shared_ptr<AVBuffer>& buffe
     return bufferQueue_->RequestBuffer(buffer, config, timeoutMs);
 }
 
+Status AVBufferQueueProducerImpl::RequestBufferWaitUs(
+    std::shared_ptr<AVBuffer> &buffer, const AVBufferConfig &config, int64_t timeoutUs)
+{
+    return bufferQueue_->RequestBufferWaitUs(buffer, config, timeoutUs);
+}
+
 Status AVBufferQueueProducerImpl::PushBuffer(uint64_t uniqueId, bool available)
 {
     return bufferQueue_->PushBuffer(uniqueId, available);
