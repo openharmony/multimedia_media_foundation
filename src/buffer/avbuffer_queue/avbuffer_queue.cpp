@@ -311,7 +311,7 @@ Status AVBufferQueueImpl::CheckConfig(const AVBufferConfig& config)
 
 bool AVBufferQueueImpl::wait_for(std::unique_lock<std::mutex>& lock, int64_t timeoutUs)
 {
-    MEDIA_LOG_D("wait for free buffer, timeout = %d", timeoutUs);
+    MEDIA_LOG_D("wait for free buffer, timeout = %{public}" PRId64, timeoutUs);
     if (timeoutUs > 0) {
         return requestCondition.wait_for(
             lock, std::chrono::microseconds(timeoutUs), [this]() {
