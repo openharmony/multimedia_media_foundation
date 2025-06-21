@@ -452,7 +452,11 @@ void MediaEventBaseWriter::WriteAudioRouteChange(std::shared_ptr<EventBean> &bea
         "TIMESTAMP", bean->GetUint64Value("TIMESTAMP"),
         "DEVICE_TYPE_BEFORE_CHANGE", static_cast<uint>(bean->GetIntValue("DEVICE_TYPE_BEFORE_CHANGE")),
         "DEVICE_TYPE_AFTER_CHANGE", static_cast<uint>(bean->GetIntValue("DEVICE_TYPE_AFTER_CHANGE")),
-        "REASON", static_cast<uint>(bean->GetIntValue("REASON")));
+        "REASON", static_cast<uint>(bean->GetIntValue("REASON")),
+        "PRE_AUDIO_SCENE", static_cast<int8_t>(bean->GetIntValue("PRE_AUDIO_SCENE")),
+        "CUR_AUDIO_SCENE", static_cast<int8_t>(bean->GetIntValue("CUR_AUDIO_SCENE")),
+        "DEVICE_LIST", bean->GetStringValue("DEVICE_LIST"),
+        "ROUTER_TYPE", static_cast<uint8_t>(bean->GetIntValue("ROUTER_TYPE")));
 #endif
 }
 
