@@ -265,6 +265,7 @@ BundleInfo MediaMonitorPolicy::GetBundleInfo(int32_t appUid)
     }
     MediaMonitorWrapper mediaMonitorWrapper;
     BundleInfo bundleInfo;
+    bundleInfo.appName = "uid:" + std::to_string(appUid); // if no name found, use uid as default
     MediaMonitorErr err = mediaMonitorWrapper.GetBundleInfo(appUid, &bundleInfo);
     if (err != MediaMonitorErr::SUCCESS) {
         return bundleInfo;
@@ -286,6 +287,15 @@ void MediaMonitorPolicy::WriteFaultEvent(EventId eventId, std::shared_ptr<EventB
             break;
         case LOAD_EFFECT_ENGINE_ERROR:
             mediaEventBaseWriter_.WriteLoadEffectEngineError(bean);
+            break;
+        case APP_WRITE_MUTE:
+            bundleInfo = GetBundleInfo(bean->GetIntValue("UID"));
+            bean->Add("APP_BUNDLE_NAME", bundleInfo.appName);
+            MEDIA_LOG_I("Handle mute event of app:" PUBLIC_LOG_S, bundleInfo.appName.c_str());
+            mediaEventBaseWriter_.WriteAppWriteMute(bean);
+            break;
+        case HDI_EXCEPTION:
+            mediaEventBaseWriter_.WriteHdiException(bean);
             break;
         case JANK_PLAYBACK:
             // update bundle name

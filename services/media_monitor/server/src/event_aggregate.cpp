@@ -60,6 +60,8 @@ void EventAggregate::WriteEvent(std::shared_ptr<EventBean> &bean)
         case HEADSET_CHANGE:
         case AUDIO_ROUTE_CHANGE:
         case LOAD_CONFIG_ERROR:
+        case APP_WRITE_MUTE:
+        case HDI_EXCEPTION:
         case AUDIO_SERVICE_STARTUP_ERROR:
         case STREAM_STANDBY:
         case SMARTPA_STATUS:

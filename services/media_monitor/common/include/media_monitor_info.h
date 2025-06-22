@@ -72,6 +72,8 @@ enum EventId {
     ADD_REMOVE_CUSTOMIZED_TONE = 30,
     RECORD_ERROR = 31,
     STREAM_OCCUPANCY = 32,
+    APP_WRITE_MUTE = 33,
+    HDI_EXCEPTION = 34,
 };
 
 enum EventType {

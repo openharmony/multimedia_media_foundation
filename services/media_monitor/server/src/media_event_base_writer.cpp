@@ -194,6 +194,44 @@ void MediaEventBaseWriter::WriteLoadEffectEngineError(std::shared_ptr<EventBean>
 #endif
 }
 
+void MediaEventBaseWriter::WriteAppWriteMute(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("app write mute");
+    if (bean == nullptr) {
+        MEDIA_LOG_E("eventBean is nullptr");
+        return;
+    }
+#ifdef MONITOR_ENABLE_HISYSEVENT
+    HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "APP_WRITE_MUTE",
+        HiviewDFX::HiSysEvent::EventType::STATISTIC,
+        "APP_BUNDLE_NAME", bean->GetStringValue("APP_BUNDLE_NAME"),
+        "STREAM_TYPE", static_cast<uint8_t>(bean->GetIntValue("STREAM_TYPE")),
+        "SESSION_ID", static_cast<uint32_t>(bean->GetIntValue("SESSION_ID")),
+        "STREAM_VOLUME", bean->GetFloatValue("STREAM_VOLUME"),
+        "MUTE_STATE", static_cast<uint8_t>(bean->GetIntValue("MUTE_STATE")),
+        "APP_BACKGROUND_STATE", static_cast<uint8_t>(bean->GetIntValue("APP_BACKGROUND_STATE")),
+        "MUTE_PLAY_START_TIME", bean->GetUint64Value("MUTE_PLAY_START_TIME"),
+        "MUTE_PLAY_DURATION", static_cast<uint32_t>(bean->GetIntValue("MUTE_PLAY_DURATION")));
+#endif
+}
+
+void MediaEventBaseWriter::WriteHdiException(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Write Hdi Exception error");
+    if (bean == nullptr) {
+        MEDIA_LOG_E("eventBean is nullptr");
+        return;
+    }
+#ifdef MONITOR_ENABLE_HISYSEVENT
+    HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "HDI_EXCEPTION",
+        HiviewDFX::HiSysEvent::EventType::FAULT,
+        "HDI_TYPE", static_cast<uint8_t>(bean->GetIntValue("HDI_TYPE")),
+        "ERROR_CASE", static_cast<uint32_t>(bean->GetIntValue("ERROR_CASE")),
+        "ERROR_MSG", bean->GetIntValue("ERROR_MSG"),
+        "ERROR_DESCRIPTION", bean->GetStringValue("ERROR_DESCRIPTION"));
+#endif
+}
+
 void MediaEventBaseWriter::WriteJankPlaybackError(std::shared_ptr<EventBean> &bean)
 {
     MEDIA_LOG_D("Write jank playback error");
