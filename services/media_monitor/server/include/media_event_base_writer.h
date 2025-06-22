@@ -50,6 +50,8 @@ public:
 
     void WriteLoadConfigError(std::shared_ptr<EventBean> &bean);
     void WriteLoadEffectEngineError(std::shared_ptr<EventBean> &bean);
+    void WriteAppWriteMute(std::shared_ptr<EventBean> &bean);
+    void WriteHdiException(std::shared_ptr<EventBean> &bean);
     void WriteJankPlaybackError(std::shared_ptr<EventBean> &bean);
     void WriteAudioStartupError(std::shared_ptr<EventBean> &bean);
     void WriteStreamExhastedError(std::shared_ptr<EventBean> &bean);
