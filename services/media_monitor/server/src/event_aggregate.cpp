@@ -65,6 +65,7 @@ void EventAggregate::WriteEvent(std::shared_ptr<EventBean> &bean)
         case AUDIO_SERVICE_STARTUP_ERROR:
         case STREAM_STANDBY:
         case SMARTPA_STATUS:
+        case DB_ACCESS_EXCEPTION:
         case AI_VOICE_NOISE_SUPPRESSION:
         case LOAD_EFFECT_ENGINE_ERROR:
         case SYSTEM_TONE_PLAYBACK:

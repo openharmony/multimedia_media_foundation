@@ -288,6 +288,9 @@ void MediaMonitorPolicy::WriteFaultEvent(EventId eventId, std::shared_ptr<EventB
         case LOAD_EFFECT_ENGINE_ERROR:
             mediaEventBaseWriter_.WriteLoadEffectEngineError(bean);
             break;
+        case DB_ACCESS_EXCEPTION:
+            mediaEventBaseWriter_.WriteDbAccessException(bean);
+            break;
         case APP_WRITE_MUTE:
             bundleInfo = GetBundleInfo(bean->GetIntValue("UID"));
             bean->Add("APP_BUNDLE_NAME", bundleInfo.appName);

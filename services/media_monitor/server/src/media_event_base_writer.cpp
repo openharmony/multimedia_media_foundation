@@ -498,6 +498,23 @@ void MediaEventBaseWriter::WriteAudioRouteChange(std::shared_ptr<EventBean> &bea
 #endif
 }
 
+void MediaEventBaseWriter::WriteDbAccessException(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Write db access exception");
+    if (bean == nullptr) {
+        MEDIA_LOG_E("eventBean is nullptr");
+        return;
+    }
+#ifdef MONITOR_ENABLE_HISYSEVENT
+    HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "DB_ACCESS_EXCEPTION",
+        HiviewDFX::HiSysEvent::EventType::FAULT,
+        "DB_TYPE", bean->GetStringValue("DB_TYPE"),
+        "ERROR_CASE", static_cast<uint32_t>(bean->GetIntValue("ERROR_CASE")),
+        "ERROR_MSG", bean->GetIntValue("ERROR_MSG"),
+        "ERROR_DESCRIPTION", bean->GetStringValue("ERROR_DESCRIPTION"));
+#endif
+}
+
 void MediaEventBaseWriter::WriteFocusMigrate(std::shared_ptr<EventBean> &bean)
 {
     MEDIA_LOG_D("Write focus migrate");

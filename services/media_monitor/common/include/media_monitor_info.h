@@ -74,6 +74,7 @@ enum EventId {
     STREAM_OCCUPANCY = 32,
     APP_WRITE_MUTE = 33,
     HDI_EXCEPTION = 34,
+    DB_ACCESS_EXCEPTION = 35,
 };
 
 enum EventType {
