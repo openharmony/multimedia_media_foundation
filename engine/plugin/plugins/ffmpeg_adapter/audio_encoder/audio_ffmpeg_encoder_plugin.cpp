@@ -402,7 +402,6 @@ void AudioFfmpegEncoderPlugin::FillInFrameCache(const std::shared_ptr<Memory>& m
         for (int i = 1; i < avCodecContext_->channels; i++) {
             cachedFrame_->extended_data[i] = cachedFrame_->extended_data[i - 1] + cachedFrame_->linesize[0];
         }
-        
     } else {
         cachedFrame_->data[0] = sampleData;
         cachedFrame_->extended_data = cachedFrame_->data;
