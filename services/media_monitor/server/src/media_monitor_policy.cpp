@@ -229,7 +229,7 @@ void MediaMonitorPolicy::TriggerSystemTonePlaybackTimeEvent(std::shared_ptr<Even
             return;
         }
         result->timeStamp.push_back(bean->GetUint64Value("TIME_STAMP"));
-        result->systemToneType.push_back(bean->GetIntValue("SYSTEM_TONE_TYPE"));
+        result->systemSoundType.push_back(bean->GetIntValue("SYSTEM_SOUND_TYPE"));
         result->clientUid.push_back(bean->GetIntValue("CLIENT_UID"));
         result->deviceType.push_back(bean->GetIntValue("DEVICE_TYPE"));
         result->errorCode.push_back(bean->GetIntValue("ERROR_CODE"));

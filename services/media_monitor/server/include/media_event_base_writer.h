@@ -24,7 +24,7 @@ namespace MediaMonitor {
 
 struct DfxSystemTonePlaybackResult {
     std::vector<uint64_t> timeStamp{};
-    std::vector<int32_t> systemToneType{};
+    std::vector<int32_t> systemSoundType{};
     std::vector<int32_t> clientUid{};
     std::vector<int32_t> deviceType{};
     std::vector<int32_t> errorCode{};
