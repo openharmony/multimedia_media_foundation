@@ -80,7 +80,6 @@ public:
      */
     static Status Clone(std::shared_ptr<AVBuffer>& srcBuffer, std::shared_ptr<AVBuffer>& dstBuffer);
 
-
     /**
      * @brief Get the AVBufferConfig.
      * @return The config struct of AVBuffer.
