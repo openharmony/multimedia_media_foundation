@@ -75,6 +75,7 @@ enum EventId {
     APP_WRITE_MUTE = 33,
     HDI_EXCEPTION = 34,
     DB_ACCESS_EXCEPTION = 35,
+    DEVICE_CHANGE_EXCEPTION = 36,
 };
 
 enum EventType {
