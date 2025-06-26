@@ -85,6 +85,8 @@ private:
     void AddMp3AudioEncoderPlugins();
     void AddFFmpegMuxerPlugins();
     void AddAudioVendorAacEncodersPlugin();
+    void AddAc3DemuxerPlugin();
+    void AddAc3AudioDecoderPlugins();
 
     std::vector<PluginDescription> pluginDescriptionList_;
 };
