@@ -613,7 +613,7 @@ void MediaEventBaseWriter::WriteSystemTonePlayback(const std::unique_ptr<DfxSyst
     HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "SYSTEM_TONE_PLAYBACK",
         HiviewDFX::HiSysEvent::EventType::BEHAVIOR,
         "TIME_STAMP", result->timeStamp,
-        "SYSTEM_TONE_TYPE", result->systemToneType,
+        "SYSTEM_SOUND_TYPE", result->systemSoundType,
         "CLIENT_UID", result->clientUid,
         "DEVICE_TYPE", result->deviceType,
         "ERROR_CODE", result->errorCode,
