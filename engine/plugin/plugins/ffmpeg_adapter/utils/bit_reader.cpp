@@ -68,7 +68,7 @@ void BitReader::SkipBits(size_t bits)
 bool BitReader::SeekTo(size_t bitPos)
 {
     size_t bytePos = bitPos / 8; // 8
-    if (begin_ + bytePos >= end_) {
+    if (bytePos >= end_ - begin_) {
         return false;
     }
     cur_ = begin_ + bytePos;
