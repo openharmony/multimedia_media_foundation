@@ -74,6 +74,14 @@ public:
     static std::shared_ptr<AVBuffer> CreateAVBuffer();
 
     /**
+     * @brief Create the AVBuffer.
+     * @return The shared pointer of AVBuffer.
+     * @since 6.0
+     */
+    static Status Clone(std::shared_ptr<AVBuffer>& srcBuffer, std::shared_ptr<AVBuffer>& dstBuffer);
+
+
+    /**
      * @brief Get the AVBufferConfig.
      * @return The config struct of AVBuffer.
      * @since 4.1
@@ -115,6 +123,9 @@ public:
     std::shared_ptr<AVMemory> memory_;
 
 private:
+    static void CopyMeta(std::shared_ptr<AVBuffer>& srcBuffer, std::shared_ptr<AVBuffer>& dstBuffer);
+    static Status CopyAVMemory(std::shared_ptr<AVBuffer>& srcBuffer, std::shared_ptr<AVBuffer>& dstBuffer);
+
     AVBuffer();
     Status Init(std::shared_ptr<AVAllocator> allocator, int32_t capacity = 0, int32_t align = 0);
     Status Init(uint8_t *ptr, int32_t capacity, int32_t size = 0);

@@ -267,5 +267,52 @@ bool AVBuffer::ReadFromMessageParcel(MessageParcel &parcel, bool isSurfaceBuffer
 #endif
     return true;
 }
+
+Status AVBuffer::Clone(std::shared_ptr<AVBuffer>& srcBuffer, std::shared_ptr<AVBuffer>& dstBuffer)
+{
+    // copy basic data
+    dstBuffer->pts_ = srcBuffer->pts_;
+    dstBuffer->dts_ = srcBuffer->dts_;
+    dstBuffer->duration_ = srcBuffer->duration_;
+    dstBuffer->flag_ = srcBuffer->flag_;
+
+    CopyMeta(srcBuffer, dstBuffer);
+    if (dstBuffer->flag_ & static_cast<uint32_t>(Plugins::AVBufferFlag::EOS)) {
+        return Status::OK;
+    }
+    return CopyAVMemory(srcBuffer, dstBuffer);
+}
+
+void AVBuffer::CopyMeta(std::shared_ptr<AVBuffer>& srcBuffer, std::shared_ptr<AVBuffer>& dstBuffer)
+{
+    if (srcBuffer->meta_ == nullptr) {
+        dstBuffer->meta_ = nullptr;
+        return;
+    }
+    dstBuffer->meta_ = std::make_shared<Meta>(*(srcBuffer->meta_));
+}
+
+Status AVBuffer::CopyAVMemory(std::shared_ptr<AVBuffer>& srcBuffer, std::shared_ptr<AVBuffer>& dstBuffer)
+{
+    std::shared_ptr<AVMemory>& srcMemory = srcBuffer->memory_;
+    std::shared_ptr<AVMemory>& dstMemory = dstBuffer->memory_;
+    if (!srcMemory || !dstMemory) {
+        return Status::ERROR_NULL_POINT_BUFFER;
+    }
+    if (srcMemory->GetSize() > dstMemory->GetCapacity()) {
+        return Status::ERROR_INVALID_BUFFER_SIZE;
+    }
+
+    errno_t copyRet = memcpy_s(dstMemory->GetAddr(),
+        dstMemory->GetCapacity(),
+        srcMemory->GetAddr() + srcMemory->GetOffset(),
+        srcMemory->GetSize());
+    if (copyRet != EOK) {
+        return Status::ERROR_UNKNOWN;
+    }
+    dstMemory->SetSize(srcMemory->GetSize());
+    dstMemory->SetOffset(srcMemory->GetOffset());
+    return Status::OK;
+}
 } // namespace Media
 } // namespace OHOS
