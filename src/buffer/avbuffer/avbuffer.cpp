@@ -270,6 +270,7 @@ bool AVBuffer::ReadFromMessageParcel(MessageParcel &parcel, bool isSurfaceBuffer
 
 Status AVBuffer::Clone(std::shared_ptr<AVBuffer>& srcBuffer, std::shared_ptr<AVBuffer>& dstBuffer)
 {
+    FALSE_RETURN_V_MSG(srcBuffer != nullptr && dstBuffer != nullptr);
     // copy basic data
     dstBuffer->pts_ = srcBuffer->pts_;
     dstBuffer->dts_ = srcBuffer->dts_;
