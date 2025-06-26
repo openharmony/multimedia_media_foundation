@@ -299,7 +299,7 @@ Status AVBuffer::CopyAVMemory(std::shared_ptr<AVBuffer>& srcBuffer, std::shared_
 {
     std::shared_ptr<AVMemory>& srcMemory = srcBuffer->memory_;
     std::shared_ptr<AVMemory>& dstMemory = dstBuffer->memory_;
-    if (!srcMemory || !dstMemory) {
+    if (!srcMemory || !srcMemory->GetAddr() || !dstMemory || !dstMemory->GetAddr()) {
         return Status::ERROR_NULL_POINT_BUFFER;
     }
     if (srcMemory->GetSize() > dstMemory->GetCapacity()) {
