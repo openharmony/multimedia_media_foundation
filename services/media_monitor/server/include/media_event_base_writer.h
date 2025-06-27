@@ -73,6 +73,7 @@ public:
     void WriteAudioPipeChange(std::shared_ptr<EventBean> &bean);
     void WriteAudioRouteChange(std::shared_ptr<EventBean> &bean);
     void WriteDbAccessException(std::shared_ptr<EventBean> &bean);
+    void WriteDeviceChangeException(std::shared_ptr<EventBean> &bean);
     void WriteFocusMigrate(std::shared_ptr<EventBean> &bean);
     void WriteMutedCapture(std::shared_ptr<EventBean> &bean);
     void WritePlaybackVolume(std::shared_ptr<EventBean> &bean);
