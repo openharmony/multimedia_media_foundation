@@ -54,7 +54,7 @@ static int32_t Stringiness(char* buf, size_t maxLen, const char* name, const T& 
 
 template <typename T>
 static int32_t FixedCapKeyStringiness(char* buf, size_t maxLen, const char* name, const char* typeName,
-                               const Plugin::ValueType& val)
+    const Plugin::ValueType& val)
 {
     int pos = 0;
     auto ret = snprintf_truncated_s(buf, maxLen, "%s:(%s)", name, typeName);
@@ -72,7 +72,7 @@ static int32_t FixedCapKeyStringiness(char* buf, size_t maxLen, const char* name
 
 template<typename T>
 static int32_t IntervalCapKeyStringiness(char* buf, size_t maxLen, const char* name, const char* typeName,
-                                  const Plugin::ValueType& val)
+    const Plugin::ValueType& val)
 {
     int pos = 0;
     auto ret = snprintf_truncated_s(buf, maxLen, "%s:(%s)[", name, typeName);
@@ -96,7 +96,7 @@ static int32_t IntervalCapKeyStringiness(char* buf, size_t maxLen, const char* n
 
 template<typename T>
 static int32_t DiscreteCapKeyStringiness(char* buf, size_t maxLen, const char* name, const char* typeName,
-                                  const Plugin::ValueType& val)
+    const Plugin::ValueType& val)
 {
     int pos = 0;
     auto ret = snprintf_truncated_s(buf, maxLen, "%s:(%s){", name, typeName);
@@ -126,7 +126,7 @@ static int32_t DiscreteCapKeyStringiness(char* buf, size_t maxLen, const char* n
 
 template<typename T>
 static int32_t CapKeyStringiness(char* buf, size_t maxLen, const char* name, const char* typeName,
-                          const Plugin::ValueType& val)
+    const Plugin::ValueType& val)
 {
     if (Plugin::Any::IsSameTypeWith<Plugin::FixedCapability<T>>(val)) {
         return FixedCapKeyStringiness<T>(buf, maxLen, name, typeName, val);
@@ -238,7 +238,7 @@ int32_t Stringiness(char* buf, size_t maxLen, const char* name, const Plugin::Co
 
 template<typename T>
 static int32_t MetaIDStringiness(char* buf, size_t maxLen, const char* name, const char* typeName,
-                          const Plugin::ValueType& val)
+    const Plugin::ValueType& val)
 {
     if (Plugin::Any::IsSameTypeWith<T>(val)) {
         return FixedCapKeyStringiness<T>(buf, maxLen, name, typeName, val);
