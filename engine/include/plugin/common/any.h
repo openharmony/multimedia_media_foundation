@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-#ifndef HISTREAMER_PLUGIN_COMMON_ANY_H
-#define HISTREAMER_PLUGIN_COMMON_ANY_H
+#ifndef HISTREAMER_ENGINE_PLUGIN_COMMON_ANY_H
+#define HISTREAMER_ENGINE_PLUGIN_COMMON_ANY_H
 
 #if defined(__clang__) || defined(__GNUC__)
 #define CPP_STANDARD __cplusplus
@@ -31,6 +31,9 @@
 #include "plugin/common/type_cast_ext.h"
 #include "securec.h"
 
+namespace OHOS {
+namespace Media {
+namespace Plugin {
 namespace {
 template <typename T>
 using decay_t = typename std::decay<T>::type;
@@ -65,9 +68,6 @@ struct IsValidCast {
     static constexpr bool value = std::is_reference<T>::value || std::is_copy_constructible<T>::value;
 };
 } // namespace
-namespace OHOS {
-namespace Media {
-namespace Plugin {
 /**
  * @brief BadAnyCast exception, which is thrown when error occurs in AnyCast
  *
@@ -740,4 +740,4 @@ inline void swap(OHOS::Media::Plugin::Any& lhs, OHOS::Media::Plugin::Any& rhs) n
     lhs.Swap(rhs);
 }
 } // namespace std
-#endif // HISTREAMER_PLUGIN_COMMON_ANY_H
+#endif // HISTREAMER_ENGINE_PLUGIN_COMMON_ANY_H
