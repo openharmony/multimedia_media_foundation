@@ -141,37 +141,37 @@ static int32_t CapKeyStringiness(char* buf, size_t maxLen, const char* name, con
     return -1;
 }
 template <>
-static MEDIA_UNUSED int32_t Stringiness(char* buf, size_t maxLen, const char* name, const int32_t& val)
+MEDIA_UNUSED int32_t Stringiness(char* buf, size_t maxLen, const char* name, const int32_t& val)
 {
     return snprintf_truncated_s(buf, maxLen, "%" PRIi32, val);
 }
 
 template<>
-static int32_t Stringiness(char* buf, size_t maxLen, const char* name, const uint32_t& val)
+int32_t Stringiness(char* buf, size_t maxLen, const char* name, const uint32_t& val)
 {
     return snprintf_truncated_s(buf, maxLen, "%" PRIu32, val);
 }
 
 template<>
-static int32_t Stringiness(char* buf, size_t maxLen, const char* name, const std::string& val)
+int32_t Stringiness(char* buf, size_t maxLen, const char* name, const std::string& val)
 {
     return snprintf_truncated_s(buf, maxLen, "%s", val.c_str());
 }
 
 template<>
-static int32_t Stringiness(char* buf, size_t maxLen, const char* name, const int64_t& val)
+int32_t Stringiness(char* buf, size_t maxLen, const char* name, const int64_t& val)
 {
     return snprintf_truncated_s(buf, maxLen, "%" PRId64, val);
 }
 
 template<>
-static int32_t Stringiness(char* buf, size_t maxLen, const char* name, const uint64_t& val)
+int32_t Stringiness(char* buf, size_t maxLen, const char* name, const uint64_t& val)
 {
     return snprintf_truncated_s(buf, maxLen, "%" PRIu64, val);
 }
 
 template<>
-static int32_t Stringiness(char* buf, size_t maxLen, const char* name, const Plugin::AudioSampleFormat& val)
+int32_t Stringiness(char* buf, size_t maxLen, const char* name, const Plugin::AudioSampleFormat& val)
 {
     if (Plugin::g_auSampleFmtStrMap.count(val) == 0) {
         MEDIA_LOG_W("audio sample format " PUBLIC_LOG_D32 " is unknown", static_cast<int32_t>(val));
@@ -181,7 +181,7 @@ static int32_t Stringiness(char* buf, size_t maxLen, const char* name, const Plu
 }
 
 template<>
-static int32_t Stringiness(char* buf, size_t maxLen, const char* name, const Plugin::AudioChannelLayout& val)
+int32_t Stringiness(char* buf, size_t maxLen, const char* name, const Plugin::AudioChannelLayout& val)
 {
     if (Plugin::g_auChannelLayoutStrMap.count(val) == 0) {
         MEDIA_LOG_W("audio channel layout " PUBLIC_LOG_U64 " is unknown", static_cast<uint64_t>(val));
@@ -191,7 +191,7 @@ static int32_t Stringiness(char* buf, size_t maxLen, const char* name, const Plu
 }
 
 template<>
-static int32_t Stringiness(char* buf, size_t maxLen, const char* name, const Plugin::VideoPixelFormat& val)
+int32_t Stringiness(char* buf, size_t maxLen, const char* name, const Plugin::VideoPixelFormat& val)
 {
     if (Plugin::g_videoPixelFormatStrMap.count(val) == 0) {
         MEDIA_LOG_W("video pixel format " PUBLIC_LOG_U32 " is unknown", static_cast<uint32_t>(val));
@@ -201,7 +201,7 @@ static int32_t Stringiness(char* buf, size_t maxLen, const char* name, const Plu
 }
 
 template<>
-static int32_t Stringiness(char* buf, size_t maxLen, const char* name, const Plugin::VideoBitStreamFormat& val)
+int32_t Stringiness(char* buf, size_t maxLen, const char* name, const Plugin::VideoBitStreamFormat& val)
 {
     if (Plugin::g_vdBitStreamFormatStrMap.count(val) == 0) {
         MEDIA_LOG_W("video bit stream format " PUBLIC_LOG_U32 " is unknown", static_cast<uint32_t>(val));
@@ -211,7 +211,7 @@ static int32_t Stringiness(char* buf, size_t maxLen, const char* name, const Plu
 }
 
 template<>
-static int32_t Stringiness(char* buf, size_t maxLen, const char* name, const Plugin::AudioAacProfile& val)
+int32_t Stringiness(char* buf, size_t maxLen, const char* name, const Plugin::AudioAacProfile& val)
 {
     if (Plugin::g_auAacProfileNameStrMap.count(val) == 0) {
         MEDIA_LOG_W("audio aac profile name " PUBLIC_LOG_U8 " is unknown", static_cast<uint8_t>(val));
@@ -221,7 +221,7 @@ static int32_t Stringiness(char* buf, size_t maxLen, const char* name, const Plu
 }
 
 template<>
-static int32_t Stringiness(char* buf, size_t maxLen, const char* name, const Plugin::AudioAacStreamFormat& val)
+int32_t Stringiness(char* buf, size_t maxLen, const char* name, const Plugin::AudioAacStreamFormat& val)
 {
     if (Plugin::g_auAacStreamFormatNameStrMap.count(val) == 0) {
         MEDIA_LOG_W("audio aac stream format name " PUBLIC_LOG_U8 " is unknown", static_cast<uint8_t>(val));
@@ -231,7 +231,7 @@ static int32_t Stringiness(char* buf, size_t maxLen, const char* name, const Plu
 }
 
 template<>
-static int32_t Stringiness(char* buf, size_t maxLen, const char* name, const Plugin::CodecConfig& val)
+int32_t Stringiness(char* buf, size_t maxLen, const char* name, const Plugin::CodecConfig& val)
 {
     return snprintf_truncated_s(buf, maxLen, "...");
 }
