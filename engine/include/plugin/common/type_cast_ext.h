@@ -12,8 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef HISTREAMER_PLUGIN_TYPE_INFO_EXT_H
-#define HISTREAMER_PLUGIN_TYPE_INFO_EXT_H
+#ifndef HISTREAMER_ENGINE_PLUGIN_TYPE_INFO_EXT_H
+#define HISTREAMER_ENGINE_PLUGIN_TYPE_INFO_EXT_H
 
 #include <cstring>
 #include <string_view>
@@ -66,4 +66,4 @@ inline std::shared_ptr<T> ReinterpretPointerCast(const std::shared_ptr<U>& ptr) 
 } // Media
 } // OHOS
 
-#endif // HISTREAMER_PLUGIN_TYPE_INFO_EXT_H
+#endif // HISTREAMER_ENGINE_PLUGIN_TYPE_INFO_EXT_H
