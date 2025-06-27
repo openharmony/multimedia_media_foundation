@@ -46,15 +46,15 @@ do { \
 using namespace OHOS::Media;
 
 template <typename T>
-int32_t Stringiness(char* buf, size_t maxLen, const char* name, const T& val)
+static int32_t Stringiness(char* buf, size_t maxLen, const char* name, const T& val)
 {
     MEDIA_LOG_I("no cap trans function for " PUBLIC_LOG_S " may be update?", name);
     return 0;
 }
 
 template <typename T>
-int32_t FixedCapKeyStringiness(char* buf, size_t maxLen, const char* name, const char* typeName,
-                               const Plugin::ValueType& val)
+static int32_t FixedCapKeyStringiness(char* buf, size_t maxLen, const char* name, const char* typeName,
+    const Plugin::ValueType& val)
 {
     int pos = 0;
     auto ret = snprintf_truncated_s(buf, maxLen, "%s:(%s)", name, typeName);
@@ -71,8 +71,8 @@ int32_t FixedCapKeyStringiness(char* buf, size_t maxLen, const char* name, const
 }
 
 template<typename T>
-int32_t IntervalCapKeyStringiness(char* buf, size_t maxLen, const char* name, const char* typeName,
-                                  const Plugin::ValueType& val)
+static int32_t IntervalCapKeyStringiness(char* buf, size_t maxLen, const char* name, const char* typeName,
+    const Plugin::ValueType& val)
 {
     int pos = 0;
     auto ret = snprintf_truncated_s(buf, maxLen, "%s:(%s)[", name, typeName);
@@ -95,8 +95,8 @@ int32_t IntervalCapKeyStringiness(char* buf, size_t maxLen, const char* name, co
 }
 
 template<typename T>
-int32_t DiscreteCapKeyStringiness(char* buf, size_t maxLen, const char* name, const char* typeName,
-                                  const Plugin::ValueType& val)
+static int32_t DiscreteCapKeyStringiness(char* buf, size_t maxLen, const char* name, const char* typeName,
+    const Plugin::ValueType& val)
 {
     int pos = 0;
     auto ret = snprintf_truncated_s(buf, maxLen, "%s:(%s){", name, typeName);
@@ -125,8 +125,8 @@ int32_t DiscreteCapKeyStringiness(char* buf, size_t maxLen, const char* name, co
 }
 
 template<typename T>
-int32_t CapKeyStringiness(char* buf, size_t maxLen, const char* name, const char* typeName,
-                          const Plugin::ValueType& val)
+static int32_t CapKeyStringiness(char* buf, size_t maxLen, const char* name, const char* typeName,
+    const Plugin::ValueType& val)
 {
     if (Plugin::Any::IsSameTypeWith<Plugin::FixedCapability<T>>(val)) {
         return FixedCapKeyStringiness<T>(buf, maxLen, name, typeName, val);
@@ -237,8 +237,8 @@ int32_t Stringiness(char* buf, size_t maxLen, const char* name, const Plugin::Co
 }
 
 template<typename T>
-int32_t MetaIDStringiness(char* buf, size_t maxLen, const char* name, const char* typeName,
-                          const Plugin::ValueType& val)
+static int32_t MetaIDStringiness(char* buf, size_t maxLen, const char* name, const char* typeName,
+    const Plugin::ValueType& val)
 {
     if (Plugin::Any::IsSameTypeWith<T>(val)) {
         return FixedCapKeyStringiness<T>(buf, maxLen, name, typeName, val);
