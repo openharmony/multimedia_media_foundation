@@ -282,6 +282,7 @@ public:
         tagCharSeq == Tag::VIDEO_ENCODER_QP_MIN or
         tagCharSeq == Tag::VIDEO_ENCODER_QP_START or
         tagCharSeq == Tag::VIDEO_ENCODER_TARGET_QP or
+        tagCharSeq == Tag::VIDEO_ENCODER_OPERATING_RATE or
         tagCharSeq == Tag::FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_COUNT or
         tagCharSeq == Tag::SCREEN_CAPTURE_ERR_CODE or
         tagCharSeq == Tag::SCREEN_CAPTURE_DURATION or
