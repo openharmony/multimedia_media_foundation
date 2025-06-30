@@ -343,7 +343,8 @@ public:
         tagCharSeq == Tag::AV_TRANSCODER_VIDEO_DECODER_DURATION or
         tagCharSeq == Tag::AV_TRANSCODER_VIDEO_ENCODER_DURATION or
         tagCharSeq == Tag::AV_TRANSCODER_VIDEO_VPE_DURATION, int32_t, AnyValueType::INT32_T);
-
+    DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::AV_TRANSCODER_ENABLE_B_FRAME, bool, AnyValueType::BOOL);
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::APP_FULL_TOKEN_ID or
         tagCharSeq == Tag::BUFFER_DECODING_TIMESTAMP or

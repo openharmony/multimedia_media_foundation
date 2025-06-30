@@ -398,6 +398,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::AV_TRANSCODER_DST_VIDEO_BITRATE, defaultInt32},
     {Tag::AV_TRANSCODER_DST_HDR_TYPE, defaultInt32},
     {Tag::AV_TRANSCODER_DST_COLOR_SPACE, defaultInt32},
+    {Tag::AV_TRANSCODER_ENABLE_B_FRAME, defaultBool},
     {Tag::AV_TRANSCODER_DST_AUDIO_SAMPLE_RATE, defaultInt32},
     {Tag::AV_TRANSCODER_DST_AUDIO_CHANNEL_COUNT, defaultInt32},
     {Tag::AV_TRANSCODER_DST_AUDIO_BITRATE, defaultInt32},
