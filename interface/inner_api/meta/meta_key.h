@@ -538,7 +538,7 @@ public:
 /* -------------------- vrr tag -------------------- */
     // int32_t, 1 is enabled, 0 is unabled
     static constexpr const char VIDEO_DECODER_OUTPUT_ENABLE_VRR[] = "video_decoder_output_enable_vrr";
-    /* ----------------- input err tag ----------------- */    
+/* ----------------- input err tag ----------------- */
     static constexpr const char VIDEO_DECODER_INPUT_STREAM_ERROR[] = "video_decoder_input_stream_error";
 };
 
