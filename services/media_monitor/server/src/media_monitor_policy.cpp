@@ -204,7 +204,6 @@ void MediaMonitorPolicy::TriggerSystemTonePlaybackEvent(std::shared_ptr<EventBea
         systemTonePlayerCount_ = 0;
         lastSystemTonePlaybackTime_ = TimeUtils::GetCurSec();
         systemTonePlayEventVector_.clear();
-        return;
     }
 }
 
@@ -217,7 +216,6 @@ void MediaMonitorPolicy::TriggerSystemTonePlaybackTimeEvent(std::shared_ptr<Even
     mediaEventBaseWriter_.WriteSystemTonePlayback(std::move(dfxResult));
     systemTonePlayerCount_ = 0;
     systemTonePlayEventVector_.clear();
-    return;
 }
 
  void MediaMonitorPolicy::CollectDataToDfxResult(DfxSystemTonePlaybackResult *result)
