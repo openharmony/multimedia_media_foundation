@@ -119,7 +119,7 @@ static std::map<TagType, std::pair<MetaSetterFunction, MetaGetterFunction>> g_me
     DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_ENCODE_BITRATE_MODE, VideoEncodeBitrateMode),
     DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_ENCODE_B_FRAME_GOP_MODE, VideoEncodeBFrameGopMode),
     DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_ENCODER_TEMPORAL_GOP_REFERENCE_MODE, TemporalGopReferenceMode),
-    DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_DECODER_INTPUT_STREAM_ERROR, VideoStreamStatus),
+    DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_DECODER_INPUT_STREAM_ERROR, VideoStreamStatus),
 };
 
 using  MetaSetterInt64Function = std::function<bool(Meta&, const TagType&, int64_t&)>;
