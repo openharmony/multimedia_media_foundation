@@ -337,11 +337,6 @@ enum class TemporalGopReferenceMode : int32_t {
     UNIFORMLY_SCALED_REFERENCE = 2,
     UNKNOWN,
 };
-
-enum class VideoStreamStatus : int32_t {
-    DROP_OUT_STREAM_ERROR = -1,
-    OK = 0
-};
 } // namespace Plugins
 } // namespace Media
 } // namespace OHOS

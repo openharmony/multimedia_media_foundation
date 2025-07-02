@@ -92,7 +92,6 @@ DEFINE_METADATA_SETTER_GETTER_FUNC(FileType, int32_t)
 DEFINE_METADATA_SETTER_GETTER_FUNC(VideoEncodeBitrateMode, int32_t)
 DEFINE_METADATA_SETTER_GETTER_FUNC(TemporalGopReferenceMode, int32_t)
 DEFINE_METADATA_SETTER_GETTER_FUNC(VideoEncodeBFrameGopMode, int32_t)
-DEFINE_METADATA_SETTER_GETTER_FUNC(VideoStreamStatus, int32_t)
 DEFINE_METADATA_SETTER_GETTER_FUNC(AudioChannelLayout, int64_t)
 
 #define  DEFINE_METADATA_SETTER_GETTER(tag, EnumType) {tag, std::make_pair(Set##EnumType, Get##EnumType)}
@@ -119,7 +118,6 @@ static std::map<TagType, std::pair<MetaSetterFunction, MetaGetterFunction>> g_me
     DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_ENCODE_BITRATE_MODE, VideoEncodeBitrateMode),
     DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_ENCODE_B_FRAME_GOP_MODE, VideoEncodeBFrameGopMode),
     DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_ENCODER_TEMPORAL_GOP_REFERENCE_MODE, TemporalGopReferenceMode),
-    DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_DECODER_INPUT_STREAM_ERROR, VideoStreamStatus),
 };
 
 using  MetaSetterInt64Function = std::function<bool(Meta&, const TagType&, int64_t&)>;
@@ -246,7 +244,6 @@ static Any defaultFileType = FileType::UNKNOW;
 static Any defaultVideoEncodeBitrateMode = VideoEncodeBitrateMode::CBR;
 static Any defaultVideoEncodeBFrameGopMode = VideoEncodeBFrameGopMode::VIDEO_ENCODE_GOP_ADAPTIVE_B_MODE;
 static Any defaultTemporalGopReferenceMode = TemporalGopReferenceMode::ADJACENT_REFERENCE;
-static Any defaultVideoStreamStatus = VideoStreamStatus::OK;
 static Any defaultAudioChannelLayout = AudioChannelLayout::UNKNOWN;
 static Any defaultAudioAacProfile = AudioAacProfile::ELD;
 static Any defaultAudioAacStreamFormat = AudioAacStreamFormat::ADIF;
@@ -273,7 +270,6 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_ENCODE_BITRATE_MODE, defaultVideoEncodeBitrateMode},
     {Tag::VIDEO_ENCODE_B_FRAME_GOP_MODE, defaultVideoEncodeBFrameGopMode},
     {Tag::VIDEO_ENCODER_TEMPORAL_GOP_REFERENCE_MODE, defaultTemporalGopReferenceMode},
-    {Tag::VIDEO_DECODER_INPUT_STREAM_ERROR, defaultVideoStreamStatus},
     // Int8
     {Tag::RECORDER_HDR_TYPE, defaultInt8},
     // Uint_8
@@ -409,6 +405,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::AV_TRANSCODER_VIDEO_VPE_DURATION, defaultInt32},
     {Tag::MEDIA_EDITLIST, defaultInt32},
     {Tag::MEDIA_ENABLE_MOOV_FRONT, defaultInt32},
+    {Tag::VIDEO_DECODER_INPUT_STREAM_ERROR, defaultInt32},
     // String
     {Tag::MIME_TYPE, defaultString},
     {Tag::MEDIA_FILE_URI, defaultString},
