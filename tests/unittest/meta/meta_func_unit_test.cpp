@@ -291,20 +291,6 @@ HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_Enum_As_Int32, TestSize.Level1)
 }
 
 /**
- * @tc.name: SetGet_MetaData_Enum_VideoStreamStatus_As_Int
- * @tc.desc: SetGet_MetaData_Enum_VideoStreamStatus_As_Int
- * @tc.type: FUNC
- */
-HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_Enum_VideoStreamStatus_As_Int, TestSize.Level1)
-{
-    int32_t valueOut = -1;
-    int32_t valueIn = static_cast<int32_t>(Plugins::VideoStreamStatus::DROP_OUT_STREAM_ERROR);
-    SetMetaData(*metaIn, Tag::VIDEO_DECODER_INPUT_STREAM_ERROR, valueIn);
-    GetMetaData(*metaIn, Tag::VIDEO_DECODER_INPUT_STREAM_ERROR, valueOut);
-    EXPECT_EQ(valueOut, valueIn);
-}
-
-/**
  * @tc.name: SetGet_MetaData_Int32_Using_Parcel
  * @tc.desc: SetGet_MetaData_Int32_Using_Parcel
  * @tc.type: FUNC
@@ -507,6 +493,7 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::AUDIO_BITRATE_MODE, Plugins::AudioEncodeBitrateMode::AUDIO_CBR},
     {Tag::AUDIO_L2HC_VERSION, 1},
     {Tag::VIDEO_ENCODER_ENABLE_PTS_BASED_RATECONTROL, 1},
+    {Tag::VIDEO_DECODER_INPUT_STREAM_ERROR, 0},
     // UINT8_T
     {Tag::AUDIO_AAC_PROFILE, static_cast<int32_t>(Plugins::AudioAacProfile::ELD)},
     {Tag::AUDIO_AAC_STREAM_FORMAT, static_cast<int32_t>(Plugins::AudioAacStreamFormat::ADIF)}};
