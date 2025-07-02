@@ -100,6 +100,11 @@ typedef enum OH_AVErrCode {
      */
     AV_ERR_UNSUPPORTED_FORMAT = 11,
     /**
+     * @error hardware failed.
+     * @since 20
+     */
+    AV_ERR_HARDWARE_FAILED = 12,
+    /**
      * extend err start.
      */
     AV_ERR_EXTEND_START = 100,
