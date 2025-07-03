@@ -99,6 +99,17 @@ enum MediaServiceErrCode : ErrCode {
     MSERR_GET_INPUT_SURFACE_FAILED,                     // video encoder or resize get input surface failed.
     MSERR_SET_OUTPUT_SURFACE_FAILED,                    // video decoder or resize set output surface failed.
     MSERR_VID_RENDER_FAILED,
+    MSERR_DSS_THREAD_CREATION_FAILED,                   // LPP: DSS thread creation failed.
+    MSERR_DSS_TASK_CREATION_FAILED,                     // LPP: DSS task creation failed.
+    MSERR_DSS_STRAT_FAILED,                             // LPP: DSS start failed.
+    MSERR_SHB_THREAD_CREATION_FAILED,                   // LPP: SHB thread creation failed.
+    MSERR_SHB_INIT_FAILED,                              // LPP: SHB init failed.
+    MSERR_SHB_MSG_QUE_CREATION_FAILED,                  // LPP: SHB message queue creation failed.
+    MSERR_SHB_NO_MEMORY,                                // LPP: SHB failed to allocate memory.
+    MSERR_SHB_CRASH_ERROR,                              // LPP: SHB crash error.
+    MSERR_RS_INIT_FAILED,                               // LPP: RS init failed.
+    MSERR_RS_DATA_FALLBACK_FAILED,                      // LPP: RS data fallback failed.
+    MSERR_HARDWARE_ERROR,                               // underlying hardware error happened.
     MSERR_EXTEND_START      = MS_ERR_OFFSET + 0xF000,   // extend err start.
 };
 
@@ -117,7 +128,7 @@ enum MediaServiceExtErrCode : int32_t {
     MSERR_EXT_EXTEND_START = 100,      // extend err start.
 };
 
-// media api9 error code
+// media api error code
 enum MediaServiceExtErrCodeAPI9 : int32_t {
     MSERR_EXT_API9_OK = 0,                          // use for determine error
     MSERR_EXT_API9_NO_PERMISSION = 201,             // permission denied (AccessToken).
@@ -132,6 +143,7 @@ enum MediaServiceExtErrCodeAPI9 : int32_t {
     MSERR_EXT_API9_UNSUPPORT_FORMAT = 5400106,      // unsupport format.
     MSERR_EXT_API9_AUDIO_INTERRUPTED = 5400107,     // audio interrupted.
     MSERR_EXT_API20_PARAM_ERROR_OUT_OF_RANGE = 5400108,         // parameter value is out of the specified range.
+    MSERR_EXT_API20_HARDWARE_FAILED = 5400201,                  // lpp hardware failed
     MSERR_EXT_API16_SUPER_RESOLUTION_UNSUPPORTED = 5410003,     // super resolution is not supported
     MSERR_EXT_API16_SUPER_RESOLUTION_NOT_ENABLED = 5410004,     // super resolution is not enabled
     MSERR_EXT_API14_IO_CANNOT_FIND_HOST = 5411001,              // IO can not find host
