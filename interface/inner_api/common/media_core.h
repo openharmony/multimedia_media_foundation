@@ -159,6 +159,7 @@ enum MediaServiceExtErrCodeAPI9 : int32_t {
     MSERR_EXT_API14_IO_SSL_SERVER_CERT_UNTRUSTED = 5411010,     // IO SSL server cert untrusted.
     MSERR_EXT_API14_IO_UNSUPPORTTED_REQUEST = 5411011,          // IO unsupported request.
     MSERR_EXT_API16_SEEK_CONTINUOUS_UNSUPPORTED = 5410002,      // seek continous unsupported.
+    MSERR_EXT_API20_IO_CLEARTEXT_NOT_PERMITTED = 5411012,       // IO clear text traffic not permitted.
 };
 
 /**
