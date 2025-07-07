@@ -396,7 +396,11 @@ public:
                                                       ///< Presentation Time Stamp(PTS). This is an optional key that
                                                       ///< applies only to video encoder, default is 0.
                                                       ///< It is used in configure.
-
+    static constexpr const char VIDEO_DECODER_BLANK_FRAME_ON_SHUTDOWN[] =
+        "video_decoder_blank_frame_on_shutdown"; ///< bool, Key for specifying whether to output a blank frame
+                                                 ///< during video decoder shutdown. This is an optional key,
+                                                 ///< only used when configuring a video decoder in surface mode.
+                                                 ///< By default, this feature is disabled (0).
     /* -------------------- video specific tag -------------------- */
     static constexpr const char VIDEO_H264_PROFILE[] = "video.h264.profile"; ///< @see VideoH264Profile
     static constexpr const char VIDEO_H264_LEVEL[] = "video.h264.level";     ///< h264 level
