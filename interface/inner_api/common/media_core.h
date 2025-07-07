@@ -109,6 +109,7 @@ enum MediaServiceErrCode : ErrCode {
     MSERR_SHB_CRASH_ERROR,                              // LPP: SHB crash error.
     MSERR_RS_INIT_FAILED,                               // LPP: RS init failed.
     MSERR_RS_DATA_FALLBACK_FAILED,                      // LPP: RS data fallback failed.
+    MSERR_LPP_INSTANCE_EXCEED_LIMIT,                    // LPP: instance limit exceeded.
     MSERR_HARDWARE_ERROR,                               // underlying hardware error happened.
     MSERR_EXTEND_START      = MS_ERR_OFFSET + 0xF000,   // extend err start.
 };
