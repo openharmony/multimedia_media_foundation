@@ -103,6 +103,7 @@ PluginList::PluginList()
     AddAmrnbAudioEncoderPlugins();
     AddMp3AudioEncoderPlugins();
     AddFFmpegMuxerPlugins();
+    AddAc3AudioDecoderPlugins();
 }
 
 void PluginList::AddDataSourceStreamPlugins()
@@ -366,6 +367,17 @@ void PluginList::AddWavDemuxerPlugin()
     pluginDescriptionList_.push_back(wavDemuxerPlugin);
 }
 
+void PluginList::AddAc3DemuxerPlugin()
+{
+    PluginDescription ac3DemuxerPlugin;
+    ac3DemuxerPlugin.pluginName = "avdemux_ac3";
+    ac3DemuxerPlugin.packageName = "FFmpegDemuxer";
+    ac3DemuxerPlugin.pluginType = PluginType::DEMUXER;
+    ac3DemuxerPlugin.cap = "";
+    ac3DemuxerPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(ac3DemuxerPlugin);
+}
+
 void PluginList::AddFFmpegDemuxerPlugins()
 {
     AddAacDemuxerPlugin();
@@ -387,6 +399,7 @@ void PluginList::AddFFmpegDemuxerPlugins()
     AddWebvttDemuxerPlugin();
     AddOggDemuxerPlugin();
     AddWavDemuxerPlugin();
+    AddAc3DemuxerPlugin();
 }
 
 void PluginList::AddMpegAudioDecoderPlugin()
@@ -499,6 +512,17 @@ void PluginList::AddOpusAudioDecoderPlugins()
     opusAudioDecoderPlugin.cap = "audio/opus";
     opusAudioDecoderPlugin.rank = DEFAULT_RANK;
     pluginDescriptionList_.push_back(opusAudioDecoderPlugin);
+}
+
+void PluginList::AddAc3AudioDecoderPlugins()
+{
+    PluginDescription ac3AudioDecoderPlugin;
+    ac3AudioDecoderPlugin.pluginName = "OH.Media.Codec.Decoder.Audio.AC3";
+    ac3AudioDecoderPlugin.packageName = "Ac3AudioDecoder";
+    ac3AudioDecoderPlugin.pluginType = PluginType::AUDIO_DECODER;
+    ac3AudioDecoderPlugin.cap = "audio/ac3";
+    ac3AudioDecoderPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(ac3AudioDecoderPlugin);
 }
 
 void PluginList::AddRawAudioDecoderPlugins()
