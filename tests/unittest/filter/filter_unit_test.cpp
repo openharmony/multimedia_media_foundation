@@ -356,6 +356,7 @@ HWTEST_F(FilterUnitTest, WaitAllState_004, TestSize.Level1)
     EXPECT_EQ(Status::OK, filter->WaitAllState(FilterState::INITIALIZED));
 }
 
+
 /**
  * @tc.name: ReleaseOnMuted_001
  * @tc.desc: Test ReleaseOnMuted interface
@@ -370,7 +371,8 @@ HWTEST_F(FilterUnitTest, ReleaseOnMuted_001, TestSize.Level1)
     filter->nextFiltersMap_[StreamType::STREAMTYPE_PACKED].push_back(filter2);
     filter->LinkPipeLine("");
     EXPECT_EQ(Status::OK, filter->Start());
-    EXPECT_EQ(Status::OK, filter->Flush());
+    EXPECT_EQ(Status::OK, filter->Pause());
+    EXPECT_EQ(Status::OK, filter->Resume());
     EXPECT_EQ(Status::OK, filter->ReleaseOnMuted());
 }
 
@@ -390,7 +392,9 @@ HWTEST_F(FilterUnitTest, ReleaseOnMuted_002, TestSize.Level1)
     sleep(sleepTime_);
     EXPECT_EQ(Status::OK, filter->Start());
     sleep(sleepTime_);
-    EXPECT_EQ(Status::OK, filter->Flush());
+    EXPECT_EQ(Status::OK, filter->Pause());
+    sleep(sleepTime_);
+    EXPECT_EQ(Status::OK, filter->Resume());
     sleep(sleepTime_);
     EXPECT_EQ(Status::OK, filter->ReleaseOnMuted());
     sleep(sleepTime_);
@@ -410,7 +414,8 @@ HWTEST_F(FilterUnitTest, ReInitAndStart_001, TestSize.Level1)
     filter->nextFiltersMap_[StreamType::STREAMTYPE_PACKED].push_back(filter2);
     filter->LinkPipeLine("");
     EXPECT_EQ(Status::OK, filter->Start());
-    EXPECT_EQ(Status::OK, filter->Flush());
+    EXPECT_EQ(Status::OK, filter->Pause());
+    EXPECT_EQ(Status::OK, filter->Resume());
     EXPECT_EQ(Status::OK, filter->ReleaseOnMuted());
     EXPECT_EQ(Status::OK, filter->ReInitAndStart());
 }
@@ -431,7 +436,9 @@ HWTEST_F(FilterUnitTest, ReInitAndStart_002, TestSize.Level1)
     sleep(sleepTime_);
     EXPECT_EQ(Status::OK, filter->Start());
     sleep(sleepTime_);
-    EXPECT_EQ(Status::OK, filter->Flush());
+    EXPECT_EQ(Status::OK, filter->Pause());
+    sleep(sleepTime_);
+    EXPECT_EQ(Status::OK, filter->Resume());
     sleep(sleepTime_);
     EXPECT_EQ(Status::OK, filter->ReleaseOnMuted());
     sleep(sleepTime_);
