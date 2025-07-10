@@ -51,8 +51,6 @@ const int MAX_FLUSH_CODEC_TIMES = 5;
 const mode_t MODE = 0775;
 const std::string PCM_FILE = ".pcm";
 const std::string FLAC_FILE = ".flac";
-const std::string BLUETOOTCH_FILE = "bluetooth";
-const uint8_t BLUETOOTH_SAMPLE_FORMAT_OFFSET = 1;
 // samples(flac: 4608) * formatSize(f32: 4) * channles(6)
 constexpr size_t MAX_BUFFER_LEN = 4608 * 4 * 6;
 // samples(flac: 4608) * formatSize(s16: 2) * channles(2)
@@ -288,12 +286,6 @@ int32_t MediaAudioEncoder::ParseAudioArgs(const std::string &fileName, AudioEnco
     } else {
         MEDIA_LOG_I("parser error filename: %{public}s", fileName.c_str());
         return ERROR;
-    }
-    if (fileName.find(BLUETOOTCH_FILE) != std::string::npos) {
-        uint8_t sampleFormatValue = 0;
-        FALSE_RETURN_V_MSG_E(StringConverter(sampleFormat, sampleFormatValue), ERROR,
-            "parse sampleFormat error, %{public}s", sampleFormat.c_str());
-        config.sampleFmt = static_cast<SampleFormat>(sampleFormatValue - BLUETOOTH_SAMPLE_FORMAT_OFFSET);
     }
     return SUCCESS;
 }
