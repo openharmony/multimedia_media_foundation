@@ -240,14 +240,15 @@ void MediaEventBaseWriter::WriteJankPlaybackError(std::shared_ptr<EventBean> &be
         return;
     }
 #ifdef MONITOR_ENABLE_HISYSEVENT
+    int32_t reason = bean->GetIntValue("REASON");
     HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "JANK_PLAYBACK",
         HiviewDFX::HiSysEvent::EventType::FAULT,
-        "REASON", static_cast<uint8_t>(bean->GetIntValue("REASON")),
+        "REASON", static_cast<uint8_t>(reason),
         "PERIOD_MS", static_cast<uint32_t>(bean->GetIntValue("PERIOD_MS")),
         "PIPE_TYPE", static_cast<uint8_t>(bean->GetIntValue("PIPE_TYPE")),
         "HDI_ADAPTER", static_cast<uint8_t>(bean->GetIntValue("HDI_ADAPTER")),
         "POSITION", static_cast<uint8_t>(bean->GetIntValue("POSITION")),
-        "APP_NAME", bean->GetStringValue("APP_NAME"));
+        "APP_NAME", (reason == 0 ? bean->GetStringValue("APP_NAMES") : bean->GetStringValue("APP_NAME")));
 #endif
 }
 
