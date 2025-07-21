@@ -373,7 +373,7 @@ HWTEST_F(FilterUnitTest, ReleaseOnMuted_001, TestSize.Level1)
     EXPECT_EQ(Status::OK, filter->Start());
     EXPECT_EQ(Status::OK, filter->Pause());
     EXPECT_EQ(Status::OK, filter->Resume());
-    EXPECT_EQ(Status::OK, filter->ReleaseOnMuted());
+    EXPECT_EQ(Status::OK, filter->ReleaseOnMuted(true));
 }
 
 /**
@@ -396,7 +396,7 @@ HWTEST_F(FilterUnitTest, ReleaseOnMuted_002, TestSize.Level1)
     sleep(sleepTime_);
     EXPECT_EQ(Status::OK, filter->Resume());
     sleep(sleepTime_);
-    EXPECT_EQ(Status::OK, filter->ReleaseOnMuted());
+    EXPECT_EQ(Status::OK, filter->ReleaseOnMuted(true));
     sleep(sleepTime_);
 }
 
@@ -416,7 +416,7 @@ HWTEST_F(FilterUnitTest, ReInitAndStart_001, TestSize.Level1)
     EXPECT_EQ(Status::OK, filter->Start());
     EXPECT_EQ(Status::OK, filter->Pause());
     EXPECT_EQ(Status::OK, filter->Resume());
-    EXPECT_EQ(Status::OK, filter->ReleaseOnMuted());
+    EXPECT_EQ(Status::OK, filter->ReleaseOnMuted(true));
     EXPECT_EQ(Status::OK, filter->ReInitAndStart());
 }
 
@@ -440,7 +440,7 @@ HWTEST_F(FilterUnitTest, ReInitAndStart_002, TestSize.Level1)
     sleep(sleepTime_);
     EXPECT_EQ(Status::OK, filter->Resume());
     sleep(sleepTime_);
-    EXPECT_EQ(Status::OK, filter->ReleaseOnMuted());
+    EXPECT_EQ(Status::OK, filter->ReleaseOnMuted(true));
     sleep(sleepTime_);
     EXPECT_EQ(Status::OK, filter->ReInitAndStart());
     sleep(sleepTime_);
