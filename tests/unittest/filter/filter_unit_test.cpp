@@ -365,10 +365,7 @@ HWTEST_F(FilterUnitTest, WaitAllState_004, TestSize.Level1)
 HWTEST_F(FilterUnitTest, ReleaseOnMuted_001, TestSize.Level1)
 {
     std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
-    std::shared_ptr<Filter> filter2 = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
     filter->Init(nullptr, nullptr);
-    filter2->Init(nullptr, nullptr);
-    filter->nextFiltersMap_[StreamType::STREAMTYPE_PACKED].push_back(filter2);
     filter->LinkPipeLine("");
     EXPECT_EQ(Status::OK, filter->Start());
     EXPECT_EQ(Status::OK, filter->Pause());
@@ -384,10 +381,7 @@ HWTEST_F(FilterUnitTest, ReleaseOnMuted_001, TestSize.Level1)
 HWTEST_F(FilterUnitTest, ReleaseOnMuted_002, TestSize.Level1)
 {
     std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
-    std::shared_ptr<Filter> filter2 = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
     filter->Init(nullptr, nullptr);
-    filter2->Init(nullptr, nullptr);
-    filter->nextFiltersMap_[StreamType::STREAMTYPE_PACKED].push_back(filter2);
     filter->LinkPipeLine("");
     sleep(sleepTime_);
     EXPECT_EQ(Status::OK, filter->Start());
@@ -408,10 +402,7 @@ HWTEST_F(FilterUnitTest, ReleaseOnMuted_002, TestSize.Level1)
 HWTEST_F(FilterUnitTest, ReInitAndStart_001, TestSize.Level1)
 {
     std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
-    std::shared_ptr<Filter> filter2 = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
     filter->Init(nullptr, nullptr);
-    filter2->Init(nullptr, nullptr);
-    filter->nextFiltersMap_[StreamType::STREAMTYPE_PACKED].push_back(filter2);
     filter->LinkPipeLine("");
     EXPECT_EQ(Status::OK, filter->Start());
     EXPECT_EQ(Status::OK, filter->Pause());
@@ -428,10 +419,7 @@ HWTEST_F(FilterUnitTest, ReInitAndStart_001, TestSize.Level1)
 HWTEST_F(FilterUnitTest, ReInitAndStart_002, TestSize.Level1)
 {
     std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
-    std::shared_ptr<Filter> filter2 = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
     filter->Init(nullptr, nullptr);
-    filter2->Init(nullptr, nullptr);
-    filter->nextFiltersMap_[StreamType::STREAMTYPE_PACKED].push_back(filter2);
     filter->LinkPipeLine("");
     sleep(sleepTime_);
     EXPECT_EQ(Status::OK, filter->Start());
