@@ -244,6 +244,7 @@ ErrCode MediaMonitorService::GetInputBuffer(DumpBuffer &buffer, int32_t size, in
     if (audioBufferCache_) {
         shared_ptr<DumpBuffer> dumpBuffer = std::make_shared<DumpBuffer>();
         audioBufferCache_->RequestBuffer(dumpBuffer, size);
+        FALSE_UPDATE_RETURN_V_MSG_E(dumpBuffer != nullptr, funcResult, ERROR, "request buffer failed");
         buffer = *dumpBuffer;
     }
     funcResult = SUCCESS;
