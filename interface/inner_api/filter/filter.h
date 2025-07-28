@@ -254,11 +254,11 @@ public:
         return Status::OK;
     }
     
-    virtual Status ReleaseOnMuted() final;
+    virtual Status ReleaseOnMuted(bool isNeedRelease) final;
 
     virtual Status ReInitAndStart() final;
 
-    virtual Status DoReleaseOnMuted();
+    virtual Status DoReleaseOnMuted(bool isNeedRelease);
 
     virtual Status DoReInitAndStart();
 

@@ -662,7 +662,7 @@ Status Filter::DoProcessOutputBuffer(int recvArg, bool dropFrame, bool byIdx, ui
     return Status::OK;
 }
 
-Status Filter::DoReleaseOnMuted()
+Status Filter::DoReleaseOnMuted(bool isNeedRelease)
 {
     return Status::OK;
 }
@@ -711,12 +711,12 @@ Status Filter::WaitAllState(FilterState state)
     return res;
 }
 
-Status Filter::ReleaseOnMuted()
+Status Filter::ReleaseOnMuted(bool isNeedRelease)
 {
     if (filterTask_) {
         MEDIA_LOG_I("ReleaseOnMuted Async");
-        filterTask_->SubmitJobOnce([this] {
-            Status ret = DoReleaseOnMuted();
+        filterTask_->SubmitJobOnce([this, isNeedRelease] {
+            Status ret = DoReleaseOnMuted(isNeedRelease);
             SetErrCode(ret);
             ChangeState(ret == Status::OK ? FilterState::CREATED : FilterState::ERROR);
             if (ret == Status::OK) {
@@ -724,7 +724,7 @@ Status Filter::ReleaseOnMuted()
             }
         });
     } else {
-        Status ret = DoReleaseOnMuted();
+        Status ret = DoReleaseOnMuted(isNeedRelease);
         SetErrCode(ret);
         ChangeState(ret == Status::OK ? FilterState::CREATED : FilterState::ERROR);
         FALSE_RETURN_V_MSG(ret == Status::OK, ret, "ReleaseOnMuted failed");
