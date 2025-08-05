@@ -93,7 +93,8 @@ ErrorCode CodecFilterBase::UpdateMetaFromPlugin(Plugin::Meta& meta)
         if (!paramMapping.second.first(paramMapping.first, tmpVal)) {
             if (Plugin::HasTagInfo(paramMapping.first)) {
                 MEDIA_LOG_I("Type of Tag " PUBLIC_LOG_S " should be " PUBLIC_LOG_S,
-                    Plugin::GetTagStrName(paramMapping.first), std::get<2>(Plugin::g_tagInfoMap.at(paramMapping.first)));
+                    Plugin::GetTagStrName(paramMapping.first),
+                    std::get<2>(Plugin::g_tagInfoMap.at(paramMapping.first)));
             } else {
                 MEDIA_LOG_I("Tag " PUBLIC_LOG_D32 " is not is map, may be update it?", paramMapping.first);
                 MEDIA_LOG_I("Type of Tag " PUBLIC_LOG_D32 "mismatch", paramMapping.first);
