@@ -122,7 +122,7 @@ bool FileSystem::MakeMultipleDir(const std::string& path)
 
 void FileSystem::ClearFileContent(const std::string& fullPath)
 {
-    MEDIA_LOG_I("Clear file content path : " PUBLIC_LOG_S, fullPath.c_str());
+    MEDIA_LOG_I("Clear file content path");
     auto filePtr = fopen(fullPath.c_str(), "w+");
     if (!filePtr) {
         MEDIA_LOG_E("Clear file content fail.");
@@ -141,7 +141,7 @@ void FileSystem::RemoveFilesInDir(const std::string& path)
                 continue;
             }
             std::string fullPath = path + "/" + info->d_name;
-            MEDIA_LOG_D("Remove file : " PUBLIC_LOG_S, fullPath.c_str());
+            MEDIA_LOG_D("Remove file : " PUBLIC_LOG_S, info->d_name);
             NZERO_LOG(remove(fullPath.c_str()));
         }
         closedir(directory);
