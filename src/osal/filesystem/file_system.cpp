@@ -141,7 +141,6 @@ void FileSystem::RemoveFilesInDir(const std::string& path)
                 continue;
             }
             std::string fullPath = path + "/" + info->d_name;
-            MEDIA_LOG_D("Remove file : " PUBLIC_LOG_S, info->d_name);
             NZERO_LOG(remove(fullPath.c_str()));
         }
         closedir(directory);
