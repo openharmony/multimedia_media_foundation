@@ -195,23 +195,23 @@ T FilterBase::FindPort(const std::vector<T>& list, const std::string& name)
 ErrorCode FilterBase::ConfigPluginWithMeta(Plugin::Base& plugin, const Plugin::Meta& meta)
 {
     auto parameterMap = PluginParameterTable::GetInstance().FindAllowedParameterMap(filterType_);
-    for (const auto& keyPair : parameterMap) {
-        if ((keyPair.second.second & PARAM_SET) == 0) {
+    for (const auto& paramMapping : parameterMap) {
+        if ((paramMapping.second.second & PARAM_SET) == 0) {
             continue;
         }
         Plugin::ValueType outValPtr;
-        auto ret = meta.GetData(static_cast<Plugin::Tag>(keyPair.first), outValPtr);
-        if (ret && keyPair.second.first(keyPair.first, outValPtr)) {
-            if (plugin.SetParameter(keyPair.first, outValPtr) != Plugin::Status::OK) {
+        auto ret = meta.GetData(static_cast<Plugin::Tag>(paramMapping.first), outValPtr);
+        if (ret && paramMapping.second.first(paramMapping.first, outValPtr)) {
+            if (plugin.SetParameter(paramMapping.first, outValPtr) != Plugin::Status::OK) {
                 MEDIA_LOG_W("set parameter " PUBLIC_LOG_S "(" PUBLIC_LOG_D32 ") on plugin " PUBLIC_LOG_S " failed",
-                            Plugin::GetTagStrName(keyPair.first), keyPair.first, plugin.GetName().c_str());
+                            Plugin::GetTagStrName(paramMapping.first), paramMapping.first, plugin.GetName().c_str());
             }
         } else {
-            if (!Plugin::HasTagInfo(keyPair.first)) {
-                MEDIA_LOG_W("tag " PUBLIC_LOG_D32 " is not in map, may be update it?", keyPair.first);
+            if (!Plugin::HasTagInfo(paramMapping.first)) {
+                MEDIA_LOG_W("tag " PUBLIC_LOG_D32 " is not in map, may be update it?", paramMapping.first);
             } else {
                 MEDIA_LOG_W("parameter " PUBLIC_LOG_S " in meta is not found or type mismatch",
-                            Plugin::GetTagStrName(keyPair.first));
+                            Plugin::GetTagStrName(paramMapping.first));
             }
         }
     }

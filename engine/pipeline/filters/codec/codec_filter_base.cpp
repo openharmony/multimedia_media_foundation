@@ -73,34 +73,35 @@ ErrorCode CodecFilterBase::Prepare()
 ErrorCode CodecFilterBase::UpdateMetaFromPlugin(Plugin::Meta& meta)
 {
     auto parameterMap = PluginParameterTable::GetInstance().FindAllowedParameterMap(filterType_);
-    for (const auto& keyPair : parameterMap) {
-        if ((keyPair.second.second & PARAM_GET) == 0) {
+    for (const auto& paramMapping : parameterMap) {
+        if ((paramMapping.second.second & PARAM_GET) == 0) {
             continue;
         }
         Plugin::ValueType tmpVal;
-        auto ret = TranslatePluginStatus(plugin_->GetParameter(keyPair.first, tmpVal));
+        auto ret = TranslatePluginStatus(plugin_->GetParameter(paramMapping.first, tmpVal));
         if (ret != ErrorCode::SUCCESS) {
-            if (Plugin::HasTagInfo(keyPair.first)) {
+            if (Plugin::HasTagInfo(paramMapping.first)) {
                 MEDIA_LOG_I("GetParameter " PUBLIC_LOG_S " from plugin " PUBLIC_LOG_S "failed with code "
-                    PUBLIC_LOG_D32, Plugin::GetTagStrName(keyPair.first), pluginInfo_->name.c_str(), ret);
+                    PUBLIC_LOG_D32, Plugin::GetTagStrName(paramMapping.first), pluginInfo_->name.c_str(), ret);
             } else {
-                MEDIA_LOG_I("Tag " PUBLIC_LOG_D32 " is not is map, may be update it?", keyPair.first);
+                MEDIA_LOG_I("Tag " PUBLIC_LOG_D32 " is not is map, may be update it?", paramMapping.first);
                 MEDIA_LOG_I("GetParameter " PUBLIC_LOG_D32 " from plugin " PUBLIC_LOG_S " failed with code "
-                    PUBLIC_LOG_D32, keyPair.first, pluginInfo_->name.c_str(), ret);
+                    PUBLIC_LOG_D32, paramMapping.first, pluginInfo_->name.c_str(), ret);
             }
             continue;
         }
-        if (!keyPair.second.first(keyPair.first, tmpVal)) {
-            if (Plugin::HasTagInfo(keyPair.first)) {
+        if (!paramMapping.second.first(paramMapping.first, tmpVal)) {
+            if (Plugin::HasTagInfo(paramMapping.first)) {
                 MEDIA_LOG_I("Type of Tag " PUBLIC_LOG_S " should be " PUBLIC_LOG_S,
-                    Plugin::GetTagStrName(keyPair.first), std::get<2>(Plugin::g_tagInfoMap.at(keyPair.first)));
+                    Plugin::GetTagStrName(paramMapping.first),
+                    std::get<2>(Plugin::g_tagInfoMap.at(paramMapping.first)));
             } else {
-                MEDIA_LOG_I("Tag " PUBLIC_LOG_D32 " is not is map, may be update it?", keyPair.first);
-                MEDIA_LOG_I("Type of Tag " PUBLIC_LOG_D32 "mismatch", keyPair.first);
+                MEDIA_LOG_I("Tag " PUBLIC_LOG_D32 " is not is map, may be update it?", paramMapping.first);
+                MEDIA_LOG_I("Type of Tag " PUBLIC_LOG_D32 "mismatch", paramMapping.first);
             }
             continue;
         }
-        meta.SetData(static_cast<Plugin::Tag>(keyPair.first), tmpVal);
+        meta.SetData(static_cast<Plugin::Tag>(paramMapping.first), tmpVal);
     }
     return ErrorCode::SUCCESS;
 }
