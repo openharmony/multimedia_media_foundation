@@ -80,7 +80,7 @@ void PrepareDumpDir()
         FALSE_RETURN(realPath != nullptr);
         allDumpFileFds[iter] = fopen(realPath, "ab+");
         if (allDumpFileFds[iter] == nullptr) {
-            MEDIA_LOG_W("Open file(" PUBLIC_LOG_S ") failed(" PUBLIC_LOG_S ").", fullPath.c_str(), strerror(errno));
+            MEDIA_LOG_W("Open file failed(" PUBLIC_LOG_S ").", strerror(errno));
         }
     }
 }
