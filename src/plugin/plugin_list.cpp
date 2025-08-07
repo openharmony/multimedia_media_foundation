@@ -646,7 +646,7 @@ void PluginList::AddAc3AudioDecoderPlugins()
 {
     PluginDescription ac3AudioDecoderPlugin;
     ac3AudioDecoderPlugin.pluginName = "OH.Media.Codec.Decoder.Audio.AC3";
-    ac3AudioDecoderPlugin.packageName = "Ac3AudioDecoder";
+    ac3AudioDecoderPlugin.packageName = "FFmpegAudioDecoders";
     ac3AudioDecoderPlugin.pluginType = PluginType::AUDIO_DECODER;
     ac3AudioDecoderPlugin.cap = "audio/ac3";
     ac3AudioDecoderPlugin.rank = DEFAULT_RANK;
