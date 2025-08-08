@@ -240,7 +240,8 @@ void VideoFfmpegDecoderPlugin::InitCodecContext()
     // the codec is opened again, causing a mismatch and possible segfault/corruption.
     avCodecContext_->coded_width = 0;
     avCodecContext_->coded_height = 0;
-    avCodecContext_->workaround_bugs |= FF_BUG_AUTODETECT;
+    avCodecContext_->workaround_bugs =
+        static_cast<uint32_t>(avCodecContext_->workaround_bugs) | static_cast<uint32_t>(FF_BUG_AUTODETECT);
     avCodecContext_->err_recognition = 1;
 }
 
@@ -558,7 +559,7 @@ Status VideoFfmpegDecoderPlugin::ScaleVideoFrame()
 }
 
 #ifndef OHOS_LITE
-Status VideoFfmpegDecoderPlugin::WriteYuvDataStride(const std::shared_ptr<Buffer>& frameBuffer, int32_t stride)
+Status VideoFfmpegDecoderPlugin::WriteYuvDataStride(const std::shared_ptr<Buffer>& frameBuffer, uint32_t stride)
 {
     auto frameBufferMem = frameBuffer->GetMemory();
     if (frameBufferMem == nullptr) {
@@ -707,7 +708,8 @@ Status VideoFfmpegDecoderPlugin::FillFrameBuffer(const std::shared_ptr<Buffer>& 
     MEDIA_LOG_DD("receive one frame: " PUBLIC_LOG_D32 ", picture type: " PUBLIC_LOG_D32 ", pixel format: "
                  PUBLIC_LOG_D32 ", packet size: " PUBLIC_LOG_D32, cachedFrame_->key_frame,
                  static_cast<int32_t>(cachedFrame_->pict_type), cachedFrame_->format, cachedFrame_->pkt_size);
-    FALSE_RETURN_V_MSG_E((cachedFrame_->flags & AV_FRAME_FLAG_CORRUPT) == 0, Status::ERROR_INVALID_DATA,
+    FALSE_RETURN_V_MSG_E((static_cast<uint32_t>(cachedFrame_->flags) & AV_FRAME_FLAG_CORRUPT) == 0,
+                         Status::ERROR_INVALID_DATA,
                          "decoded frame is corrupt");
     auto ret = ScaleVideoFrame();
     FALSE_RETURN_V_MSG_E(ret == Status::OK, ret, "ScaleVideoFrame fail: " PUBLIC_LOG_D32, ret);

@@ -28,6 +28,11 @@
 #include "foundation/osal/filesystem/file_system.h"
 #include "foundation/osal/utils/util.h"
 
+namespace {
+constexpr size_t LENGTH_OF_STRING = 2;
+constexpr size_t MAX_WRITE_SIZE = 3;
+}
+
 namespace OHOS {
 namespace Media {
 namespace Pipeline {
@@ -107,7 +112,7 @@ void DumpBufferToLog(const char* desc, const std::shared_ptr<Plugin::Buffer>& bu
     int len;
     const uint8_t* p = buffer->GetMemory()->GetReadOnlyData();
     for (size_t i = 0; i < realDumpSize; i++) {
-        len = snprintf_s(dstPtr, 3, 2, "%02x", p[i]); // max write 3 bytes, string len 2
+        len = snprintf_s(dstPtr, MAX_WRITE_SIZE, LENGTH_OF_STRING, "%02x", p[i]); // max write 3 bytes, string len 2
         FALSE_RETURN_MSG(len > 0 && len <= 2, "snprintf_s returned unexpected value " PUBLIC_LOG_D32, len); // max len 2
         dstPtr += len;
     }

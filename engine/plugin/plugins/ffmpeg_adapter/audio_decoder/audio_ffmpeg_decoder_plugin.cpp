@@ -346,7 +346,7 @@ Status AudioFfmpegDecoderPlugin::AssignExtraDataIfExistsLocked(const std::shared
             ctx->extradata = nullptr;
             return Status::ERROR_UNKNOWN;
         }
-        ctx->extradata_size = configSize;
+        ctx->extradata_size = static_cast<int32_t>configSize;
     }
     return Status::OK;
 }
