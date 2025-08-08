@@ -319,7 +319,7 @@ int PluginRegister::GetAllRegisteredPluginCount()
 {
     int count = 0;
     for (auto it : registerData_->registerTable) {
-        count += it.second.size();
+        count += static_cast<int32_t>(it.second.size());
     }
     return count;
 }
