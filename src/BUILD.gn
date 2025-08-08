@@ -205,7 +205,7 @@ if (hst_is_standard_sys) {
       "sasdk",
     ]
 
-    if (use_libfuzzer || use_clang_coverage) {
+    if (use_libfuzzer) {
       hst_plugin_path = "\"/system/asan/lib64/media/media_plugins\""
     } else if (target_cpu == "arm64" || is_emulator) {
       hst_plugin_path = "\"/system/lib64/media/media_plugins\""
