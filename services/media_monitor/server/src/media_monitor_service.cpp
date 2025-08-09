@@ -552,6 +552,15 @@ ErrCode MediaMonitorService::ErasePreferredDeviceByType(int32_t preferredType, i
     funcResult = audioMemo_.ErasePreferredDeviceByType(static_cast<PreferredType>(preferredType));
     return funcResult;
 }
+
+ErrCode MediaMonitorService::GetCollaborativeDeviceState(
+    std::map<std::string, uint32_t> &addressToCollaborativeEnabledMap, int32_t &funcResult)
+{
+    FALSE_UPDATE_RETURN_V_MSG_E(VerifyIsAudio(), funcResult, ERROR, "client permission denied");
+    MEDIA_LOG_I("ZYX MediaMonitorService GetCollaborativeDeviceState");
+    funcResult = audioMemo_.GetCollaborativeDeviceState(addressToCollaborativeEnabledMap);
+    return funcResult;
+}
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS

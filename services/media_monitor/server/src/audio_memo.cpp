@@ -205,6 +205,27 @@ int32_t AudioMemo::GetAudioExcludedDevicesMsg(std::map<AudioDeviceUsage,
     excludedDevices = excludedDevices_;
     return SUCCESS;
 }
+
+void UpdateCollaborativeDeviceState(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_I("ZYX Begin update collaborative device state");
+    if (bean == nullptr) {
+        MEDIA_LOG_E("eventBean is nullptr");
+        return;
+    }
+    std::string deviceAddress_ = bean->GetStringValue("ADDRESS");
+    CollaborativeState state = static_cast<CollaborativeState>(bean->GetIntValue("COLLABORATIVE_STATE"));
+    std::lock_guard<std::mutex> lockEventMap(collaborativeMutex_);
+    addressToCollaborativeEnabledMap_[deviceAddress_] = state;
+}
+
+int32_t GetCollaborativeDeviceState(std::map<std::string, CollaborativeState> &addressToCollaborativeEnabledMap)
+{
+    MEDIA_LOG_I("ZYX Begin get collaborative device state");
+    std::lock_guard<std::mutex> lockEventMap(collaborativeMutex_);
+    addressToCollaborativeEnabledMap = addressToCollaborativeEnabledMap_;
+    return SUCCESS;
+}
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS

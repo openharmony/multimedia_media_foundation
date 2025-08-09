@@ -125,6 +125,8 @@ void EventAggregate::UpdateAggregateEventList(std::shared_ptr<EventBean> &bean)
         case EXCLUDE_OUTPUT_DEVICE:
             HandleExcludedOutputDevices(bean);
             break;
+        case SET_DEVICE_COLLABORATIVE_STATE:
+            HandleSetDeviceCollaborativeState(bean);
         default:
             break;
     }
@@ -662,6 +664,14 @@ void EventAggregate::WriteInfo(int32_t fd, std::string &dumpString)
     if (fd != -1) {
         mediaMonitorPolicy_.WriteInfo(fd, dumpString);
     }
+}
+
+void EventAggregate::HandleSetDeviceCollaborativeState(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_I("ZYX Handle set collaborative device service");
+    audioMemo_.UpdateCollaborativeDeviceState(bean);
+    // 可以还是必须大数据打点？
+    // mediaMonitorPolicy_.WriteEvent(bean->GetEventId(), bean);
 }
 
 } // namespace MediaMonitor

@@ -76,6 +76,9 @@ enum EventId {
     HDI_EXCEPTION = 34,
     DB_ACCESS_EXCEPTION = 35,
     DEVICE_CHANGE_EXCEPTION = 36,
+
+    // for stroing collaborative service state
+    SET_DEVICE_COLLABORATIVE_STATE = 37,
 };
 
 enum EventType {
@@ -214,6 +217,13 @@ enum AudioDeviceUsage {
     ALL_CALL_DEVICES = 12,
     D_ALL_DEVICES = 15,
 };
+
+enum class CollaborativeState: uint32_t {
+    COLLABORATIVE_CLOSED = 0,
+    COLLABORATIVE_OPENED,
+    COLLABORATIVE_RESERVED,
+};
+
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS

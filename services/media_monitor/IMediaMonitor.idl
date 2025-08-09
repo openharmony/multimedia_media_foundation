@@ -25,4 +25,5 @@ interface OHOS.Media.MediaMonitor.IMediaMonitor {
     int GetPcmDumpStatus([out] int dumpEnable);
     int ErasePreferredDeviceByType([in] int preferredType);
     int GetAudioExcludedDevicesMsg([out] Map<int, List<MonitorDeviceInfo>> excludedDevices);
+    int GetCollaborativeDeviceState([out] Map<String, unsigned int> addressToCollaborativeEnabledMap);
 }

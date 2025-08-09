@@ -316,6 +316,19 @@ int32_t MediaMonitorManager::LoadDumpBufferWrap(const std::string &dumpEnable)
     }
     return SUCCESS;
 }
+
+void MediaMonitorManager::GetCollaborativeDeviceState(
+    std::map<std::string, CollaborativeState> &addressToCollaborativeEnabledMap)
+{
+    MEDIA_LOG_I("ZYX Get audio route devices");
+    sptr<IMediaMonitor> proxy = GetMediaMonitorProxy();
+    if (proxy == nullptr) {
+        MEDIA_LOG_E("proxy is nullptr.");
+        return;
+    }
+    int32_t ret;
+    proxy->GetCollaborativeDeviceState(addressToCollaborativeEnabledMap, ret);
+}
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS
