@@ -218,12 +218,6 @@ enum AudioDeviceUsage {
     D_ALL_DEVICES = 15,
 };
 
-enum class CollaborativeState: uint32_t {
-    COLLABORATIVE_CLOSED = 0,
-    COLLABORATIVE_OPENED,
-    COLLABORATIVE_RESERVED,
-};
-
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS

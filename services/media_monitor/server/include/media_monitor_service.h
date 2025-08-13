@@ -92,6 +92,9 @@ public:
 
     ErrCode GetAudioExcludedDevicesMsg(std::unordered_map<int32_t,
         std::vector<MonitorDeviceInfo>> &excludedDevices, int32_t &funcResult) override;
+    
+    ErrCode GetCollaborativeDeviceState(
+        std::unordered_map<std::string, uint32_t> &addressToCollaborativeEnabledMap, int32_t &funcResult) override;
 
     std::shared_ptr<DumpBufferWrap> dumpBufferWrap_ = nullptr;
 private:

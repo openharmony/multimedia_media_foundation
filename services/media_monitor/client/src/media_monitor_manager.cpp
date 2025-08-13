@@ -318,16 +318,21 @@ int32_t MediaMonitorManager::LoadDumpBufferWrap(const std::string &dumpEnable)
 }
 
 void MediaMonitorManager::GetCollaborativeDeviceState(
-    std::map<std::string, CollaborativeState> &addressToCollaborativeEnabledMap)
+    std::map<std::string, uint32_t> &addressToCollaborativeEnabledMap)
 {
-    MEDIA_LOG_I("ZYX Get audio route devices");
+    MEDIA_LOG_D("Get audio route devices");
     sptr<IMediaMonitor> proxy = GetMediaMonitorProxy();
     if (proxy == nullptr) {
         MEDIA_LOG_E("proxy is nullptr.");
         return;
     }
     int32_t ret;
-    proxy->GetCollaborativeDeviceState(addressToCollaborativeEnabledMap, ret);
+    std::unordered_map<std::string, uint32_t> storedCollaborativeMap;
+    // idl only accepts unorderedmap!
+    proxy->GetCollaborativeDeviceState(storedCollaborativeMap, ret);
+    for (auto &p: storedCollaborativeMap) {
+        addressToCollaborativeEnabledMap[p.first] = p.second;
+    }
 }
 } // namespace MediaMonitor
 } // namespace Media

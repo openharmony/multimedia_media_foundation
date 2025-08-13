@@ -554,11 +554,16 @@ ErrCode MediaMonitorService::ErasePreferredDeviceByType(int32_t preferredType, i
 }
 
 ErrCode MediaMonitorService::GetCollaborativeDeviceState(
-    std::map<std::string, uint32_t> &addressToCollaborativeEnabledMap, int32_t &funcResult)
+    std::unordered_map<std::string, uint32_t> &storedCollaborativeMap, int32_t &funcResult)
 {
     FALSE_UPDATE_RETURN_V_MSG_E(VerifyIsAudio(), funcResult, ERROR, "client permission denied");
-    MEDIA_LOG_I("ZYX MediaMonitorService GetCollaborativeDeviceState");
+    MEDIA_LOG_D("MediaMonitorService GetCollaborativeDeviceState");
+    // need to send unordered_map to idl
+    std::map<std::string, uint32_t> addressToCollaborativeEnabledMap;
     funcResult = audioMemo_.GetCollaborativeDeviceState(addressToCollaborativeEnabledMap);
+    for (auto &p: addressToCollaborativeEnabledMap) {
+        storedCollaborativeMap[p.first] = p.second;
+    }
     return funcResult;
 }
 } // namespace MediaMonitor

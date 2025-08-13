@@ -206,22 +206,22 @@ int32_t AudioMemo::GetAudioExcludedDevicesMsg(std::map<AudioDeviceUsage,
     return SUCCESS;
 }
 
-void UpdateCollaborativeDeviceState(std::shared_ptr<EventBean> &bean)
+void AudioMemo::UpdateCollaborativeDeviceState(std::shared_ptr<EventBean> &bean)
 {
-    MEDIA_LOG_I("ZYX Begin update collaborative device state");
+    MEDIA_LOG_D("Begin update collaborative device state");
     if (bean == nullptr) {
         MEDIA_LOG_E("eventBean is nullptr");
         return;
     }
     std::string deviceAddress_ = bean->GetStringValue("ADDRESS");
-    CollaborativeState state = static_cast<CollaborativeState>(bean->GetIntValue("COLLABORATIVE_STATE"));
+    uint32_t state = bean->GetIntValue("COLLABORATIVE_STATE");
     std::lock_guard<std::mutex> lockEventMap(collaborativeMutex_);
     addressToCollaborativeEnabledMap_[deviceAddress_] = state;
 }
 
-int32_t GetCollaborativeDeviceState(std::map<std::string, CollaborativeState> &addressToCollaborativeEnabledMap)
+int32_t AudioMemo::GetCollaborativeDeviceState(std::map<std::string, uint32_t> &addressToCollaborativeEnabledMap)
 {
-    MEDIA_LOG_I("ZYX Begin get collaborative device state");
+    MEDIA_LOG_D("Begin get collaborative device state");
     std::lock_guard<std::mutex> lockEventMap(collaborativeMutex_);
     addressToCollaborativeEnabledMap = addressToCollaborativeEnabledMap_;
     return SUCCESS;
