@@ -136,6 +136,7 @@ enum struct Tag : uint32_t {
     MEDIA_PLAYBACK_SPEED,                  ///< double, playback speed
     MEDIA_TYPE,                            ///< enum MediaType: Auido Video Subtitle...
     MEDIA_EDITLIST,                        ///< int32_t, use edit list
+    MEDIA_AIGC,                            ///< string, AIGC info
 
     /* -------------------- audio universal tag -------------------- */
     AUDIO_CHANNELS = SECTION_AUDIO_UNIVERSAL_START + 1, ///< uint32_t, stream channel num
