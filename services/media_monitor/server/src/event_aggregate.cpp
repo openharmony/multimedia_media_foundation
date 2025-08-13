@@ -670,8 +670,6 @@ void EventAggregate::HandleSetDeviceCollaborativeState(std::shared_ptr<EventBean
 {
     MEDIA_LOG_D("Handle set collaborative device service");
     audioMemo_.UpdateCollaborativeDeviceState(bean);
-    // 可以还是必须大数据打点？
-    // mediaMonitorPolicy_.WriteEvent(bean->GetEventId(), bean);
 }
 
 } // namespace MediaMonitor
