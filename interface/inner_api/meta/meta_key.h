@@ -104,7 +104,7 @@ public:
     static constexpr const char MEDIA_AVAILABLE_BITRATES[] = "available_bitRates";         ///< available bit ates
     static constexpr const char MEDIA_EDITLIST[] = "use_editlist";             ///< use edit list
     static constexpr const char MEDIA_ENABLE_MOOV_FRONT[] = "fast_start";      ///< set moov in front
-    static constexpr const char MEDIA_AIGC[] = "AIGC";                         ///< AIGC info
+    static constexpr const char MEDIA_AIGC[] = "aigc";                         ///< AIGC info
 
     /* -------------------- buffer meta tag -------------------- */
     static constexpr const char BUFFER_DECODING_TIMESTAMP[] = "decoding_timestamp";  ///< int64_t, decoding timestamp.
