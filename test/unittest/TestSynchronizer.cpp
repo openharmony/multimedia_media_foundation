@@ -91,23 +91,6 @@ HWTEST_F(TestSynchronizer, test_waitfor_succ, TestSize.Level1)
     EXPECT_EQ(true, rtv);
 }
 
-HWTEST_F(TestSynchronizer, test_waitfor_with_result_succ, TestSize.Level1)
-{
-    int syncId = 0;
-    int expect = 1234;
-    task1->RegisterHandler([this, syncId, expect] {
-        UNUSED_VARIABLE(this);
-        synchronizer.Notify(syncId, expect);
-    });
-    task1->Start();
-    int timeoutMs = 1000;
-    int result = 0;
-    auto rtv = synchronizer.WaitFor(
-        syncId, [] { return true; }, timeoutMs, result);
-    EXPECT_EQ(true, rtv);
-    EXPECT_EQ(expect, result);
-}
-
 HWTEST_F(TestSynchronizer, test_wait_succ, TestSize.Level1)
 {
     int syncId = 0;

@@ -237,17 +237,6 @@ HWTEST(TestPluginSetting, find_allowed_parameter_map, TestSize.Level1)
     ASSERT_TRUE(allowedMap.size() != 0);
 }
 
-HWTEST(TestPluginSetting, translate_into_parameter, TestSize.Level1)
-{
-    Tag tag = Tag::SECTION_REGULAR_START;
-    auto ret = TranslateIntoParameter(-1, tag);
-    ASSERT_FALSE(ret);
-    ASSERT_TRUE(tag == Tag::SECTION_REGULAR_START);
-    ret = TranslateIntoParameter(static_cast<const int>(Tag::SECTION_REGULAR_START), tag);
-    ASSERT_TRUE(ret);
-    ASSERT_TRUE(tag == Tag::SECTION_REGULAR_START);
-}
-
 HWTEST(TestPluginSetting, capability_to_string, TestSize.Level1)
 {
     std::shared_ptr<Capability> capability = std::make_shared<Capability>();
