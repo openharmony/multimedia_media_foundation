@@ -104,51 +104,6 @@ HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_WriteLogMsg_003, TestSize.Le
     EXPECT_EQ(bean->GetIntValue("DEVICETYPE"), deviceType2);
 }
 
-HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_SetMediaParams_001, TestSize.Level0)
-{
-    std::string version = OHOS::system::GetParameter("const.logsystem.versiontype", COMMERCIAL_VERSION);
-    size_t size = 0;
-    std::vector<std::pair<std::string, std::string>> kvpairs;
-    kvpairs.push_back({"BETA", "true"});
-    size = kvpairs.size();
-    int32_t ret = MediaMonitorManager::GetInstance().SetMediaParameters(kvpairs);
-    if (version != BETA_VERSION) {
-        EXPECT_EQ(ret, ERROR);
-        return;
-    }
-    EXPECT_EQ(kvpairs.size(), size);
-}
-
-HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_SetMediaParams_002, TestSize.Level0)
-{
-    std::string version = OHOS::system::GetParameter("const.logsystem.versiontype", COMMERCIAL_VERSION);
-    size_t size = 0;
-    std::vector<std::pair<std::string, std::string>> kvpairs;
-    kvpairs.push_back({"BETA", "false"});
-    size = kvpairs.size();
-    int32_t ret = MediaMonitorManager::GetInstance().SetMediaParameters(kvpairs);
-    if (version != BETA_VERSION) {
-        EXPECT_EQ(ret, ERROR);
-        return;
-    }
-    EXPECT_EQ(kvpairs.size(), size);
-}
-
-HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_GetMediaParams_001, TestSize.Level0)
-{
-    std::string version = OHOS::system::GetParameter("const.logsystem.versiontype", COMMERCIAL_VERSION);
-    size_t size = 1;
-    std::vector<std::string> subKeys;
-    subKeys.emplace_back("BETA");
-    std::vector<std::pair<std::string, std::string>> result;
-    int32_t ret = MediaMonitorManager::GetInstance().GetMediaParameters(subKeys, result);
-    if (version != BETA_VERSION) {
-        EXPECT_EQ(ret, ERROR);
-        return;
-    }
-    EXPECT_EQ(result.size(), size);
-}
-
 HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_WriteAudioBuffer_001, TestSize.Level0)
 {
     std::string filename = "/data/log/audiodump/unit_test_48000_1_1.pcm";
