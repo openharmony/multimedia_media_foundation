@@ -439,7 +439,7 @@ void MediaMonitorService::WriteBufferFromQueue(const std::string &fileName, std:
     std::string realFilePath = fileFloader_ + fileName;
     FALSE_RETURN_MSG(IsRealPath(fileFloader_), "check path failed");
     FILE *dumpFile = fopen(realFilePath.c_str(), "a");
-    FALSE_RETURN_MSG(dumpFile != nullptr, "pcm file %{public}s open failed", realFilePath.c_str());
+    FALSE_RETURN_MSG(dumpFile != nullptr, "pcm file open failed");
     if (fseek(dumpFile, 0, SEEK_END)) {
         (void)fclose(dumpFile);
         return;
@@ -539,7 +539,7 @@ bool MediaMonitorService::DeleteHistoryFile(const std::string &filePath)
     }
     (void)chmod(filePath.c_str(), FILE_MODE);
     if (remove(filePath.c_str()) != 0) {
-        MEDIA_LOG_E("remove file %{public}s failed ", filePath.c_str());
+        MEDIA_LOG_E("remove file failed ");
         return false;
     }
     return true;
