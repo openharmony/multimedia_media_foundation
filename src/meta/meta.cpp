@@ -551,6 +551,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::AV_PLAYER_HDR_TYPE, defaultInt8},
     // vector<int32_t>
     {Tag::REFERENCE_TRACK_IDS, defaultVectorInt32},
+    {Tag::MEDIA_AIGC, defaultString},
 };
 
 static std::map<AnyValueType, const Any &> g_ValueTypeDefaultValueMap = {
