@@ -77,7 +77,7 @@ enum EventId {
     DB_ACCESS_EXCEPTION = 35,
     DEVICE_CHANGE_EXCEPTION = 36,
 
-    // for stroing collaborative service state
+    // for storing collaborative service state
     SET_DEVICE_COLLABORATIVE_STATE = 37,
 };
 
