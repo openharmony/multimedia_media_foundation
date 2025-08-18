@@ -671,7 +671,6 @@ void EventAggregate::HandleSetDeviceCollaborativeState(std::shared_ptr<EventBean
     MEDIA_LOG_D("Handle set collaborative device service");
     audioMemo_.UpdateCollaborativeDeviceState(bean);
 }
-
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS
