@@ -402,6 +402,9 @@ public:
                                                  ///< during video decoder shutdown. This is an optional key,
                                                  ///< only used when configuring a video decoder in surface mode.
                                                  ///< By default, this feature is disabled (0).
+    static constexpr const char VIDEO_GRAPHIC_PIXEL_FORMAT[] =
+        "video_graphic_pixel_format"; ///< int32_t, Key for GraphicPixelFormat
+
     /* -------------------- video specific tag -------------------- */
     static constexpr const char VIDEO_H264_PROFILE[] = "video.h264.profile"; ///< @see VideoH264Profile
     static constexpr const char VIDEO_H264_LEVEL[] = "video.h264.level";     ///< h264 level
