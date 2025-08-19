@@ -79,6 +79,7 @@ enum EventId {
 
     // for storing collaborative service state
     SET_DEVICE_COLLABORATIVE_STATE = 37,
+    APP_BACKGROUND_STATE = 38,
 };
 
 enum EventType {
@@ -125,6 +126,37 @@ struct MonitorDeviceInfo : public Parcelable {
         data.ReadString(monitorDeviceInfo->address_);
         data.ReadString(monitorDeviceInfo->networkId_);
         return monitorDeviceInfo;
+    }
+};
+
+struct MonitorAppStateInfo : public Parcelable {
+    int32_t isFreeze_ = -1;
+    int32_t isBack_ = -1;
+    int32_t hasSession_ = -1;
+    int32_t hasBackTask_ = -1;
+    int32_t isBinder_ = -1;
+
+    bool Marshalling(Parcel &parcel) const override
+    {
+        return parcel.WriteInt32(isFreeze_) &&
+            parcel.WriteInt32(isBack_) &&
+            parcel.WriteInt32(hasSession_) &&
+            parcel.WriteInt32(hasBackTask_) &&
+            parcel.WriteInt32(isBinder_);
+    }
+
+    static MonitorAppStateInfo *Unmarshalling(Parcel &data)
+    {
+        MonitorAppStateInfo *monitorAppStateInfo = new (std::nothrow) MonitorAppStateInfo();
+        if (monitorAppStateInfo == nullptr) {
+            return nullptr;
+        }
+        data.ReadInt32(monitorAppStateInfo->isFreeze_);
+        data.ReadInt32(monitorAppStateInfo->isBack_);
+        data.ReadInt32(monitorAppStateInfo->hasSession_);
+        data.ReadInt32(monitorAppStateInfo->hasBackTask_);
+        data.ReadInt32(monitorAppStateInfo->isBinder_);
+        return monitorAppStateInfo;
     }
 };
 

@@ -24,6 +24,8 @@ namespace {
 constexpr OHOS::HiviewDFX::HiLogLabel LABEL = {LOG_CORE, LOG_DOMAIN_FOUNDATION, "AudioMemo"};
 constexpr int32_t EXCLUDED = 0;
 constexpr int32_t UNEXCLUDED = 1;
+constexpr int32_t ADD = 1;
+constexpr int32_t REMOVE = 0;
 }
 
 namespace OHOS {
@@ -226,6 +228,46 @@ int32_t AudioMemo::GetCollaborativeDeviceState(std::map<std::string, uint32_t> &
     addressToCollaborativeEnabledMap = addressToCollaborativeEnabledMap_;
     return SUCCESS;
 }
+
+void AudioMemo::UpdateAppBackgroundStateInner(int32_t pid, std::shared_ptr<MonitorAppStateInfo> appStateInfo,
+    int32_t isAdd)
+{
+    FALSE_RETURN_MSG(appStateInfo != nullptr, "appStateInfo is null");
+    MEDIA_LOG_I("pid %{public}d is add %{public}d, isFreeze %{public}d, isBack %{public}d, hasSession %{public}d,"
+        "hasBackTask %{public}d, isBinder %{public}d", pid, isAdd, appStateInfo->isFreeze_, appStateInfo->isBack_,
+        appStateInfo->hasSession_, appStateInfo->hasBackTask_, appStateInfo->isBinder_);
+    if (isAdd == ADD) {
+        appStateMap_[pid] = appStateInfo;
+    } else if (isAdd == REMOVE) {
+        auto iter = appStateMap_.find(pid);
+        if (iter != appStateMap_.end()) {
+            appStateMap_.erase(iter);
+        }
+    }
+}
+
+void AudioMemo::UpdateAppBackgroundState(std::shared_ptr<EventBean> &bean)
+{
+    FALSE_RETURN_MSG(bean != nullptr, "event bean is null");
+    std::lock_guard<std::mutex> lockEventMap(appStateMutex_);
+    MonitorAppStateInfo appStateInfo;
+    int32_t pid = bean->GetIntValue("PID");
+    appStateInfo.isFreeze_ = bean->GetIntValue("IS_FREEZE");
+    appStateInfo.isBack_ = bean->GetIntValue("IS_BACK");
+    appStateInfo.hasSession_ = bean->GetIntValue("HAS_SESSION");
+    appStateInfo.hasBackTask_ = bean->GetIntValue("HAS_BACK_TASK");
+    appStateInfo.isBinder_ = bean->GetIntValue("IS_BINDER");
+    int32_t isAdd = bean->GetIntValue("IS_ADD");
+    UpdateAppBackgroundStateInner(pid, std::make_shared<MonitorAppStateInfo>(appStateInfo), isAdd);
+}
+
+int32_t AudioMemo::GetAudioAppStateMsg(std::map<int32_t, std::shared_ptr<MonitorAppStateInfo>> &appStateMap)
+{
+    std::lock_guard<std::mutex> lockEventMap(appStateMutex_);
+    appStateMap = appStateMap_;
+    return SUCCESS;
+}
+
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS
