@@ -45,6 +45,8 @@ public:
 
     void GetAudioExcludedDevicesMsg(std::map<AudioDeviceUsage,
         std::vector<std::shared_ptr<MonitorDeviceInfo>>> &excludedDevices);
+    
+    void GetCollaborativeDeviceState(std::map<std::string, uint32_t> &addressToCollaborativeEnabledMap);
 
 private:
     MediaMonitorManager();

@@ -46,6 +46,8 @@ public:
     void UpdateExcludedDevice(std::shared_ptr<EventBean> &bean);
     int32_t GetAudioExcludedDevicesMsg(std::map<AudioDeviceUsage,
         std::vector<std::shared_ptr<MonitorDeviceInfo>>> &excludedDevices);
+    void UpdateCollaborativeDeviceState(std::shared_ptr<EventBean> &bean);
+    int32_t GetCollaborativeDeviceState(std::map<std::string, uint32_t> &addressToCollaborativeEnabledMap);
 private:
     PreferredType GetPreferredType(std::shared_ptr<EventBean> &bean);
     PreferredType GetPreferredRenderType(int32_t streamUsage);
@@ -61,6 +63,9 @@ private:
 
     std::mutex excludedDeviceMutex_;
     std::map<AudioDeviceUsage, std::vector<std::shared_ptr<MonitorDeviceInfo>>> excludedDevices_;
+
+    std::mutex collaborativeMutex_;
+    std::map<std::string, uint32_t> addressToCollaborativeEnabledMap_;
 };
 
 } // namespace MediaMonitor

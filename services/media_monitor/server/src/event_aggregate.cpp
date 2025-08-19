@@ -125,6 +125,8 @@ void EventAggregate::UpdateAggregateEventList(std::shared_ptr<EventBean> &bean)
         case EXCLUDE_OUTPUT_DEVICE:
             HandleExcludedOutputDevices(bean);
             break;
+        case SET_DEVICE_COLLABORATIVE_STATE:
+            HandleSetDeviceCollaborativeState(bean);
         default:
             break;
     }
@@ -664,6 +666,11 @@ void EventAggregate::WriteInfo(int32_t fd, std::string &dumpString)
     }
 }
 
+void EventAggregate::HandleSetDeviceCollaborativeState(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Handle set collaborative device service");
+    audioMemo_.UpdateCollaborativeDeviceState(bean);
+}
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS
