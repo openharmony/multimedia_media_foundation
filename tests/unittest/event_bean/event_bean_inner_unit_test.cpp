@@ -15,6 +15,8 @@
 
 #include <gtest/gtest.h>
 #include "event_bean.h"
+#include "iremote_proxy.h"
+#include "parcel.h"
 
 using namespace std;
 using namespace testing::ext;
@@ -36,6 +38,13 @@ public:
     std::shared_ptr<MediaMonitor::EventBean> eventBean_;
     const std::string strKey = "invalidKey";
     std::string strValue = "invalidValue";
+    int32_t int32Value_ = -1;
+    uint64_t uint64Value_ = -1;
+    float floatValue_ = -1.0f;
+    std::map<std::string, std::int32_t> int32Map_;
+    std::map<std::string, std::string> stringMap_;
+    std::map<std::string, uint64_t> uint64Map_;
+    std::map<std::string, float> floatMap_;
 };
 
 void EventBeanInnerUnitTest::SetUpTestCase(void) {}
@@ -134,6 +143,83 @@ HWTEST_F(EventBeanInnerUnitTest, UpdateFloatMap_001, TestSize.Level1)
 {
     eventBean_->UpdateFloatMap(strKey, 1);
     EXPECT_EQ(0, eventBean_->GetFloatValue(strKey));
+}
+
+/**
+ * @tc.name: GetIntMap_001
+ * @tc.desc: Test GetIntMap interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(EventBeanInnerUnitTest, GetIntMap_001, TestSize.Level1)
+{
+    eventBean_->Add(strKey, int32Value_);
+    int32Map_ = eventBean_->GetIntMap();
+    EXPECT_EQ(int32Value_, int32Map_[strKey]);
+    int32Map_.clear();
+}
+
+/**
+ * @tc.name: GetStringMap_001
+ * @tc.desc: Test GetStringMap interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(EventBeanInnerUnitTest, GetStringMap_001, TestSize.Level1)
+{
+    eventBean_->Add(strKey, strValue);
+    stringMap_ = eventBean_->GetStringMap();
+    EXPECT_EQ(strValue, stringMap_[strKey]);
+    stringMap_.clear();
+}
+
+/**
+ * @tc.name: GetUint64Map_001
+ * @tc.desc: Test GetUint64Map interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(EventBeanInnerUnitTest, GetUint64Map_001, TestSize.Level1)
+{
+    eventBean_->Add(strKey, uint64Value_);
+    uint64Map_ = eventBean_->GetUint64Map();
+    EXPECT_EQ(uint64Value_, uint64Map_[strKey]);
+    uint64Map_.clear();
+}
+
+/**
+ * @tc.name: GetFloatMap_001
+ * @tc.desc: Test GetFloatMap interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(EventBeanInnerUnitTest, GetFloatMap_001, TestSize.Level1)
+{
+    eventBean_->Add(strKey, floatValue_);
+    floatMap_ = eventBean_->GetFloatMap();
+    EXPECT_EQ(floatValue_, floatMap_[strKey]);
+    floatMap_.clear();
+}
+
+/**
+ * @tc.name: ReadFromParcel_001
+ * @tc.desc: Test ReadFromParcel interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(EventBeanInnerUnitTest, ReadFromParcel_001, TestSize.Level1)
+{
+    MessageParcel parcel;
+    eventBean_->ReadFromParcel(parcel);
+    EXPECT_NE(nullptr, eventBean_);
+}
+
+/**
+ * @tc.name: Unmarshalling_001
+ * @tc.desc: Test Unmarshalling interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(EventBeanInnerUnitTest, Unmarshalling_001, TestSize.Level1)
+{
+    Parcel data;
+    MediaMonitor::EventBean *eventBean = eventBean_->Unmarshalling(data);
+    EXPECT_NE(nullptr, eventBean);
+    delete eventBean;
 }
 } // namespace EventBeanUT
 } // namespace Media

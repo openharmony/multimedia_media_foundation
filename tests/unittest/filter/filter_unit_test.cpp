@@ -37,6 +37,56 @@ public:
     const int32_t sleepTime_ = 1;
 };
 
+class FilterLinkCallbackTest : public FilterLinkCallback {
+public:
+    FilterLinkCallbackTest() = default;
+
+    ~FilterLinkCallbackTest() = default;
+
+    void OnLinkedResult(const sptr<AVBufferQueueProducer>& queue, std::shared_ptr<Meta>& meta) override
+    {
+        (void)queue;
+        (void)meta;
+    }
+
+    void OnUnlinkedResult(std::shared_ptr<Meta>& meta) override
+    {
+        (void)meta;
+    }
+
+    void OnUpdatedResult(std::shared_ptr<Meta>& meta) override
+    {
+        (void)meta;
+    }
+};
+
+class FilterCallbackTest : public FilterCallback {
+public:
+    FilterCallbackTest() = default;
+
+    ~FilterCallbackTest() = default;
+
+    Status OnCallback(const std::shared_ptr<Filter>& filter, FilterCallBackCommand cmd, StreamType outType) override
+    {
+        (void)filter;
+        (void)cmd;
+        (void)outType;
+        return Status::OK;
+    }
+};
+
+class EventReceiverTest : public EventReceiver {
+public:
+    EventReceiverTest() = default;
+
+    ~EventReceiverTest() = default;
+
+    void OnEvent(const Event& event) override
+    {
+        (void)event;
+    }
+};
+
 void FilterUnitTest::SetUpTestCase(void) {}
 
 void FilterUnitTest::TearDownTestCase(void) {}
@@ -432,6 +482,202 @@ HWTEST_F(FilterUnitTest, ReInitAndStart_002, TestSize.Level1)
     sleep(sleepTime_);
     EXPECT_EQ(Status::OK, filter->ReInitAndStart());
     sleep(sleepTime_);
+}
+
+/**
+ * @tc.name: SetPlayRange_001
+ * @tc.desc: Test SetPlayRange interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(FilterUnitTest, SetPlayRange_001, TestSize.Level1)
+{
+    std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
+    EXPECT_EQ(Status::OK, filter->SetPlayRange(0, 0));
+}
+
+/**
+ * @tc.name: DoSetPlayRange_001
+ * @tc.desc: Test DoSetPlayRange interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(FilterUnitTest, DoSetPlayRange_001, TestSize.Level1)
+{
+    std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
+    EXPECT_EQ(Status::OK, filter->DoSetPlayRange(0, 0));
+}
+
+/**
+ * @tc.name: Flush_001
+ * @tc.desc: Test Flush interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(FilterUnitTest, Flush_001, TestSize.Level1)
+{
+    std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
+    EXPECT_EQ(Status::OK, filter->Flush());
+}
+
+/**
+ * @tc.name: DoFlush_001
+ * @tc.desc: Test DoFlush interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(FilterUnitTest, DoFlush_001, TestSize.Level1)
+{
+    std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
+    EXPECT_EQ(Status::OK, filter->DoFlush());
+}
+
+/**
+ * @tc.name: HandleFormatChange_001
+ * @tc.desc: Test HandleFormatChange interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(FilterUnitTest, HandleFormatChange_001, TestSize.Level1)
+{
+    std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
+    std::shared_ptr<Meta> meta = std::make_shared<Meta>();
+    EXPECT_EQ(Status::OK, filter->HandleFormatChange(Meta));
+}
+
+/**
+ * @tc.name: DoSetPerfRecEnabled_001
+ * @tc.desc: Test DoSetPerfRecEnabled interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(FilterUnitTest, DoSetPerfRecEnabled_001, TestSize.Level1)
+{
+    std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
+    EXPECT_EQ(Status::OK, filter->DoSetPerfRecEnabled(true));
+}
+
+/**
+ * @tc.name: DoProcessInputBuffer_001
+ * @tc.desc: Test DoProcessInputBuffer interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(FilterUnitTest, DoProcessInputBuffer_001, TestSize.Level1)
+{
+    std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
+    EXPECT_EQ(Status::OK, filter->DoProcessInputBuffer(0, true));
+}
+
+/**
+ * @tc.name: SetParameter_001
+ * @tc.desc: Test SetParameter interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(FilterUnitTest, SetParameter_001, TestSize.Level1)
+{
+    std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
+    std::shared_ptr<Meta> inMeta = std::make_shared<Meta>();
+    std::shared_ptr<Meta> outMeta = std::make_shared<Meta>();
+    filter->SetParameter(inMeta);
+    filter->GetParameter(outMeta);
+    EXPECT_EQ(inMeta, outMeta);
+}
+
+/**
+ * @tc.name: GetParameter_001
+ * @tc.desc: Test GetParameter interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(FilterUnitTest, GetParameter_001, TestSize.Level1)
+{
+    std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
+    std::shared_ptr<Meta> inMeta = std::make_shared<Meta>();
+    std::shared_ptr<Meta> outMeta = std::make_shared<Meta>();
+    filter->SetParameter(inMeta);
+    filter->GetParameter(outMeta);
+    EXPECT_EQ(inMeta, outMeta);
+}
+
+/**
+ * @tc.name: OnUpdated_001
+ * @tc.desc: Test OnUpdated interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(FilterUnitTest, OnUpdated_001, TestSize.Level1)
+{
+    std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
+    StreamType streamType = StreamType::STREAMTYPE_PACKED;
+    std::shared_ptr<Meta> meta = std::make_shared<Meta>();
+    std::shared_ptr<FilterLinkCallback> cb = std::make_shared<FilterLinkCallbackTest>();
+    EXPECT_EQ(Status::OK, filter->OnUpdated(streamType, meta, cb));
+}
+
+/**
+ * @tc.name: OnUnLinked_001
+ * @tc.desc: Test OnUnLinked interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(FilterUnitTest, OnUnLinked_001, TestSize.Level1)
+{
+    std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
+    StreamType streamType = StreamType::STREAMTYPE_PACKED;
+    std::shared_ptr<FilterLinkCallback> cb = std::make_shared<FilterLinkCallbackTest>();
+    EXPECT_EQ(Status::OK, filter->OnUnLinked(streamType, cb));
+}
+
+/**
+ * @tc.name: SetMuted_001
+ * @tc.desc: Test SetMuted interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(FilterUnitTest, SetMuted_001, TestSize.Level1)
+{
+    std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
+    EXPECT_EQ(Status::OK, filter->SetMuted(true));
+}
+
+/**
+ * @tc.name: NotifyRelease_001
+ * @tc.desc: Test NotifyRelease interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(FilterUnitTest, NotifyRelease_001, TestSize.Level1)
+{
+    std::shared_ptr<FilterCallback> filterCb = std::make_shared<FilterCallbackTest>();
+    filterCb->NotifyRelease();
+    EXPECT_NE(nullptr, filterCb);
+}
+
+/**
+ * @tc.name: OnDfxEvent_001
+ * @tc.desc: Test OnDfxEvent interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(FilterUnitTest, OnDfxEvent_001, TestSize.Level1)
+{
+    std::shared_ptr<EventReceiver> eventReceiver = std::make_shared<EventReceiverTest>();
+    DfxEvent event;
+    eventReceiver->OnDfxEvent(event);
+    EXPECT_NE(nullptr, eventReceiver);
+}
+
+/**
+ * @tc.name: NotifyRelease_002
+ * @tc.desc: Test NotifyRelease interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(FilterUnitTest, NotifyRelease_002, TestSize.Level1)
+{
+    std::shared_ptr<EventReceiver> eventReceiver = std::make_shared<EventReceiverTest>();
+    eventReceiver->NotifyRelease();
+    EXPECT_NE(nullptr, eventReceiver);
+}
+
+/**
+ * @tc.name: OnMemoryUsageEvent_001
+ * @tc.desc: Test OnMemoryUsageEvent interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(FilterUnitTest, OnMemoryUsageEvent_001, TestSize.Level1)
+{
+    std::shared_ptr<EventReceiver> eventReceiver = std::make_shared<EventReceiverTest>();
+    DfxEvent event;
+    eventReceiver->OnMemoryUsageEvent(event);
+    EXPECT_NE(nullptr, eventReceiver);
 }
 } // namespace FilterUnitTest
 } // namespace Media
