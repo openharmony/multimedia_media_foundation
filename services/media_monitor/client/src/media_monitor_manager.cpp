@@ -145,6 +145,21 @@ void MediaMonitorManager::GetAudioExcludedDevicesMsg(std::map<AudioDeviceUsage,
     }
 }
 
+void MediaMonitorManager::GetAudioAppStateMsg(std::map<int32_t, std::shared_ptr<MonitorAppStateInfo>> &appStateMap)
+{
+    MEDIA_LOG_D("Get audio app state msg");
+    sptr<IMediaMonitor> proxy = GetMediaMonitorProxy();
+    FALSE_RETURN_MSG(proxy != nullptr, "proxy is nullptr");
+    int32_t ret;
+    std::unordered_map<int32_t, MonitorAppStateInfo> appStateInfos;
+    proxy->GetAudioAppStateMsg(appStateInfos, ret);
+    FALSE_RETURN_MSG(ret == SUCCESS, "GetAudioAppStateMsg with error %{public}d", ret);
+    for (auto &appStateInfo : appStateInfos) {
+        std::shared_ptr<MonitorAppStateInfo> infoPtr = std::make_shared<MonitorAppStateInfo>(appStateInfo.second);
+        appStateMap.emplace(appStateInfo.first, infoPtr);
+    }
+}
+
 void MediaMonitorManager::WriteAudioBuffer(const std::string &fileName, void *ptr, size_t size)
 {
     if (!dumpEnable_) {

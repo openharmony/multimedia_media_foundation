@@ -84,6 +84,7 @@ public:
     void WriteSystemTonePlayback(const std::unique_ptr<DfxSystemTonePlaybackResult> &result);
     void WriteStreamOccupancy(std::shared_ptr<EventBean> &bean);
     void WriteAudioRecordError(std::shared_ptr<EventBean> &bean);
+    void WriteAppBackgroundState(std::shared_ptr<EventBean> &bean);
 };
 
 } // namespace MediaMonitor

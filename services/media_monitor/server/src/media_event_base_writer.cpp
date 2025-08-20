@@ -693,6 +693,18 @@ void MediaEventBaseWriter::WriteAudioRecordError(std::shared_ptr<EventBean> &bea
     }
 #endif
 }
+
+void MediaEventBaseWriter::WriteAppBackgroundState(std::shared_ptr<EventBean> &bean)
+{
+    if (bean == nullptr) {
+        MEDIA_LOG_E("eventBean is nullptr");
+        return;
+    }
+#ifdef MONITOR_ENABLE_HISYSEVENT
+    HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "APP_BACKGROUND_STATE",
+        HiviewDFX::HiSysEvent::EventType::BEHAVIOR);
+#endif
+}
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS

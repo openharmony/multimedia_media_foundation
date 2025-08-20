@@ -191,6 +191,18 @@ ErrCode MediaMonitorService::GetAudioExcludedDevicesMsg(std::unordered_map<int32
     return funcResult;
 }
 
+ErrCode MediaMonitorService::GetAudioAppStateMsg(std::unordered_map<int32_t, MonitorAppStateInfo> &appStateMapOut,
+    int32_t &funcResult)
+{
+    FALSE_UPDATE_RETURN_V_MSG_E(VerifyIsAudio(), funcResult, ERROR, "client permission denied");
+    std::map<int32_t, std::shared_ptr<MonitorAppStateInfo>> appStateInner;
+    funcResult = audioMemo_.GetAudioAppStateMsg(appStateInner);
+    for (auto &appState : appStateInner) {
+        appStateMapOut[static_cast<int32_t>(appState.first)] = *appState.second;
+    }
+    return funcResult;
+}
+
 void MediaMonitorService::AudioEncodeDump()
 {
     MEDIA_LOG_I("encode pcm start");
