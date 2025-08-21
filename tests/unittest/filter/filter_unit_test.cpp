@@ -537,7 +537,7 @@ HWTEST_F(FilterUnitTest, HandleFormatChange_001, TestSize.Level1)
 {
     std::shared_ptr<Filter> filter = std::make_shared<Filter>("testFilter", FilterType::FILTERTYPE_VENC, true);
     std::shared_ptr<Meta> meta = std::make_shared<Meta>();
-    EXPECT_EQ(Status::OK, filter->HandleFormatChange(Meta));
+    EXPECT_EQ(Status::OK, filter->HandleFormatChange(meta));
 }
 
 /**
