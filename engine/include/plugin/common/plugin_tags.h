@@ -135,6 +135,7 @@ enum struct Tag : uint32_t {
     MEDIA_SEEKABLE,                        ///< enum Seekable: Seekable status of the media
     MEDIA_PLAYBACK_SPEED,                  ///< double, playback speed
     MEDIA_TYPE,                            ///< enum MediaType: Auido Video Subtitle...
+    MEDIA_AIGC,                            ///< string, AIGC info
 
     /* -------------------- audio universal tag -------------------- */
     AUDIO_CHANNELS = SECTION_AUDIO_UNIVERSAL_START + 1, ///< uint32_t, stream channel num
