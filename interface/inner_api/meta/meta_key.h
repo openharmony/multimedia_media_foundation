@@ -101,6 +101,7 @@ public:
     static constexpr const char MEDIA_TIME_STAMP[] = "timeStamp";              ///< time stamp
     static constexpr const char MEDIA_END_OF_STREAM[] = "endOfStream";         ///< end of stream
     static constexpr const char MEDIA_AVAILABLE_BITRATES[] = "available_bitRates";         ///< available bit ates
+    static constexpr const char MEDIA_AIGC[] = "aigc";                         ///< AIGC info
 
     /* -------------------- buffer meta tag -------------------- */
     static constexpr const char BUFFER_DECODING_TIMESTAMP[] = "decoding_timestamp";  ///< int64_t, decoding timestamp.
