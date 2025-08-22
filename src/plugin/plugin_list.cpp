@@ -57,7 +57,7 @@ std::vector<PluginDescription> PluginList::GetPluginsByCap(PluginType pluginType
 PluginDescription PluginList::GetPluginByName(std::string name)
 {
     std::vector<PluginDescription>::iterator it;
-    PluginDescription bestMatchedPlugin;
+    PluginDescription bestMatchedPlugin = { "", "", PluginType::INVALID_TYPE, "", 0 };
     for (it = pluginDescriptionList_.begin(); it != pluginDescriptionList_.end(); it++) {
         PluginDescription temp = *it;
         if (strcmp((*it).pluginName.c_str(), name.c_str()) == 0) {
