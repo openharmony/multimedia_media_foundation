@@ -280,6 +280,8 @@ public:
                                     ///< and output data more than required by the codec standards. This is an optional
                                     ///< key that applies only to video encoder or video decoder. It is used in
                                     ///< configure.
+    static constexpr const char VIDEO_OPERATING_RATE[] =
+        "video_operating_rate"; ///< double, Key for video operating rate.
     static constexpr const char VIDEO_ENCODER_QP_MAX[] =
         "video_encoder_qp_max"; ///< int32_t, key for describing the maximum quantization parameter allowed for video
                                 ///< encoder. It is used in configure/setparameter or takes effect immediately with the
@@ -295,8 +297,6 @@ public:
         "video_encoder_roi_params"; ///< string, key for video encoder roi params
     static constexpr const char VIDEO_ENCODER_TARGET_QP[] =
         "video_encoder_target_qp"; ///< int32_t, Key for video encoder target qp.
-    static constexpr const char VIDEO_ENCODER_OPERATING_RATE[] =
-        "video_encoder_operating_rate"; ///< double, Key for video encoder operating rate.
     static constexpr const char VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK[] =
         "video_encoder_enable_surface_input_callback"; ///< bool, the associated value is an bool (true or false): true
                                                        ///< is enabled, false is closed.
