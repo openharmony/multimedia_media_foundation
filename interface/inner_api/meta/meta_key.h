@@ -103,7 +103,8 @@ public:
     static constexpr const char MEDIA_END_OF_STREAM[] = "endOfStream";         ///< end of stream
     static constexpr const char MEDIA_AVAILABLE_BITRATES[] = "available_bitRates";         ///< available bit ates
     static constexpr const char MEDIA_EDITLIST[] = "use_editlist";             ///< use edit list
-    static constexpr const char MEDIA_ENABLE_MOOV_FRONT[] = "fast_start";        ///< set moov in front
+    static constexpr const char MEDIA_ENABLE_MOOV_FRONT[] = "fast_start";      ///< set moov in front
+    static constexpr const char MEDIA_AIGC[] = "aigc";                         ///< AIGC info
 
     /* -------------------- buffer meta tag -------------------- */
     static constexpr const char BUFFER_DECODING_TIMESTAMP[] = "decoding_timestamp";  ///< int64_t, decoding timestamp.
@@ -279,6 +280,8 @@ public:
                                     ///< and output data more than required by the codec standards. This is an optional
                                     ///< key that applies only to video encoder or video decoder. It is used in
                                     ///< configure.
+    static constexpr const char VIDEO_OPERATING_RATE[] =
+        "video_operating_rate"; ///< double, Key for video operating rate.
     static constexpr const char VIDEO_ENCODER_QP_MAX[] =
         "video_encoder_qp_max"; ///< int32_t, key for describing the maximum quantization parameter allowed for video
                                 ///< encoder. It is used in configure/setparameter or takes effect immediately with the
@@ -294,8 +297,6 @@ public:
         "video_encoder_roi_params"; ///< string, key for video encoder roi params
     static constexpr const char VIDEO_ENCODER_TARGET_QP[] =
         "video_encoder_target_qp"; ///< int32_t, Key for video encoder target qp.
-    static constexpr const char VIDEO_ENCODER_OPERATING_RATE[] =
-        "video_encoder_operating_rate"; ///< double, Key for video encoder operating rate.
     static constexpr const char VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK[] =
         "video_encoder_enable_surface_input_callback"; ///< bool, the associated value is an bool (true or false): true
                                                        ///< is enabled, false is closed.
@@ -401,6 +402,9 @@ public:
                                                  ///< during video decoder shutdown. This is an optional key,
                                                  ///< only used when configuring a video decoder in surface mode.
                                                  ///< By default, this feature is disabled (0).
+    static constexpr const char VIDEO_GRAPHIC_PIXEL_FORMAT[] =
+        "video_graphic_pixel_format"; ///< int32_t, Key for GraphicPixelFormat
+
     /* -------------------- video specific tag -------------------- */
     static constexpr const char VIDEO_H264_PROFILE[] = "video.h264.profile"; ///< @see VideoH264Profile
     static constexpr const char VIDEO_H264_LEVEL[] = "video.h264.level";     ///< h264 level

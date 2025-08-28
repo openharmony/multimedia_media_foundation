@@ -128,6 +128,23 @@ void EventAggregate::UpdateAggregateEventList(std::shared_ptr<EventBean> &bean)
             HandleExcludedOutputDevices(bean);
             break;
         default:
+            UpdateAggregateStateEventList(bean);
+            break;
+    }
+}
+
+void EventAggregate::UpdateAggregateStateEventList(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Update Aggregate State Event List");
+    EventId eventId = bean->GetEventId();
+    switch (eventId) {
+        case SET_DEVICE_COLLABORATIVE_STATE:
+            HandleSetDeviceCollaborativeState(bean);
+            break;
+        case APP_BACKGROUND_STATE:
+            HandleAppBackgroundStateChange(bean);
+            break;
+        default:
             break;
     }
 }
@@ -659,6 +676,11 @@ void EventAggregate::HandleExcludedOutputDevices(std::shared_ptr<EventBean> &bea
     mediaMonitorPolicy_.WriteEvent(bean->GetEventId(), bean);
 }
 
+void EventAggregate::HandleAppBackgroundStateChange(std::shared_ptr<EventBean> &bean)
+{
+    audioMemo_.UpdateAppBackgroundState(bean);
+}
+
 void EventAggregate::WriteInfo(int32_t fd, std::string &dumpString)
 {
     if (fd != -1) {
@@ -666,6 +688,11 @@ void EventAggregate::WriteInfo(int32_t fd, std::string &dumpString)
     }
 }
 
+void EventAggregate::HandleSetDeviceCollaborativeState(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Handle set collaborative device service");
+    audioMemo_.UpdateCollaborativeDeviceState(bean);
+}
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS

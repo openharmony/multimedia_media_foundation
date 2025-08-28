@@ -93,6 +93,7 @@ DEFINE_METADATA_SETTER_GETTER_FUNC(VideoEncodeBitrateMode, int32_t)
 DEFINE_METADATA_SETTER_GETTER_FUNC(TemporalGopReferenceMode, int32_t)
 DEFINE_METADATA_SETTER_GETTER_FUNC(VideoEncodeBFrameGopMode, int32_t)
 DEFINE_METADATA_SETTER_GETTER_FUNC(AudioChannelLayout, int64_t)
+DEFINE_METADATA_SETTER_GETTER_FUNC(GraphicPixelFormat, int32_t)
 
 #define  DEFINE_METADATA_SETTER_GETTER(tag, EnumType) {tag, std::make_pair(Set##EnumType, Get##EnumType)}
 
@@ -118,6 +119,7 @@ static std::map<TagType, std::pair<MetaSetterFunction, MetaGetterFunction>> g_me
     DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_ENCODE_BITRATE_MODE, VideoEncodeBitrateMode),
     DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_ENCODE_B_FRAME_GOP_MODE, VideoEncodeBFrameGopMode),
     DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_ENCODER_TEMPORAL_GOP_REFERENCE_MODE, TemporalGopReferenceMode),
+    DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_GRAPHIC_PIXEL_FORMAT, GraphicPixelFormat),
 };
 
 using  MetaSetterInt64Function = std::function<bool(Meta&, const TagType&, int64_t&)>;
@@ -248,6 +250,7 @@ static Any defaultTemporalGopReferenceMode = TemporalGopReferenceMode::ADJACENT_
 static Any defaultAudioChannelLayout = AudioChannelLayout::UNKNOWN;
 static Any defaultAudioAacProfile = AudioAacProfile::ELD;
 static Any defaultAudioAacStreamFormat = AudioAacStreamFormat::ADIF;
+static Any defaultGraphicPixelFormat = GraphicPixelFormat::GRAPHIC_PIXEL_FMT_YCBCR_420_SP;
 static Any defaultVectorUInt8 = std::vector<uint8_t>();
 static Any defaultVectorUInt32 = std::vector<uint32_t>();
 static Any defaultVectorInt32 = std::vector<int32_t>();
@@ -271,6 +274,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_ENCODE_BITRATE_MODE, defaultVideoEncodeBitrateMode},
     {Tag::VIDEO_ENCODE_B_FRAME_GOP_MODE, defaultVideoEncodeBFrameGopMode},
     {Tag::VIDEO_ENCODER_TEMPORAL_GOP_REFERENCE_MODE, defaultTemporalGopReferenceMode},
+    {Tag::VIDEO_GRAPHIC_PIXEL_FORMAT, defaultGraphicPixelFormat},
     // Int8
     {Tag::RECORDER_HDR_TYPE, defaultInt8},
     // Uint_8
@@ -332,11 +336,11 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_CROP_LEFT, defaultInt32},
     {Tag::VIDEO_CROP_RIGHT, defaultInt32},
     {Tag::VIDEO_SLICE_HEIGHT, defaultInt32},
+    {Tag::VIDEO_OPERATING_RATE, defaultDouble},
     {Tag::VIDEO_ENCODER_QP_MAX, defaultInt32},
     {Tag::VIDEO_ENCODER_QP_MIN, defaultInt32},
     {Tag::VIDEO_ENCODER_QP_START, defaultInt32},
     {Tag::VIDEO_ENCODER_TARGET_QP, defaultInt32},
-    {Tag::VIDEO_ENCODER_OPERATING_RATE, defaultDouble},
     {Tag::FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_COUNT, defaultInt32},
     {Tag::OH_MD_KEY_AUDIO_OBJECT_NUMBER, defaultInt32},
     {Tag::AV_CODEC_CALLER_PID, defaultInt32},
@@ -551,6 +555,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::AV_PLAYER_HDR_TYPE, defaultInt8},
     // vector<int32_t>
     {Tag::REFERENCE_TRACK_IDS, defaultVectorInt32},
+    {Tag::MEDIA_AIGC, defaultString},
 };
 
 static std::map<AnyValueType, const Any &> g_ValueTypeDefaultValueMap = {

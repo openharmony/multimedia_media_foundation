@@ -214,7 +214,7 @@ public:
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_RENDER_SET_FLAG, bool, AnyValueType::BOOL);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_H265_PROFILE, Plugins::HEVCProfile, AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_H265_LEVEL, Plugins::HEVCLevel, AnyValueType::INT32_T);
-
+    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_GRAPHIC_PIXEL_FORMAT, GraphicPixelFormat, AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_CHROMA_LOCATION,
         Plugins::ChromaLocation, AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_ENCODER_TEMPORAL_GOP_REFERENCE_MODE,
@@ -279,11 +279,11 @@ public:
         tagCharSeq == Tag::VIDEO_CROP_LEFT or
         tagCharSeq == Tag::VIDEO_CROP_RIGHT or
         tagCharSeq == Tag::VIDEO_SLICE_HEIGHT or
+        tagCharSeq == Tag::VIDEO_OPERATING_RATE or
         tagCharSeq == Tag::VIDEO_ENCODER_QP_MAX or
         tagCharSeq == Tag::VIDEO_ENCODER_QP_MIN or
         tagCharSeq == Tag::VIDEO_ENCODER_QP_START or
         tagCharSeq == Tag::VIDEO_ENCODER_TARGET_QP or
-        tagCharSeq == Tag::VIDEO_ENCODER_OPERATING_RATE or
         tagCharSeq == Tag::FEATURE_PROPERTY_VIDEO_ENCODER_MAX_LTR_FRAME_COUNT or
         tagCharSeq == Tag::SCREEN_CAPTURE_ERR_CODE or
         tagCharSeq == Tag::SCREEN_CAPTURE_DURATION or
@@ -383,6 +383,7 @@ public:
         tagCharSeq == Tag::DRM_DECRYPT_MAX_DURATION or
         tagCharSeq == Tag::DRM_DECRYPT_TIMES, uint32_t, AnyValueType::UINT32_T);
     DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::MEDIA_AIGC or
         tagCharSeq == Tag::MIME_TYPE or
         tagCharSeq == Tag::MEDIA_FILE_URI or
         tagCharSeq == Tag::MEDIA_TITLE or

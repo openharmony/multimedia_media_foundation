@@ -191,6 +191,18 @@ ErrCode MediaMonitorService::GetAudioExcludedDevicesMsg(std::unordered_map<int32
     return funcResult;
 }
 
+ErrCode MediaMonitorService::GetAudioAppStateMsg(std::unordered_map<int32_t, MonitorAppStateInfo> &appStateMapOut,
+    int32_t &funcResult)
+{
+    FALSE_UPDATE_RETURN_V_MSG_E(VerifyIsAudio(), funcResult, ERROR, "client permission denied");
+    std::map<int32_t, std::shared_ptr<MonitorAppStateInfo>> appStateInner;
+    funcResult = audioMemo_.GetAudioAppStateMsg(appStateInner);
+    for (auto &appState : appStateInner) {
+        appStateMapOut[static_cast<int32_t>(appState.first)] = *appState.second;
+    }
+    return funcResult;
+}
+
 void MediaMonitorService::AudioEncodeDump()
 {
     MEDIA_LOG_I("encode pcm start");
@@ -439,7 +451,7 @@ void MediaMonitorService::WriteBufferFromQueue(const std::string &fileName, std:
     std::string realFilePath = fileFloader_ + fileName;
     FALSE_RETURN_MSG(IsRealPath(fileFloader_), "check path failed");
     FILE *dumpFile = fopen(realFilePath.c_str(), "a");
-    FALSE_RETURN_MSG(dumpFile != nullptr, "pcm file %{public}s open failed", realFilePath.c_str());
+    FALSE_RETURN_MSG(dumpFile != nullptr, "pcm file open failed");
     if (fseek(dumpFile, 0, SEEK_END)) {
         (void)fclose(dumpFile);
         return;
@@ -539,7 +551,7 @@ bool MediaMonitorService::DeleteHistoryFile(const std::string &filePath)
     }
     (void)chmod(filePath.c_str(), FILE_MODE);
     if (remove(filePath.c_str()) != 0) {
-        MEDIA_LOG_E("remove file %{public}s failed ", filePath.c_str());
+        MEDIA_LOG_E("remove file failed ");
         return false;
     }
     return true;
@@ -550,6 +562,20 @@ ErrCode MediaMonitorService::ErasePreferredDeviceByType(int32_t preferredType, i
     FALSE_UPDATE_RETURN_V_MSG_E(VerifyIsAudio(), funcResult, ERROR, "client permission denied");
     MEDIA_LOG_D("ErasePreferredDeviceByType enter");
     funcResult = audioMemo_.ErasePreferredDeviceByType(static_cast<PreferredType>(preferredType));
+    return funcResult;
+}
+
+ErrCode MediaMonitorService::GetCollaborativeDeviceState(
+    std::unordered_map<std::string, uint32_t> &storedCollaborativeMap, int32_t &funcResult)
+{
+    FALSE_UPDATE_RETURN_V_MSG_E(VerifyIsAudio(), funcResult, ERROR, "client permission denied");
+    MEDIA_LOG_D("MediaMonitorService GetCollaborativeDeviceState");
+    // need to send unordered_map to idl
+    std::map<std::string, uint32_t> addressToCollaborativeEnabledMap;
+    funcResult = audioMemo_.GetCollaborativeDeviceState(addressToCollaborativeEnabledMap);
+    for (auto &p: addressToCollaborativeEnabledMap) {
+        storedCollaborativeMap[p.first] = p.second;
+    }
     return funcResult;
 }
 } // namespace MediaMonitor

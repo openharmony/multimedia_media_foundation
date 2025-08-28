@@ -83,6 +83,9 @@ private:
         std::shared_ptr<EventBean> &bean, std::shared_ptr<EventBean> &beanInVector);
     void HandleStreamPropertyStats(std::shared_ptr<EventBean> &bean);
     void HandleExcludedOutputDevices(std::shared_ptr<EventBean> &bean);
+    void HandleSetDeviceCollaborativeState(std::shared_ptr<EventBean> &bean);
+    void HandleAppBackgroundStateChange(std::shared_ptr<EventBean> &bean);
+    void UpdateAggregateStateEventList(std::shared_ptr<EventBean> &bean);
 
     AudioMemo& audioMemo_;
     MediaMonitorPolicy& mediaMonitorPolicy_;

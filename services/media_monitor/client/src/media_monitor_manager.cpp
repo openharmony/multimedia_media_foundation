@@ -145,6 +145,21 @@ void MediaMonitorManager::GetAudioExcludedDevicesMsg(std::map<AudioDeviceUsage,
     }
 }
 
+void MediaMonitorManager::GetAudioAppStateMsg(std::map<int32_t, std::shared_ptr<MonitorAppStateInfo>> &appStateMap)
+{
+    MEDIA_LOG_D("Get audio app state msg");
+    sptr<IMediaMonitor> proxy = GetMediaMonitorProxy();
+    FALSE_RETURN_MSG(proxy != nullptr, "proxy is nullptr");
+    int32_t ret;
+    std::unordered_map<int32_t, MonitorAppStateInfo> appStateInfos;
+    proxy->GetAudioAppStateMsg(appStateInfos, ret);
+    FALSE_RETURN_MSG(ret == SUCCESS, "GetAudioAppStateMsg with error %{public}d", ret);
+    for (auto &appStateInfo : appStateInfos) {
+        std::shared_ptr<MonitorAppStateInfo> infoPtr = std::make_shared<MonitorAppStateInfo>(appStateInfo.second);
+        appStateMap.emplace(appStateInfo.first, infoPtr);
+    }
+}
+
 void MediaMonitorManager::WriteAudioBuffer(const std::string &fileName, void *ptr, size_t size)
 {
     if (!dumpEnable_) {
@@ -315,6 +330,24 @@ int32_t MediaMonitorManager::LoadDumpBufferWrap(const std::string &dumpEnable)
         g_dumpBufferWrap = nullptr;
     }
     return SUCCESS;
+}
+
+void MediaMonitorManager::GetCollaborativeDeviceState(
+    std::map<std::string, uint32_t> &addressToCollaborativeEnabledMap)
+{
+    MEDIA_LOG_D("Get audio route devices");
+    sptr<IMediaMonitor> proxy = GetMediaMonitorProxy();
+    if (proxy == nullptr) {
+        MEDIA_LOG_E("proxy is nullptr.");
+        return;
+    }
+    int32_t ret;
+    std::unordered_map<std::string, uint32_t> storedCollaborativeMap;
+    // idl only accepts unorderedmap!
+    proxy->GetCollaborativeDeviceState(storedCollaborativeMap, ret);
+    for (auto &p: storedCollaborativeMap) {
+        addressToCollaborativeEnabledMap[p.first] = p.second;
+    }
 }
 } // namespace MediaMonitor
 } // namespace Media

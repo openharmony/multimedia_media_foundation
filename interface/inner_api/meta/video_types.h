@@ -17,6 +17,7 @@
 #define MEDIA_FOUNDATION_VIDEO_TYPES_H
 
 #include <cstdint>  // NOLINT: used it
+#include "surface_type.h"
 
 namespace OHOS {
 namespace Media {

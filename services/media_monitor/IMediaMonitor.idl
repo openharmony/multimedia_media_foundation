@@ -15,6 +15,7 @@
 sequenceable DumpBufferDefine..DumpBuffer;
 sequenceable OHOS.Media.MediaMonitor.EventBean;
 sequenceable MediaMonitorInfo..OHOS.Media.MediaMonitor.MonitorDeviceInfo;
+sequenceable MediaMonitorInfo..OHOS.Media.MediaMonitor.MonitorAppStateInfo;
 interface OHOS.Media.MediaMonitor.IMediaMonitor {
     [oneway] void WriteLogMsg([in] EventBean bean);
     int GetAudioRouteMsg([out] Map<int, MonitorDeviceInfo> preferredDevices);
@@ -25,4 +26,6 @@ interface OHOS.Media.MediaMonitor.IMediaMonitor {
     int GetPcmDumpStatus([out] int dumpEnable);
     int ErasePreferredDeviceByType([in] int preferredType);
     int GetAudioExcludedDevicesMsg([out] Map<int, List<MonitorDeviceInfo>> excludedDevices);
+    int GetCollaborativeDeviceState([out] Map<String, unsigned int> addressToCollaborativeEnabledMap);
+    int GetAudioAppStateMsg([out] Map<int, MonitorAppStateInfo> appStateMap);
 }
