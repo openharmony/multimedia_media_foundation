@@ -731,6 +731,7 @@ map<TagType, std::string> testStringData = {
     {Tag::AV_TRANSCODER_DST_VIDEO_MIME, "String AV_TRANSCODER_DST_VIDEO_MIME"},
     {Tag::TRACK_REFERENCE_TYPE, "String TRACK_REFERENCE_TYPE"},
     {Tag::TRACK_DESCRIPTION, "String TRACK_DESCRIPTION"},
+    {Tag::MEDIA_AIGC, "String MEDIA_AIGC"}
 };
 
 /**
