@@ -368,6 +368,7 @@ public:
         tagCharSeq == Tag::DRM_DECRYPT_MAX_DURATION or
         tagCharSeq == Tag::DRM_DECRYPT_TIMES, uint32_t, AnyValueType::UINT32_T);
     DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::MEDIA_AIGC or
         tagCharSeq == Tag::MIME_TYPE or
         tagCharSeq == Tag::MEDIA_FILE_URI or
         tagCharSeq == Tag::MEDIA_TITLE or
