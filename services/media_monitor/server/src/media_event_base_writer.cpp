@@ -705,6 +705,47 @@ void MediaEventBaseWriter::WriteAppBackgroundState(std::shared_ptr<EventBean> &b
         HiviewDFX::HiSysEvent::EventType::BEHAVIOR);
 #endif
 }
+
+void MediaEventBaseWriter::WriteMessageQueueException(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Write message queue error");
+    if (bean == nullptr) {
+        MEDIA_LOG_E("eventBean is nullptr");
+        return;
+    }
+#ifdef MONITOR_ENABLE_HISYSEVENT
+    auto ret = HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "HPAE_MESSAGE_QUEUE_EXCEPTION",
+        HiviewDFX::HiSysEvent::EventType::FAULT,
+        "MSG_TYPE", bean->GetIntValue("MSG_TYPE"),
+        "MSG_FUNC_NAME", bean->GetStringValue("MSG_FUNC_NAME"),
+        "MSG_ERROR_DESCRIPTION", bean->GetStringValue("MSG_ERROR_DESCRIPTION"));
+    if (ret) {
+        MEDIA_LOG_E("write event fail: HPAE_MESSAGE_QUEUE_EXCEPTION, ret = %{public}d", ret);
+    }
+#endif
+}
+
+void MediaEventBaseWriter::WriteStreamMoveException(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Write stream move error");
+    if (bean == nullptr) {
+        MEDIA_LOG_E("eventBean is nullptr");
+        return;
+    }
+#ifdef MONITOR_ENABLE_HISYSEVENT
+    auto ret = HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "MOVE_STREAM_EXCEPTION",
+        HiviewDFX::HiSysEvent::EventType::FAULT,
+        "CLIENT_UID", bean->GetIntValue("CLIENT_UID"),
+        "SESSION_ID", static_cast<uint32_t>(bean->GetIntValue("SESSION_ID")),
+        "CURRENT_NAME", bean->GetStringValue("CURRENT_NAME"),
+        "DES_NAME", bean->GetStringValue("DES_NAME"),
+        "STREAM_TYPE", static_cast<uint32_t>(bean->GetIntValue("STREAM_TYPE")),
+        "ERROR_DESCRIPTION", bean->GetStringValue("ERROR_DESCRIPTION"));
+    if (ret) {
+        MEDIA_LOG_E("write event fail: MOVE_STREAM_EXCEPTION, ret = %{public}d", ret);
+    }
+#endif
+}
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS

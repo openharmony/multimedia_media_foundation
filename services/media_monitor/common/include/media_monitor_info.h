@@ -80,6 +80,8 @@ enum EventId {
     // for storing collaborative service state
     SET_DEVICE_COLLABORATIVE_STATE = 37,
     APP_BACKGROUND_STATE = 38,
+    HPAE_MESSAGE_QUEUE_EXCEPTION = 39,
+    STREAM_MOVE_EXCEPTION = 40,
 };
 
 enum EventType {

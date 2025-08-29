@@ -73,6 +73,8 @@ void EventAggregate::WriteEvent(std::shared_ptr<EventBean> &bean)
         case ADD_REMOVE_CUSTOMIZED_TONE:
         case RECORD_ERROR:
         case STREAM_OCCUPANCY:
+        case HPAE_MESSAGE_QUEUE_EXCEPTION:
+        case STREAM_MOVE_EXCEPTION:
             mediaMonitorPolicy_.WriteEvent(bean->GetEventId(), bean);
             break;
         default:
