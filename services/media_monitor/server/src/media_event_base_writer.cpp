@@ -746,6 +746,22 @@ void MediaEventBaseWriter::WriteStreamMoveException(std::shared_ptr<EventBean> &
     }
 #endif
 }
+
+void MediaEventBaseWriter::WriteVolumeApiInvoke(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Write volume api invoke");
+    if (bean == nullptr) {
+        MEDIA_LOG_E("eventBean is nullptr");
+        return;
+    }
+#ifdef MONITOR_ENABLE_HISYSEVENT
+    HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "VOLUME_API_INVOKE",
+        HiviewDFX::HiSysEvent::EventType::STATISTIC,
+        "APP_NAME", bean->GetStringValue("APP_NAME"),
+        "FUNC_NAME", bean->GetStringValue("FUNC_NAME"),
+        "PARAM_VALUE", bean->GetIntValue("PARAM_VALUE"));
+#endif
+}
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS

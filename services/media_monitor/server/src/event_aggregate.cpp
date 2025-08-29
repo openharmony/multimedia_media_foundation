@@ -144,6 +144,9 @@ void EventAggregate::UpdateAggregateStateEventList(std::shared_ptr<EventBean> &b
         case APP_BACKGROUND_STATE:
             HandleAppBackgroundStateChange(bean);
             break;
+        case VOLUME_API_INVOKE:
+            HandleVolumeApiInvokeEvent(bean);
+            break;
         default:
             break;
     }
@@ -692,6 +695,12 @@ void EventAggregate::HandleSetDeviceCollaborativeState(std::shared_ptr<EventBean
 {
     MEDIA_LOG_D("Handle set collaborative device service");
     audioMemo_.UpdateCollaborativeDeviceState(bean);
+}
+
+void EventAggregate::HandleVolumeApiInvokeEvent(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Handle volume api invoke event");
+    mediaMonitorPolicy_.AddToVolumeApiInvokeQueue(bean);
 }
 } // namespace MediaMonitor
 } // namespace Media

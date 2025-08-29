@@ -82,6 +82,8 @@ enum EventId {
     APP_BACKGROUND_STATE = 38,
     HPAE_MESSAGE_QUEUE_EXCEPTION = 39,
     STREAM_MOVE_EXCEPTION = 40,
+
+    VOLUME_API_INVOKE = 41,
 };
 
 enum EventType {
