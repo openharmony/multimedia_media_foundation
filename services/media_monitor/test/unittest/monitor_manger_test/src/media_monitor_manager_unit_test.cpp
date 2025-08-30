@@ -112,6 +112,74 @@ HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_WriteAudioBuffer_001, TestSi
     EXPECT_EQ(buffer, nullptr);
 }
 
+HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_WriteLogMsg_005, TestSize.Level0)
+{
+    ModuleId moduleId = AUDIO;
+    EventId eventId = STREAM_MOVE_EXCEPTION;
+    EventType eventType = FAULT_EVENT;
+
+    int32_t clientId = 1000;
+    uint32_t sessionId = 123456;
+    std::string srcName = "testSrc";
+    std::string desName = "testDes";
+    uint32_t streamType = 1;
+    std::string error = "test error";
+    std::shared_ptr<EventBean> bean = std::make_shared<EventBean>(moduleId, eventId, eventType);
+    bean->Add("CLIENT_UID", clientId);
+    bean->Add("SESSION_ID", static_cast<int32_t>(sessionId));
+    bean->Add("CURRENT_NAME", srcName);
+    bean->Add("DES_NAME", desName);
+    bean->Add("STREAM_TYPE", static_cast<int32_t>(streamType));
+    bean->Add("ERROR_DESCRIPTION", error);
+    Media::MediaMonitor::MediaMonitorManager::GetInstance().WriteLogMsg(bean);
+
+    EXPECT_EQ(bean->GetModuleId(), moduleId);
+    EXPECT_EQ(bean->GetEventId(), eventId);
+    EXPECT_EQ(bean->GetEventType(), eventType);
+
+    std::shared_ptr<EventBean> bean1 = std::make_shared<EventBean>(moduleId, eventId, eventType);
+    bean1->Add("CLIENT_UID_U", clientId);
+    bean1->Add("SESSION_ID_U", static_cast<int32_t>(sessionId));
+    bean1->Add("CURRENT_NAME_U", srcName);
+    bean1->Add("DES_NAME_U", desName);
+    bean1->Add("STREAM_TYPE_U", static_cast<int32_t>(streamType));
+    bean1->Add("ERROR_DESCRIPTION_U", error);
+    Media::MediaMonitor::MediaMonitorManager::GetInstance().WriteLogMsg(bean1);
+
+    EXPECT_EQ(bean1->GetModuleId(), moduleId);
+    EXPECT_EQ(bean1->GetEventId(), eventId);
+    EXPECT_EQ(bean1->GetEventType(), eventType);
+}
+
+HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_WriteLogMsg_006, TestSize.Level0)
+{
+    ModuleId moduleId = AUDIO;
+    EventId eventId = HPAE_MESSAGE_QUEUE_EXCEPTION;
+    EventType eventType = FAULT_EVENT;
+
+    int32_t msg_type = 1000;
+    std::string func_name = "unit_test_send_request";
+    std::string error = "test error";
+    std::shared_ptr<EventBean> bean = std::make_shared<EventBean>(moduleId, eventId, eventType);
+    bean->Add("MSG_TYPE", msg_type);
+    bean->Add("MSG_FUNC_NAME", func_name);
+    bean->Add("MSG_ERROR_DESCRIPTION", error);
+    Media::MediaMonitor::MediaMonitorManager::GetInstance().WriteLogMsg(bean);
+
+    EXPECT_EQ(bean->GetModuleId(), moduleId);
+    EXPECT_EQ(bean->GetEventId(), eventId);
+    EXPECT_EQ(bean->GetEventType(), eventType);
+
+    std::shared_ptr<EventBean> bean1 = std::make_shared<EventBean>(moduleId, eventId, eventType);
+    bean1->Add("MSG_TYPE_U", msg_type);
+    bean1->Add("MSG_FUNC_NAME_U", func_name);
+    bean1->Add("MSG_ERROR_DESCRIPTION_U", error);
+    Media::MediaMonitor::MediaMonitorManager::GetInstance().WriteLogMsg(bean1);
+
+    EXPECT_EQ(bean1->GetModuleId(), moduleId);
+    EXPECT_EQ(bean1->GetEventId(), eventId);
+    EXPECT_EQ(bean1->GetEventType(), eventType);
+}
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS
