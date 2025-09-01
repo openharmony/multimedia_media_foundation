@@ -645,10 +645,10 @@ Status VideoFfmpegDecoderPlugin::WriteYuvData(const std::shared_ptr<Buffer>& fra
         }
     }
 #endif
-    size_t ySize = static_cast<size_t>(scaleLineSize_[0] * height_);
+    size_t ySize = static_cast<size_t>(scaleLineSize_[0]) * height_;
     // AV_PIX_FMT_YUV420P: scaleLineSize_[0] = scaleLineSize_[1] * 2 = scaleLineSize_[2] * 2
     // AV_PIX_FMT_NV12: scaleLineSize_[0] = scaleLineSize_[1]
-    size_t uvSize = static_cast<size_t>(scaleLineSize_[1] * height_ / 2); // 2
+    size_t uvSize = static_cast<size_t>(scaleLineSize_[1]) * height_ / 2; // 2
     size_t frameSize = 0;
     if (pixelFormat_ == VideoPixelFormat::YUV420P) {
         frameSize = ySize + (uvSize * 2); // 2
@@ -689,7 +689,7 @@ Status VideoFfmpegDecoderPlugin::WriteRgbData(const std::shared_ptr<Buffer>& fra
         }
     }
 #endif
-    size_t frameSize = static_cast<size_t>(scaleLineSize_[0] * height_);
+    size_t frameSize = static_cast<size_t>(scaleLineSize_[0]) * height_;
     FALSE_RETURN_V_MSG_E(frameBufferMem->GetCapacity() >= frameSize, Status::ERROR_NO_MEMORY,
                          "output buffer size is not enough: real[" PUBLIC_LOG "zu], need[" PUBLIC_LOG "zu]",
                          frameBufferMem->GetCapacity(), frameSize);
@@ -738,7 +738,7 @@ Status VideoFfmpegDecoderPlugin::FillFrameBuffer(const std::shared_ptr<Buffer>& 
         MEDIA_LOG_E("Unsupported pixel format: " PUBLIC_LOG_U32, pixelFormat_);
         return Status::ERROR_UNSUPPORTED_FORMAT;
     }
-    frameBuffer->pts = static_cast<uint64_t>(cachedFrame_->pts);
+    frameBuffer->pts = static_cast<int64_t>(cachedFrame_->pts);
     MEDIA_LOG_DD("FillFrameBuffer success");
     return Status::OK;
 }
