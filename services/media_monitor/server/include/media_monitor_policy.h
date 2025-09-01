@@ -21,6 +21,8 @@
 #include <atomic>
 #include <map>
 #include <vector>
+#include <queue>
+#include <unordered_set>
 #include "event_bean.h"
 #include "monitor_utils.h"
 #include "media_event_base_writer.h"
@@ -64,6 +66,7 @@ public:
     void HandleVolumeToEventVector(std::shared_ptr<EventBean> &bean);
     void HandStreamPropertyToEventVector(std::shared_ptr<EventBean> &streamProperty);
     void TriggerSystemTonePlaybackTimeEvent(std::shared_ptr<EventBean> &bean);
+    void AddToVolumeApiInvokeQueue(std::shared_ptr<EventBean> &bean);
 
     void WhetherToHiSysEvent();
     void WriteInfo(int32_t fd, std::string &dumpString);
@@ -72,8 +75,12 @@ private:
     static constexpr int32_t DEFAULT_AGGREGATION_FREQUENCY = 1000;
     static constexpr int32_t DEFAULT_AGGREGATION_TIME = 24 * 60;
     static constexpr int32_t DEFAULT_TONE_PLAYBACK_TIME = 120;
+    static constexpr int32_t DEFAULT_VOLUME_API_INVOKE_TIME = 24 * 60;
     static constexpr uint64_t DEFAULT_AGGREGATION_TIME_SECEND = 24 * 60 * 60;
     static constexpr uint64_t DEFAULT_TONE_PLAYBACK_TIME_SECEND = 2 * 60 * 60;
+    static constexpr uint64_t DEFAULT_VOLUME_API_INVOKE_TIME_SECEND = 24 * 60 * 60;
+
+    static constexpr int32_t DEFAULT_VOLUME_API_INVOKE_COUNT_ONCE = 20;
 
     void ReadParameter();
     void StartTimeThread();
@@ -85,13 +92,17 @@ private:
     BundleInfo GetBundleInfo(int32_t appUid);
     void SetBundleNameToEvent(const std::string key, std::shared_ptr<EventBean> &bean,
         const std::string &bundleNameKey);
+    void HandleToVolumeApiInvokeEvent();
 
     uint64_t curruntTime_ = 0;
     uint64_t lastAudioTime_ = 0;
     uint64_t afterSleepTime_ = 0;
     uint64_t lastSystemTonePlaybackTime_ = 0;
+    uint64_t lastVolumeApiInvokeTime_ = 0;
     std::unique_ptr<std::thread> timeThread_ = nullptr;
     std::atomic_bool startThread_ = true;
+
+    int32_t volumeApiInvokeOnceEvent_ = DEFAULT_VOLUME_API_INVOKE_COUNT_ONCE;
 
     MediaEventBaseWriter& mediaEventBaseWriter_;
 
@@ -99,6 +110,11 @@ private:
     std::vector<std::shared_ptr<EventBean>> eventVector_;
     std::map<int32_t, BundleInfo> cachedBundleInfoMap_;
     std::vector<std::shared_ptr<EventBean>> systemTonePlayEventVector_;
+    std::queue<std::shared_ptr<EventBean>> volumeApiInvokeEventQueue_;
+    std::unordered_set<std::string> volumeApiInvokeRecordSet_;
+
+    int32_t volumeApiInvokeRecordSetSize_ = 20 * 30 * 12;
+    std::mutex volumeApiInvokeMutex_;
 
     int32_t systemTonePlayerCount_ = 0;
     int32_t aggregationFrequency_ = DEFAULT_AGGREGATION_FREQUENCY;
@@ -106,6 +122,8 @@ private:
     int32_t systemTonePlaybackTime_ = DEFAULT_TONE_PLAYBACK_TIME;
     uint64_t systemTonePlaybackSleepTime_ = DEFAULT_TONE_PLAYBACK_TIME_SECEND;
     uint64_t aggregationSleepTime_ = DEFAULT_AGGREGATION_TIME_SECEND;
+    int32_t volumeApiInvokeTime_ = DEFAULT_VOLUME_API_INVOKE_TIME;
+    uint64_t volumeApiInvokeSleepTime_ = DEFAULT_VOLUME_API_INVOKE_TIME_SECEND;
 };
 
 } // namespace MediaMonitor

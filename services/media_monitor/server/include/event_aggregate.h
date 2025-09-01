@@ -86,6 +86,7 @@ private:
     void HandleSetDeviceCollaborativeState(std::shared_ptr<EventBean> &bean);
     void HandleAppBackgroundStateChange(std::shared_ptr<EventBean> &bean);
     void UpdateAggregateStateEventList(std::shared_ptr<EventBean> &bean);
+    void HandleVolumeApiInvokeEvent(std::shared_ptr<EventBean> &bean);
 
     AudioMemo& audioMemo_;
     MediaMonitorPolicy& mediaMonitorPolicy_;

@@ -81,6 +81,10 @@ void MediaMonitorPolicy::TimeFunc()
             HandleToSystemTonePlaybackEvent();
             lastSystemTonePlaybackTime_ = TimeUtils::GetCurSec();
         }
+        if (afterSleepTime_ - lastVolumeApiInvokeTime_ >= volumeApiInvokeSleepTime_) {
+            HandleToVolumeApiInvokeEvent();
+            lastVolumeApiInvokeTime_ = TimeUtils::GetCurSec();
+        }
     }
 }
 
@@ -544,7 +548,7 @@ void MediaMonitorPolicy::HandStreamPropertyToEventVector(std::shared_ptr<EventBe
     if (!isInEventMap) {
         std::shared_ptr<EventBean> eventBean = std::make_shared<EventBean>(ModuleId::AUDIO,
             EventId::STREAM_PROPERTY_STATS, EventType::DURATION_AGGREGATION_EVENT);
-        
+
         eventBean->Add("IS_PLAYBACK", streamProperty->GetIntValue("IS_PLAYBACK"));
         eventBean->Add("STREAM_TYPE", streamProperty->GetIntValue("STREAM_TYPE"));
         eventBean->Add("APP_NAME", streamProperty->GetStringValue("APP_NAME"));
@@ -802,6 +806,43 @@ void MediaMonitorPolicy::HandleToSystemTonePlaybackEvent()
             continue;
         }
         TriggerSystemTonePlaybackTimeEvent(desc);
+    }
+}
+
+void MediaMonitorPolicy::AddToVolumeApiInvokeQueue(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("add to volume api invoke queue");
+    if (bean == nullptr) {
+        MEDIA_LOG_E("eventBean is nullptr");
+        return;
+    }
+    setAppNameToEventVector("CLIENT_UID", bean);
+    std::string key = bean->GetStringValue("APP_NAME") +
+        bean->GetStringValue("FUNC_NAME") +
+        std::to_string(bean->GetIntValue("PARAM_VALUE"));
+
+    std::lock_guard<std::mutex> lock(volumeApiInvokeMutex_);
+    if (volumeApiInvokeRecordSet_.find(key) == volumeApiInvokeRecordSet_.end() &&
+        volumeApiInvokeRecordSet_.size() <= volumeApiInvokeRecordSetSize_) {
+        volumeApiInvokeRecordSet_.emplace(key);
+        volumeApiInvokeEventQueue_.push(bean);
+    }
+    if (volumeApiInvokeRecordSet_.size() > volumeApiInvokeRecordSetSize_) {
+        MEDIA_LOG_D("volume api invoke record is full");
+        return;
+    }
+}
+
+void MediaMonitorPolicy::HandleToVolumeApiInvokeEvent()
+{
+    MEDIA_LOG_D("Handle to volume api invoke event");
+    int32_t eventCount = 0;
+    std::lock_guard<std::mutex> lock(volumeApiInvokeMutex_);
+    while (eventCount < volumeApiInvokeOnceEvent_ && !volumeApiInvokeEventQueue_.empty()) {
+        auto event = volumeApiInvokeEventQueue_.front();
+        volumeApiInvokeEventQueue_.pop();
+        eventCount++;
+        mediaEventBaseWriter_.WriteVolumeApiInvoke(event);
     }
 }
 
