@@ -125,6 +125,10 @@ public:
     static constexpr const char TRACK_REFERENCE_TYPE[] = "track_reference_type";
     static constexpr const char TRACK_DESCRIPTION[] = "track_description";
 
+    /* -------------------- 3dgs gltf tag -------------------- */
+    static constexpr const char IS_GLTF[] = "is_gltf"; ///< bool, is gltf file
+    static constexpr const char GLTF_OFFSET[] = "gltf_offset"; ///< int64_t, gltf idat position
+
     /* -------------------- audio universal tag -------------------- */
     static constexpr const char AUDIO_CHANNEL_COUNT[] = "channel_count"; ///< audio channel count
     static constexpr const char AUDIO_CHANNEL_LAYOUT[] =
