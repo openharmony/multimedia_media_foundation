@@ -56,7 +56,7 @@ void SurfaceMemory::AllocSurfaceBuffer()
     if (surfaceBuffer_ != nullptr) {
         auto bufferHandle = surfaceBuffer_->GetBufferHandle();
         if (bufferHandle != nullptr) {
-            stride_ = bufferHandle->stride;
+            stride_ = static_cast<uint32_t>(bufferHandle->stride);
         }
         fence_ = -1;
     } else {
