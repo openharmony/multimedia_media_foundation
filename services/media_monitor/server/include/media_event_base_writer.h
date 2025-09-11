@@ -86,7 +86,6 @@ public:
     void WriteAudioRecordError(std::shared_ptr<EventBean> &bean);
     void WriteMessageQueueException(std::shared_ptr<EventBean> &bean);
     void WriteStreamMoveException(std::shared_ptr<EventBean> &bean);
- };
 };
 
 } // namespace MediaMonitor
