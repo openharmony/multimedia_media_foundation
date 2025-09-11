@@ -313,6 +313,12 @@ void MediaMonitorPolicy::WriteFaultEvent(EventId eventId, std::shared_ptr<EventB
             SetBundleNameToEvent("ACTIVE_UID", bean, "ACTIVE_PKG");
             mediaEventBaseWriter_.WriteAudioRecordError(bean);
             break;
+        case HPAE_MESSAGE_QUEUE_EXCEPTION:
+            mediaEventBaseWriter_.WriteMessageQueueException(bean);
+            break;
+        case STREAM_MOVE_EXCEPTION:
+            mediaEventBaseWriter_.WriteStreamMoveException(bean);
+            break;
         default:
             break;
     }
