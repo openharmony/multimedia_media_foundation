@@ -529,6 +529,7 @@ map<TagType, bool> testBoolData = {
     {Tag::VIDEO_ENCODER_ENABLE_WATERMARK, true},
     {Tag::VIDEO_ENCODER_ENABLE_QP_MAP, true},
     {Tag::VIDEO_DECODER_BLANK_FRAME_ON_SHUTDOWN, true},
+    {Tag::IS_GLTF, true},
 };
 
 
@@ -597,6 +598,7 @@ map<TagType, int64_t> testInt64Data = {
     {Tag::VIDEO_SCENE_TYPE, 1234567890015},
     {Tag::VIDEO_ENCODER_ENABLE_B_FRAME, 1234567890016},
     {Tag::VIDEO_ENCODER_MAX_B_FRAME, 1234567890017},
+    {Tag::GLTF_OFFSET, 1234567890018},
 };
 
 /**
