@@ -81,7 +81,7 @@ void TaskInner::DeInit()
             topProcessUs_ = -1;
         }
     }
-    MEDIA_LOG_I_T(PUBLIC_LOG_S " DeInit done", name_.c_str());
+    MEDIA_LOG_D_T(PUBLIC_LOG_S " DeInit done", name_.c_str());
 }
 
 TaskInner::~TaskInner()
@@ -147,7 +147,7 @@ void TaskInner::Stop()
     runningState_ = RunningState::STOPPED;
     topProcessUs_ = -1;
     pipelineThread_->UnLockJobState(true);
-    MEDIA_LOG_I_T(PUBLIC_LOG_S " Stop <<", name_.c_str());
+    MEDIA_LOG_D_T(PUBLIC_LOG_S " Stop <<", name_.c_str());
 }
 
 void TaskInner::StopAsync()
