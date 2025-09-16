@@ -108,6 +108,9 @@ PluginList::PluginList()
     AddFFmpegMuxerPlugins();
     AddFFmpegFlacMuxerplugins();
     AddAc3AudioDecoderPlugins();
+#ifdef SUPPORT_CODEC_EAC3
+    AddEac3AudioDecoderPlugins();
+#endif
 #ifdef SUPPORT_CODEC_COOK
     AddCookAudioDecoderPlugins();
 #endif
@@ -652,6 +655,19 @@ void PluginList::AddAc3AudioDecoderPlugins()
     ac3AudioDecoderPlugin.rank = DEFAULT_RANK;
     pluginDescriptionList_.push_back(ac3AudioDecoderPlugin);
 }
+
+#ifdef SUPPORT_CODEC_EAC3
+void PluginList::AddEac3AudioDecoderPlugins()
+{
+    PluginDescription eac3AudioDecoderPlugin;
+    eac3AudioDecoderPlugin.pluginName = "OH.Media.Codec.Decoder.Audio.EAC3";
+    eac3AudioDecoderPlugin.packageName = "Eac3AudioDecoder";
+    eac3AudioDecoderPlugin.pluginType = PluginType::AUDIO_DECODER;
+    eac3AudioDecoderPlugin.cap = "audio/eac3";
+    eac3AudioDecoderPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(eac3AudioDecoderPlugin);
+}
+#endif
 
 void PluginList::AddAudioServerSinkPlugins()
 {

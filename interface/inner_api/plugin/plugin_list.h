@@ -97,6 +97,9 @@ private:
 #endif
     void AddAc3DemuxerPlugin();
     void AddAc3AudioDecoderPlugins();
+#ifdef SUPPORT_CODEC_EAC3
+    void AddEac3AudioDecoderPlugins();
+#endif
 #ifdef SUPPORT_DEMUXER_LRC
     void AddLrcDemuxerPlugin();
 #endif
