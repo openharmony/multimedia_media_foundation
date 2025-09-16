@@ -437,6 +437,19 @@ void PluginList::AddAc3DemuxerPlugin()
     pluginDescriptionList_.push_back(ac3DemuxerPlugin);
 }
 
+#ifdef SUPPORT_DEMUXER_EAC3
+void PluginList::AddEac3DemuxerPlugin()
+{
+    PluginDescription eac3DemuxerPlugin;
+    eac3DemuxerPlugin.pluginName = "avdemux_eac3";
+    eac3DemuxerPlugin.packageName = "FFmpegDemuxer";
+    eac3DemuxerPlugin.pluginType = PluginType::DEMUXER;
+    eac3DemuxerPlugin.cap = "";
+    eac3DemuxerPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(eac3DemuxerPlugin);
+}
+#endif
+
 void PluginList::AddFFmpegDemuxerPlugins()
 {
     AddAacDemuxerPlugin();
@@ -470,6 +483,9 @@ void PluginList::AddFFmpegDemuxerPlugins()
 #endif
 #ifdef SUPPORT_DEMUXER_ASS
     AddAssDemuxerPlugin();
+#endif
+#ifdef SUPPORT_DEMUXER_EAC3
+    AddEac3DemuxerPlugin();
 #endif
 }
 
