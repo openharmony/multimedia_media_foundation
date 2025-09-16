@@ -160,6 +160,7 @@ static std::vector<TagType> g_metadataBoolVector = {
     Tag::VIDEO_ENCODER_ENABLE_QP_MAP,
     Tag::VIDEO_ENCODER_ENABLE_PTS_BASED_RATECONTROL,
     Tag::VIDEO_DECODER_BLANK_FRAME_ON_SHUTDOWN,
+    Tag::IS_GLTF,
 };
 
 bool SetMetaData(Meta& meta, const TagType& tag, int32_t value)
