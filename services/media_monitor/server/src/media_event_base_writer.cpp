@@ -762,6 +762,21 @@ void MediaEventBaseWriter::WriteVolumeApiInvoke(std::shared_ptr<EventBean> &bean
         "PARAM_VALUE", bean->GetIntValue("PARAM_VALUE"));
 #endif
 }
+
+void MediaEventBaseWriter::WriteAppCallSession(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Write call audio_session");
+    if (bean == nullptr) {
+        MEDIA_LOG_E("eventBean is nullptr");
+        return;
+    }
+#ifdef MONITOR_ENABLE_HISYSEVENT
+    HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "HAP_CALL_AUDIO_SESSION",
+        HiviewDFX::HiSysEvent::EventType::STATISTIC,
+        "SYSTEMHAP_NAME", bean->GetStringValue("APP_NAME"),
+        "SYSTEMHAP_SET_FOCUSSTRATEGY", bean->GetIntValue("SYSTEMHAP_SET_FOCUSSTRATEGY"));
+#endif
+}
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS

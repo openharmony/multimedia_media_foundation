@@ -846,6 +846,25 @@ void MediaMonitorPolicy::HandleToVolumeApiInvokeEvent()
     }
 }
 
+void MediaMonitorPolicy::AddToCallSessionQueue(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("add call audio session event");
+    if (bean == nullptr) {
+        MEDIA_LOG_E("eventBean is nullptr");
+        return;
+    }
+    setAppNameToEventVector("CLIENT_UID", bean);
+    std::string key = bean->GetStringValue("APP_NAME") +
+        std::to_string(bean->GetIntValue("SYSTEMHAP_SET_FOCUSSTRATEGY"));
+
+    std::lock_guard<std::mutex> lock(callSessionMutex_);
+    if (callSessionHapSet_.find(key) == callSessionHapSet_.end() &&
+        callSessionHapSet_.size() <= callSessionHapSetSize_) {
+        callSessionHapSet_.emplace(key);
+        mediaEventBaseWriter_.WriteAppCallSession(bean);
+    }
+}
+
 void MediaMonitorPolicy::WriteInfo(int32_t fd, std::string &dumpString)
 {
     if (fd != -1) {

@@ -67,6 +67,7 @@ public:
     void HandStreamPropertyToEventVector(std::shared_ptr<EventBean> &streamProperty);
     void TriggerSystemTonePlaybackTimeEvent(std::shared_ptr<EventBean> &bean);
     void AddToVolumeApiInvokeQueue(std::shared_ptr<EventBean> &bean);
+    void AddToCallSessionQueue(std::shared_ptr<EventBean> &bean);
 
     void WhetherToHiSysEvent();
     void WriteInfo(int32_t fd, std::string &dumpString);
@@ -124,6 +125,10 @@ private:
     uint64_t aggregationSleepTime_ = DEFAULT_AGGREGATION_TIME_SECEND;
     int32_t volumeApiInvokeTime_ = DEFAULT_VOLUME_API_INVOKE_TIME;
     uint64_t volumeApiInvokeSleepTime_ = DEFAULT_VOLUME_API_INVOKE_TIME_SECEND;
+
+    std::mutex callSessionMutex_;
+    std::unordered_set<std::string> callSessionHapSet_;
+    uint32_t callSessionHapSetSize_ = 100 * 100;
 };
 
 } // namespace MediaMonitor
