@@ -181,7 +181,7 @@ void ConfigH264Codec(AVCodecContext& codecContext, const std::map<Tag, ValueType
     MEDIA_LOG_D("profile: " PUBLIC_LOG_D32, codecContext.profile);
     av_opt_set(codecContext.priv_data, "preset", "slow", 0);
     av_opt_set(codecContext.priv_data, "tune", "zerolatency", 0);
-    codecContext.flags = static_cast<uint32_t>(codecContext.flags) |= AV_CODEC_FLAG_GLOBAL_HEADER;
+    codecContext.flags = static_cast<unsigned int>(codecContext.flags) |= AV_CODEC_FLAG_GLOBAL_HEADER;
 }
 using ConfigFunc = std::function<void(AVCodecContext&, const std::map<Tag, ValueType>&)>;
 std::map<AVCodecID, ConfigFunc> g_videoConfigFuncMap = {
