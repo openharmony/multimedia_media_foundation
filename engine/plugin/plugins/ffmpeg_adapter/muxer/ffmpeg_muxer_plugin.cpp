@@ -371,7 +371,7 @@ Status FFmpegMuxerPlugin::Prepare()
         SetTagsOfTrack(outputFormat_.get(), formatContext_->streams[pair.first], pair.second);
     }
     SetTagsOfGeneral(formatContext_.get(), generalParameters_);
-    formatContext_->flags = (int)((unsigned int)formatContext_->flags |= (unsigned int)AVFMT_TS_NONSTRICT);
+    formatContext_->flags = (int)((unsigned int)formatContext_->flags | (unsigned int)AVFMT_TS_NONSTRICT);
     return Status::OK;
 }
 void FFmpegMuxerPlugin::ResetIoCtx(IOContext& ioContext)
