@@ -84,6 +84,7 @@ enum EventId {
     STREAM_MOVE_EXCEPTION = 40,
 
     VOLUME_API_INVOKE = 41,
+    HAP_CALL_AUDIO_SESSION = 42,
 };
 
 enum EventType {

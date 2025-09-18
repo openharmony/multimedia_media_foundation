@@ -87,6 +87,7 @@ private:
     void HandleAppBackgroundStateChange(std::shared_ptr<EventBean> &bean);
     void UpdateAggregateStateEventList(std::shared_ptr<EventBean> &bean);
     void HandleVolumeApiInvokeEvent(std::shared_ptr<EventBean> &bean);
+    void HandleCallSessionEvent(std::shared_ptr<EventBean> &bean);
 
     AudioMemo& audioMemo_;
     MediaMonitorPolicy& mediaMonitorPolicy_;
