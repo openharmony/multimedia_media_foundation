@@ -31,6 +31,7 @@ public:
     static constexpr const char VIDEO_VVC[] = "video/vvc";
     static constexpr const char VIDEO_RV30[] = "video/rv30";
     static constexpr const char VIDEO_RV40[] = "video/rv40";
+    static constexpr const char VIDEO_WMV3[] = "video/wmv3";
 
     static constexpr const char AUDIO_AMR_NB[] = "audio/3gpp";
     static constexpr const char AUDIO_AMR_WB[] = "audio/amr-wb";
