@@ -106,6 +106,9 @@ private:
 #ifdef SUPPORT_DEMUXER_ASS
     void AddAssDemuxerPlugin();
 #endif
+#ifdef SUPPORT_DEMUXER_EAC3
+    void AddEac3DemuxerPlugin();
+#endif
 
     std::vector<PluginDescription> pluginDescriptionList_;
 };

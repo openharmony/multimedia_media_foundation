@@ -152,6 +152,7 @@ enum class FileType : int32_t {
     MOV = 107,
     RM = 108,
     AC3 = 109,
+    EAC3 = 110,
     AMR = 201,
     AAC = 202,
     MP3 = 203,
