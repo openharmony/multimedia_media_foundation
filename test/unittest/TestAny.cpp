@@ -243,7 +243,7 @@ HWTEST(AnyTest, TestInt32CopyMove, TestSize.Level1) {
     int32_t* p = static_cast<int32_t*>(Any::StackFunctionTable<int32_t>::GetPtr(dest));
     EXPECT_EQ(*p, 42);
 
-    Any::StackFunctionTable<int32_t>::Move(src,dest);
+    Any::StackFunctionTable<int32_t>::Move(src, dest);
     EXPECT_EQ(*p, 42);
 
     Any::StackFunctionTable<int32_t>::Destroy(src);
