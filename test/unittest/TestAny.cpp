@@ -231,6 +231,66 @@ HWTEST(AnyTest, testHasValue_Reset, TestSize.Level1)
     a.Reset();
     ASSERT_FALSE(a.HasValue());
 }
+
+HWTEST(AnyTest, TestInt32CopyMove, TestSize.Level1) {
+    Any::Storage src, dest;
+    int32_t value = 42;
+
+    // 拷贝构造
+    new (Any::StackFunctionTable<int32_t>::GetPtr(src)) int32_t(value);
+    Any::StackFunctionTable<int32_t>::Copy(dest, src);
+
+    int32_t* p = static_cast<int32_t*>(Any::StackFunctionTable<int32_t>::GetPtr(dest));
+    EXPECT_EQ(*p, 42);
+
+    Any::StackFunctionTable<int32_t>::Move(src, dest);
+    EXPECT_EQ(*p, 42);
+}
+
+HWTEST(AnyTest, TestDestory, TestSize.Level1) {
+    Any::Storage storage;
+    int32_t* p = new (Any::StackFunctionTable<int32_t>::GetPtr(storage)) int32_t(100);
+    EXPECT_EQ(*p, 100);
+}
+
+HWTEST(AnyTest, TestGetPtr, TestSize.Level1) {
+    Any::Storage storage;
+    void* ptr = Any::StackFunctionTable<int32_t>::GetPtr(storage);
+    const void* cptr = Any::StackFunctionTable<int32_t>::GetConstPtr(storage);
+
+    EXPECT_EQ(ptr, cptr);
+}
+
+HWTEST(AnyTest, testHeapFunctionTable1, TestSize.Level1) {
+    Any::Storage src, dest;
+    int32_t value = 42;
+
+    // 拷贝构造
+    new (Any::HeapFunctionTable<int32_t>::GetPtr(src)) int32_t(value);
+    Any::HeapFunctionTable<int32_t>::Copy(dest, src);
+
+    int32_t* p = static_cast<int32_t*>(Any::HeapFunctionTable<int32_t>::GetPtr(dest));
+    EXPECT_EQ(*p, 42);
+
+    Any::HeapFunctionTable<int32_t>::Move(src, dest);
+    EXPECT_EQ(*p, 42);
+}
+
+HWTEST(AnyTest, testHeapFunctionTable2, TestSize.Level1) {
+    Any::Storage storage;
+    int32_t* p = new (Any::HeapFunctionTable<int32_t>::GetPtr(storage)) int32_t(100);
+    EXPECT_EQ(*p, 100);
+
+    Any::HeapFunctionTable<int32_t>::Destroy(storage);
+}
+
+HWTEST(AnyTest, testHeapFunctionTable3, TestSize.Level1) {
+    Any::Storage storage;
+    void* ptr = Any::HeapFunctionTable<int32_t>::GetPtr(storage);
+    const void* cptr = Any::HeapFunctionTable<int32_t>::GetConstPtr(storage);
+
+    EXPECT_EQ(ptr, cptr);
+}
 } // namespace Test
 } // namespace Media
 } // namespace OHOS
