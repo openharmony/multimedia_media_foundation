@@ -41,6 +41,9 @@ if (hst_is_standard_sys) {
     if (media_foundation_enable_cook_audio_decoder) {
       defines += [ "SUPPORT_CODEC_COOK" ]
     }
+    if (media_foundation_enable_eac3_audio_decoder) {
+      defines += [ "SUPPORT_CODEC_EAC3" ]
+    }
     if (media_foundation_enable_lrc_demuxer) {
       defines += [ "SUPPORT_DEMUXER_LRC" ]
     }
