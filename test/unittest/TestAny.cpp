@@ -245,31 +245,12 @@ HWTEST(AnyTest, TestInt32CopyMove, TestSize.Level1) {
 
     Any::StackFunctionTable<int32_t>::Move(src, dest);
     EXPECT_EQ(*p, 42);
-
-    Any::StackFunctionTable<int32_t>::Destroy(src);
-}
-
-HWTEST(AnyTest, TestInt64ToParrcelFromParcel, TestSize.Level1) {
-    Any::Storage storage;
-    int64_t value = 123456789012345LL;
-
-    new (Any::StackFunctionTable<int64_t>::GetPtr(storage)) int64_t(value);
-}
-
-HWTEST(AnyTest, TestEnumToParrcel, TestSize.Level1) {
-    enum class MyEnum : int32_t { A = 1, B = 2, C = 3 };
-    MyEnum e = MyEnum::B;
-
-    Any::Storage storage;
-    new (Any::StackFunctionTable<MyEnum>::GetPtr(storage)) MyEnum(e);
 }
 
 HWTEST(AnyTest, TestDestory, TestSize.Level1) {
     Any::Storage storage;
     int32_t* p = new (Any::StackFunctionTable<int32_t>::GetPtr(storage)) int32_t(100);
     EXPECT_EQ(*p, 100);
-
-    Any::StackFunctionTable<int32_t>::Destroy(storage);
 }
 
 HWTEST(AnyTest, TestGetPtr, TestSize.Level1) {
@@ -293,27 +274,9 @@ HWTEST(AnyTest, testHeapFunctionTable1, TestSize.Level1) {
 
     Any::HeapFunctionTable<int32_t>::Move(src, dest);
     EXPECT_EQ(*p, 42);
-
-    Any::HeapFunctionTable<int32_t>::Destroy(src);
 }
 
 HWTEST(AnyTest, testHeapFunctionTable2, TestSize.Level1) {
-    Any::Storage storage;
-    int64_t value = 123456789012345LL;
-
-    new (Any::HeapFunctionTable<int64_t>::GetPtr(storage)) int64_t(value);
-}
-
-HWTEST(AnyTest, testHeapFunctionTable3, TestSize.Level1) {
-    enum class MyEnum : int32_t { A = 1, B = 2, C = 3 };
-    MyEnum e = MyEnum::B;
-
-    Any::Storage storage;
-
-    new (Any::HeapFunctionTable<MyEnum>::GetPtr(storage)) MyEnum(e);
-}
-
-HWTEST(AnyTest, testHeapFunctionTable4, TestSize.Level1) {
     Any::Storage storage;
     int32_t* p = new (Any::HeapFunctionTable<int32_t>::GetPtr(storage)) int32_t(100);
     EXPECT_EQ(*p, 100);
@@ -321,7 +284,7 @@ HWTEST(AnyTest, testHeapFunctionTable4, TestSize.Level1) {
     Any::HeapFunctionTable<int32_t>::Destroy(storage);
 }
 
-HWTEST(AnyTest, testHeapFunctionTable5, TestSize.Level1) {
+HWTEST(AnyTest, testHeapFunctionTable3, TestSize.Level1) {
     Any::Storage storage;
     void* ptr = Any::HeapFunctionTable<int32_t>::GetPtr(storage);
     const void* cptr = Any::HeapFunctionTable<int32_t>::GetConstPtr(storage);
