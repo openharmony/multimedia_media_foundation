@@ -561,7 +561,6 @@ HWTEST_F(AVBufferQueueInnerUnitTest, ProducerProxyCreate_001, TestSize.Level1)
     sptr<IRemoteObject> object = nullptr;
     auto result = AVBufferQueueProducerProxy::Create(object);
     EXPECT_EQ(result, nullptr);
-
 }
 
 /**
