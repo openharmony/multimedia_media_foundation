@@ -17,6 +17,8 @@
 #include "status.h"
 #include "buffer/avbuffer_queue.h"
 #include "avbuffer_queue_impl.h"
+#include "avbuffer_queue_producer_impl.h"
+#include "avbuffer_queue_producer_proxy.h"
 
 using namespace std;
 using namespace testing::ext;
@@ -56,6 +58,13 @@ public:
 class ConsumerListener : public IConsumerListener {
 public:
     explicit ConsumerListener() {}
+
+    void OnBufferAvailable() override {}
+};
+
+class ProducerListener : public IRemoteStub<IProducerListener> {
+public:
+    explicit ProducerListener() {}
 
     void OnBufferAvailable() override {}
 };
@@ -540,6 +549,238 @@ HWTEST_F(AVBufferQueueInnerUnitTest, RequestBufferWaitUs_001, TestSize.Level1)
 
     EXPECT_EQ(avBufferQueueImpl_->AcquireBuffer(bufferConsumer), Status::ERROR_NO_DIRTY_BUFFER);
     EXPECT_EQ(avBufferQueueImpl_->GetFilledBufferSize(), 0);
+}
+
+/**
+ * @tc.name: ProducerProxyCreate_001
+ * @tc.desc: Test ProducerProxyCreate interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferQueueInnerUnitTest, ProducerProxyCreate_001, TestSize.Level1)
+{
+    sptr<IRemoteObject> object = nullptr;
+    auto result = AVBufferQueueProducerProxy::Create(object);
+    EXPECT_EQ(result, nullptr);
+
+}
+
+/**
+ * @tc.name: ProducerProxyCreate_002
+ * @tc.desc: Test ProducerProxyCreate interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferQueueInnerUnitTest, ProducerProxyCreate_002, TestSize.Level1)
+{
+    sptr<IRemoteObject> object = new AVBufferQueueProducerImpl(avBufferQueueImpl_);
+    auto result = AVBufferQueueProducerProxy::Create(object);
+    EXPECT_NE(result, nullptr);
+
+}
+
+/**
+ * @tc.name: ProducerProxyGetQueueSize_001
+ * @tc.desc: Test ProducerProxyGetQueueSize interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferQueueInnerUnitTest, ProducerProxyGetQueueSize_001, TestSize.Level1)
+{
+    sptr<IRemoteObject> object = new AVBufferQueueProducerImpl(avBufferQueueImpl_);
+    EXPECT_NE(object, nullptr);
+    auto proxy = AVBufferQueueProducerProxy::Create(object);
+    EXPECT_NE(proxy, nullptr);
+    EXPECT_EQ(proxy->GetQueueSize(), 0);
+}
+
+/**
+ * @tc.name: ProducerProxySetQueueSize_001
+ * @tc.desc: Test ProducerProxySetQueueSize interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferQueueInnerUnitTest, ProducerProxySetQueueSize_001, TestSize.Level1)
+{
+    sptr<IRemoteObject> object = new AVBufferQueueProducerImpl(avBufferQueueImpl_);
+    EXPECT_NE(object, nullptr);
+    auto proxy = AVBufferQueueProducerProxy::Create(object);
+    EXPECT_NE(proxy, nullptr);
+    EXPECT_EQ(proxy->SetQueueSize(10), Status::OK);
+}
+
+/**
+ * @tc.name: ProducerProxyRequestBuffer_001
+ * @tc.desc: Test ProducerProxyRequestBuffer interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferQueueInnerUnitTest, ProducerProxyRequestBuffer_001, TestSize.Level1)
+{
+    sptr<IRemoteObject> object = new AVBufferQueueProducerImpl(avBufferQueueImpl_);
+    EXPECT_NE(object, nullptr);
+    auto proxy = AVBufferQueueProducerProxy::Create(object);
+    EXPECT_NE(proxy, nullptr);
+    EXPECT_EQ(avBufferQueueImpl_->SetQueueSize(2), Status::OK);
+
+    sptr<IConsumerListener> listener = new ConsumerListener();
+    avBufferQueueImpl_->SetConsumerListener(listener);
+
+    AVBufferConfig config;
+    config.size = 100;
+    config.capacity = 100;
+    config.memoryType = MemoryType::VIRTUAL_MEMORY;
+    std::shared_ptr<AVBuffer> buffer = AVBuffer::CreateAVBuffer(config);
+
+    EXPECT_EQ(avBufferQueueImpl_->AttachBuffer(buffer, false), Status::OK);
+    EXPECT_EQ(proxy->RequestBuffer(buffer, config, 0), Status::OK);
+}
+
+/**
+ * @tc.name: ProducerProxyPushBuffer_001
+ * @tc.desc: Test ProducerProxyPushBuffer interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferQueueInnerUnitTest, ProducerProxyPushBuffer_001, TestSize.Level1)
+{
+    sptr<IRemoteObject> object = new AVBufferQueueProducerImpl(avBufferQueueImpl_);
+    EXPECT_NE(object, nullptr);
+    auto proxy = AVBufferQueueProducerProxy::Create(object);
+    EXPECT_NE(proxy, nullptr);
+    AVBufferConfig config;
+    config.size = 1;
+    config.capacity = 1;
+    config.memoryType = MemoryType::VIRTUAL_MEMORY;
+    std::shared_ptr<AVAllocator> allocator = AVAllocatorFactory::CreateSharedAllocator(MemoryFlag::MEMORY_READ_WRITE);
+    std::shared_ptr<AVBuffer> buffer = AVBuffer::CreateAVBuffer(allocator, 1, 1);
+    ASSERT_NE(nullptr, buffer);
+    sptr<IConsumerListener> listener = new ConsumerListener();
+    avBufferQueueImpl_->SetConsumerListener(listener);
+    EXPECT_EQ(Status::OK, avBufferQueueImpl_->AllocBuffer(buffer, config));
+    EXPECT_EQ(Status::OK, avBufferQueueImpl_->RequestReuseBuffer(buffer, config));
+    buffer->memory_->SetSize(1);
+    EXPECT_EQ(proxy->PushBuffer(buffer, true), Status::OK);
+}
+
+/**
+ * @tc.name: ProducerProxyReturnBuffer_001
+ * @tc.desc: Test ProducerProxyReturnBuffer interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferQueueInnerUnitTest, ProducerProxyReturnBuffer_001, TestSize.Level1)
+{
+    sptr<IRemoteObject> object = new AVBufferQueueProducerImpl(avBufferQueueImpl_);
+    EXPECT_NE(object, nullptr);
+    auto proxy = AVBufferQueueProducerProxy::Create(object);
+    EXPECT_NE(proxy, nullptr);
+    AVBufferConfig config;
+    config.size = 100;
+    config.capacity = 100;
+    config.memoryType = MemoryType::VIRTUAL_MEMORY;
+    std::shared_ptr<AVBuffer> buffer = AVBuffer::CreateAVBuffer(config);
+    buffer->memory_->SetSize(config.size);
+    EXPECT_EQ(proxy->ReturnBuffer(buffer, true), Status::ERROR_INVALID_BUFFER_ID);
+}
+
+/**
+ * @tc.name: ProducerProxyAttachBuffer_001
+ * @tc.desc: Test ProducerProxyAttachBuffer interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferQueueInnerUnitTest, ProducerProxyAttachBuffer_001, TestSize.Level1)
+{
+    sptr<IRemoteObject> object = new AVBufferQueueProducerImpl(avBufferQueueImpl_);
+    EXPECT_NE(object, nullptr);
+    auto proxy = AVBufferQueueProducerProxy::Create(object);
+    EXPECT_NE(proxy, nullptr);
+    EXPECT_EQ(avBufferQueueImpl_->SetQueueSize(2), Status::OK);
+    sptr<IConsumerListener> listener = new ConsumerListener();
+    avBufferQueueImpl_->SetConsumerListener(listener);
+    AVBufferConfig config;
+    config.size = 100;
+    config.capacity = 100;
+    config.memoryType = MemoryType::VIRTUAL_MEMORY;
+    std::shared_ptr<AVBuffer> buffer = AVBuffer::CreateAVBuffer(config);
+    EXPECT_EQ(proxy->AttachBuffer(buffer, false), Status::ERROR_UNEXPECTED_MEMORY_TYPE);
+}
+
+/**
+ * @tc.name: ProducerProxyDetachBuffer_001
+ * @tc.desc: Test ProducerProxyDetachBuffer interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferQueueInnerUnitTest, ProducerProxyDetachBuffer_001, TestSize.Level1)
+{
+    sptr<IRemoteObject> object = new AVBufferQueueProducerImpl(avBufferQueueImpl_);
+    EXPECT_NE(object, nullptr);
+    auto proxy = AVBufferQueueProducerProxy::Create(object);
+    EXPECT_NE(proxy, nullptr);
+    AVBufferConfig config;
+    config.size = 100;
+    config.capacity = 100;
+    config.memoryType = MemoryType::VIRTUAL_MEMORY;
+    std::shared_ptr<AVBuffer> buffer = AVBuffer::CreateAVBuffer(config);
+    buffer->memory_->SetSize(config.size);
+    EXPECT_EQ(proxy->DetachBuffer(buffer), Status::ERROR_INVALID_BUFFER_ID);
+}
+
+/**
+ * @tc.name: ProducerProxySetBufferFilledListener_001
+ * @tc.desc: Test ProducerProxySetBufferFilledListener interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferQueueInnerUnitTest, ProducerProxySetBufferFilledListener_001, TestSize.Level1)
+{
+    avBufferQueueImpl_ = std::make_shared<AVBufferQueueImpl>(AVBUFFER_QUEUE_MAX_QUEUE_SIZE + 1,
+        MemoryType::SHARED_MEMORY, "RemoveBrokerListenerTest");
+    sptr<IRemoteObject> object = new AVBufferQueueProducerImpl(avBufferQueueImpl_);
+    EXPECT_NE(object, nullptr);
+    auto proxy = AVBufferQueueProducerProxy::Create(object);
+    EXPECT_NE(proxy, nullptr);
+    sptr<IBrokerListener> listener = new BrokerListener();
+    EXPECT_EQ(proxy->SetBufferFilledListener(listener), Status::ERROR_IPC_SEND_REQUEST);
+}
+
+/**
+ * @tc.name: ProducerProxyRemoveBufferFilledListener_001
+ * @tc.desc: Test ProducerProxyRemoveBufferFilledListener interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferQueueInnerUnitTest, ProducerProxyRemoveBufferFilledListener_001, TestSize.Level1)
+{
+    avBufferQueueImpl_ = std::make_shared<AVBufferQueueImpl>(AVBUFFER_QUEUE_MAX_QUEUE_SIZE + 1,
+        MemoryType::SHARED_MEMORY, "RemoveBrokerListenerTest");
+    sptr<IRemoteObject> object = new AVBufferQueueProducerImpl(avBufferQueueImpl_);
+    EXPECT_NE(object, nullptr);
+    auto proxy = AVBufferQueueProducerProxy::Create(object);
+    EXPECT_NE(proxy, nullptr);
+    sptr<IBrokerListener> listener = new BrokerListener();
+    proxy->SetBufferFilledListener(listener);
+    EXPECT_EQ(proxy->RemoveBufferFilledListener(listener), Status::ERROR_IPC_SEND_REQUEST);
+}
+
+/**
+ * @tc.name: ProducerProxySetBufferAvailableListener_001
+ * @tc.desc: Test ProducerProxySetBufferAvailableListener interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferQueueInnerUnitTest, ProducerProxySetBufferAvailableListener_001, TestSize.Level1)
+{
+    sptr<IRemoteObject> object = new AVBufferQueueProducerImpl(avBufferQueueImpl_);
+    EXPECT_NE(object, nullptr);
+    auto proxy = AVBufferQueueProducerProxy::Create(object);
+    EXPECT_NE(proxy, nullptr);
+    sptr<IProducerListener> listener = new ProducerListener();
+    EXPECT_EQ(proxy->SetBufferAvailableListener(listener), Status::OK);
+}
+
+/**
+ * @tc.name: ProducerProxyClear_001
+ * @tc.desc: Test ProducerProxyClear interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferQueueInnerUnitTest, ProducerProxyClear_001, TestSize.Level1)
+{
+    sptr<IRemoteObject> object = new AVBufferQueueProducerImpl(avBufferQueueImpl_);
+    EXPECT_NE(object, nullptr);
+    auto proxy = AVBufferQueueProducerProxy::Create(object);
+    EXPECT_NE(proxy, nullptr);
+    EXPECT_EQ(proxy->Clear(), Status::OK);
 }
 } // namespace AVBufferQueueFuncUT
 } // namespace Media
