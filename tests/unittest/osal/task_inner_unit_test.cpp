@@ -233,7 +233,7 @@ HWTEST_F(TaskInnerFuncUnitTest, Set_EnableState_Change_Log, TestSize.Level1)
  * @tc.desc: Test_Thread_001 test
  * @tc.type: FUNC
  */
-HWTEST_F(TaskInnerFuncUnitTest, Test_Thread_001, TestSize.Level0) 
+HWTEST_F(TaskInnerFuncUnitTest, Test_Thread_001, TestSize.Level0)
 {
     Thread thread1(ThreadPriority::HIGH);
     Thread thread2(ThreadPriority::LOW);
