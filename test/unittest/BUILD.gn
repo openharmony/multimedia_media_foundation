@@ -99,6 +99,7 @@ ohos_unittest("histreamer_unit_test") {
     "./TestMimeDefs.cpp",
     "./TestPipline.cpp",
     "./TestPluginCommon.cpp",
+    "./TestPluginDefinition.cpp",
     "./TestPluginManager.cpp",
     "./TestSurfaceSinkPlugin.cpp",
     "./TestSynchronizer.cpp",
