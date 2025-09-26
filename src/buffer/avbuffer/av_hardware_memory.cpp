@@ -170,6 +170,9 @@ Status AVHardwareMemory::Init()
 Status AVHardwareMemory::Init(MessageParcel &parcel)
 {
 #ifdef MEDIA_OHOS
+    if (!parcel.ReadBool()) {
+        return Status::ERROR_INVALID_DATA;
+    }
     int32_t fd = parcel.ReadFileDescriptor();
     FALSE_RETURN_V_MSG_E(fd > 0, Status::ERROR_INVALID_DATA, "File descriptor is invalid");
 
@@ -191,15 +194,20 @@ Status AVHardwareMemory::Init(MessageParcel &parcel)
     return Status::OK;
 }
 
-bool AVHardwareMemory::WriteToMessageParcel(MessageParcel &parcel)
+bool AVHardwareMemory::WriteToMessageParcel(MessageParcel &parcel, bool updateAVMemory)
 {
     FALSE_RETURN_V_MSG_E(!HARDWARE_ALLOCATOR->GetIsSecure(), false, "AVHardwareAllocator is secure");
     bool ret = true;
 #ifdef MEDIA_OHOS
-    MessageParcel bufferParcel;
-    ret = bufferParcel.WriteFileDescriptor(fd_) && bufferParcel.WriteUint32(static_cast<uint32_t>(memFlag_));
-    if (ret) {
-        parcel.Append(bufferParcel);
+    auto oldPos = parcel.GetWritePosition();
+    auto oldSize = parcel.GetDataSize();
+    ret = parcel.WriteBool(updateAVMemory);
+    if (ret && updateAVMemory) {
+        ret = parcel.WriteFileDescriptor(fd_) && parcel.WriteUint32(static_cast<uint32_t>(memFlag_));
+    }
+    if (!ret) {
+        parcel.RewindWrite(oldPos);
+        parcel.SetDataSize(oldSize);
     }
 #endif
     return ret;
@@ -208,6 +216,9 @@ bool AVHardwareMemory::WriteToMessageParcel(MessageParcel &parcel)
 bool AVHardwareMemory::ReadFromMessageParcel(MessageParcel &parcel)
 {
 #ifdef MEDIA_OHOS
+    if (!parcel.ReadBool()) {
+        return true;
+    }
     int32_t fd = parcel.ReadFileDescriptor();
     (void)parcel.ReadUint32();
     if (fd > 0) {

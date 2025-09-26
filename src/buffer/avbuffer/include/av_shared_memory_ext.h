@@ -34,7 +34,7 @@ public:
 private:
     Status Init() override;
     Status Init(MessageParcel &parcel) override;
-    bool WriteToMessageParcel(MessageParcel &parcel) override;
+    bool WriteToMessageParcel(MessageParcel &parcel, bool updateAVMemory = true) override;
     bool ReadFromMessageParcel(MessageParcel &parcel) override;
     void UnMapMemoryAddr() noexcept;
     Status MapMemoryAddr();
