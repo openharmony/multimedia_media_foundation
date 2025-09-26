@@ -26,7 +26,7 @@ HWTEST(PluginDefinitionTest, test_PluginDefBase, TestSize.Level1)
     PluginDefBase def;
     ASSERT_TRUE(def.GetExtensions().empty());
     ASSERT_TRUE(def.GetInCaps().empty());
-    ASSERT_TRUE(def.GetOCaps().empty());
+    ASSERT_TRUE(def.GetOutCaps().empty());
 }
 } // namespace Test
 } // namespace Media
