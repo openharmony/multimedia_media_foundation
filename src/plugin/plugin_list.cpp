@@ -114,6 +114,9 @@ PluginList::PluginList()
 #ifdef SUPPORT_CODEC_COOK
     AddCookAudioDecoderPlugins();
 #endif
+#ifdef SUPPORT_CODEC_ALAC
+    AddAlacAudioDecoderPlugins();
+#endif
 }
 
 void PluginList::AddDataSourceStreamPlugins()
@@ -682,6 +685,19 @@ void PluginList::AddEac3AudioDecoderPlugins()
     eac3AudioDecoderPlugin.cap = "audio/eac3";
     eac3AudioDecoderPlugin.rank = DEFAULT_RANK;
     pluginDescriptionList_.push_back(eac3AudioDecoderPlugin);
+}
+#endif
+
+#ifdef SUPPORT_CODEC_ALAC
+void PluginList::AddAlacAudioDecoderPlugins()
+{
+    PluginDescription alacAudioDecoderPlugin;
+    alacAudioDecoderPlugin.pluginName = "OH.Media.Codec.Decoder.Audio.ALAC";
+    alacAudioDecoderPlugin.packageName = "AlacAudioDecoder";
+    alacAudioDecoderPlugin.pluginType = PluginType::AUDIO_DECODER;
+    alacAudioDecoderPlugin.cap = "audio/alac";
+    alacAudioDecoderPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(alacAudioDecoderPlugin);
 }
 #endif
 

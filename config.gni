@@ -68,6 +68,7 @@ declare_args() {
   media_foundation_enable_rm_demuxer = false
   media_foundation_enable_cook_audio_decoder = false
   media_foundation_enable_eac3_audio_decoder = false
+  media_foundation_enable_alac_audio_decoder = false
   media_foundation_enable_lrc_demuxer = false
   media_foundation_enable_sami_demuxer = false
   media_foundation_enable_ass_demuxer = false
