@@ -1,4 +1,3 @@
-dd
 /*
  * Copyright (c) 2024 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -86,6 +85,7 @@ enum EventId {
 
     VOLUME_API_INVOKE = 41,
     HAP_CALL_AUDIO_SESSION = 42,
+    PROCESS_IN_MAINTHREAD = 43,
 };
 
 enum EventType {
