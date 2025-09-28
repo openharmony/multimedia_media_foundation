@@ -1,4 +1,3 @@
-dd
 /*
  * Copyright (c) 2024 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -776,6 +775,23 @@ void MediaEventBaseWriter::WriteAppCallSession(std::shared_ptr<EventBean> &bean)
         HiviewDFX::HiSysEvent::EventType::STATISTIC,
         "SYSTEMHAP_NAME", bean->GetStringValue("APP_NAME"),
         "SYSTEMHAP_SET_FOCUSSTRATEGY", bean->GetIntValue("SYSTEMHAP_SET_FOCUSSTRATEGY"));
+#endif
+}
+
+void MediaEventBaseWriter::WriteAudioMainThreadEvent(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Write audio process in main thread");
+    if (bean == nullptr) {
+        MEDIA_LOG_E("eventBean is nullptr");
+        return;
+    }
+#ifdef MONITOR_ENABLE_HISYSEVENT
+    HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "PROCESS_AUDIO_BY_MAINTHREAD",
+        HiviewDFX::HiSysEvent::EventType::STATISTIC,
+        "BUNDLENAME", bean->GetStringValue("BUNDLENAME"),
+        "AUDIODIRECTION", bean->GetIntValue("AUDIODIRECTION"),
+        "AUDIOSTREAM", bean->GetIntValue("AUDIOSTREAM"),
+        "CALLFUNC", bean->GetIntValue("CALLFUNC"));
 #endif
 }
 } // namespace MediaMonitor
