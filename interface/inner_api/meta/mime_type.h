@@ -29,6 +29,7 @@ public:
     static constexpr const char VIDEO_VP8[] = "video/x-vnd.on2.vp8";
     static constexpr const char VIDEO_VP9[] = "video/x-vnd.on2.vp9";
     static constexpr const char VIDEO_VVC[] = "video/vvc";
+    static constexpr const char VIDEO_VC1[] = "video/vc1";
     static constexpr const char VIDEO_RV30[] = "video/rv30";
     static constexpr const char VIDEO_RV40[] = "video/rv40";
 
