@@ -50,6 +50,15 @@ public:
     static constexpr const char AUDIO_AC3[] = "audio/ac3";
     static constexpr const char AUDIO_EAC3[] = "audio/eac3";
     static constexpr const char AUDIO_MIME_L2HC[] = "audio/l2hc";
+    static constexpr const char AUDIO_GSM_MS[] = "audio/gsm_ms";
+    static constexpr const char AUDIO_WMAV1[] = "audio/wmav1";
+    static constexpr const char AUDIO_WMAV2[] = "audio/wmav2";
+    static constexpr const char AUDIO_WMAPRO[] = "audio/wmapro";
+    static constexpr const char AUDIO_ADPCM_G722[] = "audio/adpcm_g722";
+    static constexpr const char AUDIO_ADPCM_G726[] = "audio/adpcm_g726";
+    static constexpr const char AUDIO_ADPCM_IMA_WAV[] = "audio/adpcm_ima_wav";
+    static constexpr const char AUDIO_ADPCM_MS[] = "audio/adpcm_ms";
+    static constexpr const char AUDIO_ADPCM_YAMAHA[] = "audio/adpcm_yamaha";
 
     static constexpr const char IMAGE_JPG[] = "image/jpeg";
     static constexpr const char IMAGE_PNG[] = "image/png";
