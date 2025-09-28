@@ -1,4 +1,3 @@
-dd
 /*
  * Copyright (c) 2024 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -90,6 +89,7 @@ public:
     void WriteStreamMoveException(std::shared_ptr<EventBean> &bean);
     void WriteVolumeApiInvoke(std::shared_ptr<EventBean> &bean);
     void WriteAppCallSession(std::shared_ptr<EventBean> &bean);
+    void WriteAudioMainThreadEvent(std::shared_ptr<EventBean> &bean);
 };
 
 } // namespace MediaMonitor
