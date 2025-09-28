@@ -1,4 +1,3 @@
-dd
 /*
  * Copyright (c) 2024 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -160,6 +159,10 @@ void MediaMonitorPolicy::WriteBehaviorEvent(EventId eventId, std::shared_ptr<Eve
             break;
         case AI_VOICE_NOISE_SUPPRESSION:
             mediaEventBaseWriter_.WriteNoiseSuppression(bean);
+            break;
+        case PROCESS_IN_MAINTHREAD:
+            SetBundleNameToEvent("UID", bean, "BUNDLENAME");
+            mediaEventBaseWriter_.WriteAudioMainThreadEvent(bean);
             break;
         default:
             WriteBehaviorEventExpansion(eventId, bean);
