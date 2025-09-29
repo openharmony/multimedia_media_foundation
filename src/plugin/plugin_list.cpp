@@ -111,6 +111,7 @@ PluginList::PluginList()
 #ifdef SUPPORT_CODEC_EAC3
     AddEac3AudioDecoderPlugins();
 #endif
+    AddGsmMsAudioDecoderPlugin();
 #ifdef SUPPORT_CODEC_COOK
     AddCookAudioDecoderPlugins();
 #endif
@@ -684,6 +685,17 @@ void PluginList::AddEac3AudioDecoderPlugins()
     pluginDescriptionList_.push_back(eac3AudioDecoderPlugin);
 }
 #endif
+
+void PluginList::AddGsmMsAudioDecoderPlugin()
+{
+    PluginDescription gsmMsDecoderPlugin;
+    gsmMsDecoderPlugin.pluginName = "OH.Media.Codec.Decoder.Audio.GSM_MS";
+    gsmMsDecoderPlugin.packageName = "FFmpegAudioDecoders";
+    gsmMsDecoderPlugin.pluginType = PluginType::AUDIO_DECODER;
+    gsmMsDecoderPlugin.cap = "audio/gsm_ms";
+    gsmMsDecoderPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(gsmMsDecoderPlugin);
+}
 
 void PluginList::AddAudioServerSinkPlugins()
 {
