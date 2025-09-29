@@ -90,6 +90,10 @@ HWTEST_F(PiplineUnitTest, Pipeline_Test_pipline_0100, TestSize.Level1)
         Pipeline::StreamType::STREAMTYPE_ENCODED_AUDIO), Status::OK);
     EXPECT_EQ(pipeline_->Prepare(), Status::OK);
     EXPECT_EQ(pipeline_->Start(), Status::OK);
+    Event event;
+    event.type = EventType::EVENT_VIDEO_TRACK_CHANGE;
+    event.param = 0;
+    pipeline_->OnEvent(event);
     EXPECT_EQ(pipeline_->Pause(), Status::OK);
     EXPECT_EQ(pipeline_->Resume(), Status::OK);
     EXPECT_EQ(pipeline_->Stop(), Status::OK);
