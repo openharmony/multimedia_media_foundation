@@ -160,6 +160,10 @@ void MediaMonitorPolicy::WriteBehaviorEvent(EventId eventId, std::shared_ptr<Eve
         case AI_VOICE_NOISE_SUPPRESSION:
             mediaEventBaseWriter_.WriteNoiseSuppression(bean);
             break;
+        case PROCESS_IN_MAINTHREAD:
+            SetBundleNameToEvent("UID", bean, "BUNDLENAME");
+            mediaEventBaseWriter_.WriteAudioMainThreadEvent(bean);
+            break;
         default:
             WriteBehaviorEventExpansion(eventId, bean);
             break;
