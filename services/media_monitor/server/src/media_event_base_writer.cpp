@@ -777,6 +777,23 @@ void MediaEventBaseWriter::WriteAppCallSession(std::shared_ptr<EventBean> &bean)
         "SYSTEMHAP_SET_FOCUSSTRATEGY", bean->GetIntValue("SYSTEMHAP_SET_FOCUSSTRATEGY"));
 #endif
 }
+
+void MediaEventBaseWriter::WriteAudioMainThreadEvent(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Write audio process in main thread");
+    if (bean == nullptr) {
+        MEDIA_LOG_E("eventBean is nullptr");
+        return;
+    }
+#ifdef MONITOR_ENABLE_HISYSEVENT
+    HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "PROCESS_AUDIO_BY_MAINTHREAD",
+        HiviewDFX::HiSysEvent::EventType::STATISTIC,
+        "BUNDLENAME", bean->GetStringValue("BUNDLENAME"),
+        "AUDIODIRECTION", bean->GetIntValue("AUDIODIRECTION"),
+        "AUDIOSTREAM", bean->GetIntValue("AUDIOSTREAM"),
+        "CALLFUNC", bean->GetIntValue("CALLFUNC"));
+#endif
+}
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS

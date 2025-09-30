@@ -57,5 +57,10 @@ void DumpAVBufferToFile(const std::string& para, const std::string& fileName, co
     }
     std::fclose(dumpFile);
 }
+
+void PrepareDumpDir()
+{
+    MEDIA_LOG_I("Prepare dumpDir enter.");
+}
 } // Media
 } // OHOS

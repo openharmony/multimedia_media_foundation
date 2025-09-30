@@ -579,6 +579,7 @@ Status AVBufferQueueImpl::PushBufferOnFilled(uint64_t uniqueId, bool isFilled)
     auto ret = PushBuffer(uniqueId, isFilled);
     if (ret != Status::OK) {
         // PushBuffer失败，强制Detach
+        std::lock_guard<std::mutex> lockGuard(queueMutex_);
         DetachBuffer(uniqueId, true);
     }
     return ret;

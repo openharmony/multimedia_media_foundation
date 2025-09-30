@@ -218,6 +218,218 @@ HWTEST_F(AnyInnerUnitTest, Any_Parcel, TestSize.Level1)
     int32_t valueOutNew = AnyCast<int32_t>(anyIntParcel);
     EXPECT_EQ(valueOutNew, 125);
 }
+
+/**
+ * @tc.name: testTrivialStackFunctionTable_001
+ * @tc.desc: testTrivialStackFunctionTable_001
+ * @tc.type: FUNC
+ */
+HWTEST(AnyTest, testTrivialStackFunctionTable_001, TestSize.Level1) {
+    Any::Storage src, dest;
+    int32_t value = 42;
+
+    // 拷贝构造
+    new (Any::TrivialStackFunctionTable<int32_t>::GetPtr(src)) int32_t(value);
+    Any::TrivialStackFunctionTable<int32_t>::Copy(dest, src);
+
+    int32_t* p = static_cast<int32_t*>(Any::TrivialStackFunctionTable<int32_t>::GetPtr(dest));
+    EXPECT_EQ(*p, 42);
+
+    Any::TrivialStackFunctionTable<int32_t>::Move(src, dest);
+    p = static_cast<int32_t*>(Any::TrivialStackFunctionTable<int32_t>::GetPtr(src));
+    EXPECT_EQ(*p, 42);
+}
+
+/**
+ * @tc.name: testTrivialStackFunctionTable_002
+ * @tc.desc: testTrivialStackFunctionTable_002
+ * @tc.type: FUNC
+ */
+HWTEST(AnyTest, testTrivialStackFunctionTable_002, TestSize.Level1) {
+    Any::Storage storage;
+    void* ptr = Any::TrivialStackFunctionTable<int32_t>::GetPtr(storage);
+    const void* cptr = Any::TrivialStackFunctionTable<int32_t>::GetConstPtr(storage);
+
+    EXPECT_EQ(ptr, cptr);
+}
+
+/**
+ * @tc.name: testTrivialStackFunctionTable_003
+ * @tc.desc: testTrivialStackFunctionTable_003
+ * @tc.type: FUNC
+ */
+HWTEST(AnyTest, testTrivialStackFunctionTable_003, TestSize.Level1) {
+    Any::Storage storage;
+    int32_t* p = new (Any::TrivialStackFunctionTable<int32_t>::GetPtr(storage)) int32_t(100);
+    EXPECT_EQ(*p, 100);
+
+    Any::TrivialStackFunctionTable<int32_t>::Destroy(storage);
+}
+
+/**
+ * @tc.name: testTrivialStackFunctionTable_004
+ * @tc.desc: testTrivialStackFunctionTable_004
+ * @tc.type: FUNC
+ */
+HWTEST(AnyTest, testTrivialStackFunctionTable_004, TestSize.Level1) {
+    EXPECT_EQ(Any::TrivialStackFunctionTable<bool>::TypeName(), "bool");
+    EXPECT_EQ(Any::TrivialStackFunctionTable<double>::TypeName(), "double");
+}
+
+/**
+ * @tc.name: testTrivialStackFunctionTable_005
+ * @tc.desc: testTrivialStackFunctionTable_005
+ * @tc.type: FUNC
+ */
+HWTEST(AnyTest, testTrivialStackFunctionTable_005, TestSize.Level1) {
+    MessageParcel metaParcel;
+    Any anyInt = 125;
+    Any::TrivialStackFunctionTable<int32_t>::ToParcel(&anyInt, metaParcel);
+    Any anyIntParcel(0);
+    Any::TrivialStackFunctionTable<int32_t>::FromParcel(&anyIntParcel, metaParcel);
+    int32_t valueOutNew = AnyCast<int32_t>(anyIntParcel);
+    EXPECT_EQ(valueOutNew, 125);
+}
+
+/**
+ * @tc.name: testStackFunctionTable_001
+ * @tc.desc: testStackFunctionTable_001
+ * @tc.type: FUNC
+ */
+HWTEST(AnyTest, testStackFunctionTable_001, TestSize.Level1) {
+    Any::Storage src, dest;
+    int32_t value = 42;
+
+    // 拷贝构造
+    new (Any::StackFunctionTable<int32_t>::GetPtr(src)) int32_t(value);
+    Any::StackFunctionTable<int32_t>::Copy(dest, src);
+
+    int32_t* p = static_cast<int32_t*>(Any::StackFunctionTable<int32_t>::GetPtr(dest));
+    EXPECT_EQ(*p, 42);
+
+    Any::StackFunctionTable<int32_t>::Move(src, dest);
+    p = static_cast<int32_t*>(Any::StackFunctionTable<int32_t>::GetPtr(src));
+    EXPECT_EQ(*p, 42);
+}
+
+/**
+ * @tc.name: testStackFunctionTable_002
+ * @tc.desc: testStackFunctionTable_002
+ * @tc.type: FUNC
+ */
+HWTEST(AnyTest, testStackFunctionTable_002, TestSize.Level1) {
+    Any::Storage storage;
+    void* ptr = Any::StackFunctionTable<int32_t>::GetPtr(storage);
+    const void* cptr = Any::StackFunctionTable<int32_t>::GetConstPtr(storage);
+
+    EXPECT_EQ(ptr, cptr);
+}
+
+/**
+ * @tc.name: testStackFunctionTable_003
+ * @tc.desc: testStackFunctionTable_003
+ * @tc.type: FUNC
+ */
+HWTEST(AnyTest, testStackFunctionTable_003, TestSize.Level1) {
+    Any::Storage storage;
+    int32_t* p = new (Any::StackFunctionTable<int32_t>::GetPtr(storage)) int32_t(100);
+    EXPECT_EQ(*p, 100);
+}
+
+/**
+ * @tc.name: testStackFunctionTable_004
+ * @tc.desc: testStackFunctionTable_004
+ * @tc.type: FUNC
+ */
+HWTEST(AnyTest, testStackFunctionTable_004, TestSize.Level1) {
+    EXPECT_EQ(Any::StackFunctionTable<bool>::TypeName(), "bool");
+    EXPECT_EQ(Any::StackFunctionTable<double>::TypeName(), "double");
+}
+
+/**
+ * @tc.name: testStackFunctionTable_005
+ * @tc.desc: testStackFunctionTable_005
+ * @tc.type: FUNC
+ */
+HWTEST(AnyTest, testStackFunctionTable_005, TestSize.Level1) {
+    MessageParcel metaParcel;
+    Any anyInt = 125;
+    Any::StackFunctionTable<int32_t>::ToParcel(&anyInt, metaParcel);
+    Any anyIntParcel(0);
+    Any::StackFunctionTable<int32_t>::FromParcel(&anyIntParcel, metaParcel);
+    int32_t valueOutNew = AnyCast<int32_t>(anyIntParcel);
+    EXPECT_EQ(valueOutNew, 125);
+}
+
+/**
+ * @tc.name: testHeapFunctionTable_001
+ * @tc.desc: testHeapFunctionTable_001
+ * @tc.type: FUNC
+ */
+HWTEST(AnyTest, testHeapFunctionTable_001, TestSize.Level1) {
+    Any::Storage src, dest;
+    int32_t value = 42;
+
+    // 拷贝构造
+    new (Any::HeapFunctionTable<int32_t>::GetPtr(src)) int32_t(value);
+    Any::HeapFunctionTable<int32_t>::Copy(dest, src);
+
+    int32_t* p = static_cast<int32_t*>(Any::HeapFunctionTable<int32_t>::GetPtr(dest));
+    EXPECT_EQ(*p, 42);
+
+    Any::HeapFunctionTable<int32_t>::Move(src, dest);
+    p = static_cast<int32_t*>(Any::HeapFunctionTable<int32_t>::GetPtr(src));
+    EXPECT_EQ(*p, 42);
+}
+
+/**
+ * @tc.name: testHeapFunctionTable_002
+ * @tc.desc: testHeapFunctionTable_002
+ * @tc.type: FUNC
+ */
+HWTEST(AnyTest, testHeapFunctionTable_002, TestSize.Level1) {
+    Any::Storage storage;
+    void* ptr = Any::HeapFunctionTable<int32_t>::GetPtr(storage);
+    const void* cptr = Any::HeapFunctionTable<int32_t>::GetConstPtr(storage);
+
+    EXPECT_EQ(ptr, cptr);
+}
+
+/**
+ * @tc.name: testHeapFunctionTable_003
+ * @tc.desc: testHeapFunctionTable_003
+ * @tc.type: FUNC
+ */
+HWTEST(AnyTest, testHeapFunctionTable_003, TestSize.Level1) {
+    Any::Storage storage;
+    int32_t* p = new (Any::HeapFunctionTable<int32_t>::GetPtr(storage)) int32_t(100);
+    EXPECT_EQ(*p, 100);
+}
+
+/**
+ * @tc.name: testHeapFunctionTable_004
+ * @tc.desc: testHeapFunctionTable_004
+ * @tc.type: FUNC
+ */
+HWTEST(AnyTest, testHeapFunctionTable_004, TestSize.Level1) {
+    EXPECT_EQ(Any::HeapFunctionTable<bool>::TypeName(), "bool");
+    EXPECT_EQ(Any::HeapFunctionTable<double>::TypeName(), "double");
+}
+
+/**
+ * @tc.name: testHeapFunctionTable_005
+ * @tc.desc: testHeapFunctionTable_005
+ * @tc.type: FUNC
+ */
+HWTEST(AnyTest, testHeapFunctionTable_005, TestSize.Level1) {
+    MessageParcel metaParcel;
+    Any anyInt = 125;
+    Any::HeapFunctionTable<int32_t>::ToParcel(&anyInt, metaParcel);
+    Any anyIntParcel(0);
+    Any::HeapFunctionTable<int32_t>::FromParcel(&anyIntParcel, metaParcel);
+    int32_t valueOutNew = AnyCast<int32_t>(anyIntParcel);
+    EXPECT_EQ(valueOutNew, 125);
+}
 } // namespace AnyFuncUT
 } // namespace Media
 } // namespace OHOS
