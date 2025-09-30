@@ -686,7 +686,6 @@ void PluginList::AddEac3AudioDecoderPlugins()
 }
 #endif
 
-#ifdef SUPPORT_CODEC_ALAC
 void PluginList::AddAlacAudioDecoderPlugins()
 {
     PluginDescription alacAudioDecoderPlugin;
@@ -697,7 +696,6 @@ void PluginList::AddAlacAudioDecoderPlugins()
     alacAudioDecoderPlugin.rank = DEFAULT_RANK;
     pluginDescriptionList_.push_back(alacAudioDecoderPlugin);
 }
-#endif
 
 void PluginList::AddAudioServerSinkPlugins()
 {
