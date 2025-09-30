@@ -349,6 +349,30 @@ void MediaMonitorManager::GetCollaborativeDeviceState(
         addressToCollaborativeEnabledMap[p.first] = p.second;
     }
 }
+
+void MediaMonitorManager::GetDistributedDeviceInfo(std::vector<std::string> &deviceInfos)
+{
+    MEDIA_LOG_D("Get distributed device info");
+    sptr<IMediaMonitor> proxy = GetMediaMonitorProxy();
+    if (proxy == nullptr) {
+        MEDIA_LOG_E("proxy is nullptr.");
+        return;
+    }
+    int32_t ret;
+    proxy->GetDistributedDeviceInfo(deviceInfos, ret);
+}
+
+void MediaMonitorManager::GetDistributedSceneInfo(std::string &sceneInfo)
+{
+    MEDIA_LOG_D("Get distributed scene info");
+    sptr<IMediaMonitor> proxy = GetMediaMonitorProxy();
+    if (proxy == nullptr) {
+        MEDIA_LOG_E("proxy is nullptr.");
+        return;
+    }
+    int32_t ret;
+    proxy->GetDistributedSceneInfo(sceneInfo, ret);
+}
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS

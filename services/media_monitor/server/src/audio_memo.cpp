@@ -26,6 +26,7 @@ constexpr int32_t EXCLUDED = 0;
 constexpr int32_t UNEXCLUDED = 1;
 constexpr int32_t ADD = 1;
 constexpr int32_t REMOVE = 0;
+constexpr int32_t SERVICE_STATUS_STOP = 2;
 }
 
 namespace OHOS {
@@ -265,6 +266,52 @@ int32_t AudioMemo::GetAudioAppStateMsg(std::map<int32_t, std::shared_ptr<Monitor
 {
     std::lock_guard<std::mutex> lockEventMap(appStateMutex_);
     appStateMap = appStateMap_;
+    return SUCCESS;
+}
+
+void AudioMemo::UpdateDistributedSceneInfo(std::shared_ptr<EventBean> &bean)
+{
+    FALSE_RETURN_MSG(bean != nullptr, "event bean is null");
+    std::lock_guard<std::mutex> lock(distributedInfoMutex_);
+    distributedSceneInfo_ = bean->GetStringValue("SCENE_INFO");
+}
+
+int32_t AudioMemo::GetDistributedSceneInfo(std::string &distributedSceneInfo)
+{
+    std::lock_guard<std::mutex> lock(distributedInfoMutex_);
+    distributedSceneInfo = distributedSceneInfo_;
+    return SUCCESS;
+}
+
+void AudioMemo::UpdateDistributedDeviceInfo(std::shared_ptr<EventBean> &bean)
+{
+    FALSE_RETURN_MSG(bean != nullptr, "event bean is null");
+
+    std::lock_guard<std::mutex> lock(distributedInfoMutex_);
+    int32_t serviceStatus = bean->GetIntValue("SERVICE_STATUS");
+    if (serviceStatus == SERVICE_STATUS_STOP) {
+        distributedDeviceInfos_.clear();
+        return;
+    }
+
+    int32_t isAdd = bean->GetIntValue("IS_ADD");
+    std::string networkID = bean->GetStringValue("NETWORK_ID");
+    int32_t hdiPin = bean->GetIntValue("HDI_PIN");
+    std::string originalInfo = bean->GetStringValue("ORIGINAL_INFO");
+    std::string key = networkID + std::to_string(hdiPin);
+
+    if (isAdd == ADD) {
+        distributedDeviceInfos_[key] = originalInfo;
+    } else {
+        distributedDeviceInfos_.erase(key);
+    }
+}
+
+int32_t AudioMemo::GetDistributedDeviceInfo(std::vector<std::string> &distributedDeviceInfos)
+{
+    std::lock_guard<std::mutex> lock(distributedInfoMutex_);
+    std::transform(distributedDeviceInfos_.begin(), distributedDeviceInfos_.end(),
+        std::back_inserter(distributedDeviceInfos), [](const auto &pair) { return pair.second; });
     return SUCCESS;
 }
 

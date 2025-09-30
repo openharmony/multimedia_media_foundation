@@ -28,4 +28,6 @@ interface OHOS.Media.MediaMonitor.IMediaMonitor {
     int GetAudioExcludedDevicesMsg([out] Map<int, List<MonitorDeviceInfo>> excludedDevices);
     int GetCollaborativeDeviceState([out] Map<String, unsigned int> addressToCollaborativeEnabledMap);
     int GetAudioAppStateMsg([out] Map<int, MonitorAppStateInfo> appStateMap);
+    int GetDistributedDeviceInfo([out] List<String> deviceInfos);
+    int GetDistributedSceneInfo([out] String sceneInfo);
 }

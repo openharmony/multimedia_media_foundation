@@ -151,9 +151,27 @@ void EventAggregate::UpdateAggregateStateEventList(std::shared_ptr<EventBean> &b
         case HAP_CALL_AUDIO_SESSION:
             HandleCallSessionEvent(bean);
             break;
+        case DISTRIBUTED_DEVICE_INFO:
+            HandleDistributedDeviceInfo(bean);
+            break;
+        case DISTRIBUTED_SCENE_INFO:
+            HandleDistributedSceneInfo(bean);
+            break;
         default:
             break;
     }
+}
+
+void EventAggregate::HandleDistributedDeviceInfo(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Handle distributed device info");
+    audioMemo_.UpdateDistributedDeviceInfo(bean);
+}
+
+void EventAggregate::HandleDistributedSceneInfo(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Handle distributed scene info");
+    audioMemo_.UpdateDistributedSceneInfo(bean);
 }
 
 void EventAggregate::HandleCallSessionEvent(std::shared_ptr<EventBean> &bean)

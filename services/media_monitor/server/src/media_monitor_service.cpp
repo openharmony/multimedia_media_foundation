@@ -203,6 +203,20 @@ ErrCode MediaMonitorService::GetAudioAppStateMsg(std::unordered_map<int32_t, Mon
     return funcResult;
 }
 
+ErrCode MediaMonitorService::GetDistributedDeviceInfo(std::vector<std::string> &deviceInfos, int32_t &funcResult)
+{
+    FALSE_UPDATE_RETURN_V_MSG_E(VerifyIsAudio(), funcResult, ERROR, "client permission denied");
+    funcResult = audioMemo_.GetDistributedDeviceInfo(deviceInfos);
+    return funcResult;
+}
+
+ErrCode MediaMonitorService::GetDistributedSceneInfo(std::string &sceneInfo, int32_t &funcResult)
+{
+    FALSE_UPDATE_RETURN_V_MSG_E(VerifyIsAudio(), funcResult, ERROR, "client permission denied");
+    funcResult = audioMemo_.GetDistributedSceneInfo(sceneInfo);
+    return funcResult;
+}
+
 void MediaMonitorService::AudioEncodeDump()
 {
     MEDIA_LOG_I("encode pcm start");
