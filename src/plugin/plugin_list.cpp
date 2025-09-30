@@ -108,14 +108,12 @@ PluginList::PluginList()
     AddFFmpegMuxerPlugins();
     AddFFmpegFlacMuxerplugins();
     AddAc3AudioDecoderPlugins();
+    AddAlacAudioDecoderPlugins();
 #ifdef SUPPORT_CODEC_EAC3
     AddEac3AudioDecoderPlugins();
 #endif
 #ifdef SUPPORT_CODEC_COOK
     AddCookAudioDecoderPlugins();
-#endif
-#ifdef SUPPORT_CODEC_ALAC
-    AddAlacAudioDecoderPlugins();
 #endif
 }
 
@@ -693,7 +691,7 @@ void PluginList::AddAlacAudioDecoderPlugins()
 {
     PluginDescription alacAudioDecoderPlugin;
     alacAudioDecoderPlugin.pluginName = "OH.Media.Codec.Decoder.Audio.ALAC";
-    alacAudioDecoderPlugin.packageName = "AlacAudioDecoder";
+    alacAudioDecoderPlugin.packageName = "FFmpegAudioDecoders";
     alacAudioDecoderPlugin.pluginType = PluginType::AUDIO_DECODER;
     alacAudioDecoderPlugin.cap = "audio/alac";
     alacAudioDecoderPlugin.rank = DEFAULT_RANK;
