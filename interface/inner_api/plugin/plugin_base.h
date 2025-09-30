@@ -233,6 +233,21 @@ struct PluginBase {
         return Status::OK;
     }
 
+    /**
+     * @brief Sets the AV read packet stop state callback message to notify the plugin user.
+     *
+     * This function can be called in any state except DESTROYED and INVALID.
+     *
+     * @param state   true or false.
+     * @return Execution status return.
+     * @retval OK: Plugin SetAVReadPacketStopState succeeded.
+     */
+    virtual Status SetAVReadPacketStopState(bool state)
+    {
+        (void)state;
+        return Status::OK;
+    }
+
 protected:
     const std::string pluginName_;
 };
