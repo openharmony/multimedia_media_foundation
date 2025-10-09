@@ -686,6 +686,17 @@ void PluginList::AddEac3AudioDecoderPlugins()
 }
 #endif
 
+void PluginList::AddGsmMsAudioDecoderPlugin()
+{
+    PluginDescription gsmMsDecoderPlugin;
+    gsmMsDecoderPlugin.pluginName = "OH.Media.Codec.Decoder.Audio.GSM_MS";
+    gsmMsDecoderPlugin.packageName = "FFmpegAudioDecoders";
+    gsmMsDecoderPlugin.pluginType = PluginType::AUDIO_DECODER;
+    gsmMsDecoderPlugin.cap = "audio/gsm_ms";
+    gsmMsDecoderPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(gsmMsDecoderPlugin);
+}
+
 void PluginList::AddAlacAudioDecoderPlugins()
 {
     PluginDescription alacAudioDecoderPlugin;
