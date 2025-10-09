@@ -75,6 +75,7 @@ void EventAggregate::WriteEvent(std::shared_ptr<EventBean> &bean)
         case STREAM_OCCUPANCY:
         case HPAE_MESSAGE_QUEUE_EXCEPTION:
         case STREAM_MOVE_EXCEPTION:
+        case PROCESS_IN_MAINTHREAD:
             mediaMonitorPolicy_.WriteEvent(bean->GetEventId(), bean);
             break;
         default:

@@ -89,6 +89,7 @@ private:
     void AddFFmpegMuxerPlugins();
     void AddFFmpegFlacMuxerplugins();
     void AddAudioVendorAacEncodersPlugin();
+    void AddGsmMsAudioDecoderPlugin();
 #ifdef SUPPORT_CODEC_RM
     void AddRmDemuxerPlugin();
 #endif

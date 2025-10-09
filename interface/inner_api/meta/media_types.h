@@ -153,6 +153,11 @@ enum class FileType : int32_t {
     RM = 108,
     AC3 = 109,
     EAC3 = 110,
+    M4V = 111,
+    WMV = 112,
+    VOB = 113,
+    FT_3G2 = 114, //3g2
+    FT_3GP = 115, //3gp
     AMR = 201,
     AAC = 202,
     MP3 = 203,
@@ -161,6 +166,7 @@ enum class FileType : int32_t {
     M4A = 206,
     WAV = 207,
     APE = 208,
+    WMA = 209,
     SRT = 301,
     VTT = 302,
     LRC = 303,

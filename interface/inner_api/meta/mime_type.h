@@ -29,8 +29,10 @@ public:
     static constexpr const char VIDEO_VP8[] = "video/x-vnd.on2.vp8";
     static constexpr const char VIDEO_VP9[] = "video/x-vnd.on2.vp9";
     static constexpr const char VIDEO_VVC[] = "video/vvc";
+    static constexpr const char VIDEO_VC1[] = "video/vc1";
     static constexpr const char VIDEO_RV30[] = "video/rv30";
     static constexpr const char VIDEO_RV40[] = "video/rv40";
+    static constexpr const char VIDEO_WMV3[] = "video/wmv3";
 
     static constexpr const char AUDIO_AMR_NB[] = "audio/3gpp";
     static constexpr const char AUDIO_AMR_WB[] = "audio/amr-wb";
@@ -50,6 +52,15 @@ public:
     static constexpr const char AUDIO_EAC3[] = "audio/eac3";
     static constexpr const char AUDIO_ALAC[] = "audio/alac";
     static constexpr const char AUDIO_MIME_L2HC[] = "audio/l2hc";
+    static constexpr const char AUDIO_GSM_MS[] = "audio/gsm_ms";
+    static constexpr const char AUDIO_WMAV1[] = "audio/wmav1";
+    static constexpr const char AUDIO_WMAV2[] = "audio/wmav2";
+    static constexpr const char AUDIO_WMAPRO[] = "audio/wmapro";
+    static constexpr const char AUDIO_ADPCM_G722[] = "audio/adpcm_g722";
+    static constexpr const char AUDIO_ADPCM_G726[] = "audio/adpcm_g726";
+    static constexpr const char AUDIO_ADPCM_IMA_WAV[] = "audio/adpcm_ima_wav";
+    static constexpr const char AUDIO_ADPCM_MS[] = "audio/adpcm_ms";
+    static constexpr const char AUDIO_ADPCM_YAMAHA[] = "audio/adpcm_yamaha";
 
     static constexpr const char IMAGE_JPG[] = "image/jpeg";
     static constexpr const char IMAGE_PNG[] = "image/png";
