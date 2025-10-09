@@ -513,6 +513,7 @@ map<TagType, bool> testBoolData = {
     {Tag::MEDIA_HAS_TIMEDMETA, true},
     {Tag::MEDIA_HAS_AUXILIARY, true},
     {Tag::MEDIA_END_OF_STREAM, true},
+    {Tag::MEDIA_IS_HARDWARE, true},
     {Tag::VIDEO_IS_HDR_VIVID, true},
     {Tag::VIDEO_FRAME_RATE_ADAPTIVE_MODE, true},
     {Tag::VIDEO_ENCODER_ENABLE_TEMPORAL_SCALABILITY, true},
