@@ -52,6 +52,7 @@ public:
     static constexpr const char AUDIO_COOK[] = "audio/cook";
     static constexpr const char AUDIO_AC3[] = "audio/ac3";
     static constexpr const char AUDIO_EAC3[] = "audio/eac3";
+    static constexpr const char AUDIO_GSM[] = "audio/gsm";
     static constexpr const char AUDIO_MIME_L2HC[] = "audio/l2hc";
     static constexpr const char AUDIO_GSM_MS[] = "audio/gsm_ms";
     static constexpr const char AUDIO_WMAV1[] = "audio/wmav1";
