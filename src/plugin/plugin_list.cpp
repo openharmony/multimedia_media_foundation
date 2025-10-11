@@ -114,7 +114,6 @@ PluginList::PluginList()
 #ifdef SUPPORT_CODEC_EAC3
     AddEac3AudioDecoderPlugins();
 #endif
-    AddGsmMsAudioDecoderPlugin();
 #ifdef SUPPORT_CODEC_COOK
     AddCookAudioDecoderPlugins();
 #endif

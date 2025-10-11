@@ -23,6 +23,7 @@ class MimeType {
 public:
     static constexpr const char VIDEO_H263[] = "video/h263";
     static constexpr const char VIDEO_AVC[] = "video/avc";
+    static constexpr const char VIDEO_MPEG1[] = "video/mpeg";
     static constexpr const char VIDEO_MPEG2[] = "video/mpeg2";
     static constexpr const char VIDEO_HEVC[] = "video/hevc";
     static constexpr const char VIDEO_MPEG4[] = "video/mp4v-es";
@@ -33,6 +34,7 @@ public:
     static constexpr const char VIDEO_RV30[] = "video/rv30";
     static constexpr const char VIDEO_RV40[] = "video/rv40";
     static constexpr const char VIDEO_WMV3[] = "video/wmv3";
+    static constexpr const char VIDEO_MSVIDEO1[] = "video/msvideo1";
 
     static constexpr const char AUDIO_AMR_NB[] = "audio/3gpp";
     static constexpr const char AUDIO_AMR_WB[] = "audio/amr-wb";
@@ -62,6 +64,8 @@ public:
     static constexpr const char AUDIO_ADPCM_IMA_WAV[] = "audio/adpcm_ima_wav";
     static constexpr const char AUDIO_ADPCM_MS[] = "audio/adpcm_ms";
     static constexpr const char AUDIO_ADPCM_YAMAHA[] = "audio/adpcm_yamaha";
+    static constexpr const char AUDIO_WMV[] = "audio/x-ms-wma";
+    static constexpr const char AUDIO_ALAC[] = "audio/x-m4a";
 
     static constexpr const char IMAGE_JPG[] = "image/jpeg";
     static constexpr const char IMAGE_PNG[] = "image/png";
