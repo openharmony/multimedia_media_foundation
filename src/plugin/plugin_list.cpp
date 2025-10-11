@@ -702,12 +702,13 @@ void PluginList::AddGsmMsAudioDecoderPlugin()
 
 void PluginList::AddGsmAudioDecoderPlugin()
 {
-PluginDescription gsmDecoderPlugin;
-gsmDecoderPlugin.pluginName = "OH.Media.Codec.Decoder.Audio.GSM";
-gsmDecoderPlugin.packageName = "FFmpegAudioDecoders";
-gsmDecoderPlugin.pluginType = PluginType::AUDIO_DECODER;
-gsmDecoderPlugin.cap = "audio/gsm";
-gsmDecoderPlugin.rank = DEFAULT_RANK;
+    PluginDescription gsmDecoderPlugin;
+    gsmDecoderPlugin.pluginName = "OH.Media.Codec.Decoder.Audio.GSM";
+    gsmDecoderPlugin.packageName = "FFmpegAudioDecoders";
+    gsmDecoderPlugin.pluginType = PluginType::AUDIO_DECODER;
+    gsmDecoderPlugin.cap = "audio/gsm";
+    gsmDecoderPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(gsmDecoderPlugin);
 }
 
 void PluginList::AddAlacAudioDecoderPlugins()
