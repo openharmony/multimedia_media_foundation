@@ -110,6 +110,7 @@ PluginList::PluginList()
     AddAc3AudioDecoderPlugins();
     AddGsmMsAudioDecoderPlugin();
     AddGsmAudioDecoderPlugin();
+    AddAlacAudioDecoderPlugins();
 #ifdef SUPPORT_CODEC_EAC3
     AddEac3AudioDecoderPlugins();
 #endif
@@ -707,6 +708,17 @@ void PluginList::AddGsmAudioDecoderPlugin()
     gsmDecoderPlugin.cap = "audio/gsm";
     gsmDecoderPlugin.rank = DEFAULT_RANK;
     pluginDescriptionList_.push_back(gsmDecoderPlugin);
+}
+
+void PluginList::AddAlacAudioDecoderPlugins()
+{
+    PluginDescription alacAudioDecoderPlugin;
+    alacAudioDecoderPlugin.pluginName = "OH.Media.Codec.Decoder.Audio.ALAC";
+    alacAudioDecoderPlugin.packageName = "FFmpegAudioDecoders";
+    alacAudioDecoderPlugin.pluginType = PluginType::AUDIO_DECODER;
+    alacAudioDecoderPlugin.cap = "audio/alac";
+    alacAudioDecoderPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(alacAudioDecoderPlugin);
 }
 
 void PluginList::AddAudioServerSinkPlugins()

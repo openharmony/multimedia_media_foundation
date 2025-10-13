@@ -102,6 +102,7 @@ private:
 #ifdef SUPPORT_CODEC_EAC3
     void AddEac3AudioDecoderPlugins();
 #endif
+    void AddAlacAudioDecoderPlugins();
 #ifdef SUPPORT_DEMUXER_LRC
     void AddLrcDemuxerPlugin();
 #endif
