@@ -76,6 +76,7 @@ void EventAggregate::WriteEvent(std::shared_ptr<EventBean> &bean)
         case HPAE_MESSAGE_QUEUE_EXCEPTION:
         case STREAM_MOVE_EXCEPTION:
         case PROCESS_IN_MAINTHREAD:
+        case SUITE_ENGINE_EXCEPTION:
             mediaMonitorPolicy_.WriteEvent(bean->GetEventId(), bean);
             break;
         default:
@@ -127,6 +128,9 @@ void EventAggregate::UpdateAggregateEventList(std::shared_ptr<EventBean> &bean)
             break;
         case EXCLUDE_OUTPUT_DEVICE:
             HandleExcludedOutputDevices(bean);
+            break;
+        case SUITE_ENGINE_UTILIZATION_STATS:
+            HandleSuiteEngineUtilizationStats(bean);
             break;
         default:
             UpdateAggregateStateEventList(bean);
@@ -711,6 +715,12 @@ void EventAggregate::HandleVolumeApiInvokeEvent(std::shared_ptr<EventBean> &bean
 {
     MEDIA_LOG_D("Handle volume api invoke event");
     mediaMonitorPolicy_.AddToVolumeApiInvokeQueue(bean);
+}
+
+void EventAggregate::HandleSuiteEngineUtilizationStats(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Handle audio suite node utilization event");
+    mediaMonitorPolicy_.HandleSuiteEngineUtilizationStatsToEventVector(bean);
 }
 } // namespace MediaMonitor
 } // namespace Media
