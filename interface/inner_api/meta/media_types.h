@@ -158,6 +158,7 @@ enum class FileType : int32_t {
     VOB = 113,
     FT_3G2 = 114, //3g2
     FT_3GP = 115, //3gp
+    DAT = 116,
     AMR = 201,
     AAC = 202,
     MP3 = 203,
