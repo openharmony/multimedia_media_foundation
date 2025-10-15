@@ -331,6 +331,16 @@ void MediaMonitorPolicy::WriteFaultEvent(EventId eventId, std::shared_ptr<EventB
         case HPAE_MESSAGE_QUEUE_EXCEPTION:
             mediaEventBaseWriter_.WriteMessageQueueException(bean);
             break;
+        default:
+            WriteFaultEventExpansion(eventId, bean);
+            break;
+    }
+}
+
+void MediaMonitorPolicy::WriteFaultEventExpansion(EventId eventId, std::shared_ptr<EventBean> &bean)
+{
+    BundleInfo bundleInfo;
+    switch (eventId) {
         case STREAM_MOVE_EXCEPTION:
             mediaEventBaseWriter_.WriteStreamMoveException(bean);
             break;
