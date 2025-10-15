@@ -129,9 +129,6 @@ void EventAggregate::UpdateAggregateEventList(std::shared_ptr<EventBean> &bean)
         case EXCLUDE_OUTPUT_DEVICE:
             HandleExcludedOutputDevices(bean);
             break;
-        case SUITE_ENGINE_UTILIZATION_STATS:
-            HandleSuiteEngineUtilizationStats(bean);
-            break;
         default:
             UpdateAggregateStateEventList(bean);
             break;
@@ -154,6 +151,9 @@ void EventAggregate::UpdateAggregateStateEventList(std::shared_ptr<EventBean> &b
             break;
         case HAP_CALL_AUDIO_SESSION:
             HandleCallSessionEvent(bean);
+            break;
+        case SUITE_ENGINE_UTILIZATION_STATS:
+            HandleSuiteEngineUtilizationStats(bean);
             break;
         default:
             break;
