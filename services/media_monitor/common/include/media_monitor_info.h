@@ -86,6 +86,10 @@ enum EventId {
     VOLUME_API_INVOKE = 41,
     HAP_CALL_AUDIO_SESSION = 42,
     PROCESS_IN_MAINTHREAD = 43,
+   
+    // for audio suite
+    SUITE_ENGINE_UTILIZATION_STATS = 44,
+    SUITE_ENGINE_EXCEPTION = 45,
 };
 
 enum EventType {
