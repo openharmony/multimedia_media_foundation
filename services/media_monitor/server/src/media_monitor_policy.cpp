@@ -345,7 +345,7 @@ void MediaMonitorPolicy::WriteFaultEventExpansion(EventId eventId, std::shared_p
             mediaEventBaseWriter_.WriteStreamMoveException(bean);
             break;
         case SUITE_ENGINE_EXCEPTION:
-            bundleInfo = GetBundleInfo(bean->GetIntValue("UID"));
+            bundleInfo = GetBundleInfo(bean->GetIntValue("CLIENT_UID"));
             bean->Add("APP_NAME", bundleInfo.appName);
             mediaEventBaseWriter_.WriteSuiteEngineException(bean);
             break;
