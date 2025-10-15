@@ -794,6 +794,40 @@ void MediaEventBaseWriter::WriteAudioMainThreadEvent(std::shared_ptr<EventBean> 
         "CALLFUNC", bean->GetIntValue("CALLFUNC"));
 #endif
 }
+
+void MediaEventBaseWriter::WriteSuiteEngineUtilizationStats(
+        std::shared_ptr<EventBean> &bean, std::vector<std::string> appNameList, std::vector<uint32_t> nodeCountList)
+{
+    MEDIA_LOG_D("audio suite engine utilization stats");
+    if (bean == nullptr) {
+        MEDIA_LOG_E("eventBean is nullptr");
+        return;
+    }
+#ifdef MONITOR_ENABLE_HISYSEVENT
+    HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "SUITE_ENGINE_UTILIZATION_STATS",
+        HiviewDFX::HiSysEvent::EventType::STATISTIC,
+        "APP_NAME", appNameList,
+        "AUDIO_NODE_TYPE", bean->GetStringValue("AUDIO_NODE_TYPE"),
+        "AUDIO_NODE_COUNT", nodeCountList);
+#endif
+}
+ 
+void MediaEventBaseWriter::WriteSuiteEngineException(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("audio suite engine exception");
+    if (bean == nullptr) {
+        MEDIA_LOG_E("eventBean is nullptr");
+        return;
+    }
+#ifdef MONITOR_ENABLE_HISYSEVENT
+    HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "SUITE_ENGINE_EXCEPTION",
+        HiviewDFX::HiSysEvent::EventType::FAULT,
+        "APP_NAME", bean->GetStringValue("APP_NAME"),
+        "ERROR_SCENE", static_cast<uint32_t>(bean->GetIntValue("ERROR_SCENE")),
+        "ERROR_CASE", static_cast<uint32_t>(bean->GetIntValue("ERROR_CASE")),
+        "ERROR_DESCRIPTION", bean->GetStringValue("ERROR_DESCRIPTION"));
+#endif
+}
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS
