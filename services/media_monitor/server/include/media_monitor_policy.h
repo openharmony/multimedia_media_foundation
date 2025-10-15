@@ -48,6 +48,7 @@ public:
     void WriteBehaviorEvent(EventId eventId, std::shared_ptr<EventBean> &bean);
     void WriteBehaviorEventExpansion(EventId eventId, std::shared_ptr<EventBean> &bean);
     void WriteFaultEvent(EventId eventId, std::shared_ptr<EventBean> &bean);
+    void WriteFaultEventExpansion(EventId eventId, std::shared_ptr<EventBean> &bean);
     void WriteAggregationEvent(EventId eventId, std::shared_ptr<EventBean> &bean);
     void WriteAggregationEventExpansion(EventId eventId, std::shared_ptr<EventBean> &bean);
     void WriteSystemTonePlaybackEvent(EventId eventId, std::shared_ptr<EventBean> &bean);
