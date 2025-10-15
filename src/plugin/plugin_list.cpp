@@ -111,7 +111,7 @@ PluginList::PluginList()
     AddGsmMsAudioDecoderPlugin();
     AddGsmAudioDecoderPlugin();
     AddAlacAudioDecoderPlugins();
-	AddWmaV1AudioDecoderPlugins();
+    AddWmaV1AudioDecoderPlugins();
     AddWmaV2AudioDecoderPlugins();
     AddWmaProAudioDecoderPlugins();
 #ifdef SUPPORT_CODEC_EAC3

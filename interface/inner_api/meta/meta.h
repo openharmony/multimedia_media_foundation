@@ -475,7 +475,7 @@ public:
         tagCharSeq == Tag::IS_GLTF, bool, AnyValueType::BOOL);
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::GLTF_OFFSET, int64_t, AnyValueType::INT64_T);
-	DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_BLOCK_ALIGN, int32_t, AnyValueType::INT32_T);
+    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_BLOCK_ALIGN, int32_t, AnyValueType::INT32_T);
 
     Meta &operator=(const Meta &other)
     {
