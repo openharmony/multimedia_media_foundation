@@ -111,6 +111,9 @@ PluginList::PluginList()
     AddGsmMsAudioDecoderPlugin();
     AddGsmAudioDecoderPlugin();
     AddAlacAudioDecoderPlugins();
+	AddWmaV1AudioDecoderPlugins();
+    AddWmaV2AudioDecoderPlugins();
+    AddWmaProAudioDecoderPlugins();
 #ifdef SUPPORT_CODEC_EAC3
     AddEac3AudioDecoderPlugins();
 #endif
@@ -719,6 +722,39 @@ void PluginList::AddAlacAudioDecoderPlugins()
     alacAudioDecoderPlugin.cap = "audio/alac";
     alacAudioDecoderPlugin.rank = DEFAULT_RANK;
     pluginDescriptionList_.push_back(alacAudioDecoderPlugin);
+}
+
+void PluginList::AddWmaV1AudioDecoderPlugins()
+{
+    PluginDescription wmav1AudioDecoderPlugin;
+    wmav1AudioDecoderPlugin.pluginName = "OH.Media.Codec.Decoder.Audio.WMAv1";
+    wmav1AudioDecoderPlugin.packageName = "FFmpegAudioDecoders";
+    wmav1AudioDecoderPlugin.pluginType = PluginType::AUDIO_DECODER;
+    wmav1AudioDecoderPlugin.cap = "audio/wmav1";
+    wmav1AudioDecoderPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(wmav1AudioDecoderPlugin);
+}
+
+void PluginList::AddWmaV2AudioDecoderPlugins()
+{
+    PluginDescription wmav2AudioDecoderPlugin;
+    wmav2AudioDecoderPlugin.pluginName = "OH.Media.Codec.Decoder.Audio.WMAv2";
+    wmav2AudioDecoderPlugin.packageName = "FFmpegAudioDecoders";
+    wmav2AudioDecoderPlugin.pluginType = PluginType::AUDIO_DECODER;
+    wmav2AudioDecoderPlugin.cap = "audio/wmav2";
+    wmav2AudioDecoderPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(wmav2AudioDecoderPlugin);
+}
+
+void PluginList::AddWmaProAudioDecoderPlugins()
+{
+    PluginDescription wmvProAudioDecoderPlugin;
+    wmvProAudioDecoderPlugin.pluginName = "OH.Media.Codec.Decoder.Audio.WMAPro";
+    wmvProAudioDecoderPlugin.packageName = "FFmpegAudioDecoders";
+    wmvProAudioDecoderPlugin.pluginType = PluginType::AUDIO_DECODER;
+    wmvProAudioDecoderPlugin.cap = "audio/wmapro";
+    wmvProAudioDecoderPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(wmvProAudioDecoderPlugin);
 }
 
 void PluginList::AddAudioServerSinkPlugins()

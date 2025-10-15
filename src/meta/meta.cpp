@@ -561,6 +561,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     // vector<int32_t>
     {Tag::REFERENCE_TRACK_IDS, defaultVectorInt32},
     {Tag::MEDIA_AIGC, defaultString},
+	{Tag::AUDIO_BLOCK_ALIGN, defaultInt32},
 };
 
 static std::map<AnyValueType, const Any &> g_ValueTypeDefaultValueMap = {
