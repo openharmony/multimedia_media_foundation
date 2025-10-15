@@ -796,7 +796,9 @@ void MediaEventBaseWriter::WriteAudioMainThreadEvent(std::shared_ptr<EventBean> 
 }
 
 void MediaEventBaseWriter::WriteSuiteEngineUtilizationStats(
-        std::shared_ptr<EventBean> &bean, std::vector<std::string> appNameList, std::vector<uint32_t> nodeCountList)
+    std::shared_ptr<EventBean> &bean,
+    std::vector<std> appNameList,
+    std::vector<uint32_t> nodeCountList)
 {
     MEDIA_LOG_D("audio suite engine utilization stats");
     if (bean == nullptr) {
