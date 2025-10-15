@@ -85,6 +85,10 @@ void MediaMonitorPolicy::TimeFunc()
             HandleToVolumeApiInvokeEvent();
             lastVolumeApiInvokeTime_ = TimeUtils::GetCurSec();
         }
+        if (afterSleepTime_ - lastSuiteStatsTime_ >= suiteStatsSleepTime_) {
+            HandleToSuiteEngineUtilizationStatsEvent();
+            lastSuiteStatsTime_ = TimeUtils::GetCurSec();
+        }
     }
 }
 
@@ -329,6 +333,11 @@ void MediaMonitorPolicy::WriteFaultEvent(EventId eventId, std::shared_ptr<EventB
             break;
         case STREAM_MOVE_EXCEPTION:
             mediaEventBaseWriter_.WriteStreamMoveException(bean);
+            break;
+        case SUITE_ENGINE_EXCEPTION:
+            bundleInfo = GetBundleInfo(bean->GetIntValue("UID"));
+            bean->Add("APP_NAME", bundleInfo.appName);
+            mediaEventBaseWriter_.WriteSuiteEngineException(bean);
             break;
         default:
             break;
@@ -866,6 +875,62 @@ void MediaMonitorPolicy::AddToCallSessionQueue(std::shared_ptr<EventBean> &bean)
         callSessionHapSet_.size() <= callSessionHapSetSize_) {
         callSessionHapSet_.emplace(key);
         mediaEventBaseWriter_.WriteAppCallSession(bean);
+    }
+}
+
+void MediaMonitorPolicy::HandleSuiteEngineUtilizationStatsToEventVector(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_I("Handle audio suite engine utilization stats to event vector");
+    BundleInfo bundleInfo = GetBundleInfo(bean->GetIntValue("CLIENT_UID"));
+    std::string appName = bundleInfo.appName;
+    std::string nodeType = bean->GetStringValue("AUDIO_NODE_TYPE");
+ 
+    std::lock_guard<std::mutex> lock(suiteStatsEventMutex_);
+    auto suiteNodeTypeIt = suiteNodeTypeStatsMap_.find(nodeType);
+    if (suiteNodeTypeIt != suiteNodeTypeStatsMap_.end()) {
+        auto& utilizationStatsMap = suiteNodeTypeIt->second;
+        auto statsIt = utilizationStatsMap.find(appName);
+        if (statsIt != utilizationStatsMap.end()) {
+            statsIt->second++;
+        } else {
+            utilizationStatsMap[appName] = INITIAL_VALUE;
+        }
+    } else {
+        std::unordered_map<std::string, uint32_t> newStatsMap;
+        newStatsMap[appName] = INITIAL_VALUE;
+        suiteNodeTypeStatsMap_[nodeType] = std::move(newStatsMap);
+        suiteStatsEventVector_.push_back(bean);
+    }
+}
+
+void MediaMonitorPolicy::HandleToSuiteEngineUtilizationStatsEvent()
+{
+    MEDIA_LOG_D("Handle to audio suite engine utilization stats event");
+    std::vector<std::shared_ptr<EventBean>> eventVector;
+    std::unordered_map<std::string, std::unordered_map<std::string, uint32_t>> nodeTypeStatsMap;
+    {
+        std::lock_guard<std::mutex> lock(suiteStatsEventMutex_);
+        eventVector = suiteStatsEventVector_;
+        nodeTypeStatsMap = suiteNodeTypeStatsMap_;
+        suiteStatsEventVector_.clear();
+        suiteNodeTypeStatsMap_.clear();
+    }
+    for (auto &event : eventVector) {
+        if (event == nullptr) {
+            continue;
+        }
+        std::string nodeType = event->GetStringValue("AUDIO_NODE_TYPE");
+        auto statsMapIt = nodeTypeStatsMap.find(nodeType);
+        if (statsMapIt != nodeTypeStatsMap.end()) {
+            auto statsMap = statsMapIt->second;
+            std::vector<std::string> appNameList;
+            std::vector<uint32_t> nodeCountList;
+            for (const auto& pair : statsMap) {
+                appNameList.push_back(pair.first);
+                nodeCountList.push_back(pair.second);
+            }
+            mediaEventBaseWriter_.WriteSuiteEngineUtilizationStats(event, appNameList, nodeCountList);
+        }
     }
 }
 
