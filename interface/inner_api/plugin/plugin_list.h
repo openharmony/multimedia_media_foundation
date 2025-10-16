@@ -91,6 +91,9 @@ private:
     void AddAudioVendorAacEncodersPlugin();
     void AddGsmMsAudioDecoderPlugin();
     void AddGsmAudioDecoderPlugin();
+    void AddWmaV1AudioDecoderPlugins();
+    void AddWmaV2AudioDecoderPlugins();
+    void AddWmaProAudioDecoderPlugins();
 #ifdef SUPPORT_CODEC_RM
     void AddRmDemuxerPlugin();
 #endif
