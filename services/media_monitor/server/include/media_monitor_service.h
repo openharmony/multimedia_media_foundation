@@ -99,6 +99,10 @@ public:
     ErrCode GetAudioAppStateMsg(std::unordered_map<int32_t, MonitorAppStateInfo> &appStateMapOut,
         int32_t &funcResult) override;
 
+    ErrCode GetDistributedDeviceInfo(std::vector<std::string> &deviceInfos, int32_t &funcResult) override;
+
+    ErrCode GetDistributedSceneInfo(std::string &sceneInfo, int32_t &funcResult) override;
+
     std::shared_ptr<DumpBufferWrap> dumpBufferWrap_ = nullptr;
 private:
     MediaMonitorService();
