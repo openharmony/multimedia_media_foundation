@@ -120,9 +120,9 @@ private:
     std::queue<std::shared_ptr<EventBean>> volumeApiInvokeEventQueue_;
     std::unordered_set<std::string> volumeApiInvokeRecordSet_;
 
+    std::mutex suiteStatsEventMutex_;
     std::vector<std::shared_ptr<EventBean>> suiteStatsEventVector_;
     std::unordered_map<std::string, std::unordered_map<std::string, uint32_t>> suiteNodeTypeStatsMap_;
-    std::mutex suiteStatsEventMutex_;
 
     int32_t volumeApiInvokeRecordSetSize_ = 20 * 30 * 12;
     std::mutex volumeApiInvokeMutex_;
