@@ -50,6 +50,10 @@ public:
 
     void GetAudioAppStateMsg(std::map<int32_t, std::shared_ptr<MonitorAppStateInfo>> &appStateMap);
 
+    void GetDistributedDeviceInfo(std::vector<std::string> &deviceInfos);
+
+    void GetDistributedSceneInfo(std::string &sceneInfo);
+
 private:
     MediaMonitorManager();
     ~MediaMonitorManager() {}

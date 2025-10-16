@@ -88,6 +88,8 @@ private:
     void UpdateAggregateStateEventList(std::shared_ptr<EventBean> &bean);
     void HandleVolumeApiInvokeEvent(std::shared_ptr<EventBean> &bean);
     void HandleCallSessionEvent(std::shared_ptr<EventBean> &bean);
+    void HandleDistributedDeviceInfo(std::shared_ptr<EventBean> &bean);
+    void HandleDistributedSceneInfo(std::shared_ptr<EventBean> &bean);
     void HandleSuiteEngineUtilizationStats(std::shared_ptr<EventBean> &bean);
 
     AudioMemo& audioMemo_;

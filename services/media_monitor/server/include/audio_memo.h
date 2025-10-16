@@ -52,6 +52,11 @@ public:
 
     void UpdateAppBackgroundState(std::shared_ptr<EventBean> &bean);
     int32_t GetAudioAppStateMsg(std::map<int32_t, std::shared_ptr<MonitorAppStateInfo>> &appStateMap);
+
+    void UpdateDistributedSceneInfo(std::shared_ptr<EventBean> &bean);
+    int32_t GetDistributedSceneInfo(std::string &distributedSceneInfo);
+    void UpdateDistributedDeviceInfo(std::shared_ptr<EventBean> &bean);
+    int32_t GetDistributedDeviceInfo(std::vector<std::string> &distributedDeviceInfos);
 private:
     PreferredType GetPreferredType(std::shared_ptr<EventBean> &bean);
     PreferredType GetPreferredRenderType(int32_t streamUsage);
@@ -74,6 +79,10 @@ private:
 
     std::mutex appStateMutex_;
     std::map<int32_t, std::shared_ptr<MonitorAppStateInfo>> appStateMap_;
+
+    std::mutex distributedInfoMutex_;
+    std::string distributedSceneInfo_;
+    std::map<std::string, std::string> distributedDeviceInfos_;
 };
 
 } // namespace MediaMonitor
