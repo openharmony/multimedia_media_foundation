@@ -114,6 +114,7 @@ PluginList::PluginList()
     AddWmaV1AudioDecoderPlugins();
     AddWmaV2AudioDecoderPlugins();
     AddWmaProAudioDecoderPlugins();
+    AddAdpcmAudioDecoderPlugins();
 #ifdef SUPPORT_CODEC_EAC3
     AddEac3AudioDecoderPlugins();
 #endif
@@ -666,6 +667,53 @@ void PluginList::AddCookAudioDecoderPlugins()
     pluginDescriptionList_.push_back(cookAudioDecoderPlugin);
 }
 #endif
+
+void PluginList::AddAdpcmAudioDecoderPlugins()
+{
+    struct Item { const char* name; const char* mime; };
+    static const Item kItems[] = {
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.MS",         "audio/adpcm_ms" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.IMA.QT",     "audio/adpcm_ima_qt" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.IMA.WAV",    "audio/adpcm_ima_wav" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.IMA.DK3",    "audio/adpcm_ima_dk3" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.IMA.DK4",    "audio/adpcm_ima_dk4" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.IMA.WS",     "audio/adpcm_ima_ws" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.IMA.SMJPEG", "audio/adpcm_ima_smjpeg" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.IMA.DAT4",   "audio/adpcm_ima_dat4" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.IMA.AMV",    "audio/adpcm_ima_amv" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.IMA.APC",    "audio/adpcm_ima_apc" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.IMA.ISS",    "audio/adpcm_ima_iss" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.IMA.OKI",    "audio/adpcm_ima_oki" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.IMA.RAD",    "audio/adpcm_ima_rad" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.MTAF",       "audio/adpcm_mtaf" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.ADX",        "audio/adpcm_adx" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.AFC",        "audio/adpcm_afc" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.AICA",       "audio/adpcm_aica" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.CT",         "audio/adpcm_ct" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.DTK",        "audio/adpcm_dtk" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.G722",       "audio/adpcm_g722" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.G726",       "audio/adpcm_g726" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.G726LE",     "audio/adpcm_g726le" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.PSX",        "audio/adpcm_psx" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.SBPRO2",     "audio/adpcm_sbpro_2" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.SBPRO3",     "audio/adpcm_sbpro_3" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.SBPRO4",     "audio/adpcm_sbpro_4" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.THP",        "audio/adpcm_thp" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.THP.LE",     "audio/adpcm_thp_le" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.XA",         "audio/adpcm_xa" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.YAMAHA",     "audio/adpcm_yamaha" },
+    };
+
+    for (const auto& it : kItems) {
+        PluginDescription p;
+        p.pluginName  = it.name;
+        p.packageName = "FFmpegAudioDecoders";
+        p.pluginType  = PluginType::AUDIO_DECODER;
+        p.cap         = it.mime;
+        p.rank        = DEFAULT_RANK;
+        pluginDescriptionList_.push_back(std::move(p));
+    }
+}
 
 void PluginList::AddAc3AudioDecoderPlugins()
 {
