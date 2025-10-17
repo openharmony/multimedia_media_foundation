@@ -213,7 +213,7 @@ bool AVBuffer::WriteToMessageParcel(MessageParcel &parcel, bool updateAVMemory)
         FALSE_RETURN_V_MSG_E(type != MemoryType::VIRTUAL_MEMORY, false, "Virtual memory not support");
 
         ret = parcel.WriteUint8(static_cast<uint8_t>(type)) &&
-              memory_->WriteCommonToMessageParcel(parcel) && memory_->WriteToMessageParcel(parcel);
+              memory_->WriteCommonToMessageParcel(parcel) && memory_->WriteToMessageParcel(parcel, updateAVMemory);
     }
     if (!ret) {
         parcel.RewindWrite(oldPos);
