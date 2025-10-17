@@ -90,6 +90,9 @@ public:
     void WriteVolumeApiInvoke(std::shared_ptr<EventBean> &bean);
     void WriteAppCallSession(std::shared_ptr<EventBean> &bean);
     void WriteAudioMainThreadEvent(std::shared_ptr<EventBean> &bean);
+    void WriteSuiteEngineUtilizationStats(
+        std::shared_ptr<EventBean> &bean, std::vector<std::string> appNameList, std::vector<uint32_t> nodeCountList);
+    void WriteSuiteEngineException(std::shared_ptr<EventBean> &bean);
 };
 
 } // namespace MediaMonitor

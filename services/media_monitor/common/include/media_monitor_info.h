@@ -88,6 +88,10 @@ enum EventId {
     PROCESS_IN_MAINTHREAD = 43,
     DISTRIBUTED_DEVICE_INFO = 44,
     DISTRIBUTED_SCENE_INFO = 45,
+
+    // for audio suite
+    SUITE_ENGINE_UTILIZATION_STATS = 46,
+    SUITE_ENGINE_EXCEPTION = 47,
 };
 
 enum EventType {
