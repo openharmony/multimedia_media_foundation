@@ -576,7 +576,7 @@ void DemuxerFilter::NegotiateDownstream()
             MEDIA_LOG_I("demuxer negotiate with trackId: " PUBLIC_LOG_U32, stream.trackId);
             auto streamMeta = GetTrackMeta(stream.trackId);
             if (streamMeta == nullptr) {
-                MEDIA_LOG_W("streamMeta is nullptr.")
+                MEDIA_LOG_W("streamMeta is nullptr.");
                 continue;
             }
             auto tmpCap = MetaToCapability(*streamMeta);
