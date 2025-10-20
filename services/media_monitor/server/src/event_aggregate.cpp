@@ -157,6 +157,7 @@ void EventAggregate::UpdateAggregateStateEventList(std::shared_ptr<EventBean> &b
             break;
         case DISTRIBUTED_SCENE_INFO:
             HandleDistributedSceneInfo(bean);
+            break;
         case SUITE_ENGINE_UTILIZATION_STATS:
             HandleSuiteEngineUtilizationStats(bean);
             break;
