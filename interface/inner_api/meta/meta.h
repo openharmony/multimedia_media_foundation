@@ -470,6 +470,10 @@ public:
         tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_PTS_BASED_RATECONTROL, int32_t, AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::VIDEO_DECODER_INPUT_STREAM_ERROR, int32_t, AnyValueType::INT32_T);
+    DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::IS_GLTF, bool, AnyValueType::BOOL);
+    DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::GLTF_OFFSET, int64_t, AnyValueType::INT64_T);
 
     Meta &operator=(const Meta &other)
     {

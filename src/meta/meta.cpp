@@ -158,6 +158,7 @@ static std::vector<TagType> g_metadataBoolVector = {
     Tag::VIDEO_ENCODER_ENABLE_QP_MAP,
     Tag::VIDEO_ENCODER_ENABLE_PTS_BASED_RATECONTROL,
     Tag::VIDEO_DECODER_BLANK_FRAME_ON_SHUTDOWN,
+    Tag::IS_GLTF,
 };
 
 bool SetMetaData(Meta& meta, const TagType& tag, int32_t value)
@@ -504,6 +505,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_ENCODER_PER_FRAME_ABS_QP_MAP, defaultBool},
     {Tag::VIDEO_ENCODER_ENABLE_PTS_BASED_RATECONTROL, defaultBool},
     {Tag::VIDEO_DECODER_BLANK_FRAME_ON_SHUTDOWN, defaultBool},
+    {Tag::IS_GLTF, defaultBool},
     // Int64
     {Tag::MEDIA_FILE_SIZE, defaultUInt64},
     {Tag::MEDIA_POSITION, defaultUInt64},
@@ -520,6 +522,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::BUFFER_DURATION, defaultInt64},
     {Tag::VIDEO_DECODER_DESIRED_PRESENT_TIMESTAMP, defaultInt64},
     {Tag::VIDEO_ENCODE_SET_FRAME_PTS, defaultInt64},
+    {Tag::GLTF_OFFSET, defaultInt64},
     // AudioChannelLayout UINT64_T
     {Tag::AUDIO_CHANNEL_LAYOUT, defaultAudioChannelLayout},
     {Tag::AUDIO_OUTPUT_CHANNEL_LAYOUT, defaultAudioChannelLayout},
