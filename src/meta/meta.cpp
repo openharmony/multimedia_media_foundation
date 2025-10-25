@@ -467,6 +467,9 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_ENCODER_ROI_PARAMS, defaultString},
     {Tag::TRACK_REFERENCE_TYPE, defaultString},
     {Tag::TRACK_DESCRIPTION, defaultString},
+    {Tag::TRACK_REF_TYPE, defaultString},
+    {Tag::REF_TRACK_IDS, defaultString},
+    
     // Float
     {Tag::MEDIA_LATITUDE, defaultFloat},
     {Tag::MEDIA_LONGITUDE, defaultFloat},
