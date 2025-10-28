@@ -578,6 +578,7 @@ void DemuxerFilter::NegotiateDownstream()
             if (streamMeta == nullptr) {
                 MEDIA_LOG_W("streamMeta is nullptr.");
                 continue;
+                
             }
             auto tmpCap = MetaToCapability(*streamMeta);
             Plugin::Meta upstreamParams;
