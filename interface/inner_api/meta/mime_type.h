@@ -23,6 +23,7 @@ class MimeType {
 public:
     static constexpr const char VIDEO_H263[] = "video/h263";
     static constexpr const char VIDEO_AVC[] = "video/avc";
+    static constexpr const char VIDEO_AV1[] = "video/av1";
     static constexpr const char VIDEO_MPEG1[] = "video/mpeg";
     static constexpr const char VIDEO_MPEG2[] = "video/mpeg2";
     static constexpr const char VIDEO_HEVC[] = "video/hevc";
