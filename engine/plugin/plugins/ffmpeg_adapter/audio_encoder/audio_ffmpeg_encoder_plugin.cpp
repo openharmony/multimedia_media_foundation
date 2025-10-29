@@ -381,7 +381,11 @@ void AudioFfmpegEncoderPlugin::FillInFrameCache(const std::shared_ptr<Memory>& m
         }
     } else {
         sampleData = destBuffer;
-        nbSamples = static_cast<int32_t>((destLength / srcBytesPerSample_));
+        if (srcBytesPerSample_) {
+            nbSamples = static_cast<int32_t>(destLength / srcBytesPerSample_);
+        } else {
+            MEDIA_LOG_E("FillInFrameCache divided by zero");
+        }
     }
     cachedFrame_->format = avCodecContext_->sample_fmt;
     cachedFrame_->sample_rate = avCodecContext_->sample_rate;
