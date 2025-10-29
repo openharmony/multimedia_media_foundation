@@ -116,6 +116,7 @@ PluginList::PluginList()
     AddWmaProAudioDecoderPlugins();
     AddAdpcmAudioDecoderPlugins();
     AddIlbcAudioDecoderPlugins();
+    AddTrueHdAudioDecoderPlugin();
 #ifdef SUPPORT_CODEC_EAC3
     AddEac3AudioDecoderPlugins();
 #endif
@@ -815,6 +816,17 @@ void PluginList::AddIlbcAudioDecoderPlugins()
     ilbcDecoderPlugin.cap = "audio/ilbc";
     ilbcDecoderPlugin.rank = DEFAULT_RANK;
     pluginDescriptionList_.push_back(ilbcDecoderPlugin);
+}
+
+void PluginList::AddTrueHdAudioDecoderPlugin()
+{
+    PluginDescription trueHdAudioDecoderPlugin;
+    trueHdAudioDecoderPlugin.pluginName = "OH.Media.Codec.Decoder.Audio.TrueHD";
+    trueHdAudioDecoderPlugin.packageName = "FFmpegAudioDecoders";
+    trueHdAudioDecoderPlugin.pluginType = PluginType::AUDIO_DECODER;
+    trueHdAudioDecoderPlugin.cap = "audio/truehd";
+    trueHdAudioDecoderPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(trueHdAudioDecoderPlugin);
 }
 
 void PluginList::AddAudioServerSinkPlugins()
