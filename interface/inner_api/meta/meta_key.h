@@ -125,6 +125,8 @@ public:
     static constexpr const char REFERENCE_TRACK_IDS[] = "reference_track_ids";
     static constexpr const char TRACK_REFERENCE_TYPE[] = "track_reference_type";
     static constexpr const char TRACK_DESCRIPTION[] = "track_description";
+    static constexpr const char REF_TRACK_IDS[] = "ref_track_ids";
+    static constexpr const char TRACK_REF_TYPE[] = "track_ref_type";
 
     /* -------------------- 3dgs gltf tag -------------------- */
     static constexpr const char IS_GLTF[] = "is_gltf"; ///< bool, is gltf file
