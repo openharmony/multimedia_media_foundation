@@ -381,8 +381,9 @@ void AudioFfmpegEncoderPlugin::FillInFrameCache(const std::shared_ptr<Memory>& m
         }
     } else {
         sampleData = destBuffer;
-        if (srcBytesPerSample_) {
-            nbSamples = static_cast<int32_t>(destLength / srcBytesPerSample_);
+        uint32_t srcBytesPerSample = srcBytesPerSample_;
+        if (srcBytesPerSample) {
+            nbSamples = static_cast<int32_t>(destLength / srcBytesPerSample);
         } else {
             MEDIA_LOG_E("FillInFrameCache divided by zero");
         }
