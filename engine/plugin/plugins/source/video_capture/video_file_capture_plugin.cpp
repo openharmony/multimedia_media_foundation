@@ -249,8 +249,8 @@ Status VideoFileCapturePlugin::Read(std::shared_ptr<Buffer>& buffer, size_t expe
     } else {
         bufData = buffer->GetMemory();
     }
-    FALSE_RETURN_V_MSG_E(bufData != nullptr && bufData->GetMemoryType() == MemoryType::VIRTUAL_ADDR ||
-                         bufData->GetCapacity() > 0, Status::ERROR_NO_MEMORY, "buffer memory is invalid");
+    FALSE_RETURN_V_MSG_E(bufData != nullptr && (bufData->GetMemoryType() == MemoryType::VIRTUAL_ADDR ||
+                         bufData->GetCapacity() > 0), Status::ERROR_NO_MEMORY, "buffer memory is invalid");
     if (isStop_.load()) {
         MEDIA_LOG_I("flush or EOS, skip read buffer");
         return Status::END_OF_STREAM;
