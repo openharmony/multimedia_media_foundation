@@ -21,7 +21,7 @@
 #include "monitor_error.h"
 #include "media_monitor_proxy.h"
 #include "media_monitor_death_recipient.h"
-#include "dump_buffer_wrap.h"
+#include "audio_dump_buffer.h"
 
 namespace {
 constexpr OHOS::HiviewDFX::HiLogLabel LABEL = {LOG_CORE, LOG_DOMAIN_FOUNDATION, "MediaMonitorManager"};
@@ -35,7 +35,6 @@ using namespace std;
 
 static mutex g_mmProxyMutex;
 static sptr<IMediaMonitor> g_mmProxy = nullptr;
-static std::shared_ptr<DumpBufferWrap> g_dumpBufferWrap = nullptr;
 constexpr int MAX_DUMP_TIME = 90;
 
 MediaMonitorManager::MediaMonitorManager()
@@ -184,22 +183,10 @@ void MediaMonitorManager::WriteAudioBuffer(const std::string &fileName, void *pt
     FALSE_RETURN_MSG(proxy != nullptr, "proxy is nullptr");
 
     int32_t ret;
-    std::shared_ptr<DumpBuffer> bufferPtr = std::make_shared<DumpBuffer>();
-    proxy->GetInputBuffer(*bufferPtr, size, ret);
-    FALSE_RETURN_MSG(ret == SUCCESS, "get buffer failed.");
-    FALSE_RETURN_MSG(bufferPtr != nullptr, "get buffer is nullptr.");
-
-    std::shared_ptr<DumpBufferWrap> tmpBufferWrap = g_dumpBufferWrap;
-    FALSE_RETURN_MSG(tmpBufferWrap != nullptr, "buffer wrap is nullptr.");
-
-    int32_t bufferCapacitySize = tmpBufferWrap->GetCapacity(bufferPtr.get());
-    FALSE_RETURN_MSG(bufferCapacitySize > 0, "get buffer capacity error");
-    int32_t writeSize = tmpBufferWrap->Write(bufferPtr.get(), static_cast<uint8_t*>(ptr), size);
-    FALSE_RETURN_MSG(writeSize > 0, "write buffer error");
-
-    uint64_t bufferId = tmpBufferWrap->GetUniqueId(bufferPtr.get());
-    proxy->InputBufferFilled(fileName, bufferId, writeSize, ret);
-    FALSE_RETURN_MSG(ret == SUCCESS, "write buffer error %{public}d", ret);
+    AudioDumpBuffer buffer;
+    buffer.size = size;
+    buffer.RawDataCpy(ptr);
+    proxy->WriteAudioBuffer(fileName, buffer, ret);
     MEDIA_LOG_D("write audio buffer ret %{public}d", ret);
 }
 
@@ -288,8 +275,6 @@ int32_t MediaMonitorManager::SetMediaParameters(const std::vector<std::pair<std:
         return ERROR;
     }
 
-    FALSE_RETURN_V_MSG_E(LoadDumpBufferWrap(dumpEnable) == SUCCESS, ERROR, "load buffer wrap error");
-
     int32_t ret;
     proxy->SetMediaParameters(dumpType, dumpEnable, ret);
     if (ret != SUCCESS) {
@@ -309,27 +294,6 @@ int32_t MediaMonitorManager::ErasePreferredDeviceByType(const PreferredType pref
     int32_t ret;
     proxy->ErasePreferredDeviceByType(preferredType, ret);
     return ret;
-}
-
-int32_t MediaMonitorManager::LoadDumpBufferWrap(const std::string &dumpEnable)
-{
-    bool flag = (dumpEnable == "true") ? true : false;
-    if (flag && g_dumpBufferWrap != nullptr) {
-        return SUCCESS;
-    }
-
-    if (flag) {
-        g_dumpBufferWrap = std::make_shared<DumpBufferWrap>();
-        bool ret = g_dumpBufferWrap->Open();
-        if (!ret) {
-            MEDIA_LOG_E("load dumpbuffer failed");
-            g_dumpBufferWrap = nullptr;
-            return ERROR;
-        }
-    } else {
-        g_dumpBufferWrap = nullptr;
-    }
-    return SUCCESS;
 }
 
 void MediaMonitorManager::GetCollaborativeDeviceState(
