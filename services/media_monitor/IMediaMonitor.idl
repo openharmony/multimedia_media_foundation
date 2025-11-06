@@ -12,17 +12,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-sequenceable DumpBufferDefine..DumpBuffer;
+rawdata OHOS.Media.MediaMonitor.AudioDumpBuffer;
 sequenceable OHOS.Media.MediaMonitor.EventBean;
 sequenceable MediaMonitorInfo..OHOS.Media.MediaMonitor.MonitorDeviceInfo;
 sequenceable MediaMonitorInfo..OHOS.Media.MediaMonitor.MonitorAppStateInfo;
 interface OHOS.Media.MediaMonitor.IMediaMonitor {
     [oneway] void WriteLogMsg([in] EventBean bean);
     int GetAudioRouteMsg([out] Map<int, MonitorDeviceInfo> preferredDevices);
-    int WriteAudioBuffer([in] String fileName, [in] unsigned long ptr, [in] unsigned int size);
+    int WriteAudioBuffer([in] String fileName, [in] AudioDumpBuffer buffer);
     int SetMediaParameters([in] String dumpType, [in] String dumpEnable);
-    int GetInputBuffer([out] DumpBuffer buffer, [in] int size);
-    int InputBufferFilled([in] String fileName, [in] unsigned long bufferId, [in] unsigned int size);
     int GetPcmDumpStatus([out] int dumpEnable);
     int ErasePreferredDeviceByType([in] int preferredType);
     int GetAudioExcludedDevicesMsg([out] Map<int, List<MonitorDeviceInfo>> excludedDevices);
