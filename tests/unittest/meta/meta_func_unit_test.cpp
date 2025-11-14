@@ -771,7 +771,7 @@ map<TagType, std::vector<uint8_t>> testVetcorInt8Data = {
     {Tag::AUDIO_VORBIS_SETUP_HEADER, vectorUint8MediaCover},
     {Tag::AUDIO_VIVID_METADATA, vectorUint8MediaCover},
     {Tag::VIDEO_ENCODER_PER_FRAME_QP_MAP, vectorUint8MediaCover},
-    {Tag::BUFFER_SKIP_SAMPLES_INFO vectorUint8MediaCodec},
+    {Tag::BUFFER_SKIP_SAMPLES_INFO, vectorUint8MediaCodec},
 };
 
 /**
