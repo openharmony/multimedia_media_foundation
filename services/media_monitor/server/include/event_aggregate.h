@@ -90,6 +90,7 @@ private:
     void HandleCallSessionEvent(std::shared_ptr<EventBean> &bean);
     void HandleDistributedDeviceInfo(std::shared_ptr<EventBean> &bean);
     void HandleDistributedSceneInfo(std::shared_ptr<EventBean> &bean);
+    void HandleDmDeviceInfo(std::shared_ptr<EventBean> &bean);
     void HandleSuiteEngineUtilizationStats(std::shared_ptr<EventBean> &bean);
 
     AudioMemo& audioMemo_;

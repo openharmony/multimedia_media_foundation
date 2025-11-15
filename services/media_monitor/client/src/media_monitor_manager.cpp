@@ -337,6 +337,18 @@ void MediaMonitorManager::GetDistributedSceneInfo(std::string &sceneInfo)
     int32_t ret;
     proxy->GetDistributedSceneInfo(sceneInfo, ret);
 }
+
+void MediaMonitorManager::GetDmDeviceInfo(std::vector<MonitorDmDeviceInfo> &dmDeviceInfos)
+{
+    MEDIA_LOG_D("Get dm device info");
+    sptr<IMediaMonitor> proxy = GetMediaMonitorProxy();
+    if (proxy == nullptr) {
+        MEDIA_LOG_E("proxy is nullptr.");
+        return;
+    }
+    int32_t ret;
+    proxy->GetDmDeviceInfo(dmDeviceInfos, ret);
+}
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS
