@@ -54,6 +54,8 @@ public:
 
     void GetDistributedSceneInfo(std::string &sceneInfo);
 
+    void GetDmDeviceInfo(std::vector<MonitorDmDeviceInfo> &dmDeviceInfos);
+
 private:
     MediaMonitorManager();
     ~MediaMonitorManager() {}

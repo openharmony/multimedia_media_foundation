@@ -315,6 +315,30 @@ int32_t AudioMemo::GetDistributedDeviceInfo(std::vector<std::string> &distribute
     return SUCCESS;
 }
 
+void AudioMemo::UpdateDmDeviceInfo(std::shared_ptr<EventBean> &bean)
+{
+    FALSE_RETURN_MSG(bean != nullptr, "event bean is null");
+    int32_t isAdd = bean->GetIntValue("IS_ADD");
+    MonitorDmDeviceInfo dmDevice;
+    dmDevice.deviceName_ = bean->GetStringValue("DEVICE_NAME");
+    dmDevice.networkId_ = bean->GetStringValue("NETWORK_ID");
+    dmDevice.dmDeviceType_ = static_cast<uint16_t>(bean->GetIntValue("DM_DEVICE_TYPE"));
+    std::lock_guard<std::mutex> lock(distributedInfoMutex_);
+    if (isAdd == ADD) {
+        dmDeviceInfos_[dmDevice.networkId_] = dmDevice;
+    } else {
+        dmDeviceInfos_.erase(dmDevice.networkId_);
+    }
+}
+
+int32_t AudioMemo::GetDmDeviceInfo(std::vector<MonitorDmDeviceInfo> &dmDeviceInfos)
+{
+    std::lock_guard<std::mutex> lock(distributedInfoMutex_);
+    std::transform(dmDeviceInfos_.begin(), dmDeviceInfos_.end(),
+        std::back_inserter(dmDeviceInfos), [](const auto &pair) { return pair.second; });
+    return SUCCESS;
+}
+
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS

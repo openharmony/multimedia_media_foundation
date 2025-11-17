@@ -98,6 +98,8 @@ public:
 
     ErrCode GetDistributedSceneInfo(std::string &sceneInfo, int32_t &funcResult) override;
 
+    ErrCode GetDmDeviceInfo(std::vector<MonitorDmDeviceInfo> &dmDeviceInfos, int32_t &funcResult) override;
+
 private:
     MediaMonitorService();
     void MessageLoopFunc();

@@ -158,6 +158,9 @@ void EventAggregate::UpdateAggregateStateEventList(std::shared_ptr<EventBean> &b
         case DISTRIBUTED_SCENE_INFO:
             HandleDistributedSceneInfo(bean);
             break;
+        case DM_DEVICE_INFO:
+            HandleDmDeviceInfo(bean);
+            break;
         case SUITE_ENGINE_UTILIZATION_STATS:
             HandleSuiteEngineUtilizationStats(bean);
             break;
@@ -176,6 +179,12 @@ void EventAggregate::HandleDistributedSceneInfo(std::shared_ptr<EventBean> &bean
 {
     MEDIA_LOG_D("Handle distributed scene info");
     audioMemo_.UpdateDistributedSceneInfo(bean);
+}
+
+void EventAggregate::HandleDmDeviceInfo(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Handle dm device info");
+    audioMemo_.UpdateDmDeviceInfo(bean);
 }
 
 void EventAggregate::HandleCallSessionEvent(std::shared_ptr<EventBean> &bean)
