@@ -111,6 +111,7 @@ public:
     static constexpr const char BUFFER_DECODING_TIMESTAMP[] = "decoding_timestamp";  ///< int64_t, decoding timestamp.
     static constexpr const char BUFFER_DURATION[] = "buffer_duration";               ///< int64_t, buffer duration
     static constexpr const char BUFFER_INDEX[] = "private_buffer_index";
+    static constexpr const char BUFFER_SKIP_SAMPLES_INFO[] = "buffer_skip_samples_info"; // skip info for sample.
 
     /* -------------------- timed metadata tag -------------------- */
     static constexpr const char TIMED_METADATA_SRC_TRACK_MIME[] =

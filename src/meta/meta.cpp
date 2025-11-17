@@ -546,6 +546,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::AUDIO_VORBIS_IDENTIFICATION_HEADER, defaultVectorUInt8},
     {Tag::AUDIO_VORBIS_SETUP_HEADER, defaultVectorUInt8},
     {Tag::OH_MD_KEY_AUDIO_VIVID_METADATA, defaultVectorUInt8},
+    {Tag::BUFFER_SKIP_SAMPLES_INFO, defaultVectorUInt8},
     // vector<Plugins::VideoBitStreamFormat>
     {Tag::VIDEO_BIT_STREAM_FORMAT, defaultVectorVideoBitStreamFormat},
     // vector<uint8_t>
