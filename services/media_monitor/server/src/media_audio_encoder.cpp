@@ -183,7 +183,7 @@ int32_t MediaAudioEncoder::EncodePcmToFlac(const std::string &in)
         return ERROR;
     }
     size_t bufferLen = PcmDataSize();
-    if (bufferLen <= 0 || bufferLen > MAX_BUFFER_LEN) {
+    if (bufferLen == 0 || bufferLen > MAX_BUFFER_LEN) {
         Release();
         return ERROR;
     }
