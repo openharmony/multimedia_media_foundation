@@ -58,6 +58,7 @@ private:
     void AddFlvDemuxerPlugin();
     void AddMatroskaDemuxerPlugin();
     void AddMovDemuxerPlugin();
+    void AddCafDemuxerPlugin();
     void AddMp3DemuxerPlugin();
     void AddMpegDemuxerPlugin();
     void AddMpegtsDemuxerPlugin();

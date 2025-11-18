@@ -292,6 +292,17 @@ void PluginList::AddMovDemuxerPlugin()
     pluginDescriptionList_.push_back(movDemuxerPlugin);
 }
 
+void PluginList::AddCafDemuxerPlugin()
+{
+    PluginDescription cafDemuxerPlugin;
+    cafDemuxerPlugin.pluginName = "avdemux_caf";
+    cafDemuxerPlugin.packageName = "FFmpegDemuxer";
+    cafDemuxerPlugin.pluginType = PluginType::DEMUXER;
+    cafDemuxerPlugin.cap = "";
+    cafDemuxerPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(cafDemuxerPlugin);
+}
+
 void PluginList::AddMp3DemuxerPlugin()
 {
     PluginDescription mp3DemuxerPlugin;
