@@ -164,6 +164,9 @@ void EventAggregate::UpdateAggregateStateEventList(std::shared_ptr<EventBean> &b
         case SUITE_ENGINE_UTILIZATION_STATS:
             HandleSuiteEngineUtilizationStats(bean);
             break;
+        case VOLUME_SETTING_STATISTICS:
+            HandleAddLoudVolumeTimesEvent(bean);
+            break;
         default:
             break;
     }
@@ -748,6 +751,12 @@ void EventAggregate::HandleSuiteEngineUtilizationStats(std::shared_ptr<EventBean
 {
     MEDIA_LOG_D("Handle audio suite node utilization event");
     mediaMonitorPolicy_.HandleSuiteEngineUtilizationStatsToEventVector(bean);
+}
+
+void EventAggregate::HandleAddLoudVolumeTimesEvent(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Handle add loud volume times event");
+    mediaMonitorPolicy_.AddLoudVolumeTimes(bean);
 }
 } // namespace MediaMonitor
 } // namespace Media
