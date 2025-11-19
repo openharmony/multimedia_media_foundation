@@ -94,6 +94,8 @@ enum EventId {
     SUITE_ENGINE_EXCEPTION = 47,
 
     DM_DEVICE_INFO = 48,
+
+    VOLUME_SETTING_STATISTICS = 49,
 };
 
 enum EventType {

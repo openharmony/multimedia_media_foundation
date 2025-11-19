@@ -89,6 +89,10 @@ void MediaMonitorPolicy::TimeFunc()
             HandleToSuiteEngineUtilizationStatsEvent();
             lastSuiteStatsTime_ = TimeUtils::GetCurSec();
         }
+        if (afterSleepTime_ - lastTimeDefaultDaily_ >= defaultDailySleepTime_) {
+            HandleToVolumeSettingStatisticsEvent();
+            lastTimeDefaultDaily_ = TimeUtils::GetCurSec();
+        }
     }
 }
 
@@ -942,6 +946,23 @@ void MediaMonitorPolicy::HandleToSuiteEngineUtilizationStatsEvent()
             mediaEventBaseWriter_.WriteSuiteEngineUtilizationStats(event, appNameList, nodeCountList);
         }
     }
+}
+
+void MediaMonitorPolicy::AddLoudVolumeTimes(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("add loud volume times");
+    loudVolumeTimes_.fetch_add(1);
+}
+ 
+void MediaMonitorPolicy::HandleToVolumeSettingStatisticsEvent()
+{
+    MEDIA_LOG_D("Handle to loud volume setting statistics event");
+    int32_t loudVolumeTimes = loudVolumeTimes_.load();
+    if (loudVolumeTimes == 0) {
+        return;
+    }
+    mediaEventBaseWriter_.WriteVolumeSettingStatistics(loudVolumeTimes);
+    loudVolumeTimes_.fetch_sub(loudVolumeTimes);
 }
 
 void MediaMonitorPolicy::WriteInfo(int32_t fd, std::string &dumpString)

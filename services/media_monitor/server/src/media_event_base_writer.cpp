@@ -830,6 +830,15 @@ void MediaEventBaseWriter::WriteSuiteEngineException(std::shared_ptr<EventBean> 
         "ERROR_DESCRIPTION", bean->GetStringValue("ERROR_DESCRIPTION"));
 #endif
 }
+
+void MediaEventBaseWriter::WriteVolumeSettingStatistics(int32_t times)
+{
+    MEDIA_LOG_D("audio volume setting statistics");
+#ifdef MONITOR_ENABLE_HISYSEVENT
+    HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "VOLUME_SETTING_STATISTICS",
+        HiviewDFX::HiSysEvent::EventType::STATISTIC, "LOUD_VOLUME_TIMES", times);
+#endif
+}
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS

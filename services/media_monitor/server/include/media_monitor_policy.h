@@ -70,11 +70,13 @@ public:
     void AddToVolumeApiInvokeQueue(std::shared_ptr<EventBean> &bean);
     void AddToCallSessionQueue(std::shared_ptr<EventBean> &bean);
     void HandleSuiteEngineUtilizationStatsToEventVector(std::shared_ptr<EventBean> &bean);
+    void AddLoudVolumeTimes(std::shared_ptr<EventBean> &bean);
 
     void WhetherToHiSysEvent();
     void WriteInfo(int32_t fd, std::string &dumpString);
 
 private:
+    static constexpr int32_t DEFAULT_DAILY_TIME_SECEND = 2 * 60 * 60;
     static constexpr int32_t DEFAULT_AGGREGATION_FREQUENCY = 1000;
     static constexpr int32_t DEFAULT_AGGREGATION_TIME = 24 * 60;
     static constexpr int32_t DEFAULT_TONE_PLAYBACK_TIME = 120;
@@ -99,7 +101,9 @@ private:
         const std::string &bundleNameKey);
     void HandleToVolumeApiInvokeEvent();
     void HandleToSuiteEngineUtilizationStatsEvent();
+    void HandleToVolumeSettingStatisticsEvent();
 
+    uint64_t lastTimeDefaultDaily_ = 0;
     uint64_t curruntTime_ = 0;
     uint64_t lastAudioTime_ = 0;
     uint64_t afterSleepTime_ = 0;
@@ -126,7 +130,9 @@ private:
 
     int32_t volumeApiInvokeRecordSetSize_ = 20 * 30 * 12;
     std::mutex volumeApiInvokeMutex_;
-
+    std::atomic<int32_t> loudVolumeTimes_ = 0;
+    
+    uint64_t defaultDailySleepTime_ = DEFAULT_DAILY_TIME_SECEND;
     int32_t systemTonePlayerCount_ = 0;
     int32_t aggregationFrequency_ = DEFAULT_AGGREGATION_FREQUENCY;
     int32_t aggregationTime_ = DEFAULT_AGGREGATION_TIME;
