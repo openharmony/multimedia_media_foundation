@@ -115,6 +115,7 @@ PluginList::PluginList()
     AddWmaV2AudioDecoderPlugins();
     AddWmaProAudioDecoderPlugins();
     AddAdpcmAudioDecoderPlugins();
+    AddIlbcAudioDecoderPlugins();
 #ifdef SUPPORT_CODEC_EAC3
     AddEac3AudioDecoderPlugins();
 #endif
@@ -803,6 +804,17 @@ void PluginList::AddWmaProAudioDecoderPlugins()
     wmvProAudioDecoderPlugin.cap = "audio/wmapro";
     wmvProAudioDecoderPlugin.rank = DEFAULT_RANK;
     pluginDescriptionList_.push_back(wmvProAudioDecoderPlugin);
+}
+
+void PluginList::AddIlbcAudioDecoderPlugins()
+{
+    PluginDescription ilbcDecoderPlugin;
+    ilbcDecoderPlugin.pluginName = "OH.Media.Codec.Decoder.Audio.ILBC";
+    ilbcDecoderPlugin.packageName = "FFmpegAudioDecoders";
+    ilbcDecoderPlugin.pluginType = PluginType::AUDIO_DECODER;
+    ilbcDecoderPlugin.cap = "audio/ilbc";
+    ilbcDecoderPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(ilbcDecoderPlugin);
 }
 
 void PluginList::AddAudioServerSinkPlugins()

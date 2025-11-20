@@ -92,6 +92,7 @@ public:
     static constexpr const char AUDIO_ADPCM_YAMAHA[] = "audio/adpcm_yamaha";
     static constexpr const char AUDIO_WMV[] = "audio/x-ms-wma";
     static constexpr const char AUDIO_ALAC[] = "audio/alac";
+    static constexpr const char AUDIO_ILBC[] = "audio/ilbc";
 
     static constexpr const char IMAGE_JPG[] = "image/jpeg";
     static constexpr const char IMAGE_PNG[] = "image/png";
