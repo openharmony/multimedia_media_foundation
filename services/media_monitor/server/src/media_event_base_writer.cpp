@@ -839,6 +839,21 @@ void MediaEventBaseWriter::WriteVolumeSettingStatistics(int32_t times)
         HiviewDFX::HiSysEvent::EventType::STATISTIC, "LOUD_VOLUME_TIMES", times);
 #endif
 }
+
+void MediaEventBaseWriter::WriteMuteBundleName(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Write mute bundle name");
+    if (bean == nullptr) {
+        MEDIA_LOG_E("eventBean is nullptr");
+        return;
+    }
+#ifdef MONITOR_ENABLE_HISYSEVENT
+    HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "MUTE_BUNDLE_NAME",
+        HiviewDFX::HiSysEvent::EventType::STATISTIC,
+        "MUTETYPE", bean->GetStringValue("MUTETYPE"),
+        "BUNDLENAME", bean->GetStringValue("BUNDLENAME"));
+#endif
+}
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS
