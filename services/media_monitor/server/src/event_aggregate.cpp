@@ -77,6 +77,7 @@ void EventAggregate::WriteEvent(std::shared_ptr<EventBean> &bean)
         case STREAM_MOVE_EXCEPTION:
         case PROCESS_IN_MAINTHREAD:
         case SUITE_ENGINE_EXCEPTION:
+        case MUTE_BUNDLE_NAME:
             mediaMonitorPolicy_.WriteEvent(bean->GetEventId(), bean);
             break;
         default:

@@ -96,6 +96,8 @@ enum EventId {
     DM_DEVICE_INFO = 48,
 
     VOLUME_SETTING_STATISTICS = 49,
+
+    MUTE_BUNDLE_NAME = 50,
 };
 
 enum EventType {
