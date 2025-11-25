@@ -78,6 +78,7 @@ void EventAggregate::WriteEvent(std::shared_ptr<EventBean> &bean)
         case PROCESS_IN_MAINTHREAD:
         case SUITE_ENGINE_EXCEPTION:
         case MUTE_BUNDLE_NAME:
+        case TONE_PLAYBACK_FAILED:
             mediaMonitorPolicy_.WriteEvent(bean->GetEventId(), bean);
             break;
         default:

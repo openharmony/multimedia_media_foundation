@@ -98,6 +98,9 @@ enum EventId {
     VOLUME_SETTING_STATISTICS = 49,
 
     MUTE_BUNDLE_NAME = 50,
+
+    // Ringtone playback failure event
+    TONE_PLAYBACK_FAILED = 51,
 };
 
 enum EventType {

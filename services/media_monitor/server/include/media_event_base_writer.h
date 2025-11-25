@@ -95,6 +95,7 @@ public:
     void WriteSuiteEngineException(std::shared_ptr<EventBean> &bean);
     void WriteVolumeSettingStatistics(int32_t times);
     void WriteMuteBundleName(std::shared_ptr<EventBean> &bean);
+    void WriteTonePlaybackFailed(std::shared_ptr<EventBean> &bean);
 };
 
 } // namespace MediaMonitor
