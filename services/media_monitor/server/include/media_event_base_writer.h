@@ -93,8 +93,8 @@ public:
     void WriteSuiteEngineUtilizationStats(
         std::shared_ptr<EventBean> &bean, std::vector<std::string> appNameList, std::vector<uint32_t> nodeCountList);
     void WriteSuiteEngineException(std::shared_ptr<EventBean> &bean);
-    void WriteVolumeSettingStatistics(int32_t times);
     void WriteMuteBundleName(std::shared_ptr<EventBean> &bean);
+    void WriteVolumeSettingStatistics(std::shared_ptr<EventBean> &bean);
 };
 
 } // namespace MediaMonitor
