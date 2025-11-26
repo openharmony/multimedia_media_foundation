@@ -103,9 +103,11 @@ enum EventId {
 enum VolumeStatisticsSceneType : uint8_t {
     LOUD_VOLUME_SCENE = 0,
 };
+
 static VolumeStatisticsSceneType sceneTypes[] = {
     VolumeStatisticsSceneType::LOUD_VOLUME_SCENE
 };
+
 enum EventType {
     UNKNOW_EVENTTYPE = -1,
     FAULT_EVENT = 0,
