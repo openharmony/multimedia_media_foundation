@@ -973,7 +973,6 @@ void MediaMonitorPolicy::AddLoudVolumeTimes()
 void MediaMonitorPolicy::HandleToVolumeSettingStatisticsEvent()
 {
     MEDIA_LOG_D("Handle to loud volume setting statistics event");
-    VolumeStatisticsSceneType sceneTypes[] = {VolumeStatisticsSceneType::LOUD_VOLUME_SCENE};
     for (VolumeStatisticsSceneType sceneType  : sceneTypes) {
         std::shared_ptr<EventBean> eventBean = std::make_shared<EventBean>(ModuleId::AUDIO,
             EventId::VOLUME_SETTING_STATISTICS, EventType::FREQUENCY_AGGREGATION_EVENT);
