@@ -95,9 +95,17 @@ enum EventId {
 
     DM_DEVICE_INFO = 48,
 
-    VOLUME_SETTING_STATISTICS = 49,
+    VOLUME_SETTING_STATISTICS = 51,
 
     MUTE_BUNDLE_NAME = 50,
+};
+
+enum VolumeStatisticsSceneType : uint8_t {
+    LOUD_VOLUME_SCENE = 0,
+};
+
+static VolumeStatisticsSceneType sceneTypes[] = {
+    VolumeStatisticsSceneType::LOUD_VOLUME_SCENE
 };
 
 enum EventType {
