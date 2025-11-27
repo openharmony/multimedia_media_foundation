@@ -831,12 +831,14 @@ void MediaEventBaseWriter::WriteSuiteEngineException(std::shared_ptr<EventBean> 
 #endif
 }
 
-void MediaEventBaseWriter::WriteVolumeSettingStatistics(int32_t times)
+void MediaEventBaseWriter::WriteVolumeSettingStatistics(std::shared_ptr<EventBean> &bean)
 {
     MEDIA_LOG_D("audio volume setting statistics");
 #ifdef MONITOR_ENABLE_HISYSEVENT
     HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "VOLUME_SETTING_STATISTICS",
-        HiviewDFX::HiSysEvent::EventType::STATISTIC, "LOUD_VOLUME_TIMES", times);
+        HiviewDFX::HiSysEvent::EventType::STATISTIC,
+        "LOUD_VOLUME_TIMES", static_cast<int32_t>(bean->GetIntValue("LOUD_VOLUME_TIMES")),
+        "SCENE_TYPE", static_cast<uint8_t>(bean->GetIntValue("SCENE_TYPE")));
 #endif
 }
 

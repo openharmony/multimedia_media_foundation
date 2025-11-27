@@ -70,7 +70,8 @@ public:
     void AddToVolumeApiInvokeQueue(std::shared_ptr<EventBean> &bean);
     void AddToCallSessionQueue(std::shared_ptr<EventBean> &bean);
     void HandleSuiteEngineUtilizationStatsToEventVector(std::shared_ptr<EventBean> &bean);
-    void AddLoudVolumeTimes(std::shared_ptr<EventBean> &bean);
+    void HandleVolumeSettingStatistics(std::shared_ptr<EventBean> &bean);
+    void AddLoudVolumeTimes();
 
     void WhetherToHiSysEvent();
     void WriteInfo(int32_t fd, std::string &dumpString);
@@ -102,6 +103,7 @@ private:
     void HandleToVolumeApiInvokeEvent();
     void HandleToSuiteEngineUtilizationStatsEvent();
     void HandleToVolumeSettingStatisticsEvent();
+    void HandleToLoudVolumeSceneEvent(std::shared_ptr<EventBean> &bean);
 
     uint64_t lastTimeDefaultDaily_ = 0;
     uint64_t curruntTime_ = 0;

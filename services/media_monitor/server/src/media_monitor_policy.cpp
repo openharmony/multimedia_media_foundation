@@ -954,7 +954,20 @@ void MediaMonitorPolicy::HandleToSuiteEngineUtilizationStatsEvent()
     }
 }
 
-void MediaMonitorPolicy::AddLoudVolumeTimes(std::shared_ptr<EventBean> &bean)
+void MediaMonitorPolicy::HandleVolumeSettingStatistics(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("handle volume setting statistics");
+    uint8_t sceneType = static_cast<uint8_t>(bean->GetIntValue("SCENE_TYPE"));
+    switch (sceneType) {
+        case LOUD_VOLUME_SCENE:
+            AddLoudVolumeTimes();
+            break;
+        default:
+            break;
+    }
+}
+
+void MediaMonitorPolicy::AddLoudVolumeTimes()
 {
     MEDIA_LOG_D("add loud volume times");
     loudVolumeTimes_.fetch_add(1);
@@ -963,11 +976,25 @@ void MediaMonitorPolicy::AddLoudVolumeTimes(std::shared_ptr<EventBean> &bean)
 void MediaMonitorPolicy::HandleToVolumeSettingStatisticsEvent()
 {
     MEDIA_LOG_D("Handle to loud volume setting statistics event");
+    for (VolumeStatisticsSceneType sceneType  : sceneTypes) {
+        std::shared_ptr<EventBean> eventBean = std::make_shared<EventBean>(ModuleId::AUDIO,
+            EventId::VOLUME_SETTING_STATISTICS, EventType::FREQUENCY_AGGREGATION_EVENT);
+        eventBean->Add("SCENE_TYPE", sceneType);
+        if (sceneType == LOUD_VOLUME_SCENE) {
+            HandleToLoudVolumeSceneEvent(eventBean);
+        }
+    }
+}
+
+void MediaMonitorPolicy::HandleToLoudVolumeSceneEvent(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Handle to loud volume Scene event");
     int32_t loudVolumeTimes = loudVolumeTimes_.load();
     if (loudVolumeTimes == 0) {
         return;
     }
-    mediaEventBaseWriter_.WriteVolumeSettingStatistics(loudVolumeTimes);
+    bean->Add("LOUD_VOLUME_TIMES", loudVolumeTimes);
+    mediaEventBaseWriter_.WriteVolumeSettingStatistics(bean);
     loudVolumeTimes_.fetch_sub(loudVolumeTimes);
 }
 
