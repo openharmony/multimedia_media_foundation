@@ -356,6 +356,9 @@ void MediaMonitorPolicy::WriteFaultEventExpansion(EventId eventId, std::shared_p
             bean->Add("APP_NAME", bundleInfo.appName);
             mediaEventBaseWriter_.WriteSuiteEngineException(bean);
             break;
+        case TONE_PLAYBACK_FAILED:
+            mediaEventBaseWriter_.WriteTonePlaybackFailed(bean);
+            break;
         default:
             break;
     }

@@ -856,6 +856,21 @@ void MediaEventBaseWriter::WriteMuteBundleName(std::shared_ptr<EventBean> &bean)
         "BUNDLENAME", bean->GetStringValue("BUNDLENAME"));
 #endif
 }
+
+void MediaEventBaseWriter::WriteTonePlaybackFailed(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("tone playback failed");
+    if (bean == nullptr) {
+        MEDIA_LOG_E("eventBean is nullptr");
+        return;
+    }
+#ifdef MONITOR_ENABLE_HISYSEVENT
+    HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "TONE_PLAYBACK_FAILED",
+        HiviewDFX::HiSysEvent::EventType::FAULT,
+        "ERROR_CODE", bean->GetIntValue("APP_NAME"),
+        "ERROR_REASON", bean->GetStringValue("ERROR_REASON"));
+#endif
+}
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS
