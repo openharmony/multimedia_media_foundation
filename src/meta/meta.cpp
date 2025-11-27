@@ -415,6 +415,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_DECODER_INPUT_STREAM_ERROR, defaultInt32},
     // String
     {Tag::MIME_TYPE, defaultString},
+    {Tag::ORIGINAL_CODEC_NAME, defaultString},
     {Tag::MEDIA_FILE_URI, defaultString},
     {Tag::MEDIA_TITLE, defaultString},
     {Tag::MEDIA_ARTIST, defaultString},
