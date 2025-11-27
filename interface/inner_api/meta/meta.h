@@ -387,6 +387,7 @@ public:
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::MEDIA_AIGC or
         tagCharSeq == Tag::MIME_TYPE or
+        tagCharSeq == Tag::ORIGINAL_CODEC_NAME or
         tagCharSeq == Tag::MEDIA_FILE_URI or
         tagCharSeq == Tag::MEDIA_TITLE or
         tagCharSeq == Tag::MEDIA_ARTIST or

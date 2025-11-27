@@ -687,6 +687,7 @@ HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_All_As_Double_Using_ParcelPackage, T
 map<TagType, std::string> testStringData = {
     // String
     {Tag::MIME_TYPE, "String MIME_TYPE"},
+    {Tag::ORIGINAL_CODEC_NAME, "String ORIGINAL_CODEC_NAME"},
     {Tag::MEDIA_FILE_URI, "String MEDIA_FILE_URI"},
     {Tag::MEDIA_TITLE, "String MEDIA_TITLE"},
     {Tag::MEDIA_ARTIST, "String MEDIA_ARTIST"},

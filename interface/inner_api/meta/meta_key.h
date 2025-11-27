@@ -54,6 +54,7 @@ public:
         "regular.audio.render.set.flag"; ///< bool, audio render set flag
     /* -------------------- media tag -------------------- */
     static constexpr const char MIME_TYPE[] = "codec_mime";            ///< @see MimeType
+    static constexpr const char ORIGINAL_CODEC_NAME[] = "original_codec_name";  /// string, original codec name
     static constexpr const char MEDIA_CODEC_NAME[] = "codec_name";     ///< codec name
     static constexpr const char MEDIA_IS_HARDWARE[] = "is_hardware";   ///< bool, codec is hardware
     static constexpr const char MEDIA_TITLE[] = "title";               ///< title
