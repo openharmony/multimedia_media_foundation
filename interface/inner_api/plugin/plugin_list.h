@@ -97,6 +97,7 @@ private:
     void AddAdpcmAudioDecoderPlugins();
     void AddIlbcAudioDecoderPlugins();
     void AddTrueHdAudioDecoderPlugin();
+    void AddTwinVQAudioDecoderPlugins();
 #ifdef SUPPORT_CODEC_RM
     void AddRmDemuxerPlugin();
 #endif

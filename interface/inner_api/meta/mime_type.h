@@ -60,6 +60,7 @@ public:
     static constexpr const char AUDIO_WMAV1[] = "audio/wmav1";
     static constexpr const char AUDIO_WMAV2[] = "audio/wmav2";
     static constexpr const char AUDIO_WMAPRO[] = "audio/wmapro";
+    static constexpr const char AUDIO_TWINVQ[] = "audio/twinvq";
     static constexpr const char AUDIO_ADPCM_MS[] = "audio/adpcm_ms";
     static constexpr const char AUDIO_ADPCM_IMA_QT[] = "audio/adpcm_ima_qt";
     static constexpr const char AUDIO_ADPCM_IMA_WAV[] = "audio/adpcm_ima_wav";
