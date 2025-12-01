@@ -55,10 +55,6 @@ struct SuiteEngineNodeStatCounts {
 
     SuiteEngineNodeStatCounts &operator+=(const SuiteEngineNodeStatCounts &other)
     {
-        if (this == &other) {
-            return *this;
-        }
-        
         nodeCount += other.nodeCount;
         renderCnt += other.renderCnt;
         rtfOverBaselineCnt += other.rtfOverBaselineCnt;

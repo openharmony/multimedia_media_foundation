@@ -904,18 +904,30 @@ void MediaMonitorPolicy::AddToSuiteEngineNodeStatsMap(std::shared_ptr<EventBean>
     BundleInfo bundleInfo = GetBundleInfo(bean->GetIntValue("CLIENT_UID"));
     std::string appName = bundleInfo.appName;
     std::string nodeType = bean->GetStringValue("AUDIO_NODE_TYPE");
+    int32_t nodeCount = bean->GetIntValue("AUDIO_NODE_COUNT");
+    int32_t renderCnt = bean->GetIntValue("RT_MODE_RENDER_COUNT");
+    int32_t rtfOverBaselineCnt = bean->GetIntValue("RT_MODE_RTF_OVER_BASE_COUNT");
+    int32_t rtfOver110BaseCnt = bean->GetIntValue("RT_MODE_RTF_OVER_110BASE_COUNT");
+    int32_t rtfOver120BaseCnt = bean->GetIntValue("RT_MODE_RTF_OVER_120BASE_COUNT");
+    int32_t rtfOver100Cnt = bean->GetIntValue("RT_MODE_RTF_OVER_100_COUNT");
+    int32_t editRenderCnt = bean->GetIntValue("EDIT_MODE_RENDER_COUNT");
+    int32_t editRtfOverBaselineCnt = bean->GetIntValue("EDIT_MODE_RTF_OVER_BASE_COUNT");
+    int32_t editRtfOver110BaseCnt = bean->GetIntValue("EDIT_MODE_RTF_OVER_110BASE_COUNT");
+    int32_t editRtfOver120BaseCnt = bean->GetIntValue("EDIT_MODE_RTF_OVER_120BASE_COUNT");
+    int32_t editRtfOver100Cnt = bean->GetIntValue("EDIT_MODE_RTF_OVER_100_COUNT");
+
     SuiteEngineNodeStatCounts statCounts{
-        bean->GetIntValue("AUDIO_NODE_COUNT") != -1 ? bean->GetIntValue("AUDIO_NODE_COUNT") : 0,
-        bean->GetIntValue("RT_MODE_RENDER_COUNT") != -1 ? bean->GetIntValue("RT_MODE_RENDER_COUNT") : 0,
-        bean->GetIntValue("RT_MODE_RTF_OVER_BASE_COUNT") != -1 ? bean->GetIntValue("RT_MODE_RTF_OVER_BASE_COUNT") : 0,
-        bean->GetIntValue("RT_MODE_RTF_OVER_110BASE_COUNT") != -1 ? bean->GetIntValue("RT_MODE_RTF_OVER_110BASE_COUNT") : 0,
-        bean->GetIntValue("RT_MODE_RTF_OVER_120BASE_COUNT") != -1 ? bean->GetIntValue("RT_MODE_RTF_OVER_120BASE_COUNT") : 0,
-        bean->GetIntValue("RT_MODE_RTF_OVER_100_COUNT") != -1 ? bean->GetIntValue("RT_MODE_RTF_OVER_100_COUNT") : 0,
-        bean->GetIntValue("EDIT_MODE_RENDER_COUNT") != -1 ? bean->GetIntValue("EDIT_MODE_RENDER_COUNT") : 0,
-        bean->GetIntValue("EDIT_MODE_RTF_OVER_BASE_COUNT") != -1 ? bean->GetIntValue("EDIT_MODE_RTF_OVER_BASE_COUNT") : 0,
-        bean->GetIntValue("EDIT_MODE_RTF_OVER_110BASE_COUNT") != -1 ? bean->GetIntValue("EDIT_MODE_RTF_OVER_110BASE_COUNT") : 0,
-        bean->GetIntValue("EDIT_MODE_RTF_OVER_120BASE_COUNT") != -1 ? bean->GetIntValue("EDIT_MODE_RTF_OVER_120BASE_COUNT") : 0,
-        bean->GetIntValue("EDIT_MODE_RTF_OVER_100_COUNT") != -1 ? bean->GetIntValue("EDIT_MODE_RTF_OVER_100_COUNT") : 0};
+        nodeCount != -1 ? nodeCount : 0,
+        renderCnt != -1 ? renderCnt : 0,
+        rtfOverBaselineCnt != -1 ? rtfOverBaselineCnt : 0,
+        rtfOver110BaseCnt != -1 ? rtfOver110BaseCnt : 0,
+        rtfOver120BaseCnt != -1 ? rtfOver120BaseCnt : 0,
+        rtfOver100Cnt != -1 ? rtfOver100Cnt : 0,
+        editRenderCnt != -1 ? editRenderCnt : 0,
+        editRtfOverBaselineCnt != -1 ? editRtfOverBaselineCnt : 0,
+        editRtfOver110BaseCnt != -1 ? editRtfOver110BaseCnt : 0,
+        editRtfOver120BaseCnt != -1 ? editRtfOver120BaseCnt : 0,
+        editRtfOver100Cnt != -1 ? editRtfOver100Cnt : 0};
 
     std::lock_guard<std::mutex> lock(suiteStatsEventMutex_);
     auto &nodeTypeAppStatsMap = suiteEngineNodeStatsMap_[nodeType];

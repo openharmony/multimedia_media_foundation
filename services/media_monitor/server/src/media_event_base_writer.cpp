@@ -800,8 +800,8 @@ void MediaEventBaseWriter::WriteSuiteEngineUtilizationStats(const SuiteEngineUti
 #ifdef MONITOR_ENABLE_HISYSEVENT
     HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "SUITE_ENGINE_UTILIZATION_STATS",
         HiviewDFX::HiSysEvent::EventType::STATISTIC,
-        "APP_NAME", data.appName,
-        "AUDIO_NODE_TYPE", data.nodeTypeList,
+        "APP_NAME", data.appNameList,
+        "AUDIO_NODE_TYPE", data.nodeType,
         "AUDIO_NODE_COUNT", data.nodeCountList,
         "RT_MODE_RENDER_COUNT", data.renderCntList,
         "RT_MODE_RTF_OVER_BASE_COUNT", data.rtfOverBaselineCntList,
