@@ -117,6 +117,7 @@ PluginList::PluginList()
     AddAdpcmAudioDecoderPlugins();
     AddIlbcAudioDecoderPlugins();
     AddTrueHdAudioDecoderPlugin();
+    AddTwinVQAudioDecoderPlugins();
 #ifdef SUPPORT_CODEC_EAC3
     AddEac3AudioDecoderPlugins();
 #endif
@@ -827,6 +828,17 @@ void PluginList::AddTrueHdAudioDecoderPlugin()
     trueHdAudioDecoderPlugin.cap = "audio/truehd";
     trueHdAudioDecoderPlugin.rank = DEFAULT_RANK;
     pluginDescriptionList_.push_back(trueHdAudioDecoderPlugin);
+}
+
+void PluginList::AddTwinVQAudioDecoderPlugins()
+{
+    PluginDescription twinvqProAudioDecoderPlugin;
+    twinvqProAudioDecoderPlugin.pluginName = "OH.Media.Codec.Decoder.Audio.TwinVQ";
+    twinvqProAudioDecoderPlugin.packageName = "FFmpegAudioDecoders";
+    twinvqProAudioDecoderPlugin.pluginType = PluginType::AUDIO_DECODER;
+    twinvqProAudioDecoderPlugin.cap = "audio/twinvq";
+    twinvqProAudioDecoderPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(twinvqProAudioDecoderPlugin);
 }
 
 void PluginList::AddAudioServerSinkPlugins()
