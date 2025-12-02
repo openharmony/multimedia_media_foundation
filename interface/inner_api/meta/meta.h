@@ -479,6 +479,15 @@ public:
         tagCharSeq == Tag::GLTF_OFFSET, int64_t, AnyValueType::INT64_T);
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::AUDIO_BLOCK_ALIGN, int32_t, AnyValueType::INT32_T);
+    DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::MEDIA_GLTF_VERSION, int32_t, AnyValueType::INT32_T);
+    DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::MEDIA_GLTF_ITEM_NAME or
+        tagCharSeq == Tag::MEDIA_GLTF_CONTENT_TYPE or
+        tagCharSeq == Tag::MEDIA_GLTF_CONTENT_ENCODING or
+        tagCharSeq == Tag::MEDIA_GLTF_ITEM_TYPE, std::string, AnyValueType::STRING);
+    DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::MEDIA_GLTF_DATA, std::vector<uint8_t>, AnyValueType::VECTOR_UINT8);
 
     Meta &operator=(const Meta &other)
     {

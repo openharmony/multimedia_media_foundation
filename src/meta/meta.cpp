@@ -412,6 +412,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::AV_TRANSCODER_VIDEO_VPE_DURATION, defaultInt32},
     {Tag::MEDIA_EDITLIST, defaultInt32},
     {Tag::MEDIA_ENABLE_MOOV_FRONT, defaultInt32},
+    {Tag::MEDIA_GLTF_VERSION, defaultInt32},
     {Tag::VIDEO_DECODER_INPUT_STREAM_ERROR, defaultInt32},
     // String
     {Tag::MIME_TYPE, defaultString},
@@ -470,6 +471,10 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::TRACK_DESCRIPTION, defaultString},
     {Tag::TRACK_REF_TYPE, defaultString},
     {Tag::REF_TRACK_IDS, defaultString},
+    {Tag::MEDIA_GLTF_ITEM_NAME, defaultString},
+    {Tag::MEDIA_GLTF_CONTENT_TYPE, defaultString},
+    {Tag::MEDIA_GLTF_CONTENT_ENCODING, defaultString},
+    {Tag::MEDIA_GLTF_ITEM_TYPE, defaultString},
     
     // Float
     {Tag::MEDIA_LATITUDE, defaultFloat},
@@ -554,6 +559,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::DRM_CENC_INFO, defaultVectorUInt8},
     {Tag::MEDIA_AVAILABLE_BITRATES, defaultVectorUInt8},
     {Tag::VIDEO_ENCODER_PER_FRAME_QP_MAP, defaultVectorUInt8},
+    {Tag::MEDIA_GLTF_DATA, defaultVectorUInt8},
     // Uint32
     {Tag::DRM_DECRYPT_AVG_SIZE, defaultUInt32},
     {Tag::DRM_DECRYPT_AVG_DURATION, defaultUInt32},
