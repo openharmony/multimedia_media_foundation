@@ -16,6 +16,7 @@
 #include "common/log.h"
 #include "meta/any.h"
 #include <map>
+#include <unordered_map>
 
 namespace {
 constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "Any" };
