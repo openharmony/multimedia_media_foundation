@@ -36,6 +36,10 @@ const BaseTypesMap &GetBaseTypesMap()
         typeMap[std::string(defaultInt32.TypeName())] = AnyValueType::INT32_T;
         Any defaultInt64 = (int64_t)0;
         typeMap[std::string(defaultInt64.TypeName())] = AnyValueType::INT64_T;
+        Any defaultUint32 = (uint32_t)0;
+        typeMap[std::string(defaultUint32.TypeName())] = AnyValueType::UINT32_T;
+        Any defaultUint64 = (uint64_t)0;
+        typeMap[std::string(defaultUint64.TypeName())] = AnyValueType::UINT64_T;
         Any defaultFoalt = (float)0.0;
         typeMap[std::string(defaultFoalt.TypeName())] = AnyValueType::FLOAT;
         Any defaultDouble = (double)0.0;
@@ -72,6 +76,12 @@ bool Any::BaseTypesToParcel(const Any *operand, MessageParcel &parcel) noexcept
         case AnyValueType::INT64_T:
             ret = ret && parcel.WriteInt64(*AnyCast<int64_t>(operand));
             break;
+        case AnyValueType::UINT32_T:
+            ret = ret && parcel.WriteUint32(*AnyCast<uint32_t>(operand));
+            break;
+        case AnyValueType::UINT64_T:
+            ret = ret && parcel.WriteUint64(*AnyCast<uint64_t>(operand));
+            break;
         case AnyValueType::FLOAT:
             ret = ret && parcel.WriteFloat(*AnyCast<float>(operand));
             break;
@@ -101,71 +111,47 @@ enum class StatusCodeFromParcel {
     NO_RETRY = 2,
 };
 
-static void BaseTypesVectorUint8(Any *operand, MessageParcel &parcel)
+static Any BaseTypesVectorUint8(MessageParcel &parcel)
 {
     std::vector<uint8_t> val;
     (void)parcel.ReadUInt8Vector(&val);
-    Any tmp(val);
-    operand->Swap(tmp);
+    return Any(val);
 }
 
-static void BaseTypesVectorInt32(Any *operand, MessageParcel &parcel)
+static Any BaseTypesVectorInt32(MessageParcel &parcel)
 {
     std::vector<int32_t> val;
     (void)parcel.ReadInt32Vector(&val);
-    Any tmp(val);
-    operand->Swap(tmp);
+    return Any(val);
 }
 
 // returnValue : 0 -- success; 1 -- retry for enum type; 2 -- failed no retry
 int Any::BaseTypesFromParcel(Any *operand, MessageParcel &parcel) noexcept
 {
+    using ReadFunc = std::function<Any(MessageParcel &)>;
+    static const std::unordered_map<AnyValueType, ReadFunc> typeHandlerMap = {
+        {AnyValueType::BOOL, [](MessageParcel &p) { return Any(p.ReadBool()); }},
+        {AnyValueType::INT32_T, [](MessageParcel &p) { return Any(p.ReadInt32()); }},
+        {AnyValueType::INT64_T, [](MessageParcel &p) { return Any(p.ReadInt64()); }},
+        {AnyValueType::UINT32_T, [](MessageParcel &p) { return Any(p.ReadUint32()); }},
+        {AnyValueType::UINT64_T, [](MessageParcel &p) { return Any(p.ReadUint64()); }},
+        {AnyValueType::FLOAT, [](MessageParcel &p) { return Any(p.ReadFloat()); }},
+        {AnyValueType::DOUBLE, [](MessageParcel &p) { return Any(p.ReadDouble()); }},
+        {AnyValueType::STRING, [](MessageParcel &p) { return Any(p.ReadString()); }},
+        {AnyValueType::VECTOR_UINT8, BaseTypesVectorUint8},
+        {AnyValueType::VECTOR_INT32, BaseTypesVectorInt32},
+    };
     AnyValueType type = static_cast<AnyValueType>(parcel.ReadInt32());
-    switch (type) {
-        case AnyValueType::BOOL: {
-            Any tmp(parcel.ReadBool());
-            operand->Swap(tmp);
-            break;
-        }
-        case AnyValueType::INT32_T: {
-            Any tmp(parcel.ReadInt32());
-            operand->Swap(tmp);
-            break;
-        }
-        case AnyValueType::INT64_T: {
-            Any tmp(parcel.ReadInt64());
-            operand->Swap(tmp);
-            break;
-        }
-        case AnyValueType::FLOAT: {
-            Any tmp(parcel.ReadFloat());
-            operand->Swap(tmp);
-            break;
-        }
-        case AnyValueType::DOUBLE: {
-            Any tmp(parcel.ReadDouble());
-            operand->Swap(tmp);
-            break;
-        }
-        case AnyValueType::STRING: {
-            Any tmp(parcel.ReadString());
-            operand->Swap(tmp);
-            break;
-        }
-        case AnyValueType::VECTOR_UINT8: {
-            BaseTypesVectorUint8(operand, parcel);
-            break;
-        }
-        case AnyValueType::VECTOR_INT32: {
-            BaseTypesVectorInt32(operand, parcel);
-            break;
-        }
-        case AnyValueType::INVALID_TYPE:
-            return static_cast<int>(StatusCodeFromParcel::ENUM_RETRY);
-        default:
-            return static_cast<int>(StatusCodeFromParcel::NO_RETRY);
+    auto it = typeHandlerMap.find(type);
+    if (it != typeHandlerMap.end()) {
+        Any tmp = it->second(parcel);
+        operand->Swap(tmp);
+        return static_cast<int>(StatusCodeFromParcel::SUCCESS);
     }
-    return static_cast<int>(StatusCodeFromParcel::SUCCESS);
+    if (type == AnyValueType::INVALID_TYPE) {
+        return static_cast<int>(StatusCodeFromParcel::ENUM_RETRY);
+    }
+    return static_cast<int>(StatusCodeFromParcel::NO_RETRY);
 }
 
 /**
