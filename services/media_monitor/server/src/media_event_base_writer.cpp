@@ -795,25 +795,27 @@ void MediaEventBaseWriter::WriteAudioMainThreadEvent(std::shared_ptr<EventBean> 
 #endif
 }
 
-void MediaEventBaseWriter::WriteSuiteEngineUtilizationStats(
-    std::shared_ptr<EventBean> &bean,
-    std::vector<std::string> appNameList,
-    std::vector<uint32_t> nodeCountList)
+void MediaEventBaseWriter::WriteSuiteEngineUtilizationStats(const SuiteEngineUtilizationStatsReportData &data)
 {
-    MEDIA_LOG_D("audio suite engine utilization stats");
-    if (bean == nullptr) {
-        MEDIA_LOG_E("eventBean is nullptr");
-        return;
-    }
 #ifdef MONITOR_ENABLE_HISYSEVENT
     HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "SUITE_ENGINE_UTILIZATION_STATS",
         HiviewDFX::HiSysEvent::EventType::STATISTIC,
-        "APP_NAME", appNameList,
-        "AUDIO_NODE_TYPE", bean->GetStringValue("AUDIO_NODE_TYPE"),
-        "AUDIO_NODE_COUNT", nodeCountList);
+        "APP_NAME", data.appNameList,
+        "AUDIO_NODE_TYPE", data.nodeType,
+        "AUDIO_NODE_COUNT", data.nodeCountList,
+        "RT_MODE_RENDER_COUNT", data.renderCntList,
+        "RT_MODE_RTF_OVER_BASE_COUNT", data.rtfOverBaselineCntList,
+        "RT_MODE_RTF_OVER_110BASE_COUNT", data.rtfOver110BaseCntList,
+        "RT_MODE_RTF_OVER_120BASE_COUNT", data.rtfOver120BaseCntList,
+        "RT_MODE_RTF_OVER_100_COUNT", data.rtfOver100CntList,
+        "EDIT_MODE_RENDER_COUNT", data.editRenderCntList,
+        "EDIT_MODE_RTF_OVER_BASE_COUNT", data.editRtfOverBaselineCntList,
+        "EDIT_MODE_RTF_OVER_110BASE_COUNT", data.editRtfOver110BaseCntList,
+        "EDIT_MODE_RTF_OVER_120BASE_COUNT", data.editRtfOver120BaseCntList,
+        "EDIT_MODE_RTF_OVER_100_COUNT", data.editRtfOver100CntList);
 #endif
 }
- 
+
 void MediaEventBaseWriter::WriteSuiteEngineException(std::shared_ptr<EventBean> &bean)
 {
     MEDIA_LOG_D("audio suite engine exception");
