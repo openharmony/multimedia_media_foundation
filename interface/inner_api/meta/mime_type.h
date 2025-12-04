@@ -37,6 +37,7 @@ public:
     static constexpr const char VIDEO_MJPEG[] = "video/mjpeg";
     static constexpr const char VIDEO_WMV3[] = "video/wmv3";
     static constexpr const char VIDEO_MSVIDEO1[] = "video/msvideo1";
+    static constexpr const char VIDEO_AVS[] = "video/cavs";
 
     static constexpr const char AUDIO_AMR_NB[] = "audio/3gpp";
     static constexpr const char AUDIO_AMR_WB[] = "audio/amr-wb";
