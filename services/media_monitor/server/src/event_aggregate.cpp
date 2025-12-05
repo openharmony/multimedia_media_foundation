@@ -752,7 +752,7 @@ void EventAggregate::HandleVolumeApiInvokeEvent(std::shared_ptr<EventBean> &bean
 void EventAggregate::HandleSuiteEngineUtilizationStats(std::shared_ptr<EventBean> &bean)
 {
     MEDIA_LOG_D("Handle audio suite node utilization event");
-    mediaMonitorPolicy_.HandleSuiteEngineUtilizationStatsToEventVector(bean);
+    mediaMonitorPolicy_.AddToSuiteEngineNodeStatsMap(bean);
 }
 
 void EventAggregate::HandleVolumeSettingStatisticsEvent(std::shared_ptr<EventBean> &bean)

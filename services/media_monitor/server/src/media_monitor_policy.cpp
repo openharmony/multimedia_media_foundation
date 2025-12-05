@@ -898,59 +898,73 @@ void MediaMonitorPolicy::AddToCallSessionQueue(std::shared_ptr<EventBean> &bean)
     }
 }
 
-void MediaMonitorPolicy::HandleSuiteEngineUtilizationStatsToEventVector(std::shared_ptr<EventBean> &bean)
+void MediaMonitorPolicy::AddToSuiteEngineNodeStatsMap(std::shared_ptr<EventBean> &bean)
 {
-    MEDIA_LOG_I("Handle audio suite engine utilization stats to event vector");
+    MEDIA_LOG_I("Add audio suite engine utilization stats counts to map");
     BundleInfo bundleInfo = GetBundleInfo(bean->GetIntValue("CLIENT_UID"));
     std::string appName = bundleInfo.appName;
     std::string nodeType = bean->GetStringValue("AUDIO_NODE_TYPE");
- 
+    int32_t nodeCount = bean->GetIntValue("AUDIO_NODE_COUNT");
+    int32_t renderCnt = bean->GetIntValue("RT_MODE_RENDER_COUNT");
+    int32_t rtfOverBaselineCnt = bean->GetIntValue("RT_MODE_RTF_OVER_BASE_COUNT");
+    int32_t rtfOver110BaseCnt = bean->GetIntValue("RT_MODE_RTF_OVER_110BASE_COUNT");
+    int32_t rtfOver120BaseCnt = bean->GetIntValue("RT_MODE_RTF_OVER_120BASE_COUNT");
+    int32_t rtfOver100Cnt = bean->GetIntValue("RT_MODE_RTF_OVER_100_COUNT");
+    int32_t editRenderCnt = bean->GetIntValue("EDIT_MODE_RENDER_COUNT");
+    int32_t editRtfOverBaselineCnt = bean->GetIntValue("EDIT_MODE_RTF_OVER_BASE_COUNT");
+    int32_t editRtfOver110BaseCnt = bean->GetIntValue("EDIT_MODE_RTF_OVER_110BASE_COUNT");
+    int32_t editRtfOver120BaseCnt = bean->GetIntValue("EDIT_MODE_RTF_OVER_120BASE_COUNT");
+    int32_t editRtfOver100Cnt = bean->GetIntValue("EDIT_MODE_RTF_OVER_100_COUNT");
+
+    SuiteEngineNodeStatCounts statCounts{
+        nodeCount != -1 ? nodeCount : 0,
+        renderCnt != -1 ? renderCnt : 0,
+        rtfOverBaselineCnt != -1 ? rtfOverBaselineCnt : 0,
+        rtfOver110BaseCnt != -1 ? rtfOver110BaseCnt : 0,
+        rtfOver120BaseCnt != -1 ? rtfOver120BaseCnt : 0,
+        rtfOver100Cnt != -1 ? rtfOver100Cnt : 0,
+        editRenderCnt != -1 ? editRenderCnt : 0,
+        editRtfOverBaselineCnt != -1 ? editRtfOverBaselineCnt : 0,
+        editRtfOver110BaseCnt != -1 ? editRtfOver110BaseCnt : 0,
+        editRtfOver120BaseCnt != -1 ? editRtfOver120BaseCnt : 0,
+        editRtfOver100Cnt != -1 ? editRtfOver100Cnt : 0};
+
     std::lock_guard<std::mutex> lock(suiteStatsEventMutex_);
-    auto suiteNodeTypeIt = suiteNodeTypeStatsMap_.find(nodeType);
-    if (suiteNodeTypeIt != suiteNodeTypeStatsMap_.end()) {
-        auto& utilizationStatsMap = suiteNodeTypeIt->second;
-        auto statsIt = utilizationStatsMap.find(appName);
-        if (statsIt != utilizationStatsMap.end()) {
-            statsIt->second++;
-        } else {
-            utilizationStatsMap[appName] = INITIAL_VALUE;
-        }
+    auto &nodeTypeAppStatsMap = suiteEngineNodeStatsMap_[nodeType];
+    if (auto it = nodeTypeAppStatsMap.find(appName); it != nodeTypeAppStatsMap.end()) {
+        it->second += statCounts;
     } else {
-        std::unordered_map<std::string, uint32_t> newStatsMap;
-        newStatsMap[appName] = INITIAL_VALUE;
-        suiteNodeTypeStatsMap_[nodeType] = std::move(newStatsMap);
-        suiteStatsEventVector_.push_back(bean);
+        nodeTypeAppStatsMap[appName] = statCounts;
     }
 }
 
 void MediaMonitorPolicy::HandleToSuiteEngineUtilizationStatsEvent()
 {
     MEDIA_LOG_D("Handle to audio suite engine utilization stats event");
-    std::vector<std::shared_ptr<EventBean>> eventVector;
-    std::unordered_map<std::string, std::unordered_map<std::string, uint32_t>> nodeTypeStatsMap;
+    std::unordered_map<std::string, std::unordered_map<std::string, SuiteEngineNodeStatCounts>> nodeStatsMap;
     {
         std::lock_guard<std::mutex> lock(suiteStatsEventMutex_);
-        eventVector = suiteStatsEventVector_;
-        nodeTypeStatsMap = suiteNodeTypeStatsMap_;
-        suiteStatsEventVector_.clear();
-        suiteNodeTypeStatsMap_.clear();
+        nodeStatsMap = suiteEngineNodeStatsMap_;
+        suiteEngineNodeStatsMap_.clear();
     }
-    for (auto &event : eventVector) {
-        if (event == nullptr) {
-            continue;
+    for (const auto &[nodeType, nodeTypeAppStatsMap] : nodeStatsMap) {
+        SuiteEngineUtilizationStatsReportData rd;
+        rd.nodeType = nodeType;
+        for (const auto &[appName, statCounts] : nodeTypeAppStatsMap) {
+            rd.appNameList.push_back(appName);
+            rd.nodeCountList.push_back(statCounts.nodeCount);
+            rd.renderCntList.push_back(statCounts.renderCnt);
+            rd.rtfOverBaselineCntList.push_back(statCounts.rtfOverBaselineCnt);
+            rd.rtfOver110BaseCntList.push_back(statCounts.rtfOver110BaseCnt);
+            rd.rtfOver120BaseCntList.push_back(statCounts.rtfOver120BaseCnt);
+            rd.rtfOver100CntList.push_back(statCounts.rtfOver100Cnt);
+            rd.editRenderCntList.push_back(statCounts.editRenderCnt);
+            rd.editRtfOverBaselineCntList.push_back(statCounts.editRtfOverBaselineCnt);
+            rd.editRtfOver110BaseCntList.push_back(statCounts.editRtfOver110BaseCnt);
+            rd.editRtfOver120BaseCntList.push_back(statCounts.editRtfOver120BaseCnt);
+            rd.editRtfOver100CntList.push_back(statCounts.editRtfOver100Cnt);
         }
-        std::string nodeType = event->GetStringValue("AUDIO_NODE_TYPE");
-        auto statsMapIt = nodeTypeStatsMap.find(nodeType);
-        if (statsMapIt != nodeTypeStatsMap.end()) {
-            auto statsMap = statsMapIt->second;
-            std::vector<std::string> appNameList;
-            std::vector<uint32_t> nodeCountList;
-            for (const auto& pair : statsMap) {
-                appNameList.push_back(pair.first);
-                nodeCountList.push_back(pair.second);
-            }
-            mediaEventBaseWriter_.WriteSuiteEngineUtilizationStats(event, appNameList, nodeCountList);
-        }
+        mediaEventBaseWriter_.WriteSuiteEngineUtilizationStats(rd);
     }
 }
 

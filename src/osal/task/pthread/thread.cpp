@@ -131,6 +131,10 @@ void Thread::SetNameInternal()
 void Thread::UpdateThreadPriority(const uint32_t newPriority, const std::string &strBundleName)
 {
     MEDIA_LOG_I("winddraw update priority %{public}u %{public}s", newPriority, std::to_string(gettid()).c_str());
+    if (strBundleName == "bootanimation") {
+        OHOS::QOS::SetThreadQos(OHOS::QOS::QosLevel::QOS_USER_INTERACTIVE);
+        return;
+    }
     std::unordered_map<std::string, std::string> mapPayload;
     mapPayload["bundleName"] = strBundleName;
     mapPayload["pid"] = std::to_string(getpid());

@@ -69,7 +69,7 @@ public:
     void TriggerSystemTonePlaybackTimeEvent(std::shared_ptr<EventBean> &bean);
     void AddToVolumeApiInvokeQueue(std::shared_ptr<EventBean> &bean);
     void AddToCallSessionQueue(std::shared_ptr<EventBean> &bean);
-    void HandleSuiteEngineUtilizationStatsToEventVector(std::shared_ptr<EventBean> &bean);
+    void AddToSuiteEngineNodeStatsMap(std::shared_ptr<EventBean> &bean);
     void HandleVolumeSettingStatistics(std::shared_ptr<EventBean> &bean);
     void AddLoudVolumeTimes();
 
@@ -127,8 +127,8 @@ private:
     std::unordered_set<std::string> volumeApiInvokeRecordSet_;
 
     std::mutex suiteStatsEventMutex_;
-    std::vector<std::shared_ptr<EventBean>> suiteStatsEventVector_;
-    std::unordered_map<std::string, std::unordered_map<std::string, uint32_t>> suiteNodeTypeStatsMap_;
+    std::unordered_map<std::string, std::unordered_map<std::string, SuiteEngineNodeStatCounts>>
+        suiteEngineNodeStatsMap_;
 
     int32_t volumeApiInvokeRecordSetSize_ = 20 * 30 * 12;
     std::mutex volumeApiInvokeMutex_;
