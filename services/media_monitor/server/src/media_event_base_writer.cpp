@@ -285,7 +285,7 @@ void MediaEventBaseWriter::WriteStreamExhastedError(std::shared_ptr<EventBean> &
 
 void MediaEventBaseWriter::WriteStreamCreateError(std::shared_ptr<EventBean> &bean)
 {
-    MEDIA_LOG_D("Write stream create error");
+    MEDIA_LOG_E("Write stream create error");
     if (bean == nullptr) {
         MEDIA_LOG_E("eventBean is nullptr");
         return;
