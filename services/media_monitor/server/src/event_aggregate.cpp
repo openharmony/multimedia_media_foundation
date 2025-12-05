@@ -79,6 +79,7 @@ void EventAggregate::WriteEvent(std::shared_ptr<EventBean> &bean)
         case SUITE_ENGINE_EXCEPTION:
         case MUTE_BUNDLE_NAME:
         case TONE_PLAYBACK_FAILED:
+        case AUDIO_STREAM_CREATE_ERROR_STATS:
             mediaMonitorPolicy_.WriteEvent(bean->GetEventId(), bean);
             break;
         default:
@@ -100,9 +101,6 @@ void EventAggregate::UpdateAggregateEventList(std::shared_ptr<EventBean> &bean)
             break;
         case AUDIO_STREAM_EXHAUSTED_STATS:
             HandleStreamExhaustedErrorEvent(bean);
-            break;
-        case AUDIO_STREAM_CREATE_ERROR_STATS:
-            HandleStreamCreateErrorEvent(bean);
             break;
         case BACKGROUND_SILENT_PLAYBACK:
             HandleBackgroundSilentPlayback(bean);
