@@ -104,9 +104,6 @@ private:
 #ifdef SUPPORT_CODEC_RM
     void AddRmDemuxerPlugin();
 #endif
-#ifdef SUPPORT_CODEC_COOK
-    void AddCookAudioDecoderPlugins();
-#endif
     void AddAc3DemuxerPlugin();
     void AddAc3AudioDecoderPlugins();
 #ifdef SUPPORT_CODEC_EAC3
