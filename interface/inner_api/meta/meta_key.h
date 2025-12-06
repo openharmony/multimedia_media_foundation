@@ -52,6 +52,7 @@ public:
     static constexpr const char PROCESS_NAME[] = "process_name";                     ///< string, process name
     static constexpr const char AUDIO_RENDER_SET_FLAG[] =
         "regular.audio.render.set.flag"; ///< bool, audio render set flag
+    static constexpr const char STALLING_TIMESTAMP[] = "regular.stalling.timestamp"; ///< stalling timestamp
     /* -------------------- media tag -------------------- */
     static constexpr const char MIME_TYPE[] = "codec_mime";            ///< @see MimeType
     static constexpr const char ORIGINAL_CODEC_NAME[] = "original_codec_name";  /// string, original codec name

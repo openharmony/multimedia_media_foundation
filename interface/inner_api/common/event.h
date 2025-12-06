@@ -76,6 +76,7 @@ enum struct DfxEventType : uint32_t {
     DFX_INFO_PERF_REPORT,
     DFX_INFO_MEMORY_USAGE,
     DFX_EVENT_BUTT,
+    DFX_EVENT_STALLING
 };
 
 struct Event {

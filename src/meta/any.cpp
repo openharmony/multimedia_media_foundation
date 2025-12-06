@@ -50,6 +50,8 @@ const BaseTypesMap &GetBaseTypesMap()
         typeMap[std::string(defaultVecUint8.TypeName())] = AnyValueType::VECTOR_UINT8;
         Any defaultVecInt32 = std::vector<int32_t>();
         typeMap[std::string(defaultVecInt32.TypeName())] = AnyValueType::VECTOR_INT32;
+        Any defaultVecInt64 = std::vector<int64_t>();
+        typeMap[std::string(defaultVecInt64.TypeName())] = AnyValueType::VECTOR_INT64;
         return typeMap;
     }());
     return baseTypeMap;
@@ -97,6 +99,9 @@ bool Any::BaseTypesToParcel(const Any *operand, MessageParcel &parcel) noexcept
         case AnyValueType::VECTOR_INT32:
             ret = ret && parcel.WriteInt32Vector(*AnyCast<std::vector<int32_t>>(operand));
             break;
+        case AnyValueType::VECTOR_INT64:
+            ret = ret && parcel.WriteInt64Vector(*AnyCast<std::vector<int64_t>>(operand));
+            break;
         default: {
             parcel.WriteInt32(static_cast<int32_t>(AnyValueType::INVALID_TYPE));
             return false;
@@ -125,6 +130,13 @@ static Any BaseTypesVectorInt32(MessageParcel &parcel)
     return Any(val);
 }
 
+static Any BaseTypesVectorInt64(MessageParcel &parcel)
+{
+    std::vector<int64_t> val;
+    (void)parcel.ReadInt64Vector(&val);
+    return Any(val);
+}
+
 // returnValue : 0 -- success; 1 -- retry for enum type; 2 -- failed no retry
 int Any::BaseTypesFromParcel(Any *operand, MessageParcel &parcel) noexcept
 {
@@ -140,6 +152,7 @@ int Any::BaseTypesFromParcel(Any *operand, MessageParcel &parcel) noexcept
         {AnyValueType::STRING, [](MessageParcel &p) { return Any(p.ReadString()); }},
         {AnyValueType::VECTOR_UINT8, BaseTypesVectorUint8},
         {AnyValueType::VECTOR_INT32, BaseTypesVectorInt32},
+        {AnyValueType::VECTOR_INT64, BaseTypesVectorInt64},
     };
     AnyValueType type = static_cast<AnyValueType>(parcel.ReadInt32());
     auto it = typeHandlerMap.find(type);

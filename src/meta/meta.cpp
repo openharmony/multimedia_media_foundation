@@ -256,6 +256,7 @@ static Any defaultGraphicPixelFormat = GraphicPixelFormat::GRAPHIC_PIXEL_FMT_YCB
 static Any defaultVectorUInt8 = std::vector<uint8_t>();
 static Any defaultVectorUInt32 = std::vector<uint32_t>();
 static Any defaultVectorInt32 = std::vector<int32_t>();
+static Any defaultVectorInt64 = std::vector<int64_t>();
 static Any defaultVectorVideoBitStreamFormat = std::vector<VideoBitStreamFormat>();
 static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::SRC_INPUT_TYPE, defaultSrcInputType},
@@ -573,6 +574,8 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::REFERENCE_TRACK_IDS, defaultVectorInt32},
     {Tag::MEDIA_AIGC, defaultString},
     {Tag::AUDIO_BLOCK_ALIGN, defaultInt32},
+    // vector<int64_t>
+    {Tag::STALLING_TIMESTAMP, defaultVectorInt64}
 };
 
 static std::map<AnyValueType, const Any &> g_ValueTypeDefaultValueMap = {
@@ -589,6 +592,7 @@ static std::map<AnyValueType, const Any &> g_ValueTypeDefaultValueMap = {
     {AnyValueType::VECTOR_UINT32, defaultVectorUInt32},
     {AnyValueType::STRING, defaultString},
     {AnyValueType::VECTOR_INT32, defaultVectorInt32},
+    {AnyValueType::VECTOR_INT64, defaultVectorInt64},
 };
 
 Any GetDefaultAnyValue(const TagType& tag)
@@ -650,6 +654,8 @@ AnyValueType Meta::GetValueType(const TagType& key) const
             return AnyValueType::STRING;
         } else if (Any::IsSameTypeWith<std::vector<int32_t>>(iter->second)) {
             return AnyValueType::VECTOR_INT32;
+        } else if (Any::IsSameTypeWith<std::vector<int64_t>>(iter->second)) {
+            return AnyValueType::VECTOR_INT64;
         } else {
             auto iter = g_metadataGetterSetterInt64Map.find(key);
             if (iter == g_metadataGetterSetterInt64Map.end()) {

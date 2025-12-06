@@ -117,6 +117,28 @@ extern std::optional<Any> GetDefaultAnyValueOpt(const TagType& tag);
  * @example GetDefaultAnyValue("media.file.type", AnyValueType::INT32_T);
  */
 extern Any GetDefaultAnyValue(const TagType& tag, AnyValueType type);
+enum class StallingStage : int64_t {
+    // DEMUXER stages
+    DEMUXER_START = 101,
+    DEMUXER_END = 102,
+
+    // DECODER stages
+    DECODER_START = 201,
+    DECODER_END = 202,
+
+    // AVSYNC stages
+    AVSYNC_START = 301,
+    AVSYNC_END = 302,
+
+    // RENDERER stages
+    RENDERER_START = 401,
+
+    // CUSTOM stages
+    CUSTOM_PRE_RENDER = 501,
+    CUSTOM_FRAME_INTERVAL = 502,
+    CUSTOM_FRAME_PTS = 503,
+};
+
 class Meta {
 public:
     enum struct ValueType : int32_t {
@@ -134,6 +156,7 @@ public:
         VECTOR_UINT32,
         STRING,
         VECTOR_INT32,
+        VECTOR_INT64,
     };
 
     DECLARE_INFO_CLASS;
@@ -466,6 +489,8 @@ public:
         tagCharSeq == Tag::VIDEO_ENCODER_PER_FRAME_QP_MAP, std::vector<uint8_t>, AnyValueType::VECTOR_UINT8);
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::REFERENCE_TRACK_IDS, std::vector<int32_t>, AnyValueType::VECTOR_INT32);
+    DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::STALLING_TIMESTAMP, std::vector<int64_t>, AnyValueType::VECTOR_INT64);
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::TRACK_REFERENCE_TYPE or
         tagCharSeq == Tag::TRACK_DESCRIPTION, std::string, AnyValueType::STRING);

@@ -73,6 +73,11 @@ typedef struct DownloadInfo {
     int32_t avgDownloadSpeed {0};
     uint64_t totalDownLoadBits {0};
     bool isTimeOut {false};
+    int64_t firstDownloadTime {0};
+    int64_t firstFrameDecapsulationTime {0};
+    int32_t loadingCount {0};
+    int64_t totalLoadingTime {0};
+    int64_t totalDownLoadBytes {0};
 } DownloadInfo;
 
 typedef struct PlaybackInfo {
