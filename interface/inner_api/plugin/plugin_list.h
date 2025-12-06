@@ -98,6 +98,9 @@ private:
     void AddIlbcAudioDecoderPlugins();
     void AddTrueHdAudioDecoderPlugin();
     void AddTwinVQAudioDecoderPlugins();
+    void AddDVAudioDecoderPlugins();
+    void AddDtsDecoderPlugins();
+    void AddCookAudioDecoderPlugins();
 #ifdef SUPPORT_CODEC_RM
     void AddRmDemuxerPlugin();
 #endif
