@@ -519,7 +519,7 @@ void HiPlayerImpl::HandlePluginErrorEvent(const Event& event)
             errorType = PlayerErrorType::PLAYER_ERROR;
             serviceErrCode = MSERR_NETWORK_TIMEOUT;
         }
-        callbackLooper_.OnError(errorType, serviceErrCode);
+        callbackLooper_.OnError(errorType, serviceErrCode, "");
     }
 }
 
@@ -662,7 +662,7 @@ ErrorCode HiPlayerImpl::DoSeek(int64_t hstTime, Plugin::SeekMode mode)
         PROFILE_RESET();
     }
     if (rtv != ErrorCode::SUCCESS) {
-        callbackLooper_.OnError(PLAYER_ERROR, MSERR_SEEK_FAILED);
+        callbackLooper_.OnError(PlayerErrorType::PLAYER_ERROR, MSERR_SEEK_FAILED, "");
         MEDIA_LOG_E("Seek done, seek error.");
     } else {
         Format format;
@@ -726,7 +726,7 @@ ErrorCode HiPlayerImpl::DoOnComplete()
 ErrorCode HiPlayerImpl::DoOnError(ErrorCode errorCode)
 {
     UpdateStateNoLock(PlayerStates::PLAYER_STATE_ERROR);
-    callbackLooper_.OnError(PLAYER_ERROR, TransErrorCode(errorCode));
+    callbackLooper_.OnError(PlayerErrorType::PLAYER_ERROR, TransErrorCode(errorCode), "");
     return ErrorCode::SUCCESS;
 }
 
@@ -741,7 +741,7 @@ ErrorCode HiPlayerImpl::SetVolumeToSink(float volume, bool reportUpward)
 
     if (ret != ErrorCode::SUCCESS) {
         MEDIA_LOG_E("SetVolume failed with error " PUBLIC_LOG_D32, static_cast<int>(ret));
-        callbackLooper_.OnError(PLAYER_ERROR, TransErrorCode(ret));
+        callbackLooper_.OnError(PlayerErrorType::PLAYER_ERROR, TransErrorCode(ret), "");
     } else if (reportUpward) {
         Format format;
         callbackLooper_.OnInfo(INFO_TYPE_VOLUME_CHANGE, volume, format);
