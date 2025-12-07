@@ -24,7 +24,7 @@ namespace OHOS {
 namespace Media {
 
 constexpr uint32_t AVBUFFER_QUEUE_MAX_QUEUE_SIZE = 32;
-constexpr uint32_t AVBUFFER_QUEUE_MAX_QUEUE_SIZE_FOR_LARGER = 150;
+constexpr uint32_t AVBUFFER_QUEUE_MAX_QUEUE_SIZE_FOR_LARGER = 500;
 
 class AVBufferQueueProducer;
 class AVBufferQueueConsumer;
