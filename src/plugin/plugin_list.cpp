@@ -476,6 +476,7 @@ void PluginList::AddFFmpegDemuxerPlugins()
     AddApeDemuxerPlugin();
     AddAsfDemuxerPlugin();
     AddAsfoDemuxerPlugin();
+    AddCafDemuxerPlugin();
     AddFlacDemuxerPlugin();
     AddFlvDemuxerPlugin();
     AddMatroskaDemuxerPlugin();

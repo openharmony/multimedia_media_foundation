@@ -158,8 +158,6 @@ enum class FileType : int32_t {
     VOB = 113,
     FT_3G2 = 114, //3g2
     FT_3GP = 115, //3gp
-    DAT = 116,
-    CAF = 117, //CoreAudioFormat
     AMR = 201,
     AAC = 202,
     MP3 = 203,
@@ -169,6 +167,7 @@ enum class FileType : int32_t {
     WAV = 207,
     APE = 208,
     WMA = 209,
+    CAF = 210, //CoreAudioFormat
     SRT = 301,
     VTT = 302,
     LRC = 303,
