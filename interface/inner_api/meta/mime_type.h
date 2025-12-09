@@ -96,6 +96,8 @@ public:
     static constexpr const char AUDIO_ALAC[] = "audio/alac";
     static constexpr const char AUDIO_ILBC[] = "audio/ilbc";
     static constexpr const char AUDIO_TRUEHD[] = "audio/truehd";
+    static constexpr const char AUDIO_DVAUDIO[] = "audio/dvaudio";
+    static constexpr const char AUDIO_DTS[] = "audio/dts";
 
     static constexpr const char IMAGE_JPG[] = "image/jpeg";
     static constexpr const char IMAGE_PNG[] = "image/png";

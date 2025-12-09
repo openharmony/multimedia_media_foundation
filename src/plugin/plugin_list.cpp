@@ -118,11 +118,11 @@ PluginList::PluginList()
     AddIlbcAudioDecoderPlugins();
     AddTrueHdAudioDecoderPlugin();
     AddTwinVQAudioDecoderPlugins();
+    AddDVAudioDecoderPlugins();
+    AddDtsDecoderPlugins();
+    AddCookAudioDecoderPlugins();
 #ifdef SUPPORT_CODEC_EAC3
     AddEac3AudioDecoderPlugins();
-#endif
-#ifdef SUPPORT_CODEC_COOK
-    AddCookAudioDecoderPlugins();
 #endif
 }
 
@@ -658,18 +658,38 @@ void PluginList::AddRawAudioDecoderPlugins()
     pluginDescriptionList_.push_back(opusAudioDecoderPlugin);
 }
 
-#ifdef SUPPORT_CODEC_COOK
+void PluginList::AddDVAudioDecoderPlugins()
+{
+    PluginDescription dvAduioAudioDecoderPlugin;
+    dvAduioAudioDecoderPlugin.pluginName = "OH.Media.Codec.Decoder.Audio.DVAUDIO";
+    dvAduioAudioDecoderPlugin.packageName = "FFmpegAudioDecoders";
+    dvAduioAudioDecoderPlugin.pluginType = PluginType::AUDIO_DECODER;
+    dvAduioAudioDecoderPlugin.cap = "audio/dvaudio";
+    dvAduioAudioDecoderPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(dvAduioAudioDecoderPlugin);
+}
+
+void PluginList::AddDtsDecoderPlugins()
+{
+    PluginDescription dtsAudioDecoderPlugin;
+    dtsAudioDecoderPlugin.pluginName = "OH.Media.Codec.Decoder.Audio.DTS";
+    dtsAudioDecoderPlugin.packageName = "FFmpegAudioDecoders";
+    dtsAudioDecoderPlugin.pluginType = PluginType::AUDIO_DECODER;
+    dtsAudioDecoderPlugin.cap = "audio/dts";
+    dtsAudioDecoderPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(dtsAudioDecoderPlugin);
+}
+
 void PluginList::AddCookAudioDecoderPlugins()
 {
     PluginDescription cookAudioDecoderPlugin;
     cookAudioDecoderPlugin.pluginName = "OH.Media.Codec.Decoder.Audio.COOK";
-    cookAudioDecoderPlugin.packageName = "CookAudioDecoder";
+    cookAudioDecoderPlugin.packageName = "FFmpegAudioDecoders";
     cookAudioDecoderPlugin.pluginType = PluginType::AUDIO_DECODER;
     cookAudioDecoderPlugin.cap = "audio/cook";
     cookAudioDecoderPlugin.rank = DEFAULT_RANK;
     pluginDescriptionList_.push_back(cookAudioDecoderPlugin);
 }
-#endif
 
 void PluginList::AddAdpcmAudioDecoderPlugins()
 {
