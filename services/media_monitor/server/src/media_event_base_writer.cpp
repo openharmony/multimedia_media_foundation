@@ -869,7 +869,7 @@ void MediaEventBaseWriter::WriteTonePlaybackFailed(std::shared_ptr<EventBean> &b
 #ifdef MONITOR_ENABLE_HISYSEVENT
     HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "TONE_PLAYBACK_FAILED",
         HiviewDFX::HiSysEvent::EventType::FAULT,
-        "ERROR_CODE", bean->GetIntValue("APP_NAME"),
+        "ERROR_CODE", bean->GetIntValue("ERROR_CODE"),
         "ERROR_REASON", bean->GetStringValue("ERROR_REASON"));
 #endif
 }
