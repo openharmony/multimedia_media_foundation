@@ -67,6 +67,7 @@ private:
     void AddOggDemuxerPlugin();
     void AddWavDemuxerPlugin();
     void AddFFmpegDemuxerPlugins();
+    void AddDtsDemuxerPlugin();
     void AddMpegAudioDecoderPlugin();
     void AddAacAudioDecoderPlugin();
     void AddFFmpegAudioDecodersPlugins();
