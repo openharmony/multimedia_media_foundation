@@ -80,6 +80,7 @@ void EventAggregate::WriteEvent(std::shared_ptr<EventBean> &bean)
         case MUTE_BUNDLE_NAME:
         case TONE_PLAYBACK_FAILED:
         case AUDIO_STREAM_CREATE_ERROR_STATS:
+        case AUDIO_STREAM_EXHAUSTED_STATS:
             mediaMonitorPolicy_.WriteEvent(bean->GetEventId(), bean);
             break;
         default:
@@ -98,9 +99,6 @@ void EventAggregate::UpdateAggregateEventList(std::shared_ptr<EventBean> &bean)
             break;
         case STREAM_CHANGE:
             HandleStreamChangeEvent(bean);
-            break;
-        case AUDIO_STREAM_EXHAUSTED_STATS:
-            HandleStreamExhaustedErrorEvent(bean);
             break;
         case BACKGROUND_SILENT_PLAYBACK:
             HandleBackgroundSilentPlayback(bean);
@@ -665,13 +663,6 @@ void EventAggregate::HandlePipeChange(std::shared_ptr<EventBean> &bean)
 {
     MEDIA_LOG_D("Handle pipe change");
     mediaMonitorPolicy_.WriteEvent(bean->GetEventId(), bean);
-}
-
-void EventAggregate::HandleStreamExhaustedErrorEvent(std::shared_ptr<EventBean> &bean)
-{
-    MEDIA_LOG_D("Handle stream exhausted error event");
-    mediaMonitorPolicy_.HandleExhaustedToEventVector(bean);
-    mediaMonitorPolicy_.WhetherToHiSysEvent();
 }
 
 void EventAggregate::HandleStreamCreateErrorEvent(std::shared_ptr<EventBean> &bean)
