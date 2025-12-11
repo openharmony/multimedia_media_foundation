@@ -171,7 +171,8 @@ enum class FileType : int32_t {
     VTT = 302,
     LRC = 303,
     SAMI = 304,
-    ASS = 305
+    ASS = 305,
+    CINEPAK = 306
 };
 
 /**
