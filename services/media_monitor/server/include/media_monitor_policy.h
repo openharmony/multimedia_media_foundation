@@ -48,6 +48,7 @@ public:
     void WriteBehaviorEvent(EventId eventId, std::shared_ptr<EventBean> &bean);
     void WriteBehaviorEventExpansion(EventId eventId, std::shared_ptr<EventBean> &bean);
     void WriteFaultEvent(EventId eventId, std::shared_ptr<EventBean> &bean);
+    void WriteFaultEventExpansion(EventId eventId, std::shared_ptr<EventBean> &bean);
     void WriteAggregationEvent(EventId eventId, std::shared_ptr<EventBean> &bean);
     void WriteAggregationEventExpansion(EventId eventId, std::shared_ptr<EventBean> &bean);
     void WriteSystemTonePlaybackEvent(EventId eventId, std::shared_ptr<EventBean> &bean);
@@ -68,18 +69,24 @@ public:
     void TriggerSystemTonePlaybackTimeEvent(std::shared_ptr<EventBean> &bean);
     void AddToVolumeApiInvokeQueue(std::shared_ptr<EventBean> &bean);
     void AddToCallSessionQueue(std::shared_ptr<EventBean> &bean);
+    void AddToSuiteEngineNodeStatsMap(std::shared_ptr<EventBean> &bean);
+    void HandleVolumeSettingStatistics(std::shared_ptr<EventBean> &bean);
+    void AddLoudVolumeTimes();
 
     void WhetherToHiSysEvent();
     void WriteInfo(int32_t fd, std::string &dumpString);
 
 private:
+    static constexpr int32_t DEFAULT_DAILY_TIME_SECEND = 2 * 60 * 60;
     static constexpr int32_t DEFAULT_AGGREGATION_FREQUENCY = 1000;
     static constexpr int32_t DEFAULT_AGGREGATION_TIME = 24 * 60;
     static constexpr int32_t DEFAULT_TONE_PLAYBACK_TIME = 120;
     static constexpr int32_t DEFAULT_VOLUME_API_INVOKE_TIME = 24 * 60;
+    static constexpr int32_t DEFAULT_SUITE_STATS_TIME = 24 * 60;
     static constexpr uint64_t DEFAULT_AGGREGATION_TIME_SECEND = 24 * 60 * 60;
     static constexpr uint64_t DEFAULT_TONE_PLAYBACK_TIME_SECEND = 2 * 60 * 60;
     static constexpr uint64_t DEFAULT_VOLUME_API_INVOKE_TIME_SECEND = 24 * 60 * 60;
+    static constexpr uint64_t DEFAULT_SUITE_STATS_TIME_SECEND = 24 * 60 * 60;
 
     static constexpr int32_t DEFAULT_VOLUME_API_INVOKE_COUNT_ONCE = 20;
 
@@ -94,12 +101,17 @@ private:
     void SetBundleNameToEvent(const std::string key, std::shared_ptr<EventBean> &bean,
         const std::string &bundleNameKey);
     void HandleToVolumeApiInvokeEvent();
+    void HandleToSuiteEngineUtilizationStatsEvent();
+    void HandleToVolumeSettingStatisticsEvent();
+    void HandleToLoudVolumeSceneEvent(std::shared_ptr<EventBean> &bean);
 
+    uint64_t lastTimeDefaultDaily_ = 0;
     uint64_t curruntTime_ = 0;
     uint64_t lastAudioTime_ = 0;
     uint64_t afterSleepTime_ = 0;
     uint64_t lastSystemTonePlaybackTime_ = 0;
     uint64_t lastVolumeApiInvokeTime_ = 0;
+    uint64_t lastSuiteStatsTime_ = 0;
     std::unique_ptr<std::thread> timeThread_ = nullptr;
     std::atomic_bool startThread_ = true;
 
@@ -114,9 +126,15 @@ private:
     std::queue<std::shared_ptr<EventBean>> volumeApiInvokeEventQueue_;
     std::unordered_set<std::string> volumeApiInvokeRecordSet_;
 
+    std::mutex suiteStatsEventMutex_;
+    std::unordered_map<std::string, std::unordered_map<std::string, SuiteEngineNodeStatCounts>>
+        suiteEngineNodeStatsMap_;
+
     int32_t volumeApiInvokeRecordSetSize_ = 20 * 30 * 12;
     std::mutex volumeApiInvokeMutex_;
-
+    std::atomic<int32_t> loudVolumeTimes_ = 0;
+    
+    uint64_t defaultDailySleepTime_ = DEFAULT_DAILY_TIME_SECEND;
     int32_t systemTonePlayerCount_ = 0;
     int32_t aggregationFrequency_ = DEFAULT_AGGREGATION_FREQUENCY;
     int32_t aggregationTime_ = DEFAULT_AGGREGATION_TIME;
@@ -125,6 +143,8 @@ private:
     uint64_t aggregationSleepTime_ = DEFAULT_AGGREGATION_TIME_SECEND;
     int32_t volumeApiInvokeTime_ = DEFAULT_VOLUME_API_INVOKE_TIME;
     uint64_t volumeApiInvokeSleepTime_ = DEFAULT_VOLUME_API_INVOKE_TIME_SECEND;
+    int32_t suiteStatsTime_ = DEFAULT_SUITE_STATS_TIME;
+    uint64_t suiteStatsSleepTime_ = DEFAULT_SUITE_STATS_TIME_SECEND;
 
     std::mutex callSessionMutex_;
     std::unordered_set<std::string> callSessionHapSet_;

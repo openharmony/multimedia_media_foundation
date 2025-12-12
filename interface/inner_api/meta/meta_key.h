@@ -54,6 +54,7 @@ public:
         "regular.audio.render.set.flag"; ///< bool, audio render set flag
     /* -------------------- media tag -------------------- */
     static constexpr const char MIME_TYPE[] = "codec_mime";            ///< @see MimeType
+    static constexpr const char ORIGINAL_CODEC_NAME[] = "original_codec_name";  /// string, original codec name
     static constexpr const char MEDIA_CODEC_NAME[] = "codec_name";     ///< codec name
     static constexpr const char MEDIA_IS_HARDWARE[] = "is_hardware";   ///< bool, codec is hardware
     static constexpr const char MEDIA_TITLE[] = "title";               ///< title
@@ -106,11 +107,18 @@ public:
     static constexpr const char MEDIA_EDITLIST[] = "use_editlist";             ///< use edit list
     static constexpr const char MEDIA_ENABLE_MOOV_FRONT[] = "fast_start";      ///< set moov in front
     static constexpr const char MEDIA_AIGC[] = "aigc";                         ///< AIGC info
+    static constexpr const char MEDIA_GLTF_VERSION[] = "gltf_version";                  ///< gltf infe version
+    static constexpr const char MEDIA_GLTF_ITEM_NAME[] = "gltf_item_name";              ///< gltf infe item name
+    static constexpr const char MEDIA_GLTF_CONTENT_TYPE[] = "gltf_content_type";        ///< gltf infe content type
+    static constexpr const char MEDIA_GLTF_CONTENT_ENCODING[] = "gltf_content_encoding";///< gltf infe content encoding
+    static constexpr const char MEDIA_GLTF_DATA[] = "gltf_data";                        ///< gltf infe data
+    static constexpr const char MEDIA_GLTF_ITEM_TYPE[] = "gltf_item_type";              ///< gltf infe item type
 
     /* -------------------- buffer meta tag -------------------- */
     static constexpr const char BUFFER_DECODING_TIMESTAMP[] = "decoding_timestamp";  ///< int64_t, decoding timestamp.
     static constexpr const char BUFFER_DURATION[] = "buffer_duration";               ///< int64_t, buffer duration
     static constexpr const char BUFFER_INDEX[] = "private_buffer_index";
+    static constexpr const char BUFFER_SKIP_SAMPLES_INFO[] = "buffer_skip_samples_info"; // skip info for sample.
 
     /* -------------------- timed metadata tag -------------------- */
     static constexpr const char TIMED_METADATA_SRC_TRACK_MIME[] =
@@ -125,6 +133,8 @@ public:
     static constexpr const char REFERENCE_TRACK_IDS[] = "reference_track_ids";
     static constexpr const char TRACK_REFERENCE_TYPE[] = "track_reference_type";
     static constexpr const char TRACK_DESCRIPTION[] = "track_description";
+    static constexpr const char REF_TRACK_IDS[] = "ref_track_ids";
+    static constexpr const char TRACK_REF_TYPE[] = "track_ref_type";
 
     /* -------------------- 3dgs gltf tag -------------------- */
     static constexpr const char IS_GLTF[] = "is_gltf"; ///< bool, is gltf file
@@ -141,6 +151,7 @@ public:
     static constexpr const char AUDIO_OUTPUT_CHANNELS[] = "audio.output.channels";    ///< sink output channel num
     static constexpr const char AUDIO_OUTPUT_CHANNEL_LAYOUT[] =
         "audio.output.channel.layout"; ///< @see AudioChannelLayout, sink output channel layout
+    static constexpr const char AUDIO_BLOCK_ALIGN[] = "audio_block_align"; ///< int32_t, number of bytes per packet
     static constexpr const char AUDIO_COMPRESSION_LEVEL[] = "audio_compression_level";         ///< compression level
     static constexpr const char AUDIO_MAX_INPUT_SIZE[] = "audio.max.input.size";         ///< max input size
     static constexpr const char AUDIO_MAX_OUTPUT_SIZE[] = "audio.max.output.size";       ///< max output size

@@ -461,6 +461,7 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::AV_TRANSCODER_VIDEO_ENCODER_DURATION, 19},
     {Tag::AV_TRANSCODER_VIDEO_VPE_DURATION, 20},
     {Tag::TIMED_METADATA_SRC_TRACK, 1},
+    {Tag::MEDIA_GLTF_VERSION, 1},
     {Tag::SRC_INPUT_TYPE, static_cast<int32_t>(Plugins::SrcInputType::AUD_ES)},
     {Tag::AUDIO_SAMPLE_FORMAT, static_cast<int32_t>(Plugins::AudioSampleFormat::SAMPLE_S16LE)},
     {Tag::AUDIO_RAW_SAMPLE_FORMAT, static_cast<int32_t>(Plugins::AudioSampleFormat::SAMPLE_S16LE)},
@@ -495,6 +496,7 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::AUDIO_L2HC_VERSION, 1},
     {Tag::VIDEO_ENCODER_ENABLE_PTS_BASED_RATECONTROL, 1},
     {Tag::VIDEO_DECODER_INPUT_STREAM_ERROR, 0},
+    {Tag::AUDIO_BLOCK_ALIGN, 1},
     // UINT8_T
     {Tag::AUDIO_AAC_PROFILE, static_cast<int32_t>(Plugins::AudioAacProfile::ELD)},
     {Tag::AUDIO_AAC_STREAM_FORMAT, static_cast<int32_t>(Plugins::AudioAacStreamFormat::ADIF)}};
@@ -686,6 +688,7 @@ HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_All_As_Double_Using_ParcelPackage, T
 map<TagType, std::string> testStringData = {
     // String
     {Tag::MIME_TYPE, "String MIME_TYPE"},
+    {Tag::ORIGINAL_CODEC_NAME, "String ORIGINAL_CODEC_NAME"},
     {Tag::MEDIA_FILE_URI, "String MEDIA_FILE_URI"},
     {Tag::MEDIA_TITLE, "String MEDIA_TITLE"},
     {Tag::MEDIA_ARTIST, "String MEDIA_ARTIST"},
@@ -735,6 +738,10 @@ map<TagType, std::string> testStringData = {
     {Tag::AV_TRANSCODER_DST_VIDEO_MIME, "String AV_TRANSCODER_DST_VIDEO_MIME"},
     {Tag::TRACK_REFERENCE_TYPE, "String TRACK_REFERENCE_TYPE"},
     {Tag::TRACK_DESCRIPTION, "String TRACK_DESCRIPTION"},
+    {Tag::MEDIA_GLTF_ITEM_NAME, "String MEDIA_GLTF_ITEM_NAME"},
+    {Tag::MEDIA_GLTF_CONTENT_TYPE, "String MEDIA_GLTF_CONTENT_TYPE"},
+    {Tag::MEDIA_GLTF_CONTENT_ENCODING, "String MEDIA_GLTF_CONTENT_ENCODING"},
+    {Tag::MEDIA_GLTF_ITEM_TYPE, "String MEDIA_GLTF_ITEM_TYPE"},
     {Tag::MEDIA_AIGC, "String MEDIA_AIGC"}
 };
 
@@ -762,6 +769,7 @@ HWTEST_F(MetaInnerUnitTest, SetGet_MetaData_All_As_String_Using_ParcelPackage, T
 
 std::vector<uint8_t> vectorUint8MediaCodec{1, 2, 3};
 std::vector<uint8_t> vectorUint8MediaCover{1, 2, 3, 4};
+std::vector<uint8_t> vectorUint8MediaGltfData{0x01, 0x02, 0x03, 0x04};
 map<TagType, std::vector<uint8_t>> testVetcorInt8Data = {
     // vector<uint8_t>
     {Tag::MEDIA_CODEC_CONFIG, vectorUint8MediaCodec},
@@ -770,6 +778,8 @@ map<TagType, std::vector<uint8_t>> testVetcorInt8Data = {
     {Tag::AUDIO_VORBIS_SETUP_HEADER, vectorUint8MediaCover},
     {Tag::AUDIO_VIVID_METADATA, vectorUint8MediaCover},
     {Tag::VIDEO_ENCODER_PER_FRAME_QP_MAP, vectorUint8MediaCover},
+    {Tag::MEDIA_GLTF_DATA, vectorUint8MediaGltfData},
+    {Tag::BUFFER_SKIP_SAMPLES_INFO, vectorUint8MediaCodec},
 };
 
 /**

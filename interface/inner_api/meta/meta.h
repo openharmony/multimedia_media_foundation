@@ -145,7 +145,8 @@ public:
                            tagCharSeq == Tag::AUDIO_VORBIS_IDENTIFICATION_HEADER or
                            tagCharSeq == Tag::AUDIO_VORBIS_SETUP_HEADER or
                            tagCharSeq == Tag::OH_MD_KEY_AUDIO_VIVID_METADATA or
-                           tagCharSeq == Tag::DRM_CENC_INFO,
+                           tagCharSeq == Tag::DRM_CENC_INFO or
+                           tagCharSeq == Tag::BUFFER_SKIP_SAMPLES_INFO,
                            std::vector<uint8_t>, AnyValueType::VECTOR_UINT8);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_CHANNEL_LAYOUT or
                            tagCharSeq == Tag::AUDIO_OUTPUT_CHANNEL_LAYOUT or
@@ -386,6 +387,7 @@ public:
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::MEDIA_AIGC or
         tagCharSeq == Tag::MIME_TYPE or
+        tagCharSeq == Tag::ORIGINAL_CODEC_NAME or
         tagCharSeq == Tag::MEDIA_FILE_URI or
         tagCharSeq == Tag::MEDIA_TITLE or
         tagCharSeq == Tag::MEDIA_ARTIST or
@@ -475,6 +477,17 @@ public:
         tagCharSeq == Tag::IS_GLTF, bool, AnyValueType::BOOL);
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::GLTF_OFFSET, int64_t, AnyValueType::INT64_T);
+    DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::AUDIO_BLOCK_ALIGN, int32_t, AnyValueType::INT32_T);
+    DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::MEDIA_GLTF_VERSION, int32_t, AnyValueType::INT32_T);
+    DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::MEDIA_GLTF_ITEM_NAME or
+        tagCharSeq == Tag::MEDIA_GLTF_CONTENT_TYPE or
+        tagCharSeq == Tag::MEDIA_GLTF_CONTENT_ENCODING or
+        tagCharSeq == Tag::MEDIA_GLTF_ITEM_TYPE, std::string, AnyValueType::STRING);
+    DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::MEDIA_GLTF_DATA, std::vector<uint8_t>, AnyValueType::VECTOR_UINT8);
 
     Meta &operator=(const Meta &other)
     {

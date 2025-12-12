@@ -86,6 +86,29 @@ enum EventId {
     VOLUME_API_INVOKE = 41,
     HAP_CALL_AUDIO_SESSION = 42,
     PROCESS_IN_MAINTHREAD = 43,
+    DISTRIBUTED_DEVICE_INFO = 44,
+    DISTRIBUTED_SCENE_INFO = 45,
+
+    // for audio suite
+    SUITE_ENGINE_UTILIZATION_STATS = 46,
+    SUITE_ENGINE_EXCEPTION = 47,
+
+    DM_DEVICE_INFO = 48,
+
+    VOLUME_SETTING_STATISTICS = 51,
+
+    MUTE_BUNDLE_NAME = 50,
+
+    // Ringtone playback failure event
+    TONE_PLAYBACK_FAILED = 51,
+};
+
+enum VolumeStatisticsSceneType : uint8_t {
+    LOUD_VOLUME_SCENE = 0,
+};
+
+static VolumeStatisticsSceneType sceneTypes[] = {
+    VolumeStatisticsSceneType::LOUD_VOLUME_SCENE
 };
 
 enum EventType {
@@ -254,6 +277,31 @@ enum AudioDeviceUsage {
     CALL_INPUT_DEVICES = 8,
     ALL_CALL_DEVICES = 12,
     D_ALL_DEVICES = 15,
+};
+
+struct MonitorDmDeviceInfo : public Parcelable {
+    std::string deviceName_;
+    std::string networkId_;
+    uint16_t dmDeviceType_{0};
+
+    bool Marshalling(Parcel &parcel) const override
+    {
+        return parcel.WriteString(deviceName_) &&
+            parcel.WriteString(networkId_) &&
+            parcel.WriteUint16(dmDeviceType_);
+    }
+
+    static MonitorDmDeviceInfo *Unmarshalling(Parcel &data)
+    {
+        MonitorDmDeviceInfo *monitorDmDeviceInfo = new (std::nothrow) MonitorDmDeviceInfo();
+        if (monitorDmDeviceInfo == nullptr) {
+            return nullptr;
+        }
+        data.ReadString(monitorDmDeviceInfo->deviceName_);
+        data.ReadString(monitorDmDeviceInfo->networkId_);
+        data.ReadUint16(monitorDmDeviceInfo->dmDeviceType_);
+        return monitorDmDeviceInfo;
+    }
 };
 
 } // namespace MediaMonitor

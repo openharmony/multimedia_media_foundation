@@ -76,6 +76,10 @@ void EventAggregate::WriteEvent(std::shared_ptr<EventBean> &bean)
         case HPAE_MESSAGE_QUEUE_EXCEPTION:
         case STREAM_MOVE_EXCEPTION:
         case PROCESS_IN_MAINTHREAD:
+        case SUITE_ENGINE_EXCEPTION:
+        case MUTE_BUNDLE_NAME:
+        case TONE_PLAYBACK_FAILED:
+        case AUDIO_STREAM_CREATE_ERROR_STATS:
             mediaMonitorPolicy_.WriteEvent(bean->GetEventId(), bean);
             break;
         default:
@@ -97,9 +101,6 @@ void EventAggregate::UpdateAggregateEventList(std::shared_ptr<EventBean> &bean)
             break;
         case AUDIO_STREAM_EXHAUSTED_STATS:
             HandleStreamExhaustedErrorEvent(bean);
-            break;
-        case AUDIO_STREAM_CREATE_ERROR_STATS:
-            HandleStreamCreateErrorEvent(bean);
             break;
         case BACKGROUND_SILENT_PLAYBACK:
             HandleBackgroundSilentPlayback(bean);
@@ -151,9 +152,42 @@ void EventAggregate::UpdateAggregateStateEventList(std::shared_ptr<EventBean> &b
         case HAP_CALL_AUDIO_SESSION:
             HandleCallSessionEvent(bean);
             break;
+        case DISTRIBUTED_DEVICE_INFO:
+            HandleDistributedDeviceInfo(bean);
+            break;
+        case DISTRIBUTED_SCENE_INFO:
+            HandleDistributedSceneInfo(bean);
+            break;
+        case DM_DEVICE_INFO:
+            HandleDmDeviceInfo(bean);
+            break;
+        case SUITE_ENGINE_UTILIZATION_STATS:
+            HandleSuiteEngineUtilizationStats(bean);
+            break;
+        case VOLUME_SETTING_STATISTICS:
+            HandleVolumeSettingStatisticsEvent(bean);
+            break;
         default:
             break;
     }
+}
+
+void EventAggregate::HandleDistributedDeviceInfo(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Handle distributed device info");
+    audioMemo_.UpdateDistributedDeviceInfo(bean);
+}
+
+void EventAggregate::HandleDistributedSceneInfo(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Handle distributed scene info");
+    audioMemo_.UpdateDistributedSceneInfo(bean);
+}
+
+void EventAggregate::HandleDmDeviceInfo(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Handle dm device info");
+    audioMemo_.UpdateDmDeviceInfo(bean);
 }
 
 void EventAggregate::HandleCallSessionEvent(std::shared_ptr<EventBean> &bean)
@@ -711,6 +745,18 @@ void EventAggregate::HandleVolumeApiInvokeEvent(std::shared_ptr<EventBean> &bean
 {
     MEDIA_LOG_D("Handle volume api invoke event");
     mediaMonitorPolicy_.AddToVolumeApiInvokeQueue(bean);
+}
+
+void EventAggregate::HandleSuiteEngineUtilizationStats(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Handle audio suite node utilization event");
+    mediaMonitorPolicy_.AddToSuiteEngineNodeStatsMap(bean);
+}
+
+void EventAggregate::HandleVolumeSettingStatisticsEvent(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Handle volume setting statistics event");
+    mediaMonitorPolicy_.HandleVolumeSettingStatistics(bean);
 }
 } // namespace MediaMonitor
 } // namespace Media

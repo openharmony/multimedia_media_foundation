@@ -112,6 +112,7 @@ enum MediaServiceErrCode : ErrCode {
     MSERR_LPP_INSTANCE_EXCEED_LIMIT,                    // LPP: instance limit exceeded.
     MSERR_HARDWARE_ERROR,                               // underlying hardware error happened.
     MSERR_EXTEND_START      = MS_ERR_OFFSET + 0xF000,   // extend err start.
+    MSERR_CLEARTEXT_NOT_PERMITTED,                      // http cleartext not permitted.
 };
 
 // media api error code

@@ -257,7 +257,6 @@ if (hst_is_lite_sys) {
     output_values = get_target_outputs(":media_monitor_interface")
 
     sources = [
-      "server/src/audio_buffer_cache.cpp",
       "server/src/audio_memo.cpp",
       "server/src/event_aggregate.cpp",
       "server/src/ffmpeg_api_wrap.cpp",
@@ -286,10 +285,8 @@ if (hst_is_lite_sys) {
     deps = [
       ":media_monitor.para",
       ":media_monitor.para.dac",
-      ":media_monitor_buffer",
       ":media_monitor_common",
       ":media_monitor_interface",
-      "../../src:media_foundation",
     ]
 
     external_deps = [
@@ -418,10 +415,8 @@ if (hst_is_lite_sys) {
     ]
 
     deps = [
-      ":media_monitor_buffer",
       ":media_monitor_common",
       ":media_monitor_interface",
-      "../../src:media_foundation",
     ]
 
     external_deps = [

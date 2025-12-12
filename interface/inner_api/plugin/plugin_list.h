@@ -68,6 +68,7 @@ private:
     void AddOggDemuxerPlugin();
     void AddWavDemuxerPlugin();
     void AddFFmpegDemuxerPlugins();
+    void AddDtsDemuxerPlugin();
     void AddMpegAudioDecoderPlugin();
     void AddAacAudioDecoderPlugin();
     void AddFFmpegAudioDecodersPlugins();
@@ -92,11 +93,18 @@ private:
     void AddAudioVendorAacEncodersPlugin();
     void AddGsmMsAudioDecoderPlugin();
     void AddGsmAudioDecoderPlugin();
+    void AddWmaV1AudioDecoderPlugins();
+    void AddWmaV2AudioDecoderPlugins();
+    void AddWmaProAudioDecoderPlugins();
+    void AddAdpcmAudioDecoderPlugins();
+    void AddIlbcAudioDecoderPlugins();
+    void AddTrueHdAudioDecoderPlugin();
+    void AddTwinVQAudioDecoderPlugins();
+    void AddDVAudioDecoderPlugins();
+    void AddDtsDecoderPlugins();
+    void AddCookAudioDecoderPlugins();
 #ifdef SUPPORT_CODEC_RM
     void AddRmDemuxerPlugin();
-#endif
-#ifdef SUPPORT_CODEC_COOK
-    void AddCookAudioDecoderPlugins();
 #endif
     void AddAc3DemuxerPlugin();
     void AddAc3AudioDecoderPlugins();

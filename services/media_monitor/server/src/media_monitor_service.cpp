@@ -203,6 +203,27 @@ ErrCode MediaMonitorService::GetAudioAppStateMsg(std::unordered_map<int32_t, Mon
     return funcResult;
 }
 
+ErrCode MediaMonitorService::GetDistributedDeviceInfo(std::vector<std::string> &deviceInfos, int32_t &funcResult)
+{
+    FALSE_UPDATE_RETURN_V_MSG_E(VerifyIsAudio(), funcResult, ERROR, "client permission denied");
+    funcResult = audioMemo_.GetDistributedDeviceInfo(deviceInfos);
+    return funcResult;
+}
+
+ErrCode MediaMonitorService::GetDistributedSceneInfo(std::string &sceneInfo, int32_t &funcResult)
+{
+    FALSE_UPDATE_RETURN_V_MSG_E(VerifyIsAudio(), funcResult, ERROR, "client permission denied");
+    funcResult = audioMemo_.GetDistributedSceneInfo(sceneInfo);
+    return funcResult;
+}
+
+ErrCode MediaMonitorService::GetDmDeviceInfo(std::vector<MonitorDmDeviceInfo> &dmDeviceInfos, int32_t &funcResult)
+{
+    FALSE_UPDATE_RETURN_V_MSG_E(VerifyIsAudio(), funcResult, ERROR, "client permission denied");
+    funcResult = audioMemo_.GetDmDeviceInfo(dmDeviceInfos);
+    return funcResult;
+}
+
 void MediaMonitorService::AudioEncodeDump()
 {
     MEDIA_LOG_I("encode pcm start");
@@ -232,14 +253,8 @@ bool MediaMonitorService::IsNeedDump()
     return false;
 }
 
-ErrCode MediaMonitorService::WriteAudioBuffer(const std::string &fileName, uint64_t ptr, uint32_t size,
+ErrCode MediaMonitorService::WriteAudioBuffer(const std::string &fileName, const AudioDumpBuffer &buffer,
     int32_t &funcResult)
-{
-    funcResult = SUCCESS;
-    return funcResult;
-}
-
-ErrCode MediaMonitorService::GetInputBuffer(DumpBuffer &buffer, int32_t size, int32_t &funcResult)
 {
     if (versionType_ != BETA_VERSION) {
         funcResult = ERROR;
@@ -253,31 +268,10 @@ ErrCode MediaMonitorService::GetInputBuffer(DumpBuffer &buffer, int32_t size, in
 
     FALSE_UPDATE_RETURN_V_MSG_E(VerifyIsAudio(), funcResult, ERROR, "client permissionn denied");
     unique_lock<mutex> lock(bufferMutex_);
-    if (audioBufferCache_) {
-        shared_ptr<DumpBuffer> dumpBuffer = std::make_shared<DumpBuffer>();
-        audioBufferCache_->RequestBuffer(dumpBuffer, size);
-        FALSE_UPDATE_RETURN_V_MSG_E(dumpBuffer != nullptr, funcResult, ERROR, "request buffer failed");
-        buffer = *dumpBuffer;
-    }
-    funcResult = SUCCESS;
-    return funcResult;
-}
-
-ErrCode MediaMonitorService::InputBufferFilled(const std::string &fileName, uint64_t bufferId, uint32_t size,
-    int32_t &funcResult)
-{
-    if (versionType_ != BETA_VERSION) {
-        funcResult = ERROR;
-        return funcResult;
-    }
-
-    FALSE_UPDATE_RETURN_V_MSG_E(VerifyIsAudio(), funcResult, ERROR, "client permissionn denied");
-    FALSE_UPDATE_RETURN_V_MSG_E(audioBufferCache_ != nullptr, funcResult, ERROR, "buffer cahce nullptr");
-    std::shared_ptr<DumpBuffer> buffer = nullptr;
-    audioBufferCache_->GetBufferById(buffer, bufferId);
-    FALSE_RETURN_V_MSG_E(buffer != nullptr, ERROR, "get buffer falied");
-    audioBufferCache_->SetBufferSize(buffer, size);
-    AddBufferToQueue(fileName, buffer);
+    std::shared_ptr<AudioDumpBuffer> dumpBuffer = make_shared<AudioDumpBuffer>();
+    dumpBuffer->size = buffer.size;
+    dumpBuffer->RawDataCpy(buffer.data);
+    AddBufferToQueue(fileName, dumpBuffer);
     funcResult = SUCCESS;
     return funcResult;
 }
@@ -338,10 +332,6 @@ int32_t MediaMonitorService::DumpThreadProcess()
         if (dumpLoopThread_ && dumpLoopThread_->joinable()) {
             dumpLoopThread_->join();
         }
-        dumpBufferWrap_ = std::make_shared<DumpBufferWrap>();
-        if (!dumpBufferWrap_->Open()) {
-            return ERROR;
-        }
         DumpThreadStart();
     } else {
         DumpThreadStop();
@@ -353,7 +343,6 @@ void MediaMonitorService::DumpThreadStart()
 {
     MEDIA_LOG_I("DumpThreadStart enter");
     DumpFileClear();
-    audioBufferCache_ = std::make_shared<AudioBufferCache>(dumpBufferWrap_);
     dumpSignal_ = std::make_shared<DumpSignal>();
     dumpSignal_->isRunning_.store(true);
     dumpLoopThread_ = std::make_unique<thread>(&MediaMonitorService::DumpLoopFunc, this);
@@ -386,13 +375,12 @@ void MediaMonitorService::DumpLoopFunc()
 {
     MEDIA_LOG_I("DumpLoopFunc enter");
     FALSE_RETURN_MSG(dumpSignal_ != nullptr, "signal is nullptr");
-    FALSE_RETURN_MSG(dumpBufferWrap_ != nullptr, "buffer wrap is nullptr");
     while (!isDumpExit_) {
         if (!dumpSignal_->isRunning_.load()) {
             MEDIA_LOG_I("DumpLoopFunc running exit");
             break;
         }
-        std::queue<std::pair<std::string, std::shared_ptr<DumpBuffer>>> tmpBufferQue;
+        std::queue<std::pair<std::string, std::shared_ptr<AudioDumpBuffer>>> tmpBufferQue;
         {
             unique_lock<mutex> lock(dumpSignal_->dumpMutex_);
             dumpSignal_->dumpCond_.wait_for(lock, std::chrono::seconds(WAIT_DUMP_TIMEOUT_S), [this]() {
@@ -408,30 +396,22 @@ void MediaMonitorService::DumpLoopFunc()
             DumpThreadStop();
         }
     }
-    if (audioBufferCache_ != nullptr) {
-        audioBufferCache_->Clear();
-        audioBufferCache_ = nullptr;
-    }
-    if (dumpBufferWrap_ != nullptr) {
-        dumpBufferWrap_->Close();
-        dumpBufferWrap_ = nullptr;
-    }
 }
 
-void MediaMonitorService::DumpBufferWrite(std::queue<std::pair<std::string, std::shared_ptr<DumpBuffer>>> &bufferQueue)
+void MediaMonitorService::DumpBufferWrite(std::queue<std::pair<std::string,
+    std::shared_ptr<AudioDumpBuffer>>> &bufferQueue)
 {
-    std::pair<std::string, std::shared_ptr<DumpBuffer>> dumpData;
+    std::pair<std::string, std::shared_ptr<AudioDumpBuffer>> dumpData;
     while (!bufferQueue.empty()) {
         dumpData = bufferQueue.front();
         bufferQueue.pop();
         if (dumpEnable_) {
             WriteBufferFromQueue(dumpData.first, dumpData.second);
         }
-        AudioBufferRelease(dumpData.second);
     }
 }
 
-void MediaMonitorService::AddBufferToQueue(const std::string &fileName, std::shared_ptr<DumpBuffer> &buffer)
+void MediaMonitorService::AddBufferToQueue(const std::string &fileName, std::shared_ptr<AudioDumpBuffer> &buffer)
 {
     MEDIA_LOG_D("AddBufferToQueue enter");
     FALSE_RETURN_MSG(dumpSignal_ != nullptr, "signal is nullptr");
@@ -444,10 +424,11 @@ void MediaMonitorService::AddBufferToQueue(const std::string &fileName, std::sha
     dumpSignal_->dumpCond_.notify_all();
 }
 
-void MediaMonitorService::WriteBufferFromQueue(const std::string &fileName, std::shared_ptr<DumpBuffer> &buffer)
+void MediaMonitorService::WriteBufferFromQueue(const std::string &fileName, std::shared_ptr<AudioDumpBuffer> &buffer)
 {
     MEDIA_LOG_D("WriteBufferFromQueue enter");
     FALSE_RETURN_MSG(buffer != nullptr, "buffer is nullptr");
+    FALSE_RETURN_MSG(buffer->data != nullptr, "buffer data is nullptr");
     std::string realFilePath = fileFloader_ + fileName;
     FALSE_RETURN_MSG(IsRealPath(fileFloader_), "check path failed");
     FILE *dumpFile = fopen(realFilePath.c_str(), "a");
@@ -463,14 +444,8 @@ void MediaMonitorService::WriteBufferFromQueue(const std::string &fileName, std:
         dumpFile = fopen(realFilePath.c_str(), "a");
         FALSE_RETURN_MSG(dumpFile != nullptr, "reopen file failed");
     }
-    size_t bufferSize = static_cast<size_t>(dumpBufferWrap_->GetSize(buffer.get()));
-    uint8_t *bufferAddr = dumpBufferWrap_->GetAddr(buffer.get());
-    if (bufferAddr == nullptr) {
-        (void)fclose(dumpFile);
-        dumpFile = nullptr;
-        return;
-    }
-    (void)fwrite(bufferAddr, 1, bufferSize, dumpFile);
+
+    (void)fwrite(buffer->data, 1, buffer->size, dumpFile);
     (void)fclose(dumpFile);
     dumpFile = nullptr;
 }
@@ -493,19 +468,9 @@ void MediaMonitorService::DumpBufferClear()
 {
     dumpSignal_->dumpMutex_.lock();
     while (!dumpSignal_->dumpQueue_.empty()) {
-        auto &dumpData = dumpSignal_->dumpQueue_.front();
-        AudioBufferRelease(dumpData.second);
         dumpSignal_->dumpQueue_.pop();
     }
     dumpSignal_->dumpMutex_.unlock();
-}
-
-void MediaMonitorService::AudioBufferRelease(std::shared_ptr<DumpBuffer> &buffer)
-{
-    FALSE_RETURN_MSG(buffer != nullptr, "buffer is nullptr");
-    if (audioBufferCache_) {
-        audioBufferCache_->ReleaseBuffer(buffer);
-    }
 }
 
 void MediaMonitorService::HistoryFilesHandle()

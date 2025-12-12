@@ -106,6 +106,7 @@ int32_t SampleConvert::Init(const ResamplePara &param)
     swrCtx_ = std::shared_ptr<SwrContext>(swrContext, [this](SwrContext* ptr) {
         apiWrap_->SwrFree(&ptr);
     });
+    FALSE_RETURN_V_MSG_E(swrCtx_ != nullptr, ERROR, "new swr ctx error");
     isInit_ = true;
     return SUCCESS;
 }
@@ -183,7 +184,7 @@ int32_t MediaAudioEncoder::EncodePcmToFlac(const std::string &in)
         return ERROR;
     }
     size_t bufferLen = PcmDataSize();
-    if (bufferLen <= 0 || bufferLen > MAX_BUFFER_LEN) {
+    if (bufferLen == 0 || bufferLen > MAX_BUFFER_LEN) {
         Release();
         return ERROR;
     }
@@ -317,6 +318,7 @@ int32_t MediaAudioEncoder::InitMux()
     formatContext_ = std::shared_ptr<AVFormatContext>(formatCtx, [this](AVFormatContext* ptr) {
         apiWrap_->FormatFreeContext(ptr);
     });
+    FALSE_RETURN_V_MSG_E(formatContext_ != nullptr, ERROR, "new format ctx error");
     if (audioCodecContext_ != nullptr) {
         AVStream *audioStream = nullptr;
         audioStream = apiWrap_->FormatNewStream(formatContext_.get(), nullptr);
@@ -360,6 +362,7 @@ int32_t MediaAudioEncoder::InitAudioEncode(const AudioEncodeConfig &audioConfig)
     audioCodecContext_ = std::shared_ptr<AVCodecContext>(context, [this](AVCodecContext* ptr) {
         apiWrap_->CodecFreeContext(&ptr);
     });
+    FALSE_RETURN_V_MSG_E(audioCodecContext_ != nullptr, ERROR, "new codec ctx error");
 
     audioCodecContext_->sample_fmt = codec->sample_fmts ? codec->sample_fmts[0] : AV_SAMPLE_FMT_S16;
     if (srcSampleFormat_ > SampleFormat::S16LE && audioConfig.audioCodecId == AV_CODEC_ID_FLAC) {
@@ -385,6 +388,7 @@ int32_t MediaAudioEncoder::InitFrame()
     avFrame_ = std::shared_ptr<AVFrame>(frame, [this](AVFrame* frame) {
         apiWrap_->FrameFree(&frame);
     });
+    FALSE_RETURN_V_MSG_E(avFrame_ != nullptr, ERROR, "new frame error");
 
     avFrame_->format = audioCodecContext_->sample_fmt;
     avFrame_->nb_samples = audioCodecContext_->frame_size;
@@ -403,6 +407,7 @@ int32_t MediaAudioEncoder::InitPacket()
     avPacket_ = std::shared_ptr<AVPacket>(packet, [this](AVPacket *packet) {
         apiWrap_->PacketFree(&packet);
     });
+    FALSE_RETURN_V_MSG_E(avPacket_ != nullptr, ERROR, "new packet error");
     return SUCCESS;
 }
 

@@ -48,7 +48,7 @@ bool AVVirtualAllocator::Free(void *ptr)
 {
     uint8_t *dataPtr = static_cast<uint8_t *>(ptr);
     FALSE_RETURN_V_MSG_E(dataPtr != nullptr, false, "Invalid ptr, ptr = 0x%{public}06" PRIXPTR, FAKE_POINTER(dataPtr));
-    delete dataPtr;
+    delete[] dataPtr;
     return true;
 }
 

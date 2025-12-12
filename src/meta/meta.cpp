@@ -412,9 +412,11 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::AV_TRANSCODER_VIDEO_VPE_DURATION, defaultInt32},
     {Tag::MEDIA_EDITLIST, defaultInt32},
     {Tag::MEDIA_ENABLE_MOOV_FRONT, defaultInt32},
+    {Tag::MEDIA_GLTF_VERSION, defaultInt32},
     {Tag::VIDEO_DECODER_INPUT_STREAM_ERROR, defaultInt32},
     // String
     {Tag::MIME_TYPE, defaultString},
+    {Tag::ORIGINAL_CODEC_NAME, defaultString},
     {Tag::MEDIA_FILE_URI, defaultString},
     {Tag::MEDIA_TITLE, defaultString},
     {Tag::MEDIA_ARTIST, defaultString},
@@ -467,6 +469,13 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_ENCODER_ROI_PARAMS, defaultString},
     {Tag::TRACK_REFERENCE_TYPE, defaultString},
     {Tag::TRACK_DESCRIPTION, defaultString},
+    {Tag::TRACK_REF_TYPE, defaultString},
+    {Tag::REF_TRACK_IDS, defaultString},
+    {Tag::MEDIA_GLTF_ITEM_NAME, defaultString},
+    {Tag::MEDIA_GLTF_CONTENT_TYPE, defaultString},
+    {Tag::MEDIA_GLTF_CONTENT_ENCODING, defaultString},
+    {Tag::MEDIA_GLTF_ITEM_TYPE, defaultString},
+    
     // Float
     {Tag::MEDIA_LATITUDE, defaultFloat},
     {Tag::MEDIA_LONGITUDE, defaultFloat},
@@ -543,12 +552,14 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::AUDIO_VORBIS_IDENTIFICATION_HEADER, defaultVectorUInt8},
     {Tag::AUDIO_VORBIS_SETUP_HEADER, defaultVectorUInt8},
     {Tag::OH_MD_KEY_AUDIO_VIVID_METADATA, defaultVectorUInt8},
+    {Tag::BUFFER_SKIP_SAMPLES_INFO, defaultVectorUInt8},
     // vector<Plugins::VideoBitStreamFormat>
     {Tag::VIDEO_BIT_STREAM_FORMAT, defaultVectorVideoBitStreamFormat},
     // vector<uint8_t>
     {Tag::DRM_CENC_INFO, defaultVectorUInt8},
     {Tag::MEDIA_AVAILABLE_BITRATES, defaultVectorUInt8},
     {Tag::VIDEO_ENCODER_PER_FRAME_QP_MAP, defaultVectorUInt8},
+    {Tag::MEDIA_GLTF_DATA, defaultVectorUInt8},
     // Uint32
     {Tag::DRM_DECRYPT_AVG_SIZE, defaultUInt32},
     {Tag::DRM_DECRYPT_AVG_DURATION, defaultUInt32},
@@ -561,6 +572,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     // vector<int32_t>
     {Tag::REFERENCE_TRACK_IDS, defaultVectorInt32},
     {Tag::MEDIA_AIGC, defaultString},
+    {Tag::AUDIO_BLOCK_ALIGN, defaultInt32},
 };
 
 static std::map<AnyValueType, const Any &> g_ValueTypeDefaultValueMap = {

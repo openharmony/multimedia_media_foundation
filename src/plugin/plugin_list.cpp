@@ -111,11 +111,18 @@ PluginList::PluginList()
     AddGsmMsAudioDecoderPlugin();
     AddGsmAudioDecoderPlugin();
     AddAlacAudioDecoderPlugins();
+    AddWmaV1AudioDecoderPlugins();
+    AddWmaV2AudioDecoderPlugins();
+    AddWmaProAudioDecoderPlugins();
+    AddAdpcmAudioDecoderPlugins();
+    AddIlbcAudioDecoderPlugins();
+    AddTrueHdAudioDecoderPlugin();
+    AddTwinVQAudioDecoderPlugins();
+    AddDVAudioDecoderPlugins();
+    AddDtsDecoderPlugins();
+    AddCookAudioDecoderPlugins();
 #ifdef SUPPORT_CODEC_EAC3
     AddEac3AudioDecoderPlugins();
-#endif
-#ifdef SUPPORT_CODEC_COOK
-    AddCookAudioDecoderPlugins();
 #endif
 }
 
@@ -467,6 +474,17 @@ void PluginList::AddEac3DemuxerPlugin()
 }
 #endif
 
+void PluginList::AddDtsDemuxerPlugin()
+{
+    PluginDescription dtsDemuxerPlugin;
+    dtsDemuxerPlugin.pluginName = "avdemux_dts";
+    dtsDemuxerPlugin.packageName = "FFmpegDemuxer";
+    dtsDemuxerPlugin.pluginType = PluginType::DEMUXER;
+    dtsDemuxerPlugin.cap = "";
+    dtsDemuxerPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(dtsDemuxerPlugin);
+}
+
 void PluginList::AddFFmpegDemuxerPlugins()
 {
     AddAacDemuxerPlugin();
@@ -490,6 +508,7 @@ void PluginList::AddFFmpegDemuxerPlugins()
     AddOggDemuxerPlugin();
     AddWavDemuxerPlugin();
     AddAc3DemuxerPlugin();
+    AddDtsDemuxerPlugin();
 #ifdef SUPPORT_CODEC_RM
     AddRmDemuxerPlugin();
 #endif
@@ -663,18 +682,85 @@ void PluginList::AddRawAudioDecoderPlugins()
     pluginDescriptionList_.push_back(opusAudioDecoderPlugin);
 }
 
-#ifdef SUPPORT_CODEC_COOK
+void PluginList::AddDVAudioDecoderPlugins()
+{
+    PluginDescription dvAduioAudioDecoderPlugin;
+    dvAduioAudioDecoderPlugin.pluginName = "OH.Media.Codec.Decoder.Audio.DVAUDIO";
+    dvAduioAudioDecoderPlugin.packageName = "FFmpegAudioDecoders";
+    dvAduioAudioDecoderPlugin.pluginType = PluginType::AUDIO_DECODER;
+    dvAduioAudioDecoderPlugin.cap = "audio/dvaudio";
+    dvAduioAudioDecoderPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(dvAduioAudioDecoderPlugin);
+}
+
+void PluginList::AddDtsDecoderPlugins()
+{
+    PluginDescription dtsAudioDecoderPlugin;
+    dtsAudioDecoderPlugin.pluginName = "OH.Media.Codec.Decoder.Audio.DTS";
+    dtsAudioDecoderPlugin.packageName = "FFmpegAudioDecoders";
+    dtsAudioDecoderPlugin.pluginType = PluginType::AUDIO_DECODER;
+    dtsAudioDecoderPlugin.cap = "audio/dts";
+    dtsAudioDecoderPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(dtsAudioDecoderPlugin);
+}
+
 void PluginList::AddCookAudioDecoderPlugins()
 {
     PluginDescription cookAudioDecoderPlugin;
     cookAudioDecoderPlugin.pluginName = "OH.Media.Codec.Decoder.Audio.COOK";
-    cookAudioDecoderPlugin.packageName = "CookAudioDecoder";
+    cookAudioDecoderPlugin.packageName = "FFmpegAudioDecoders";
     cookAudioDecoderPlugin.pluginType = PluginType::AUDIO_DECODER;
     cookAudioDecoderPlugin.cap = "audio/cook";
     cookAudioDecoderPlugin.rank = DEFAULT_RANK;
     pluginDescriptionList_.push_back(cookAudioDecoderPlugin);
 }
-#endif
+
+void PluginList::AddAdpcmAudioDecoderPlugins()
+{
+    struct Item { const char* name; const char* mime; };
+    static const Item kItems[] = {
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.MS",         "audio/adpcm_ms" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.IMA.QT",     "audio/adpcm_ima_qt" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.IMA.WAV",    "audio/adpcm_ima_wav" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.IMA.DK3",    "audio/adpcm_ima_dk3" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.IMA.DK4",    "audio/adpcm_ima_dk4" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.IMA.WS",     "audio/adpcm_ima_ws" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.IMA.SMJPEG", "audio/adpcm_ima_smjpeg" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.IMA.DAT4",   "audio/adpcm_ima_dat4" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.IMA.AMV",    "audio/adpcm_ima_amv" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.IMA.APC",    "audio/adpcm_ima_apc" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.IMA.ISS",    "audio/adpcm_ima_iss" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.IMA.OKI",    "audio/adpcm_ima_oki" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.IMA.RAD",    "audio/adpcm_ima_rad" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.MTAF",       "audio/adpcm_mtaf" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.ADX",        "audio/adpcm_adx" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.AFC",        "audio/adpcm_afc" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.AICA",       "audio/adpcm_aica" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.CT",         "audio/adpcm_ct" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.DTK",        "audio/adpcm_dtk" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.G722",       "audio/adpcm_g722" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.G726",       "audio/adpcm_g726" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.G726LE",     "audio/adpcm_g726le" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.PSX",        "audio/adpcm_psx" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.SBPRO2",     "audio/adpcm_sbpro_2" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.SBPRO3",     "audio/adpcm_sbpro_3" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.SBPRO4",     "audio/adpcm_sbpro_4" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.THP",        "audio/adpcm_thp" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.THP.LE",     "audio/adpcm_thp_le" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.XA",         "audio/adpcm_xa" },
+        { "OH.Media.Codec.Decoder.Audio.ADPCM.YAMAHA",     "audio/adpcm_yamaha" },
+    };
+
+    for (const auto& it : kItems) {
+        PluginDescription p;
+        p.pluginName  = it.name;
+        p.packageName = "FFmpegAudioDecoders";
+        p.pluginType  = PluginType::AUDIO_DECODER;
+        p.cap         = it.mime;
+        p.rank        = DEFAULT_RANK;
+        pluginDescriptionList_.push_back(std::move(p));
+    }
+}
 
 void PluginList::AddAc3AudioDecoderPlugins()
 {
@@ -731,6 +817,72 @@ void PluginList::AddAlacAudioDecoderPlugins()
     alacAudioDecoderPlugin.cap = "audio/alac";
     alacAudioDecoderPlugin.rank = DEFAULT_RANK;
     pluginDescriptionList_.push_back(alacAudioDecoderPlugin);
+}
+
+void PluginList::AddWmaV1AudioDecoderPlugins()
+{
+    PluginDescription wmav1AudioDecoderPlugin;
+    wmav1AudioDecoderPlugin.pluginName = "OH.Media.Codec.Decoder.Audio.WMAv1";
+    wmav1AudioDecoderPlugin.packageName = "FFmpegAudioDecoders";
+    wmav1AudioDecoderPlugin.pluginType = PluginType::AUDIO_DECODER;
+    wmav1AudioDecoderPlugin.cap = "audio/wmav1";
+    wmav1AudioDecoderPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(wmav1AudioDecoderPlugin);
+}
+
+void PluginList::AddWmaV2AudioDecoderPlugins()
+{
+    PluginDescription wmav2AudioDecoderPlugin;
+    wmav2AudioDecoderPlugin.pluginName = "OH.Media.Codec.Decoder.Audio.WMAv2";
+    wmav2AudioDecoderPlugin.packageName = "FFmpegAudioDecoders";
+    wmav2AudioDecoderPlugin.pluginType = PluginType::AUDIO_DECODER;
+    wmav2AudioDecoderPlugin.cap = "audio/wmav2";
+    wmav2AudioDecoderPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(wmav2AudioDecoderPlugin);
+}
+
+void PluginList::AddWmaProAudioDecoderPlugins()
+{
+    PluginDescription wmvProAudioDecoderPlugin;
+    wmvProAudioDecoderPlugin.pluginName = "OH.Media.Codec.Decoder.Audio.WMAPro";
+    wmvProAudioDecoderPlugin.packageName = "FFmpegAudioDecoders";
+    wmvProAudioDecoderPlugin.pluginType = PluginType::AUDIO_DECODER;
+    wmvProAudioDecoderPlugin.cap = "audio/wmapro";
+    wmvProAudioDecoderPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(wmvProAudioDecoderPlugin);
+}
+
+void PluginList::AddIlbcAudioDecoderPlugins()
+{
+    PluginDescription ilbcDecoderPlugin;
+    ilbcDecoderPlugin.pluginName = "OH.Media.Codec.Decoder.Audio.ILBC";
+    ilbcDecoderPlugin.packageName = "FFmpegAudioDecoders";
+    ilbcDecoderPlugin.pluginType = PluginType::AUDIO_DECODER;
+    ilbcDecoderPlugin.cap = "audio/ilbc";
+    ilbcDecoderPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(ilbcDecoderPlugin);
+}
+
+void PluginList::AddTrueHdAudioDecoderPlugin()
+{
+    PluginDescription trueHdAudioDecoderPlugin;
+    trueHdAudioDecoderPlugin.pluginName = "OH.Media.Codec.Decoder.Audio.TrueHD";
+    trueHdAudioDecoderPlugin.packageName = "FFmpegAudioDecoders";
+    trueHdAudioDecoderPlugin.pluginType = PluginType::AUDIO_DECODER;
+    trueHdAudioDecoderPlugin.cap = "audio/truehd";
+    trueHdAudioDecoderPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(trueHdAudioDecoderPlugin);
+}
+
+void PluginList::AddTwinVQAudioDecoderPlugins()
+{
+    PluginDescription twinvqProAudioDecoderPlugin;
+    twinvqProAudioDecoderPlugin.pluginName = "OH.Media.Codec.Decoder.Audio.TwinVQ";
+    twinvqProAudioDecoderPlugin.packageName = "FFmpegAudioDecoders";
+    twinvqProAudioDecoderPlugin.pluginType = PluginType::AUDIO_DECODER;
+    twinvqProAudioDecoderPlugin.cap = "audio/twinvq";
+    twinvqProAudioDecoderPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(twinvqProAudioDecoderPlugin);
 }
 
 void PluginList::AddAudioServerSinkPlugins()

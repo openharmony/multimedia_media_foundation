@@ -25,7 +25,7 @@
 #include "system_ability.h"
 #include "media_monitor_stub.h"
 #include "event_aggregate.h"
-#include "audio_buffer_cache.h"
+#include "audio_dump_buffer.h"
 
 namespace OHOS {
 namespace Media {
@@ -43,7 +43,7 @@ struct MessageSignal {
 struct DumpSignal {
     std::mutex dumpMutex_;
     std::condition_variable dumpCond_;
-    std::queue<std::pair<std::string, std::shared_ptr<DumpBuffer>>> dumpQueue_;
+    std::queue<std::pair<std::string, std::shared_ptr<AudioDumpBuffer>>> dumpQueue_;
     std::atomic<bool> isRunning_ = false;
 };
 
@@ -79,12 +79,7 @@ public:
     ErrCode SetMediaParameters(const std::string &dumpType, const std::string &dumpEnable,
         int32_t &funcResult) override;
 
-    ErrCode WriteAudioBuffer(const std::string &fileName, uint64_t ptr, uint32_t size, int32_t &funcResult) override;
-
-    ErrCode GetInputBuffer(DumpBuffer &buffer, int32_t size, int32_t &funcResult) override;
-
-    ErrCode InputBufferFilled(const std::string &fileName, uint64_t bufferId, uint32_t size,
-        int32_t &funcResult) override;
+    ErrCode WriteAudioBuffer(const std::string &fileName, const AudioDumpBuffer &buffer, int32_t &funcResult) override;
 
     ErrCode GetPcmDumpStatus(int32_t &dumpEnable, int32_t &funcResult) override;
 
@@ -99,7 +94,12 @@ public:
     ErrCode GetAudioAppStateMsg(std::unordered_map<int32_t, MonitorAppStateInfo> &appStateMapOut,
         int32_t &funcResult) override;
 
-    std::shared_ptr<DumpBufferWrap> dumpBufferWrap_ = nullptr;
+    ErrCode GetDistributedDeviceInfo(std::vector<std::string> &deviceInfos, int32_t &funcResult) override;
+
+    ErrCode GetDistributedSceneInfo(std::string &sceneInfo, int32_t &funcResult) override;
+
+    ErrCode GetDmDeviceInfo(std::vector<MonitorDmDeviceInfo> &dmDeviceInfos, int32_t &funcResult) override;
+
 private:
     MediaMonitorService();
     void MessageLoopFunc();
@@ -123,11 +123,10 @@ private:
     void DumpFileClear();
     void DumpBufferClear();
     void HistoryFilesHandle();
-    void AudioBufferRelease(std::shared_ptr<DumpBuffer> &buffer);
     bool DeleteHistoryFile(const std::string &filePath);
-    void DumpBufferWrite(std::queue<std::pair<std::string, std::shared_ptr<DumpBuffer>>> &bufferQueue);
-    void AddBufferToQueue(const std::string &fileName, std::shared_ptr<DumpBuffer> &buffer);
-    void WriteBufferFromQueue(const std::string &fileName, std::shared_ptr<DumpBuffer> &buffer);
+    void DumpBufferWrite(std::queue<std::pair<std::string, std::shared_ptr<AudioDumpBuffer>>> &bufferQueue);
+    void AddBufferToQueue(const std::string &fileName, std::shared_ptr<AudioDumpBuffer> &buffer);
+    void WriteBufferFromQueue(const std::string &fileName, std::shared_ptr<AudioDumpBuffer> &buffer);
     bool isDumpExit_ = false;
     bool dumpEnable_ = false;
     std::mutex paramMutex_;
@@ -137,7 +136,6 @@ private:
     std::string fileFloader_ = DEFAULT_DUMP_DIR;
     std::unique_ptr<std::thread> dumpLoopThread_ = nullptr;
     std::shared_ptr<DumpSignal> dumpSignal_ = nullptr;
-    std::shared_ptr<AudioBufferCache> audioBufferCache_ = nullptr;
     std::time_t dumpThreadTime_ = 0;
 };
 

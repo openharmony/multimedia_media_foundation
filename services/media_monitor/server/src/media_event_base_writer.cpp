@@ -285,7 +285,7 @@ void MediaEventBaseWriter::WriteStreamExhastedError(std::shared_ptr<EventBean> &
 
 void MediaEventBaseWriter::WriteStreamCreateError(std::shared_ptr<EventBean> &bean)
 {
-    MEDIA_LOG_D("Write stream create error");
+    MEDIA_LOG_E("Write stream create error");
     if (bean == nullptr) {
         MEDIA_LOG_E("eventBean is nullptr");
         return;
@@ -792,6 +792,85 @@ void MediaEventBaseWriter::WriteAudioMainThreadEvent(std::shared_ptr<EventBean> 
         "AUDIODIRECTION", bean->GetIntValue("AUDIODIRECTION"),
         "AUDIOSTREAM", bean->GetIntValue("AUDIOSTREAM"),
         "CALLFUNC", bean->GetIntValue("CALLFUNC"));
+#endif
+}
+
+void MediaEventBaseWriter::WriteSuiteEngineUtilizationStats(const SuiteEngineUtilizationStatsReportData &data)
+{
+#ifdef MONITOR_ENABLE_HISYSEVENT
+    HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "SUITE_ENGINE_UTILIZATION_STATS",
+        HiviewDFX::HiSysEvent::EventType::STATISTIC,
+        "APP_NAME", data.appNameList,
+        "AUDIO_NODE_TYPE", data.nodeType,
+        "AUDIO_NODE_COUNT", data.nodeCountList,
+        "RT_MODE_RENDER_COUNT", data.renderCntList,
+        "RT_MODE_RTF_OVER_BASE_COUNT", data.rtfOverBaselineCntList,
+        "RT_MODE_RTF_OVER_110BASE_COUNT", data.rtfOver110BaseCntList,
+        "RT_MODE_RTF_OVER_120BASE_COUNT", data.rtfOver120BaseCntList,
+        "RT_MODE_RTF_OVER_100_COUNT", data.rtfOver100CntList,
+        "EDIT_MODE_RENDER_COUNT", data.editRenderCntList,
+        "EDIT_MODE_RTF_OVER_BASE_COUNT", data.editRtfOverBaselineCntList,
+        "EDIT_MODE_RTF_OVER_110BASE_COUNT", data.editRtfOver110BaseCntList,
+        "EDIT_MODE_RTF_OVER_120BASE_COUNT", data.editRtfOver120BaseCntList,
+        "EDIT_MODE_RTF_OVER_100_COUNT", data.editRtfOver100CntList);
+#endif
+}
+
+void MediaEventBaseWriter::WriteSuiteEngineException(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("audio suite engine exception");
+    if (bean == nullptr) {
+        MEDIA_LOG_E("eventBean is nullptr");
+        return;
+    }
+#ifdef MONITOR_ENABLE_HISYSEVENT
+    HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "SUITE_ENGINE_EXCEPTION",
+        HiviewDFX::HiSysEvent::EventType::FAULT,
+        "APP_NAME", bean->GetStringValue("APP_NAME"),
+        "ERROR_SCENE", static_cast<uint32_t>(bean->GetIntValue("ERROR_SCENE")),
+        "ERROR_CASE", static_cast<uint32_t>(bean->GetIntValue("ERROR_CASE")),
+        "ERROR_DESCRIPTION", bean->GetStringValue("ERROR_DESCRIPTION"));
+#endif
+}
+
+void MediaEventBaseWriter::WriteVolumeSettingStatistics(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("audio volume setting statistics");
+#ifdef MONITOR_ENABLE_HISYSEVENT
+    HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "VOLUME_SETTING_STATISTICS",
+        HiviewDFX::HiSysEvent::EventType::STATISTIC,
+        "LOUD_VOLUME_TIMES", static_cast<int32_t>(bean->GetIntValue("LOUD_VOLUME_TIMES")),
+        "SCENE_TYPE", static_cast<uint8_t>(bean->GetIntValue("SCENE_TYPE")));
+#endif
+}
+
+void MediaEventBaseWriter::WriteMuteBundleName(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Write mute bundle name");
+    if (bean == nullptr) {
+        MEDIA_LOG_E("eventBean is nullptr");
+        return;
+    }
+#ifdef MONITOR_ENABLE_HISYSEVENT
+    HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "MUTE_BUNDLE_NAME",
+        HiviewDFX::HiSysEvent::EventType::STATISTIC,
+        "MUTETYPE", bean->GetStringValue("MUTETYPE"),
+        "BUNDLENAME", bean->GetStringValue("BUNDLENAME"));
+#endif
+}
+
+void MediaEventBaseWriter::WriteTonePlaybackFailed(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("tone playback failed");
+    if (bean == nullptr) {
+        MEDIA_LOG_E("eventBean is nullptr");
+        return;
+    }
+#ifdef MONITOR_ENABLE_HISYSEVENT
+    HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "TONE_PLAYBACK_FAILED",
+        HiviewDFX::HiSysEvent::EventType::FAULT,
+        "ERROR_CODE", bean->GetIntValue("ERROR_CODE"),
+        "ERROR_REASON", bean->GetStringValue("ERROR_REASON"));
 #endif
 }
 } // namespace MediaMonitor

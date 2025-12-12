@@ -37,6 +37,55 @@ struct DfxSystemTonePlaybackResult {
     std::vector<int64_t> volumeLevel{};
 };
 
+struct SuiteEngineNodeStatCounts {
+    // count for effect node create
+    uint32_t nodeCount = 0;
+    // real-time mode perf stats begin
+    uint32_t renderCnt = 0;
+    uint32_t rtfOverBaselineCnt = 0;
+    uint32_t rtfOver110BaseCnt = 0;
+    uint32_t rtfOver120BaseCnt = 0;
+    uint32_t rtfOver100Cnt = 0;
+    // edit mode perf stats begin
+    uint32_t editRenderCnt = 0;
+    uint32_t editRtfOverBaselineCnt = 0;
+    uint32_t editRtfOver110BaseCnt = 0;
+    uint32_t editRtfOver120BaseCnt = 0;
+    uint32_t editRtfOver100Cnt = 0;
+
+    SuiteEngineNodeStatCounts &operator+=(const SuiteEngineNodeStatCounts &other)
+    {
+        nodeCount += other.nodeCount;
+        renderCnt += other.renderCnt;
+        rtfOverBaselineCnt += other.rtfOverBaselineCnt;
+        rtfOver110BaseCnt += other.rtfOver110BaseCnt;
+        rtfOver120BaseCnt += other.rtfOver120BaseCnt;
+        rtfOver100Cnt += other.rtfOver100Cnt;
+        editRenderCnt += other.editRenderCnt;
+        editRtfOverBaselineCnt += other.editRtfOverBaselineCnt;
+        editRtfOver110BaseCnt += other.editRtfOver110BaseCnt;
+        editRtfOver120BaseCnt += other.editRtfOver120BaseCnt;
+        editRtfOver100Cnt += other.editRtfOver100Cnt;
+        return *this;
+    }
+};
+
+struct SuiteEngineUtilizationStatsReportData {
+    std::string nodeType;
+    std::vector<std::string> appNameList{};
+    std::vector<uint32_t> nodeCountList{};
+    std::vector<uint32_t> renderCntList{};
+    std::vector<uint32_t> rtfOverBaselineCntList{};
+    std::vector<uint32_t> rtfOver110BaseCntList{};
+    std::vector<uint32_t> rtfOver120BaseCntList{};
+    std::vector<uint32_t> rtfOver100CntList{};
+    std::vector<uint32_t> editRenderCntList{};
+    std::vector<uint32_t> editRtfOverBaselineCntList{};
+    std::vector<uint32_t> editRtfOver110BaseCntList{};
+    std::vector<uint32_t> editRtfOver120BaseCntList{};
+    std::vector<uint32_t> editRtfOver100CntList{};
+};
+
 class MediaEventBaseWriter {
 public:
     static MediaEventBaseWriter& GetMediaEventBaseWriter()
@@ -90,6 +139,11 @@ public:
     void WriteVolumeApiInvoke(std::shared_ptr<EventBean> &bean);
     void WriteAppCallSession(std::shared_ptr<EventBean> &bean);
     void WriteAudioMainThreadEvent(std::shared_ptr<EventBean> &bean);
+    void WriteSuiteEngineUtilizationStats(const SuiteEngineUtilizationStatsReportData &data);
+    void WriteSuiteEngineException(std::shared_ptr<EventBean> &bean);
+    void WriteMuteBundleName(std::shared_ptr<EventBean> &bean);
+    void WriteVolumeSettingStatistics(std::shared_ptr<EventBean> &bean);
+    void WriteTonePlaybackFailed(std::shared_ptr<EventBean> &bean);
 };
 
 } // namespace MediaMonitor
