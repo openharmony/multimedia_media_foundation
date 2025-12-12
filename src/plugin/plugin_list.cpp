@@ -463,6 +463,17 @@ void PluginList::AddEac3DemuxerPlugin()
 }
 #endif
 
+void PluginList::AddDtsDemuxerPlugin()
+{
+    PluginDescription dtsDemuxerPlugin;
+    dtsDemuxerPlugin.pluginName = "avdemux_dts";
+    dtsDemuxerPlugin.packageName = "FFmpegDemuxer";
+    dtsDemuxerPlugin.pluginType = PluginType::DEMUXER;
+    dtsDemuxerPlugin.cap = "";
+    dtsDemuxerPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(dtsDemuxerPlugin);
+}
+
 void PluginList::AddFFmpegDemuxerPlugins()
 {
     AddAacDemuxerPlugin();
@@ -485,6 +496,7 @@ void PluginList::AddFFmpegDemuxerPlugins()
     AddOggDemuxerPlugin();
     AddWavDemuxerPlugin();
     AddAc3DemuxerPlugin();
+    AddDtsDemuxerPlugin();
 #ifdef SUPPORT_CODEC_RM
     AddRmDemuxerPlugin();
 #endif
