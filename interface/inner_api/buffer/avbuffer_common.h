@@ -71,7 +71,11 @@ enum struct MemoryType : uint8_t {
     /**
      * The identifier for buffer queue, representing any type of memory can be allocated.
      */
-    UNKNOWN_MEMORY
+    UNKNOWN_MEMORY,
+    /**
+    * A memory type that allows user-defined AVMemory implementations whose lifetime must be fully managed by the user.
+    */
+    CUSTOM_MEMORY
 };
 
 /**

@@ -29,33 +29,6 @@ namespace {
 constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "AVMemory" };
 }
 
-namespace {
-uint64_t GetUniqueId()
-{
-#ifdef MEDIA_OHOS
-    using namespace std::chrono;
-    static const uint64_t startTime =
-        static_cast<uint64_t>(time_point_cast<seconds>(system_clock::now()).time_since_epoch().count());
-    static const uint16_t processId = static_cast<uint16_t>(getpid());
-#else
-    static const uint64_t startTime = 0;
-    static const uint16_t processId = 0;
-#endif
-    static std::atomic<uint32_t> bufferId = 0;
-    if (bufferId == UINT32_MAX) {
-        bufferId = 0;
-    }
-    union UniqueId {
-        uint64_t startTime;    //  1--16, 16: time
-        uint16_t processId[4]; // 17--32, 16: process id
-        uint32_t bufferId[2];  // 33--64, 32: atomic val
-    } uid = {.startTime = startTime};
-    ++bufferId;
-    uid.processId[1] = processId;
-    uid.bufferId[1] = bufferId;
-    return uid.startTime;
-}
-} // namespace
 namespace OHOS {
 namespace Media {
 std::shared_ptr<AVMemory> AVMemory::CreateAVMemory(std::shared_ptr<AVAllocator> allocator, int32_t capacity,
@@ -89,7 +62,7 @@ std::shared_ptr<AVMemory> AVMemory::CreateAVMemory(std::shared_ptr<AVAllocator> 
     mem->capacity_ = capacity;
     mem->align_ = align;
     Status ret = mem->Init();
-    FALSE_RETURN_V_MSG_E(ret == Status::OK, nullptr, "Init AVMemory failed, uid:" PUBLIC_LOG_U64, mem->uid_);
+    FALSE_RETURN_V_MSG_E(ret == Status::OK, nullptr, "Init AVMemory failed");
     return mem;
 }
 
@@ -140,7 +113,7 @@ std::shared_ptr<AVMemory> AVMemory::CreateAVMemory(MessageParcel &parcel, bool i
     FALSE_RETURN_V_MSG_E(isReadParcel == true, nullptr, "Read common memory info from parcel failed");
 
     Status ret = mem->Init(parcel);
-    FALSE_RETURN_V_MSG_E(ret == Status::OK, nullptr, "Init AVMemory failed, uid:" PUBLIC_LOG_U64, mem->uid_);
+    FALSE_RETURN_V_MSG_E(ret == Status::OK, nullptr, "Init AVMemory failed");
     return mem;
 #else
     return nullptr;
@@ -155,14 +128,14 @@ std::shared_ptr<AVMemory> AVMemory::CreateAVMemory(sptr<SurfaceBuffer> surfaceBu
     return mem;
 }
 
-AVMemory::AVMemory() : align_(0), offset_(0), size_(0), base_(nullptr), uid_(GetUniqueId()), allocator_(nullptr)
+AVMemory::AVMemory() : align_(0), offset_(0), size_(0), base_(nullptr), allocator_(nullptr)
 {
-    MEDIA_LOG_DD("enter ctor, instance:0x%{public}06" PRIXPTR ", uid:" PUBLIC_LOG_U64, FAKE_POINTER(this), uid_);
+    MEDIA_LOG_DD("enter ctor, instance:0x%{public}06" PRIXPTR, FAKE_POINTER(this));
 }
 
 AVMemory::~AVMemory()
 {
-    MEDIA_LOG_DD("enter dtor, instance:0x%{public}06" PRIXPTR ", uid:" PUBLIC_LOG_U64, FAKE_POINTER(this), uid_);
+    MEDIA_LOG_DD("enter dtor, instance:0x%{public}06" PRIXPTR, FAKE_POINTER(this));
 }
 
 Status AVMemory::Init()
@@ -346,8 +319,7 @@ int32_t AVMemory::Write(const uint8_t *in, int32_t writeSize, int32_t position)
     uint8_t *dstPtr = addr + start;
     FALSE_RETURN_V_MSG_E(dstPtr != nullptr, 0, "Inner dstPtr is nullptr");
     auto error = memcpy_s(dstPtr, length, in, length);
-    FALSE_RETURN_V_MSG_E(error == EOK, 0, "Inner memcpy_s failed, uid:" PUBLIC_LOG_U64 ", %{public}s", uid_,
-                         strerror(error));
+    FALSE_RETURN_V_MSG_E(error == EOK, 0, "Inner memcpy_s failed, %{public}s", strerror(error));
     size_ = start + length;
     return length;
 }
@@ -372,8 +344,7 @@ int32_t AVMemory::Read(uint8_t *out, int32_t readSize, int32_t position)
     uint8_t *srcPtr = addr + start;
     FALSE_RETURN_V_MSG_E(srcPtr != nullptr, 0, "Inner srcPtr is nullptr");
     auto error = memcpy_s(out, length, srcPtr, length);
-    FALSE_RETURN_V_MSG_E(error == EOK, 0, "Inner memcpy_s failed, uid:" PUBLIC_LOG_U64 ", %{public}s", uid_,
-                         strerror(error));
+    FALSE_RETURN_V_MSG_E(error == EOK, 0, "Inner memcpy_s failed, %{public}s", strerror(error));
     return length;
 }
 
