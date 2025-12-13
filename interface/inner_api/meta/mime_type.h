@@ -28,8 +28,10 @@ public:
     static constexpr const char VIDEO_MPEG2[] = "video/mpeg2";
     static constexpr const char VIDEO_HEVC[] = "video/hevc";
     static constexpr const char VIDEO_MPEG4[] = "video/mp4v-es";
-    static constexpr const char VIDEO_VP8[] = "video/vp8";
-    static constexpr const char VIDEO_VP9[] = "video/vp9";
+    static constexpr const char VIDEO_VP8[] = "video/x-vnd.on2.vp8";
+    static constexpr const char VIDEO_VP9[] = "video/x-vnd.on2.vp9";
+    static constexpr const char VIDEO_VP8_IANA[] = "video/vp8";
+    static constexpr const char VIDEO_VP9_IANA[] = "video/vp9";
     static constexpr const char VIDEO_VVC[] = "video/vvc";
     static constexpr const char VIDEO_VC1[] = "video/vc1";
     static constexpr const char VIDEO_RV30[] = "video/rv30";
