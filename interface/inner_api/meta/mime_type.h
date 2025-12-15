@@ -42,6 +42,7 @@ public:
     static constexpr const char VIDEO_AVS[] = "video/cavs";
     static constexpr const char VIDEO_CINEPAK[] = "video/cinepak";
     static constexpr const char VIDEO_DVVIDEO[] = "video/dvvideo";
+    static constexpr const char VIDEO_RAWVIDEO[] = "video/rawvideo";
 
     static constexpr const char AUDIO_AMR_NB[] = "audio/3gpp";
     static constexpr const char AUDIO_AMR_WB[] = "audio/amr-wb";
