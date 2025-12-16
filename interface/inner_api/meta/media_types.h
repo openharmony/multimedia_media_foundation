@@ -168,6 +168,7 @@ enum class FileType : int32_t {
     APE = 208,
     WMA = 209,
     DTS = 210,
+    CAF = 211, //CoreAudioFormat
     SRT = 301,
     VTT = 302,
     LRC = 303,
