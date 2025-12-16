@@ -112,6 +112,7 @@ enum struct AnyValueType : int32_t {
     VECTOR_UINT32,
     STRING,
     VECTOR_INT32,
+    VECTOR_INT64,
 };
 /**
  * @brief BadAnyCast exception, which is thrown when error occurs in AnyCast
