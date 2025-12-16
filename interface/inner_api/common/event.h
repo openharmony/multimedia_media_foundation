@@ -83,6 +83,7 @@ struct Event {
     std::string srcFilter;
     EventType type;
     Any param;
+    std::string description;
 };
 
 struct DfxEvent {
