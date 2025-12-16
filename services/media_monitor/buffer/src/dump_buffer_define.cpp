@@ -14,6 +14,12 @@
  */
 
 #include "dump_buffer_define.h"
+#include "log.h"
+
+namespace {
+constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "HiStreamer" };
+}
+
 
 DumpBuffer::DumpBuffer()
 {
@@ -28,4 +34,24 @@ DumpBuffer::DumpBuffer(const std::shared_ptr<OHOS::Media::AVBuffer> &buffer)
 DumpBuffer::~DumpBuffer()
 {
     buffer_ = nullptr;
+}
+
+bool DumpBuffer::Marshalling(OHOS::Parcel &parcel) const
+{
+    OHOS::MessageParcel *parcelIn = static_cast<OHOS::MessageParcel*>(&parcel);
+    FALSE_RETURN_V(buffer_ != nullptr, false);
+    bool ret = buffer_->WriteToMessageParcel(*parcelIn);
+    return ret;
+}
+
+DumpBuffer *DumpBuffer::Unmarshalling(OHOS::Parcel &data)
+{
+    std::shared_ptr<OHOS::Media::AVBuffer> buffer = OHOS::Media::AVBuffer::CreateAVBuffer();
+    FALSE_RETURN_V(buffer != nullptr, nullptr);
+    struct DumpBuffer *dumpBuffer = new (std::nothrow) DumpBuffer(buffer);
+    FALSE_RETURN_V(dumpBuffer != nullptr, nullptr);
+
+    OHOS::MessageParcel *parcelIn = static_cast<OHOS::MessageParcel*>(&data);
+    dumpBuffer->buffer_->ReadFromMessageParcel(*parcelIn);
+    return dumpBuffer;
 }

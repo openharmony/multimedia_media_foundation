@@ -221,6 +221,16 @@ HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_WriteLogMsg_006, TestSize.Le
     EXPECT_EQ(bean1->GetEventId(), eventId);
     EXPECT_EQ(bean1->GetEventType(), eventType);
 }
+
+HWTEST(MediaMonitorManagerUnitTest, Monitor_Device_Info_Marshalling_007, TestSize.Level0)
+{
+    std::shared_ptr<MonitorDeviceInfo> deviceInfo = std::make_shared<MonitorDeviceInfo>;
+    deviceInfo->deviceType_ = 1;
+    Parcel parcel;
+    deviceInfo->Marshalling(parcel);
+    MonitorDeviceInfo *outDeviceInfo = deviceInfo->Unmarshalling(parcel);
+    EXPECT_EQ(outDeviceInfo->deviceType_, 1);
+}
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS
