@@ -84,6 +84,15 @@ bool OH_AVFormat_SetIntValue(struct OH_AVFormat *format, const char *key, int32_
     return format->format_.PutIntValue(key, value);
 }
 
+bool OH_AVFormat_SetUintValue(struct OH_AVFormat *format, const char *key, uint32_t value)
+{
+    FALSE_RETURN_V_MSG_E(format != nullptr, false, "input format is nullptr!");
+    FALSE_RETURN_V_MSG_E(format->magic_ == MFMagic::MFMAGIC_FORMAT, false, "magic error!");
+    FALSE_RETURN_V_MSG_E(key != nullptr, false, "key is nullptr!");
+
+    return format->format_.PutUintValue(key, value);
+}
+
 bool OH_AVFormat_SetLongValue(struct OH_AVFormat *format, const char *key, int64_t value)
 {
     FALSE_RETURN_V_MSG_E(format != nullptr, false, "input format is nullptr!");
@@ -151,6 +160,16 @@ bool OH_AVFormat_GetIntValue(struct OH_AVFormat *format, const char *key, int32_
     FALSE_RETURN_V_MSG_E(out != nullptr, false, "out is nullptr!");
 
     return format->format_.GetIntValue(key, *out);
+}
+
+bool OH_AVFormat_GetUintValue(struct OH_AVFormat *format, const char *key, uint32_t *out)
+{
+    FALSE_RETURN_V_MSG_E(format != nullptr, false, "input format is nullptr!");
+    FALSE_RETURN_V_MSG_E(format->magic_ == MFMagic::MFMAGIC_FORMAT, false, "magic error!");
+    FALSE_RETURN_V_MSG_E(key != nullptr, false, "key is nullptr!");
+    FALSE_RETURN_V_MSG_E(out != nullptr, false, "out is nullptr!");
+
+    return format->format_.GetUintValue(key, *out);
 }
 
 bool OH_AVFormat_GetLongValue(struct OH_AVFormat *format, const char *key, int64_t *out)

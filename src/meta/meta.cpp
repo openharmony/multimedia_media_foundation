@@ -193,6 +193,35 @@ bool GetMetaData(const Meta& meta, const TagType& tag, int32_t& value)
     return iter->second.second(meta, tag, value);
 }
 
+bool SetMetaData(Meta& meta, const TagType& tag, uint32_t value)
+{
+    auto iter = g_metadataGetterSetterMap.find(tag);
+    if (iter == g_metadataGetterSetterMap.end()) {
+        if (std::find(g_metadataBoolVector.begin(), g_metadataBoolVector.end(), tag) != g_metadataBoolVector.end()) {
+            meta.SetData(tag, value != 0 ? true : false);
+            return true;
+        }
+        meta.SetData<uint32_t>(tag, value);
+        return true;
+    }
+    return false;
+}
+
+bool GetMetaData(const Meta& meta, const TagType& tag, uint32_t& value)
+{
+    auto iter = g_metadataGetterSetterMap.find(tag);
+    if (iter == g_metadataGetterSetterMap.end()) {
+        if (std::find(g_metadataBoolVector.begin(), g_metadataBoolVector.end(), tag) != g_metadataBoolVector.end()) {
+            bool valueBool = false;
+            FALSE_RETURN_V(meta.GetData(tag, valueBool), false);
+            value = valueBool ? 1 : 0;
+            return true;
+        }
+        return meta.GetData<uint32_t>(tag, value);
+    }
+    return false;
+}
+
 bool SetMetaData(Meta& meta, const TagType& tag, int64_t value)
 {
     auto iter = g_metadataGetterSetterInt64Map.find(tag);
@@ -640,6 +669,8 @@ AnyValueType Meta::GetValueType(const TagType& key) const
     if (iter != map_.end()) {
         if (Any::IsSameTypeWith<int32_t>(iter->second)) {
             return AnyValueType::INT32_T;
+        } else if (Any::IsSameTypeWith<uint32_t>(iter->second)) {
+            return AnyValueType::UINT32_T;
         } else if (Any::IsSameTypeWith<bool>(iter->second)) {
             return AnyValueType::BOOL;
         } else if (Any::IsSameTypeWith<int64_t>(iter->second)) {
