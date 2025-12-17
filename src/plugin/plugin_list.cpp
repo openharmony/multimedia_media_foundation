@@ -450,6 +450,17 @@ void PluginList::AddRmDemuxerPlugin()
 }
 #endif
 
+void PluginList::AddAiffDemuxerPlugin()
+{
+    PluginDescription aiffDemuxerPlugin;
+    aiffDemuxerPlugin.pluginName = "avdemux_aiff";
+    aiffDemuxerPlugin.packageName = "FFmpegDemuxer";
+    aiffDemuxerPlugin.pluginType = PluginType::DEMUXER;
+    aiffDemuxerPlugin.cap = "";
+    aiffDemuxerPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(aiffDemuxerPlugin);
+}
+
 void PluginList::AddAc3DemuxerPlugin()
 {
     PluginDescription ac3DemuxerPlugin;
@@ -507,6 +518,7 @@ void PluginList::AddFFmpegDemuxerPlugins()
     AddWebvttDemuxerPlugin();
     AddOggDemuxerPlugin();
     AddWavDemuxerPlugin();
+    AddAiffDemuxerPlugin();
     AddAc3DemuxerPlugin();
     AddDtsDemuxerPlugin();
 #ifdef SUPPORT_CODEC_RM
