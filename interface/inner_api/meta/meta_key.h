@@ -189,6 +189,7 @@ public:
     static constexpr const char VIDEO_WIDTH[] = "width";                               ///< video width
     static constexpr const char VIDEO_HEIGHT[] = "height";                             ///< video height
     static constexpr const char VIDEO_PIXEL_FORMAT[] = "pixel_format";                 ///< @see VideoPixelFormat
+    static constexpr const char VIDEO_RAWVIDEO_INPUT_PIXEL_FORMAT[] = "rawvideo_input_pix_fmt"; ///< int32_t
     static constexpr const char VIDEO_FRAME_RATE[] = "frame_rate";                     ///< video frame rate
     static constexpr const char VIDEO_SURFACE[] = "video.surface";                     ///< @see class Surface
     static constexpr const char VIDEO_MAX_SURFACE_NUM[] = "video.max.surface_num";     ///< max video surface num
