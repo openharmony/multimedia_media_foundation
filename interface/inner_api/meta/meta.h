@@ -163,6 +163,7 @@ public:
 
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::SRC_INPUT_TYPE, Plugins::SrcInputType, AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::MEDIA_CODEC_CONFIG or
+                           tagCharSeq == Tag::VIDEO_HDR_METADATA or
                            tagCharSeq == Tag::MEDIA_COVER or
                            tagCharSeq == Tag::AUDIO_VIVID_METADATA or
                            tagCharSeq == Tag::AUDIO_VORBIS_IDENTIFICATION_HEADER or
