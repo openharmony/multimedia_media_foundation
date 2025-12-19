@@ -54,6 +54,7 @@ private:
     void AddApeDemuxerPlugin();
     void AddAsfDemuxerPlugin();
     void AddAsfoDemuxerPlugin();
+    void AddAuDemuxerPlugin();
     void AddFlacDemuxerPlugin();
     void AddFlvDemuxerPlugin();
     void AddMatroskaDemuxerPlugin();
