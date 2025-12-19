@@ -46,7 +46,7 @@ const T* FindTagInMap(Tag tag, const std::map<Tag, ValueType>& tagStore)
 
 void ConfigAudioCommonAttr(AVCodecContext& codecContext, const std::map<Tag, ValueType>& tagStore)
 {
-    ASSIGN_IF_NOT_NULL(FindTagInMap<uint32_t>(Tag::AUDIO_CHANNELS, tagStore), codecContext.channels);
+    ASSIGN_IF_NOT_NULL(FindTagInMap<uint32_t>(Tag::AUDIO_CHANNELS, tagStore), codecContext.ch_layout.nb_channels);
     ASSIGN_IF_NOT_NULL(FindTagInMap<uint32_t>(Tag::AUDIO_SAMPLE_RATE, tagStore), codecContext.sample_rate);
     ASSIGN_IF_NOT_NULL(FindTagInMap<int64_t>(Tag::MEDIA_BITRATE, tagStore), codecContext.bit_rate);
     auto audioSampleFmtPtr = FindTagInMap<AudioSampleFormat>(Tag::AUDIO_SAMPLE_FORMAT, tagStore);
@@ -59,7 +59,7 @@ void ConfigAudioCommonAttr(AVCodecContext& codecContext, const std::map<Tag, Val
     auto layoutPtr  = FindTagInMap<AudioChannelLayout>(Tag::AUDIO_CHANNEL_LAYOUT, tagStore);
     if (layoutPtr != nullptr) {
         auto ffLayout = ConvertChannelLayoutToFFmpeg(*layoutPtr);
-        codecContext.channel_layout = ffLayout;
+        codecContext.ch_layout.u.mask = ffLayout;
     }
 }
 

@@ -157,7 +157,7 @@ Status SetParameterOfAuTrack(AVStream* stream, const Meta& meta)
 
     FALSE_RETURN_V(meta.Get<Tag::AUDIO_CHANNELS>(channels),
                    Status::ERROR_INVALID_PARAMETER);
-    stream->codecpar->channels = ui2iFunc(channels);
+    stream->codecpar->ch_layout.nb_channels = ui2iFunc(channels);
 
     FALSE_RETURN_V(meta.Get<Tag::AUDIO_SAMPLE_RATE>(sampleRate),
                    Status::ERROR_INVALID_PARAMETER);
@@ -169,7 +169,7 @@ Status SetParameterOfAuTrack(AVStream* stream, const Meta& meta)
 
     FALSE_RETURN_V(meta.Get<Tag::AUDIO_CHANNEL_LAYOUT>(layout),
                    Status::ERROR_INVALID_PARAMETER);
-    stream->codecpar->channel_layout = (uint64_t)layout;
+    stream->codecpar->ch_layout.u.mask = (uint64_t)layout;
     return Status::OK;
 }
 
@@ -386,8 +386,10 @@ Status FFmpegMuxerPlugin::Reset()
     generalParameters_.Clear();
     trackParameters_.clear();
     OSAL::ScopedLock lock(fmtMutex_);
-    if (outputFormat_->deinit) {
-        outputFormat_->deinit(formatContext_.get());
+    FFOutputFormat *ffOutputFormat = (FFOutputFormat*)outputFormat_.get();
+    std::shared_ptr<FFOutputFormat> ffOf = std::shared_ptr<FFOutputFormat>((ffOutputFormat), [](void*) {});
+    if (ffOf->deinit) {
+        ffOf->deinit(formatContext_.get());
     }
     formatContext_.reset();
     return InitFormatCtxLocked();
@@ -511,7 +513,7 @@ int32_t FFmpegMuxerPlugin::IoRead(void* opaque, uint8_t* buf, int bufSize)
     (void)bufSize;
     return 0;
 }
-int32_t FFmpegMuxerPlugin::IoWrite(void* opaque, uint8_t* buf, int bufSize)
+int32_t FFmpegMuxerPlugin::IoWrite(void* opaque, const uint8_t* buf, int bufSize)
 {
     auto ioCtx = static_cast<IOContext*>(opaque);
     if (ioCtx && ioCtx->dataSink_) {
