@@ -687,6 +687,27 @@ bool SetMetaData(Meta& meta, const TagType& tag, int32_t value);
  * @example OHOS::Media::GetMetaData(meta, "audio.aac.profile", value);
  */
 bool GetMetaData(const Meta& meta, const TagType& tag, int32_t& value);
+
+/**
+ * @brief SetMetaData only used for Application interface OH_AVFormat to set enum/bool/uint32_t value into Meta Object.
+ * @implNote In order to set value(uint32_t type) to Meta Object, should convert uint32_t value to correct EnumType then
+ * save to Any object. We use metadataGetterSetterMap to get the right setter function.
+ * @return Returns operator status, <b>True</b> if Set Success.
+ * returns <b>False</b> otherwise.
+ * @example OHOS::Media::SetMetaData(meta, "audio.aac.profile", value);
+ */
+bool SetMetaData(Meta& meta, const TagType& tag, uint32_t value);
+
+/**
+ * @brief GetMetaData only used for Application interface OH_AVFormat to get enum/bool/uint32_t value from Meta Object.
+ * @implNote In order to get value(Enum type) from Meta Object, should use correct Enum type to get value from Any
+ * object. We use metadataGetterSetterMap to get the right getter function.
+ * @return Returns operator status, <b>True</b> if Get Success.
+ * returns <b>False</b> otherwise.
+ * @example OHOS::Media::GetMetaData(meta, "audio.aac.profile", value);
+ */
+bool GetMetaData(const Meta& meta, const TagType& tag, uint32_t& value);
+
 /**
  * @brief SetMetaData only used for Application interface OH_AVFormat to set enum/int64_t value into Meta Object.
  * @implNote In order to set value(int64_t type) to Meta Object, should convert int64_t value to correct EnumType then

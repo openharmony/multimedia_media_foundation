@@ -39,6 +39,8 @@ enum FormatDataType : uint32_t {
     FORMAT_TYPE_STRING,
     /* Addr */
     FORMAT_TYPE_ADDR,
+    /* Uint32 */
+    FORMAT_TYPE_UINT32,
 };
 
 struct FormatData {
@@ -48,6 +50,7 @@ struct FormatData {
         int64_t int64Val;
         float floatVal;
         double doubleVal;
+        uint32_t uint32Val;
     } val = {0};
     std::string stringVal = "";
     uint8_t *addr = nullptr;
@@ -74,6 +77,16 @@ public:
      * @version 1.0
      */
     bool PutIntValue(const std::string_view &key, int32_t value);
+
+    /**
+     * @brief Sets metadata of the unsigned integer or boolean type.
+     *
+     * @param key Indicates the metadata key.
+     * @param value Indicates the metadata value, which is a 32-bit unsigned integer.
+     * @return Returns <b>true</b> if the setting is successful; returns <b>false</b> otherwise.
+     * @since 23
+     */
+    bool PutUintValue(const std::string_view &key, uint32_t value);
 
     /**
      * @brief Sets metadata of the long integer type.
@@ -164,6 +177,17 @@ public:
      * @version 1.0
      */
     bool GetIntValue(const std::string_view &key, int32_t &value) const;
+
+    /**
+     * @brief Obtains the metadata value of the integer or boolean type.
+     *
+     * @param key Indicates the metadata key.
+     * @param value Indicates the metadata value to obtain, which is a 32-bit integer.
+     * @return Returns <b>true</b> if the integer is successfully obtained; returns <b>false</b> otherwise.
+     * @since 10
+     * @version 1.0
+     */
+    bool GetUintValue(const std::string_view &key, uint32_t &value) const;
 
     /**
      * @brief Obtains the metadata value of the long integer type.
