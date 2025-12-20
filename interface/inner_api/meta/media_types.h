@@ -78,6 +78,7 @@ enum class OutputFormat : uint32_t {
     WAV = 10,
     AAC = 11,
     FLAC = 12,
+    OGG = 13,
 };
 
 struct Location {
