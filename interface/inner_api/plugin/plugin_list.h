@@ -91,6 +91,7 @@ private:
     void AddMp3AudioEncoderPlugins();
     void AddFFmpegMuxerPlugins();
     void AddFFmpegFlacMuxerplugins();
+    void AddFFmpegOggMuxerplugins();
     void AddAudioVendorAacEncodersPlugin();
     void AddGsmMsAudioDecoderPlugin();
     void AddGsmAudioDecoderPlugin();

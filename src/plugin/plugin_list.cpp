@@ -107,6 +107,7 @@ PluginList::PluginList()
     AddMp3AudioEncoderPlugins();
     AddFFmpegMuxerPlugins();
     AddFFmpegFlacMuxerplugins();
+    AddFFmpegOggMuxerplugins();
     AddAc3AudioDecoderPlugins();
     AddGsmMsAudioDecoderPlugin();
     AddGsmAudioDecoderPlugin();
@@ -1063,6 +1064,17 @@ void PluginList::AddFFmpegMuxerPlugins()
     aacMuxerPlugin.cap = "media/aac";
     aacMuxerPlugin.rank = DEFAULT_RANK;
     pluginDescriptionList_.push_back(aacMuxerPlugin);
+}
+
+void PluginList::AddFFmpegOggMuxerplugins()
+{
+    PluginDescription oggMuxerPlugin;
+    oggMuxerPlugin.pluginName = "ffmpegMux_ogg";
+    oggMuxerPlugin.packageName = "FFmpegMuxer";
+    oggMuxerPlugin.pluginType = PluginType::MUXER;
+    oggMuxerPlugin.cap = "media/ogg";
+    oggMuxerPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(oggMuxerPlugin);
 }
 
 } // namespace Plugins
