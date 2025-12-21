@@ -292,7 +292,7 @@ uint32_t OH_AVFormat_GetKeyCount(OH_AVFormat *format)
     return keys.size();
 }
 
-bool OH_AVFormat_GetKey(OH_AVFormat *format, int index, const char **key)
+bool OH_AVFormat_GetKey(OH_AVFormat *format, uint32_t index, const char **key)
 {
     FALSE_RETURN_V_MSG_E(format != nullptr, false, "input format is nullptr");
     FALSE_RETURN_V_MSG_E(key != nullptr, false, "key is nullptr");
@@ -303,7 +303,7 @@ bool OH_AVFormat_GetKey(OH_AVFormat *format, int index, const char **key)
     std::vector<std::string> keys;
     meta->GetKeys(keys);
 
-    if (index < 0 || static_cast<size_t>(index) >= keys.size()) {
+    if (static_cast<size_t>(index) >= keys.size()) {
         return false;
     }
 
