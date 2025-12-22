@@ -470,7 +470,7 @@ uint32_t OH_AVFormat_GetKeyCount(OH_AVFormat *format);
  * @since 23
  * @version 1.0
  */
-bool OH_AVFormat_GetKey(OH_AVFormat *format, int index, const char **key);
+bool OH_AVFormat_GetKey(OH_AVFormat *format, uint32_t index, const char **key);
 
 #ifdef __cplusplus
 }
