@@ -83,6 +83,7 @@ DEFINE_METADATA_SETTER_GETTER_FUNC(VideoH264Profile, int32_t)
 DEFINE_METADATA_SETTER_GETTER_FUNC(VideoRotation, int32_t)
 DEFINE_METADATA_SETTER_GETTER_FUNC(VideoOrientationType, int32_t)
 DEFINE_METADATA_SETTER_GETTER_FUNC(ColorPrimary, int32_t)
+DEFINE_METADATA_SETTER_GETTER_FUNC(HDRType, int32_t)
 DEFINE_METADATA_SETTER_GETTER_FUNC(TransferCharacteristic, int32_t)
 DEFINE_METADATA_SETTER_GETTER_FUNC(MatrixCoefficient, int32_t)
 DEFINE_METADATA_SETTER_GETTER_FUNC(HEVCProfile, int32_t)
@@ -110,6 +111,7 @@ static std::map<TagType, std::pair<MetaSetterFunction, MetaGetterFunction>> g_me
     DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_ROTATION, VideoRotation),
     DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_ORIENTATION_TYPE, VideoOrientationType),
     DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_COLOR_PRIMARIES, ColorPrimary),
+    DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_HDR_TYPE, HDRType),
     DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_COLOR_TRC, TransferCharacteristic),
     DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_COLOR_MATRIX_COEFF, MatrixCoefficient),
     DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_H265_PROFILE, HEVCProfile),
@@ -269,6 +271,7 @@ static Any defaultVideoH264Profile = VideoH264Profile::UNKNOWN;
 static Any defaultVideoRotation = VideoRotation::VIDEO_ROTATION_0;
 static Any defaultVideoOrientationType = VideoOrientationType::ROTATE_NONE;
 static Any defaultColorPrimary = ColorPrimary::BT2020;
+static Any defaultHdrType = HDRType::HLG;
 static Any defaultTransferCharacteristic = TransferCharacteristic::BT1361;
 static Any defaultMatrixCoefficient = MatrixCoefficient::BT2020_CL;
 static Any defaultHEVCProfile = HEVCProfile::HEVC_PROFILE_UNKNOW;
@@ -297,6 +300,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_ROTATION, defaultVideoRotation},
     {Tag::VIDEO_ORIENTATION_TYPE, defaultVideoOrientationType},
     {Tag::VIDEO_COLOR_PRIMARIES, defaultColorPrimary},
+    {Tag::VIDEO_HDR_TYPE, defaultHdrType},
     {Tag::VIDEO_COLOR_TRC, defaultTransferCharacteristic},
     {Tag::VIDEO_COLOR_MATRIX_COEFF, defaultMatrixCoefficient},
     {Tag::VIDEO_H265_PROFILE, defaultHEVCProfile},

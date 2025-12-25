@@ -358,6 +358,13 @@ enum struct RawVideoPixelFormat : int32_t {
      */
     RGBA = 3,
 };
+
+enum class HDRType : int32_t {
+    HLG = 0,
+    HDR_10 = 1,
+    HDR_VIVID = 2,
+    NONE = -1,
+};
 } // namespace Plugins
 } // namespace Media
 } // namespace OHOS

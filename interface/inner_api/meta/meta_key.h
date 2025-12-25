@@ -202,6 +202,7 @@ public:
     static constexpr const char VIDEO_COLOR_MATRIX_COEFF[] = "matrix_coefficients";    ///< @see MatrixCoefficient
     static constexpr const char VIDEO_COLOR_RANGE[] = "range_flag";                    ///< bool, video color range
     static constexpr const char VIDEO_IS_HDR_VIVID[] = "video_is_hdr_vivid";           ///< bool, video is hdr vivid
+    static constexpr const char VIDEO_HDR_TYPE[] = "video_hdr_type";                   ///< @see HDRType
     static constexpr const char VIDEO_STRIDE[] = "stride";                             ///< int32_t, video stride
     static constexpr const char VIDEO_DISPLAY_WIDTH[] = "display_width";            ///< int32_t, video display width
     static constexpr const char VIDEO_DISPLAY_HEIGHT[] = "display_height";          ///< int32_t, video display height
