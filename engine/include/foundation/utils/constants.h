@@ -18,7 +18,6 @@
 
 #include <string>
 
-
 namespace OHOS {
 namespace Media {
 constexpr size_t DEFAULT_QUEUE_SIZE = 10;
