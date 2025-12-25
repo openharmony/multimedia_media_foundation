@@ -338,6 +338,9 @@ void MediaMonitorPolicy::WriteFaultEvent(EventId eventId, std::shared_ptr<EventB
         case HPAE_MESSAGE_QUEUE_EXCEPTION:
             mediaEventBaseWriter_.WriteMessageQueueException(bean);
             break;
+        case LOOPBACK_EXCEPTION:
+            mediaEventBaseWriter_.WriteAudioLoopbackException(bean);
+            break;
         default:
             WriteFaultEventExpansion(eventId, bean);
             break;

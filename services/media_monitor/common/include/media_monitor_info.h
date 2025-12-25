@@ -101,6 +101,9 @@ enum EventId {
 
     // Ringtone playback failure event
     TONE_PLAYBACK_FAILED = 51,
+
+    // for audio loopback
+    LOOPBACK_EXCEPTION = 53,
 };
 
 enum VolumeStatisticsSceneType : uint8_t {
