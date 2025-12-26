@@ -391,9 +391,8 @@ void AudioFfmpegEncoderPlugin::FillInFrameCache(const std::shared_ptr<Memory>& m
     }
     cachedFrame_->format = avCodecContext_->sample_fmt;
     cachedFrame_->sample_rate = avCodecContext_->sample_rate;
-    cachedFrame_->ch_layout.nb_channels = avCodecContext_->ch_layout.nb_channels;
-    cachedFrame_->ch_layout.u.mask = avCodecContext_->ch_layout.u.mask;
     cachedFrame_->nb_samples = nbSamples;
+    av_channel_layout_copy(&cachedFrame_->ch_layout, &avCodecContext_->ch_layout);
     if (av_sample_fmt_is_planar(avCodecContext_->sample_fmt) && avCodecContext_->ch_layout.nb_channels > 1) {
         if (avCodecContext_->ch_layout.nb_channels > AV_NUM_DATA_POINTERS) {
             av_freep(cachedFrame_->extended_data);

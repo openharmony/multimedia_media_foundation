@@ -614,6 +614,7 @@ int Sniff(const std::string& pluginName, std::shared_ptr<DataSource> dataSource)
         return 0;
     }
     auto plugin = g_pluginInputFormat[pluginName];
+    // refer to ffmpeg libavformat/demux.h ffifmt
     FFInputFormat *ffInputFormat = (FFInputFormat*)plugin.get();
     std::shared_ptr<FFInputFormat> ffIf = std::shared_ptr<FFInputFormat>((ffInputFormat), [](void*) {});
     if (!plugin || !ffIf->read_probe) {

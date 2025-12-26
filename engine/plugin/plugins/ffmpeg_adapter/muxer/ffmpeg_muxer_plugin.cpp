@@ -157,7 +157,7 @@ Status SetParameterOfAuTrack(AVStream* stream, const Meta& meta)
 
     FALSE_RETURN_V(meta.Get<Tag::AUDIO_CHANNELS>(channels),
                    Status::ERROR_INVALID_PARAMETER);
-    stream->codecpar->ch_layout.nb_channels = ui2iFunc(channels);
+    av_channel_layout_default(&stream->codecpar->ch_layout, ui2iFunc(channels));
 
     FALSE_RETURN_V(meta.Get<Tag::AUDIO_SAMPLE_RATE>(sampleRate),
                    Status::ERROR_INVALID_PARAMETER);
@@ -169,7 +169,7 @@ Status SetParameterOfAuTrack(AVStream* stream, const Meta& meta)
 
     FALSE_RETURN_V(meta.Get<Tag::AUDIO_CHANNEL_LAYOUT>(layout),
                    Status::ERROR_INVALID_PARAMETER);
-    stream->codecpar->ch_layout.u.mask = (uint64_t)layout;
+    av_channel_layout_from_mask(&stream->codecpar->ch_layout, (uint64_t)layout);
     return Status::OK;
 }
 
@@ -386,6 +386,7 @@ Status FFmpegMuxerPlugin::Reset()
     generalParameters_.Clear();
     trackParameters_.clear();
     OSAL::ScopedLock lock(fmtMutex_);
+    // refer to ffmpeg libavformat/mux.h ffofmt
     FFOutputFormat *ffOutputFormat = (FFOutputFormat*)outputFormat_.get();
     std::shared_ptr<FFOutputFormat> ffOf = std::shared_ptr<FFOutputFormat>((ffOutputFormat), [](void*) {});
     if (ffOf->deinit) {

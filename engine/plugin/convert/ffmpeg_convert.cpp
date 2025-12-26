@@ -37,12 +37,14 @@ Status Resample::Init(const ResamplePara& resamplePara)
             MEDIA_LOG_E("cannot allocate swr context");
             return Status::ERROR_NO_MEMORY;
         }
-        AVChannelLayout *av_ch_layout = nullptr;
-        int ret = av_channel_layout_from_mask(av_ch_layout, resamplePara_.channelLayout);
-        FALSE_RETURN_V_MSG_E(!ret, Status::ERROR_UNKNOWN, "channel layout is not supported.");
+        AVChannelLayout av_ch_layout;
+        int ret = av_channel_layout_from_mask(&av_ch_layout, resamplePara_.channelLayout);
+        if (ret) {
+            av_channel_layout_default(&av_ch_layout, resamplePara_.channels);
+        }
         ret = swr_alloc_set_opts2(&swrContext,
-            static_cast<const AVChannelLayout *>(av_ch_layout), resamplePara_.destFmt, resamplePara_.sampleRate,
-            static_cast<const AVChannelLayout *>(av_ch_layout), resamplePara_.srcFfFmt, resamplePara_.sampleRate,
+            &av_ch_layout, resamplePara_.destFmt, resamplePara_.sampleRate,
+            &av_ch_layout, resamplePara_.srcFfFmt, resamplePara_.sampleRate,
             0, nullptr);
         FALSE_RETURN_V_MSG_E(!ret, Status::ERROR_UNKNOWN, "swr alloc set opts failed.");
         if (swr_init(swrContext) != 0) {
