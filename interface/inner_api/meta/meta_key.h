@@ -499,6 +499,7 @@ public:
     static constexpr const char RECORDER_AUDIO_CHANNEL_COUNT[] = "audioChannelCount";
     static constexpr const char RECORDER_AUDIO_BITRATE[] = "audioBitrate";
     static constexpr const char RECORDER_START_LATENCY[] = "startLatency";
+    static constexpr const char RECORDER_CONTAINER_FORMAT[] = "containerFormat";
 
     static constexpr const char SUBTITLE_TEXT[] = "subtitle_text";
     static constexpr const char SUBTITLE_PTS[] = "subtitle_pts";
