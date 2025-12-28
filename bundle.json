@@ -189,6 +189,7 @@
                     "pipeline/pipeline.h",
                     "plugin/generic_plugin.h",
                     "common/media_data_source.h",
+                    "common/dolby_passthrough.h",
                     "plugin/plugin_base.h",
                     "plugin/plugin_caps.h",
                     "plugin/plugin_definition.h",
