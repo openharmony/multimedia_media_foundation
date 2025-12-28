@@ -226,7 +226,7 @@ private:
     std::map<std::string, std::string> header_ {};
     std::shared_ptr<PlayStrategy> playStrategy_ {};
     int32_t appUid_ {-1};
-    bool enalbe_ {false};
+    bool enable_ {false};
     //std::shared_ptr<DataConsumer> dataConsumer_ {};
 #ifndef OHOS_LITE
     std::shared_ptr<IMediaDataSource> dataSrc_ {};
