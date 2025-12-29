@@ -126,6 +126,12 @@ private:
 #ifdef SUPPORT_DEMUXER_EAC3
     void AddEac3DemuxerPlugin();
 #endif
+#ifdef SUPPORT_DEMUXER_DTSHD
+    void AddDtshdDemuxerPlugin();
+#endif
+#ifdef SUPPORT_DEMUXER_TRUEHD
+    void AddTruehdDemuxerPlugin();
+#endif
 
     std::vector<PluginDescription> pluginDescriptionList_;
 };
