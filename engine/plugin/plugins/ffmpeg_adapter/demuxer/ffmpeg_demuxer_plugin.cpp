@@ -560,7 +560,7 @@ int FFmpegDemuxerPlugin::AVReadPacket(void* opaque, uint8_t* buf, int bufSize) /
  * write packet unimplemented.
  * @return 0
  */
-int FFmpegDemuxerPlugin::AVWritePacket(void* opaque, uint8_t* buf, int bufSize) // NOLINT: intentionally using void*
+int FFmpegDemuxerPlugin::AVWritePacket(void* opaque, const uint8_t* buf, int bufSize) // NOLINT: intentionally using void*
 {
     (void)opaque;
     (void)buf;
@@ -614,7 +614,10 @@ int Sniff(const std::string& pluginName, std::shared_ptr<DataSource> dataSource)
         return 0;
     }
     auto plugin = g_pluginInputFormat[pluginName];
-    if (!plugin || !plugin->read_probe) {
+    // refer to ffmpeg libavformat/demux.h ffifmt
+    FFInputFormat *ffInputFormat = (FFInputFormat*)plugin.get();
+    std::shared_ptr<FFInputFormat> ffIf = std::shared_ptr<FFInputFormat>((ffInputFormat), [](void*) {});
+    if (!plugin || !ffIf->read_probe) {
         MEDIA_LOG_DD("Sniff failed due to invalid plugin for " PUBLIC_LOG_S ".", pluginName.c_str());
         return 0;
     }
@@ -634,7 +637,7 @@ int Sniff(const std::string& pluginName, std::shared_ptr<DataSource> dataSource)
             return 0;
         }
         AVProbeData probeData{"", buff.data(), static_cast<int>(bufferInfoMem->GetSize()), ""};
-        confidence = plugin->read_probe(&probeData);
+        confidence = ffIf->read_probe(&probeData);
     }
     if (confidence > 0) {
         MEDIA_LOG_I("Sniff: plugin pluginName = " PUBLIC_LOG_S ", probability = " PUBLIC_LOG_D32 " / 100 ...",

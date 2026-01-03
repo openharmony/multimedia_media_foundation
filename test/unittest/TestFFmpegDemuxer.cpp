@@ -61,7 +61,7 @@ void propagateChannelLayouts(const AVStream& avStream,
     int channelLayoutsNum = 12;
     for (int shift = 0, channelLayout = 0; shift <= channelLayoutsNum; shift++) {
         channelLayout = channelLayout << shift;
-        avCodecContextPtr->channel_layout = channelLayout;
+        avCodecContextPtr->ch_layout.u.mask = channelLayout;
         propagateFrameSize(avStream, avFormatContextPtr, avCodecContextPtr, meta);
     }
 }
@@ -73,7 +73,7 @@ void propagateChannels(const AVStream& avStream,
 {
     int channels[] = {0, 1, 2, 3, 4, 6, 8, 10, 12, 14, 16, 24};
     for (auto channel : channels) {
-        avCodecContextPtr->channels = channel;
+        avCodecContextPtr->ch_layout.nb_channels = channel;
         propagateChannelLayouts(avStream, avFormatContextPtr, avCodecContextPtr, meta);
     }
 }
