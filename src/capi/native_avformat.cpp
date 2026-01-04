@@ -84,6 +84,15 @@ bool OH_AVFormat_SetIntValue(struct OH_AVFormat *format, const char *key, int32_
     return format->format_.PutIntValue(key, value);
 }
 
+bool OH_AVFormat_SetUintValue(struct OH_AVFormat *format, const char *key, uint32_t value)
+{
+    FALSE_RETURN_V_MSG_E(format != nullptr, false, "input format is nullptr!");
+    FALSE_RETURN_V_MSG_E(format->magic_ == MFMagic::MFMAGIC_FORMAT, false, "magic error!");
+    FALSE_RETURN_V_MSG_E(key != nullptr, false, "key is nullptr!");
+
+    return format->format_.PutUintValue(key, value);
+}
+
 bool OH_AVFormat_SetLongValue(struct OH_AVFormat *format, const char *key, int64_t value)
 {
     FALSE_RETURN_V_MSG_E(format != nullptr, false, "input format is nullptr!");
@@ -151,6 +160,16 @@ bool OH_AVFormat_GetIntValue(struct OH_AVFormat *format, const char *key, int32_
     FALSE_RETURN_V_MSG_E(out != nullptr, false, "out is nullptr!");
 
     return format->format_.GetIntValue(key, *out);
+}
+
+bool OH_AVFormat_GetUintValue(struct OH_AVFormat *format, const char *key, uint32_t *out)
+{
+    FALSE_RETURN_V_MSG_E(format != nullptr, false, "input format is nullptr!");
+    FALSE_RETURN_V_MSG_E(format->magic_ == MFMagic::MFMAGIC_FORMAT, false, "magic error!");
+    FALSE_RETURN_V_MSG_E(key != nullptr, false, "key is nullptr!");
+    FALSE_RETURN_V_MSG_E(out != nullptr, false, "out is nullptr!");
+
+    return format->format_.GetUintValue(key, *out);
 }
 
 bool OH_AVFormat_GetLongValue(struct OH_AVFormat *format, const char *key, int64_t *out)
@@ -258,4 +277,54 @@ const char *OH_AVFormat_DumpInfo(struct OH_AVFormat *format)
         format->dumpInfo_ = nullptr;
     }
     return format->dumpInfo_;
+}
+
+uint32_t OH_AVFormat_GetKeyCount(OH_AVFormat *format)
+{
+    FALSE_RETURN_V_MSG(format != nullptr, 0, "input format is nullptr");
+
+    std::shared_ptr<Meta> meta = format->format_.GetMeta();
+    FALSE_RETURN_V_MSG(meta != nullptr, 0, "format meta is nullptr");
+
+    std::vector<std::string> keys;
+    meta->GetKeys(keys);
+
+    return keys.size();
+}
+
+bool OH_AVFormat_GetKey(OH_AVFormat *format, uint32_t index, const char **key)
+{
+    FALSE_RETURN_V_MSG_E(format != nullptr, false, "input format is nullptr");
+    FALSE_RETURN_V_MSG_E(key != nullptr, false, "key is nullptr");
+
+    std::shared_ptr<Meta> meta = format->format_.GetMeta();
+    FALSE_RETURN_V_MSG_E(meta != nullptr, false, "format meta is nullptr");
+
+    std::vector<std::string> keys;
+    meta->GetKeys(keys);
+
+    if (static_cast<size_t>(index) >= keys.size()) {
+        return false;
+    }
+
+    if (format->outString_ != nullptr) {
+        free(format->outString_);
+        format->outString_ = nullptr;
+    }
+
+    const std::string& str = keys[index];
+    uint32_t bufLength = str.size() > MAX_STRING_LENGTH ? MAX_STRING_LENGTH : str.size();
+
+    format->outString_ = static_cast<char *>(malloc((bufLength + 1) * sizeof(char)));
+    FALSE_RETURN_V_MSG_E(format->outString_ != nullptr, false, "malloc out string nullptr!");
+
+    if (strcpy_s(format->outString_, bufLength + 1, str.c_str()) != EOK) {
+        MEDIA_LOG_E("Failed to strcpy_s");
+        free(format->outString_);
+        format->outString_ = nullptr;
+        return false;
+    }
+
+    *key = format->outString_;
+    return true;
 }

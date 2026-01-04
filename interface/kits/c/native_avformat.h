@@ -162,6 +162,17 @@ bool OH_AVFormat_Copy(struct OH_AVFormat *to, struct OH_AVFormat *from);
 bool OH_AVFormat_SetIntValue(struct OH_AVFormat *format, const char *key, int32_t value);
 
 /**
+ * @brief Write unsigned integer data to OH_AVFormat
+ * @param {OH_AVFormat*} format pointer to an OH_AVFormat instance
+ * @param {const char*} key key to write data
+ * @param {uint32_t} value written data
+ * @return The return value is TRUE for success, FALSE for failure
+ * Possible failure causes: 1. input format is nullptr. 2. input format's magic error.3. key is nullptr.
+ * @since 23
+ */
+bool OH_AVFormat_SetUintValue(struct OH_AVFormat *format, const char *key, uint32_t value);
+
+/**
  * @brief Set a value of Long type to the key of OH_AVFormat.
  * @syscap SystemCapability.Multimedia.Media.Core
  * @param format pointer to an OH_AVFormat instance
@@ -286,6 +297,18 @@ bool OH_AVFormat_SetIntBuffer(struct OH_AVFormat *format, const char *key, const
  * @version 1.0
  */
 bool OH_AVFormat_GetIntValue(struct OH_AVFormat *format, const char *key, int32_t *out);
+
+/**
+ * @brief Read unsigned integer data from OH_AVFormat
+ * @param {OH_AVFormat*} format pointer to an OH_AVFormat instance
+ * @param {const char*} key read key value
+ * @param {uint32_t} out read data
+ * @return The return value is TRUE for success, FALSE for failure
+ * Possible failure causes: 1. input format is nullptr. 2. input format's magic error. 3. key is nullptr.
+ * 4. out is nullptr.
+ * @since 23
+ */
+bool OH_AVFormat_GetUintValue(struct OH_AVFormat *format, const char *key, uint32_t *out);
 
 /**
  * @brief Get the Long value from the key of OH_AVFormat.
@@ -418,6 +441,36 @@ bool OH_AVFormat_GetIntBuffer(struct OH_AVFormat *format, const char *key, int32
  * @version 1.0
  */
 const char *OH_AVFormat_DumpInfo(struct OH_AVFormat *format);
+
+/**
+ * @brief Get the total number of keys contained in OH_AVFormat.
+ * @syscap SystemCapability.Multimedia.Media.Core
+ * @param format Pointer to an OH_AVFormat instance
+ * @return Returns the number of keys on success; returns 0 on failure
+ * @details Possible failure causes:
+ * 1. input format is NULL;
+ * 2. system resources are insufficient.
+ * @since 23
+ * @version 1.0
+ */
+uint32_t OH_AVFormat_GetKeyCount(OH_AVFormat *format);
+
+/**
+ * @brief Get the key name string by index from OH_AVFormat.
+ * @syscap SystemCapability.Multimedia.Media.Core
+ * @param format Pointer to an OH_AVFormat instance
+ * @param index Zero-based index of the key to query, range: [0, OH_AVFormat_GetKeyCount(format))
+ * @param key Output pointer to receive the key name string; the lifecycle is bound to the format
+ * @return Returns TRUE on success, FALSE on failure
+ * @details Possible failure causes:
+ * 1. input format is NULL;
+ * 2. index is out of range;
+ * 3. key is NULL;
+ * 4. system resources are insufficient.
+ * @since 23
+ * @version 1.0
+ */
+bool OH_AVFormat_GetKey(OH_AVFormat *format, uint32_t index, const char **key);
 
 #ifdef __cplusplus
 }

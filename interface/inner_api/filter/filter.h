@@ -60,6 +60,7 @@ enum class StreamType {
     STREAMTYPE_ENCODED_VIDEO,
     STREAMTYPE_RAW_AUDIO,
     STREAMTYPE_RAW_VIDEO,
+    STREAMTYPE_DOLBY,
     STREAMTYPE_SUBTITLE,
     STREAMTYPE_MAX,
 };
@@ -109,6 +110,15 @@ public:
     virtual ~FilterCallback() = default;
     virtual Status OnCallback(const std::shared_ptr<Filter>& filter, FilterCallBackCommand cmd, StreamType outType) = 0;
     virtual void NotifyRelease() {}
+    virtual bool IsAudioPassthroughCallback(const char* mimeType)
+    {
+        (void)mimeType;
+        return false;
+    }
+    virtual std::vector<std::string> GetDolbyListCallback()
+    {
+        return {};
+    }
 };
 
 class FilterLinkCallback {

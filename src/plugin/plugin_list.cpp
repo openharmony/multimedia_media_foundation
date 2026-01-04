@@ -107,6 +107,7 @@ PluginList::PluginList()
     AddMp3AudioEncoderPlugins();
     AddFFmpegMuxerPlugins();
     AddFFmpegFlacMuxerplugins();
+    AddFFmpegOggMuxerplugins();
     AddAc3AudioDecoderPlugins();
     AddGsmMsAudioDecoderPlugin();
     AddGsmAudioDecoderPlugin();
@@ -506,6 +507,32 @@ void PluginList::AddDtsDemuxerPlugin()
     pluginDescriptionList_.push_back(dtsDemuxerPlugin);
 }
 
+#ifdef SUPPORT_DEMUXER_DTSHD
+void PluginList::AddDtshdDemuxerPlugin()
+{
+    PluginDescription dtshdDemuxerPlugin;
+    dtshdDemuxerPlugin.pluginName = "avdemux_dtshd";
+    dtshdDemuxerPlugin.packageName = "FFmpegDemuxer";
+    dtshdDemuxerPlugin.pluginType = PluginType::DEMUXER;
+    dtshdDemuxerPlugin.cap = "";
+    dtshdDemuxerPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(dtshdDemuxerPlugin);
+}
+#endif
+
+#ifdef SUPPORT_DEMUXER_TRUEHD
+void PluginList::AddTruehdDemuxerPlugin()
+{
+    PluginDescription truehdDemuxerPlugin;
+    truehdDemuxerPlugin.pluginName = "avdemux_truehd";
+    truehdDemuxerPlugin.packageName = "FFmpegDemuxer";
+    truehdDemuxerPlugin.pluginType = PluginType::DEMUXER;
+    truehdDemuxerPlugin.cap = "";
+    truehdDemuxerPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(truehdDemuxerPlugin);
+}
+#endif
+
 void PluginList::AddFFmpegDemuxerPlugins()
 {
     AddAacDemuxerPlugin();
@@ -546,6 +573,12 @@ void PluginList::AddFFmpegDemuxerPlugins()
 #endif
 #ifdef SUPPORT_DEMUXER_EAC3
     AddEac3DemuxerPlugin();
+#endif
+#ifdef SUPPORT_DEMUXER_DTSHD
+    AddDtshdDemuxerPlugin();
+#endif
+#ifdef SUPPORT_DEMUXER_TRUEHD
+    AddTruehdDemuxerPlugin();
 #endif
 }
 
@@ -1074,6 +1107,17 @@ void PluginList::AddFFmpegMuxerPlugins()
     aacMuxerPlugin.cap = "media/aac";
     aacMuxerPlugin.rank = DEFAULT_RANK;
     pluginDescriptionList_.push_back(aacMuxerPlugin);
+}
+
+void PluginList::AddFFmpegOggMuxerplugins()
+{
+    PluginDescription oggMuxerPlugin;
+    oggMuxerPlugin.pluginName = "ffmpegMux_ogg";
+    oggMuxerPlugin.packageName = "FFmpegMuxer";
+    oggMuxerPlugin.pluginType = PluginType::MUXER;
+    oggMuxerPlugin.cap = "media/ogg";
+    oggMuxerPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(oggMuxerPlugin);
 }
 
 } // namespace Plugins

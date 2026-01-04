@@ -370,8 +370,11 @@ int32_t MediaAudioEncoder::InitAudioEncode(const AudioEncodeConfig &audioConfig)
     }
     audioCodecContext_->bit_rate = audioConfig.bitRate;
     audioCodecContext_->sample_rate = audioConfig.sampleRate;
-    audioCodecContext_->channels = audioConfig.channels;
-    audioCodecContext_->channel_layout = static_cast<uint64_t>(apiWrap_->GetChannelLayout(audioConfig.channels));
+    int res = av_channel_layout_from_mask(&audioCodecContext_->ch_layout,
+        static_cast<uint64_t>(apiWrap_->GetChannelLayout(audioConfig.channels)));
+    if (res) {
+        av_channel_layout_default(&audioCodecContext_->ch_layout, audioConfig.channels);
+    }
 
     unsigned int codecCtxFlag = static_cast<unsigned int>(audioCodecContext_->flags);
     codecCtxFlag |= AV_CODEC_FLAG_GLOBAL_HEADER;
@@ -392,9 +395,8 @@ int32_t MediaAudioEncoder::InitFrame()
 
     avFrame_->format = audioCodecContext_->sample_fmt;
     avFrame_->nb_samples = audioCodecContext_->frame_size;
-    avFrame_->channel_layout = audioCodecContext_->channel_layout;
     avFrame_->sample_rate = audioCodecContext_->sample_rate;
-    avFrame_->channels = audioCodecContext_->channels;
+    av_channel_layout_copy(&avFrame_->ch_layout, &audioCodecContext_->ch_layout);
     int32_t ret = apiWrap_->FrameGetBuffer(avFrame_.get(), 0);
     FALSE_RETURN_V_MSG_E(ret >= 0, ERROR, "get frame buffer failed %{public}d", ret);
     return SUCCESS;
@@ -422,9 +424,9 @@ int32_t MediaAudioEncoder::InitSampleConvert()
 
     sampleConvert_ = std::make_shared<SampleConvert>(apiWrap_);
     ResamplePara param {
-            avFrame_->channels,
+            avFrame_->ch_layout.nb_channels,
             avFrame_->sample_rate,
-            avFrame_->channel_layout,
+            avFrame_->ch_layout.u.mask,
             AudioSampleMap[srcSampleFormat_],
             (AVSampleFormat)avFrame_->format,
     };
@@ -570,7 +572,7 @@ size_t MediaAudioEncoder::PcmDataSize()
     }
 
     size = static_cast<size_t>(audioCodecContext_->frame_size
-        * audioCodecContext_->channels
+        * audioCodecContext_->ch_layout.nb_channels
         * bytesPerSample);
     return size;
 }

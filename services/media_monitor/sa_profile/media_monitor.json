@@ -9,7 +9,6 @@
             "dump_level": 1,
             "min_hdi_proxy_version": [
                 "libdisplay_composer_proxy_1.2.z.so",
-                "libdisplay_composer_hdi_impl_1.2.z.so",
                 "libcodec_proxy_4.0.z.so"
             ]
         }

@@ -78,6 +78,7 @@ enum class OutputFormat : uint32_t {
     WAV = 10,
     AAC = 11,
     FLAC = 12,
+    OGG = 13,
 };
 
 struct Location {
@@ -171,6 +172,9 @@ enum class FileType : int32_t {
     CAF = 211, //CoreAudioFormat
     AIFF = 212,
     AU = 213,
+    DTSHD = 213,
+    TRUEHD = 214,
+    AU = 215,
     SRT = 301,
     VTT = 302,
     LRC = 303,

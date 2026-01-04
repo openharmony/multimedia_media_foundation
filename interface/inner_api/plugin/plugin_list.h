@@ -92,6 +92,7 @@ private:
     void AddMp3AudioEncoderPlugins();
     void AddFFmpegMuxerPlugins();
     void AddFFmpegFlacMuxerplugins();
+    void AddFFmpegOggMuxerplugins();
     void AddAudioVendorAacEncodersPlugin();
     void AddGsmMsAudioDecoderPlugin();
     void AddGsmAudioDecoderPlugin();
@@ -125,6 +126,12 @@ private:
 #endif
 #ifdef SUPPORT_DEMUXER_EAC3
     void AddEac3DemuxerPlugin();
+#endif
+#ifdef SUPPORT_DEMUXER_DTSHD
+    void AddDtshdDemuxerPlugin();
+#endif
+#ifdef SUPPORT_DEMUXER_TRUEHD
+    void AddTruehdDemuxerPlugin();
 #endif
 
     std::vector<PluginDescription> pluginDescriptionList_;

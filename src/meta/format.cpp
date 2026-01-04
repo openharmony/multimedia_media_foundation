@@ -44,6 +44,15 @@ bool PutIntValueToFormatMap(FormatDataMap &formatMap, const std::string_view &ke
     return ret.second;
 }
 
+bool PutUintValueToFormatMap(FormatDataMap &formatMap, const std::string_view &key, uint32_t value)
+{
+    FormatData data;
+    data.type = FORMAT_TYPE_UINT32;
+    data.val.uint32Val = value;
+    auto ret = formatMap.insert(std::make_pair(std::string(key), data));
+    return ret.second;
+}
+
 bool PutLongValueToFormatMap(FormatDataMap &formatMap, const std::string_view &key, int64_t value)
 {
     FormatData data;
@@ -160,6 +169,19 @@ bool Format::PutIntValue(const std::string_view &key, int32_t value)
             Any::IsSameTypeWith<int32_t>(defaultValue.value()) ||
             Any::IsSameTypeWith<bool>(defaultValue.value()) || IsIntEnum(key.data());
         FALSE_RETURN_V_MSG_E(isSameType, false, "Key's value type does not match int32, key: %{public}s", key.data());
+    }
+
+    return SetMetaData(*meta_, std::string(key), value);
+}
+
+bool Format::PutUintValue(const std::string_view &key, uint32_t value)
+{
+    auto defaultValue = GetDefaultAnyValueOpt(key.data());
+    if (defaultValue != std::nullopt) {
+        auto isSameType =
+            Any::IsSameTypeWith<uint32_t>(defaultValue.value()) ||
+            Any::IsSameTypeWith<bool>(defaultValue.value()) || IsIntEnum(key.data());
+        FALSE_RETURN_V_MSG_E(isSameType, false, "Key's value type does not match uint32, key: %{public}s", key.data());
     }
 
     return SetMetaData(*meta_, std::string(key), value);
@@ -283,6 +305,11 @@ bool Format::GetIntValue(const std::string_view &key, int32_t &value) const
     return GetMetaData(*meta_, std::string(key), value);
 }
 
+bool Format::GetUintValue(const std::string_view &key, uint32_t &value) const
+{
+    return GetMetaData(*meta_, std::string(key), value);
+}
+
 bool Format::GetLongValue(const std::string_view &key, int64_t &value) const
 {
     return GetMetaData(*meta_, std::string(key), value);
@@ -365,6 +392,8 @@ FormatDataType Format::GetValueType(const std::string_view &key) const
     if (iter != meta_->end()) {
         if (Any::IsSameTypeWith<int32_t>(iter->second)) {
             return FORMAT_TYPE_INT32;
+        } else if (Any::IsSameTypeWith<uint32_t>(iter->second)) {
+            return FORMAT_TYPE_UINT32;
         } else if (Any::IsSameTypeWith<int64_t>(iter->second)) {
             return FORMAT_TYPE_INT64;
         } else if (Any::IsSameTypeWith<float>(iter->second)) {
@@ -403,6 +432,9 @@ const Format::FormatDataMap &Format::GetFormatMap() const
         switch (GetValueType(iter->first)) {
             case FORMAT_TYPE_INT32:
                 ret = PutIntValueToFormatMap(formatTemp, iter->first, AnyCast<int32_t>(iter->second));
+                break;
+            case FORMAT_TYPE_UINT32:
+                ret = PutUintValueToFormatMap(formatTemp, iter->first, AnyCast<uint32_t>(iter->second));
                 break;
             case FORMAT_TYPE_INT64:
                 ret = PutLongValueToFormatMap(formatTemp, iter->first, AnyCast<int64_t>(iter->second));
@@ -446,6 +478,9 @@ std::string Format::Stringify() const
         switch (GetValueType(iter->first)) {
             case FORMAT_TYPE_INT32:
                 dumpStream << iter->first << " = " << std::to_string(AnyCast<int32_t>(iter->second)) << " | ";
+                break;
+            case FORMAT_TYPE_UINT32:
+                dumpStream << iter->first << " = " << std::to_string(AnyCast<uint32_t>(iter->second)) << " | ";
                 break;
             case FORMAT_TYPE_INT64:
                 dumpStream << iter->first << " = " << std::to_string(AnyCast<int64_t>(iter->second)) << " | ";

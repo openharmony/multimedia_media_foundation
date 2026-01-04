@@ -202,6 +202,7 @@ public:
     static constexpr const char VIDEO_COLOR_MATRIX_COEFF[] = "matrix_coefficients";    ///< @see MatrixCoefficient
     static constexpr const char VIDEO_COLOR_RANGE[] = "range_flag";                    ///< bool, video color range
     static constexpr const char VIDEO_IS_HDR_VIVID[] = "video_is_hdr_vivid";           ///< bool, video is hdr vivid
+    static constexpr const char VIDEO_HDR_TYPE[] = "video_hdr_type";                   ///< @see HDRType
     static constexpr const char VIDEO_STRIDE[] = "stride";                             ///< int32_t, video stride
     static constexpr const char VIDEO_DISPLAY_WIDTH[] = "display_width";            ///< int32_t, video display width
     static constexpr const char VIDEO_DISPLAY_HEIGHT[] = "display_height";          ///< int32_t, video display height
@@ -499,6 +500,7 @@ public:
     static constexpr const char RECORDER_AUDIO_CHANNEL_COUNT[] = "audioChannelCount";
     static constexpr const char RECORDER_AUDIO_BITRATE[] = "audioBitrate";
     static constexpr const char RECORDER_START_LATENCY[] = "startLatency";
+    static constexpr const char RECORDER_CONTAINER_FORMAT[] = "containerFormat";
 
     static constexpr const char SUBTITLE_TEXT[] = "subtitle_text";
     static constexpr const char SUBTITLE_PTS[] = "subtitle_pts";
