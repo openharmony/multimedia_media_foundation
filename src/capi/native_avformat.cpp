@@ -326,5 +326,6 @@ bool OH_AVFormat_GetKey(OH_AVFormat *format, uint32_t index, const char **key)
     }
 
     *key = format->outString_;
+    format->outString_ = nullptr;
     return true;
 }

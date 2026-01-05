@@ -444,20 +444,17 @@ const char *OH_AVFormat_DumpInfo(struct OH_AVFormat *format);
 
 /**
  * @brief Get the total number of keys contained in OH_AVFormat.
- * @syscap SystemCapability.Multimedia.Media.Core
  * @param format Pointer to an OH_AVFormat instance
  * @return Returns the number of keys on success; returns 0 on failure
  * @details Possible failure causes:
  * 1. input format is NULL;
  * 2. system resources are insufficient.
  * @since 23
- * @version 1.0
  */
 uint32_t OH_AVFormat_GetKeyCount(OH_AVFormat *format);
 
 /**
  * @brief Get the key name string by index from OH_AVFormat.
- * @syscap SystemCapability.Multimedia.Media.Core
  * @param format Pointer to an OH_AVFormat instance
  * @param index Zero-based index of the key to query, range: [0, OH_AVFormat_GetKeyCount(format))
  * @param key Output pointer to receive the key name string; the lifecycle is bound to the format
@@ -468,7 +465,6 @@ uint32_t OH_AVFormat_GetKeyCount(OH_AVFormat *format);
  * 3. key is NULL;
  * 4. system resources are insufficient.
  * @since 23
- * @version 1.0
  */
 bool OH_AVFormat_GetKey(OH_AVFormat *format, uint32_t index, const char **key);
 
