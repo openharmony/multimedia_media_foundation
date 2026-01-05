@@ -876,14 +876,14 @@ void MediaEventBaseWriter::WriteTonePlaybackFailed(std::shared_ptr<EventBean> &b
 
 void MediaEventBaseWriter::WriteAudioLoopbackException(std::shared_ptr<EventBean> &bean)
 {
-    MEDIA_LOG_D("write audio loopback exception failed");
+    MEDIA_LOG_D("write audio loopback exception statistics");
     if (bean == nullptr) {
         MEDIA_LOG_E("eventBean is nullptr");
         return;
     }
 #ifdef MONITOR_ENABLE_HISYSEVENT
     auto ret = HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "LOOPBACK_EXCEPTION",
-        HiviewDFX::HiSysEvent::EventType::FAULT,
+        HiviewDFX::HiSysEvent::EventType::STATISTIC,
         "APP_UID", bean->GetIntValue("APP_UID"),
         "APP_NAME", bean->GetStringValue("APP_NAME"),
         "RENDER_DEVICE_TYPE", bean->GetIntValue("RENDER_DEVICE_TYPE"),
