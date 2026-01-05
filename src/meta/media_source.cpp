@@ -105,6 +105,16 @@ void MediaSource::SetSourceLoader(std::shared_ptr<IMediaSourceLoader> mediaSourc
     MEDIA_LOG_I("SetSourceLoader");
     sourceLoader_ = std::move(mediaSourceLoader);
 }
+
+void MediaSource::enableOfflineCache(bool enable)
+{
+    enable_ = enable;
+}
+
+bool MediaSource::GetenableOfflineCache()
+{
+    return enable_;
+}
  
 std::shared_ptr<IMediaSourceLoader> MediaSource::GetSourceLoader() const
 {

@@ -266,15 +266,16 @@ Status AudioFfmpegEncoderPlugin::Start()
     FALSE_RETURN_V_MSG_E(res == 0, Status::ERROR_UNKNOWN, "avcodec open error " PUBLIC_LOG_S " when start encoder",
                       AVStrError(res).c_str());
     FALSE_RETURN_V_MSG_E(avCodecContext_->frame_size > 0, Status::ERROR_UNKNOWN, "frame_size unknown");
-    fullInputFrameSize_ = (uint32_t)av_samples_get_buffer_size(nullptr, avCodecContext_->channels,
+    fullInputFrameSize_ = (uint32_t)av_samples_get_buffer_size(nullptr, avCodecContext_->ch_layout.nb_channels,
         avCodecContext_->frame_size, srcFmt_, 1);
-    srcBytesPerSample_ = static_cast<uint32_t>((av_get_bytes_per_sample(srcFmt_) * avCodecContext_->channels));
+    srcBytesPerSample_ =
+        static_cast<uint32_t>((av_get_bytes_per_sample(srcFmt_) * avCodecContext_->ch_layout.nb_channels));
     if (needReformat_) {
         Ffmpeg::ResamplePara resamplePara = {
-            static_cast<uint32_t>(avCodecContext_->channels),
+            static_cast<uint32_t>(avCodecContext_->ch_layout.nb_channels),
             static_cast<uint32_t>(avCodecContext_->sample_rate),
             0,
-            static_cast<int64_t>(avCodecContext_->channel_layout),
+            static_cast<int64_t>(avCodecContext_->ch_layout.u.mask),
             srcFmt_,
             static_cast<uint32_t>(avCodecContext_->frame_size),
             avCodecContext_->sample_fmt,
@@ -377,7 +378,7 @@ void AudioFfmpegEncoderPlugin::FillInFrameCache(const std::shared_ptr<Memory>& m
         if (destLength) {
             sampleData = destBuffer;
             nbSamples = static_cast<int32_t>((static_cast<int32_t>(destLength)
-                / av_get_bytes_per_sample(avCodecContext_->sample_fmt) / avCodecContext_->channels));
+                / av_get_bytes_per_sample(avCodecContext_->sample_fmt) / avCodecContext_->ch_layout.nb_channels));
         }
     } else {
         sampleData = destBuffer;
@@ -390,28 +391,27 @@ void AudioFfmpegEncoderPlugin::FillInFrameCache(const std::shared_ptr<Memory>& m
     }
     cachedFrame_->format = avCodecContext_->sample_fmt;
     cachedFrame_->sample_rate = avCodecContext_->sample_rate;
-    cachedFrame_->channels = avCodecContext_->channels;
-    cachedFrame_->channel_layout = avCodecContext_->channel_layout;
     cachedFrame_->nb_samples = nbSamples;
-    if (av_sample_fmt_is_planar(avCodecContext_->sample_fmt) && avCodecContext_->channels > 1) {
-        if (avCodecContext_->channels > AV_NUM_DATA_POINTERS) {
+    av_channel_layout_copy(&cachedFrame_->ch_layout, &avCodecContext_->ch_layout);
+    if (av_sample_fmt_is_planar(avCodecContext_->sample_fmt) && avCodecContext_->ch_layout.nb_channels > 1) {
+        if (avCodecContext_->ch_layout.nb_channels > AV_NUM_DATA_POINTERS) {
             av_freep(cachedFrame_->extended_data);
-            cachedFrame_->extended_data = static_cast<uint8_t**>(av_malloc_array(avCodecContext_->channels,
-                sizeof(uint8_t *)));
+            cachedFrame_->extended_data =
+                static_cast<uint8_t**>(av_malloc_array(avCodecContext_->ch_layout.nb_channels, sizeof(uint8_t *)));
         } else {
             cachedFrame_->extended_data = cachedFrame_->data;
         }
         FALSE_RETURN(cachedFrame_->extended_data);
         cachedFrame_->extended_data[0] = sampleData;
         cachedFrame_->linesize[0] = nbSamples * av_get_bytes_per_sample(avCodecContext_->sample_fmt);
-        for (int i = 1; i < avCodecContext_->channels; i++) {
+        for (int i = 1; i < avCodecContext_->ch_layout.nb_channels; i++) {
             cachedFrame_->extended_data[i] = cachedFrame_->extended_data[i - 1] + cachedFrame_->linesize[0];
         }
     } else {
         cachedFrame_->data[0] = sampleData;
         cachedFrame_->extended_data = cachedFrame_->data;
         cachedFrame_->linesize[0] = nbSamples * av_get_bytes_per_sample(avCodecContext_->sample_fmt) *
-            avCodecContext_->channels;
+            avCodecContext_->ch_layout.nb_channels;
     }
 }
 

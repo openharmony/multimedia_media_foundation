@@ -171,6 +171,8 @@ enum class FileType : int32_t {
     DTS = 210,
     CAF = 211, //CoreAudioFormat
     AIFF = 212,
+    DTSHD = 213,
+    TRUEHD = 214,
     SRT = 301,
     VTT = 302,
     LRC = 303,

@@ -45,7 +45,9 @@
           "media_foundation_enable_sami_demuxer",
           "media_foundation_enable_ass_demuxer",
           "media_foundation_enable_eac3_demuxer",
-          "media_foundation_enable_eac3_audio_decoder"
+          "media_foundation_enable_eac3_audio_decoder",
+          "media_foundation_enable_dtshd_demuxer",
+          "media_foundation_enable_truehd_demuxer"
         ],
         "adapted_system_type": [
             "mini",
@@ -189,6 +191,7 @@
                     "pipeline/pipeline.h",
                     "plugin/generic_plugin.h",
                     "common/media_data_source.h",
+                    "common/dolby_passthrough.h",
                     "plugin/plugin_base.h",
                     "plugin/plugin_caps.h",
                     "plugin/plugin_definition.h",

@@ -115,11 +115,11 @@ void ConvertCommonAudioStreamToMetaInfo(const AVStream& avStream,
                                         const std::shared_ptr<AVCodecContext>& avCodecContext, Meta& meta)
 {
     ConvertCommonTrackToMetaInfo(avStream, avFormatContext, avCodecContext, meta);
-    if (avCodecContext->channels != -1) {
+    if (avCodecContext->ch_layout.nb_channels != -1) {
         meta.Set<Tag::AUDIO_SAMPLE_RATE>(avCodecContext->sample_rate);
-        meta.Set<Tag::AUDIO_CHANNELS>(avCodecContext->channels);
-        meta.Set<Tag::AUDIO_CHANNEL_LAYOUT>(ConvertChannelLayoutFromFFmpeg(avCodecContext->channels,
-                                                                           avCodecContext->channel_layout));
+        meta.Set<Tag::AUDIO_CHANNELS>(avCodecContext->ch_layout.nb_channels);
+        meta.Set<Tag::AUDIO_CHANNEL_LAYOUT>(ConvertChannelLayoutFromFFmpeg(avCodecContext->ch_layout.nb_channels,
+                                                                           avCodecContext->ch_layout.u.mask));
         // ffmpeg defaults to 1024 samples per frame for planar PCM in each buffer (one for each channel).
         uint32_t samplesPerFrame = 1024;
         if (!IsPcmStream(avStream) && avCodecContext->frame_size != 0) {

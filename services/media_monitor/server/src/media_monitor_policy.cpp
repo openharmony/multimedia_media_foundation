@@ -350,6 +350,7 @@ void MediaMonitorPolicy::WriteFaultEvent(EventId eventId, std::shared_ptr<EventB
 void MediaMonitorPolicy::WriteFaultEventExpansion(EventId eventId, std::shared_ptr<EventBean> &bean)
 {
     BundleInfo bundleInfo;
+    std::string dubiousApp;
     switch (eventId) {
         case STREAM_MOVE_EXCEPTION:
             mediaEventBaseWriter_.WriteStreamMoveException(bean);
@@ -362,6 +363,12 @@ void MediaMonitorPolicy::WriteFaultEventExpansion(EventId eventId, std::shared_p
         case TONE_PLAYBACK_FAILED:
             mediaEventBaseWriter_.WriteTonePlaybackFailed(bean);
             break;
+        case AUDIO_STREAM_EXHAUSTED_STATS:
+            bundleInfo = GetBundleInfo(bean->GetIntValue("CLIENT_UID"));
+            dubiousApp = bean->GetStringValue("EXCEEDED_SCENE") + ": " + bundleInfo.appName;
+            bean->Add("DUBIOUS_APP", dubiousApp);
+            mediaEventBaseWriter_.WriteStreamExhastedError(bean);
+            break;
         default:
             break;
     }
@@ -371,11 +378,6 @@ void MediaMonitorPolicy::WriteAggregationEvent(EventId eventId, std::shared_ptr<
 {
     BundleInfo bundleInfo = {};
     switch (eventId) {
-        case AUDIO_STREAM_EXHAUSTED_STATS:
-            bundleInfo = GetBundleInfo(bean->GetIntValue("CLIENT_UID"));
-            bean->Add("DUBIOUS_APP", bundleInfo.appName);
-            mediaEventBaseWriter_.WriteStreamExhastedError(bean);
-            break;
         case AUDIO_STREAM_CREATE_ERROR_STATS:
             bundleInfo = GetBundleInfo(bean->GetIntValue("CLIENT_UID"));
             bean->Add("APP_NAME", bundleInfo.appName);
@@ -664,38 +666,6 @@ void MediaMonitorPolicy::HandleCaptureMutedToEventVector(std::shared_ptr<EventBe
         eventBean->Add("STREAM_TYPE", bean->GetIntValue("STREAM_TYPE"));
         eventBean->Add("DEVICE_TYPE", bean->GetIntValue("DEVICE_TYPE"));
         eventBean->Add("DURATION", bean->GetUint64Value("DURATION"));
-        AddToEventVector(eventBean);
-    }
-}
-
-void MediaMonitorPolicy::HandleExhaustedToEventVector(std::shared_ptr<EventBean> &bean)
-{
-    MEDIA_LOG_I("Handle exhausted to event map");
-    int32_t uid = bean->GetIntValue("CLIENT_UID");
-    int32_t appStreamNum = bean->GetIntValue("TIMES");
-    bool isInEventMap = false;
-    auto isExist = [&uid](const std::shared_ptr<EventBean> &eventBean) {
-        if (eventBean->GetEventId() == AUDIO_STREAM_EXHAUSTED_STATS &&
-            uid == eventBean->GetIntValue("CLIENT_UID")) {
-            MEDIA_LOG_I("Find the existing CLIENT_UID");
-            return true;
-        }
-        return false;
-    };
-    std::lock_guard<std::mutex> lockEventVector(eventVectorMutex_);
-    auto it = std::find_if(eventVector_.begin(), eventVector_.end(), isExist);
-    if (it != eventVector_.end()) {
-        int32_t streamNum = (*it)->GetIntValue("TIMES");
-        if (appStreamNum > streamNum) {
-            (*it)->UpdateIntMap("TIMES", appStreamNum);
-        }
-        isInEventMap = true;
-    }
-    if (!isInEventMap) {
-        std::shared_ptr<EventBean> eventBean = std::make_shared<EventBean>(ModuleId::AUDIO,
-            EventId::AUDIO_STREAM_EXHAUSTED_STATS, EventType::FREQUENCY_AGGREGATION_EVENT);
-        eventBean->Add("CLIENT_UID", uid);
-        eventBean->Add("TIMES", appStreamNum);
         AddToEventVector(eventBean);
     }
 }

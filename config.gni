@@ -72,6 +72,8 @@ declare_args() {
   media_foundation_enable_sami_demuxer = false
   media_foundation_enable_ass_demuxer = false
   media_foundation_enable_eac3_demuxer = false
+  media_foundation_enable_dtshd_demuxer = false
+  media_foundation_enable_truehd_demuxer = false
 
   # enable ffrt task instead of pthread task
   media_foundation_enable_ffrt = false

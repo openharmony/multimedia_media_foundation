@@ -211,6 +211,9 @@ public:
     void SetSourceLoader(std::shared_ptr<IMediaSourceLoader> mediaSourceLoader);
 
     std::shared_ptr<IMediaSourceLoader> GetSourceLoader() const;
+    void enableOfflineCache(bool enable);
+
+    bool GetenableOfflineCache();
 
     //std::shared_ptr<DataConsumer> GetDataConsumer() const;
 #ifndef OHOS_LITE
@@ -223,6 +226,7 @@ private:
     std::map<std::string, std::string> header_ {};
     std::shared_ptr<PlayStrategy> playStrategy_ {};
     int32_t appUid_ {-1};
+    bool enable_ {false};
     //std::shared_ptr<DataConsumer> dataConsumer_ {};
 #ifndef OHOS_LITE
     std::shared_ptr<IMediaDataSource> dataSrc_ {};
