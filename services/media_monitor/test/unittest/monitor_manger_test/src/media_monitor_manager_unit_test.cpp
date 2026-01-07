@@ -234,7 +234,6 @@ HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_WriteLogMsg_007, TestSize.Le
     int32_t captureDeviceType = 1;
     int32_t errScope = 1;
     int32_t errType = 1;
-    std::string errMsg = "test error";
 
     std::shared_ptr<EventBean> bean = std::make_shared<EventBean>(moduleId, eventId, eventType);
     bean->Add("APP_UID", appUid);
@@ -243,7 +242,6 @@ HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_WriteLogMsg_007, TestSize.Le
     bean->Add("CAPTURE_DEVICE_TYPE", captureDeviceType);
     bean->Add("ERROR_SCOPE", errScope);
     bean->Add("ERROR_TYPE", errType);
-    bean->Add("ERROR_DESCRIPTION", errMsg);
     Media::MediaMonitor::MediaMonitorManager::GetInstance().WriteLogMsg(bean);
 
     EXPECT_EQ(bean->GetModuleId(), moduleId);

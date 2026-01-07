@@ -889,8 +889,7 @@ void MediaEventBaseWriter::WriteAudioLoopbackException(std::shared_ptr<EventBean
         "RENDER_DEVICE_TYPE", bean->GetIntValue("RENDER_DEVICE_TYPE"),
         "CAPTURE_DEVICE_TYPE", bean->GetIntValue("CAPTURE_DEVICE_TYPE"),
         "ERROR_SCOPE", bean->GetIntValue("ERROR_SCOPE"),
-        "ERROR_TYPE", bean->GetIntValue("ERROR_TYPE"),
-        "ERROR_DESCRIPTION", bean->GetStringValue("ERROR_DESCRIPTION"));
+        "ERROR_TYPE", bean->GetIntValue("ERROR_TYPE"));
     if (ret) {
         MEDIA_LOG_E("write event fail: LOOPBACK_EXCEPTION, ret = %{public}d", ret);
     }
