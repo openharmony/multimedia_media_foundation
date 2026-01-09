@@ -81,6 +81,7 @@ void EventAggregate::WriteEvent(std::shared_ptr<EventBean> &bean)
         case TONE_PLAYBACK_FAILED:
         case AUDIO_STREAM_CREATE_ERROR_STATS:
         case AUDIO_STREAM_EXHAUSTED_STATS:
+        case LOOPBACK_EXCEPTION:
             mediaMonitorPolicy_.WriteEvent(bean->GetEventId(), bean);
             break;
         default:

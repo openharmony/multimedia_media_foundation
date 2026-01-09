@@ -873,6 +873,28 @@ void MediaEventBaseWriter::WriteTonePlaybackFailed(std::shared_ptr<EventBean> &b
         "ERROR_REASON", bean->GetStringValue("ERROR_REASON"));
 #endif
 }
+
+void MediaEventBaseWriter::WriteAudioLoopbackException(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("write audio loopback exception statistics");
+    if (bean == nullptr) {
+        MEDIA_LOG_E("eventBean is nullptr");
+        return;
+    }
+#ifdef MONITOR_ENABLE_HISYSEVENT
+    auto ret = HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "LOOPBACK_EXCEPTION",
+        HiviewDFX::HiSysEvent::EventType::STATISTIC,
+        "APP_UID", bean->GetIntValue("APP_UID"),
+        "APP_NAME", bean->GetStringValue("APP_NAME"),
+        "RENDER_DEVICE_TYPE", bean->GetIntValue("RENDER_DEVICE_TYPE"),
+        "CAPTURE_DEVICE_TYPE", bean->GetIntValue("CAPTURE_DEVICE_TYPE"),
+        "ERROR_SCOPE", bean->GetIntValue("ERROR_SCOPE"),
+        "ERROR_TYPE", bean->GetIntValue("ERROR_TYPE"));
+    if (ret) {
+        MEDIA_LOG_E("write event fail: LOOPBACK_EXCEPTION, ret = %{public}d", ret);
+    }
+#endif
+}
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS

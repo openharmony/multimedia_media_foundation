@@ -221,6 +221,33 @@ HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_WriteLogMsg_006, TestSize.Le
     EXPECT_EQ(bean1->GetEventId(), eventId);
     EXPECT_EQ(bean1->GetEventType(), eventType);
 }
+
+HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_WriteLogMsg_007, TestSize.Level1)
+{
+    ModuleId moduleId = AUDIO;
+    EventId eventId = LOOPBACK_EXCEPTION;
+    EventType eventType = FAULT_EVENT;
+
+    int32_t appUid = 1000; // 1000 for test appuid
+    std::string appName = "testName";
+    int32_t renderDeviceType = 1;
+    int32_t captureDeviceType = 1;
+    int32_t errScope = 1;
+    int32_t errType = 1;
+
+    std::shared_ptr<EventBean> bean = std::make_shared<EventBean>(moduleId, eventId, eventType);
+    bean->Add("APP_UID", appUid);
+    bean->Add("APP_NAME", appName);
+    bean->Add("RENDER_DEVICE_TYPE", renderDeviceType);
+    bean->Add("CAPTURE_DEVICE_TYPE", captureDeviceType);
+    bean->Add("ERROR_SCOPE", errScope);
+    bean->Add("ERROR_TYPE", errType);
+    Media::MediaMonitor::MediaMonitorManager::GetInstance().WriteLogMsg(bean);
+
+    EXPECT_EQ(bean->GetModuleId(), moduleId);
+    EXPECT_EQ(bean->GetEventId(), eventId);
+    EXPECT_EQ(bean->GetEventType(), eventType);
+}
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS
