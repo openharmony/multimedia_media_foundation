@@ -93,6 +93,7 @@ private:
     void AddFFmpegMuxerPlugins();
     void AddFFmpegFlacMuxerplugins();
     void AddFFmpegOggMuxerplugins();
+    void AddMpeg4MuxerPlugins();
     void AddAudioVendorAacEncodersPlugin();
     void AddGsmMsAudioDecoderPlugin();
     void AddGsmAudioDecoderPlugin();
