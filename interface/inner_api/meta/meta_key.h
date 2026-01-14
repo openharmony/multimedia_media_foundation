@@ -197,6 +197,7 @@ public:
     static constexpr const char VIDEO_BIT_STREAM_FORMAT[] = "video.bit.stream.format"; ///< @see VideoBitStreamFormat
     static constexpr const char VIDEO_ROTATION[] = "rotation_angle";                   ///< @see VideoRotation
     static constexpr const char VIDEO_ORIENTATION_TYPE[] = "video_orientation_type";   ///< @see VideoOrientation
+    static constexpr const char VIDEO_HDR_METADATA[] = "video_hdr_metadata";   ///< @see VideoOrientation
     static constexpr const char VIDEO_COLOR_PRIMARIES[] = "color_primaries";           ///< @see ColorPrimary
     static constexpr const char VIDEO_COLOR_TRC[] = "transfer_characteristics";        ///< @see TransferCharacteristic
     static constexpr const char VIDEO_COLOR_MATRIX_COEFF[] = "matrix_coefficients";    ///< @see MatrixCoefficient
