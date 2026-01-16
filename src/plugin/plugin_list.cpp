@@ -108,6 +108,7 @@ PluginList::PluginList()
     AddFFmpegMuxerPlugins();
     AddFFmpegFlacMuxerplugins();
     AddFFmpegOggMuxerplugins();
+    AddMpeg4MuxerPlugins();
     AddAc3AudioDecoderPlugins();
     AddGsmMsAudioDecoderPlugin();
     AddGsmAudioDecoderPlugin();
@@ -1118,6 +1119,25 @@ void PluginList::AddFFmpegOggMuxerplugins()
     oggMuxerPlugin.cap = "media/ogg";
     oggMuxerPlugin.rank = DEFAULT_RANK;
     pluginDescriptionList_.push_back(oggMuxerPlugin);
+}
+
+void PluginList::AddMpeg4MuxerPlugins()
+{
+    PluginDescription mp4MuxerPlugin;
+    mp4MuxerPlugin.pluginName = "Mpeg4Mux_mp4";
+    mp4MuxerPlugin.packageName = "Mpeg4Muxer";
+    mp4MuxerPlugin.pluginType = PluginType::MUXER;
+    mp4MuxerPlugin.cap = "media/mp4";
+    mp4MuxerPlugin.rank = DEFAULT_RANK + 1; // larger than default muxer plugin
+    pluginDescriptionList_.push_back(mp4MuxerPlugin);
+
+    PluginDescription m4aMuxerPlugin;
+    m4aMuxerPlugin.pluginName = "Mpeg4Mux_m4a";
+    m4aMuxerPlugin.packageName = "Mpeg4Muxer";
+    m4aMuxerPlugin.pluginType = PluginType::MUXER;
+    m4aMuxerPlugin.cap = "media/m4a";
+    m4aMuxerPlugin.rank = DEFAULT_RANK + 1; // larger than default muxer plugin
+    pluginDescriptionList_.push_back(m4aMuxerPlugin);
 }
 
 } // namespace Plugins
