@@ -108,11 +108,11 @@ void UpdateInCaps(const AVCodec* codec, CodecPluginDef& definition)
         }
     }
 
-    if (codec->channel_layouts != nullptr) {
+    if (codec->ch_layouts != nullptr) {
         DiscreteCapability<AudioChannelLayout> values;
         size_t index {0};
-        for (; codec->channel_layouts[index] != 0; ++index) {
-            values.push_back(AudioChannelLayout(codec->channel_layouts[index]));
+        for (; codec->ch_layouts[index].u.mask != 0; ++index) {
+            values.push_back(AudioChannelLayout(codec->ch_layouts[index].u.mask));
         }
         if (index) {
             capBuilder.SetAudioChannelLayoutList(values);
@@ -290,7 +290,7 @@ do { \
     });
     {
         OSAL::ScopedLock lock1(parameterMutex_);
-        FAIL_RET_WHEN_ASSIGN_LOCKED(Tag::AUDIO_CHANNELS, int32_t, tmpCtx->channels);
+        FAIL_RET_WHEN_ASSIGN_LOCKED(Tag::AUDIO_CHANNELS, int32_t, tmpCtx->ch_layout.nb_channels);
         FAIL_RET_WHEN_ASSIGN_LOCKED(Tag::AUDIO_SAMPLE_RATE, int32_t, tmpCtx->sample_rate);
         FAIL_RET_WHEN_ASSIGN_LOCKED(Tag::MEDIA_BITRATE, int64_t, tmpCtx->bit_rate);
         FAIL_RET_WHEN_ASSIGN_LOCKED(Tag::BITS_PER_CODED_SAMPLE, int32_t, tmpCtx->bits_per_coded_sample);
@@ -527,7 +527,7 @@ Status AudioFfmpegDecoderPlugin::SendBufferLocked(const std::shared_ptr<Buffer>&
 Status AudioFfmpegDecoderPlugin::ReceiveFrameSucc(const std::shared_ptr<Buffer>& ioInfo)
 {
     FALSE_RETURN_V_MSG_E(ioInfo != nullptr, Status::ERROR_INVALID_PARAMETER, "ioInfo buffer is null.");
-    int32_t channels = cachedFrame_->channels;
+    int32_t channels = cachedFrame_->ch_layout.nb_channels;
     int32_t samples = cachedFrame_->nb_samples;
     auto sampleFormat = static_cast<AVSampleFormat>(cachedFrame_->format);
     int32_t bytePerSample = av_get_bytes_per_sample(sampleFormat);

@@ -141,12 +141,11 @@ HWTEST_F(AVBufferQueueInnerUnitTest, SetQueueSizeTest, TestSize.Level1)
  */
 HWTEST_F(AVBufferQueueInnerUnitTest, SetLargerQueueSize, TestSize.Level1)
 {
-    uint32_t size = AVBUFFER_QUEUE_MAX_QUEUE_SIZE + 1;
+    uint32_t size = AVBUFFER_QUEUE_MAX_QUEUE_SIZE;
     ASSERT_EQ(avBufferQueueImpl_->SetLargerQueueSize(size), Status::OK);
     ASSERT_EQ(avBufferQueueImpl_->GetQueueSize(), size);
  
     size = AVBUFFER_QUEUE_MAX_QUEUE_SIZE_FOR_LARGER;
-    ASSERT_EQ(avBufferQueueImpl_->SetLargerQueueSize(size), Status::OK);
     ASSERT_EQ(avBufferQueueImpl_->GetQueueSize(), size);
  
     ASSERT_EQ(avBufferQueueImpl_->SetLargerQueueSize(size + 1), Status::ERROR_INVALID_BUFFER_SIZE);

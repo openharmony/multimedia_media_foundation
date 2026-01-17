@@ -189,6 +189,7 @@ public:
     static constexpr const char VIDEO_WIDTH[] = "width";                               ///< video width
     static constexpr const char VIDEO_HEIGHT[] = "height";                             ///< video height
     static constexpr const char VIDEO_PIXEL_FORMAT[] = "pixel_format";                 ///< @see VideoPixelFormat
+    static constexpr const char VIDEO_RAWVIDEO_INPUT_PIXEL_FORMAT[] = "rawvideo_input_pix_fmt"; ///< int32_t
     static constexpr const char VIDEO_FRAME_RATE[] = "frame_rate";                     ///< video frame rate
     static constexpr const char VIDEO_SURFACE[] = "video.surface";                     ///< @see class Surface
     static constexpr const char VIDEO_MAX_SURFACE_NUM[] = "video.max.surface_num";     ///< max video surface num
@@ -196,11 +197,13 @@ public:
     static constexpr const char VIDEO_BIT_STREAM_FORMAT[] = "video.bit.stream.format"; ///< @see VideoBitStreamFormat
     static constexpr const char VIDEO_ROTATION[] = "rotation_angle";                   ///< @see VideoRotation
     static constexpr const char VIDEO_ORIENTATION_TYPE[] = "video_orientation_type";   ///< @see VideoOrientation
+    static constexpr const char VIDEO_HDR_METADATA[] = "video_hdr_metadata";   ///< @see VideoOrientation
     static constexpr const char VIDEO_COLOR_PRIMARIES[] = "color_primaries";           ///< @see ColorPrimary
     static constexpr const char VIDEO_COLOR_TRC[] = "transfer_characteristics";        ///< @see TransferCharacteristic
     static constexpr const char VIDEO_COLOR_MATRIX_COEFF[] = "matrix_coefficients";    ///< @see MatrixCoefficient
     static constexpr const char VIDEO_COLOR_RANGE[] = "range_flag";                    ///< bool, video color range
     static constexpr const char VIDEO_IS_HDR_VIVID[] = "video_is_hdr_vivid";           ///< bool, video is hdr vivid
+    static constexpr const char VIDEO_HDR_TYPE[] = "video_hdr_type";                   ///< @see HDRType
     static constexpr const char VIDEO_STRIDE[] = "stride";                             ///< int32_t, video stride
     static constexpr const char VIDEO_DISPLAY_WIDTH[] = "display_width";            ///< int32_t, video display width
     static constexpr const char VIDEO_DISPLAY_HEIGHT[] = "display_height";          ///< int32_t, video display height
@@ -428,6 +431,12 @@ public:
     static constexpr const char VIDEO_H265_PROFILE[] = "video.h265.profile"; ///< @see HEVCProfile
     static constexpr const char VIDEO_H265_LEVEL[] = "video.h265.level";     ///< @see HEVCLevel
     static constexpr const char VIDEO_CHROMA_LOCATION[] = "chroma_location"; ///< @see ChromaLocation
+    static constexpr const char VIDEO_ENABLE_LOCAL_RELEASE[] =
+        "video_enable_local_release"; ///< bool, key to enable the local release mode, true is enabled, false
+                                      ///< otherwise. If enabled, the video decoder doesn't report
+                                      ///< OnOutputBufferAvailable and will release buffer locally in codec server.
+                                      ///< This is an optional key that applies only to video decoder.
+                                      ///< It is used in configure.
 
     /* -------------------- user specific tag -------------------- */
     static constexpr const char USER_FRAME_PTS[] = "user.frame.pts"; ///< The user frame pts
@@ -498,6 +507,7 @@ public:
     static constexpr const char RECORDER_AUDIO_CHANNEL_COUNT[] = "audioChannelCount";
     static constexpr const char RECORDER_AUDIO_BITRATE[] = "audioBitrate";
     static constexpr const char RECORDER_START_LATENCY[] = "startLatency";
+    static constexpr const char RECORDER_CONTAINER_FORMAT[] = "containerFormat";
 
     static constexpr const char SUBTITLE_TEXT[] = "subtitle_text";
     static constexpr const char SUBTITLE_PTS[] = "subtitle_pts";

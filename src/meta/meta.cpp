@@ -83,6 +83,7 @@ DEFINE_METADATA_SETTER_GETTER_FUNC(VideoH264Profile, int32_t)
 DEFINE_METADATA_SETTER_GETTER_FUNC(VideoRotation, int32_t)
 DEFINE_METADATA_SETTER_GETTER_FUNC(VideoOrientationType, int32_t)
 DEFINE_METADATA_SETTER_GETTER_FUNC(ColorPrimary, int32_t)
+DEFINE_METADATA_SETTER_GETTER_FUNC(HDRType, int32_t)
 DEFINE_METADATA_SETTER_GETTER_FUNC(TransferCharacteristic, int32_t)
 DEFINE_METADATA_SETTER_GETTER_FUNC(MatrixCoefficient, int32_t)
 DEFINE_METADATA_SETTER_GETTER_FUNC(HEVCProfile, int32_t)
@@ -110,6 +111,7 @@ static std::map<TagType, std::pair<MetaSetterFunction, MetaGetterFunction>> g_me
     DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_ROTATION, VideoRotation),
     DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_ORIENTATION_TYPE, VideoOrientationType),
     DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_COLOR_PRIMARIES, ColorPrimary),
+    DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_HDR_TYPE, HDRType),
     DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_COLOR_TRC, TransferCharacteristic),
     DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_COLOR_MATRIX_COEFF, MatrixCoefficient),
     DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_H265_PROFILE, HEVCProfile),
@@ -161,6 +163,7 @@ static std::vector<TagType> g_metadataBoolVector = {
     Tag::VIDEO_ENCODER_ENABLE_QP_MAP,
     Tag::VIDEO_ENCODER_ENABLE_PTS_BASED_RATECONTROL,
     Tag::VIDEO_DECODER_BLANK_FRAME_ON_SHUTDOWN,
+    Tag::VIDEO_ENABLE_LOCAL_RELEASE,
     Tag::IS_GLTF,
 };
 
@@ -191,6 +194,35 @@ bool GetMetaData(const Meta& meta, const TagType& tag, int32_t& value)
         return meta.GetData(tag, value);
     }
     return iter->second.second(meta, tag, value);
+}
+
+bool SetMetaData(Meta& meta, const TagType& tag, uint32_t value)
+{
+    auto iter = g_metadataGetterSetterMap.find(tag);
+    if (iter == g_metadataGetterSetterMap.end()) {
+        if (std::find(g_metadataBoolVector.begin(), g_metadataBoolVector.end(), tag) != g_metadataBoolVector.end()) {
+            meta.SetData(tag, value != 0 ? true : false);
+            return true;
+        }
+        meta.SetData<uint32_t>(tag, value);
+        return true;
+    }
+    return false;
+}
+
+bool GetMetaData(const Meta& meta, const TagType& tag, uint32_t& value)
+{
+    auto iter = g_metadataGetterSetterMap.find(tag);
+    if (iter == g_metadataGetterSetterMap.end()) {
+        if (std::find(g_metadataBoolVector.begin(), g_metadataBoolVector.end(), tag) != g_metadataBoolVector.end()) {
+            bool valueBool = false;
+            FALSE_RETURN_V(meta.GetData(tag, valueBool), false);
+            value = valueBool ? 1 : 0;
+            return true;
+        }
+        return meta.GetData<uint32_t>(tag, value);
+    }
+    return false;
 }
 
 bool SetMetaData(Meta& meta, const TagType& tag, int64_t value)
@@ -240,6 +272,7 @@ static Any defaultVideoH264Profile = VideoH264Profile::UNKNOWN;
 static Any defaultVideoRotation = VideoRotation::VIDEO_ROTATION_0;
 static Any defaultVideoOrientationType = VideoOrientationType::ROTATE_NONE;
 static Any defaultColorPrimary = ColorPrimary::BT2020;
+static Any defaultHdrType = HDRType::HLG;
 static Any defaultTransferCharacteristic = TransferCharacteristic::BT1361;
 static Any defaultMatrixCoefficient = MatrixCoefficient::BT2020_CL;
 static Any defaultHEVCProfile = HEVCProfile::HEVC_PROFILE_UNKNOW;
@@ -268,6 +301,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_ROTATION, defaultVideoRotation},
     {Tag::VIDEO_ORIENTATION_TYPE, defaultVideoOrientationType},
     {Tag::VIDEO_COLOR_PRIMARIES, defaultColorPrimary},
+    {Tag::VIDEO_HDR_TYPE, defaultHdrType},
     {Tag::VIDEO_COLOR_TRC, defaultTransferCharacteristic},
     {Tag::VIDEO_COLOR_MATRIX_COEFF, defaultMatrixCoefficient},
     {Tag::VIDEO_H265_PROFILE, defaultHEVCProfile},
@@ -521,6 +555,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_ENCODER_PER_FRAME_ABS_QP_MAP, defaultBool},
     {Tag::VIDEO_ENCODER_ENABLE_PTS_BASED_RATECONTROL, defaultBool},
     {Tag::VIDEO_DECODER_BLANK_FRAME_ON_SHUTDOWN, defaultBool},
+    {Tag::VIDEO_ENABLE_LOCAL_RELEASE, defaultBool},
     {Tag::IS_GLTF, defaultBool},
     // Int64
     {Tag::MEDIA_FILE_SIZE, defaultUInt64},
@@ -640,6 +675,8 @@ AnyValueType Meta::GetValueType(const TagType& key) const
     if (iter != map_.end()) {
         if (Any::IsSameTypeWith<int32_t>(iter->second)) {
             return AnyValueType::INT32_T;
+        } else if (Any::IsSameTypeWith<uint32_t>(iter->second)) {
+            return AnyValueType::UINT32_T;
         } else if (Any::IsSameTypeWith<bool>(iter->second)) {
             return AnyValueType::BOOL;
         } else if (Any::IsSameTypeWith<int64_t>(iter->second)) {

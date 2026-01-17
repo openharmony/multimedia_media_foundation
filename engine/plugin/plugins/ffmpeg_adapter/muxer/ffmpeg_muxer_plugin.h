@@ -24,6 +24,7 @@ extern "C" {
 #endif
 #include "libavformat/avformat.h"
 #include "libavutil/opt.h"
+#include "libavformat/mux.h"
 #ifdef __cplusplus
 }
 #endif
@@ -77,7 +78,7 @@ private:
 
     static int32_t IoRead(void* opaque, uint8_t* buf, int bufSize);
 
-    static int32_t IoWrite(void* opaque, uint8_t* buf, int bufSize);
+    static int32_t IoWrite(void* opaque, const uint8_t* buf, int bufSize);
 
     static int64_t IoSeek(void* opaque, int64_t offset, int whence);
 

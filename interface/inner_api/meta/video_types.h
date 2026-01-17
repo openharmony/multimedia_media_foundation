@@ -338,6 +338,33 @@ enum class TemporalGopReferenceMode : int32_t {
     UNIFORMLY_SCALED_REFERENCE = 2,
     UNKNOWN,
 };
+
+enum struct RawVideoPixelFormat : int32_t {
+    UNKNOWN = -1,
+    /**
+     * yuv 420 planar.
+     */
+    YUV420P = 0,
+    /**
+     *  NV12. yuv 420 semiplanar.
+     */
+    NV12 = 1,
+    /**
+     *  NV21. yvu 420 semiplanar.
+     */
+    NV21 = 2,
+    /**
+     * RGBA.
+     */
+    RGBA = 3,
+};
+
+enum class HDRType : int32_t {
+    HLG = 0,
+    HDR_10 = 1,
+    HDR_VIVID = 2,
+    NONE = -1,
+};
 } // namespace Plugins
 } // namespace Media
 } // namespace OHOS

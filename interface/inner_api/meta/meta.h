@@ -163,6 +163,7 @@ public:
 
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::SRC_INPUT_TYPE, Plugins::SrcInputType, AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::MEDIA_CODEC_CONFIG or
+                           tagCharSeq == Tag::VIDEO_HDR_METADATA or
                            tagCharSeq == Tag::MEDIA_COVER or
                            tagCharSeq == Tag::AUDIO_VIVID_METADATA or
                            tagCharSeq == Tag::AUDIO_VORBIS_IDENTIFICATION_HEADER or
@@ -199,6 +200,8 @@ public:
                            AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_COLOR_PRIMARIES, Plugins::ColorPrimary,
                            AnyValueType::INT32_T);
+    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_HDR_TYPE, Plugins::HDRType,
+                           AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_COLOR_TRC, Plugins::TransferCharacteristic,
                            AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_COLOR_MATRIX_COEFF, Plugins::MatrixCoefficient,
@@ -234,7 +237,8 @@ public:
         tagCharSeq == Tag::VIDEO_ENCODER_PER_FRAME_DISCARD or
         tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_QP_MAP or
         tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_WATERMARK or
-        tagCharSeq == Tag::VIDEO_DECODER_BLANK_FRAME_ON_SHUTDOWN, bool, AnyValueType::BOOL);
+        tagCharSeq == Tag::VIDEO_DECODER_BLANK_FRAME_ON_SHUTDOWN or
+        tagCharSeq == Tag::VIDEO_ENABLE_LOCAL_RELEASE, bool, AnyValueType::BOOL);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_BUFFER_CAN_DROP, bool, AnyValueType::BOOL);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_RENDER_SET_FLAG, bool, AnyValueType::BOOL);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_H265_PROFILE, Plugins::HEVCProfile, AnyValueType::INT32_T);
@@ -292,6 +296,7 @@ public:
         tagCharSeq == Tag::VIDEO_PIC_HEIGHT or
         tagCharSeq == Tag::OH_MD_KEY_AUDIO_OBJECT_NUMBER or
         tagCharSeq == Tag::AUDIO_L2HC_VERSION or
+        tagCharSeq == Tag::VIDEO_RAWVIDEO_INPUT_PIXEL_FORMAT or
         tagCharSeq == Tag::DRM_ERROR_CODE, int32_t, AnyValueType::INT32_T);
 
     DEFINE_INSERT_GET_FUNC(
@@ -686,6 +691,27 @@ bool SetMetaData(Meta& meta, const TagType& tag, int32_t value);
  * @example OHOS::Media::GetMetaData(meta, "audio.aac.profile", value);
  */
 bool GetMetaData(const Meta& meta, const TagType& tag, int32_t& value);
+
+/**
+ * @brief SetMetaData only used for Application interface OH_AVFormat to set enum/bool/uint32_t value into Meta Object.
+ * @implNote In order to set value(uint32_t type) to Meta Object, should convert uint32_t value to correct EnumType then
+ * save to Any object. We use metadataGetterSetterMap to get the right setter function.
+ * @return Returns operator status, <b>True</b> if Set Success.
+ * returns <b>False</b> otherwise.
+ * @example OHOS::Media::SetMetaData(meta, "audio.aac.profile", value);
+ */
+bool SetMetaData(Meta& meta, const TagType& tag, uint32_t value);
+
+/**
+ * @brief GetMetaData only used for Application interface OH_AVFormat to get enum/bool/uint32_t value from Meta Object.
+ * @implNote In order to get value(Enum type) from Meta Object, should use correct Enum type to get value from Any
+ * object. We use metadataGetterSetterMap to get the right getter function.
+ * @return Returns operator status, <b>True</b> if Get Success.
+ * returns <b>False</b> otherwise.
+ * @example OHOS::Media::GetMetaData(meta, "audio.aac.profile", value);
+ */
+bool GetMetaData(const Meta& meta, const TagType& tag, uint32_t& value);
+
 /**
  * @brief SetMetaData only used for Application interface OH_AVFormat to set enum/int64_t value into Meta Object.
  * @implNote In order to set value(int64_t type) to Meta Object, should convert int64_t value to correct EnumType then

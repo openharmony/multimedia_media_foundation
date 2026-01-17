@@ -28,6 +28,7 @@ extern "C" {
 #include "libavformat/avformat.h"
 #include "libavcodec/avcodec.h"
 #include "libavcodec/bsf.h"
+#include "libavformat/demux.h"
 #ifdef __cplusplus
 }
 #endif
@@ -90,7 +91,7 @@ private:
 
     static int AVReadPacket(void* opaque, uint8_t* buf, int bufSize); // NOLINT: void*
 
-    static int AVWritePacket(void* opaque, uint8_t* buf, int bufSize); // NOLINT: void*
+    static int AVWritePacket(void* opaque, const uint8_t* buf, int bufSize); // NOLINT: void*
 
     static int64_t AVSeek(void* opaque, int64_t offset, int whence); // NOLINT: void*
 

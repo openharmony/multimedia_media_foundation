@@ -26,11 +26,37 @@
 
 namespace {
 constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "AVBuffer" };
+uint64_t GenerateUniqueId()
+{
+#ifdef MEDIA_OHOS
+    using namespace std::chrono;
+    static const uint64_t startTime =
+        static_cast<uint64_t>(time_point_cast<seconds>(system_clock::now()).time_since_epoch().count());
+    static const uint16_t processId = static_cast<uint16_t>(getpid());
+#else
+    static const uint64_t startTime = 0;
+    static const uint16_t processId = 0;
+#endif
+    static std::atomic<uint32_t> bufferId = 0;
+    if (bufferId == UINT32_MAX) {
+        bufferId = 0;
+    }
+    union UniqueId {
+        uint64_t startTime;    //  1--16, 16: time
+        uint16_t processId[4]; // 17--32, 16: process id
+        uint32_t bufferId[2];  // 33--64, 32: atomic val
+    } uid = {.startTime = startTime};
+    ++bufferId;
+    uid.processId[1] = processId;
+    uid.bufferId[1] = bufferId;
+    return uid.startTime;
 }
+} // namespace
 
 namespace OHOS {
 namespace Media {
-AVBuffer::AVBuffer() : pts_(0), dts_(0), duration_(0), flag_(0), meta_(nullptr), memory_(nullptr) {}
+AVBuffer::AVBuffer() : pts_(0), dts_(0), duration_(0), flag_(0), meta_(nullptr), memory_(nullptr),
+    uniqueId_(GenerateUniqueId()) {}
 
 AVBuffer::~AVBuffer() {}
 
@@ -193,17 +219,15 @@ Status AVBuffer::Init(sptr<SurfaceBuffer> surfaceBuffer)
 
 uint64_t AVBuffer::GetUniqueId()
 {
-    if (memory_ == nullptr) {
-        return 0;
-    }
-    return memory_->uid_;
+    return uniqueId_;
 }
 
 bool AVBuffer::WriteToMessageParcel(MessageParcel &parcel)
 {
 #ifdef MEDIA_OHOS
     MessageParcel bufferParcel;
-    bool ret = bufferParcel.WriteUint64(GetUniqueId()) && bufferParcel.WriteInt64(pts_) &&
+    auto uid = memory_ == nullptr ? 0 : GetUniqueId();
+    bool ret = bufferParcel.WriteUint64(uid) && bufferParcel.WriteInt64(pts_) &&
                bufferParcel.WriteInt64(dts_) && bufferParcel.WriteInt64(duration_) && bufferParcel.WriteUint32(flag_) &&
                meta_->ToParcel(bufferParcel);
 
@@ -254,7 +278,7 @@ bool AVBuffer::ReadFromMessageParcel(MessageParcel &parcel, bool isSurfaceBuffer
     } else if (uid != 0) {
         memory_ = AVMemory::CreateAVMemory(parcel, false);
         FALSE_RETURN_V_MSG_E(memory_ != nullptr, false, "Create memory failed");
-        memory_->uid_ = uid;
+        uniqueId_ = uid;
     }
     pts_ = pts;
     dts_ = dts;

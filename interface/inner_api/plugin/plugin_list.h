@@ -54,10 +54,12 @@ private:
     void AddApeDemuxerPlugin();
     void AddAsfDemuxerPlugin();
     void AddAsfoDemuxerPlugin();
+    void AddAuDemuxerPlugin();
     void AddFlacDemuxerPlugin();
     void AddFlvDemuxerPlugin();
     void AddMatroskaDemuxerPlugin();
     void AddMovDemuxerPlugin();
+    void AddCafDemuxerPlugin();
     void AddMp3DemuxerPlugin();
     void AddMpegDemuxerPlugin();
     void AddMpegtsDemuxerPlugin();
@@ -66,6 +68,7 @@ private:
     void AddWebvttDemuxerPlugin();
     void AddOggDemuxerPlugin();
     void AddWavDemuxerPlugin();
+    void AddAiffDemuxerPlugin();
     void AddFFmpegDemuxerPlugins();
     void AddDtsDemuxerPlugin();
     void AddMpegAudioDecoderPlugin();
@@ -89,6 +92,8 @@ private:
     void AddMp3AudioEncoderPlugins();
     void AddFFmpegMuxerPlugins();
     void AddFFmpegFlacMuxerplugins();
+    void AddFFmpegOggMuxerplugins();
+    void AddMpeg4MuxerPlugins();
     void AddAudioVendorAacEncodersPlugin();
     void AddGsmMsAudioDecoderPlugin();
     void AddGsmAudioDecoderPlugin();
@@ -122,6 +127,12 @@ private:
 #endif
 #ifdef SUPPORT_DEMUXER_EAC3
     void AddEac3DemuxerPlugin();
+#endif
+#ifdef SUPPORT_DEMUXER_DTSHD
+    void AddDtshdDemuxerPlugin();
+#endif
+#ifdef SUPPORT_DEMUXER_TRUEHD
+    void AddTruehdDemuxerPlugin();
 #endif
 
     std::vector<PluginDescription> pluginDescriptionList_;

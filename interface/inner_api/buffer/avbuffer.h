@@ -130,6 +130,7 @@ private:
     Status Init(uint8_t *ptr, int32_t capacity, int32_t size = 0);
     Status Init(sptr<SurfaceBuffer> surfaceBuffer);
     AVBufferConfig config_;
+    uint64_t uniqueId_;
 };
 
 /**
@@ -262,7 +263,6 @@ protected:
     int32_t offset_;
     int32_t size_;
     uint8_t *base_;
-    uint64_t uid_;
     std::shared_ptr<AVAllocator> allocator_;
 
 private:

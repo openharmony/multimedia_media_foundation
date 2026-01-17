@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 Huawei Device Co., Ltd.
+ * Copyright (C) 2025 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,26 +13,17 @@
  * limitations under the License.
  */
 
-#ifndef TASK_UNITTEST_H
-#define TASK_UNITTEST_H
-
-#include "gtest/gtest.h"
-#include "mock/taskInner.h"
-#include "osal/task/task.h"
+#ifndef DOLBY_PASSTHROUGH_H
+#define DOLBY_PASSTHROUGH_H
 
 namespace OHOS {
 namespace Media {
-class TaskUnitTest : public testing::Test {
+class IDolbyPassthrough {
 public:
-    // SetUpTestCase: Called before all test cases
-    static void SetUpTestCase(void);
-    // TearDownTestCase: Called after all test case
-    static void TearDownTestCase(void);
-    // SetUp: Called before each test cases
-    void SetUp(void);
-    // TearDown: Called after each test cases
-    void TearDown(void);
+    virtual ~IDolbyPassthrough() = default;
+    virtual bool IsAudioPass(const char* mime) = 0;
+    virtual std::vector<std::string> GetList() = 0;
 };
 } // namespace Media
 } // namespace OHOS
-#endif // TASK_UNITTEST_H
+#endif // DOLBY_PASSTHROUGH_H

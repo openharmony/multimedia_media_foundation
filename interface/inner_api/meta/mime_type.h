@@ -28,8 +28,10 @@ public:
     static constexpr const char VIDEO_MPEG2[] = "video/mpeg2";
     static constexpr const char VIDEO_HEVC[] = "video/hevc";
     static constexpr const char VIDEO_MPEG4[] = "video/mp4v-es";
-    static constexpr const char VIDEO_VP8[] = "video/vp8";
-    static constexpr const char VIDEO_VP9[] = "video/vp9";
+    static constexpr const char VIDEO_VP8[] = "video/x-vnd.on2.vp8";
+    static constexpr const char VIDEO_VP9[] = "video/x-vnd.on2.vp9";
+    static constexpr const char VIDEO_VP8_IANA[] = "video/vp8";
+    static constexpr const char VIDEO_VP9_IANA[] = "video/vp9";
     static constexpr const char VIDEO_VVC[] = "video/vvc";
     static constexpr const char VIDEO_VC1[] = "video/vc1";
     static constexpr const char VIDEO_RV30[] = "video/rv30";
@@ -39,6 +41,8 @@ public:
     static constexpr const char VIDEO_MSVIDEO1[] = "video/msvideo1";
     static constexpr const char VIDEO_AVS[] = "video/cavs";
     static constexpr const char VIDEO_CINEPAK[] = "video/cinepak";
+    static constexpr const char VIDEO_DVVIDEO[] = "video/dvvideo";
+    static constexpr const char VIDEO_RAWVIDEO[] = "video/rawvideo";
 
     static constexpr const char AUDIO_AMR_NB[] = "audio/3gpp";
     static constexpr const char AUDIO_AMR_WB[] = "audio/amr-wb";
@@ -111,6 +115,7 @@ public:
     static constexpr const char MEDIA_WAV[] = "media/wav";
     static constexpr const char MEDIA_AAC[] = "media/aac";
     static constexpr const char MEDIA_FLAC[] = "media/flac";
+    static constexpr const char MEDIA_OGG[] = "media/ogg";
 
     static constexpr const char TEXT_SUBRIP[] = "application/x-subrip";
     static constexpr const char TEXT_WEBVTT[] = "text/vtt";
