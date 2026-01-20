@@ -529,7 +529,7 @@ Status AVBufferQueueImpl::SetQueueSizeAndAttachBuffer(uint32_t size,
 
 void AVBufferQueueImpl::TotalMemoryCalculation(bool isAdd, int32_t capacity)
 {
-    FALSE_RETURN(capacity > 0);
+    FALSE_RETURN_NOLOG(capacity > 0);
     uint32_t capacityUint = static_cast<uint32_t>(capacity);
     if (isAdd) {
         memoryUsage_.fetch_add(capacityUint);
