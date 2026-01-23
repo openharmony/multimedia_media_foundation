@@ -184,7 +184,7 @@ typedef enum OH_AVErrCode {
      */
     AV_ERR_IO_UNSUPPORTED_REQUEST = 5411011,
     /**
-     * @error clear_text not permitted.
+     * @error Http clear text not permitted.
      * @since 23
      */
     AV_ERR_IO_CLEARTEXT_NOT_PERMITTED = 5411012,
@@ -205,7 +205,7 @@ typedef enum OH_AVErrCode {
      */
     AV_ERR_TRY_AGAIN_LATER = 5410006,
     /**
-     * @error Super_resolution unsupported.
+     * @error Super-resolution unsupported.
      * @since 23
      */
     AV_ERR_SUPER_RESOLUTION_UNSUPPORTED = 5410003,
