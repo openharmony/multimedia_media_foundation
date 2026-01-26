@@ -90,9 +90,10 @@ public:
     
     ErrCode GetCollaborativeDeviceState(
         std::unordered_map<std::string, uint32_t> &addressToCollaborativeEnabledMap, int32_t &funcResult) override;
+    
+    ErrCode GetAudioAppSessionMsg(std::unordered_map<int32_t, bool> &avSessionMap, int32_t &funcResult) override;
 
-    ErrCode GetAudioAppStateMsg(std::unordered_map<int32_t, MonitorAppStateInfo> &appStateMapOut,
-        int32_t &funcResult) override;
+    ErrCode GetAudioAppBackTaskMsg(std::unordered_map<int32_t, bool> &backTaskMap, int32_t &funcResult) override;
 
     ErrCode GetDistributedDeviceInfo(std::vector<std::string> &deviceInfos, int32_t &funcResult) override;
 

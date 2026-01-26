@@ -142,8 +142,11 @@ void EventAggregate::UpdateAggregateStateEventList(std::shared_ptr<EventBean> &b
         case SET_DEVICE_COLLABORATIVE_STATE:
             HandleSetDeviceCollaborativeState(bean);
             break;
-        case APP_BACKGROUND_STATE:
-            HandleAppBackgroundStateChange(bean);
+        case APP_SESSION_STATE:
+            HandleAppSessionStateChange(bean);
+            break;
+        case APP_BACKTASK_STATE:
+            HandleAppBackTaskStateChange(bean);
             break;
         case VOLUME_API_INVOKE:
             HandleVolumeApiInvokeEvent(bean);
@@ -715,9 +718,14 @@ void EventAggregate::HandleExcludedOutputDevices(std::shared_ptr<EventBean> &bea
     mediaMonitorPolicy_.WriteEvent(bean->GetEventId(), bean);
 }
 
-void EventAggregate::HandleAppBackgroundStateChange(std::shared_ptr<EventBean> &bean)
+void EventAggregate::HandleAppSessionStateChange(std::shared_ptr<EventBean> &bean)
 {
-    audioMemo_.UpdateAppBackgroundState(bean);
+    audioMemo_.UpdateAppSessionState(bean);
+}
+
+void EventAggregate::HandleAppBackTaskStateChange(std::shared_ptr<EventBean> &bean)
+{
+    audioMemo_.UpdateAppBackTaskState(bean);
 }
 
 void EventAggregate::WriteInfo(int32_t fd, std::string &dumpString)

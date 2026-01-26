@@ -144,18 +144,31 @@ void MediaMonitorManager::GetAudioExcludedDevicesMsg(std::map<AudioDeviceUsage,
     }
 }
 
-void MediaMonitorManager::GetAudioAppStateMsg(std::map<int32_t, std::shared_ptr<MonitorAppStateInfo>> &appStateMap)
+void MediaMonitorManager::GetAudioAppSessionMsg(std::map<int32_t, bool> &avSessionMap)
 {
-    MEDIA_LOG_D("Get audio app state msg");
+    MEDIA_LOG_D("Get audio app session msg");
     sptr<IMediaMonitor> proxy = GetMediaMonitorProxy();
     FALSE_RETURN_MSG(proxy != nullptr, "proxy is nullptr");
     int32_t ret;
-    std::unordered_map<int32_t, MonitorAppStateInfo> appStateInfos;
-    proxy->GetAudioAppStateMsg(appStateInfos, ret);
-    FALSE_RETURN_MSG(ret == SUCCESS, "GetAudioAppStateMsg with error %{public}d", ret);
-    for (auto &appStateInfo : appStateInfos) {
-        std::shared_ptr<MonitorAppStateInfo> infoPtr = std::make_shared<MonitorAppStateInfo>(appStateInfo.second);
-        appStateMap.emplace(appStateInfo.first, infoPtr);
+    std::unordered_map<int32_t, bool> sessionInfos;
+    proxy->GetAudioAppSessionMsg(sessionInfos, ret);
+    FALSE_RETURN_MSG(ret == SUCCESS, "GetAudioAppSessionMsg with error %{public}d", ret);
+    for (auto &sessionInfo : sessionInfos) {
+        avSessionMap.emplace(sessionInfo.first, sessionInfo.second);
+    }
+}
+
+void MediaMonitorManager::GetAudioAppBackTaskMsg(std::map<int32_t, bool> &backTaskMap)
+{
+    MEDIA_LOG_D("Get audio app back task msg");
+    sptr<IMediaMonitor> proxy = GetMediaMonitorProxy();
+    FALSE_RETURN_MSG(proxy != nullptr, "proxy is nullptr");
+    int32_t ret;
+    std::unordered_map<int32_t, bool> backTaskInfos;
+    proxy->GetAudioAppBackTaskMsg(backTaskInfos, ret);
+    FALSE_RETURN_MSG(ret == SUCCESS, "GetAudioAppBackTaskMsg with error %{public}d", ret);
+    for (auto &backTaskInfo : backTaskInfos) {
+        backTaskMap.emplace(backTaskInfo.first, backTaskInfo.second);
     }
 }
 

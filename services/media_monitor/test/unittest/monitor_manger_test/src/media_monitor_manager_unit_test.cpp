@@ -112,47 +112,6 @@ HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_WriteAudioBuffer_001, TestSi
     EXPECT_EQ(buffer, nullptr);
 }
 
-HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_GetAudioAppStateMsg_001, TestSize.Level0)
-{
-    int32_t selfUid = getuid();
-    setuid(1041);
-    //ADD
-    std::shared_ptr<EventBean> bean = std::make_shared<EventBean>(
-        AUDIO, APP_BACKGROUND_STATE, BEHAVIOR_EVENT);
-    bean->Add("PID", 1);
-    bean->Add("IS_FREEZE", 1);
-    bean->Add("IS_BACK", 1);
-    bean->Add("HAS_SESSION", 1);
-    bean->Add("HAS_BACK_TASK", 1);
-    bean->Add("IS_BINDER", 1);
-    bean->Add("IS_ADD", 1);
-    MediaMonitorManager::GetInstance().WriteLogMsg(bean);
-    usleep(100000); // 100ms
-
-    std::map<int32_t, std::shared_ptr<MonitorAppStateInfo>> appStateMap;
-    MediaMonitorManager::GetInstance().GetAudioAppStateMsg(appStateMap);
-    auto it = appStateMap.find(1);
-    EXPECT_NE(it, appStateMap.end());
-
-    std::shared_ptr<EventBean> bean1 = std::make_shared<EventBean>(
-        AUDIO, APP_BACKGROUND_STATE, BEHAVIOR_EVENT);
-    bean1->Add("PID", 1);
-    bean1->Add("IS_FREEZE", 0);
-    bean1->Add("IS_BACK", 0);
-    bean1->Add("HAS_SESSION", 0);
-    bean1->Add("HAS_BACK_TASK", 0);
-    bean1->Add("IS_BINDER", 0);
-    bean1->Add("IS_ADD", 0);
-    MediaMonitorManager::GetInstance().WriteLogMsg(bean1);
-    usleep(100000); // 100ms
-
-    std::map<int32_t, std::shared_ptr<MonitorAppStateInfo>> appStateMap1;
-    MediaMonitorManager::GetInstance().GetAudioAppStateMsg(appStateMap1);
-    it = appStateMap1.find(1);
-    EXPECT_EQ(it, appStateMap1.end());
-    setuid(selfUid);
-}
-
 HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_WriteLogMsg_005, TestSize.Level0)
 {
     ModuleId moduleId = AUDIO;
@@ -382,6 +341,76 @@ HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_GetDmDeviceInfo_002, TestSiz
     std::vector<MonitorDmDeviceInfo> dmDeviceInfos;
     MediaMonitorManager::GetInstance().GetDmDeviceInfo(dmDeviceInfos);
     EXPECT_EQ(dmDeviceInfos.size(), 0);
+}
+
+HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_GetAudioAppSessionMsg_001, TestSize.Level0)
+{
+    int32_t selfUid = getuid();
+    setuid(1041);
+
+    std::shared_ptr<EventBean> bean = std::make_shared<EventBean>(
+        AUDIO, APP_SESSION_STATE, BEHAVIOR_EVENT);
+    bean->Add("PID", 1);
+    bean->Add("HAS_SESSION", 1);
+    bean->Add("IS_ADD", 1);
+    MediaMonitorManager::GetInstance().WriteLogMsg(bean);
+    usleep(10000);
+
+    std::map<int32_t, bool> appSessionMap;
+    MediaMonitorManager::GetInstance().GetAudioAppSessionMsg(appSessionMap);
+    auto it = appSessionMap.find(1);
+    EXPECT_NE(it, appSessionMap.end());
+    EXPECT_EQ(it->second, true);
+
+    std::shared_ptr<EventBean> bean1 = std::make_shared<EventBean>(
+        AUDIO, APP_SESSION_STATE, BEHAVIOR_EVENT);
+    bean1->Add("PID", 1);
+    bean1->Add("HAS_SESSION", 1);
+    bean1->Add("IS_ADD", 0);
+    MediaMonitorManager::GetInstance().WriteLogMsg(bean1);
+    usleep(10000);
+
+    appSessionMap.clear();
+    MediaMonitorManager::GetInstance().GetAudioAppSessionMsg(appSessionMap);
+    it = appSessionMap.find(1);
+    EXPECT_NE(it, appSessionMap.end());
+
+    setuid(selfUid);
+}
+
+HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_GetAudioAppBackTaskMsg_001, TestSize.Level0)
+{
+    int32_t selfUid = getuid();
+    setuid(1041);
+
+    std::shared_ptr<EventBean> bean = std::make_shared<EventBean>(
+        AUDIO, APP_BACKTASK_STATE, BEHAVIOR_EVENT);
+    bean->Add("PID", 2);
+    bean->Add("HAS_BACK_TASK", 1);
+    bean->Add("IS_ADD", 1);
+    MediaMonitorManager::GetInstance().WriteLogMsg(bean);
+    usleep(10000);
+
+    std::map<int32_t, bool> appBackTaskMap;
+    MediaMonitorManager::GetInstance().GetAudioAppBackTaskMsg(appBackTaskMap);
+    auto it = appBackTaskMap.find(2);
+    EXPECT_NE(it, appBackTaskMap.end());
+    EXPECT_EQ(it->second, true);
+
+    std::shared_ptr<EventBean> bean1 = std::make_shared<EventBean>(
+        AUDIO, APP_BACKTASK_STATE, BEHAVIOR_EVENT);
+    bean1->Add("PID", 2);
+    bean1->Add("HAS_BACK_TASK", 1);
+    bean1->Add("IS_ADD", 0);
+    MediaMonitorManager::GetInstance().WriteLogMsg(bean1);
+    usleep(10000);
+
+    appBackTaskMap.clear();
+    MediaMonitorManager::GetInstance().GetAudioAppBackTaskMsg(appBackTaskMap);
+    it = appBackTaskMap.find(2);
+    EXPECT_NE(it, appBackTaskMap.end());
+
+    setuid(selfUid);
 }
 } // namespace MediaMonitor
 } // namespace Media

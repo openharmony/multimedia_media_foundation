@@ -79,7 +79,7 @@ enum EventId {
 
     // for storing collaborative service state
     SET_DEVICE_COLLABORATIVE_STATE = 37,
-    APP_BACKGROUND_STATE = 38,
+    APP_BACKTASK_STATE = 38,
     HPAE_MESSAGE_QUEUE_EXCEPTION = 39,
     STREAM_MOVE_EXCEPTION = 40,
 
@@ -104,6 +104,8 @@ enum EventId {
 
     // for audio loopback
     LOOPBACK_EXCEPTION = 53,
+
+    APP_SESSION_STATE = 54,
 };
 
 enum VolumeStatisticsSceneType : uint8_t {

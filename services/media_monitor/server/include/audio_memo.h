@@ -50,8 +50,11 @@ public:
     void UpdateCollaborativeDeviceState(std::shared_ptr<EventBean> &bean);
     int32_t GetCollaborativeDeviceState(std::map<std::string, uint32_t> &addressToCollaborativeEnabledMap);
 
-    void UpdateAppBackgroundState(std::shared_ptr<EventBean> &bean);
-    int32_t GetAudioAppStateMsg(std::map<int32_t, std::shared_ptr<MonitorAppStateInfo>> &appStateMap);
+    void UpdateAppSessionState(std::shared_ptr<EventBean> &bean);
+    void UpdateAppBackTaskState(std::shared_ptr<EventBean> &bean);
+
+    int32_t GetAudioAppSessionMsg(std::unordered_map<int32_t, bool> &avSessionMap);
+    int32_t GetAudioAppBackTaskMsg(std::unordered_map<int32_t, bool> &backTaskMap);
 
     void UpdateDistributedSceneInfo(std::shared_ptr<EventBean> &bean);
     int32_t GetDistributedSceneInfo(std::string &distributedSceneInfo);
@@ -68,7 +71,8 @@ private:
 
     void UpdateExcludedDeviceInner(AudioDeviceUsage audioDevUsage, std::shared_ptr<MonitorDeviceInfo> &deviceInfo,
         int32_t exclusionStatus);
-    void UpdateAppBackgroundStateInner(int32_t pid, std::shared_ptr<MonitorAppStateInfo> appStateInfo, int32_t isAdd);
+    void UpdateAppSessionStateInner(int32_t pid, bool hasSession, int32_t isAdd);
+    void UpdateAppBackTaskStateInner(int32_t pid, bool hasBackTask, int32_t isAdd);
 
     std::mutex preferredDeviceMutex_;
     std::map<PreferredType, std::shared_ptr<MonitorDeviceInfo>> preferredDevices_;
@@ -79,8 +83,11 @@ private:
     std::mutex collaborativeMutex_;
     std::map<std::string, uint32_t> addressToCollaborativeEnabledMap_;
 
-    std::mutex appStateMutex_;
-    std::map<int32_t, std::shared_ptr<MonitorAppStateInfo>> appStateMap_;
+    std::mutex appSessionMutex_;
+    std::unordered_map<int32_t, bool> appSessionMap_;
+
+    std::mutex appBackTaskMutex_;
+    std::unordered_map<int32_t, bool> appBackTaskMap_;
 
     std::mutex distributedInfoMutex_;
     std::string distributedSceneInfo_;

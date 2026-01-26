@@ -133,7 +133,6 @@ public:
     void WriteSystemTonePlayback(const std::unique_ptr<DfxSystemTonePlaybackResult> &result);
     void WriteStreamOccupancy(std::shared_ptr<EventBean> &bean);
     void WriteAudioRecordError(std::shared_ptr<EventBean> &bean);
-    void WriteAppBackgroundState(std::shared_ptr<EventBean> &bean);
     void WriteMessageQueueException(std::shared_ptr<EventBean> &bean);
     void WriteStreamMoveException(std::shared_ptr<EventBean> &bean);
     void WriteVolumeApiInvoke(std::shared_ptr<EventBean> &bean);
