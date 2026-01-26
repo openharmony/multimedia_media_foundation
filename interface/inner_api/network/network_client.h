@@ -43,21 +43,35 @@ public:
     static std::shared_ptr<NetworkClient> GetInstance(RxHeader headCallback, RxBody bodyCallback, void *userParam);
     virtual void SetAppUid(int32_t appUid);
     static std::shared_ptr<NetworkClient> GetAppInstance(RxHeader headCallback, RxBody bodyCallback, void *userParam);
-    virtual void SetLoader(std::shared_ptr<IMediaSourceLoader> sourceLoader) {}
+    virtual void SetLoader(std::shared_ptr<IMediaSourceLoader> sourceLoader) 
+    {
+        (void)sourceLoader;
+    }
     virtual int32_t RespondHeader(int64_t uuid, const std::map<std::string, std::string>& httpHeader,
                     std::string redirctUrl)
     {
+        (void)uuid;
+        (void)httpHeader;
+        (void)redirctUrl;
         return 0;
     }
     virtual int32_t RespondData(int64_t uuid, int64_t offset, const std::shared_ptr<AVSharedMemory> memory)
     {
+        (void)uuid;
+        (void)offset;
+        (void)memory;
         return 0;
     }
     virtual int32_t FinishLoading(int64_t uuid, LoadingRequestError state)
     {
+        (void)uuid;
+        (void)state;
         return 0;
     }
-    virtual void SetUuid(int64_t uuid) {}
+    virtual void SetUuid(int64_t uuid)
+    {
+        (void)uuid;
+    }
 
     virtual std::string GetRedirectUrl()
     {
