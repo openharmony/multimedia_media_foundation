@@ -43,7 +43,7 @@ public:
     static std::shared_ptr<NetworkClient> GetInstance(RxHeader headCallback, RxBody bodyCallback, void *userParam);
     virtual void SetAppUid(int32_t appUid);
     static std::shared_ptr<NetworkClient> GetAppInstance(RxHeader headCallback, RxBody bodyCallback, void *userParam);
-    virtual void SetLoader(std::shared_ptr<IMediaSourceLoader> sourceLoader) 
+    virtual void SetLoader(std::shared_ptr<IMediaSourceLoader> sourceLoader)
     {
         (void)sourceLoader;
     }
