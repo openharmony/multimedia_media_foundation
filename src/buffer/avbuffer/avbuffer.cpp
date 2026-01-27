@@ -222,24 +222,26 @@ uint64_t AVBuffer::GetUniqueId()
     return uniqueId_;
 }
 
-bool AVBuffer::WriteToMessageParcel(MessageParcel &parcel)
+bool AVBuffer::WriteToMessageParcel(MessageParcel &parcel, bool updateAVMemory)
 {
 #ifdef MEDIA_OHOS
-    MessageParcel bufferParcel;
+    auto oldPos = parcel.GetWritePosition();
+    auto oldSize = parcel.GetDataSize();
     auto uid = memory_ == nullptr ? 0 : GetUniqueId();
-    bool ret = bufferParcel.WriteUint64(uid) && bufferParcel.WriteInt64(pts_) &&
-               bufferParcel.WriteInt64(dts_) && bufferParcel.WriteInt64(duration_) && bufferParcel.WriteUint32(flag_) &&
-               meta_->ToParcel(bufferParcel);
+    bool ret = parcel.WriteUint64(uid) && parcel.WriteInt64(pts_) &&
+               parcel.WriteInt64(dts_) && parcel.WriteInt64(duration_) && parcel.WriteUint32(flag_) &&
+               meta_->ToParcel(parcel);
 
-    if (memory_ != nullptr) {
+    if (ret && memory_ != nullptr) {
         MemoryType type = memory_->GetMemoryType();
         FALSE_RETURN_V_MSG_E(type != MemoryType::VIRTUAL_MEMORY, false, "Virtual memory not support");
 
-        ret = ret && bufferParcel.WriteUint8(static_cast<uint8_t>(type)) &&
-              memory_->WriteCommonToMessageParcel(bufferParcel) && memory_->WriteToMessageParcel(bufferParcel);
+        ret = parcel.WriteUint8(static_cast<uint8_t>(type)) &&
+              memory_->WriteCommonToMessageParcel(parcel) && memory_->WriteToMessageParcel(parcel, updateAVMemory);
     }
-    if (ret) {
-        parcel.Append(bufferParcel);
+    if (!ret) {
+        parcel.RewindWrite(oldPos);
+        parcel.SetDataSize(oldSize);
     }
     return ret;
 #else

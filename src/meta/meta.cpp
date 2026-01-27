@@ -707,24 +707,21 @@ AnyValueType Meta::GetValueType(const TagType& key) const
 
 bool Meta::ToParcel(MessageParcel &parcel) const
 {
-    MessageParcel metaParcel;
-    int32_t metaSize = 0;
-    bool ret = true;
+    auto oldPos = parcel.GetWritePosition();
+    auto oldSize = parcel.GetDataSize();
+    bool ret = parcel.WriteInt32(map_.size());
     for (auto iter = begin(); iter != end(); ++iter) {
-        ++metaSize;
-        ret &= metaParcel.WriteString(iter->first);
-        ret &= metaParcel.WriteInt32(static_cast<int32_t>(GetValueType(iter->first)));
-        ret &= iter->second.ToParcel(metaParcel);
+        ret = ret && parcel.WriteString(iter->first);
+        ret = ret && parcel.WriteInt32(static_cast<int32_t>(GetValueType(iter->first)));
+        ret = ret && iter->second.ToParcel(parcel);
         if (!ret) {
             MEDIA_LOG_E("fail to Marshalling Key: " PUBLIC_LOG_S, iter->first.c_str());
-            return false;
+            break;
         }
     }
-    if (ret) {
-        ret = ret && parcel.WriteInt32(metaSize);
-        if (metaSize != 0) {
-            ret = ret && parcel.Append(metaParcel);
-        }
+    if (!ret) {
+        parcel.RewindWrite(oldPos);
+        parcel.SetDataSize(oldSize);
     }
     return ret;
 }

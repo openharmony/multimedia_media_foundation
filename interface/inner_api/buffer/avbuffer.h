@@ -100,7 +100,7 @@ public:
      * @return Whether the writing was successful.
      * @since 4.1
      */
-    bool WriteToMessageParcel(MessageParcel &parcel);
+    bool WriteToMessageParcel(MessageParcel &parcel, bool updateAVMemory = true);
 
     /**
      * @brief Read buffer info from MessageParcel.
@@ -250,7 +250,7 @@ protected:
     virtual Status Init(MessageParcel &parcel);
     virtual Status InitSurfaceBuffer(MessageParcel &parcel);
     virtual Status InitSurfaceBuffer(sptr<SurfaceBuffer> surfaceBuffer);
-    virtual bool WriteToMessageParcel(MessageParcel &parcel);
+    virtual bool WriteToMessageParcel(MessageParcel &parcel, bool updateAVMemory = true);
     virtual bool ReadFromMessageParcel(MessageParcel &parcel);
 
     bool ReadCommonFromMessageParcel(MessageParcel &parcel);
