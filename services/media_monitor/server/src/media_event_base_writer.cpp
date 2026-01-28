@@ -895,6 +895,29 @@ void MediaEventBaseWriter::WriteAudioLoopbackException(std::shared_ptr<EventBean
     }
 #endif
 }
+
+void MediaEventBaseWriter::WriteAudioInterruptErrorEvent(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_E("Write using audiosession error event");
+    if (bean == nullptr) {
+        MEDIA_LOG_E("eventBean is nullptr");
+        return;
+    }
+#ifdef MONITOR_ENABLE_HISYSEVENT
+    HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "INTERRUPT_ERROR",
+        HiviewDFX::HiSysEvent::EventType::STATISTIC,
+        "APP_NAME", bean->GetStringValue("APP_NAME"),
+        "ERROR_INFO", bean->GetStringValue("ERROR_INFO"),
+        "INTERRUPT_HINTTYPE", bean->GetIntValue("INTERRUPT_HINTTYPE"),
+        "RENDERER_INFO", bean->GetStringValue("RENDERER_INFO"),
+        "SESSION_INFO", bean->GetStringValue("SESSION_INFO"),
+        "WINDOW_STATE", bean->GetIntValue("WINDOW_STATE"),
+        "RENDERER_PLAY_TIMES", bean->GetIntValue("RENDERER_PLAY_TIMES"),
+        "CURR_APP_NAME", bean->GetStringValue("CURR_APP_NAME"),
+        "CURR_RENDERER_INFO", bean->GetStringValue("CURR_RENDERER_INFO"),
+        "CURR_SESSION_INFO", bean->GetStringValue("CURR_SESSION_INFO"));
+#endif
+}
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS
