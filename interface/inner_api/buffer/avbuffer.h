@@ -100,7 +100,16 @@ public:
      * @return Whether the writing was successful.
      * @since 4.1
      */
-    bool WriteToMessageParcel(MessageParcel &parcel, bool updateAVMemory = true);
+    bool WriteToMessageParcel(MessageParcel &parcel);
+
+    /**
+     * @brief Write buffer info to MessageParcel.
+     * @param parcel The MessageParcel written by buffer, refer to {@link MessageParcel}.
+     * @param updateAVMemory Whether to update AVMemory info to parcel.
+     * @return Whether the writing was successful.
+     * @since 4.1
+     */
+    bool WriteToMessageParcel(MessageParcel &parcel, bool updateAVMemory);
 
     /**
      * @brief Read buffer info from MessageParcel.
@@ -250,7 +259,8 @@ protected:
     virtual Status Init(MessageParcel &parcel);
     virtual Status InitSurfaceBuffer(MessageParcel &parcel);
     virtual Status InitSurfaceBuffer(sptr<SurfaceBuffer> surfaceBuffer);
-    virtual bool WriteToMessageParcel(MessageParcel &parcel, bool updateAVMemory = true);
+    virtual bool WriteToMessageParcel(MessageParcel &parcel);
+    virtual bool WriteToMessageParcel(MessageParcel &parcel, bool updateAVMemory);
     virtual bool ReadFromMessageParcel(MessageParcel &parcel);
 
     bool ReadCommonFromMessageParcel(MessageParcel &parcel);

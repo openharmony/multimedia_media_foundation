@@ -167,6 +167,11 @@ bool AVMemory::ReadFromMessageParcel(MessageParcel &parcel)
     return false;
 }
 
+bool AVMemory::WriteToMessageParcel(MessageParcel &parcel)
+{
+    return WriteToMessageParcel(parcel, true);
+}
+
 bool AVMemory::WriteToMessageParcel(MessageParcel &parcel, [[maybe_unused]] bool updateAVMemory)
 {
     (void)parcel;

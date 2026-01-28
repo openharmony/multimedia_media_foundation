@@ -222,6 +222,11 @@ uint64_t AVBuffer::GetUniqueId()
     return uniqueId_;
 }
 
+bool AVBuffer::WriteToMessageParcel(MessageParcel &parcel)
+{
+    return WriteToMessageParcel(parcel, true);
+}
+
 bool AVBuffer::WriteToMessageParcel(MessageParcel &parcel, bool updateAVMemory)
 {
 #ifdef MEDIA_OHOS
