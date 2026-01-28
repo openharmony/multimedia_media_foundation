@@ -200,7 +200,7 @@ void EventAggregate::HandleCallSessionEvent(std::shared_ptr<EventBean> &bean)
 
 void EventAggregate::HandleAudioInterruptErrorEvent(std::shared_ptr<EventBean> &bean)
 {
-    MEDIA_LOG_D("Handle audio interrupt error event");
+    MEDIA_LOG_D("Handle call audio session event");
     mediaMonitorPolicy_.AddAudioInterruptErrorEvent(bean);
 }
 
