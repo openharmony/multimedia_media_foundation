@@ -871,6 +871,29 @@ void MediaMonitorPolicy::AddToCallSessionQueue(std::shared_ptr<EventBean> &bean)
     }
 }
 
+void MediaMonitorPolicy::AddAudioInterruptErrorEvent(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("add call audio session event");
+    if (bean == nullptr) {
+        MEDIA_LOG_E("eventBean is nullptr");
+        return;
+    }
+    std::lock_guard<std::mutex> lock(audioInterruptErrorMutex_);
+    if (bean->GetStringValue("ERROR_INFO") == "AudioInterruptError") {
+        MEDIA_LOG_E("AudioInterruptError begin");
+        mediaEventBaseWriter_.WriteAudioInterruptErrorEvent(bean);
+        return;
+    }
+    std::string key = bean->GetStringValue("APP_NAME") + bean->GetStringValue("ERROR_INFO")
+        + bean->GetStringValue("AUDIOSESSION_INFO");
+    if (audioInterruptErrorSet_.find(key) == audioInterruptErrorSet_.end() &&
+        audioInterruptErrorSet_.size() <= audioInterruptErrorSetSize_) {
+        MEDIA_LOG_E("others begin");
+        audioInterruptErrorSet_.emplace(key);
+        mediaEventBaseWriter_.WriteAudioInterruptErrorEvent(bean);
+    }
+}
+
 void MediaMonitorPolicy::AddToSuiteEngineNodeStatsMap(std::shared_ptr<EventBean> &bean)
 {
     MEDIA_LOG_I("Add audio suite engine utilization stats counts to map");
@@ -983,29 +1006,6 @@ void MediaMonitorPolicy::HandleToLoudVolumeSceneEvent(std::shared_ptr<EventBean>
     bean->Add("LOUD_VOLUME_TIMES", loudVolumeTimes);
     mediaEventBaseWriter_.WriteVolumeSettingStatistics(bean);
     loudVolumeTimes_.fetch_sub(loudVolumeTimes);
-}
-
-void MediaMonitorPolicy::AddAudioInterruptErrorEvent(std::shared_ptr<EventBean> &bean)
-{
-    MEDIA_LOG_D("add call audio session event");
-    if (bean == nullptr) {
-        MEDIA_LOG_E("eventBean is nullptr");
-        return;
-    }
-    std::lock_guard<std::mutex> lock(audioInterruptErrorMutex_);
-    if (bean->GetStringValue("ERROR_INFO") == "AudioInterruptError") {
-        MEDIA_LOG_E("AudioInterruptError begin");
-        mediaEventBaseWriter_.WriteAudioInterruptErrorEvent(bean);
-        return;
-    }
-    std::string key = bean->GetStringValue("APP_NAME") + bean->GetStringValue("ERROR_INFO")
-        + bean->GetStringValue("AUDIOSESSION_INFO");
-    if (audioInterruptErrorSet_.find(key) == audioInterruptErrorSet_.end() &&
-        audioInterruptErrorSet_.size() <= audioInterruptErrorSetSize_) {
-        MEDIA_LOG_E("others begin");
-        audioInterruptErrorSet_.emplace(key);
-        mediaEventBaseWriter_.WriteAudioInterruptErrorEvent(bean);
-    }
 }
 
 void MediaMonitorPolicy::WriteInfo(int32_t fd, std::string &dumpString)
