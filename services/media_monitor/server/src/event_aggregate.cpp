@@ -166,6 +166,9 @@ void EventAggregate::UpdateAggregateStateEventList(std::shared_ptr<EventBean> &b
         case VOLUME_SETTING_STATISTICS:
             HandleVolumeSettingStatisticsEvent(bean);
             break;
+        case INTERRUPT_ERROR:
+            HandleAudioInterruptErrorEvent(bean);
+            break;
         default:
             break;
     }
@@ -193,6 +196,12 @@ void EventAggregate::HandleCallSessionEvent(std::shared_ptr<EventBean> &bean)
 {
     MEDIA_LOG_D("Handle call audio session event");
     mediaMonitorPolicy_.AddToCallSessionQueue(bean);
+}
+
+void EventAggregate::HandleAudioInterruptErrorEvent(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Handle call audio session event");
+    mediaMonitorPolicy_.AddAudioInterruptErrorEvent(bean);
 }
 
 void EventAggregate::HandleDeviceChangeEvent(std::shared_ptr<EventBean> &bean)
