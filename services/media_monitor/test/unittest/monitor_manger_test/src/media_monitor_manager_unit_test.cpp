@@ -258,6 +258,131 @@ HWTEST(MediaMonitorManagerUnitTest, Monitor_Device_Info_Marshalling_008, TestSiz
     MonitorDeviceInfo *outDeviceInfo = deviceInfo->Unmarshalling(parcel);
     EXPECT_EQ(outDeviceInfo->deviceType_, 1);
 }
+
+HWTEST(MediaMonitorManagerUnitTest, Monitor_Dm_Device_Info_Marshalling_001, TestSize.Level0)
+{
+    MonitorDmDeviceInfo info {};
+    info.deviceName_ = "123";
+    info.networkId_ = "456";
+    info.dmDeviceType_ = 1;
+
+    Parcel parcel;
+    info.Marshalling(parcel);
+    auto newInfo = std::shared_ptr<MonitorDmDeviceInfo>(MonitorDmDeviceInfo::Unmarshalling(parcel));
+    ASSERT_NE(newInfo, nullptr);
+
+    EXPECT_EQ(newInfo->deviceName_, info.deviceName_);
+    EXPECT_EQ(newInfo->networkId_, info.networkId_);
+    EXPECT_EQ(newInfo->dmDeviceType_, info.dmDeviceType_);
+}
+
+HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_GetDistributedDeviceInfo_001, TestSize.Level0)
+{
+    std::shared_ptr<Media::MediaMonitor::EventBean> bean = std::make_shared<Media::MediaMonitor::EventBean>(
+        Media::MediaMonitor::ModuleId::AUDIO, Media::MediaMonitor::EventId::DISTRIBUTED_DEVICE_INFO,
+        Media::MediaMonitor::BEHAVIOR_EVENT);
+    ASSERT_NE(bean, nullptr);
+    bean->Add("IS_ADD", 1);
+    bean->Add("NETWORK_ID", "123");
+    bean->Add("HDI_PIN", 1);
+    bean->Add("SERVICE_STATUS", 1);
+    bean->Add("ORIGINAL_INFO", "22");
+    MediaMonitorManager::GetInstance().WriteLogMsg(bean);
+    usleep(100000); // 100ms
+
+    std::vector<std::string> deviceInfos;
+    MediaMonitorManager::GetInstance().GetDistributedDeviceInfo(deviceInfos);
+    EXPECT_EQ(deviceInfos.size(), 0);
+}
+
+HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_GetDistributedDeviceInfo_002, TestSize.Level0)
+{
+    std::shared_ptr<Media::MediaMonitor::EventBean> bean = std::make_shared<Media::MediaMonitor::EventBean>(
+        Media::MediaMonitor::ModuleId::AUDIO, Media::MediaMonitor::EventId::DISTRIBUTED_DEVICE_INFO,
+        Media::MediaMonitor::BEHAVIOR_EVENT);
+    ASSERT_NE(bean, nullptr);
+    bean->Add("IS_ADD", 0);
+    bean->Add("NETWORK_ID", "123");
+    bean->Add("HDI_PIN", 1);
+    bean->Add("SERVICE_STATUS", 1);
+    bean->Add("ORIGINAL_INFO", "22");
+    MediaMonitorManager::GetInstance().WriteLogMsg(bean);
+    usleep(100000); // 100ms
+
+    std::vector<std::string> deviceInfos;
+    MediaMonitorManager::GetInstance().GetDistributedDeviceInfo(deviceInfos);
+    EXPECT_EQ(deviceInfos.size(), 0);
+}
+
+HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_GetDistributedDeviceInfo_003, TestSize.Level0)
+{
+    std::shared_ptr<Media::MediaMonitor::EventBean> bean = std::make_shared<Media::MediaMonitor::EventBean>(
+        Media::MediaMonitor::ModuleId::AUDIO, Media::MediaMonitor::EventId::DISTRIBUTED_DEVICE_INFO,
+        Media::MediaMonitor::BEHAVIOR_EVENT);
+    ASSERT_NE(bean, nullptr);
+    bean->Add("IS_ADD", 1);
+    bean->Add("NETWORK_ID", "123");
+    bean->Add("HDI_PIN", 1);
+    bean->Add("SERVICE_STATUS", 2);
+    bean->Add("ORIGINAL_INFO", "22");
+    MediaMonitorManager::GetInstance().WriteLogMsg(bean);
+    usleep(100000); // 100ms
+
+    std::vector<std::string> deviceInfos;
+    MediaMonitorManager::GetInstance().GetDistributedDeviceInfo(deviceInfos);
+    EXPECT_EQ(deviceInfos.size(), 0);
+}
+
+HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_GetDistributedSceneInfo_001, TestSize.Level0)
+{
+    std::shared_ptr<Media::MediaMonitor::EventBean> bean = std::make_shared<Media::MediaMonitor::EventBean>(
+        Media::MediaMonitor::ModuleId::AUDIO, Media::MediaMonitor::EventId::DISTRIBUTED_SCENE_INFO,
+        Media::MediaMonitor::BEHAVIOR_EVENT);
+    ASSERT_NE(bean, nullptr);
+    bean->Add("SCENE_INFO", "123");
+    MediaMonitorManager::GetInstance().WriteLogMsg(bean);
+    usleep(100000); // 100ms
+
+    std::string sceneInfo;
+    MediaMonitorManager::GetInstance().GetDistributedSceneInfo(sceneInfo);
+    EXPECT_STREQ(sceneInfo.c_str(), "");
+}
+
+HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_GetDmDeviceInfo_001, TestSize.Level0)
+{
+    std::shared_ptr<Media::MediaMonitor::EventBean> bean = std::make_shared<Media::MediaMonitor::EventBean>(
+        Media::MediaMonitor::ModuleId::AUDIO, Media::MediaMonitor::EventId::DM_DEVICE_INFO,
+        Media::MediaMonitor::BEHAVIOR_EVENT);
+    ASSERT_NE(bean, nullptr);
+    bean->Add("IS_ADD", 1);
+    bean->Add("DEVICE_NAME", "123");
+    bean->Add("NETWORK_ID", "456");
+    bean->Add("DM_DEVICE_TYPE", 1);
+    MediaMonitorManager::GetInstance().WriteLogMsg(bean);
+    usleep(100000); // 100ms
+
+    std::vector<MonitorDmDeviceInfo> dmDeviceInfos;
+    MediaMonitorManager::GetInstance().GetDmDeviceInfo(dmDeviceInfos);
+    EXPECT_EQ(dmDeviceInfos.size(), 0);
+}
+
+HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_GetDmDeviceInfo_002, TestSize.Level0)
+{
+    std::shared_ptr<Media::MediaMonitor::EventBean> bean = std::make_shared<Media::MediaMonitor::EventBean>(
+        Media::MediaMonitor::ModuleId::AUDIO, Media::MediaMonitor::EventId::DM_DEVICE_INFO,
+        Media::MediaMonitor::BEHAVIOR_EVENT);
+    ASSERT_NE(bean, nullptr);
+    bean->Add("IS_ADD", 0);
+    bean->Add("DEVICE_NAME", "123");
+    bean->Add("NETWORK_ID", "456");
+    bean->Add("DM_DEVICE_TYPE", 1);
+    MediaMonitorManager::GetInstance().WriteLogMsg(bean);
+    usleep(100000); // 100ms
+
+    std::vector<MonitorDmDeviceInfo> dmDeviceInfos;
+    MediaMonitorManager::GetInstance().GetDmDeviceInfo(dmDeviceInfos);
+    EXPECT_EQ(dmDeviceInfos.size(), 0);
+}
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS
