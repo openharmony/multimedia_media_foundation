@@ -85,6 +85,7 @@ public:
         MEDIA_LOG_D("WriteBuffer in current tail " PUBLIC_LOG_ZU ", head_ " PUBLIC_LOG_ZU, tail_, head_);
         if (writeSize > SIZE_MAX -tail_) {
             MEDIA_LOG_W("WriteBuffer writeSize overflow " PUBLIC_LOG_ZU ", tail " PUBLIC_LOG_ZU, writeSize, tail_);
+            return false;
         }
         while (writeSize + tail_ > head_ + bufferSize_) {
             MEDIA_LOG_DD("WriteBuffer wait writeSize is " PUBLIC_LOG_U64, writeSize);
