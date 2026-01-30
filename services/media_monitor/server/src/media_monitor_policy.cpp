@@ -879,16 +879,9 @@ void MediaMonitorPolicy::AddAudioInterruptErrorEvent(std::shared_ptr<EventBean> 
         return;
     }
     std::lock_guard<std::mutex> lock(audioInterruptErrorMutex_);
-    if (bean->GetStringValue("ERROR_INFO") == "AudioInterruptError") {
-        MEDIA_LOG_E("AudioInterruptError begin");
-        mediaEventBaseWriter_.WriteAudioInterruptErrorEvent(bean);
-        return;
-    }
-    std::string key = bean->GetStringValue("APP_NAME") + bean->GetStringValue("ERROR_INFO")
-        + bean->GetStringValue("AUDIOSESSION_INFO");
+    std::string key = bean->GetStringValue("APP_NAME") + bean->GetStringValue("ERROR_INFO");
     if (audioInterruptErrorSet_.find(key) == audioInterruptErrorSet_.end() &&
         audioInterruptErrorSet_.size() <= audioInterruptErrorSetSize_) {
-        MEDIA_LOG_E("others begin");
         audioInterruptErrorSet_.emplace(key);
         mediaEventBaseWriter_.WriteAudioInterruptErrorEvent(bean);
     }
