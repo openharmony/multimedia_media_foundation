@@ -176,7 +176,7 @@ Status FileFdSourcePlugin::ParseUriInfo(const std::string& uri)
     FALSE_RETURN_V_MSG_E(std::regex_match(uri, fdUriMatch, std::regex("^fd://(.*)?offset=(.*)&size=(.*)")) ||
         std::regex_match(uri, fdUriMatch, std::regex("^fd://(.*)")),
         Status::ERROR_INVALID_PARAMETER, "Invalid fd uri format: " PUBLIC_LOG_S, uri.c_str());
-     std::string fdStr = fdUriMatch[1].str();
+    std::string fdStr = fdUriMatch[1].str();
     FALSE_RETURN_V_MSG_E(StrToInt(fdStr, fd_) && fd_ != -1 && FileSystem::IsRegularFile(fd_),
         Status::ERROR_INVALID_PARAMETER, "Invalid fd: " PUBLIC_LOG_D32, fd_);
     fileSize_ = GetFileSize(fd_);
@@ -187,7 +187,7 @@ Status FileFdSourcePlugin::ParseUriInfo(const std::string& uri)
         if (static_cast<uint64_t>(offset_) > fileSize_) {
             offset_ = fileSize_;
         }
-         int64_t tempSize = 0;
+        int64_t tempSize = 0;
         std::string sizeStr = fdUriMatch[SIZE_INDEX].str();
         FALSE_RETURN_V_MSG_E(StrToLong(sizeStr, tempSize), Status::ERROR_INVALID_PARAMETER,
             "Failed to read size.");
