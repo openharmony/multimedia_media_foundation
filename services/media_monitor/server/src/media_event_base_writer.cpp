@@ -780,7 +780,7 @@ void MediaEventBaseWriter::WriteAppCallSession(std::shared_ptr<EventBean> &bean)
 
 void MediaEventBaseWriter::WriteAudioInterruptErrorEvent(std::shared_ptr<EventBean> &bean)
 {
-    MEDIA_LOG_E("Write using audiosession error event");
+    MEDIA_LOG_E("Write audio interrupt error event");
     if (bean == nullptr) {
         MEDIA_LOG_E("eventBean is nullptr");
         return;
