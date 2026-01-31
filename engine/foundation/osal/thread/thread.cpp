@@ -105,9 +105,6 @@ void Thread::SetNameInternal()
 
 void* Thread::Run(void* arg) // NOLINT: void*
 {
-    if (arg == nullptr) {
-        return nullptr;
-    }
     auto state = static_cast<State*>(arg);
     if (state && state->func) {
         const std::string name = state->name;
