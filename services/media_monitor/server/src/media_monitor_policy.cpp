@@ -873,7 +873,7 @@ void MediaMonitorPolicy::AddToCallSessionQueue(std::shared_ptr<EventBean> &bean)
 
 void MediaMonitorPolicy::AddAudioInterruptErrorEvent(std::shared_ptr<EventBean> &bean)
 {
-    MEDIA_LOG_D("add call audio session event");
+    MEDIA_LOG_D("add audio interrupt error event");
     if (bean == nullptr) {
         MEDIA_LOG_E("eventBean is nullptr");
         return;
