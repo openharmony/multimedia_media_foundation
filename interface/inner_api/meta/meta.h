@@ -237,8 +237,7 @@ public:
         tagCharSeq == Tag::VIDEO_ENCODER_PER_FRAME_DISCARD or
         tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_QP_MAP or
         tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_WATERMARK or
-        tagCharSeq == Tag::VIDEO_DECODER_BLANK_FRAME_ON_SHUTDOWN or
-        tagCharSeq == Tag::VIDEO_ENABLE_LOCAL_RELEASE, bool, AnyValueType::BOOL);
+        tagCharSeq == Tag::VIDEO_DECODER_BLANK_FRAME_ON_SHUTDOWN, bool, AnyValueType::BOOL);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_BUFFER_CAN_DROP, bool, AnyValueType::BOOL);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_RENDER_SET_FLAG, bool, AnyValueType::BOOL);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_H265_PROFILE, Plugins::HEVCProfile, AnyValueType::INT32_T);
