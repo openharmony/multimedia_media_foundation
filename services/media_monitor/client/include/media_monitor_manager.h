@@ -47,8 +47,10 @@ public:
         std::vector<std::shared_ptr<MonitorDeviceInfo>>> &excludedDevices);
     
     void GetCollaborativeDeviceState(std::map<std::string, uint32_t> &addressToCollaborativeEnabledMap);
+    
+    void GetAudioAppSessionMsg(std::map<int32_t, bool> &avSessionMap);
 
-    void GetAudioAppStateMsg(std::map<int32_t, std::shared_ptr<MonitorAppStateInfo>> &appStateMap);
+    void GetAudioAppBackTaskMsg(std::map<int32_t, bool> &backTaskMap);
 
     void GetDistributedDeviceInfo(std::vector<std::string> &deviceInfos);
 
