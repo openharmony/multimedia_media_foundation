@@ -58,6 +58,9 @@ public:
             available = tail_ - head_;
             waitTimes--;
         }
+        if (ptr == nullptr) {
+            return 0;
+        }
         available = (available > readSize) ? readSize : available;
         size_t index = head_ % bufferSize_;
         if (index + available < bufferSize_) {
@@ -89,6 +92,9 @@ public:
             if (!isActive_) {
                 return false;
             }
+        }
+        if (ptr == nullptr) {
+            return 0;
         }
         size_t index = tail_ % bufferSize_;
         if (index + writeSize < bufferSize_) {

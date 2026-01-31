@@ -308,6 +308,9 @@ void MiniMP4DemuxerPlugin::FillADTSHead(std::shared_ptr<Memory> &data, unsigned 
 
 int MiniMP4DemuxerPlugin::ReadCallback(int64_t offset, void* buffer, size_t size, void* token)
 {
+    if (buffer == nullptr || token == nullptr) {
+        return -1;
+    }
     MiniMP4DemuxerPlugin* mp4Demuxer = reinterpret_cast<MiniMP4DemuxerPlugin*>(token);
     unsigned int tempFileSize = mp4Demuxer->GetFileSize();
     if (offset >= tempFileSize) {
