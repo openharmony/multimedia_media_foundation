@@ -104,6 +104,7 @@ ohos_unittest("histreamer_unit_test") {
     "./TestSurfaceSinkPlugin.cpp",
     "./TestSynchronizer.cpp",
     "./TestVideoFFmpegEncoder.cpp",
+    "./TestPluginBase.cpp",
     "./plugins/UtSourceTest1.cpp",
     "./plugins/UtSourceTest2.cpp",
   ]

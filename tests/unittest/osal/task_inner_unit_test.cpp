@@ -197,6 +197,27 @@ HWTEST_F(TaskInnerFuncUnitTest, Try_Lock, TestSize.Level1)
 }
  
 /**
+ * @tc.name: AutoLock_MoveAssign
+ * @tc.desc: Test AutoLock move assignment transfers mutex ownership correctly.
+ * @tc.type: FUNC
+ */
+HWTEST_F(TaskInnerFuncUnitTest, AutoLock_MoveAssign, TestSize.Level1)
+{
+    Mutex m1;
+    Mutex m2;
+    AutoLock lock1(m1);
+    AutoLock lock2(m2);
+    EXPECT_FALSE(m1.try_lock());
+    EXPECT_FALSE(m2.try_lock());
+    lock2 = std::move(lock1);
+    EXPECT_EQ(lock2.mutex_, &m1);
+    EXPECT_EQ(lock1.mutex_, nullptr);
+    EXPECT_TRUE(m2.try_lock());
+    m2.unlock();
+    EXPECT_FALSE(m1.try_lock());
+}
+ 
+/**
  * @tc.name: Set_EnableState_Change_Log
  * @tc.desc: Set_EnableState_Change_Log test
  * @tc.type: FUNC

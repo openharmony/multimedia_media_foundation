@@ -55,6 +55,7 @@ ohos_unittest("osal_inner_unit_test") {
 
   sources = [
     "./file_system_unit_test.cpp",
+    "./jobutils_unit_test.cpp",
     "./task_func_unit_test.cpp",
     "./task_inner_unit_test.cpp",
   ]

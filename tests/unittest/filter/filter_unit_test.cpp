@@ -679,6 +679,30 @@ HWTEST_F(FilterUnitTest, OnMemoryUsageEvent_001, TestSize.Level1)
     eventReceiver->OnMemoryUsageEvent(event);
     EXPECT_NE(nullptr, eventReceiver);
 }
+
+/**
+ * @tc.name: IsAudioPassthroughCallback_001
+ * @tc.desc: Test IsAudioPassthroughCallback interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(FilterUnitTest, IsAudioPassthroughCallback_001, TestSize.Level1)
+{
+    std::shared_ptr<FilterCallback> filterCb = std::make_shared<FilterCallbackTest>();
+    const char* aacMimeType = "audio/mp4a-latm";
+    EXPECT_EQ(false, filterCb->IsAudioPassthroughCallback(aacMimeType));
+}
+
+/**
+ * @tc.name: GetDolbyListCallback_001
+ * @tc.desc: Test GetDolbyListCallback interface
+ * @tc.type: FUNC
+ */
+HWTEST_F(FilterUnitTest, GetDolbyListCallback_001, TestSize.Level1)
+{
+    std::shared_ptr<FilterCallback> filterCb = std::make_shared<FilterCallbackTest>();
+    u_int32_t res = (filterCb->GetDolbyListCallback()).size();
+    EXPECT_EQ(0, res);
+}
 } // namespace FilterUnitTest
 } // namespace Media
 } // namespace OHOS
