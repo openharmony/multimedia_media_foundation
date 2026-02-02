@@ -84,7 +84,8 @@ private:
     void HandleStreamPropertyStats(std::shared_ptr<EventBean> &bean);
     void HandleExcludedOutputDevices(std::shared_ptr<EventBean> &bean);
     void HandleSetDeviceCollaborativeState(std::shared_ptr<EventBean> &bean);
-    void HandleAppBackgroundStateChange(std::shared_ptr<EventBean> &bean);
+    void HandleAppSessionStateChange(std::shared_ptr<EventBean> &bean);
+    void HandleAppBackTaskStateChange(std::shared_ptr<EventBean> &bean);
     void UpdateAggregateStateEventList(std::shared_ptr<EventBean> &bean);
     void HandleVolumeApiInvokeEvent(std::shared_ptr<EventBean> &bean);
     void HandleCallSessionEvent(std::shared_ptr<EventBean> &bean);

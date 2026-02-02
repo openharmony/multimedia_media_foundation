@@ -230,42 +230,63 @@ int32_t AudioMemo::GetCollaborativeDeviceState(std::map<std::string, uint32_t> &
     return SUCCESS;
 }
 
-void AudioMemo::UpdateAppBackgroundStateInner(int32_t pid, std::shared_ptr<MonitorAppStateInfo> appStateInfo,
-    int32_t isAdd)
+void AudioMemo::UpdateAppSessionStateInner(int32_t pid, bool hasSession, int32_t isAdd)
 {
-    FALSE_RETURN_MSG(appStateInfo != nullptr, "appStateInfo is null");
-    MEDIA_LOG_I("pid %{public}d is add %{public}d, isFreeze %{public}d, isBack %{public}d, hasSession %{public}d,"
-        "hasBackTask %{public}d, isBinder %{public}d", pid, isAdd, appStateInfo->isFreeze_, appStateInfo->isBack_,
-        appStateInfo->hasSession_, appStateInfo->hasBackTask_, appStateInfo->isBinder_);
+    MEDIA_LOG_I("pid %{public}d is add %{public}d, hasSession %{public}d", pid, isAdd, hasSession);
     if (isAdd == ADD) {
-        appStateMap_[pid] = appStateInfo;
+        appSessionMap_[pid] = hasSession;
     } else if (isAdd == REMOVE) {
-        auto iter = appStateMap_.find(pid);
-        if (iter != appStateMap_.end()) {
-            appStateMap_.erase(iter);
+        auto iter = appSessionMap_.find(pid);
+        if (iter != appSessionMap_.end()) {
+            appSessionMap_.erase(iter);
         }
     }
 }
 
-void AudioMemo::UpdateAppBackgroundState(std::shared_ptr<EventBean> &bean)
+void AudioMemo::UpdateAppBackTaskStateInner(int32_t pid, bool hasBackTask, int32_t isAdd)
 {
-    FALSE_RETURN_MSG(bean != nullptr, "event bean is null");
-    std::lock_guard<std::mutex> lockEventMap(appStateMutex_);
-    MonitorAppStateInfo appStateInfo;
-    int32_t pid = bean->GetIntValue("PID");
-    appStateInfo.isFreeze_ = bean->GetIntValue("IS_FREEZE");
-    appStateInfo.isBack_ = bean->GetIntValue("IS_BACK");
-    appStateInfo.hasSession_ = bean->GetIntValue("HAS_SESSION");
-    appStateInfo.hasBackTask_ = bean->GetIntValue("HAS_BACK_TASK");
-    appStateInfo.isBinder_ = bean->GetIntValue("IS_BINDER");
-    int32_t isAdd = bean->GetIntValue("IS_ADD");
-    UpdateAppBackgroundStateInner(pid, std::make_shared<MonitorAppStateInfo>(appStateInfo), isAdd);
+    MEDIA_LOG_I("pid %{public}d is add %{public}d, hasBackTask %{public}d", pid, isAdd, hasBackTask);
+    if (isAdd == ADD) {
+        appBackTaskMap_[pid] = hasBackTask;
+    } else if (isAdd == REMOVE) {
+        auto iter = appBackTaskMap_.find(pid);
+        if (iter != appBackTaskMap_.end()) {
+            appBackTaskMap_.erase(iter);
+        }
+    }
 }
 
-int32_t AudioMemo::GetAudioAppStateMsg(std::map<int32_t, std::shared_ptr<MonitorAppStateInfo>> &appStateMap)
+void AudioMemo::UpdateAppSessionState(std::shared_ptr<EventBean> &bean)
 {
-    std::lock_guard<std::mutex> lockEventMap(appStateMutex_);
-    appStateMap = appStateMap_;
+    FALSE_RETURN_MSG(bean != nullptr, "event bean is null");
+    std::lock_guard<std::mutex> lockEventMap(appSessionMutex_);
+    int32_t pid = bean->GetIntValue("PID");
+    bool hasSession = bean->GetIntValue("HAS_SESSION");
+    int32_t isAdd = bean->GetIntValue("IS_ADD");
+    UpdateAppSessionStateInner(pid, hasSession, isAdd);
+}
+
+void AudioMemo::UpdateAppBackTaskState(std::shared_ptr<EventBean> &bean)
+{
+    FALSE_RETURN_MSG(bean != nullptr, "event bean is null");
+    std::lock_guard<std::mutex> lockEventMap(appBackTaskMutex_);
+    int32_t pid = bean->GetIntValue("PID");
+    bool hasBackTask = bean->GetIntValue("HAS_BACK_TASK");
+    int32_t isAdd = bean->GetIntValue("IS_ADD");
+    UpdateAppBackTaskStateInner(pid, hasBackTask, isAdd);
+}
+
+int32_t AudioMemo::GetAudioAppSessionMsg(std::unordered_map<int32_t, bool> &avSessionMap)
+{
+    std::lock_guard<std::mutex> lockEventMap(appSessionMutex_);
+    avSessionMap = appSessionMap_;
+    return SUCCESS;
+}
+
+int32_t AudioMemo::GetAudioAppBackTaskMsg(std::unordered_map<int32_t, bool> &backTaskMap)
+{
+    std::lock_guard<std::mutex> lockEventMap(appBackTaskMutex_);
+    backTaskMap = appBackTaskMap_;
     return SUCCESS;
 }
 

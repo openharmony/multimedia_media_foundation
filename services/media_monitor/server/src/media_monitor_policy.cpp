@@ -200,9 +200,6 @@ void MediaMonitorPolicy::WriteBehaviorEventExpansion(EventId eventId, std::share
             systemTonePlayEventVector_.push_back(bean);
             TriggerSystemTonePlaybackEvent(bean);
             break;
-        case APP_BACKGROUND_STATE:
-            mediaEventBaseWriter_.WriteAppBackgroundState(bean);
-            break;
         case MUTE_BUNDLE_NAME:
             mediaEventBaseWriter_.WriteMuteBundleName(bean);
             break;
