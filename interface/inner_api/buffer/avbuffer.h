@@ -103,6 +103,15 @@ public:
     bool WriteToMessageParcel(MessageParcel &parcel);
 
     /**
+     * @brief Write buffer info to MessageParcel.
+     * @param parcel The MessageParcel written by buffer, refer to {@link MessageParcel}.
+     * @param updateAVMemory Whether to update AVMemory info to parcel.
+     * @return Whether the writing was successful.
+     * @since 6.1
+     */
+    bool WriteToMessageParcel(MessageParcel &parcel, bool updateAVMemory);
+
+    /**
      * @brief Read buffer info from MessageParcel.
      * @param parcel The MessageParcel that wirtten by remote buffer, refer to {@link MessageParcel}.
      * @param isSurfaceBuffer Whether the parcel was obtained directly through SurfaceBuffer's function, {@link
@@ -251,6 +260,7 @@ protected:
     virtual Status InitSurfaceBuffer(MessageParcel &parcel);
     virtual Status InitSurfaceBuffer(sptr<SurfaceBuffer> surfaceBuffer);
     virtual bool WriteToMessageParcel(MessageParcel &parcel);
+    virtual bool WriteToMessageParcel(MessageParcel &parcel, bool updateAVMemory);
     virtual bool ReadFromMessageParcel(MessageParcel &parcel);
 
     bool ReadCommonFromMessageParcel(MessageParcel &parcel);

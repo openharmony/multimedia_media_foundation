@@ -105,6 +105,9 @@ Status AVSharedMemoryExt::Init()
 Status AVSharedMemoryExt::Init(MessageParcel &parcel)
 {
 #ifdef MEDIA_OHOS
+    if (!parcel.ReadBool()) {
+        return Status::ERROR_INVALID_DATA;
+    }
     fd_ = parcel.ReadFileDescriptor();
     FALSE_RETURN_V_MSG_E(fd_ > 0, Status::ERROR_INVALID_DATA, "File descriptor is invalid");
     memFlag_ = static_cast<MemoryFlag>(parcel.ReadUint32());
@@ -114,13 +117,18 @@ Status AVSharedMemoryExt::Init(MessageParcel &parcel)
 #endif
 }
 
-bool AVSharedMemoryExt::WriteToMessageParcel(MessageParcel &parcel)
+bool AVSharedMemoryExt::WriteToMessageParcel(MessageParcel &parcel, bool updateAVMemory)
 {
 #ifdef MEDIA_OHOS
-    MessageParcel bufferParcel;
-    bool ret = bufferParcel.WriteFileDescriptor(fd_) && bufferParcel.WriteUint32(static_cast<uint32_t>(memFlag_));
-    if (ret) {
-        parcel.Append(bufferParcel);
+    auto oldPos = parcel.GetWritePosition();
+    auto oldSize = parcel.GetDataSize();
+    bool ret = parcel.WriteBool(updateAVMemory);
+    if (ret && updateAVMemory) {
+        ret = parcel.WriteFileDescriptor(fd_) && parcel.WriteUint32(static_cast<uint32_t>(memFlag_));
+    }
+    if (!ret) {
+        parcel.RewindWrite(oldPos);
+        parcel.SetDataSize(oldSize);
     }
     return ret;
 #else
@@ -131,6 +139,9 @@ bool AVSharedMemoryExt::WriteToMessageParcel(MessageParcel &parcel)
 bool AVSharedMemoryExt::ReadFromMessageParcel(MessageParcel &parcel)
 {
 #ifdef MEDIA_OHOS
+    if (!parcel.ReadBool()) {
+        return true;
+    }
     int32_t fd = parcel.ReadFileDescriptor();
     (void)parcel.ReadUint32();
     if (fd > 0) {

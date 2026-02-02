@@ -169,6 +169,11 @@ bool AVMemory::ReadFromMessageParcel(MessageParcel &parcel)
 
 bool AVMemory::WriteToMessageParcel(MessageParcel &parcel)
 {
+    return WriteToMessageParcel(parcel, true);
+}
+
+bool AVMemory::WriteToMessageParcel(MessageParcel &parcel, [[maybe_unused]] bool updateAVMemory)
+{
     (void)parcel;
     return false;
 }
@@ -176,7 +181,6 @@ bool AVMemory::WriteToMessageParcel(MessageParcel &parcel)
 bool AVMemory::ReadCommonFromMessageParcel(MessageParcel &parcel)
 {
 #ifdef MEDIA_OHOS
-    (void)parcel.ReadUint64();
     int32_t capacity = -1;
     int32_t align = -1;
     int32_t offset = -1;
@@ -207,15 +211,12 @@ bool AVMemory::ReadCommonFromMessageParcel(MessageParcel &parcel)
 bool AVMemory::SkipCommonFromMessageParcel(MessageParcel &parcel)
 {
 #ifdef MEDIA_OHOS
-    uint64_t skipSize = 0;
-    bool ret = parcel.ReadUint64(skipSize);
-    FALSE_RETURN_V_MSG_E(ret, false, "unknown parcel");
-    parcel.SkipBytes(static_cast<size_t>(skipSize) - 2 * sizeof(int32_t)); // 2: the size of size_ and offset_
+    parcel.SkipBytes(2 * sizeof(int32_t)); // 2: the size of capacity_ and align_
 
     int32_t size = -1;
     int32_t offset = -1;
 
-    ret = parcel.ReadInt32(offset);
+    bool ret = parcel.ReadInt32(offset);
     FALSE_RETURN_V_MSG_E(ret && (capacity_ >= offset) && (offset >= 0), false, "offset is invalid");
 
     ret = parcel.ReadInt32(size);
@@ -232,13 +233,15 @@ bool AVMemory::SkipCommonFromMessageParcel(MessageParcel &parcel)
 bool AVMemory::WriteCommonToMessageParcel(MessageParcel &parcel)
 {
 #ifdef MEDIA_OHOS
-    bool ret = true;
-    MessageParcel bufferParcel;
-    ret = bufferParcel.WriteInt32(capacity_) && bufferParcel.WriteInt32(align_) && bufferParcel.WriteInt32(offset_) &&
-          bufferParcel.WriteInt32(size_);
-
-    size_t size = bufferParcel.GetDataSize();
-    return ret && parcel.WriteUint64(static_cast<uint64_t>(size)) && parcel.Append(bufferParcel);
+    auto oldPos = parcel.GetWritePosition();
+    auto oldSize = parcel.GetDataSize();
+    bool ret = parcel.WriteInt32(capacity_) && parcel.WriteInt32(align_) &&
+               parcel.WriteInt32(offset_)   && parcel.WriteInt32(size_);
+    if (!ret) {
+        parcel.RewindWrite(oldPos);
+        parcel.SetDataSize(oldSize);
+    }
+    return ret;
 #endif
     return true;
 }
