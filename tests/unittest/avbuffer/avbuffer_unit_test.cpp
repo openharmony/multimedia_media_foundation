@@ -196,6 +196,7 @@ void AVBufferInnerUnitTest::CreateLocalSurfaceMemByParcel()
     MessageParcel parcel;
     sptr<SurfaceBuffer> surfaceBuffer = SurfaceBuffer::Create();
     (void)surfaceBuffer->Alloc(DEFAULT_CONFIG);
+    (void)parcel.WriteBool(true);
     (void)surfaceBuffer->WriteToMessageParcel(parcel);
     // create local
     remoteBuffer_ = buffer_ = AVBuffer::CreateAVBuffer();

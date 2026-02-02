@@ -107,7 +107,7 @@ public:
      * @param parcel The MessageParcel written by buffer, refer to {@link MessageParcel}.
      * @param updateAVMemory Whether to update AVMemory info to parcel.
      * @return Whether the writing was successful.
-     * @since 4.1
+     * @since 6.1
      */
     bool WriteToMessageParcel(MessageParcel &parcel, bool updateAVMemory);
 

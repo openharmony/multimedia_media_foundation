@@ -136,9 +136,9 @@ bool AVSurfaceMemory::WriteToMessageParcel(MessageParcel &parcel, bool updateAVM
     auto oldSize = parcel.GetDataSize();
     bool ret = parcel.WriteBool(updateAVMemory);
     if (ret && updateAVMemory) {
-        GSError gsRet = surfaceBuffer_->WriteToMessageParcel(parcel);
-        FALSE_RETURN_V_MSG_E(gsRet == GSERROR_OK, false, "Write message parcel failed!, %{public}s",
-            GSErrorStr(gsRet).c_str());
+        GSError ret = surfaceBuffer_->WriteToMessageParcel(parcel);
+        FALSE_RETURN_V_MSG_E(ret == GSERROR_OK, false, "Write message parcel failed!, %{public}s",
+            GSErrorStr(ret).c_str());
     }
     if (!ret) {
         parcel.RewindWrite(oldPos);
@@ -156,9 +156,9 @@ bool AVSurfaceMemory::ReadFromMessageParcel(MessageParcel &parcel)
     if (!parcel.ReadBool()) {
         return true;
     }
-    GSError gsRet = surfaceBuffer_->WriteToMessageParcel(parcel);
-    FALSE_RETURN_V_MSG_E(gsRet == GSERROR_OK, false, "Write message parcel failed!, %{public}s",
-        GSErrorStr(gsRet).c_str());
+    GSError ret = surfaceBuffer_->ReadFromMessageParcel(parcel);
+    FALSE_RETURN_V_MSG_E(ret == GSERROR_OK, false, "Read message parcel failed!, %{public}s",
+        GSErrorStr(ret).c_str());
 #endif
     return true;
 }
