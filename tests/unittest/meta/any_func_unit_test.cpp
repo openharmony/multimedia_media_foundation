@@ -430,6 +430,60 @@ HWTEST(AnyTest, testHeapFunctionTable_005, TestSize.Level1) {
     int32_t valueOutNew = AnyCast<int32_t>(anyIntParcel);
     EXPECT_EQ(valueOutNew, 125);
 }
+
+#ifndef HST_ANY_WITH_NO_RTTI
+/**
+ * @tc.name: testStackFunctionTable_006
+ * @tc.desc: testStackFunctionTable_006
+ * @tc.type: FUNC
+ */
+HWTEST(AnyTest, testStackFunctionTable_006, TestSize.Level1) {
+    const std::type_info& intTypeInfo = Any::StackFunctionTable<int>::Type();
+    EXPECT_NE(&intTypeInfo, nullptr);
+}
+
+/**
+ * @tc.name: testHeapFunctionTable_006
+ * @tc.desc: testHeapFunctionTable_006
+ * @tc.type: FUNC
+ */
+HWTEST(AnyTest, testHeapFunctionTable_006, TestSize.Level1) {
+    const std::type_info& intTypeInfo = Any::HeapFunctionTable<int>::Type();
+    EXPECT_NE(&intTypeInfo, nullptr);
+}
+
+/**
+ * @tc.name: testTrivialStackFunctionTable_006
+ * @tc.desc: testTrivialStackFunctionTable_006
+ * @tc.type: FUNC
+ */
+HWTEST(AnyTest, testTrivialStackFunctionTable_006, TestSize.Level1) {
+    const std::type_info& intTypeInfo = Any::TrivialStackFunctionTable<int>::Type();
+    EXPECT_NE(&intTypeInfo, nullptr);
+}
+
+/**
+ * @tc.name: testAny_001
+ * @tc.desc: testAny_001
+ * @tc.type: FUNC
+ */
+HWTEST(AnyTest, testAny_001, TestSize.Level1) {
+    Any anyInt;
+    const std::type_info& resultType = anyInt.Type();
+    EXPECT_NE(&resultType, nullptr);
+}
+#endif
+
+/**
+ * @tc.name: testBadAnyCast_001
+ * @tc.desc: testBadAnyCast_001
+ * @tc.type: FUNC
+ */
+HWTEST(AnyTest, testBadAnyCast_001, TestSize.Level1) {
+    BadAnyCast badCastObj;
+    const char* errorMsg = badCastObj.what();
+    EXPECT_STREQ(errorMsg, "bad any cast");
+}
 } // namespace AnyFuncUT
 } // namespace Media
 } // namespace OHOS

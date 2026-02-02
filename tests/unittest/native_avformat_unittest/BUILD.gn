@@ -50,6 +50,7 @@ ohos_unittest("native_avformat_unittest") {
 
   external_deps = [
     "c_utils:utils",
+    "eventhandler:libeventhandler",
     "googletest:gmock",
     "graphic_surface:surface_static",
     "graphic_surface:sync_fence_static",

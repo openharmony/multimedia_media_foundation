@@ -83,6 +83,57 @@ HWTEST_F(AvsharedmemorybaseUnitTest, Read, TestSize.Level0)
     ASSERT_TRUE(ret == SIZE);
     ASSERT_TRUE(memcmp(buffer, readBuffer, SIZE) == 0);
 }
+
+/**
+ * @tc.name: Test GetUsedSize API
+ * @tc.desc: Verify GetUsedSize before/after Write and ClearUsedSize.
+ * @tc.type: FUNC
+ */
+HWTEST_F(AvsharedmemorybaseUnitTest, GetUsedSize, TestSize.Level0)
+{
+    std::shared_ptr<AVSharedMemoryBase> memory =
+        std::make_shared<AVSharedMemoryBase>(SIZE, AVSharedMemory::Flags::FLAGS_READ_WRITE, "test");
+    ASSERT_TRUE(memory != nullptr);
+
+    int32_t ret = memory->Init();
+    ASSERT_TRUE(ret == static_cast<int32_t>(Status::OK));
+
+    EXPECT_EQ(memory->GetUsedSize(), 0);
+
+    uint8_t buffer[SIZE] = {0};
+    ret = memory->Write(buffer, SIZE);
+    ASSERT_TRUE(ret == SIZE);
+    EXPECT_EQ(memory->GetUsedSize(), SIZE);
+
+    memory->ClearUsedSize();
+    EXPECT_EQ(memory->GetUsedSize(), 0);
+}
+
+/**
+ * @tc.name: Test GetSharedMemoryID API
+ * @tc.desc: Verify different AVSharedMemoryBase instances have different IDs.
+ * @tc.type: FUNC
+ */
+HWTEST_F(AvsharedmemorybaseUnitTest, GetSharedMemoryID, TestSize.Level0)
+{
+    std::shared_ptr<AVSharedMemoryBase> memory1 =
+        std::make_shared<AVSharedMemoryBase>(SIZE, AVSharedMemory::Flags::FLAGS_READ_WRITE, "test1");
+    ASSERT_TRUE(memory1 != nullptr);
+
+    int32_t ret = memory1->Init();
+    ASSERT_TRUE(ret == static_cast<int32_t>(Status::OK));
+    uint64_t id1 = memory1->GetSharedMemoryID();
+
+    std::shared_ptr<AVSharedMemoryBase> memory2 =
+        std::make_shared<AVSharedMemoryBase>(SIZE, AVSharedMemory::Flags::FLAGS_READ_WRITE, "test2");
+    ASSERT_TRUE(memory2 != nullptr);
+
+    ret = memory2->Init();
+    ASSERT_TRUE(ret == static_cast<int32_t>(Status::OK));
+    uint64_t id2 = memory2->GetSharedMemoryID();
+
+    EXPECT_NE(id1, id2);
+}
 }  // namespace AvsharedmemorybaseUnitTest
 }  // namespace Media
 }  // namespace OHOS

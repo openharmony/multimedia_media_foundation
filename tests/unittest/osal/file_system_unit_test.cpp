@@ -26,6 +26,8 @@ const std::string DUMP_FILE_NAME = "DumpBufferTest.es";
 
 namespace OHOS {
 namespace Media {
+static const int32_t NUM_VALID = -1;
+static const int32_t NUM_VALIDOONEHUNDRED = -100;
 class FileSystemUnitTest : public testing::Test {
 public:
     static void SetUpTestCase(void) {};
@@ -50,6 +52,20 @@ HWTEST_F(FileSystemUnitTest, CreateFiles, TestSize.Level1)
     fileSystem->ClearFileContent("/data/test/makeMulti/dir");
     fileSystem->RemoveFilesInDir("/data/test/makedir");
     EXPECT_TRUE(fileSystem->IsExists("/data/test/makedir"));
+}
+
+/**
+ * @tc.name: IsSocketFile
+ * @tc.desc: Simple coverage for IsSocketFile with invalid fd.
+ * @tc.type: FUNC
+ */
+HWTEST_F(FileSystemUnitTest, IsSocketFile, TestSize.Level1)
+{
+    std::shared_ptr<FileSystem> fileSystem = std::make_shared<FileSystem>();
+    int32_t invalidFd1 = NUM_VALID;
+    int32_t invalidFd2 = NUM_VALIDOONEHUNDRED;
+    EXPECT_FALSE(fileSystem->IsSocketFile(invalidFd1));
+    EXPECT_FALSE(fileSystem->IsSocketFile(invalidFd2));
 }
 }
 }
