@@ -236,7 +236,6 @@ bool AVBuffer::WriteToMessageParcel(MessageParcel &parcel, bool updateAVMemory)
     bool ret = parcel.WriteUint64(uid) && parcel.WriteInt64(pts_) &&
                parcel.WriteInt64(dts_) && parcel.WriteInt64(duration_) && parcel.WriteUint32(flag_) &&
                meta_->ToParcel(parcel);
-
     if (ret && memory_ != nullptr) {
         MemoryType type = memory_->GetMemoryType();
         FALSE_RETURN_V_MSG_E(type != MemoryType::VIRTUAL_MEMORY, false, "Virtual memory not support");
