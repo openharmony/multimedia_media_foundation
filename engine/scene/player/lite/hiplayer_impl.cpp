@@ -664,7 +664,7 @@ ErrorCode HiPlayerImpl::GetSourceMeta(shared_ptr<const Plugin::Meta>& meta) cons
 
 ErrorCode HiPlayerImpl::GetTrackMeta(size_t id, shared_ptr<const Plugin::Meta>& meta) const
 {
-    if (id > streamMeta_.size() || id < 0) {
+    if (id >= streamMeta_.size() || id < 0) {
         return ErrorCode::ERROR_INVALID_PARAMETER_VALUE;
     }
     meta = streamMeta_[id].lock();
