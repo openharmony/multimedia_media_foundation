@@ -69,6 +69,7 @@ public:
     void TriggerSystemTonePlaybackTimeEvent(std::shared_ptr<EventBean> &bean);
     void AddToVolumeApiInvokeQueue(std::shared_ptr<EventBean> &bean);
     void AddToCallSessionQueue(std::shared_ptr<EventBean> &bean);
+    void AddAudioInterruptErrorEvent(std::shared_ptr<EventBean> &bean);
     void AddToSuiteEngineNodeStatsMap(std::shared_ptr<EventBean> &bean);
     void HandleVolumeSettingStatistics(std::shared_ptr<EventBean> &bean);
     void AddLoudVolumeTimes();
@@ -149,6 +150,10 @@ private:
     std::mutex callSessionMutex_;
     std::unordered_set<std::string> callSessionHapSet_;
     uint32_t callSessionHapSetSize_ = 100 * 100;
+
+    std::mutex audioInterruptErrorMutex_;
+    std::unordered_set<std::string> audioInterruptErrorSet_;
+    uint32_t audioInterruptErrorSetSize_ = 100 * 100;
 };
 
 } // namespace MediaMonitor

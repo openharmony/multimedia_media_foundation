@@ -105,7 +105,9 @@ enum EventId {
     // for audio loopback
     LOOPBACK_EXCEPTION = 53,
 
-    APP_SESSION_STATE = 54,
+    INTERRUPT_ERROR = 54,
+
+    APP_SESSION_STATE = 55,
 };
 
 enum VolumeStatisticsSceneType : uint8_t {
