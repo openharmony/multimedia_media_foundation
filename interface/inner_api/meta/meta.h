@@ -297,7 +297,8 @@ public:
         tagCharSeq == Tag::OH_MD_KEY_AUDIO_OBJECT_NUMBER or
         tagCharSeq == Tag::AUDIO_L2HC_VERSION or
         tagCharSeq == Tag::VIDEO_RAWVIDEO_INPUT_PIXEL_FORMAT or
-        tagCharSeq == Tag::DRM_ERROR_CODE, int32_t, AnyValueType::INT32_T);
+        tagCharSeq == Tag::DRM_ERROR_CODE or
+        tagCharSeq == Tag::ENABLE_BUFFER_SKIP_SAMPLES, int32_t, AnyValueType::INT32_T);
 
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::VIDEO_ENCODER_TEMPORAL_GOP_SIZE or
