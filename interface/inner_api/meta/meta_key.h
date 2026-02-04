@@ -431,6 +431,12 @@ public:
     static constexpr const char VIDEO_H265_PROFILE[] = "video.h265.profile"; ///< @see HEVCProfile
     static constexpr const char VIDEO_H265_LEVEL[] = "video.h265.level";     ///< @see HEVCLevel
     static constexpr const char VIDEO_CHROMA_LOCATION[] = "chroma_location"; ///< @see ChromaLocation
+    static constexpr const char VIDEO_ENABLE_LOCAL_RELEASE[] =
+        "video_enable_local_release"; ///< bool, key to enable the local release mode, true is enabled, false
+                                      ///< otherwise. If enabled, the video decoder doesn't report
+                                      ///< OnOutputBufferAvailable and will release buffer locally in codec server.
+                                      ///< This is an optional key that applies only to video decoder.
+                                      ///< It is used in configure.
 
     /* -------------------- user specific tag -------------------- */
     static constexpr const char USER_FRAME_PTS[] = "user.frame.pts"; ///< The user frame pts
