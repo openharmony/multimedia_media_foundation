@@ -449,6 +449,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::MEDIA_ENABLE_MOOV_FRONT, defaultInt32},
     {Tag::MEDIA_GLTF_VERSION, defaultInt32},
     {Tag::VIDEO_DECODER_INPUT_STREAM_ERROR, defaultInt32},
+    {Tag::ENABLE_BUFFER_SKIP_SAMPLES, defaultInt32},
     // String
     {Tag::MIME_TYPE, defaultString},
     {Tag::ORIGINAL_CODEC_NAME, defaultString},

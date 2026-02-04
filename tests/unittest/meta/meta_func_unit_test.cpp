@@ -462,6 +462,7 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::AV_TRANSCODER_VIDEO_VPE_DURATION, 20},
     {Tag::TIMED_METADATA_SRC_TRACK, 1},
     {Tag::MEDIA_GLTF_VERSION, 1},
+    {Tag::ENABLE_BUFFER_SKIP_SAMPLES, 1},
     {Tag::SRC_INPUT_TYPE, static_cast<int32_t>(Plugins::SrcInputType::AUD_ES)},
     {Tag::AUDIO_SAMPLE_FORMAT, static_cast<int32_t>(Plugins::AudioSampleFormat::SAMPLE_S16LE)},
     {Tag::AUDIO_RAW_SAMPLE_FORMAT, static_cast<int32_t>(Plugins::AudioSampleFormat::SAMPLE_S16LE)},
