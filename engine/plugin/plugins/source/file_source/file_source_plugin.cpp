@@ -65,7 +65,7 @@ void* FileSourceAllocator::Alloc(size_t size)
 void FileSourceAllocator::Free(void* ptr) // NOLINT: void*
 {
     if (ptr != nullptr) {
-        delete[] static_cast<uint8_t*>(ptr);
+        delete[] (uint8_t*) ptr;
     }
 }
 

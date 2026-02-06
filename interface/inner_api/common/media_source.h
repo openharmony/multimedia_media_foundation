@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-#ifndef HISTREAMER_PLUGIN_MEDIA_SOURCE_H
-#define HISTREAMER_PLUGIN_MEDIA_SOURCE_H
+#ifndef HISTREAMER_PLUGINS_MEDIA_SOURCE_H
+#define HISTREAMER_PLUGINS_MEDIA_SOURCE_H
 
 #include <map>
 #include <memory>
@@ -237,4 +237,4 @@ private:
 } // namespace Plugins
 } // namespace Media
 } // namespace OHOS
-#endif // HISTREAMER_PLUGIN_MEDIA_SOURCE_H
+#endif // HISTREAMER_PLUGINS_MEDIA_SOURCE_H

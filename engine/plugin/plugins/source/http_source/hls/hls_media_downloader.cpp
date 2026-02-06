@@ -135,7 +135,6 @@ size_t HlsMediaDownloader::GetContentLength() const
 
 double HlsMediaDownloader::GetDuration() const
 {
-    MEDIA_LOG_I("GetDuration " PUBLIC_LOG_D64 , playListDownloader_->GetDuration());
     return playListDownloader_->GetDuration();
 }
 
