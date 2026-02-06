@@ -20,7 +20,7 @@ group("plugin_standard_video_surface_sink") {
 
 if (hst_is_standard_sys) {
   import("//build/ohos.gni")
-  ohos_source_set("std_video_surface_sink") {
+  ohos_shared_library("histreamer_plugin_StdVideoSurfaceSink") {
     subsystem_name = "multimedia"
     part_name = "media_foundation"
     include_dirs = [ "//foundation/multimedia/media_foundation/engine/include" ]
