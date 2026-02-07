@@ -59,7 +59,8 @@
         "hisysevent_config": [ "//foundation/multimedia/audio_framework/hisysevent.yaml" ],
         "deps": {
           "third_party": [
-            "curl"
+            "curl",
+            "ffmpeg"
           ],
           "components": [
               "ability_base",
@@ -82,10 +83,14 @@
               "bounds_checking_function",
               "pulseaudio",
               "hisysevent",
+              "window_manager",
+              "ffmpeg",
+              "curl",
               "safwk",
               "samgr",
               "skia",
               "bundle_framework",
+              "openmax",
               "image_framework",
               "qos_manager",
               "resource_schedule_service",
