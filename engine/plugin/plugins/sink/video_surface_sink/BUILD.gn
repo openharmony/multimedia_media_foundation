@@ -13,29 +13,23 @@
 #
 import("//foundation/multimedia/media_foundation/config.gni")
 group("plugin_standard_video_surface_sink") {
-  deps = []
-  if (hst_is_lite_sys) {
-    print("std video surface sink plugin is not available on lite systems")
-  } else {
-    deps += [ ":histreamer_plugin_StdVideoSurfaceSink" ]
+  if (hst_is_standard_sys) {
+    deps = [ ":histreamer_plugin_StdVideoSurfaceSink" ]
   }
 }
 
-ohos_source_set("std_video_surface_sink") {
-  subsystem_name = "multimedia"
-  part_name = "media_foundation"
-  sources = [ "surface_sink_plugin.cpp" ]
-  public_deps = [
-    "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
-    "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",
-  ]
-
-  public_configs =
-      [ "//foundation/multimedia/media_foundation:histreamer_presets" ]
-  if (hst_is_lite_sys) {
-    print("std video surface sink plugin is not available on lite systems")
-  } else {
+if (hst_is_standard_sys) {
+  import("//build/ohos.gni")
+  ohos_shared_library("histreamer_plugin_StdVideoSurfaceSink") {
+    subsystem_name = "multimedia"
+    part_name = "media_foundation"
     include_dirs = [ "//foundation/multimedia/media_foundation/engine/include" ]
+    sources = [ "surface_sink_plugin.cpp" ]
+    public_configs = [ "//foundation/multimedia/media_foundation:histreamer_presets" ]
+    public_deps = [
+      "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
+      "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",
+    ]
     deps = []
     external_deps = [
       "bounds_checking_function:libsec_shared",
@@ -48,28 +42,16 @@ ohos_source_set("std_video_surface_sink") {
       "graphic_surface:surface",
       "graphic_surface:sync_fence",
       "hilog:libhilog",
-      "hitrace:hitrace_meter",
       "init:libbeget_proxy",
       "ipc:ipc_core",
+      "hitrace:hitrace_meter",
     ]
-  }
-}
-
-if (hst_is_lite_sys) {
-  print("std video surface sink plugin is not available on lite systems")
-} else {
-  import("//build/ohos.gni")
-  ohos_shared_library("histreamer_plugin_StdVideoSurfaceSink") {
     sanitize = {
       cfi = true
       cfi_cross_dso = true
       debug = false
       integer_overflow = true
     }
-    deps = [ ":std_video_surface_sink" ]
-    external_deps = [ "hilog:libhilog" ]
     relative_install_dir = "media/histreamer_plugins"
-    subsystem_name = "multimedia"
-    part_name = "media_foundation"
   }
 }
