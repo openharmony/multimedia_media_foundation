@@ -73,6 +73,7 @@ if (hst_is_lite_sys) {
     if (media_foundation_enable_video) {
       public_external_deps += [
         "c_utils:utilsbase",
+        "drivers_interface_display:libdisplay_composer_hdi_impl_1.2",
         "drivers_interface_display:libdisplay_composer_proxy_1.0",
         "drivers_interface_display:libdisplay_composer_proxy_1.1",
         "drivers_interface_display:libdisplay_composer_proxy_1.2",
