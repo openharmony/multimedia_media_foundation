@@ -14,7 +14,7 @@
 import("//foundation/multimedia/media_foundation/config.gni")
 group("plugin_standard_video_surface_sink") {
   if (hst_is_standard_sys) {
-    deps += [ ":histreamer_plugin_StdVideoSurfaceSink" ]
+    deps = [ ":histreamer_plugin_StdVideoSurfaceSink" ]
   }
 }
 
