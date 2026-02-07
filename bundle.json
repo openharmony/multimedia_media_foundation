@@ -82,6 +82,7 @@
               "bounds_checking_function",
               "pulseaudio",
               "hisysevent",
+              "curl",
               "safwk",
               "samgr",
               "skia",
