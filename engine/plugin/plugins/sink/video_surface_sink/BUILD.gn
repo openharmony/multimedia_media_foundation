@@ -42,9 +42,9 @@ if (hst_is_standard_sys) {
       "graphic_surface:surface",
       "graphic_surface:sync_fence",
       "hilog:libhilog",
-      "hitrace:hitrace_meter",
       "init:libbeget_proxy",
       "ipc:ipc_core",
+      "hitrace:hitrace_meter",
     ]
     sanitize = {
       cfi = true
