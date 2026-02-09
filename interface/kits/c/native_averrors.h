@@ -96,7 +96,7 @@ typedef enum OH_AVErrCode {
     AV_ERR_INPUT_DATA_ERROR = 10,
     /**
      * @error unsupported format.
-     * @since 16
+     * @since 18
      */
     AV_ERR_UNSUPPORTED_FORMAT = 11,
     /**
