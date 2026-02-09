@@ -128,6 +128,10 @@ struct DataSource {
     virtual int32_t GetStreamID() = 0;
 
     virtual bool IsDash() = 0;
+
+    virtual uint64_t GetSniffSize(){return 0;};
+
+    virtual void SetSniffSize(uint64_t sniffSize){(void)sniffSize;};
 };
 
 /// Plugin create function. All plugins must implement this function.
