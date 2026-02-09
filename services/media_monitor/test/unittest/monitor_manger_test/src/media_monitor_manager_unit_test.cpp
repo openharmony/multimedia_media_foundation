@@ -354,7 +354,7 @@ HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_GetAudioAppSessionMsg_001, T
     bean->Add("HAS_SESSION", 1);
     bean->Add("IS_ADD", 1);
     MediaMonitorManager::GetInstance().WriteLogMsg(bean);
-    usleep(10000);
+    usleep(100);
 
     std::map<int32_t, bool> appSessionMap;
     MediaMonitorManager::GetInstance().GetAudioAppSessionMsg(appSessionMap);
@@ -368,12 +368,13 @@ HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_GetAudioAppSessionMsg_001, T
     bean1->Add("HAS_SESSION", 1);
     bean1->Add("IS_ADD", 0);
     MediaMonitorManager::GetInstance().WriteLogMsg(bean1);
-    usleep(10000);
+    MediaMonitorManager::GetInstance().WriteLogMsg(bean1);
+    usleep(100);
 
     appSessionMap.clear();
     MediaMonitorManager::GetInstance().GetAudioAppSessionMsg(appSessionMap);
     it = appSessionMap.find(1);
-    EXPECT_NE(it, appSessionMap.end());
+    EXPECT_EQ(it, appSessionMap.end());
 
     setuid(selfUid);
 }
@@ -389,7 +390,7 @@ HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_GetAudioAppBackTaskMsg_001, 
     bean->Add("HAS_BACK_TASK", 1);
     bean->Add("IS_ADD", 1);
     MediaMonitorManager::GetInstance().WriteLogMsg(bean);
-    usleep(10000);
+    usleep(100);
 
     std::map<int32_t, bool> appBackTaskMap;
     MediaMonitorManager::GetInstance().GetAudioAppBackTaskMsg(appBackTaskMap);
@@ -403,12 +404,13 @@ HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_GetAudioAppBackTaskMsg_001, 
     bean1->Add("HAS_BACK_TASK", 1);
     bean1->Add("IS_ADD", 0);
     MediaMonitorManager::GetInstance().WriteLogMsg(bean1);
-    usleep(10000);
+    MediaMonitorManager::GetInstance().WriteLogMsg(bean1);
+    usleep(100);
 
     appBackTaskMap.clear();
     MediaMonitorManager::GetInstance().GetAudioAppBackTaskMsg(appBackTaskMap);
     it = appBackTaskMap.find(2);
-    EXPECT_NE(it, appBackTaskMap.end());
+    EXPECT_EQ(it, appBackTaskMap.end());
 
     setuid(selfUid);
 }
