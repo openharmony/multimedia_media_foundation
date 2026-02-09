@@ -94,7 +94,7 @@ void Thread::SetNameInternal()
     if (state_ && !name_.empty()) {
         constexpr int threadNameMaxSize = 15;
         if (name_.size() > threadNameMaxSize) {
-            MEDIA_LOG_W("task name " PUBLIC_LOG_S " exceed max size: " PUBLIC_LOG_D32,
+            MEDIA_LOG_D("task name " PUBLIC_LOG_S " exceed max size: " PUBLIC_LOG_D32,
                         name_.c_str(), threadNameMaxSize);
             name_ = name_.substr(0, threadNameMaxSize);
         }
