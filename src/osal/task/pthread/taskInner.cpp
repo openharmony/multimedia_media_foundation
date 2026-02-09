@@ -50,7 +50,7 @@ TaskInner::TaskInner(const std::string& name, const std::string& groupId, TaskTy
     bool singleLoop)
     : name_(std::move(name)), runningState_(RunningState::PAUSED), singleLoop_(singleLoop)
 {
-    MEDIA_LOG_I_T(">> " PUBLIC_LOG_S " groupId:" PUBLIC_LOG_S " type:%{public}d ctor",
+    MEDIA_LOG_D_T(">> " PUBLIC_LOG_S " groupId:" PUBLIC_LOG_S " type:%{public}d ctor",
         name_.c_str(), groupId.c_str(), type);
     if (type == TaskType::SINGLETON) {
         std::string newName = name_ + std::to_string(++singletonTaskId);
@@ -124,7 +124,7 @@ void TaskInner::Start()
         UpdateTop();
     }
     pipelineThread_->UnLockJobState(true);
-    MEDIA_LOG_I_FALSE_D(isStateLogEnabled_.load(), "task " PUBLIC_LOG_S " Start done, topProcessUs:%{public}" PRId64,
+    MEDIA_LOG_D("task " PUBLIC_LOG_S " Start done, topProcessUs:%{public}" PRId64,
         name_.c_str(), topProcessUs_);
 }
 
@@ -198,7 +198,7 @@ void TaskInner::Pause()
     runningState_ = RunningState::PAUSED;
     topProcessUs_ = -1;
     pipelineThread_->UnLockJobState(true);
-    MEDIA_LOG_I_FALSE_D_T(isStateLogEnabled_.load(), PUBLIC_LOG_S " Pause done.", name_.c_str());
+    MEDIA_LOG_D_T(PUBLIC_LOG_S " Pause done.", name_.c_str());
 }
 
 void TaskInner::PauseAsync()

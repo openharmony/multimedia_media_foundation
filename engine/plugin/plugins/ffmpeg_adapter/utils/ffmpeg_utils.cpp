@@ -248,12 +248,7 @@ std::string RemoveDelimiter(const char* str, char delimiter)
 
 void RemoveDelimiter(char delimiter, std::string& str)
 {
-    for (auto it = std::find(str.begin(), str.end(), delimiter); it != str.end();) {
-        it = str.erase(it);
-        if (*it != delimiter) {
-            it = std::find(it, str.end(), delimiter);
-        }
-    }
+    str.erase(std::remove(str.begin(), str.end(), delimiter), str.end());
 }
 
 void ReplaceDelimiter(const std::string& delmiters, char newDelimiter, std::string& str)
