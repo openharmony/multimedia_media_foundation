@@ -82,6 +82,7 @@
               "bounds_checking_function",
               "pulseaudio",
               "hisysevent",
+              "window_manager",
               "curl",
               "safwk",
               "samgr",
