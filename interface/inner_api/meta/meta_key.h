@@ -224,12 +224,12 @@ public:
         "video_encode_b_frame_gop_mode"; ///<  Key for video encode gop mode, see {link @VideoEncodeBFrameGopMode}
     static constexpr const char VIDEO_ENCODE_SET_FRAME_PTS[] =
         "video_encode_set_frame_pts"; ///<  Key for video encode set frame pts.
-    static constexpr const char VIDEO_SCENE_TYPE[] =
-        "video_scene_type"; ///<  Key for video encode carmera-recoder mode, see {link @VideoSceneType}
+    static constexpr const char VIDEO_CODEC_SCENARIO[] =
+        "video_codec_scenario"; ///<  Key for video codec scenario, see {link @VideoCodecScenario}
     static constexpr const char VIDEO_ENCODER_ENABLE_B_FRAME[] =
         "video_encoder_enable_b_frame"; ///<  bool,Key for video encode B-frame mode.
     static constexpr const char VIDEO_ENCODER_MAX_B_FRAME[] =
-        "video_encoder_max_b_frame"; ///<  Key for video encode carmera-recoder mode, see {link @VideoSceneType}
+        "video_encoder_max_b_frame"; ///<  Key for video encode carmera-recoder mode.
     static constexpr const char VIDEO_ENCODE_QUALITY[] =
         "quality"; ///<  key for the desired encoding quality,  this key is only supported for encoders that are
                    ///<  configured in constant quality mode
