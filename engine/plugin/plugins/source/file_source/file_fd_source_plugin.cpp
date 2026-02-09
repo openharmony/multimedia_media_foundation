@@ -34,7 +34,7 @@ namespace Media {
 namespace Plugin {
 namespace FileFdSource {
 namespace {
-constexpr size_t SIZE_INDEX                     = 3;
+constexpr size_t SIZE_INDEX = 3;
 
 uint64_t GetFileSize(int32_t fd)
 {
@@ -176,7 +176,7 @@ Status FileFdSourcePlugin::ParseUriInfo(const std::string& uri)
     FALSE_RETURN_V_MSG_E(std::regex_match(uri, fdUriMatch, std::regex("^fd://(.*)?offset=(.*)&size=(.*)")) ||
         std::regex_match(uri, fdUriMatch, std::regex("^fd://(.*)")),
         Status::ERROR_INVALID_PARAMETER, "Invalid fd uri format: " PUBLIC_LOG_S, uri.c_str());
-    std::string fdStr = fdUriMatch[1].str();
+    std::string fdStr = fdUriMatch[1].str(); // 1: sub match fd subscript
     FALSE_RETURN_V_MSG_E(StrToInt(fdStr, fd_) && fd_ != -1 && FileSystem::IsRegularFile(fd_),
         Status::ERROR_INVALID_PARAMETER, "Invalid fd: " PUBLIC_LOG_D32, fd_);
     fileSize_ = GetFileSize(fd_);
