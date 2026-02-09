@@ -29,7 +29,7 @@ namespace OHOS {
 namespace Media {
 namespace Plugins {
 namespace HttpPlugin {
-class NetworkClient: public std::enable_shared_from_this<NetworkClient> {
+class NetworkClient : public std::enable_shared_from_this<NetworkClient> {
 public:
     virtual ~NetworkClient() = default;
     virtual Status Init() = 0;
