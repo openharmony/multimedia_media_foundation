@@ -48,11 +48,11 @@ public:
         (void)sourceLoader;
     }
     virtual int32_t RespondHeader(int64_t uuid, const std::map<std::string, std::string>& httpHeader,
-                    std::string redirctUrl)
+                    std::string redirectUrl)
     {
         (void)uuid;
         (void)httpHeader;
-        (void)redirctUrl;
+        (void)redirectUrl;
         return 0;
     }
     virtual int32_t RespondData(int64_t uuid, int64_t offset, const std::shared_ptr<AVSharedMemory> memory)

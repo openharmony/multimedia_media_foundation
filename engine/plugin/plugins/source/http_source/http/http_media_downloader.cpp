@@ -30,10 +30,12 @@ constexpr int WATER_LINE = 8192; //  WATER_LINE:8192
 #endif
 }
 
-HttpMediaDownloader::HttpMediaDownloader() noexcept : buffer_(std::make_shared<RingBuffer>(RING_BUFFER_SIZE)),
-                                                      downloader_(std::make_shared<Downloader>("http"))
+HttpMediaDownloader::HttpMediaDownloader() noexcept
 {
+    buffer_ = std::make_shared<RingBuffer>(RING_BUFFER_SIZE);
     buffer_->Init();
+    
+    downloader_ = std::make_shared<Downloader>("http");
 }
 
 HttpMediaDownloader::~HttpMediaDownloader()

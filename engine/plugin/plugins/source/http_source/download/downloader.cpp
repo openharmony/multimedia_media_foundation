@@ -99,7 +99,7 @@ void DownloadRequest::WaitHeaderUpdated() const
     MEDIA_LOG_D("isHeaderUpdated " PUBLIC_LOG_D32 ", times " PUBLIC_LOG_ZU, isHeaderUpdated, times);
 }
 
-Downloader::Downloader(const std::string& name) noexcept : name_(std::move(name))
+Downloader::Downloader(std::string name) noexcept : name_(std::move(name))
 {
     shouldStartNextRequest = true;
 

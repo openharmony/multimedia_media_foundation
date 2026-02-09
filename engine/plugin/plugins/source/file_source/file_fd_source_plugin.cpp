@@ -172,7 +172,7 @@ Status FileFdSourcePlugin::ParseUriInfo(const std::string& uri)
         size_ = static_cast<uint64_t>(std::stoll(fdUriMatch[3].str())); // 3: sub match size subscript
         uint64_t remainingSize = fileSize_ - offset_;
         if (size_ > remainingSize) {
-            size_ = remainingSize; 
+            size_ = remainingSize;
         }
     } else {
         size_ = fileSize_;
