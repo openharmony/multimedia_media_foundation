@@ -29,7 +29,7 @@ namespace OHOS {
 namespace Media {
 namespace Plugins {
 namespace HttpPlugin {
-class NetworkClient {
+class NetworkClient : public std::enable_shared_from_this<NetworkClient> {
 public:
     virtual ~NetworkClient() = default;
     virtual Status Init() = 0;
@@ -48,11 +48,11 @@ public:
         (void)sourceLoader;
     }
     virtual int32_t RespondHeader(int64_t uuid, const std::map<std::string, std::string>& httpHeader,
-                    std::string redirctUrl)
+                    std::string redirectUrl)
     {
         (void)uuid;
         (void)httpHeader;
-        (void)redirctUrl;
+        (void)redirectUrl;
         return 0;
     }
     virtual int32_t RespondData(int64_t uuid, int64_t offset, const std::shared_ptr<AVSharedMemory> memory)
@@ -78,6 +78,10 @@ public:
         return "";
     }
 };
+
+extern "C" __attribute__((visibility("default"))) NetworkClient *CreateNetworkClient(RxHeader headCallback,
+    RxBody bodyCallback, void *userParam);
+
 } // namespace HttpPlugin
 } // namespace Plugins
 } // namespace Media

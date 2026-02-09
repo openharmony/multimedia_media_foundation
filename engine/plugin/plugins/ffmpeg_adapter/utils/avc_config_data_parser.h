@@ -36,7 +36,7 @@ public:
     ~AVCConfigDataParser();
 
     bool ParseConfigData();
-    bool IsNeedAddFrameHeader() const;
+    bool IsNeedAddFrameHeader();
     bool GetNewConfigData(std::shared_ptr<uint8_t>& newCfgData, size_t& newCfgDataSize);
 
 private:
