@@ -86,6 +86,7 @@ if (hst_is_standard_sys) {
     ]
 
     output_extension = "so"
+    innerapi_tags = [ "ndk" ]
     subsystem_name = "multimedia"
     part_name = "media_foundation"
   }
