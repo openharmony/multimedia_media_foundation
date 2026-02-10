@@ -145,6 +145,7 @@ void Thread::UpdateThreadPriority(const uint32_t newPriority, const std::string 
 
 void* Thread::Run(void* arg) // NOLINT: void*
 {
+    FALSE_RETURN_V(arg != nullptr, nullptr);
     std::function<void()> func;
     std::string name;
     {
