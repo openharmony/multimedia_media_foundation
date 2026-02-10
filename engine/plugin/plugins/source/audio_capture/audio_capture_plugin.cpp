@@ -166,7 +166,7 @@ Status AudioCapturePlugin::Deinit()
 
 Status AudioCapturePlugin::Prepare()
 {
-    MEDIA_LOG_D("IN");
+    MEDIA_LOG_D("Prepare");
     AudioStandard::AudioEncodingType audioEncoding = AudioStandard::ENCODING_INVALID;
     auto supportedEncodingTypes = OHOS::AudioStandard::AudioCapturer::GetSupportedEncodingTypes();
     for (const auto& supportedEncodingType : supportedEncodingTypes) {
