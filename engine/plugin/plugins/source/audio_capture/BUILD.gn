@@ -43,8 +43,8 @@ if (hst_is_standard_sys) {
       "c_utils:utilsbase",
       "graphic_surface:surface",
       "hilog:libhilog",
-      "hitrace:hitrace_meter",
       "ipc:ipc_core",
+      "hitrace:hitrace_meter",
     ]
     sanitize = {
       cfi = true
