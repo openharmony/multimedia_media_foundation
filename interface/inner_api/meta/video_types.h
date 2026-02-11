@@ -339,6 +339,17 @@ enum class TemporalGopReferenceMode : int32_t {
     UNKNOWN,
 };
 
+/**
+ * @brief Video codec scenarios
+ *
+ * @since 6.1
+ */
+enum VideoCodecScenario : int32_t {
+    SCENARIO_RECORDING = 0,             /** video recording scenario */
+    SCENARIO_MOVING_PHOTO,              /** moving photo scenario */
+    SCENARIO_INVALID,                   /** invalid scenario */
+};
+
 enum struct RawVideoPixelFormat : int32_t {
     UNKNOWN = -1,
     /**
