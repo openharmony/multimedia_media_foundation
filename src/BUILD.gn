@@ -230,6 +230,10 @@ if (hst_is_standard_sys) {
       "HST_PLUGIN_FILE_TAIL=\".z.so\"",
     ]
 
+    cflags = [
+      "-D_FORTIFY_SOURCE=2",
+    ]
+    
     subsystem_name = "multimedia"
     part_name = "media_foundation"
   }
