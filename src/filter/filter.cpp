@@ -81,10 +81,10 @@ void Filter::LinkPipeLine(const std::string &groupId, bool needTurbo, bool needI
     filterTask_ = std::make_unique<Task>(name_, groupId_, taskType, TaskPriority::HIGH, false);
     
     if (needTurbo) {
-        filterTask_->UpdateThreadPriority(THREAD_PRIORITY_41, "media_service");
+        filterTask_->UpdateThreadPriority(THREAD_PRIORITY_41, "bootanimation");
     }
     
-    MEDIA_LOG_I("needInit is: " PUBLIC_LOG_U32, needInit);
+    MEDIA_LOG_I("needInit: " PUBLIC_LOG_U32, needInit);
     
     filterTask_->SubmitJobOnce([this, needInit] {
         Status ret = Status::OK;

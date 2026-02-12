@@ -271,7 +271,7 @@ bool OH_AVFormat_SetBuffer(struct OH_AVFormat *format, const char *key, const ui
  * @param size written data length
  * @return The return value is TRUE for success, FALSE for failure
  * Possible failure causes:
- * 1. input format is NULL.
+ * 1. input format is nullptr.
  * 2. input format's magic error.
  * 3. key is nullptr.
  * 4. addr is nullptr.
