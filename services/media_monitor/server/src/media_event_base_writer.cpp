@@ -687,7 +687,12 @@ void MediaEventBaseWriter::WriteAudioRecordError(std::shared_ptr<EventBean> &bea
         "ACTIVE_SOURCE", static_cast<uint8_t>(bean->GetIntValue("ACTIVE_SOURCE")),
         "ACTIVE_PID", bean->GetIntValue("ACTIVE_PID"),
         "ACTIVE_PKG", bean->GetStringValue("ACTIVE_PKG"),
-        "REASON", bean->GetIntValue("REASON"));
+        "REASON", bean->GetIntValue("REASON"),
+        "TYPE", bean->GetIntValue("TYPE"),
+        "PIPE_TYPE", bean->GetIntValue("PIPE_TYPE"),
+        "HDI_ADAPTER", bean->GetIntValue("HDI_ADAPTER"),
+        "COUNT", bean->GetIntValue("COUNT"),
+        "START_TIME", static_cast<int64_t>(bean->GetUint64Value("START_TIME")));
     if (ret) {
         MEDIA_LOG_E("write event fail: RECORD_ERROR, ret = %{public}d", ret);
     }
@@ -906,7 +911,6 @@ void MediaEventBaseWriter::WriteAudioLoopbackException(std::shared_ptr<EventBean
     }
 #endif
 }
-// maobin add
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS
