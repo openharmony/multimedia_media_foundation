@@ -906,6 +906,7 @@ void MediaEventBaseWriter::WriteAudioLoopbackException(std::shared_ptr<EventBean
     }
 #endif
 }
+// maobin add
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS
