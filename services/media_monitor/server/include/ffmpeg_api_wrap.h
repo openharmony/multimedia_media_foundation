@@ -67,6 +67,8 @@ using PacketFreeFunc = void (*)(AVPacket **pkt);
 using PacketUnrefFunc = void (*)(AVPacket *pkt);
 
 using GetChannelLayoutFunc = int64_t (*)(int nbChannels);
+using GetChannelLayoutDefaultFunc = int64_t (*)(AVChannelLayout *ch_layout, int nb_channels);
+using GetChannelLayoutCopyFunc = int64_t (*)(AVChannelLayout *dst, const AVChannelLayout *src);
 using GetBytesPerSampleFunc = int (*)(enum AVSampleFormat sampleFmt);
 using SampleFmtIsPlannarFunc = int (*)(enum AVSampleFormat sampleFmt);
 
@@ -115,6 +117,8 @@ public:
     void PacketUnref(AVPacket *pkt);
 
     int64_t GetChannelLayout(int nbChannels);
+    int64_t GetChannelLayoutDefault(AVChannelLayout *ch_layout, int nb_channels);
+    int64_t GetChannelLayoutCopy(AVChannelLayout *dst, const AVChannelLayout *src);
     int GetBytesPerSample(AVSampleFormat sampleFmt);
     int SampleFmtIsPlannar(AVSampleFormat sampleFmt);
     struct SwrContext *SwrAlloc();
@@ -159,6 +163,8 @@ private:
     FrameGetBufferFunc frameGetBufferFunc = nullptr;
     FrameFreeFunc frameFreeFunc = nullptr;
     GetChannelLayoutFunc getChannelLayoutFunc = nullptr;
+    GetChannelLayoutDefaultFunc getChannelLayoutDefaultFunc = nullptr;
+    GetChannelLayoutCopyFunc getChannelLayoutCopyFunc = nullptr;
     GetBytesPerSampleFunc getBytesPerSampleFunc = nullptr;
     SampleFmtIsPlannarFunc sampleFmtIsPlannarFunc = nullptr;
 

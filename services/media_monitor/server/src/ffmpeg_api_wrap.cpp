@@ -114,6 +114,10 @@ bool FFmpegApiWrap::LoadUtilsApi()
     FALSE_RETURN_V_MSG_E(frameFreeFunc != nullptr, false, "load error");
     getChannelLayoutFunc = (GetChannelLayoutFunc)dlsym(handler, "av_get_default_channel_layout");
     FALSE_RETURN_V_MSG_E(getChannelLayoutFunc != nullptr, false, "load error");
+    getChannelLayoutDefaultFunc = (GetChannelLayoutDefaultFunc)dlsym(handler, "av_channel_layout_default");
+    FALSE_RETURN_V_MSG_E(getChannelLayoutDefaultFunc != nullptr, false, "load error");
+    getChannelLayoutCopyFunc = (GetChannelLayoutCopyFunc)dlsym(handler, "av_channel_layout_copy");
+    FALSE_RETURN_V_MSG_E(getChannelLayoutCopyFunc != nullptr, false, "load error");
     getBytesPerSampleFunc = (GetBytesPerSampleFunc)dlsym(handler, "av_get_bytes_per_sample");
     FALSE_RETURN_V_MSG_E(getBytesPerSampleFunc != nullptr, false, "load error");
     sampleFmtIsPlannarFunc = (SampleFmtIsPlannarFunc)dlsym(handler, "av_sample_fmt_is_planar");
@@ -347,6 +351,24 @@ int64_t FFmpegApiWrap::GetChannelLayout(int nbChannels)
     int ret = -1;
     if (getChannelLayoutFunc != nullptr) {
         ret = getChannelLayoutFunc(nbChannels);
+    }
+    return ret;
+}
+
+int64_t FFmpegApiWrap::GetChannelLayoutDefault(AVChannelLayout *ch_layout, int nb_channels)
+{
+    int ret = -1;
+    if (getChannelLayoutDefaultFunc != nullptr) {
+        ret = getChannelLayoutDefaultFunc(ch_layout, nb_channels);
+    }
+    return ret;
+}
+
+int64_t FFmpegApiWrap::GetChannelLayoutCopy(AVChannelLayout *dst, const AVChannelLayout *src)
+{
+    int ret = -1;
+    if (getChannelLayoutCopyFunc != nullptr) {
+        ret = getChannelLayoutCopyFunc(dst, src);
     }
     return ret;
 }
