@@ -112,8 +112,8 @@ bool FFmpegApiWrap::LoadUtilsApi()
     FALSE_RETURN_V_MSG_E(frameGetBufferFunc != nullptr, false, "load error");
     frameFreeFunc = (FrameFreeFunc)dlsym(handler, "av_frame_free");
     FALSE_RETURN_V_MSG_E(frameFreeFunc != nullptr, false, "load error");
-    getChannelLayoutFunc = (GetChannelLayoutFunc)dlsym(handler, "av_get_default_channel_layout");
-    FALSE_RETURN_V_MSG_E(getChannelLayoutFunc != nullptr, false, "load error");
+    getChannelLayoutFromMaskFunc = (GetChannelLayoutFromMaskFunc)dlsym(handler, "av_channel_layout_from_mask");
+    FALSE_RETURN_V_MSG_E(getChannelLayoutFromMaskFunc != nullptr, false, "load error");
     getChannelLayoutDefaultFunc = (GetChannelLayoutDefaultFunc)dlsym(handler, "av_channel_layout_default");
     FALSE_RETURN_V_MSG_E(getChannelLayoutDefaultFunc != nullptr, false, "load error");
     getChannelLayoutCopyFunc = (GetChannelLayoutCopyFunc)dlsym(handler, "av_channel_layout_copy");
@@ -127,8 +127,8 @@ bool FFmpegApiWrap::LoadUtilsApi()
 
 bool FFmpegApiWrap::LoadResampleApi()
 {
-    swrSetOptsFunc = (SwrSetOptsFunc)dlsym(handler, "swr_alloc_set_opts");
-    FALSE_RETURN_V_MSG_E(swrSetOptsFunc != nullptr, false, "load error");
+    swrSetOpts2Func = (SwrSetOpts2Func)dlsym(handler, "swr_alloc_set_opts2");
+    FALSE_RETURN_V_MSG_E(swrSetOpts2Func != nullptr, false, "load error");
     swrAllocFunc = (SwrAllocFunc)dlsym(handler, "swr_alloc");
     FALSE_RETURN_V_MSG_E(swrAllocFunc != nullptr, false, "load error");
     swrInitFunc = (SwrInitFunc)dlsym(handler, "swr_init");
@@ -346,11 +346,11 @@ void FFmpegApiWrap::PacketUnref(AVPacket *pkt)
     }
 }
 
-int64_t FFmpegApiWrap::GetChannelLayout(int nbChannels)
+int64_t FFmpegApiWrap::GetChannelLayoutFromMask(AVChannelLayout *channel_layout, uint64_t mask)
 {
     int ret = -1;
-    if (getChannelLayoutFunc != nullptr) {
-        ret = getChannelLayoutFunc(nbChannels);
+    if (getChannelLayoutFromMaskFunc != nullptr) {
+        ret = getChannelLayoutFromMaskFunc(channel_layout, mask);
     }
     return ret;
 }
@@ -400,19 +400,17 @@ struct SwrContext *FFmpegApiWrap::SwrAlloc()
     return s;
 }
 
-struct SwrContext *FFmpegApiWrap::SwrSetOpts(struct SwrContext *s,
-    int64_t outChLayout, AVSampleFormat outSampleFmt, int outSampleRate,
-    int64_t inChLayout, AVSampleFormat inSampleFmt, int inSampleRate,
-    int logOffset, void *logCtx)
+int FFmpegApiWrap::SwrSetOpts2(struct SwrContext **ps,
+    const AVChannelLayout *out_ch_layout, enum AVSampleFormat out_sample_fmt, int out_sample_rate,
+    const AVChannelLayout *in_ch_layout, enum AVSampleFormat in_sample_fmt, int in_sample_rate,
+    int log_offset, void *log_ctx)
 {
-    struct SwrContext *ptr = nullptr;
-    if (swrSetOptsFunc != nullptr) {
-        ptr = swrSetOptsFunc(s,
-                            outChLayout, outSampleFmt, outSampleRate,
-                            inChLayout, inSampleFmt, inSampleRate,
-                            logOffset, logCtx);
+    int ret = -1;
+    if (swrSetOpts2Func != nullptr) {
+        ret = swrSetOpts2Func(ps, out_ch_layout, out_sample_fmt, out_sample_rate,
+            in_ch_layout, in_sample_fmt, in_sample_rate, log_offset, log_ctx);
     }
-    return ptr;
+    return ret;
 }
 
 int FFmpegApiWrap::SwrInit(struct SwrContext *s)

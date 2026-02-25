@@ -95,10 +95,16 @@ int32_t SampleConvert::Init(const ResamplePara &param)
         MEDIA_LOG_E("cannot allocate swr context");
         return ERROR;
     }
-    swrContext = apiWrap_->SwrSetOpts(swrContext,
-        resamplePara_.channelLayout, resamplePara_.destFmt, resamplePara_.sampleRate,
-        resamplePara_.channelLayout, resamplePara_.srcFfFmt, resamplePara_.sampleRate,
+    AVChannelLayout av_ch_layout;
+    int ret = apiWrap_->GetChannelLayoutFromMask(&av_ch_layout, resamplePara_.channelLayout);
+    if (ret) {
+        apiWrap_->GetChannelLayoutDefault(&av_ch_layout, resamplePara_.channels);
+    }
+    ret = apiWrap_->SwrSetOpts2(&swrContext,
+        &av_ch_layout, resamplePara_.destFmt, resamplePara_.sampleRate,
+        &av_ch_layout, resamplePara_.srcFfFmt, resamplePara_.sampleRate,
         0, nullptr);
+    FALSE_RETURN_V_MSG_E(!ret, ERROR, "swr alloc set opts failed.");
     if (apiWrap_->SwrInit(swrContext) != 0) {
         MEDIA_LOG_E("swr init error");
         return ERROR;
