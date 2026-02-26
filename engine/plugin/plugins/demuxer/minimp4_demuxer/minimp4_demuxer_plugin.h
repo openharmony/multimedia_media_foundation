@@ -70,6 +70,7 @@ private:
     unsigned int  ioDataRemainSize_;
     int           inIoBufferSize_;
     unsigned int sampleIndex_;
+    uint32_t readDataSize_ = 0;
 };
 } // namespace Minimp4
 } // namespace Plugin
