@@ -425,6 +425,7 @@ if (hst_is_lite_sys) {
       "init:libbegetutil",
       "ipc:ipc_single",
       "samgr:samgr_proxy",
+      "init:libbeget_proxy",
     ]
 
     subsystem_name = "multimedia"

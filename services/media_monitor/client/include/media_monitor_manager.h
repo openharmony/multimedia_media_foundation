@@ -58,13 +58,17 @@ public:
 
     void GetDmDeviceInfo(std::vector<MonitorDmDeviceInfo> &dmDeviceInfos);
 
+    static void HiviewUeEnableChangeCallback(const char *key, const char *value, void *context);
+
 private:
     MediaMonitorManager();
     ~MediaMonitorManager() {}
+    void WatchHiviewUeEnableParameter();
     bool dumpEnable_ = false;
     std::string dumpType_ = DEFAULT_DUMP_TYPE;
     std::string versionType_ = COMMERCIAL_VERSION;
     std::time_t dumpStartTime_ = 0;
+    static std::atomic_bool hiviewUeEnable_;
 };
 } // namespace MediaMonitor
 } // namespace Media

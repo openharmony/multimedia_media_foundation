@@ -15,6 +15,7 @@
 
 #include "media_monitor_manager.h"
 #include "log.h"
+#include "parameter.h"
 #include "parameters.h"
 #include "iservice_registry.h"
 #include "system_ability_definition.h"
@@ -22,6 +23,8 @@
 #include "media_monitor_proxy.h"
 #include "media_monitor_death_recipient.h"
 #include "audio_dump_buffer.h"
+#include <atomic>
+#include <cstring>
 
 namespace {
 constexpr OHOS::HiviewDFX::HiLogLabel LABEL = {LOG_CORE, LOG_DOMAIN_FOUNDATION, "MediaMonitorManager"};
@@ -37,10 +40,13 @@ static mutex g_mmProxyMutex;
 static sptr<IMediaMonitor> g_mmProxy = nullptr;
 constexpr int MAX_DUMP_TIME = 90;
 
+std::atomic_bool MediaMonitorManager::hiviewUeEnable_{false};
+
 MediaMonitorManager::MediaMonitorManager()
 {
     versionType_ = OHOS::system::GetParameter("const.logsystem.versiontype", COMMERCIAL_VERSION);
     MEDIA_LOG_I("version type:%{public}s", versionType_.c_str());
+    WatchHiviewUeEnableParameter();
 }
 
 MediaMonitorManager& MediaMonitorManager::GetInstance()
@@ -80,6 +86,28 @@ static const sptr<IMediaMonitor> GetMediaMonitorProxy()
     return g_mmProxy;
 }
 
+void MediaMonitorManager::HiviewUeEnableChangeCallback(const char *key, const char *value, void *context)
+{
+    FALSE_RETURN_MSG(value != nullptr, "HiviewUeEnableChangeCallback: value is null");
+    bool enable = (strcmp(value, "true") == 0 || strcmp(value, "1") == 0);
+    hiviewUeEnable_.store(enable, std::memory_order_release);
+    MEDIA_LOG_I("HiviewUeEnable changed to %{public}d", enable);
+}
+
+void MediaMonitorManager::WatchHiviewUeEnableParameter()
+{
+    // Initialize with current value
+    hiviewUeEnable_.store(OHOS::system::GetBoolParameter("persist.hiviewdfx.hiview.ue.enable", false),
+        std::memory_order_release);
+
+    // Register parameter change callback
+    int32_t ret = WatchParameter("persist.hiviewdfx.hiview.ue.enable",
+        HiviewUeEnableChangeCallback, this);
+    FALSE_RETURN_MSG(ret == SUCCESS, "WatchHiviewUeEnableParameter failed!");
+    MEDIA_LOG_I("WatchHiviewUeEnableParameter success, current value: %{public}d",
+        hiviewUeEnable_.load(std::memory_order_relaxed));
+}
+
 void MediaMonitorManager::MediaMonitorDied(pid_t pid)
 {
     MEDIA_LOG_I("media monitor died");
@@ -99,6 +127,8 @@ void MediaMonitorManager::WriteLogMsg(std::shared_ptr<EventBean> &bean)
         MEDIA_LOG_E("proxy is nullptr.");
         return;
     }
+    FALSE_RETURN_MSG(hiviewUeEnable_.load(std::memory_order_relaxed),
+        "persist.hiviewdfx.hiview.ue.enable is false, skip write log msg");
     proxy->WriteLogMsg(*bean);
 }
 
