@@ -16,6 +16,49 @@
 #include <plugin/plugin_definition.h>
 #include "gtest/gtest.h"
 
+
+class TestDataSource : public DataSource {
+public:
+    Status ReadAt(int64_t offset, std::shared_ptr<Buffer>& buffer, size_t expectedLen) override
+    {
+        return Status::OK;
+    }
+
+    Status GetSize(uint64_t& size) override
+    {
+        size = 0;
+        return Status::OK;
+    }
+
+    Seekable GetSeekable() override
+    {
+        return Seekable::SEEKABLE;
+    }
+
+    int32_t GetStreamID() override
+    {
+        return 0;
+    }
+
+    bool IsDash() override
+    {
+        return false;
+    }
+
+    uint64_t GetSniffSize() override
+    {
+        return sniffSize_;
+    }
+
+    void SetSniffSize(uint64_t sniffSize) override
+    {
+        sniffSize_ = sniffSize;
+    }
+
+private:
+    uint64_t sniffSize_ = 0;
+};
+
 namespace OHOS {
 namespace Media {
 namespace Test {
@@ -27,6 +70,50 @@ HWTEST(PluginDefinitionTest, test_PluginDefBase, TestSize.Level1)
     ASSERT_TRUE(def.GetExtensions().empty());
     ASSERT_TRUE(def.GetInCaps().empty());
     ASSERT_TRUE(def.GetOutCaps().empty());
+}
+
+HWTEST(PluginDefinitionTest, test_DataSource_GetSniffSize_Default, TestSize.Level1)
+{
+    TestDataSource dataSource;
+    uint64_t size = dataSource.GetSniffSize();
+    ASSERT_EQ(size, 0);
+}
+
+HWTEST(PluginDefinitionTest, test_DataSource_SetSniffSizeAndGetSniffSize, TestSize.Level1)
+{
+    TestDataSource dataSource;
+    uint64_t testSize = 1024;
+    dataSource.SetSniffSize(testSize);
+    uint64_t size = dataSource.GetSniffSize();
+    ASSERT_EQ(size, testSize);
+}
+
+HWTEST(PluginDefinitionTest, test_DataSource_SetSniffSize_Zero, TestSize.Level1)
+{
+    TestDataSource dataSource;
+    dataSource.SetSniffSize(0);
+    uint64_t size = dataSource.GetSniffSize();
+    ASSERT_EQ(size, 0);
+}
+
+HWTEST(PluginDefinitionTest, test_DataSource_SetSniffSize_Max, TestSize.Level1)
+{
+    TestDataSource dataSource;
+    uint64_t maxSize = UINT64_MAX;
+    dataSource.SetSniffSize(maxSize);
+    uint64_t size = dataSource.GetSniffSize();
+    ASSERT_EQ(size, maxSize);
+}
+
+HWTEST(PluginDefinitionTest, test_DataSource_SetSniffSize_MultipleTimes, TestSize.Level1)
+{
+    TestDataSource dataSource;
+    dataSource.SetSniffSize(100);
+    ASSERT_EQ(dataSource.GetSniffSize(), 100);
+    dataSource.SetSniffSize(200);
+    ASSERT_EQ(dataSource.GetSniffSize(), 200);
+    dataSource.SetSniffSize(300);
+    ASSERT_EQ(dataSource.GetSniffSize(), 300);
 }
 } // namespace Test
 } // namespace Media
