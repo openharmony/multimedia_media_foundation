@@ -144,6 +144,7 @@ public:
     void WriteVolumeSettingStatistics(std::shared_ptr<EventBean> &bean);
     void WriteTonePlaybackFailed(std::shared_ptr<EventBean> &bean);
     void WriteAudioLoopbackException(std::shared_ptr<EventBean> &bean);
+    void WriteAudioInterruptErrorEvent(std::shared_ptr<EventBean> &bean);
 };
 
 } // namespace MediaMonitor

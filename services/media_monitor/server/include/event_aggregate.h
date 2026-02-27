@@ -94,6 +94,7 @@ private:
     void HandleDmDeviceInfo(std::shared_ptr<EventBean> &bean);
     void HandleSuiteEngineUtilizationStats(std::shared_ptr<EventBean> &bean);
     void HandleVolumeSettingStatisticsEvent(std::shared_ptr<EventBean> &bean);
+    void HandleAudioInterruptErrorEvent(std::shared_ptr<EventBean> &bean);
 
     AudioMemo& audioMemo_;
     MediaMonitorPolicy& mediaMonitorPolicy_;
