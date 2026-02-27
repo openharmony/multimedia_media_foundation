@@ -185,8 +185,8 @@ void MediaMonitorPolicy::WriteBehaviorEventExpansion(EventId eventId, std::share
     switch (eventId) {
         case VOLUME_SUBSCRIBE:
             bundleInfo = GetBundleInfo(bean->GetIntValue("CLIENT_UID"));
-            bean->Add("SUBSCRIBE_KEY", bundleInfo.subscrbeKey);
-            bean->Add("SUBSCRIBE_RESULT", bundleInfo.subscrbeResult);
+            bean->Add("SUBSCRIBE_KEY", bundleInfo.subscribeKey);
+            bean->Add("SUBSCRIBE_RESULT", bundleInfo.subscribeResult);
             mediaEventBaseWriter_.WriteVolumeSubscribe(bean);
             break;
         case SMARTPA_STATUS:
@@ -242,7 +242,7 @@ void MediaMonitorPolicy::TriggerSystemTonePlaybackTimeEvent(std::shared_ptr<Even
     MEDIA_LOG_D("Collect data to dfx result .");
     for (const auto& bean : systemTonePlayEventVector_) {
         if (bean == nullptr || result == nullptr) {
-            MEDIA_LOG_E("The incoming data is invalid or data is nullptr.");
+            MEDIA_LOG_E("Invalid parameter");
             return;
         }
         result->timeStamp.push_back(bean->GetUint64Value("TIME_STAMP"));
@@ -826,11 +826,11 @@ void MediaMonitorPolicy::AddToVolumeApiInvokeQueue(std::shared_ptr<EventBean> &b
 
     std::lock_guard<std::mutex> lock(volumeApiInvokeMutex_);
     if (volumeApiInvokeRecordSet_.find(key) == volumeApiInvokeRecordSet_.end() &&
-        volumeApiInvokeRecordSet_.size() <= volumeApiInvokeRecordSetSize_) {
+        static_cast<int32_t>(volumeApiInvokeRecordSet_.size()) <= volumeApiInvokeRecordSetSize_) {
         volumeApiInvokeRecordSet_.emplace(key);
         volumeApiInvokeEventQueue_.push(bean);
     }
-    if (volumeApiInvokeRecordSet_.size() > volumeApiInvokeRecordSetSize_) {
+    if (static_cast<int32_t>(volumeApiInvokeRecordSet_.size()) > volumeApiInvokeRecordSetSize_) {
         MEDIA_LOG_D("volume api invoke record is full");
         return;
     }

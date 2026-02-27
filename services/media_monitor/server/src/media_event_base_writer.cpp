@@ -337,7 +337,7 @@ void MediaEventBaseWriter::WriteBGSilentPlayback(std::shared_ptr<EventBean> &bea
 
 void MediaEventBaseWriter::WriteExcludeOutputDevice(std::shared_ptr<EventBean> &bean)
 {
-    MEDIA_LOG_D("Write exclude output device");
+    MEDIA_LOG_D("Write set force use device");
     if (bean == nullptr) {
         MEDIA_LOG_E("eventBean is nullptr");
         return;
@@ -348,7 +348,7 @@ void MediaEventBaseWriter::WriteExcludeOutputDevice(std::shared_ptr<EventBean> &
         "APP_NAME", bean->GetStringValue("APP_NAME"),
         "EXCLUSION_STATUS", static_cast<uint>(bean->GetIntValue("EXCLUSION_STATUS")),
         "AUDIO_DEVICE_USAGE", static_cast<uint>(bean->GetIntValue("AUDIO_DEVICE_USAGE")),
-        "DEVICE_TYPE", bean->GetIntValue("DEVICE_TYPE"));
+        "DEVICETYPE", bean->GetIntValue("DEVICETYPE"));
 #endif
 }
 
@@ -880,7 +880,7 @@ void MediaEventBaseWriter::WriteTonePlaybackFailed(std::shared_ptr<EventBean> &b
 #ifdef MONITOR_ENABLE_HISYSEVENT
     HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "TONE_PLAYBACK_FAILED",
         HiviewDFX::HiSysEvent::EventType::FAULT,
-        "ERROR_CODE", bean->GetIntValue("ERROR_CODE"),
+        "ERROR_CODE", bean->GetIntValue("APP_NAME"),
         "ERROR_REASON", bean->GetStringValue("ERROR_REASON"));
 #endif
 }
