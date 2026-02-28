@@ -519,6 +519,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     // Float
     {Tag::MEDIA_LATITUDE, defaultFloat},
     {Tag::MEDIA_LONGITUDE, defaultFloat},
+    {Tag::MEDIA_ALTITUDE, defaultFloat},
     {Tag::AV_PLAYER_VIDEO_FRAMERATE, defaultFloat},
     // Double
     {Tag::VIDEO_CAPTURE_RATE, defaultDouble},

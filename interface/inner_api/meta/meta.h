@@ -398,6 +398,7 @@ public:
 
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::MEDIA_LATITUDE or
         tagCharSeq == Tag::MEDIA_LONGITUDE or
+        tagCharSeq == Tag::MEDIA_ALTITUDE or
         tagCharSeq == Tag::AV_PLAYER_VIDEO_FRAMERATE, float, AnyValueType::FLOAT);
 
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_FRAME_RATE or
