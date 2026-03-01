@@ -76,6 +76,7 @@ public:
         "creation_time"; ///< creation time, string as YYYY-MM-DD HH:MM:SS.XXX or now
     static constexpr const char MEDIA_LATITUDE[] = "latitude";         ///< latitude, float
     static constexpr const char MEDIA_LONGITUDE[] = "longitude";       ///< longitude, float
+    static constexpr const char MEDIA_ALTITUDE[] = "altitude";         ///< altitude, float
     static constexpr const char MEDIA_DURATION[] = "duration";         ///< duration based on {@link HST_TIME_BASE}
     static constexpr const char MEDIA_FILE_SIZE[] = "media.file.size"; ///< file size
     static constexpr const char MEDIA_BITRATE[] = "bitrate";           ///< bite rate
