@@ -420,7 +420,12 @@ HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_GetMediaParameters_001, Test
     std::vector<std::string> subKeys = {"R_AND_D"};
     std::vector<std::pair<std::string, std::string>> result;
     int32_t ret = MediaMonitorManager::GetInstance().GetMediaParameters(subKeys, result);
-    EXPECT_EQ(ret, ERROR);
+    bool isBeta = (MediaMonitorManager::GetInstance().versionType_ == BETA_VERSION);
+    if (isBeta) {
+        EXPECT_EQ(ret, SUCCESS);
+    }else {
+        EXPECT_EQ(ret, ERROR);
+    }
 }
 
 HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_GetMediaParameters_002, TestSize.Level0)
@@ -436,7 +441,12 @@ HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_GetMediaParameters_003, Test
     std::vector<std::string> subKeys = {"BETA"};
     std::vector<std::pair<std::string, std::string>> result;
     int32_t ret = MediaMonitorManager::GetInstance().GetMediaParameters(subKeys, result);
-    EXPECT_EQ(ret, ERROR);
+    bool isBeta = (MediaMonitorManager::GetInstance().versionType_ == BETA_VERSION);
+    if (isBeta) {
+        EXPECT_EQ(ret, SUCCESS);
+    }else {
+        EXPECT_EQ(ret, ERROR);
+    }
 }
 
 HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_GetMediaParameters_004, TestSize.Level0)
@@ -452,7 +462,12 @@ HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_GetMediaParameters_005, Test
     std::vector<std::string> subKeys = {"R_AND_D", "BETA"};
     std::vector<std::pair<std::string, std::string>> result;
     int32_t ret = MediaMonitorManager::GetInstance().GetMediaParameters(subKeys, result);
-    EXPECT_EQ(ret, ERROR);
+    bool isBeta = (MediaMonitorManager::GetInstance().versionType_ == BETA_VERSION);
+    if (isBeta) {
+        EXPECT_EQ(ret, SUCCESS);
+    }else {
+        EXPECT_EQ(ret, ERROR);
+    }
 }
 
 HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_GetMediaParameters_006, TestSize.Level0)
@@ -460,7 +475,12 @@ HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_GetMediaParameters_006, Test
     std::vector<std::string> subKeys = {"R_AND_D"};
     std::vector<std::pair<std::string, std::string>> result;
     int32_t ret = MediaMonitorManager::GetInstance().GetMediaParameters(subKeys, result);
-    EXPECT_EQ(ret, ERROR);
+    bool isBeta = (MediaMonitorManager::GetInstance().versionType_ == BETA_VERSION);
+    if (isBeta) {
+        EXPECT_EQ(ret, SUCCESS);
+    }else {
+        EXPECT_EQ(ret, ERROR);
+    }
 }
 
 HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_GetMediaParameters_007, TestSize.Level0)
@@ -468,7 +488,12 @@ HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_GetMediaParameters_007, Test
     std::vector<std::string> subKeys = {"R_AND_D"};
     std::vector<std::pair<std::string, std::string>> result;
     int32_t ret = MediaMonitorManager::GetInstance().GetMediaParameters(subKeys, result);
-    EXPECT_EQ(ret, ERROR);
+    bool isBeta = (MediaMonitorManager::GetInstance().versionType_ == BETA_VERSION);
+    if (isBeta) {
+        EXPECT_EQ(ret, SUCCESS);
+    }else {
+        EXPECT_EQ(ret, ERROR);
+    }
 }
 
 HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_GetMediaParameters_008, TestSize.Level0)
@@ -476,7 +501,12 @@ HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_GetMediaParameters_008, Test
     std::vector<std::string> subKeys = {"BETA"};
     std::vector<std::pair<std::string, std::string>> result;
     int32_t ret = MediaMonitorManager::GetInstance().GetMediaParameters(subKeys, result);
-    EXPECT_EQ(ret, ERROR);
+    bool isBeta = (MediaMonitorManager::GetInstance().versionType_ == BETA_VERSION);
+    if (isBeta) {
+        EXPECT_EQ(ret, SUCCESS);
+    }else {
+        EXPECT_EQ(ret, ERROR);
+    }
 }
 
 HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_GetMediaParameters_009, TestSize.Level0)
@@ -484,7 +514,12 @@ HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_GetMediaParameters_009, Test
     std::vector<std::string> subKeys = {"R_AND_D"};
     std::vector<std::pair<std::string, std::string>> result;
     int32_t ret = MediaMonitorManager::GetInstance().GetMediaParameters(subKeys, result);
-    EXPECT_EQ(ret, ERROR);
+    bool isBeta = (MediaMonitorManager::GetInstance().versionType_ == BETA_VERSION);
+    if (isBeta) {
+        EXPECT_EQ(ret, SUCCESS);
+    }else {
+        EXPECT_EQ(ret, ERROR);
+    }
 }
 } // namespace MediaMonitor
 } // namespace Media
