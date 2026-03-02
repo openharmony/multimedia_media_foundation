@@ -33,6 +33,9 @@ ohos_unittest("histreamer_unit_test") {
     "$histreamer_root_dir/engine/plugin/core/",
     "./plugins/",
     "$histreamer_root_dir/engine/include/",
+    "$histreamer_root_dir/interface/inner_api",
+    "$histreamer_root_dir/interface/inner_api/meta",
+    "$histreamer_root_dir/interface/inner_api/common",
   ]
   cflags = histreamer_unittest_cflags
 
