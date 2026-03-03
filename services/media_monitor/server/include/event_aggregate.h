@@ -22,8 +22,6 @@
 #include "media_monitor_policy.h"
 #include "audio_info.h"
 
-using OHOS::AudioStandard::AudioStreamPolicyServiceDiedCallback;
-
 namespace OHOS {
 namespace Media {
 namespace MediaMonitor {
