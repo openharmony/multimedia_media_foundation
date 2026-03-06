@@ -118,10 +118,14 @@ PluginList::PluginList()
     AddWmaProAudioDecoderPlugins();
     AddAdpcmAudioDecoderPlugins();
     AddIlbcAudioDecoderPlugins();
+#ifdef SUPPORT_CODEC_TRUEHD
     AddTrueHdAudioDecoderPlugin();
+#endif
     AddTwinVQAudioDecoderPlugins();
     AddDVAudioDecoderPlugins();
+#ifdef SUPPORT_CODEC_DTS
     AddDtsDecoderPlugins();
+#endif
     AddCookAudioDecoderPlugins();
 #ifdef SUPPORT_CODEC_EAC3
     AddEac3AudioDecoderPlugins();
@@ -750,6 +754,7 @@ void PluginList::AddDVAudioDecoderPlugins()
     pluginDescriptionList_.push_back(dvAduioAudioDecoderPlugin);
 }
 
+#ifdef SUPPORT_CODEC_DTS
 void PluginList::AddDtsDecoderPlugins()
 {
     PluginDescription dtsAudioDecoderPlugin;
@@ -760,6 +765,7 @@ void PluginList::AddDtsDecoderPlugins()
     dtsAudioDecoderPlugin.rank = DEFAULT_RANK;
     pluginDescriptionList_.push_back(dtsAudioDecoderPlugin);
 }
+#endif
 
 void PluginList::AddCookAudioDecoderPlugins()
 {
@@ -920,6 +926,7 @@ void PluginList::AddIlbcAudioDecoderPlugins()
     pluginDescriptionList_.push_back(ilbcDecoderPlugin);
 }
 
+#ifdef SUPPORT_CODEC_TRUEHD
 void PluginList::AddTrueHdAudioDecoderPlugin()
 {
     PluginDescription trueHdAudioDecoderPlugin;
@@ -930,6 +937,7 @@ void PluginList::AddTrueHdAudioDecoderPlugin()
     trueHdAudioDecoderPlugin.rank = DEFAULT_RANK;
     pluginDescriptionList_.push_back(trueHdAudioDecoderPlugin);
 }
+#endif
 
 void PluginList::AddTwinVQAudioDecoderPlugins()
 {
