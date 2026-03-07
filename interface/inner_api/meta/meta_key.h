@@ -157,6 +157,13 @@ public:
     static constexpr const char AUDIO_OUTPUT_CHANNEL_LAYOUT[] =
         "audio.output.channel.layout"; ///< @see AudioChannelLayout, sink output channel layout
     static constexpr const char AUDIO_BLOCK_ALIGN[] = "audio_block_align"; ///< int32_t, number of bytes per packet
+    ///< @see AudioChannelLayout, soundbed layout
+    static constexpr const char AUDIO_SOUNDBED_LAYOUT[] = "audio_soundbed_layout";
+    ///< int64_t, bit rate for soundbed
+    static constexpr const char AUDIO_SOUNDBED_BITRATE[] = "audio_soundbed_bitrate";
+    ///< int64_t, bit rate for audio object
+    static constexpr const char AUDIO_OBJECT_BITRATE[] = "audio_object_bitrate";
+    static constexpr const char AUDIO_VIVID_SIGNAL_FORMAT[] = "audio_vivid_signal_format"; ///< int32_t
     static constexpr const char AUDIO_COMPRESSION_LEVEL[] = "audio_compression_level";         ///< compression level
     static constexpr const char AUDIO_MAX_INPUT_SIZE[] = "audio.max.input.size";         ///< max input size
     static constexpr const char AUDIO_MAX_OUTPUT_SIZE[] = "audio.max.output.size";       ///< max output size
