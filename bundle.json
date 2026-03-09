@@ -47,7 +47,9 @@
           "media_foundation_enable_eac3_demuxer",
           "media_foundation_enable_eac3_audio_decoder",
           "media_foundation_enable_dtshd_demuxer",
-          "media_foundation_enable_truehd_demuxer"
+          "media_foundation_enable_truehd_demuxer",
+          "media_foundation_enable_truehd_audio_decoder",
+          "media_foundation_enable_dts_audio_decoder"
         ],
         "adapted_system_type": [
             "mini",

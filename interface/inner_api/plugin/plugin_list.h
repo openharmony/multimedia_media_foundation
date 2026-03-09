@@ -102,10 +102,14 @@ private:
     void AddWmaProAudioDecoderPlugins();
     void AddAdpcmAudioDecoderPlugins();
     void AddIlbcAudioDecoderPlugins();
+#ifdef SUPPORT_CODEC_TRUEHD
     void AddTrueHdAudioDecoderPlugin();
+#endif
     void AddTwinVQAudioDecoderPlugins();
     void AddDVAudioDecoderPlugins();
+#ifdef SUPPORT_CODEC_DTS
     void AddDtsDecoderPlugins();
+#endif
     void AddCookAudioDecoderPlugins();
 #ifdef SUPPORT_CODEC_RM
     void AddRmDemuxerPlugin();
