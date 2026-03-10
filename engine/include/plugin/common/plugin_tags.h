@@ -137,6 +137,7 @@ enum struct Tag : uint32_t {
     MEDIA_TYPE,                            ///< enum MediaType: Auido Video Subtitle...
     MEDIA_EDITLIST,                        ///< int32_t, use edit list
     MEDIA_AIGC,                            ///< string, AIGC info
+    MEDIA_ENCODER,                         ///< string, encoder info
 
     /* -------------------- audio universal tag -------------------- */
     AUDIO_CHANNELS = SECTION_AUDIO_UNIVERSAL_START + 1, ///< uint32_t, stream channel num
