@@ -541,6 +541,7 @@ public:
     static constexpr const char AV_PLAYER_MAX_SURFACESWAP_LATENCY[] = "av_player_max_surfaceswap_latency";
     static constexpr const char AV_PLAYER_DOWNLOAD_TOTAL_BITS[] = "av_player_total_download_bits";
     static constexpr const char AV_PLAYER_DOWNLOAD_TIME_OUT[] = "av_player_download_time_out";
+    static constexpr const char AV_PLAYER_BUFFER_DURATION[] = "av_player_buffer_duration";
 
     static constexpr const char AV_PLAYER_SEI_PAYLOAD[] = "payload";
     static constexpr const char AV_PLAYER_SEI_PAYLOAD_TYPE[] = "payloadType";

@@ -608,6 +608,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::DRM_DECRYPT_MAX_SIZE, defaultUInt32},
     {Tag::DRM_DECRYPT_MAX_DURATION, defaultUInt32},
     {Tag::DRM_DECRYPT_TIMES, defaultUInt32},
+    {Tag::AV_PLAYER_BUFFER_DURATION, defaultUInt32},
     //int8
     {Tag::AV_PLAYER_VIDEO_BITDEPTH, defaultInt8},
     {Tag::AV_PLAYER_HDR_TYPE, defaultInt8},
