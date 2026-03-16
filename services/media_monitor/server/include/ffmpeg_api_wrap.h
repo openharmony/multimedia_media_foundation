@@ -66,14 +66,16 @@ using FrameFreeFunc = void (*)(AVFrame **frame);
 using PacketFreeFunc = void (*)(AVPacket **pkt);
 using PacketUnrefFunc = void (*)(AVPacket *pkt);
 
-using GetChannelLayoutFunc = int64_t (*)(int nbChannels);
+using GetChannelLayoutFromMaskFunc = int64_t (*)(AVChannelLayout *channel_layout, uint64_t mask);
+using GetChannelLayoutDefaultFunc = int64_t (*)(AVChannelLayout *ch_layout, int nb_channels);
+using GetChannelLayoutCopyFunc = int64_t (*)(AVChannelLayout *dst, const AVChannelLayout *src);
 using GetBytesPerSampleFunc = int (*)(enum AVSampleFormat sampleFmt);
 using SampleFmtIsPlannarFunc = int (*)(enum AVSampleFormat sampleFmt);
 
-using SwrSetOptsFunc = struct SwrContext *(*)(struct SwrContext *s,
-        int64_t outChLayout, enum AVSampleFormat outSampleFmt, int outSampleRate,
-        int64_t inChLayout, enum AVSampleFormat inSampleFmt, int inSampleRate,
-        int logOffset, void *logCtx);
+using SwrSetOpts2Func = int (*)(struct SwrContext **ps,
+        const AVChannelLayout *out_ch_layout, enum AVSampleFormat out_sample_fmt, int out_sample_rate,
+        const AVChannelLayout *in_ch_layout, enum AVSampleFormat in_sample_fmt, int in_sample_rate,
+        int log_offset, void *log_ctx);
 using SwrInitFunc = int (*)(struct SwrContext *s);
 using SwrAllocFunc = struct SwrContext *(*)();
 using SwrFreeFunc = void (*)(struct SwrContext **s);
@@ -114,14 +116,16 @@ public:
     void PacketFree(AVPacket **pkt);
     void PacketUnref(AVPacket *pkt);
 
-    int64_t GetChannelLayout(int nbChannels);
+    int64_t GetChannelLayoutFromMask(AVChannelLayout *channel_layout, uint64_t mask);
+    int64_t GetChannelLayoutDefault(AVChannelLayout *ch_layout, int nb_channels);
+    int64_t GetChannelLayoutCopy(AVChannelLayout *dst, const AVChannelLayout *src);
     int GetBytesPerSample(AVSampleFormat sampleFmt);
     int SampleFmtIsPlannar(AVSampleFormat sampleFmt);
     struct SwrContext *SwrAlloc();
-    struct SwrContext *SwrSetOpts(struct SwrContext *s,
-        int64_t outChLayout, AVSampleFormat outSampleFmt, int outSampleRate,
-        int64_t inChLayout, AVSampleFormat inSampleFmt, int inSampleRate,
-        int logOffset, void *logCtx);
+    int SwrSetOpts2(struct SwrContext **ps,
+        const AVChannelLayout *out_ch_layout, enum AVSampleFormat out_sample_fmt, int out_sample_rate,
+        const AVChannelLayout *in_ch_layout, enum AVSampleFormat in_sample_fmt, int in_sample_rate,
+        int log_offset, void *log_ctx);
     int SwrInit(struct SwrContext *s);
     void SwrFree(struct SwrContext **s);
     int SwrConvert(struct SwrContext *s,
@@ -158,11 +162,13 @@ private:
     FrameAllocFunc frameAllocFunc = nullptr;
     FrameGetBufferFunc frameGetBufferFunc = nullptr;
     FrameFreeFunc frameFreeFunc = nullptr;
-    GetChannelLayoutFunc getChannelLayoutFunc = nullptr;
+    GetChannelLayoutFromMaskFunc getChannelLayoutFromMaskFunc = nullptr;
+    GetChannelLayoutDefaultFunc getChannelLayoutDefaultFunc = nullptr;
+    GetChannelLayoutCopyFunc getChannelLayoutCopyFunc = nullptr;
     GetBytesPerSampleFunc getBytesPerSampleFunc = nullptr;
     SampleFmtIsPlannarFunc sampleFmtIsPlannarFunc = nullptr;
 
-    SwrSetOptsFunc swrSetOptsFunc = nullptr;
+    SwrSetOpts2Func swrSetOpts2Func = nullptr;
     SwrAllocFunc swrAllocFunc = nullptr;
     SwrFreeFunc swrFreeFunc = nullptr;
     SwrInitFunc swrInitFunc = nullptr;
