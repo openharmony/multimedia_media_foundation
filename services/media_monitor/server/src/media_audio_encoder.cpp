@@ -95,10 +95,16 @@ int32_t SampleConvert::Init(const ResamplePara &param)
         MEDIA_LOG_E("cannot allocate swr context");
         return ERROR;
     }
-    swrContext = apiWrap_->SwrSetOpts(swrContext,
-        resamplePara_.channelLayout, resamplePara_.destFmt, resamplePara_.sampleRate,
-        resamplePara_.channelLayout, resamplePara_.srcFfFmt, resamplePara_.sampleRate,
+    AVChannelLayout av_ch_layout;
+    int ret = apiWrap_->GetChannelLayoutFromMask(&av_ch_layout, resamplePara_.channelLayout);
+    if (ret) {
+        apiWrap_->GetChannelLayoutDefault(&av_ch_layout, resamplePara_.channels);
+    }
+    ret = apiWrap_->SwrSetOpts2(&swrContext,
+        &av_ch_layout, resamplePara_.destFmt, resamplePara_.sampleRate,
+        &av_ch_layout, resamplePara_.srcFfFmt, resamplePara_.sampleRate,
         0, nullptr);
+    FALSE_RETURN_V_MSG_E(!ret, ERROR, "swr alloc set opts failed.");
     if (apiWrap_->SwrInit(swrContext) != 0) {
         MEDIA_LOG_E("swr init error");
         return ERROR;
@@ -370,11 +376,7 @@ int32_t MediaAudioEncoder::InitAudioEncode(const AudioEncodeConfig &audioConfig)
     }
     audioCodecContext_->bit_rate = audioConfig.bitRate;
     audioCodecContext_->sample_rate = audioConfig.sampleRate;
-    int res = av_channel_layout_from_mask(&audioCodecContext_->ch_layout,
-        static_cast<uint64_t>(apiWrap_->GetChannelLayout(audioConfig.channels)));
-    if (res) {
-        av_channel_layout_default(&audioCodecContext_->ch_layout, audioConfig.channels);
-    }
+    apiWrap_->GetChannelLayoutDefault(&audioCodecContext_->ch_layout, audioConfig.channels);
 
     unsigned int codecCtxFlag = static_cast<unsigned int>(audioCodecContext_->flags);
     codecCtxFlag |= AV_CODEC_FLAG_GLOBAL_HEADER;
@@ -396,7 +398,7 @@ int32_t MediaAudioEncoder::InitFrame()
     avFrame_->format = audioCodecContext_->sample_fmt;
     avFrame_->nb_samples = audioCodecContext_->frame_size;
     avFrame_->sample_rate = audioCodecContext_->sample_rate;
-    av_channel_layout_copy(&avFrame_->ch_layout, &audioCodecContext_->ch_layout);
+    apiWrap_->GetChannelLayoutCopy(&avFrame_->ch_layout, &audioCodecContext_->ch_layout);
     int32_t ret = apiWrap_->FrameGetBuffer(avFrame_.get(), 0);
     FALSE_RETURN_V_MSG_E(ret >= 0, ERROR, "get frame buffer failed %{public}d", ret);
     return SUCCESS;
