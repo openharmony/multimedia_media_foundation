@@ -111,6 +111,7 @@ enum MediaServiceErrCode : ErrCode {
     MSERR_RS_DATA_FALLBACK_FAILED,                      // LPP: RS data fallback failed.
     MSERR_LPP_INSTANCE_EXCEED_LIMIT,                    // LPP: instance limit exceeded.
     MSERR_HARDWARE_ERROR,                               // underlying hardware error happened.
+    MSERR_PARAM_OUT_OF_RANGE,                           // Parameter value out of range.
     MSERR_EXTEND_START      = MS_ERR_OFFSET + 0xF000,   // extend err start.
     MSERR_CLEARTEXT_NOT_PERMITTED,                      // http cleartext not permitted.
 };
