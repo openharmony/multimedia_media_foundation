@@ -175,8 +175,11 @@ void AsyncMode::FlushStart()
     if (pushTask_) {
         pushTask_->Pause();
     }
-    while (!outBufQue_.empty()) {
-        outBufQue_.pop();
+    {
+        OSAL::ScopedLock l(renderMutex_);
+        while (!outBufQue_.empty()) {
+            outBufQue_.pop();
+        }
     }
     MEDIA_LOG_I("AsyncMode FlushStart exit.");
 }
