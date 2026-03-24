@@ -39,7 +39,7 @@ OH_AVBuffer *OH_AVBuffer_Create(int32_t capacity)
     FALSE_RETURN_V_MSG_E(buffer->memory_->GetAddr() != nullptr, nullptr, "memory's addr is nullptr");
 
     struct OH_AVBuffer *buf = new (std::nothrow) OH_AVBuffer(buffer);
-    FALSE_RETURN_V_MSG_E(buffer != nullptr, nullptr, "failed to new OH_AVBuffer");
+    FALSE_RETURN_V_MSG_E(buf != nullptr, nullptr, "failed to new OH_AVBuffer");
     buf->isUserCreated = true;
     return buf;
 }
