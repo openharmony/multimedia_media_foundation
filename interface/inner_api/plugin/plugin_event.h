@@ -47,6 +47,8 @@ enum struct PluginEventType : int32_t {
     HLS_SEEK_READY,
     AUDIO_OUTPUT_FORMAT_CHANGED,
     FLV_AUTO_SELECT_BITRATE,
+    STREAM_UPDATE,
+    NETWORK_BITRATE_CHANGED,
 };
 
 enum class NetworkClientErrorCode : int32_t {
