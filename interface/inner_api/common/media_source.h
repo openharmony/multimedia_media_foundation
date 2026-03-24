@@ -56,6 +56,44 @@ typedef struct PlayStrategy {
     double thresholdForAutoQuickPlay {0};
 } PlayStrategy;
 
+struct TrackSelectionFilter {
+    int32_t maxVideoBitrate = -1;
+    int32_t minVideoBitrate = -1;
+    int32_t maxVideoFrameRate = -1;
+    int32_t minVideoFrameRate = -1;
+    std::pair<int32_t, int32_t> maxVideoResolution = {-1, -1};
+    std::pair<int32_t, int32_t> minVideoResolution = {-1, -1};
+    std::vector<std::string> preferredVideoMimeTypes = {};
+    int32_t maxAudioBitrate = -1;
+    int32_t minAudioBitrate = -1;
+    int32_t maxAudioChannels = -1;
+    std::vector<std::string> preferredAudioMimeTypes = {};
+    std::vector<std::string> preferredAudioLanguages = {};
+    std::vector<std::string> preferredSubtitleLanguages = {};
+
+    std::uint32_t GetMinVideoResolution() const
+    {
+        if (minVideoResolution.first <= 0 || minVideoResolution.second <= 0) {
+            return 0;
+        }
+        if (UINT32_MAX / minVideoResolution.first < static_cast<uint32_t>(minVideoResolution.second)) {
+            return UINT32_MAX;
+        }
+        return minVideoResolution.first * minVideoResolution.second;
+    }
+
+    std::uint32_t GetMaxVideoResolution() const
+    {
+        if (maxVideoResolution.first <= 0 || maxVideoResolution.second <= 0) {
+            return 0;
+        }
+        if (UINT32_MAX / maxVideoResolution.first < static_cast<uint32_t>(maxVideoResolution.second)) {
+            return UINT32_MAX;
+        }
+        return maxVideoResolution.first * maxVideoResolution.second;
+    }
+};
+
 struct PlayMediaStream {
     std::string url {""};
     uint32_t width {0};
