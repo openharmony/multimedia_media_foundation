@@ -53,6 +53,14 @@ enum class Seekable : int32_t {
 };
 
 /**
+ * @brief Seekable time range in HST time (ns).
+ */
+struct SeekRange {
+    int64_t start {0};
+    int64_t end {0};
+};
+
+/**
  * @enum Codec Mode.
  *
  * @since 1.0
