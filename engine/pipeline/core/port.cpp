@@ -162,17 +162,20 @@ bool OutPort::Negotiate(const std::shared_ptr<const Plugin::Capability>& upstrea
                         const Plugin::Meta& upstreamParams,
                         Plugin::Meta& downstreamParams)
 {
+    FALSE_RETURN_V(nextPort != nullptr, false);
     return nextPort->Negotiate(upstreamCap, negotiatedCap, upstreamParams, downstreamParams);
 }
 
 bool OutPort::Configure(const std::shared_ptr<const Plugin::Meta>& upstreamMeta, Plugin::Meta& upstreamParams,
                         Plugin::Meta& downstreamParams)
 {
+    FALSE_RETURN_V(nextPort != nullptr, false);
     return nextPort->Configure(upstreamMeta, upstreamParams, downstreamParams);
 }
 
 void OutPort::PushData(const AVBufferPtr& buffer, int64_t offset)
 {
+    FALSE_RETURN_W(nextPort != nullptr);
     nextPort->PushData(buffer, offset);
 }
 
