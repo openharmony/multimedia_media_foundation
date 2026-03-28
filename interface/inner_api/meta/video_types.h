@@ -96,6 +96,7 @@ enum VideoEncodeBitrateMode : int32_t {
     VBR = 1, // variable bit rate mode.
     CQ = 2, // constant quality mode.
     SQR = 3, // stable quality rate control mode.
+    CBR_HIGH_QUALITY = 4, // high quality rate contraol mode.
     CBR_VIDEOCALL = 10, // constant bit rate mode for video call or meeting scene.
     CRF = 11, // constant rate factor.
 };
