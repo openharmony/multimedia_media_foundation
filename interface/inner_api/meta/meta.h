@@ -326,6 +326,7 @@ public:
         tagCharSeq == Tag::RECORDER_AUDIO_SAMPLE_RATE or
         tagCharSeq == Tag::RECORDER_AUDIO_CHANNEL_COUNT or
         tagCharSeq == Tag::RECORDER_AUDIO_BITRATE or
+        tagCharSeq == Tag::MEDIA_TIME_SCALE or
         tagCharSeq == Tag::RECORDER_START_LATENCY, int32_t, AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::VIDEO_DECODER_RATE_UPPER_LIMIT or
