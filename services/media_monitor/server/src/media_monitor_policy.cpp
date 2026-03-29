@@ -884,6 +884,16 @@ void MediaMonitorPolicy::AddAudioInterruptErrorEvent(std::shared_ptr<EventBean> 
     }
 }
 
+void MediaMonitorPolicy::AddAudioPlaybackErrorEvent(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("add audio playback error event");
+    if (bean == nullptr) {
+        MEDIA_LOG_E("eventBean is nullptr");
+        return;
+    }
+    mediaEventBaseWriter_.WriteAudioPlaybackErrorEvent(bean);
+}
+
 void MediaMonitorPolicy::AddToSuiteEngineNodeStatsMap(std::shared_ptr<EventBean> &bean)
 {
     MEDIA_LOG_I("Add audio suite engine utilization stats counts to map");

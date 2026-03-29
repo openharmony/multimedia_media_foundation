@@ -108,6 +108,7 @@ enum EventId {
     INTERRUPT_ERROR = 54,
 
     APP_SESSION_STATE = 55,
+    AUDIO_PLAYBACK_ERROR = 56,
 };
 
 enum VolumeStatisticsSceneType : uint8_t {

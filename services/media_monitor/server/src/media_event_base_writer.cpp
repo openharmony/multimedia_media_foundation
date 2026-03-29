@@ -794,6 +794,22 @@ void MediaEventBaseWriter::WriteAudioInterruptErrorEvent(std::shared_ptr<EventBe
 #endif
 }
 
+void MediaEventBaseWriter::WriteAudioPlaybackErrorEvent(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_E("Write audio playback error event");
+    if (bean == nullptr) {
+        MEDIA_LOG_E("eventBean is nullptr");
+        return;
+    }
+#ifdef MONITOR_ENABLE_HISYSEVENT
+    HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "AUDIO_PLAYBACK_ERROR",
+        HiviewDFX::HiSysEvent::EventType::STATISTIC,
+        "APP_NAME", bean->GetStringValue("APP_NAME"),
+        "STREAM_TYPE", bean->GetIntValue("STREAM_TYPE"),
+        "TYPE", bean->GetIntValue("TYPE"));
+#endif
+}
+
 void MediaEventBaseWriter::WriteAudioMainThreadEvent(std::shared_ptr<EventBean> &bean)
 {
     MEDIA_LOG_D("Write audio process in main thread");

@@ -73,6 +73,7 @@ public:
     void AddToSuiteEngineNodeStatsMap(std::shared_ptr<EventBean> &bean);
     void HandleVolumeSettingStatistics(std::shared_ptr<EventBean> &bean);
     void AddLoudVolumeTimes();
+    void AddAudioPlaybackErrorEvent(std::shared_ptr<EventBean> &bean);
 
     void WhetherToHiSysEvent();
     void WriteInfo(int32_t fd, std::string &dumpString);
