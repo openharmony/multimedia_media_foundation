@@ -98,6 +98,7 @@ ohos_unittest("histreamer_unit_test") {
     "./TestFileSourcePlugin.cpp",
     "./TestFilter.cpp",
     "./TestHttpSourcePlugin.cpp",
+    "./TestMediaSource.cpp",
     "./TestMeta.cpp",
     "./TestMimeDefs.cpp",
     "./TestPipline.cpp",
