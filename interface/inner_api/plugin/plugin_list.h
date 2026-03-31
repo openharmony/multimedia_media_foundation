@@ -70,6 +70,8 @@ private:
     void AddWavDemuxerPlugin();
     void AddAiffDemuxerPlugin();
     void AddFFmpegDemuxerPlugins();
+    void AddMpeg4DemuxerPlugin();
+    void AddDemuxerPlugins();
     void AddDtsDemuxerPlugin();
     void AddMpegAudioDecoderPlugin();
     void AddAacAudioDecoderPlugin();

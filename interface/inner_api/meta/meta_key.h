@@ -92,6 +92,7 @@ public:
     static constexpr const char MEDIA_TYPE[] =
         "track_type"; ///< enum MediaType: Audio Video Subtitle... int32_t, see {link @MediaTrackType}
     static constexpr const char MEDIA_TRACK_COUNT[] = "track_count";           ///< track count in file
+    static constexpr const char MEDIA_TIME_SCALE[] = "time_scale";             ///< time scale
     static constexpr const char MEDIA_FILE_TYPE[] = "file_type";               ///< @see FileType, track type
     static constexpr const char MEDIA_STREAM_TYPE[] = "media.stream.type";     ///< stream type of track data
     static constexpr const char MEDIA_HAS_VIDEO[] = "has_video";               ///< has video track in file

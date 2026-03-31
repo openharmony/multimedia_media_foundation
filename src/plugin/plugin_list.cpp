@@ -86,7 +86,7 @@ PluginList::PluginList()
     AddFileFdSourcePlugins();
     AddFileSourcePlugins();
     AddHttpSourcePlugins();
-    AddFFmpegDemuxerPlugins();
+    AddDemuxerPlugins();
     AddFFmpegAudioDecodersPlugins();
     AddAudioVividDecodersPlugins();
     AddL2hcEncodersPlugins();
@@ -537,6 +537,23 @@ void PluginList::AddTruehdDemuxerPlugin()
     pluginDescriptionList_.push_back(truehdDemuxerPlugin);
 }
 #endif
+
+void PluginList::AddDemuxerPlugins()
+{
+    AddFFmpegDemuxerPlugins();
+    AddMpeg4DemuxerPlugin();
+}
+
+void PluginList::AddMpeg4DemuxerPlugin()
+{
+    PluginDescription mp4DemuxerPlugin;
+    mp4DemuxerPlugin.pluginName = "avdemux_mpeg4";
+    mp4DemuxerPlugin.packageName = "Mpeg4Demuxer";
+    mp4DemuxerPlugin.pluginType = PluginType::DEMUXER;
+    mp4DemuxerPlugin.cap = "";
+    mp4DemuxerPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(mp4DemuxerPlugin);
+}
 
 void PluginList::AddFFmpegDemuxerPlugins()
 {
