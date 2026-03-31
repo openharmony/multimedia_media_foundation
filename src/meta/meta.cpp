@@ -130,7 +130,8 @@ using  MetaSetterInt64Function = std::function<bool(Meta&, const TagType&, int64
 using  MetaGetterInt64Function = std::function<bool(const Meta&, const TagType&, int64_t&)>;
 static std::map<TagType, std::pair<MetaSetterInt64Function, MetaGetterInt64Function>> g_metadataGetterSetterInt64Map = {
         DEFINE_METADATA_SETTER_GETTER(Tag::AUDIO_CHANNEL_LAYOUT, AudioChannelLayout),
-        DEFINE_METADATA_SETTER_GETTER(Tag::AUDIO_OUTPUT_CHANNEL_LAYOUT, AudioChannelLayout)
+        DEFINE_METADATA_SETTER_GETTER(Tag::AUDIO_OUTPUT_CHANNEL_LAYOUT, AudioChannelLayout),
+        DEFINE_METADATA_SETTER_GETTER(Tag::AUDIO_SOUNDBED_LAYOUT, AudioChannelLayout)
 };
 
 static std::vector<TagType> g_metadataBoolVector = {
@@ -580,9 +581,12 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_DECODER_DESIRED_PRESENT_TIMESTAMP, defaultInt64},
     {Tag::VIDEO_ENCODE_SET_FRAME_PTS, defaultInt64},
     {Tag::GLTF_OFFSET, defaultInt64},
+    {Tag::AUDIO_SOUNDBED_BITRATE, defaultInt64},
+    {Tag::AUDIO_OBJECT_BITRATE, defaultInt64},
     // AudioChannelLayout UINT64_T
     {Tag::AUDIO_CHANNEL_LAYOUT, defaultAudioChannelLayout},
     {Tag::AUDIO_OUTPUT_CHANNEL_LAYOUT, defaultAudioChannelLayout},
+    {Tag::AUDIO_SOUNDBED_LAYOUT, defaultAudioChannelLayout},
     // AudioAacProfile UInt8
     {Tag::AUDIO_AAC_PROFILE, defaultAudioAacProfile},
     // AudioAacStreamFormat UInt8
@@ -616,6 +620,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::REFERENCE_TRACK_IDS, defaultVectorInt32},
     {Tag::MEDIA_AIGC, defaultString},
     {Tag::AUDIO_BLOCK_ALIGN, defaultInt32},
+    {Tag::AUDIO_VIVID_SIGNAL_FORMAT, defaultInt32},
     // vector<int64_t>
     {Tag::STALLING_TIMESTAMP, defaultVectorInt64}
 };

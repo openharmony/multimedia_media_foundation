@@ -500,6 +500,7 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::VIDEO_ENCODER_ENABLE_PTS_BASED_RATECONTROL, 1},
     {Tag::VIDEO_DECODER_INPUT_STREAM_ERROR, 0},
     {Tag::AUDIO_BLOCK_ALIGN, 1},
+    {Tag::AUDIO_VIVID_SIGNAL_FORMAT, 1},
     // UINT8_T
     {Tag::AUDIO_AAC_PROFILE, static_cast<int32_t>(Plugins::AudioAacProfile::ELD)},
     {Tag::AUDIO_AAC_STREAM_FORMAT, static_cast<int32_t>(Plugins::AudioAacStreamFormat::ADIF)}};
@@ -599,11 +600,14 @@ map<TagType, int64_t> testInt64Data = {
     {Tag::BUFFER_DURATION, 1234567890012},
     {Tag::AUDIO_CHANNEL_LAYOUT, static_cast<int64_t>(Plugins::AudioChannelLayout::CH_10POINT2)},
     {Tag::AUDIO_OUTPUT_CHANNEL_LAYOUT, static_cast<int64_t>(Plugins::AudioChannelLayout::HOA_ORDER3_FUMA)},
+    {Tag::AUDIO_SOUNDBED_LAYOUT, static_cast<int64_t>(Plugins::AudioChannelLayout::CH_7POINT1)},
     {Tag::VIDEO_DECODER_DESIRED_PRESENT_TIMESTAMP, 1234567890013},
     {Tag::VIDEO_ENCODE_SET_FRAME_PTS, 1234567890014},
     {Tag::VIDEO_ENCODER_ENABLE_B_FRAME, 1234567890016},
     {Tag::VIDEO_ENCODER_MAX_B_FRAME, 1234567890017},
     {Tag::GLTF_OFFSET, 1234567890018},
+    {Tag::AUDIO_SOUNDBED_BITRATE, 1234567890019},
+    {Tag::AUDIO_OBJECT_BITRATE, 1234567890020},
 };
 
 /**

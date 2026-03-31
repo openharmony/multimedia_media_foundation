@@ -174,6 +174,7 @@ public:
                            std::vector<uint8_t>, AnyValueType::VECTOR_UINT8);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_CHANNEL_LAYOUT or
                            tagCharSeq == Tag::AUDIO_OUTPUT_CHANNEL_LAYOUT or
+                           tagCharSeq == Tag::AUDIO_SOUNDBED_LAYOUT or
                            tagCharSeq == Tag::VIDEO_ENCODE_SET_FRAME_PTS,
                            Plugins::AudioChannelLayout, AnyValueType::INT64_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_SAMPLE_FORMAT, Plugins::AudioSampleFormat,
@@ -391,6 +392,8 @@ public:
         tagCharSeq == Tag::MEDIA_FILE_SIZE or
         tagCharSeq == Tag::MEDIA_POSITION or
         tagCharSeq == Tag::MEDIA_TIME_STAMP or
+        tagCharSeq == Tag::AUDIO_SOUNDBED_BITRATE or
+        tagCharSeq == Tag::AUDIO_OBJECT_BITRATE or
         tagCharSeq == Tag::VIDEO_DECODER_DESIRED_PRESENT_TIMESTAMP, int64_t, AnyValueType::INT64_T);
 
     DEFINE_INSERT_GET_FUNC(
@@ -512,6 +515,8 @@ public:
         tagCharSeq == Tag::GLTF_OFFSET, int64_t, AnyValueType::INT64_T);
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::AUDIO_BLOCK_ALIGN, int32_t, AnyValueType::INT32_T);
+    DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::AUDIO_VIVID_SIGNAL_FORMAT, int32_t, AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::MEDIA_GLTF_VERSION, int32_t, AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(

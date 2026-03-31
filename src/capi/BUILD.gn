@@ -75,6 +75,7 @@ if (hst_is_standard_sys) {
       "./native_avbuffer.cpp",
       "./native_avformat.cpp",
       "./native_avmemory.cpp",
+      "./native_audio_vivid.cpp",
     ]
 
     external_deps = [

@@ -165,6 +165,7 @@
                     "meta/source_types.h",
                     "meta/video_types.h",
                     "meta/audio_types.h",
+                    "meta/meta_audio_vivid.h",
                     "meta/media_types.h",
                     "meta/meta.h",
                     "meta/meta_key.h",
@@ -210,7 +211,8 @@
                     "native_avbuffer.h",
                     "native_averrors.h",
                     "native_avformat.h",
-                    "native_avmemory.h"
+                    "native_avmemory.h",
+                    "native_audio_vivid.h"
                   ],
                   "header_base": "//foundation/multimedia/media_foundation/interface/kits/c"
                 }

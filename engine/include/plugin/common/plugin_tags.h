@@ -148,6 +148,10 @@ enum struct Tag : uint32_t {
     AUDIO_OUTPUT_CHANNELS,                              ///< uint32_t, sink output channel num
     AUDIO_OUTPUT_CHANNEL_LAYOUT,                        ///< @see AudioChannelLayout, sink output channel layout
     AUDIO_BLOCK_ALIGN,                                  ///< int32_t, number of bytes per packet
+    AUDIO_SOUNDBED_LAYOUT,                              ///< @see AudioChannelLayout, soundbed layout
+    AUDIO_SOUNDBED_BITRATE,                             ///< int64_t, bit rate for soundbed
+    AUDIO_OBJECT_BITRATE,                               ///< int64_t, bit rate for audio object
+    AUDIO_VIVID_SIGNAL_FORMAT,                          ///< int32_t
 
     /* -------------------- audio specific tag -------------------- */
     AUDIO_SPECIFIC_MPEG_START = MAKE_AUDIO_SPECIFIC_START(AudioFormat::MPEG),
