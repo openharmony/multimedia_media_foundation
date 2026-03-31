@@ -172,6 +172,9 @@ void EventAggregate::UpdateAggregateStateEventList(std::shared_ptr<EventBean> &b
         case INTERRUPT_ERROR:
             HandleAudioInterruptErrorEvent(bean);
             break;
+        case AUDIO_PLAYBACK_ERROR:
+            HandleAudioPlaybackErrorEvent(bean);
+            break;
         default:
             break;
     }
@@ -205,6 +208,12 @@ void EventAggregate::HandleAudioInterruptErrorEvent(std::shared_ptr<EventBean> &
 {
     MEDIA_LOG_D("Handle audio interrupt error event");
     mediaMonitorPolicy_.AddAudioInterruptErrorEvent(bean);
+}
+
+void EventAggregate::HandleAudioPlaybackErrorEvent(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Handle audio playback error event");
+    mediaMonitorPolicy_.AddAudioPlaybackErrorEvent(bean);
 }
 
 void EventAggregate::HandleDeviceChangeEvent(std::shared_ptr<EventBean> &bean)
