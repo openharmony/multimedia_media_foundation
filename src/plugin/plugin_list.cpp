@@ -80,6 +80,12 @@ std::vector<PluginDescription> PluginList::GetPluginsByType(PluginType pluginTyp
     return matchedPlugins;
 }
 
+void PluginList::AddPlugins()
+{
+    AddAudioVividDecodersPlugins();
+    AddAudioVividEncodersPlugins();
+}
+
 PluginList::PluginList()
 {
     AddDataSourceStreamPlugins();
@@ -88,7 +94,6 @@ PluginList::PluginList()
     AddHttpSourcePlugins();
     AddDemuxerPlugins();
     AddFFmpegAudioDecodersPlugins();
-    AddAudioVividDecodersPlugins();
     AddL2hcEncodersPlugins();
     AddL2hcDecodersPlugins();
     AddAudioVendorAacEncodersPlugin();
@@ -130,6 +135,7 @@ PluginList::PluginList()
 #ifdef SUPPORT_CODEC_EAC3
     AddEac3AudioDecoderPlugins();
 #endif
+    AddPlugins();
 }
 
 void PluginList::AddDataSourceStreamPlugins()
@@ -681,6 +687,17 @@ void PluginList::AddAudioVividDecodersPlugins()
     audioVividDecoderPlugin.cap = "audio/av3a";
     audioVividDecoderPlugin.rank = DEFAULT_RANK;
     pluginDescriptionList_.push_back(audioVividDecoderPlugin);
+}
+
+void PluginList::AddAudioVividEncodersPlugins()
+{
+    PluginDescription audioVividEncoderPlugin;
+    audioVividEncoderPlugin.pluginName = "OH.Media.Codec.Encoder.Audio.Vivid";
+    audioVividEncoderPlugin.packageName = "AudioVividEncoder";
+    audioVividEncoderPlugin.pluginType = PluginType::AUDIO_ENCODER;
+    audioVividEncoderPlugin.cap = "audio/av3a";
+    audioVividEncoderPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(audioVividEncoderPlugin);
 }
 
 void PluginList::AddL2hcEncodersPlugins()

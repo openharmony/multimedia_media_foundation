@@ -77,6 +77,7 @@ private:
     void AddAacAudioDecoderPlugin();
     void AddFFmpegAudioDecodersPlugins();
     void AddAudioVividDecodersPlugins();
+    void AddAudioVividEncodersPlugins();
     void AddL2hcEncodersPlugins();
     void AddL2hcDecodersPlugins();
     void AddG711muAudioDecoderPlugins();
@@ -140,6 +141,7 @@ private:
 #ifdef SUPPORT_DEMUXER_TRUEHD
     void AddTruehdDemuxerPlugin();
 #endif
+    void AddPlugins();
 
     std::vector<PluginDescription> pluginDescriptionList_;
 };
