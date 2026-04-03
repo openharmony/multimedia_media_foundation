@@ -170,6 +170,8 @@ public:
                            tagCharSeq == Tag::AUDIO_VORBIS_SETUP_HEADER or
                            tagCharSeq == Tag::OH_MD_KEY_AUDIO_VIVID_METADATA or
                            tagCharSeq == Tag::DRM_CENC_INFO or
+                           tagCharSeq == Tag::VIDEO_STATIC_METADATA_SMPT2086 or
+                           tagCharSeq == Tag::VIDEO_STATIC_METADATA_CTA861 or
                            tagCharSeq == Tag::BUFFER_SKIP_SAMPLES_INFO,
                            std::vector<uint8_t>, AnyValueType::VECTOR_UINT8);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_CHANNEL_LAYOUT or

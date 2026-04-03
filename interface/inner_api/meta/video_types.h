@@ -377,6 +377,24 @@ enum class HDRType : int32_t {
     HDR_VIVID = 2,
     NONE = -1,
 };
+
+struct Smpte2086 {
+    float displayPrimaryRedX;
+    float displayPrimaryRedY;
+    float displayPrimaryGreenX;
+    float displayPrimaryGreenY;
+    float displayPrimaryBlueX;
+    float displayPrimaryBlueY;
+    float whitePointX;
+    float whitePointY;
+    float maxLuminance;
+    float minLuminance;
+};
+
+struct Cta861 {
+    float maxContentLightLevel;
+    float maxFrameAverageLightLevel;
+};
 } // namespace Plugins
 } // namespace Media
 } // namespace OHOS
