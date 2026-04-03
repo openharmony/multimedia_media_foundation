@@ -166,6 +166,7 @@ static std::vector<TagType> g_metadataBoolVector = {
     Tag::VIDEO_ENCODER_ENABLE_QP_MAP,
     Tag::VIDEO_ENCODER_ENABLE_PTS_BASED_RATECONTROL,
     Tag::VIDEO_DECODER_BLANK_FRAME_ON_SHUTDOWN,
+    Tag::VIDEO_DECODER_OUTPUT_IN_DECODING_ORDER,
     Tag::VIDEO_ENABLE_LOCAL_RELEASE,
     Tag::IS_GLTF,
 };
@@ -365,6 +366,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::AUDIO_FLAC_COMPLIANCE_LEVEL, defaultInt32},
     {Tag::MEDIA_LEVEL, defaultInt32},
     {Tag::VIDEO_STRIDE, defaultInt32},
+    {Tag::VIDEO_ENCODER_NUMBER_OF_PENDING_FRAMES, defaultInt32},
     {Tag::VIDEO_DISPLAY_WIDTH, defaultInt32},
     {Tag::VIDEO_DISPLAY_HEIGHT, defaultInt32},
     {Tag::VIDEO_PIC_WIDTH, defaultInt32},
@@ -430,6 +432,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_COORDINATE_H, defaultInt32},
     {Tag::VIDEO_ENCODER_REPEAT_PREVIOUS_FRAME_AFTER, defaultInt32},
     {Tag::VIDEO_ENCODER_REPEAT_PREVIOUS_MAX_COUNT, defaultInt32},
+    {Tag::VIDEO_ENCODER_MAX_FRAME_DELAY_COUNT, defaultInt32},
     {Tag::VIDEO_DECODER_OUTPUT_COLOR_SPACE, defaultInt32},
     {Tag::VIDEO_DECODER_OUTPUT_ENABLE_VRR, defaultInt32},
     {Tag::AV_TRANSCODER_ERR_CODE, defaultInt32},
@@ -562,6 +565,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_ENCODER_PER_FRAME_ABS_QP_MAP, defaultBool},
     {Tag::VIDEO_ENCODER_ENABLE_PTS_BASED_RATECONTROL, defaultBool},
     {Tag::VIDEO_DECODER_BLANK_FRAME_ON_SHUTDOWN, defaultBool},
+    {Tag::VIDEO_DECODER_OUTPUT_IN_DECODING_ORDER, defaultBool},
     {Tag::VIDEO_ENABLE_LOCAL_RELEASE, defaultBool},
     {Tag::IS_GLTF, defaultBool},
     // Int64
