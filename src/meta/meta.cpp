@@ -606,6 +606,8 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::MEDIA_AVAILABLE_BITRATES, defaultVectorUInt8},
     {Tag::VIDEO_ENCODER_PER_FRAME_QP_MAP, defaultVectorUInt8},
     {Tag::MEDIA_GLTF_DATA, defaultVectorUInt8},
+    {Tag::VIDEO_STATIC_METADATA_SMPT2086, defaultVectorUInt8},
+    {Tag::VIDEO_STATIC_METADATA_CTA861, defaultVectorUInt8},
     // Uint32
     {Tag::DRM_DECRYPT_AVG_SIZE, defaultUInt32},
     {Tag::DRM_DECRYPT_AVG_DURATION, defaultUInt32},

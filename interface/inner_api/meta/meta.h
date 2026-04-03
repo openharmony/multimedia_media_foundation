@@ -526,6 +526,8 @@ public:
         tagCharSeq == Tag::MEDIA_GLTF_CONTENT_ENCODING or
         tagCharSeq == Tag::MEDIA_GLTF_ITEM_TYPE, std::string, AnyValueType::STRING);
     DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::VIDEO_STATIC_METADATA_SMPT2086 or
+        tagCharSeq == Tag::VIDEO_STATIC_METADATA_CTA861 or
         tagCharSeq == Tag::MEDIA_GLTF_DATA, std::vector<uint8_t>, AnyValueType::VECTOR_UINT8);
 
     Meta &operator=(const Meta &other)

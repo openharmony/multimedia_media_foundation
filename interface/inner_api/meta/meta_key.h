@@ -125,6 +125,10 @@ public:
     static constexpr const char BUFFER_SKIP_SAMPLES_INFO[] = "buffer_skip_samples_info"; ///< skip info for sample.
     static constexpr const char ENABLE_BUFFER_SKIP_SAMPLES[] =
         "enable_buffer_skip_samples"; ///< enable skip info for sample.
+    static constexpr const char VIDEO_STATIC_METADATA_SMPT2086[] =
+        "video_static_metadata_smpt2086"; // video static metadata.
+    static constexpr const char VIDEO_STATIC_METADATA_CTA861[] =
+        "video_static_metadata_cta861"; // video static metadata.
 
     /* -------------------- timed metadata tag -------------------- */
     static constexpr const char TIMED_METADATA_SRC_TRACK_MIME[] =
