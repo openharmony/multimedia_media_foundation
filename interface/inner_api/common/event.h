@@ -22,8 +22,7 @@
 
 namespace OHOS {
 namespace Media {
-// 各个组件向Pipeline报告的事件类型
-enum struct EventType : uint32_t {
+// 各个组件向Pipeline报告的事件类�?enum struct EventType : uint32_t {
     EVENT_READY = 0,
     EVENT_AUDIO_PROGRESS, // unit is HST_TIME_BASE
     EVENT_VIDEO_PROGRESS, // unit is HST_TIME_BASE
@@ -65,6 +64,8 @@ enum struct EventType : uint32_t {
     EVENT_VIDEO_TARGET_ARRIVED,
     EVENT_HW_DECODER_UNSUPPORT_CAP,
     EVENT_NOTIFY_SEEK_CLOSEST,
+    EVENT_TIMED_METADATA,           // Timed metadata received (interstitial event started)
+    EVENT_TIMED_METADATA_OFF,       // Timed metadata expired (interstitial event ended)
 };
 
 // DFX events and infos reported from filters, modules, and plugins
