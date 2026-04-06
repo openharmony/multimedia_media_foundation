@@ -22,7 +22,8 @@
 
 namespace OHOS {
 namespace Media {
-// 各个组件向Pipeline报告的事件类�?enum struct EventType : uint32_t {
+// 各个组件向Pipeline报告的事件类型
+enum struct EventType : uint32_t {
     EVENT_READY = 0,
     EVENT_AUDIO_PROGRESS, // unit is HST_TIME_BASE
     EVENT_VIDEO_PROGRESS, // unit is HST_TIME_BASE
