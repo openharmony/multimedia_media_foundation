@@ -218,7 +218,7 @@ HWTEST_F(AudioVividUnitTest, AudioVivid_Create_006, TestSize.Level1)
 
 /**
  * @tc.name: AudioVivid_Create_007
- * @tc.desc: Create builder with MIX signal format (must have AUDIO_OBJECT_NUMBER)
+ * @tc.desc: Create builder with MIX signal format (must have OH_MD_KEY_AUDIO_OBJECT_NUMBER)
  * @tc.type: FUNC
  */
 HWTEST_F(AudioVividUnitTest, AudioVivid_Create_007, TestSize.Level1)
@@ -230,7 +230,7 @@ HWTEST_F(AudioVividUnitTest, AudioVivid_Create_007, TestSize.Level1)
     ASSERT_NE(nullptr, testFormat);
     OH_AVFormat_SetIntValue(testFormat, Tag::AUDIO_VIVID_SIGNAL_FORMAT,
         static_cast<int32_t>(OH_AUDIO_VIVID_SIGNAL_FORMAT_MIX));
-    OH_AVFormat_SetIntValue(testFormat, Tag::AUDIO_OBJECT_NUMBER, OBJECT_NUMBER);
+    OH_AVFormat_SetIntValue(testFormat, Tag::OH_MD_KEY_AUDIO_OBJECT_NUMBER, OBJECT_NUMBER);
 
     OH_AVErrCode ret = OH_AudioVividMetaBuilder_Create(&builder, testFormat);
     
@@ -262,7 +262,7 @@ HWTEST_F(AudioVividUnitTest, AudioVivid_Create_008, TestSize.Level1)
     ASSERT_NE(nullptr, testFormat);
     OH_AVFormat_SetIntValue(testFormat, Tag::AUDIO_VIVID_SIGNAL_FORMAT,
         static_cast<int32_t>(OH_AUDIO_VIVID_SIGNAL_FORMAT_MIX));
-    OH_AVFormat_SetIntValue(testFormat, Tag::AUDIO_OBJECT_NUMBER, OBJECT_NUMBER);
+    OH_AVFormat_SetIntValue(testFormat, Tag::OH_MD_KEY_AUDIO_OBJECT_NUMBER, OBJECT_NUMBER);
     OH_AVFormat_SetLongValue(testFormat, Tag::AUDIO_SOUNDBED_LAYOUT, SOUNDBED_LAYOUT);
 
     OH_AVErrCode ret = OH_AudioVividMetaBuilder_Create(&builder, testFormat);
@@ -312,7 +312,7 @@ HWTEST_F(AudioVividUnitTest, AudioVivid_UpdateObjectPos_002, TestSize.Level1)
     ASSERT_NE(nullptr, testFormat);
     OH_AVFormat_SetIntValue(testFormat, Tag::AUDIO_VIVID_SIGNAL_FORMAT,
         static_cast<int32_t>(OH_AUDIO_VIVID_SIGNAL_FORMAT_MIX));
-    OH_AVFormat_SetIntValue(testFormat, Tag::AUDIO_OBJECT_NUMBER, OBJECT_NUMBER);
+    OH_AVFormat_SetIntValue(testFormat, Tag::OH_MD_KEY_AUDIO_OBJECT_NUMBER, OBJECT_NUMBER);
 
     OH_AVErrCode ret = OH_AudioVividMetaBuilder_Create(&builder, testFormat);
     
@@ -354,7 +354,7 @@ HWTEST_F(AudioVividUnitTest, AudioVivid_UpdateObjectPos_003, TestSize.Level1)
     ASSERT_NE(nullptr, testFormat);
     OH_AVFormat_SetIntValue(testFormat, Tag::AUDIO_VIVID_SIGNAL_FORMAT,
         static_cast<int32_t>(OH_AUDIO_VIVID_SIGNAL_FORMAT_MIX));
-    OH_AVFormat_SetIntValue(testFormat, Tag::AUDIO_OBJECT_NUMBER, OBJECT_NUMBER);
+    OH_AVFormat_SetIntValue(testFormat, Tag::OH_MD_KEY_AUDIO_OBJECT_NUMBER, OBJECT_NUMBER);
 
     OH_AVErrCode ret = OH_AudioVividMetaBuilder_Create(&builder, testFormat);
     
@@ -449,7 +449,7 @@ HWTEST_F(AudioVividUnitTest, AudioVivid_UpdateObjectGain_002, TestSize.Level1)
     ASSERT_NE(nullptr, testFormat);
     OH_AVFormat_SetIntValue(testFormat, Tag::AUDIO_VIVID_SIGNAL_FORMAT,
         static_cast<int32_t>(OH_AUDIO_VIVID_SIGNAL_FORMAT_MIX));
-    OH_AVFormat_SetIntValue(testFormat, Tag::AUDIO_OBJECT_NUMBER, OBJECT_NUMBER);
+    OH_AVFormat_SetIntValue(testFormat, Tag::OH_MD_KEY_AUDIO_OBJECT_NUMBER, OBJECT_NUMBER);
 
     OH_AVErrCode ret = OH_AudioVividMetaBuilder_Create(&builder, testFormat);
     
@@ -568,7 +568,7 @@ HWTEST_F(AudioVividUnitTest, AudioVivid_GetMetaLen_003, TestSize.Level1)
     ASSERT_NE(nullptr, testFormat);
     OH_AVFormat_SetIntValue(testFormat, Tag::AUDIO_VIVID_SIGNAL_FORMAT,
         static_cast<int32_t>(OH_AUDIO_VIVID_SIGNAL_FORMAT_MIX));
-    OH_AVFormat_SetIntValue(testFormat, Tag::AUDIO_OBJECT_NUMBER, OBJECT_NUMBER);
+    OH_AVFormat_SetIntValue(testFormat, Tag::OH_MD_KEY_AUDIO_OBJECT_NUMBER, OBJECT_NUMBER);
 
     OH_AVErrCode ret = OH_AudioVividMetaBuilder_Create(&builder, testFormat);
     
@@ -776,7 +776,7 @@ HWTEST_F(AudioVividUnitTest, AudioVivid_FullWorkflow_001, TestSize.Level1)
     ASSERT_NE(nullptr, testFormat);
     OH_AVFormat_SetIntValue(testFormat, Tag::AUDIO_VIVID_SIGNAL_FORMAT,
         static_cast<int32_t>(OH_AUDIO_VIVID_SIGNAL_FORMAT_MIX));
-    OH_AVFormat_SetIntValue(testFormat, Tag::AUDIO_OBJECT_NUMBER, OBJECT_NUMBER);
+    OH_AVFormat_SetIntValue(testFormat, Tag::OH_MD_KEY_AUDIO_OBJECT_NUMBER, OBJECT_NUMBER);
 
     OH_AVErrCode ret = OH_AudioVividMetaBuilder_Create(&builder, testFormat);
     
@@ -832,7 +832,7 @@ HWTEST_F(AudioVividUnitTest, AudioVivid_MultipleObjects_001, TestSize.Level1)
     ASSERT_NE(nullptr, testFormat);
     OH_AVFormat_SetIntValue(testFormat, Tag::AUDIO_VIVID_SIGNAL_FORMAT,
         static_cast<int32_t>(OH_AUDIO_VIVID_SIGNAL_FORMAT_MIX));
-    OH_AVFormat_SetIntValue(testFormat, Tag::AUDIO_OBJECT_NUMBER, OBJECT_NUMBER);
+    OH_AVFormat_SetIntValue(testFormat, Tag::OH_MD_KEY_AUDIO_OBJECT_NUMBER, OBJECT_NUMBER);
 
     OH_AVErrCode ret = OH_AudioVividMetaBuilder_Create(&builder, testFormat);
     
