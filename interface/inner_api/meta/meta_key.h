@@ -591,6 +591,11 @@ public:
 /* -------------------- vrr tag -------------------- */
     // int32_t, 1 is enabled, 0 is unabled
     static constexpr const char VIDEO_DECODER_OUTPUT_ENABLE_VRR[] = "video_decoder_output_enable_vrr";
+/* -------------------- sfd tag -------------------- */
+    static constexpr const char VIDEO_DECODER_FRAME_RETENTION_MODE[] = "video_decoder_frame_retention_mode";
+    static constexpr const char VIDEO_DECODER_FRAME_RETENTION_RATIO[] = "video_decoder_frame_retention_ratio";
+    static constexpr const char VIDEO_DECODER_SPEED[] = "video_decoder_speed";
+    static constexpr const char VIDEO_DECODER_ENABLE_MV_UPLOAD[] = "video_decoder_enable_mv_upload";
 /* ----------------- input err tag ----------------- */
     static constexpr const char VIDEO_DECODER_INPUT_STREAM_ERROR[] = "video_decoder_input_stream_error";
 };
