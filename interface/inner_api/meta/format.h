@@ -375,7 +375,7 @@ public:
      * @brief Get the metadata.
      *
      * @return Returns the meta of Format.
-     * @since 24
+     * @since 26
      * @version 1.0
      */
     void GetKeys(std::vector<std::string> &keys) const;
