@@ -395,6 +395,12 @@ struct Cta861 {
     float maxContentLightLevel;
     float maxFrameAverageLightLevel;
 };
+
+enum class FrameRetentionMode: int32_t {
+    FULL = 0,
+    ADAPTIVE,
+    UNIFORM,
+};
 } // namespace Plugins
 } // namespace Media
 } // namespace OHOS
