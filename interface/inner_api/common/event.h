@@ -65,8 +65,7 @@ enum struct EventType : uint32_t {
     EVENT_VIDEO_TARGET_ARRIVED,
     EVENT_HW_DECODER_UNSUPPORT_CAP,
     EVENT_NOTIFY_SEEK_CLOSEST,
-    EVENT_TIMED_METADATA,           // Timed metadata received (interstitial event started)
-    EVENT_TIMED_METADATA_OFF,       // Timed metadata expired (interstitial event ended)
+    EVENT_TIMED_METADATA,
 };
 
 // DFX events and infos reported from filters, modules, and plugins

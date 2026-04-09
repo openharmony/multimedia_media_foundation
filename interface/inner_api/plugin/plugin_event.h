@@ -49,8 +49,7 @@ enum struct PluginEventType : int32_t {
     FLV_AUTO_SELECT_BITRATE,
     STREAM_UPDATE,
     NETWORK_BITRATE_CHANGED,
-    SOURCE_TIMED_METADATA,          // Source timed metadata received (interstitial event)
-    SOURCE_TIMED_METADATA_OFF,      // Source timed metadata expired (interstitial event ended)
+    SOURCE_TIMED_METADATA,
 };
 
 enum class NetworkClientErrorCode : int32_t {
