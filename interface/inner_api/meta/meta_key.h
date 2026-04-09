@@ -437,16 +437,22 @@ public:
     static constexpr const char VIDEO_GRAPHIC_PIXEL_FORMAT[] =
         "video_graphic_pixel_format"; ///< int32_t, Key for GraphicPixelFormat.
     static constexpr const char VIDEO_ENCODER_NUMBER_OF_PENDING_FRAMES[] =
-        "video_encoder_number_of_pending_frames", ///< int32_t, Key for querying the number of pending frames in the
+        "video_encoder_number_of_pending_frames"; ///< int32_t, Key for querying the number of pending frames in the
                                                   ///< video encoder.
     static constexpr const char VIDEO_ENCODER_MAX_FRAME_DELAY_COUNT[] =
-        "video_encoder_max_frame_delay_count", ///< int32_t, Key to set maximum number of frames that a compressor is
+        "video_encoder_max_frame_delay_count"; ///< int32_t, Key to set maximum number of frames that a compressor is
                                                ///< allowed to hold before it must output a compressed frame.
     static constexpr const char VIDEO_DECODER_OUTPUT_IN_DECODING_ORDER[] =
-         "video_decoder_output_in_decoding_order", ///< int32_t, Key to enable the decoder to output frames in decoding
-                                                   ///< order.This is an optional key that applies only to video
-                                                   ///< decoder. It is used in configure. By default, this feature
-                                                   ///< is disabled (0).
+        "video_decoder_output_in_decoding_order"; ///< bool, Key to enable the decoder to output frames in decoding
+                                                  ///< order.This is an optional key that applies only to video
+                                                  ///< decoder. It is used in configure. By default, this feature
+                                                  ///< is disabled (0).
+    static constexpr const char VIDEO_ENCODER_REPEAT_HEADER_BEFORE_SYNC_FRAMES[] =
+        "video_encoder_repeat_header_before_sync_frames"; ///< bool, Key to repeat headers before sync frames.
+                                                          ///< This is an optional key that applies only to AVC and
+                                                          ///< HEVC encoders and is only used in configure. For other
+                                                          ///< encoders, the key is ignored. By default, this feature
+                                                          ///< is disabled (0).
     /* -------------------- video specific tag -------------------- */
     static constexpr const char VIDEO_H264_PROFILE[] = "video.h264.profile"; ///< @see VideoH264Profile
     static constexpr const char VIDEO_H264_LEVEL[] = "video.h264.level";     ///< h264 level

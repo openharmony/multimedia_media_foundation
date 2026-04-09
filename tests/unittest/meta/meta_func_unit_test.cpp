@@ -539,6 +539,7 @@ map<TagType, bool> testBoolData = {
     {Tag::VIDEO_ENCODER_ENABLE_QP_MAP, true},
     {Tag::VIDEO_DECODER_BLANK_FRAME_ON_SHUTDOWN, true},
     {Tag::VIDEO_DECODER_OUTPUT_IN_DECODING_ORDER, true},
+    {Tag::VIDEO_ENCODER_REPEAT_HEADER_BEFORE_SYNC_FRAMES, true},
     {Tag::IS_GLTF, true},
 };
 

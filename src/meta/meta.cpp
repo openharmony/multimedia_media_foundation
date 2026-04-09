@@ -167,6 +167,7 @@ static std::vector<TagType> g_metadataBoolVector = {
     Tag::VIDEO_ENCODER_ENABLE_PTS_BASED_RATECONTROL,
     Tag::VIDEO_DECODER_BLANK_FRAME_ON_SHUTDOWN,
     Tag::VIDEO_DECODER_OUTPUT_IN_DECODING_ORDER,
+    Tag::VIDEO_ENCODER_REPEAT_HEADER_BEFORE_SYNC_FRAMES,
     Tag::VIDEO_ENABLE_LOCAL_RELEASE,
     Tag::IS_GLTF,
 };
@@ -566,6 +567,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_ENCODER_ENABLE_PTS_BASED_RATECONTROL, defaultBool},
     {Tag::VIDEO_DECODER_BLANK_FRAME_ON_SHUTDOWN, defaultBool},
     {Tag::VIDEO_DECODER_OUTPUT_IN_DECODING_ORDER, defaultBool},
+    {Tag::VIDEO_ENCODER_REPEAT_HEADER_BEFORE_SYNC_FRAMES, defaultBool},
     {Tag::VIDEO_ENABLE_LOCAL_RELEASE, defaultBool},
     {Tag::IS_GLTF, defaultBool},
     // Int64

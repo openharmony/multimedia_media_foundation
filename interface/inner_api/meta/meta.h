@@ -240,6 +240,7 @@ public:
         tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_WATERMARK or
         tagCharSeq == Tag::VIDEO_DECODER_BLANK_FRAME_ON_SHUTDOWN or
         tagCharSeq == Tag::VIDEO_DECODER_OUTPUT_IN_DECODING_ORDER or
+        tagCharSeq == Tag::VIDEO_ENCODER_REPEAT_HEADER_BEFORE_SYNC_FRAMES or
         tagCharSeq == Tag::VIDEO_ENABLE_LOCAL_RELEASE, bool, AnyValueType::BOOL);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_BUFFER_CAN_DROP, bool, AnyValueType::BOOL);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_RENDER_SET_FLAG, bool, AnyValueType::BOOL);
