@@ -239,6 +239,8 @@ public:
         tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_QP_MAP or
         tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_WATERMARK or
         tagCharSeq == Tag::VIDEO_DECODER_BLANK_FRAME_ON_SHUTDOWN or
+        tagCharSeq == Tag::VIDEO_DECODER_OUTPUT_IN_DECODING_ORDER or
+        tagCharSeq == Tag::VIDEO_ENCODER_REPEAT_HEADER_BEFORE_SYNC_FRAMES or
         tagCharSeq == Tag::VIDEO_ENABLE_LOCAL_RELEASE, bool, AnyValueType::BOOL);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_BUFFER_CAN_DROP, bool, AnyValueType::BOOL);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_RENDER_SET_FLAG, bool, AnyValueType::BOOL);
@@ -328,6 +330,7 @@ public:
         tagCharSeq == Tag::RECORDER_AUDIO_CHANNEL_COUNT or
         tagCharSeq == Tag::RECORDER_AUDIO_BITRATE or
         tagCharSeq == Tag::MEDIA_TIME_SCALE or
+        tagCharSeq == Tag::VIDEO_ENCODER_NUMBER_OF_PENDING_FRAMES or
         tagCharSeq == Tag::RECORDER_START_LATENCY, int32_t, AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::VIDEO_DECODER_RATE_UPPER_LIMIT or
@@ -359,6 +362,7 @@ public:
         tagCharSeq == Tag::VIDEO_COORDINATE_W or
         tagCharSeq == Tag::VIDEO_COORDINATE_H or
         tagCharSeq == Tag::VIDEO_ENCODER_REPEAT_PREVIOUS_FRAME_AFTER or
+        tagCharSeq == Tag::VIDEO_ENCODER_MAX_FRAME_DELAY_COUNT or
         tagCharSeq == Tag::VIDEO_ENCODER_REPEAT_PREVIOUS_MAX_COUNT, int32_t, AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::AV_TRANSCODER_ERR_CODE or
