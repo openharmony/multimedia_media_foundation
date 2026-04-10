@@ -295,6 +295,7 @@ static Any defaultVectorUInt32 = std::vector<uint32_t>();
 static Any defaultVectorInt32 = std::vector<int32_t>();
 static Any defaultVectorInt64 = std::vector<int64_t>();
 static Any defaultVectorVideoBitStreamFormat = std::vector<VideoBitStreamFormat>();
+static Any defaultDemuxerMode = DemuxerMode::FULL_PARSE;
 static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::SRC_INPUT_TYPE, defaultSrcInputType},
     {Tag::AUDIO_SAMPLE_FORMAT, defaultAudioSampleFormat},
@@ -624,7 +625,9 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::AUDIO_BLOCK_ALIGN, defaultInt32},
     {Tag::AUDIO_VIVID_SIGNAL_FORMAT, defaultInt32},
     // vector<int64_t>
-    {Tag::STALLING_TIMESTAMP, defaultVectorInt64}
+    {Tag::STALLING_TIMESTAMP, defaultVectorInt64},
+    // DemuxerMode
+    {Tag::MEDIA_DEMUXER_MODE, defaultDemuxerMode}
 };
 
 static std::map<AnyValueType, const Any &> g_ValueTypeDefaultValueMap = {
