@@ -389,11 +389,8 @@ bool Format::ContainKey(const std::string_view &key) const
 void Format::GetKeys(std::vector<std::string> &keys) const
 {
     keys.clear();
-    for (const auto &[key, value] : formatMap_) {
-        keys.push_back(key);
-    }
-    for (const auto &[key, value] : formatVecMap_) {
-        keys.push_back(key);
+    for (auto iter = meta_->begin(); iter != meta_->end(); ++iter) {
+        keys.push_back(iter->first);
     }
 }
 
