@@ -373,8 +373,8 @@ public:
 
     /**
      * @brief Get the metadata.
-     *
-     * @return Returns the meta of Format.
+
+     * @param keys the key will be got.
      * @since 26
      * @version 1.0
      */
