@@ -1150,6 +1150,8 @@ void PluginList::AddFFmpegMuxerPlugins()
     aacMuxerPlugin.cap = "media/aac";
     aacMuxerPlugin.rank = DEFAULT_RANK;
     pluginDescriptionList_.push_back(aacMuxerPlugin);
+
+    AddFFmpegFlvMuxerplugins();
 }
 
 void PluginList::AddFFmpegOggMuxerplugins()
@@ -1161,6 +1163,17 @@ void PluginList::AddFFmpegOggMuxerplugins()
     oggMuxerPlugin.cap = "media/ogg";
     oggMuxerPlugin.rank = DEFAULT_RANK;
     pluginDescriptionList_.push_back(oggMuxerPlugin);
+}
+
+void PluginList::AddFFmpegFlvMuxerplugins()
+{
+    PluginDescription flvMuxerPlugin;
+    flvMuxerPlugin.pluginName = "ffmpegMux_flv";
+    flvMuxerPlugin.packageName = "FFmpegMuxer";
+    flvMuxerPlugin.pluginType = PluginType::MUXER;
+    flvMuxerPlugin.cap = "media/flv";
+    flvMuxerPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(flvMuxerPlugin);
 }
 
 void PluginList::AddMpeg4MuxerPlugins()
