@@ -373,7 +373,7 @@ public:
 
     /**
      * @brief Get the metadata.
-
+     *
      * @param keys the key will be got.
      * @since 26
      * @version 1.0
