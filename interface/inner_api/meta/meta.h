@@ -533,6 +533,8 @@ public:
         tagCharSeq == Tag::VIDEO_STATIC_METADATA_SMPT2086 or
         tagCharSeq == Tag::VIDEO_STATIC_METADATA_CTA861 or
         tagCharSeq == Tag::MEDIA_GLTF_DATA, std::vector<uint8_t>, AnyValueType::VECTOR_UINT8);
+    DEFINE_INSERT_GET_FUNC(
+        tagCharSeq == Tag::MEDIA_DEMUXER_MODE, Plugins::DemuxerMode, AnyValueType::UINT32_T);
 
     Meta &operator=(const Meta &other)
     {
