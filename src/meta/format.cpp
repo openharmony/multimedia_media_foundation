@@ -386,6 +386,14 @@ bool Format::ContainKey(const std::string_view &key) const
     return vecMapIter != formatVecMap_.end();
 }
 
+void Format::GetKeys(std::vector<std::string> &keys) const
+{
+    keys.clear();
+    for (auto iter = meta_->begin(); iter != meta_->end(); ++iter) {
+        keys.push_back(iter->first);
+    }
+}
+
 FormatDataType Format::GetValueType(const std::string_view &key) const
 {
     auto iter = meta_->Find(std::string(key));
