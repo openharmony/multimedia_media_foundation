@@ -504,6 +504,7 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::AUDIO_BLOCK_ALIGN, 1},
     {Tag::AUDIO_VIVID_SIGNAL_FORMAT, 1},
     // UINT8_T
+    {Tag::MEDIA_DEMUXER_MODE, static_cast<int32_t>(Plugins::DemuxerMode::FULL_PARSE)},
     {Tag::AUDIO_AAC_PROFILE, static_cast<int32_t>(Plugins::AudioAacProfile::ELD)},
     {Tag::AUDIO_AAC_STREAM_FORMAT, static_cast<int32_t>(Plugins::AudioAacStreamFormat::ADIF)}};
 

@@ -401,6 +401,11 @@ enum class FrameRetentionMode: int32_t {
     ADAPTIVE,
     UNIFORM,
 };
+
+enum class DemuxerMode: uint32_t {
+    FULL_PARSE = 0,
+    FAST_INIT = 1
+};
 } // namespace Plugins
 } // namespace Media
 } // namespace OHOS
