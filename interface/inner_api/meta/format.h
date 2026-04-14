@@ -371,6 +371,14 @@ public:
      */
     bool SetMetaPtr(std::shared_ptr<Meta> meta);
 
+    /**
+     * @brief Get the metadata.
+     *
+     * @param keys the key will be got.
+     * @since 26
+     * @version 1.0
+     */
+    void GetKeys(std::vector<std::string> &keys) const;
 private:
     FormatDataMap formatMap_;
     FormatVectorMap formatVecMap_;
