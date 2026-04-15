@@ -474,6 +474,7 @@ map<TagType, int32_t> testInt32Data = {
     {Tag::VIDEO_ORIENTATION_TYPE, static_cast<int32_t>(Plugins::VideoOrientationType::FLIP_H_ROT90)},
     {Tag::VIDEO_COLOR_PRIMARIES, static_cast<int32_t>(Plugins::ColorPrimary::BT2020)},
     {Tag::VIDEO_HDR_TYPE, static_cast<int32_t>(Plugins::HDRType::HLG)},
+    {Tag::VIDEO_HDR_COMPATIBILITY, static_cast<int32_t>(Plugins::HDRType::NONE)},
     {Tag::VIDEO_COLOR_TRC, static_cast<int32_t>(Plugins::TransferCharacteristic::BT1361)},
     {Tag::VIDEO_COLOR_MATRIX_COEFF, static_cast<int32_t>(Plugins::MatrixCoefficient::BT2020_CL)},
     {Tag::VIDEO_H265_PROFILE, static_cast<int32_t>(Plugins::HEVCProfile::HEVC_PROFILE_MAIN_10_HDR10)},
