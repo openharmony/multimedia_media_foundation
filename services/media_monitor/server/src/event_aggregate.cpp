@@ -84,6 +84,9 @@ void EventAggregate::WriteEvent(std::shared_ptr<EventBean> &bean)
         case AUDIO_STREAM_EXHAUSTED_STATS:
             mediaMonitorPolicy_.WriteEvent(bean->GetEventId(), bean);
             break;
+        case UNIFIED_FAULT_CODE:
+            AddToUnifiedFaultCodeVector(bean);
+            break;
         default:
             UpdateAggregateEventList(bean);
             break;
@@ -775,6 +778,30 @@ void EventAggregate::HandleVolumeSettingStatisticsEvent(std::shared_ptr<EventBea
 {
     MEDIA_LOG_D("Handle volume setting statistics event");
     mediaMonitorPolicy_.HandleVolumeSettingStatistics(bean);
+}
+
+void EventAggregate::AddToUnifiedFaultCodeVector(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Add to unified fault code vector");
+    std::lock_guard<std::mutex> lock(unifiedFaultCodeMutex_);
+
+    std::shared_ptr<EventBean> faultCodeBean = std::make_shared<EventBean>();
+    faultCodeBean->Add("ERROR_UID", bean->GetIntValue("ERROR_UID"));
+    faultCodeBean->Add("ERROR_CODE", bean->GetIntValue("ERROR_CODE"));
+    faultCodeBean->Add("ERROR_REASON", bean->GetStringValue("ERROR_REASON"));
+    faultCodeBean->Add("TIMESTAMP", TimeUtils::GetCurSec());
+
+    unifiedFaultCodeVector_.push_back(faultCodeBean);
+
+    if (unifiedFaultCodeVector_.size() > MAX_UNIFIED_FAULT_CODE_COUNT) {
+        unifiedFaultCodeVector_.erase(unifiedFaultCodeVector_.begin());
+    }
+}
+
+std::vector<std::shared_ptr<EventBean>> EventAggregate::GetUnifiedFaultCodeRecords()
+{
+    std::lock_guard<std::mutex> lock(unifiedFaultCodeMutex_);
+    return unifiedFaultCodeVector_;
 }
 } // namespace MediaMonitor
 } // namespace Media

@@ -47,6 +47,8 @@ public:
 
     void WriteInfo(int32_t fd, std::string &dumpString);
 
+    std::vector<std::shared_ptr<EventBean>> GetUnifiedFaultCodeRecords();
+
 private:
     void UpdateAggregateEventList(std::shared_ptr<EventBean> &bean);
     void HandleDeviceChangeEvent(std::shared_ptr<EventBean> &bean);
@@ -94,6 +96,7 @@ private:
     void HandleVolumeSettingStatisticsEvent(std::shared_ptr<EventBean> &bean);
     void HandleAudioInterruptErrorEvent(std::shared_ptr<EventBean> &bean);
     void HandleAudioPlaybackErrorEvent(std::shared_ptr<EventBean> &bean);
+    void AddToUnifiedFaultCodeVector(std::shared_ptr<EventBean> &bean);
 
     AudioMemo& audioMemo_;
     MediaMonitorPolicy& mediaMonitorPolicy_;
@@ -103,6 +106,9 @@ private:
     std::vector<std::shared_ptr<EventBean>> captureMutedVector_;
     std::vector<std::shared_ptr<EventBean>> volumeVector_;
     std::vector<std::shared_ptr<EventBean>> streamPropertyVector_;
+    std::vector<std::shared_ptr<EventBean>> unifiedFaultCodeVector_;
+    std::mutex unifiedFaultCodeMutex_;
+    static constexpr int32_t MAX_UNIFIED_FAULT_CODE_COUNT = 10;
 
     // Record volume for stream state 2->5->2
     int32_t systemVol_ = -1;
