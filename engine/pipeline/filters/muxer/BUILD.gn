@@ -23,7 +23,7 @@ ohos_source_set("muxer_filter") {
   ]
   sources = [ "muxer_filter.cpp" ]
   public_configs = [ "../../../../:histreamer_presets" ]
-  public_deps = [
+  deps = [
     "../../../foundation:histreamer_foundation",
     "../../../pipeline:histreamer_base",
   ]
