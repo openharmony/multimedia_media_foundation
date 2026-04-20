@@ -667,6 +667,139 @@ HWTEST_F(AVFormatUnitTest, Format_GetValueType_002, TestSize.Level1)
     format->SetMeta(std::move(meta));
     CheckValueType(format);
 }
+
+/**
+ * @tc.name: Format_GetKeys_001
+ * @tc.desc: Test GetKeys with multiple key-value pairs
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVFormatUnitTest, Format_GetKeys_001, TestSize.Level1)
+{
+    std::vector<std::string> keys;
+    
+    format_->PutIntValue(INT_TESTKEY, INT_VALUE);
+    format_->PutLongValue(LONG_TESTKEY, LONG_VALUE);
+    format_->PutDoubleValue(DOUBLE_TESTKEY, DOUBLE_VALUE);
+    format_->PutStringValue(STRING_TESTKEY, STRING_VALUE.c_str());
+    
+    format_->GetKeys(keys);
+    
+    EXPECT_EQ(keys.size(), 4);
+    
+    bool hasIntKey = false;
+    bool hasLongKey = false;
+    bool hasDoubleKey = false;
+    bool hasStringKey = false;
+    
+    for (const auto& key : keys) {
+        if (key == INT_TESTKEY) hasIntKey = true;
+        if (key == LONG_TESTKEY) hasLongKey = true;
+        if (key == DOUBLE_TESTKEY) hasDoubleKey = true;
+        if (key == STRING_TESTKEY) hasStringKey = true;
+    }
+    
+    EXPECT_TRUE(hasIntKey);
+    EXPECT_TRUE(hasLongKey);
+    EXPECT_TRUE(hasDoubleKey);
+    EXPECT_TRUE(hasStringKey);
+}
+
+/**
+ * @tc.name: Format_GetKeys_002
+ * @tc.desc: Test GetKeys with empty format
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVFormatUnitTest, Format_GetKeys_002, TestSize.Level1)
+{
+    Format emptyFormat;
+    std::vector<std::string> keys;
+    
+    emptyFormat.GetKeys(keys);
+    
+    EXPECT_EQ(keys.size(), 0);
+    EXPECT_TRUE(keys.empty());
+}
+
+/**
+ * @tc.name: Format_GetKeys_003
+ * @tc.desc: Test GetKeys after removing keys
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVFormatUnitTest, Format_GetKeys_003, TestSize.Level1)
+{
+    std::vector<std::string> keys;
+    
+    format_->PutIntValue(INT_TESTKEY, INT_VALUE);
+    format_->PutLongValue(LONG_TESTKEY, LONG_VALUE);
+    format_->PutStringValue(STRING_TESTKEY, STRING_VALUE.c_str());
+    
+    format_->GetKeys(keys);
+    EXPECT_EQ(keys.size(), 3);
+    
+    format_->RemoveKey(INT_TESTKEY);
+    keys.clear();
+    format_->GetKeys(keys);
+    EXPECT_EQ(keys.size(), 2);
+    
+    bool hasIntKey = false;
+    for (const auto& key : keys) {
+        if (key == INT_TESTKEY) hasIntKey = true;
+    }
+    EXPECT_FALSE(hasIntKey);
+}
+
+/**
+ * @tc.name: Format_GetKeys_004
+ * @tc.desc: Test GetKeys clears previous content
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVFormatUnitTest, Format_GetKeys_004, TestSize.Level1)
+{
+    std::vector<std::string> keys;
+    keys.push_back("old_key_1");
+    keys.push_back("old_key_2");
+    
+    format_->PutIntValue(INT_TESTKEY, INT_VALUE);
+    format_->PutStringValue(STRING_TESTKEY, STRING_VALUE.c_str());
+    
+    format_->GetKeys(keys);
+    
+    EXPECT_EQ(keys.size(), 2);
+    
+    bool hasOldKey = false;
+    for (const auto& key : keys) {
+        if (key == "old_key_1" || key == "old_key_2") {
+            hasOldKey = true;
+        }
+    }
+    EXPECT_FALSE(hasOldKey);
+}
+
+/**
+ * @tc.name: Format_GetKeys_005
+ * @tc.desc: Test GetKeys with buffer type value
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVFormatUnitTest, Format_GetKeys_005, TestSize.Level1)
+{
+    constexpr size_t bufferSize = 7;
+    uint8_t buffer[bufferSize] = {1, 2, 3, 4, 255, 0, 255};
+    
+    format_->PutIntValue(INT_TESTKEY, INT_VALUE);
+    format_->PutBuffer(BUFFER_TESTKEY, buffer, bufferSize);
+    format_->PutStringValue(STRING_TESTKEY, STRING_VALUE.c_str());
+    
+    std::vector<std::string> keys;
+    format_->GetKeys(keys);
+    
+    EXPECT_EQ(keys.size(), 3);
+    
+    bool hasBufferKey = false;
+    for (const auto& key : keys) {
+        if (key == BUFFER_TESTKEY) hasBufferKey = true;
+    }
+    EXPECT_TRUE(hasBufferKey);
+}
 #endif
 } // namespace Media
 } // namespace OHOS
