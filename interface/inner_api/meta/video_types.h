@@ -403,7 +403,7 @@ enum class FrameRetentionMode: int32_t {
     UNIFORM,
 };
 
-enum class DemuxerMode: uint32_t {
+enum class DemuxerMode: int32_t {
     FULL_PARSE = 0,
     FAST_INIT = 1
 };
