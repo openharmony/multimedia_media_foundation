@@ -692,10 +692,18 @@ HWTEST_F(AVFormatUnitTest, Format_GetKeys_001, TestSize.Level1)
     bool hasStringKey = false;
     
     for (const auto& key : keys) {
-        if (key == INT_TESTKEY) hasIntKey = true;
-        if (key == LONG_TESTKEY) hasLongKey = true;
-        if (key == DOUBLE_TESTKEY) hasDoubleKey = true;
-        if (key == STRING_TESTKEY) hasStringKey = true;
+        if (key == INT_TESTKEY) {
+            hasIntKey = true;
+        }
+        if (key == LONG_TESTKEY) {
+            hasLongKey = true;
+        }
+        if (key == DOUBLE_TESTKEY) {
+            hasDoubleKey = true;
+        }
+        if (key == STRING_TESTKEY) {
+            hasStringKey = true;
+        }
     }
     
     EXPECT_TRUE(hasIntKey);
@@ -743,7 +751,9 @@ HWTEST_F(AVFormatUnitTest, Format_GetKeys_003, TestSize.Level1)
     
     bool hasIntKey = false;
     for (const auto& key : keys) {
-        if (key == INT_TESTKEY) hasIntKey = true;
+        if (key == INT_TESTKEY) {
+            hasIntKey = true;
+        }
     }
     EXPECT_FALSE(hasIntKey);
 }
@@ -796,7 +806,9 @@ HWTEST_F(AVFormatUnitTest, Format_GetKeys_005, TestSize.Level1)
     
     bool hasBufferKey = false;
     for (const auto& key : keys) {
-        if (key == BUFFER_TESTKEY) hasBufferKey = true;
+        if (key == BUFFER_TESTKEY) {
+            hasBufferKey = true;
+        }
     }
     EXPECT_TRUE(hasBufferKey);
 }
