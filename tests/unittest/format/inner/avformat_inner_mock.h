@@ -44,6 +44,7 @@ public:
     void InitAudioTrackFormat(const std::string_view &mimeType, int32_t sampleRate, int32_t channelCount) override;
     void InitVideoTrackFormat(const std::string_view &mimeType, int32_t width, int32_t height) override;
     const char *DumpInfo() override;
+    void GetKeys(std::vector<std::string> &keys) const override;
     Format &GetFormat();
 
 private:

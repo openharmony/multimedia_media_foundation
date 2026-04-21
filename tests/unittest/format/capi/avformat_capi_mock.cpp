@@ -58,6 +58,22 @@ bool AVFormatCapiMock::GetStringValue(const std::string_view &key, std::string &
     return false;
 }
 
+void AVFormatCapiMock::GetKeys(std::vector<std::string> &keys) const
+{
+    keys.clear();
+    if (format_ == nullptr) {
+        return;
+    }
+
+    uint32_t keyCount = OH_AVFormat_GetKeyCount(format_);
+    for (uint32_t i = 0; i < keyCount; ++i) {
+        const char *key = nullptr;
+        if (OH_AVFormat_GetKey(format_, i, &key) && key != nullptr) {
+            keys.push_back(std::string(key));
+        }
+    }
+}
+
 void AVFormatCapiMock::Destroy()
 {
     if (format_ != nullptr) {
