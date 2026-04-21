@@ -57,11 +57,6 @@ void AVFormatInnerMock::GetKeys(std::vector<std::string> &keys) const
     format_.GetKeys(keys);
 }
 
-void AVFormatInnerMock::RemoveKey(const std::string_view &key)
-{
-    format_.RemoveKey(key);
-}
-
 bool AVFormatInnerMock::PutLongValue(const std::string_view &key, int64_t value)
 {
     return format_.PutLongValue(key, value);
