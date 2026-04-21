@@ -45,6 +45,7 @@ public:
     void InitAudioTrackFormat(const std::string_view &mimeType, int32_t sampleRate, int32_t channelCount) override;
     void InitVideoTrackFormat(const std::string_view &mimeType, int32_t width, int32_t height) override;
     const char *DumpInfo() override;
+    void GetKeys(std::vector<std::string> &keys) const override;
     bool AVFormat_Copy(struct OH_AVFormat *to, struct OH_AVFormat *from);
     OH_AVFormat *GetFormat();
 
