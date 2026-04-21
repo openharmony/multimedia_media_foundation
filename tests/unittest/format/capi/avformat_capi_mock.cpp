@@ -74,6 +74,13 @@ void AVFormatCapiMock::GetKeys(std::vector<std::string> &keys) const
     }
 }
 
+void AVFormatCapiMock::RemoveKey(const std::string_view &key)
+{
+    if (format_ != nullptr) {
+        OH_AVFormat_RemoveKey(format_, key.data());
+    }
+}
+
 void AVFormatCapiMock::Destroy()
 {
     if (format_ != nullptr) {

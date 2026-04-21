@@ -36,6 +36,7 @@ public:
     virtual bool PutStringValue(const std::string_view &key, const std::string_view &value) = 0;
     virtual bool GetStringValue(const std::string_view &key, std::string &value) = 0;
     virtual void GetKeys(std::vector<std::string> &keys) const = 0;
+    virtual void RemoveKey(const std::string_view &key) = 0;
     virtual bool GetBuffer(const std::string_view &key, uint8_t **addr, size_t &size) = 0;
     virtual bool PutBuffer(const std::string_view &key, const uint8_t *addr, size_t size) = 0;
     virtual bool GetIntBuffer(const std::string_view &key, int32_t **addr, size_t &size) = 0;
