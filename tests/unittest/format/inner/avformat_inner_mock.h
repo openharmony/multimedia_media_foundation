@@ -45,6 +45,7 @@ public:
     void InitVideoTrackFormat(const std::string_view &mimeType, int32_t width, int32_t height) override;
     const char *DumpInfo() override;
     void GetKeys(std::vector<std::string> &keys) const override;
+    void RemoveKey(const std::string_view &key) override;
     Format &GetFormat();
 
 private:
