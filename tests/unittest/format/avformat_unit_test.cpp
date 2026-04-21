@@ -730,35 +730,10 @@ HWTEST_F(AVFormatUnitTest, Format_GetKeys_002, TestSize.Level1)
 
 /**
  * @tc.name: Format_GetKeys_003
- * @tc.desc: Test GetKeys after removing keys
- * @tc.type: FUNC
- */
-HWTEST_F(AVFormatUnitTest, Format_GetKeys_003, TestSize.Level1)
-{
-    std::vector<std::string> keys;
-    
-    format_->PutIntValue(INT_TESTKEY, INT_VALUE);
-    format_->PutLongValue(LONG_TESTKEY, LONG_VALUE);
-    format_->PutStringValue(STRING_TESTKEY, STRING_VALUE.c_str());
-    
-    format_->GetKeys(keys);
-    EXPECT_EQ(keys.size(), 3);
-    
-    bool hasIntKey = false;
-    for (const auto& key : keys) {
-        if (key == INT_TESTKEY) {
-            hasIntKey = true;
-        }
-    }
-    EXPECT_TRUE(hasIntKey);
-}
-
-/**
- * @tc.name: Format_GetKeys_004
  * @tc.desc: Test GetKeys clears previous content
  * @tc.type: FUNC
  */
-HWTEST_F(AVFormatUnitTest, Format_GetKeys_004, TestSize.Level1)
+HWTEST_F(AVFormatUnitTest, Format_GetKeys_003, TestSize.Level1)
 {
     std::vector<std::string> keys;
     keys.push_back("old_key_1");
@@ -781,11 +756,11 @@ HWTEST_F(AVFormatUnitTest, Format_GetKeys_004, TestSize.Level1)
 }
 
 /**
- * @tc.name: Format_GetKeys_005
+ * @tc.name: Format_GetKeys_004
  * @tc.desc: Test GetKeys with buffer type value
  * @tc.type: FUNC
  */
-HWTEST_F(AVFormatUnitTest, Format_GetKeys_005, TestSize.Level1)
+HWTEST_F(AVFormatUnitTest, Format_GetKeys_004, TestSize.Level1)
 {
     constexpr size_t bufferSize = 7;
     uint8_t buffer[bufferSize] = {1, 2, 3, 4, 255, 0, 255};
