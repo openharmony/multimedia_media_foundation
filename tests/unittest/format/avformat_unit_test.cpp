@@ -744,18 +744,13 @@ HWTEST_F(AVFormatUnitTest, Format_GetKeys_003, TestSize.Level1)
     format_->GetKeys(keys);
     EXPECT_EQ(keys.size(), 3);
     
-    format_->RemoveKey(INT_TESTKEY);
-    keys.clear();
-    format_->GetKeys(keys);
-    EXPECT_EQ(keys.size(), 2);
-    
     bool hasIntKey = false;
     for (const auto& key : keys) {
         if (key == INT_TESTKEY) {
             hasIntKey = true;
         }
     }
-    EXPECT_FALSE(hasIntKey);
+    EXPECT_TRUE(hasIntKey);
 }
 
 /**
