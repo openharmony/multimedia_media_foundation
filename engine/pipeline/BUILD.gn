@@ -130,7 +130,7 @@ ohos_source_set("histreamer_pipeline") {
   sources = []
   public_configs =
       [ "//foundation/multimedia/media_foundation:histreamer_presets" ]
-  public_deps = [
+  deps = [
     ":histreamer_codec_filters",
     "filters/codec:codec_filters",
     "filters/demux:demuxer_filter",
@@ -147,9 +147,9 @@ ohos_source_set("histreamer_pipeline") {
     ]
   }
   if (media_foundation_enable_video) {
-    public_deps += [ "filters/sink:video_sink_filter" ]
+    deps += [ "filters/sink:video_sink_filter" ]
     if (media_foundation_enable_recorder) {
-      public_deps += [ "filters/source:video_capture_filter" ]
+      deps += [ "filters/source:video_capture_filter" ]
     }
   }
 }
