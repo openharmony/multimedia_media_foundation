@@ -25,7 +25,7 @@ ohos_source_set("std_video_surface_sink") {
   subsystem_name = "multimedia"
   part_name = "media_foundation"
   sources = [ "surface_sink_plugin.cpp" ]
-  public_deps = [
+  deps = [
     "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation",
     "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_base",
   ]
@@ -36,7 +36,6 @@ ohos_source_set("std_video_surface_sink") {
     print("std video surface sink plugin is not available on lite systems")
   } else {
     include_dirs = [ "//foundation/multimedia/media_foundation/engine/include" ]
-    deps = []
     external_deps = [
       "bounds_checking_function:libsec_shared",
       "c_utils:utils",
