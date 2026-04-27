@@ -66,7 +66,6 @@ public:
     void HandleCaptureMutedToEventVector(std::shared_ptr<EventBean> &bean);
     void HandleVolumeToEventVector(std::shared_ptr<EventBean> &bean);
     void HandStreamPropertyToEventVector(std::shared_ptr<EventBean> &streamProperty);
-    void TriggerSystemTonePlaybackTimeEvent(std::shared_ptr<EventBean> &bean);
     void AddToVolumeApiInvokeQueue(std::shared_ptr<EventBean> &bean);
     void AddToCallSessionQueue(std::shared_ptr<EventBean> &bean);
     void AddAudioInterruptErrorEvent(std::shared_ptr<EventBean> &bean);
@@ -123,6 +122,7 @@ private:
 
     std::mutex eventVectorMutex_;
     std::vector<std::shared_ptr<EventBean>> eventVector_;
+    std::mutex cachedBundleInfoMutex_;
     std::map<int32_t, BundleInfo> cachedBundleInfoMap_;
     std::vector<std::shared_ptr<EventBean>> systemTonePlayEventVector_;
     std::queue<std::shared_ptr<EventBean>> volumeApiInvokeEventQueue_;
