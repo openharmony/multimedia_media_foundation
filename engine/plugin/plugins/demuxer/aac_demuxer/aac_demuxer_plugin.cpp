@@ -338,6 +338,8 @@ int AACDemuxerPlugin::AudioDemuxerAACPrepare(const uint8_t *buf, uint32_t len, A
         }
 
         int sampleIndex = ((buf[2] & 0x3C) >> 2); // 根据协议计算 sampleIndex
+        FALSE_RETURN_V_MSG_E(sampleIndex < static_cast<int>(sizeof(samplingRateMap) / sizeof(samplingRateMap[0])),
+            -1, "Invalid sampleIndex.");
         int channelCount = ((buf[2] & 0x01) << 2) | ((buf[3] & 0xC0) >> 6); // 根据协议计算 channelCount
 
         int sample = samplingRateMap[sampleIndex];
