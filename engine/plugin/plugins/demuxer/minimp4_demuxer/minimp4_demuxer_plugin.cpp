@@ -312,7 +312,8 @@ int MiniMP4DemuxerPlugin::ReadCallback(int64_t offset, void* buffer, size_t size
         return -1;
     }
 
-    if ((offset + size) <= mp4Demuxer->ioContext_.offset) {
+    if ((offset + size) <= mp4Demuxer->ioContext_.offset &&
+        offset >= (mp4Demuxer->ioContext_.offset - mp4Demuxer->ioDataRemainSize_)) {
         (void)memcpy_s(buffer, size, mp4Demuxer->inIoBuffer_ +
             (mp4Demuxer->ioDataRemainSize_ - (mp4Demuxer->ioContext_.offset - offset)), size);
         return 0;
