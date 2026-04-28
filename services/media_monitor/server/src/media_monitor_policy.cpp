@@ -197,7 +197,6 @@ void MediaMonitorPolicy::WriteBehaviorEventExpansion(EventId eventId, std::share
             mediaEventBaseWriter_.WriteExcludeOutputDevice(bean);
             break;
         case SYSTEM_TONE_PLAYBACK:
-            systemTonePlayEventVector_.push_back(bean);
             TriggerSystemTonePlaybackEvent(bean);
             break;
         case MUTE_BUNDLE_NAME:
@@ -213,6 +212,7 @@ void MediaMonitorPolicy::TriggerSystemTonePlaybackEvent(std::shared_ptr<EventBea
     MEDIA_LOG_D("Trigger system tone playback event . ");
 
     std::lock_guard<std::mutex> lockEventVector(eventVectorMutex_);
+    systemTonePlayEventVector_.push_back(bean);
     systemTonePlayerCount_++;
     MEDIA_LOG_I("systemTonePlayerCount_ . = %{public}d", systemTonePlayerCount_);
     if (systemTonePlayerCount_ >= MAX_PLAY_COUNT) {
@@ -226,17 +226,7 @@ void MediaMonitorPolicy::TriggerSystemTonePlaybackEvent(std::shared_ptr<EventBea
     }
 }
 
-void MediaMonitorPolicy::TriggerSystemTonePlaybackTimeEvent(std::shared_ptr<EventBean> &bean)
-{
-    MEDIA_LOG_D("TriggerSystemTonePlaybackTimeEvent . ");
-    std::lock_guard<std::mutex> lockEventVector(eventVectorMutex_);
-    auto dfxResult = std::make_unique<DfxSystemTonePlaybackResult>();
-    CollectDataToDfxResult(dfxResult.get());
-    mediaEventBaseWriter_.WriteSystemTonePlayback(std::move(dfxResult));
-    systemTonePlayerCount_ = 0;
-    systemTonePlayEventVector_.clear();
-}
-
+ // Note: eventVectorMutex_ must be held before calling this function
  void MediaMonitorPolicy::CollectDataToDfxResult(DfxSystemTonePlaybackResult *result)
 {
     MEDIA_LOG_D("Collect data to dfx result .");
@@ -276,9 +266,12 @@ void MediaMonitorPolicy::SetBundleNameToEvent(const std::string key, std::shared
 
 BundleInfo MediaMonitorPolicy::GetBundleInfo(int32_t appUid)
 {
-    auto cachedBundleInfo = cachedBundleInfoMap_.find(appUid);
-    if (cachedBundleInfo != cachedBundleInfoMap_.end()) {
-        return cachedBundleInfo->second;
+    {
+        std::lock_guard<std::mutex> lock(cachedBundleInfoMutex_);
+        auto it = cachedBundleInfoMap_.find(appUid);
+        if (it != cachedBundleInfoMap_.end()) {
+            return it->second;
+        }
     }
     MediaMonitorWrapper mediaMonitorWrapper;
     BundleInfo bundleInfo;
@@ -287,7 +280,10 @@ BundleInfo MediaMonitorPolicy::GetBundleInfo(int32_t appUid)
     if (err != MediaMonitorErr::SUCCESS) {
         return bundleInfo;
     }
-    cachedBundleInfoMap_.insert(std::make_pair(appUid, bundleInfo));
+    {
+        std::lock_guard<std::mutex> lock(cachedBundleInfoMutex_);
+        cachedBundleInfoMap_.insert(std::make_pair(appUid, bundleInfo));
+    }
     return bundleInfo;
 }
 
@@ -767,6 +763,7 @@ void MediaMonitorPolicy::HandleUnderrunToEventVector(std::shared_ptr<EventBean> 
     }
 }
 
+// Note: eventVectorMutex_ must be held before calling this function
 void MediaMonitorPolicy::AddToEventVector(std::shared_ptr<EventBean> &bean)
 {
     MEDIA_LOG_D("Add to event vector");
@@ -775,6 +772,7 @@ void MediaMonitorPolicy::AddToEventVector(std::shared_ptr<EventBean> &bean)
 
 void MediaMonitorPolicy::WhetherToHiSysEvent()
 {
+    std::lock_guard<std::mutex> lockEventVector(eventVectorMutex_);
     MEDIA_LOG_D("eventVector size %{public}zu", eventVector_.size());
     if (eventVector_.size() >= static_cast<uint32_t>(aggregationFrequency_)) {
         std::unique_ptr<std::thread>  writeEventThread = std::make_unique<std::thread>(
@@ -804,11 +802,13 @@ void MediaMonitorPolicy::HandleToHiSysEvent()
 void MediaMonitorPolicy::HandleToSystemTonePlaybackEvent()
 {
     MEDIA_LOG_D("Handle to systemTone playback Event");
-    for (auto &desc : systemTonePlayEventVector_) {
-        if (desc == nullptr) {
-            continue;
-        }
-        TriggerSystemTonePlaybackTimeEvent(desc);
+    std::lock_guard<std::mutex> lockEventVector(eventVectorMutex_);
+    if (!systemTonePlayEventVector_.empty()) {
+        auto dfxResult = std::make_unique<DfxSystemTonePlaybackResult>();
+        CollectDataToDfxResult(dfxResult.get());
+        mediaEventBaseWriter_.WriteSystemTonePlayback(std::move(dfxResult));
+        systemTonePlayerCount_ = 0;
+        systemTonePlayEventVector_.clear();
     }
 }
 
