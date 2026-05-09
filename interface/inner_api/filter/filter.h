@@ -52,6 +52,7 @@ enum class FilterType {
     FILTERTYPE_SEI,
     TIMED_METADATA,
     FILTERTYPE_MAX,
+    WATERMARK,
 };
 
 enum class StreamType {
