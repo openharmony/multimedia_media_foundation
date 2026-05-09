@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023-2025 Huawei Device Co., Ltd.
+ * Copyright (c) 2023-2026 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -220,6 +220,9 @@ public:
 
     MediaSource(std::string uri, std::map<std::string, std::string> header);
 
+    // Use cachePath to create MediaSource
+    MediaSource(std::string uri, std::string cachePath);
+
     /// Destructor
     virtual ~MediaSource() = default;
 
@@ -253,6 +256,9 @@ public:
 
     bool GetenableOfflineCache();
 
+    // Get MediaSource cachePath
+    std::string GetCachePath() const;
+
     //std::shared_ptr<DataConsumer> GetDataConsumer() const;
 #ifndef OHOS_LITE
     std::shared_ptr<IMediaDataSource> GetDataSrc() const;
@@ -265,6 +271,7 @@ private:
     std::shared_ptr<PlayStrategy> playStrategy_ {};
     int32_t appUid_ {-1};
     bool enable_ {false};
+    std::string cachePath_ {};  // cache path
     //std::shared_ptr<DataConsumer> dataConsumer_ {};
 #ifndef OHOS_LITE
     std::shared_ptr<IMediaDataSource> dataSrc_ {};
