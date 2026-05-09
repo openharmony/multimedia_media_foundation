@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2021-2026 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -41,6 +41,13 @@ MediaSource::MediaSource(std::string uri, std::map<std::string, std::string> hea
     : uri_(std::move(uri)), header_(std::move(header))
 {
     MEDIA_LOG_I("MediaSource ctor called header");
+}
+
+// Use cachePath to create MediaSource
+MediaSource::MediaSource(std::string uri, std::string cachePath)
+    : uri_(std::move(uri)), cachePath_(std::move(cachePath))
+{
+    MEDIA_LOG_I("MediaSource ctor called cachePath");
 }
 
 SourceType MediaSource::GetSourceType() const
@@ -98,6 +105,12 @@ void MediaSource::SetMimeType(const std::string& mimeType)
 std::string MediaSource::GetMimeType() const
 {
     return mimeType_;
+}
+
+// Get MediaSource cache path
+std::string MediaSource::GetCachePath() const
+{
+    return cachePath_;
 }
 
 void MediaSource::SetSourceLoader(std::shared_ptr<IMediaSourceLoader> mediaSourceLoader)
