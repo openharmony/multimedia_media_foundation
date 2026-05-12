@@ -304,8 +304,9 @@ enum AACProfile : int32_t {
 };
 
 enum AudioEncodePtsMode : int32_t {
-    DEFAULT_ENCODE_PTS_MODE = 0,               // not use input pts, calculate by encoder, pts start in 0
-    GENERATE_ENCODE_PTS_BY_INPUT_MODE,         // use input pts, calculate start from input pts
+    DEFAULT_ENCODE_PTS_MODE = 0,               // encoder original behavior
+    ZERO_START_ENCODE_PTS_MODE = 1,             // pts start from zero
+    FIRST_INPUT_START_ENCODE_PTS_MODE = 2,      // pts start from first input pts
 };
 
 enum AudioEncodeBitrateMode : int32_t {
