@@ -97,7 +97,6 @@ DEFINE_METADATA_SETTER_GETTER_FUNC(VideoEncodeBFrameGopMode, int32_t)
 DEFINE_METADATA_SETTER_GETTER_FUNC(AudioChannelLayout, int64_t)
 DEFINE_METADATA_SETTER_GETTER_FUNC(GraphicPixelFormat, int32_t)
 DEFINE_METADATA_SETTER_GETTER_FUNC(VideoCodecScenario, int32_t)
-DEFINE_METADATA_SETTER_GETTER_FUNC(AudioEncodePtsMode, int32_t)
 
 #define  DEFINE_METADATA_SETTER_GETTER(tag, EnumType) {tag, std::make_pair(Set##EnumType, Get##EnumType)}
 
@@ -128,7 +127,6 @@ static std::map<TagType, std::pair<MetaSetterFunction, MetaGetterFunction>> g_me
     DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_ENCODER_TEMPORAL_GOP_REFERENCE_MODE, TemporalGopReferenceMode),
     DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_GRAPHIC_PIXEL_FORMAT, GraphicPixelFormat),
     DEFINE_METADATA_SETTER_GETTER(Tag::VIDEO_CODEC_SCENARIO, VideoCodecScenario),
-    DEFINE_METADATA_SETTER_GETTER(Tag::AUDIO_ENCODE_PTS_MODE, AudioEncodePtsMode),
 };
 
 using  MetaSetterInt64Function = std::function<bool(Meta&, const TagType&, int64_t&)>;
@@ -175,6 +173,7 @@ static std::vector<TagType> g_metadataBoolVector = {
     Tag::VIDEO_ENCODER_REPEAT_HEADER_BEFORE_SYNC_FRAMES,
     Tag::VIDEO_ENABLE_LOCAL_RELEASE,
     Tag::IS_GLTF,
+    Tag::AUDIO_ENCODER_ENABLE_SAMPLE_FORMAT_CONVERT,
 };
 
 bool SetMetaData(Meta& meta, const TagType& tag, int32_t value)
@@ -577,6 +576,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::VIDEO_ENCODER_REPEAT_HEADER_BEFORE_SYNC_FRAMES, defaultBool},
     {Tag::VIDEO_ENABLE_LOCAL_RELEASE, defaultBool},
     {Tag::IS_GLTF, defaultBool},
+    {Tag::AUDIO_ENCODER_ENABLE_SAMPLE_FORMAT_CONVERT, defaultBool},
     // Int64
     {Tag::MEDIA_FILE_SIZE, defaultUInt64},
     {Tag::MEDIA_POSITION, defaultUInt64},

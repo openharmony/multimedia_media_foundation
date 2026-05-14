@@ -543,6 +543,7 @@ map<TagType, bool> testBoolData = {
     {Tag::VIDEO_DECODER_OUTPUT_IN_DECODING_ORDER, true},
     {Tag::VIDEO_ENCODER_REPEAT_HEADER_BEFORE_SYNC_FRAMES, true},
     {Tag::IS_GLTF, true},
+    {Tag::AUDIO_ENCODER_ENABLE_SAMPLE_FORMAT_CONVERT, true},
 };
 
 

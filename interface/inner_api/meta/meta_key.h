@@ -177,6 +177,8 @@ public:
     static constexpr const char AUDIO_BITS_PER_RAW_SAMPLE[] = "bits_per_raw_sample"; ///< bits per raw sample
     static constexpr const char AUDIO_BITRATE_MODE[] = "audio_bitrate_mode"; ///< @see AudioEncodeBitrateMode
     static constexpr const char AUDIO_L2HC_VERSION[] = "audio_l2hc_version"; ///< int32_t, L2HC algo version
+    static constexpr const char AUDIO_ENCODER_ENABLE_SAMPLE_FORMAT_CONVERT[] =
+        "audio_encoder_enable_sample_format_convert"; ///< bool
 
     /* -------------------- audio specific tag -------------------- */
     static constexpr const char AUDIO_MPEG_VERSION[] = "audio.mpeg.version"; ///< mpeg version
