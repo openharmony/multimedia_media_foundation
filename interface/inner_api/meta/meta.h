@@ -188,6 +188,8 @@ public:
                            AnyValueType::UINT8_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_ENCODE_PTS_MODE, Plugins::AudioEncodePtsMode,
                            AnyValueType::INT32_T);
+    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_MAX_INPUT_BUFFER_SIZE, int32_t,
+                           AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_PIXEL_FORMAT, Plugins::VideoPixelFormat,
                            AnyValueType::INT32_T);
 //    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::MEDIA_SEEKABLE), Plugins::Seekable);
