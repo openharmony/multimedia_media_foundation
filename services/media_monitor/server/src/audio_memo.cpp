@@ -86,7 +86,8 @@ PreferredType AudioMemo::GetPreferredRenderType(int32_t streamUsage)
 {
     if (streamUsage == AudioStandard::STREAM_USAGE_VOICE_COMMUNICATION ||
         streamUsage == AudioStandard::STREAM_USAGE_VOICE_MODEM_COMMUNICATION ||
-        streamUsage == AudioStandard::STREAM_USAGE_VIDEO_COMMUNICATION) {
+        streamUsage == AudioStandard::STREAM_USAGE_VIDEO_COMMUNICATION ||
+        streamUsage == AudioStandard::STREAM_USAGE_INTERPHONE) {
         return CALL_RENDER;
     } else {
         return MEDIA_RENDER;
@@ -97,7 +98,8 @@ PreferredType AudioMemo::GetPreferredCaptureType(int32_t audioScene)
 {
     if (audioScene == AudioStandard::AUDIO_SCENE_PHONE_CALL ||
         audioScene == AudioStandard::AUDIO_SCENE_PHONE_CHAT ||
-        audioScene == AudioStandard::SOURCE_TYPE_VOICE_COMMUNICATION) {
+        audioScene == AudioStandard::SOURCE_TYPE_VOICE_COMMUNICATION ||
+        audioScene == AudioStandard::SOURCE_TYPE_INTERPHONE) {
         return CALL_CAPTURE;
     } else {
         return RECORD_CAPTURE;
