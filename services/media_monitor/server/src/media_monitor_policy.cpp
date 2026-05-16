@@ -93,6 +93,10 @@ void MediaMonitorPolicy::TimeFunc()
             HandleToVolumeSettingStatisticsEvent();
             lastTimeDefaultDaily_ = TimeUtils::GetCurSec();
         }
+        if (afterSleepTime_ - lastKaraokeFeatureTime_ >= karaokeFeatureSleepTime_) {
+            HandleToKaraokeFeatureEvent();
+            lastKaraokeFeatureTime_ = TimeUtils::GetCurSec();
+        }
     }
 }
 
@@ -1028,6 +1032,68 @@ void MediaMonitorPolicy::WriteInfo(int32_t fd, std::string &dumpString)
         dumpString += "    Remaining refresh time:" + std::to_string(oneDay - elapsedTime) + "min";
         dumpString += "\n";
         dumpString += "\n";
+    }
+}
+
+void MediaMonitorPolicy::AddToKaraokeFeatureVector(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Add to karaoke feature vector");
+    if (bean == nullptr) {
+        MEDIA_LOG_E("bean is nullptr");
+        return;
+    }
+
+    bool isExist = false;
+    int32_t uid = bean->GetIntValue("UID");
+    int32_t deviceType = bean->GetIntValue("DEVICE_TYPE");
+    int32_t feature = bean->GetIntValue("FEATURE");
+    uint64_t duration = bean->GetUint64Value("DURATION");
+
+    auto matcher = [uid, deviceType, feature](const std::shared_ptr<EventBean> &existBean) {
+        return existBean->GetIntValue("UID") == uid &&
+               existBean->GetIntValue("DEVICE_TYPE") == deviceType &&
+               existBean->GetIntValue("FEATURE") == feature;
+    };
+
+    std::lock_guard<std::mutex> lock(eventVectorMutex_);
+    auto it = std::find_if(karaokeFeatureEventVector_.begin(), karaokeFeatureEventVector_.end(), matcher);
+    if (it != karaokeFeatureEventVector_.end()) {
+        uint64_t totalDuration = (*it)->GetUint64Value("DURATION") + duration;
+        (*it)->UpdateUint64Map("DURATION", totalDuration);
+        isExist = true;
+    }
+
+    if (!isExist) {
+        std::shared_ptr<EventBean> newBean = std::make_shared<EventBean>(
+            ModuleId::AUDIO, EventId::KARAOKE_FEATURE_UTILIZATION,
+            EventType::FREQUENCY_AGGREGATION_EVENT);
+        newBean->Add("UID", uid);
+        newBean->Add("TYPE", bean->GetIntValue("TYPE"));
+        newBean->Add("FEATURE", feature);
+        newBean->Add("DEVICE_TYPE", deviceType);
+        newBean->Add("DURATION", duration);
+        karaokeFeatureEventVector_.push_back(newBean);
+    }
+}
+
+void MediaMonitorPolicy::HandleToKaraokeFeatureEvent()
+{
+    MEDIA_LOG_D("Handle to karaoke feature utilization event");
+
+    std::vector<std::shared_ptr<EventBean>> eventVector;
+    {
+        std::lock_guard<std::mutex> lock(eventVectorMutex_);
+        eventVector = karaokeFeatureEventVector_;
+        karaokeFeatureEventVector_.clear();
+    }
+
+    for (auto &bean : eventVector) {
+        if (bean == nullptr) {
+            continue;
+        }
+        BundleInfo bundleInfo = GetBundleInfo(bean->GetIntValue("UID"));
+        bean->Add("APP_NAME", bundleInfo.appName);
+        mediaEventBaseWriter_.WriteKaraokeFeatureStatistic(bean);
     }
 }
 

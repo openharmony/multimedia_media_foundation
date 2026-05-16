@@ -927,6 +927,28 @@ void MediaEventBaseWriter::WriteAudioLoopbackException(std::shared_ptr<EventBean
     }
 #endif
 }
+
+void MediaEventBaseWriter::WriteKaraokeFeatureStatistic(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Write karaoke feature statistic");
+    if (bean == nullptr) {
+        MEDIA_LOG_E("eventBean is nullptr");
+        return;
+    }
+#ifdef MONITOR_ENABLE_HISYSEVENT
+    int ret = HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO,
+        "KARAOKE_FEATURE_UTILIZATION",
+        HiviewDFX::HiSysEvent::EventType::STATISTIC,
+        "APP_NAME", bean->GetStringValue("APP_NAME"),
+        "TYPE", static_cast<uint8_t>(bean->GetIntValue("TYPE")),
+        "FEATURE", static_cast<uint8_t>(bean->GetIntValue("FEATURE")),
+        "DEVICE_TYPE", static_cast<uint32_t>(bean->GetIntValue("DEVICE_TYPE")),
+        "DURATION", bean->GetUint64Value("DURATION"));
+    if (ret) {
+        MEDIA_LOG_E("write event fail: KARAOKE_FEATURE_UTILIZATION, ret = %{public}d", ret);
+    }
+#endif
+}
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS
