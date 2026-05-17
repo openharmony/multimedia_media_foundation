@@ -111,6 +111,9 @@ enum EventId {
     AUDIO_PLAYBACK_ERROR = 56,
 
     UNIFIED_FAULT_CODE = 57,
+
+    // for karaoke feature utilization
+    KARAOKE_FEATURE_UTILIZATION = 58,
 };
 
 enum VolumeStatisticsSceneType : uint8_t {

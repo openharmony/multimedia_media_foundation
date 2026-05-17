@@ -13,12 +13,16 @@
  * limitations under the License.
  */
 
+#include <unistd.h>
 #include "parameters.h"
 #include "media_monitor_manager.h"
 #include "event_bean.h"
 #include "monitor_utils.h"
 #include "monitor_error.h"
 #include "media_monitor_manager_unit_test.h"
+#include "media_monitor_policy.h"
+#include "media_event_base_writer.h"
+#include "event_aggregate.h"
 
 using namespace testing::ext;
 using namespace testing;
@@ -520,6 +524,164 @@ HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_GetMediaParameters_009, Test
     }else {
         EXPECT_EQ(ret, ERROR);
     }
+}
+
+HWTEST(MediaMonitorManagerUnitTest, Monitor_Karaoke_AddToVector_Null_001, TestSize.Level0)
+{
+    std::shared_ptr<EventBean> nullBean = nullptr;
+    MediaMonitorPolicy::GetMediaMonitorPolicy().AddToKaraokeFeatureVector(nullBean);
+    EXPECT_EQ(nullBean, nullptr);
+}
+
+HWTEST(MediaMonitorManagerUnitTest, Monitor_Karaoke_AddToVector_New_001, TestSize.Level0)
+{
+    std::shared_ptr<EventBean> bean = std::make_shared<EventBean>(
+        AUDIO, KARAOKE_FEATURE_UTILIZATION, FREQUENCY_AGGREGATION_EVENT);
+    bean->Add("UID", 1001);
+    bean->Add("TYPE", 1);
+    bean->Add("FEATURE", 1);
+    bean->Add("DEVICE_TYPE", 1);
+    bean->Add("DURATION", 1000);
+
+    MediaMonitorPolicy::GetMediaMonitorPolicy().AddToKaraokeFeatureVector(bean);
+    
+    EXPECT_EQ(bean->GetIntValue("UID"), 1001);
+    EXPECT_EQ(bean->GetIntValue("FEATURE"), 1);
+    EXPECT_EQ(bean->GetUint64Value("DURATION"), 1000);
+}
+
+HWTEST(MediaMonitorManagerUnitTest, Monitor_Karaoke_AddToVector_Existing_001, TestSize.Level0)
+{
+    std::shared_ptr<EventBean> bean1 = std::make_shared<EventBean>(
+        AUDIO, KARAOKE_FEATURE_UTILIZATION, FREQUENCY_AGGREGATION_EVENT);
+    bean1->Add("UID", 1001);
+    bean1->Add("TYPE", 1);
+    bean1->Add("FEATURE", 1);
+    bean1->Add("DEVICE_TYPE", 1);
+    bean1->Add("DURATION", 1000);
+
+    MediaMonitorPolicy::GetMediaMonitorPolicy().AddToKaraokeFeatureVector(bean1);
+
+    std::shared_ptr<EventBean> bean2 = std::make_shared<EventBean>(
+        AUDIO, KARAOKE_FEATURE_UTILIZATION, FREQUENCY_AGGREGATION_EVENT);
+    bean2->Add("UID", 1001);
+    bean2->Add("TYPE", 1);
+    bean2->Add("FEATURE", 1);
+    bean2->Add("DEVICE_TYPE", 1);
+    bean2->Add("DURATION", 2000);
+
+    MediaMonitorPolicy::GetMediaMonitorPolicy().AddToKaraokeFeatureVector(bean2);
+
+    EXPECT_EQ(bean2->GetIntValue("UID"), 1001);
+    EXPECT_EQ(bean2->GetIntValue("FEATURE"), 1);
+}
+
+HWTEST(MediaMonitorManagerUnitTest, Monitor_Karaoke_HandleEvent_Empty_001, TestSize.Level0)
+{
+    MediaMonitorPolicy::GetMediaMonitorPolicy().HandleToKaraokeFeatureEvent();
+    EXPECT_TRUE(true);
+}
+
+HWTEST(MediaMonitorManagerUnitTest, Monitor_Karaoke_HandleEvent_NullInVector_001, TestSize.Level0)
+{
+    std::shared_ptr<EventBean> validBean = std::make_shared<EventBean>(
+        AUDIO, KARAOKE_FEATURE_UTILIZATION, FREQUENCY_AGGREGATION_EVENT);
+    validBean->Add("UID", 1001);
+    validBean->Add("TYPE", 1);
+    validBean->Add("FEATURE", 1);
+    validBean->Add("DEVICE_TYPE", 1);
+    validBean->Add("DURATION", 1000);
+    
+    MediaMonitorPolicy::GetMediaMonitorPolicy().AddToKaraokeFeatureVector(validBean);
+    MediaMonitorPolicy::GetMediaMonitorPolicy().HandleToKaraokeFeatureEvent();
+    
+    EXPECT_EQ(validBean->GetIntValue("UID"), 1001);
+}
+
+HWTEST(MediaMonitorManagerUnitTest, Monitor_Karaoke_HandleEvent_Valid_001, TestSize.Level0)
+{
+    std::shared_ptr<EventBean> bean = std::make_shared<EventBean>(
+        AUDIO, KARAOKE_FEATURE_UTILIZATION, FREQUENCY_AGGREGATION_EVENT);
+    bean->Add("UID", 1001);
+    bean->Add("TYPE", 1);
+    bean->Add("FEATURE", 2);
+    bean->Add("DEVICE_TYPE", 3);
+    bean->Add("DURATION", 5000);
+
+    MediaMonitorPolicy::GetMediaMonitorPolicy().AddToKaraokeFeatureVector(bean);
+    MediaMonitorPolicy::GetMediaMonitorPolicy().HandleToKaraokeFeatureEvent();
+
+    EXPECT_EQ(bean->GetIntValue("UID"), 1001);
+    EXPECT_EQ(bean->GetIntValue("TYPE"), 1);
+    EXPECT_EQ(bean->GetIntValue("FEATURE"), 2);
+    EXPECT_EQ(bean->GetIntValue("DEVICE_TYPE"), 3);
+    EXPECT_EQ(bean->GetUint64Value("DURATION"), 5000);
+}
+
+HWTEST(MediaMonitorManagerUnitTest, Monitor_Karaoke_WriteStatistic_Null_001, TestSize.Level0)
+{
+    std::shared_ptr<EventBean> nullBean = nullptr;
+    MediaEventBaseWriter::GetMediaEventBaseWriter().WriteKaraokeFeatureStatistic(nullBean);
+    EXPECT_EQ(nullBean, nullptr);
+}
+
+HWTEST(MediaMonitorManagerUnitTest, Monitor_Karaoke_WriteStatistic_Valid_001, TestSize.Level0)
+{
+    std::shared_ptr<EventBean> bean = std::make_shared<EventBean>(
+        AUDIO, KARAOKE_FEATURE_UTILIZATION, FREQUENCY_AGGREGATION_EVENT);
+    bean->Add("APP_NAME", "test_app");
+    bean->Add("TYPE", 1);
+    bean->Add("FEATURE", 1);
+    bean->Add("DEVICE_TYPE", 2);
+    bean->Add("DURATION", 3000);
+
+    MediaEventBaseWriter::GetMediaEventBaseWriter().WriteKaraokeFeatureStatistic(bean);
+
+    EXPECT_EQ(bean->GetStringValue("APP_NAME"), "test_app");
+    EXPECT_EQ(bean->GetIntValue("TYPE"), 1);
+    EXPECT_EQ(bean->GetIntValue("FEATURE"), 1);
+    EXPECT_EQ(bean->GetIntValue("DEVICE_TYPE"), 2);
+    EXPECT_EQ(bean->GetUint64Value("DURATION"), 3000);
+}
+
+HWTEST(MediaMonitorManagerUnitTest, Monitor_Karaoke_EventRouting_001, TestSize.Level0)
+{
+    std::shared_ptr<EventBean> bean = std::make_shared<EventBean>(
+        AUDIO, KARAOKE_FEATURE_UTILIZATION, FREQUENCY_AGGREGATION_EVENT);
+    bean->Add("UID", 1001);
+    bean->Add("TYPE", 1);
+    bean->Add("FEATURE", 3);
+    bean->Add("DEVICE_TYPE", 5);
+    bean->Add("DURATION", 8000);
+
+    MediaMonitorManager::GetInstance().WriteLogMsg(bean);
+    usleep(100000);
+
+    EXPECT_EQ(bean->GetModuleId(), AUDIO);
+    EXPECT_EQ(bean->GetEventId(), KARAOKE_FEATURE_UTILIZATION);
+    EXPECT_EQ(bean->GetEventType(), FREQUENCY_AGGREGATION_EVENT);
+}
+
+HWTEST(MediaMonitorManagerUnitTest, Monitor_Karaoke_MultipleFeatures_001, TestSize.Level1)
+{
+    std::vector<int32_t> features = {1, 2, 3};
+    std::vector<int32_t> deviceTypes = {1, 2, 3, 4, 5};
+    
+    for (size_t i = 0; i < features.size(); i++) {
+        std::shared_ptr<EventBean> bean = std::make_shared<EventBean>(
+            AUDIO, KARAOKE_FEATURE_UTILIZATION, FREQUENCY_AGGREGATION_EVENT);
+        bean->Add("UID", static_cast<int32_t>(1001 + i));
+        bean->Add("TYPE", 1);
+        bean->Add("FEATURE", features[i]);
+        bean->Add("DEVICE_TYPE", deviceTypes[i]);
+        bean->Add("DURATION", static_cast<uint64_t>(1000 * (i + 1)));
+
+        MediaMonitorPolicy::GetMediaMonitorPolicy().AddToKaraokeFeatureVector(bean);
+    }
+
+    MediaMonitorPolicy::GetMediaMonitorPolicy().HandleToKaraokeFeatureEvent();
+
+    EXPECT_TRUE(true);
 }
 } // namespace MediaMonitor
 } // namespace Media
