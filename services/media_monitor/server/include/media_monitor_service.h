@@ -101,6 +101,8 @@ public:
 
     ErrCode GetDmDeviceInfo(std::vector<MonitorDmDeviceInfo> &dmDeviceInfos, int32_t &funcResult) override;
 
+    ErrCode GetUnifiedFaultCodeRecords(std::vector<std::string> &faultRecords, int32_t &funcResult) override;
+
 private:
     MediaMonitorService();
     void MessageLoopFunc();

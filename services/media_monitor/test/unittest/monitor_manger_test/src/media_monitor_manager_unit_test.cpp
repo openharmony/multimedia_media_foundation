@@ -521,6 +521,46 @@ HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_GetMediaParameters_009, Test
         EXPECT_EQ(ret, ERROR);
     }
 }
+HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_GetUnifiedFaultCodeRecords_001, TestSize.Level0)
+{
+    int32_t selfUid = getuid();
+    setuid(1041);
+
+    std::shared_ptr<EventBean> bean = std::make_shared<EventBean>(
+        AUDIO, UNIFIED_FAULT_CODE, FAULT_EVENT);
+    bean->Add("ERROR_UID", 1001);
+    bean->Add("ERROR_CODE", 0x12345678);
+    bean->Add("ERROR_REASON", "test_error_reason");
+    MediaMonitorManager::GetInstance().WriteLogMsg(bean);
+    usleep(100000); // 100ms
+
+    std::vector<std::string> faultRecords;
+    MediaMonitorManager::GetInstance().GetUnifiedFaultCodeRecords(faultRecords);
+    EXPECT_GT(faultRecords.size(), 0);
+
+    std::string &record = faultRecords.back();
+    EXPECT_NE(record.find("uid:1001"), std::string::npos);
+    EXPECT_NE(record.find("errorCode:0x12345678"), std::string::npos);
+    EXPECT_NE(record.find("errorReason:test_error_reason"), std::string::npos);
+    EXPECT_NE(record.find("timestamp:"), std::string::npos);
+
+    setuid(selfUid);
+}
+
+HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_GetUnifiedFaultCodeRecords_002, TestSize.Level0)
+{
+    std::shared_ptr<EventBean> bean = std::make_shared<EventBean>(
+        AUDIO, UNIFIED_FAULT_CODE, FAULT_EVENT);
+    bean->Add("ERROR_UID", 1001);
+    bean->Add("ERROR_CODE", 0x12345678);
+    bean->Add("ERROR_REASON", "test_error_reason");
+    MediaMonitorManager::GetInstance().WriteLogMsg(bean);
+    usleep(100000); // 100ms
+
+    std::vector<std::string> faultRecords;
+    MediaMonitorManager::GetInstance().GetUnifiedFaultCodeRecords(faultRecords);
+    EXPECT_NE(faultRecords.size(), 0);
+}
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS

@@ -30,4 +30,5 @@ interface OHOS.Media.MediaMonitor.IMediaMonitor {
     int GetDistributedDeviceInfo([out] List<String> deviceInfos);
     int GetDistributedSceneInfo([out] String sceneInfo);
     int GetDmDeviceInfo([out] List<MonitorDmDeviceInfo> dmDeviceInfos);
+    int GetUnifiedFaultCodeRecords([out] List<String> faultRecords);
 }

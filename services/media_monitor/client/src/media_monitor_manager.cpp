@@ -392,6 +392,18 @@ void MediaMonitorManager::GetDmDeviceInfo(std::vector<MonitorDmDeviceInfo> &dmDe
     int32_t ret;
     proxy->GetDmDeviceInfo(dmDeviceInfos, ret);
 }
+
+void MediaMonitorManager::GetUnifiedFaultCodeRecords(std::vector<std::string> &faultRecords)
+{
+    MEDIA_LOG_D("Get unified fault code records");
+    sptr<IMediaMonitor> proxy = GetMediaMonitorProxy();
+    if (proxy == nullptr) {
+        MEDIA_LOG_E("proxy is nullptr.");
+        return;
+    }
+    int32_t ret;
+    proxy->GetUnifiedFaultCodeRecords(faultRecords, ret);
+}
 } // namespace MediaMonitor
 } // namespace Media
 } // namespace OHOS
