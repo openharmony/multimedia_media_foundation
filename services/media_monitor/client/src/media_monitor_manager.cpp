@@ -137,19 +137,19 @@ void MediaMonitorManager::WriteLogMsg(std::shared_ptr<EventBean> &bean)
         return;
     }
     FALSE_RETURN_MSG(bean != nullptr, "bean is nullptr.");
-    FALSE_RETURN_MSG(!ShouldSkipLogEventWhenHiviewUeDisable(bean->GetEventId()),
+    FALSE_RETURN_MSG(ShouldWriteLogEvent(bean->GetEventId()),
         "persist.hiviewdfx.hiview.ue.enable is false, skip write log msg, eventId %{public}d",
         bean->GetEventId());
     proxy->WriteLogMsg(*bean);
 }
 
-bool MediaMonitorManager::ShouldSkipLogEventWhenHiviewUeDisable(EventId eventId)
+bool MediaMonitorManager::ShouldWriteLogEvent(EventId eventId)
 {
-    if (hiviewUeEnable_.load(std::memory_order_relaxed)) {
-        return false;
+    if (!hiviewUeEnable_.load(std::memory_order_relaxed)) {
+        return std::find(HIVIEW_UE_DISABLE_SKIP_EVENT_LIST.begin(),
+            HIVIEW_UE_DISABLE_SKIP_EVENT_LIST.end(), eventId) == HIVIEW_UE_DISABLE_SKIP_EVENT_LIST.end();
     }
-    return std::find(HIVIEW_UE_DISABLE_SKIP_EVENT_LIST.begin(),
-        HIVIEW_UE_DISABLE_SKIP_EVENT_LIST.end(), eventId) != HIVIEW_UE_DISABLE_SKIP_EVENT_LIST.end();
+    return true;
 }
 
 void MediaMonitorManager::GetAudioRouteMsg(std::map<PreferredType, shared_ptr<MonitorDeviceInfo>> &preferredDevices)
