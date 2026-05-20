@@ -145,11 +145,9 @@ void MediaMonitorManager::WriteLogMsg(std::shared_ptr<EventBean> &bean)
 
 bool MediaMonitorManager::ShouldWriteLogEvent(EventId eventId)
 {
-    if (!hiviewUeEnable_.load(std::memory_order_relaxed)) {
-        return std::find(HIVIEW_UE_DISABLE_SKIP_EVENT_LIST.begin(),
-            HIVIEW_UE_DISABLE_SKIP_EVENT_LIST.end(), eventId) == HIVIEW_UE_DISABLE_SKIP_EVENT_LIST.end();
-    }
-    return true;
+    bool shouldWriteWhenHiviewUeDisable = std::find(HIVIEW_UE_DISABLE_SKIP_EVENT_LIST.begin(),
+        HIVIEW_UE_DISABLE_SKIP_EVENT_LIST.end(), eventId) == HIVIEW_UE_DISABLE_SKIP_EVENT_LIST.end();
+    return hiviewUeEnable_.load(std::memory_order_relaxed) || shouldWriteWhenHiviewUeDisable;
 }
 
 void MediaMonitorManager::GetAudioRouteMsg(std::map<PreferredType, shared_ptr<MonitorDeviceInfo>> &preferredDevices)
