@@ -38,20 +38,21 @@ constexpr float S32_SCALE = 2147483648.0f;
 
 inline int32_t ReadS24(const uint8_t* ptr)
 {
-    int32_t val = static_cast<int32_t>(ptr[0]) |
-                  (static_cast<int32_t>(ptr[1]) << 8) | // 8 bits
-                  (static_cast<int32_t>(ptr[2]) << 16); // 2 bytes 16 bits
-    if (val & 0x00800000) {
-        val |= 0xFF000000;
+    uint32_t val = static_cast<uint32_t>(ptr[0]) |
+                   (static_cast<uint32_t>(ptr[1]) << 8) |   // 1 byte: 8 bits
+                   (static_cast<uint32_t>(ptr[2]) << 16);   // 2 bytes: 16 bits
+    if (val & 0x00800000u) {
+        val |= 0xFF000000u;
     }
-    return val;
+    return static_cast<int32_t>(val);
 }
 
 inline void WriteS24(uint8_t* ptr, int32_t val)
 {
-    ptr[0] = static_cast<uint8_t>(val & 0xFF);
-    ptr[1] = static_cast<uint8_t>((val >> 8) & 0xFF); // 8 bits
-    ptr[2] = static_cast<uint8_t>((val >> 16) & 0xFF); // 2 bytes 16 bits
+    uint32_t uval = static_cast<uint32_t>(val);
+    ptr[0] = static_cast<uint8_t>(uval & 0xFFu);
+    ptr[1] = static_cast<uint8_t>((uval >> 8) & 0xFFu);    // 1 byte: 8 bits
+    ptr[2] = static_cast<uint8_t>((uval >> 16) & 0xFFu);   // 2 bytes: 16 bits
 }
 
 inline int16_t ReadS16(const uint8_t* ptr)
@@ -62,8 +63,9 @@ inline int16_t ReadS16(const uint8_t* ptr)
 
 inline void WriteS16(uint8_t* ptr, int16_t val)
 {
-    ptr[0] = static_cast<uint8_t>(val & 0xFF);
-    ptr[1] = static_cast<uint8_t>((val >> 8) & 0xFF); // 8
+    uint16_t uval = static_cast<uint16_t>(val);
+    ptr[0] = static_cast<uint8_t>(uval & 0xFFu);
+    ptr[1] = static_cast<uint8_t>((uval >> 8) & 0xFFu);    // 1 byte: 8 bits
 }
 
 inline int32_t ReadS32(const uint8_t* ptr)
@@ -76,10 +78,11 @@ inline int32_t ReadS32(const uint8_t* ptr)
 
 inline void WriteS32(uint8_t* ptr, int32_t val)
 {
-    ptr[0] = static_cast<uint8_t>(val & 0xFF);
-    ptr[1] = static_cast<uint8_t>((val >> 8) & 0xFF); // 1 byte: 8bit
-    ptr[2] = static_cast<uint8_t>((val >> 16) & 0xFF); // 2 byte: 16bit
-    ptr[3] = static_cast<uint8_t>((val >> 24) & 0xFF); // 3 byte: 24bit
+    uint32_t uval = static_cast<uint32_t>(val);
+    ptr[0] = static_cast<uint8_t>(uval & 0xFFu);
+    ptr[1] = static_cast<uint8_t>((uval >> 8) & 0xFFu);    // 1 byte: 8 bits
+    ptr[2] = static_cast<uint8_t>((uval >> 16) & 0xFFu);   // 2 bytes: 16 bits
+    ptr[3] = static_cast<uint8_t>((uval >> 24) & 0xFFu);   // 3 bytes: 24 bits
 }
 
 inline float ReadF32(const uint8_t* ptr)
@@ -122,7 +125,7 @@ inline float S32ToFloat(int32_t val)
 inline uint8_t FloatToU8(float val)
 {
     val = std::clamp(val, F32_MIN_VAL, F32_MAX_VAL);
-    int32_t result = static_cast<int32_t>(std::round(val * 127.5f + 127.5f)); // 127.5f round
+    int32_t result = static_cast<int32_t>(std::round(val * 128.0f + 128.0f)); // scale 128, same as U8ToFloat
     return static_cast<uint8_t>(std::clamp(result, 0, 255)); // 255 max U8
 }
 
@@ -227,13 +230,13 @@ Status ConvertFromS16LE(const uint8_t* input, size_t sampleCount,
             ConvertSamples(input, sampleCount, output, inputBytes, outputBytes,
                 [](const uint8_t* p) { return ReadS16(p); },
                 [](uint8_t* p, int32_t v) { WriteS24(p, v); },
-                [](int16_t v) { return static_cast<int32_t>(v) << 8; }); // 8: 1 byte to bit
+                [](int16_t v) { return static_cast<int32_t>(v) * 256; }); // 256: S16 to S24 scale
             break;
         case AudioSampleFormat::SAMPLE_S32LE:
             ConvertSamples(input, sampleCount, output, inputBytes, outputBytes,
                 [](const uint8_t* p) { return ReadS16(p); },
                 [](uint8_t* p, int32_t v) { WriteS32(p, v); },
-                [](int16_t v) { return static_cast<int32_t>(v) << 16; }); // 16: 2 bytes to bit
+                [](int16_t v) { return static_cast<int32_t>(v) * 65536; }); // 65536: S16 to S32 scale
             break;
         case AudioSampleFormat::SAMPLE_F32LE:
             ConvertSamples(input, sampleCount, output, inputBytes, outputBytes,
@@ -267,7 +270,7 @@ Status ConvertFromS24LE(const uint8_t* input, size_t sampleCount,
             ConvertSamples(input, sampleCount, output, inputBytes, outputBytes,
                 [](const uint8_t* p) { return ReadS24(p); },
                 [](uint8_t* p, int32_t v) { WriteS32(p, v); },
-                [](int32_t v) { return v << 8; }); // 8: 1 byte to bit
+                [](int32_t v) { return v * 256; }); // 256: S24 to S32 scale
             break;
         case AudioSampleFormat::SAMPLE_F32LE:
             ConvertSamples(input, sampleCount, output, inputBytes, outputBytes,
