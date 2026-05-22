@@ -99,8 +99,11 @@ Status WavDemuxerPlugin::GetMediaInfo(MediaInfo& mediaInfo)
         mediaInfo.tracks[0].Set<Tag::AUDIO_CHANNEL_LAYOUT>(AudioChannelLayout::STEREO);
     }
     int64_t duration = 0;
+    unint32_t divisor = 0;
+    divisor = wavHeader_.sampleRate * wavHeader_.bitsPerSample * wavHeader_.numChannels;
+    FALSE_RETURN_V_MES_E(divisor != 0, Status::ERROR_INVALID_DATA, "divisor is invalid");
     if (!Sec2HstTime((fileSize_ - wavHeadLength_) * 8 /     // 8
-        (wavHeader_.sampleRate * wavHeader_.bitsPerSample * wavHeader_.numChannels), duration)) {
+        divisor, duration)) {
         MEDIA_LOG_E("value overflow!");
     }
     mediaInfo.tracks[0].Set<Tag::MEDIA_DURATION>(duration);
