@@ -664,7 +664,8 @@ void MediaEventBaseWriter::WriteStreamOccupancy(std::shared_ptr<EventBean> &bean
         "PKGNAME", bean->GetStringValue("PKGNAME"),
         "STREAM_OR_SOURCE_TYPE", bean->GetIntValue("STREAM_OR_SOURCE_TYPE"),
         "START_TIME", static_cast<int64_t>(bean->GetUint64Value("START_TIME")),
-        "UPLOAD_TIME", static_cast<int64_t>(bean->GetUint64Value("UPLOAD_TIME")));
+        "UPLOAD_TIME", static_cast<int64_t>(bean->GetUint64Value("UPLOAD_TIME")),
+        "STANDBY_DURATION_S", static_cast<int32_t>(bean->GetIntValue("STANDBY_DURATION_S")));
     if (ret) {
         MEDIA_LOG_E("write event fail: STREAM_OCCUPANCY, ret = %{public}d", ret);
     }
