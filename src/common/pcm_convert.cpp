@@ -264,7 +264,7 @@ Status ConvertFromS24LE(const uint8_t* input, size_t sampleCount,
             ConvertSamples(input, sampleCount, output, inputBytes, outputBytes,
                 [](const uint8_t* p) { return ReadS24(p); },
                 [](uint8_t* p, int16_t v) { WriteS16(p, v); },
-                [](int32_t v) { return static_cast<int16_t>(v >> 8); }); // 8: 1 byte to bit
+                [](int32_t v) { return static_cast<int16_t>(v / 256); }); // 256: S24 to S16 scale
             break;
         case AudioSampleFormat::SAMPLE_S32LE:
             ConvertSamples(input, sampleCount, output, inputBytes, outputBytes,
@@ -298,13 +298,13 @@ Status ConvertFromS32LE(const uint8_t* input, size_t sampleCount,
             ConvertSamples(input, sampleCount, output, inputBytes, outputBytes,
                 [](const uint8_t* p) { return ReadS32(p); },
                 [](uint8_t* p, int16_t v) { WriteS16(p, v); },
-                [](int32_t v) { return static_cast<int16_t>(v >> 16); }); // 16: 2 bytes to bit
+                [](int32_t v) { return static_cast<int16_t>(v / 65536); }); // 65536: S32 to S16 scale
             break;
         case AudioSampleFormat::SAMPLE_S24LE:
             ConvertSamples(input, sampleCount, output, inputBytes, outputBytes,
                 [](const uint8_t* p) { return ReadS32(p); },
                 [](uint8_t* p, int32_t v) { WriteS24(p, v); },
-                [](int32_t v) { return v >> 8; }); // 8: 1 byte to bit
+                [](int32_t v) { return v / 256; }); // 256: S32 to S24 scale
             break;
         case AudioSampleFormat::SAMPLE_F32LE:
             ConvertSamples(input, sampleCount, output, inputBytes, outputBytes,
