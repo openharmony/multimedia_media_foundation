@@ -153,6 +153,13 @@ inline int32_t FloatToS32(float val)
         static_cast<int64_t>(2147483647))); // ~ 2147483647
 }
 
+template<int32_t Divisor>
+inline int32_t FloorDiv(int32_t v)
+{
+    constexpr int32_t adjustment = Divisor - 1; // adjustment for floor division
+    return v < 0 ? static_cast<int32_t>((static_cast<int64_t>(v) - adjustment) / Divisor) : v / Divisor;
+}
+
 bool IsSupportedInterleavedFormat(AudioSampleFormat format)
 {
     switch (format) {
@@ -264,7 +271,7 @@ Status ConvertFromS24LE(const uint8_t* input, size_t sampleCount,
             ConvertSamples(input, sampleCount, output, inputBytes, outputBytes,
                 [](const uint8_t* p) { return ReadS24(p); },
                 [](uint8_t* p, int16_t v) { WriteS16(p, v); },
-                [](int32_t v) { return static_cast<int16_t>(v / 256); }); // 256: S24 to S16 scale
+                [](int32_t v) { return static_cast<int16_t>(FloorDiv<256>(v)); }); // 256: S24 to S16 scale
             break;
         case AudioSampleFormat::SAMPLE_S32LE:
             ConvertSamples(input, sampleCount, output, inputBytes, outputBytes,
@@ -298,13 +305,13 @@ Status ConvertFromS32LE(const uint8_t* input, size_t sampleCount,
             ConvertSamples(input, sampleCount, output, inputBytes, outputBytes,
                 [](const uint8_t* p) { return ReadS32(p); },
                 [](uint8_t* p, int16_t v) { WriteS16(p, v); },
-                [](int32_t v) { return static_cast<int16_t>(v / 65536); }); // 65536: S32 to S16 scale
+                [](int32_t v) { return static_cast<int16_t>(FloorDiv<65536>(v)); }); // 65536: S32 to S16 scale
             break;
         case AudioSampleFormat::SAMPLE_S24LE:
             ConvertSamples(input, sampleCount, output, inputBytes, outputBytes,
                 [](const uint8_t* p) { return ReadS32(p); },
                 [](uint8_t* p, int32_t v) { WriteS24(p, v); },
-                [](int32_t v) { return v / 256; }); // 256: S32 to S24 scale
+                [](int32_t v) { return FloorDiv<256>(v); }); // 256: S32 to S24 scale
             break;
         case AudioSampleFormat::SAMPLE_F32LE:
             ConvertSamples(input, sampleCount, output, inputBytes, outputBytes,
