@@ -23,7 +23,6 @@
 #include "filter/filter.h"
 #include "osal/task/mutex.h"
 
-
 namespace OHOS {
 namespace Media {
 namespace Pipeline {
