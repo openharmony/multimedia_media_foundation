@@ -49,36 +49,64 @@ public:
     OH_AVErrCode Init(const Format &format)
     {
         std::lock_guard<std::mutex> lock(mutex_);
-        auto ptr = ::dlopen("libAudioVividMetaBuilder.z.so", RTLD_NOW | RTLD_LOCAL);
-        FALSE_RETURN_V_MSG_E(ptr != nullptr, AV_ERR_UNSUPPORT, "lib not found, not support audio vivid metadata");
-
-        CreateBuilderFunc createFunc =
-            reinterpret_cast<CreateBuilderFunc>(::dlsym(ptr, "CreateAudioVividMetaBuilder"));
-        DestroyBuilderFunc destroyFunc =
-            reinterpret_cast<DestroyBuilderFunc>(::dlsym(ptr, "DestroyAudioVividMetaBuilder"));
-        if (!createFunc || !destroyFunc) {
-            ::dlclose(ptr);
-            MEDIA_LOG_E("audio vivid meta load func failed!");
-            return AV_ERR_UNKNOWN;
-        }
-        builder_ = createFunc();
-        if (!builder_) {
-            MEDIA_LOG_E("audio vivid builder nullptr");
-            ::dlclose(ptr);
-            return AV_ERR_UNKNOWN;
+        OH_AVErrCode loadRet = LoadAndCreateBuilder();
+        if (loadRet != AV_ERR_OK) {
+            return loadRet;
         }
         auto meta = const_cast<Format &>(format).GetMeta();
         int32_t ret = builder_->Init(meta);
         if (ret != 0) {
             MEDIA_LOG_E("audio vivid builder init fail");
-            destroyFunc(builder_);
-            builder_ = nullptr;
-            ::dlclose(ptr);
+            CleanupAfterInitFail();
             return AV_ERR_INVALID_VAL;
         }
-        library_ = ptr;
-        destroyFunc_ = destroyFunc;
         MEDIA_LOG_I("audio vivid builder init");
+        return AV_ERR_OK;
+    }
+
+    OH_AVErrCode InitEmpty()
+    {
+        std::lock_guard<std::mutex> lock(mutex_);
+        OH_AVErrCode loadRet = LoadAndCreateBuilder();
+        if (loadRet != AV_ERR_OK) {
+            return loadRet;
+        }
+        if (builder_->InitEmpty() != 0) {
+            MEDIA_LOG_E("audio vivid builder InitEmpty fail");
+            CleanupAfterInitFail();
+            return AV_ERR_UNSUPPORT;
+        }
+        MEDIA_LOG_I("audio vivid builder init empty");
+        return AV_ERR_OK;
+    }
+
+    OH_AVErrCode UpdateBaseMeta(const uint8_t *buffer, int32_t len)
+    {
+        std::lock_guard<std::mutex> lock(mutex_);
+        FALSE_RETURN_V_MSG_E(builder_ != nullptr, AV_ERR_INVALID_STATE, "builder not init!");
+        if (builder_->UpdateBaseMeta(buffer, len) != 0) {
+            return AV_ERR_INVALID_VAL;
+        }
+        return AV_ERR_OK;
+    }
+
+    OH_AVErrCode AddObject(int32_t &objectIndex)
+    {
+        std::lock_guard<std::mutex> lock(mutex_);
+        FALSE_RETURN_V_MSG_E(builder_ != nullptr, AV_ERR_INVALID_STATE, "builder not init!");
+        if (builder_->AddObject(objectIndex) != 0) {
+            return AV_ERR_UNKNOWN;
+        }
+        return AV_ERR_OK;
+    }
+
+    OH_AVErrCode RemoveObject(int32_t objectIndex)
+    {
+        std::lock_guard<std::mutex> lock(mutex_);
+        FALSE_RETURN_V_MSG_E(builder_ != nullptr, AV_ERR_INVALID_STATE, "builder not init!");
+        if (builder_->RemoveObject(objectIndex) != 0) {
+            return AV_ERR_INVALID_VAL;
+        }
         return AV_ERR_OK;
     }
 
@@ -131,6 +159,43 @@ public:
     }
 
 private:
+    OH_AVErrCode LoadAndCreateBuilder()
+    {
+        auto ptr = ::dlopen("libAudioVividMetaBuilder.z.so", RTLD_NOW | RTLD_LOCAL);
+        FALSE_RETURN_V_MSG_E(ptr != nullptr, AV_ERR_UNSUPPORT, "lib not found, not support audio vivid metadata");
+
+        CreateBuilderFunc createFunc =
+            reinterpret_cast<CreateBuilderFunc>(::dlsym(ptr, "CreateAudioVividMetaBuilder"));
+        DestroyBuilderFunc destroyFunc =
+            reinterpret_cast<DestroyBuilderFunc>(::dlsym(ptr, "DestroyAudioVividMetaBuilder"));
+        if (!createFunc || !destroyFunc) {
+            ::dlclose(ptr);
+            MEDIA_LOG_E("audio vivid meta load func failed!");
+            return AV_ERR_UNKNOWN;
+        }
+        builder_ = createFunc();
+        if (!builder_) {
+            MEDIA_LOG_E("audio vivid builder nullptr");
+            ::dlclose(ptr);
+            return AV_ERR_UNKNOWN;
+        }
+        library_ = ptr;
+        destroyFunc_ = destroyFunc;
+        return AV_ERR_OK;
+    }
+
+    void CleanupAfterInitFail()
+    {
+        if (builder_ && destroyFunc_) {
+            destroyFunc_(builder_);
+            builder_ = nullptr;
+        }
+        if (library_) {
+            ::dlclose(library_);
+            library_ = nullptr;
+        }
+    }
+
     AudioMetaBuilderBase *builder_ = nullptr;
     void *library_ = nullptr;
     DestroyBuilderFunc destroyFunc_ = nullptr;
@@ -206,4 +271,48 @@ OH_AVErrCode OH_AudioVividMetaBuilder_Destroy(OH_AudioVividMetaBuilder *builder)
     AudioVividMetaManager *innerBuilder = reinterpret_cast<AudioVividMetaManager *>(builder);
     delete innerBuilder;
     return AV_ERR_OK;
+}
+
+OH_AVErrCode OH_AudioVividMetaBuilder_CreateEmptyBuilder(OH_AudioVividMetaBuilder **builder)
+{
+    FALSE_RETURN_V_MSG_E(builder != nullptr, AV_ERR_INVALID_VAL, "input builder is nullptr!");
+    AudioVividMetaManager *innerBuilder = new(std::nothrow) AudioVividMetaManager();
+    FALSE_RETURN_V_MSG_E(innerBuilder != nullptr, AV_ERR_UNKNOWN, "create inner builder error!");
+    OH_AVErrCode ret = innerBuilder->InitEmpty();
+    if (ret != AV_ERR_OK) {
+        delete innerBuilder;
+        return ret;
+    }
+    *builder = reinterpret_cast<OH_AudioVividMetaBuilder *>(innerBuilder);
+    return AV_ERR_OK;
+}
+
+OH_AVErrCode OH_AudioVividMetaBuilder_UpdateBaseMeta(OH_AudioVividMetaBuilder *builder, const uint8_t *buffer,
+    int32_t len)
+{
+    FALSE_RETURN_V_MSG_E(builder != nullptr, AV_ERR_INVALID_VAL, "input builder is nullptr!");
+    FALSE_RETURN_V_MSG_E(buffer != nullptr, AV_ERR_INVALID_VAL, "input buffer is nullptr!");
+    FALSE_RETURN_V_MSG_E(len > 0, AV_ERR_INVALID_VAL, "input len is invalid!");
+    AudioVividMetaManager *innerBuilder = reinterpret_cast<AudioVividMetaManager *>(builder);
+    return innerBuilder->UpdateBaseMeta(buffer, len);
+}
+
+OH_AVErrCode OH_AudioVividMetaBuilder_AddObject(OH_AudioVividMetaBuilder *builder, int32_t *objectIndex)
+{
+    FALSE_RETURN_V_MSG_E(builder != nullptr, AV_ERR_INVALID_VAL, "input builder is nullptr!");
+    FALSE_RETURN_V_MSG_E(objectIndex != nullptr, AV_ERR_INVALID_VAL, "input objectIndex is nullptr!");
+    AudioVividMetaManager *innerBuilder = reinterpret_cast<AudioVividMetaManager *>(builder);
+    int32_t idx = 0;
+    OH_AVErrCode ret = innerBuilder->AddObject(idx);
+    if (ret == AV_ERR_OK) {
+        *objectIndex = idx;
+    }
+    return ret;
+}
+
+OH_AVErrCode OH_AudioVividMetaBuilder_RemoveObject(OH_AudioVividMetaBuilder *builder, int32_t objectIndex)
+{
+    FALSE_RETURN_V_MSG_E(builder != nullptr, AV_ERR_INVALID_VAL, "input builder is nullptr!");
+    AudioVividMetaManager *innerBuilder = reinterpret_cast<AudioVividMetaManager *>(builder);
+    return innerBuilder->RemoveObject(objectIndex);
 }
