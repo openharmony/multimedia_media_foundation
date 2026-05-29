@@ -249,6 +249,77 @@ OH_AVErrCode OH_AudioVividMetaBuilder_GetMeta(const OH_AudioVividMetaBuilder *bu
  */
 OH_AVErrCode OH_AudioVividMetaBuilder_Destroy(OH_AudioVividMetaBuilder *builder);
 
+/**
+ * @brief Creates an empty Audio Vivid metadata builder.
+ *
+ * This function is used for merging metadata scenarios. After creating an empty builder,
+ * you can update base metadata by calling {@link OH_AudioVividMetaBuilder_UpdateBaseMeta},
+ * then add, modify, or remove objects.
+ *
+ * @param builder Output Parameter. Pointer to retrieve the OH_AudioVividMetaBuilder instance pointer.
+ * @return Returns AV_ERR_OK if successful, otherwise returns a specific error code, refer to {@link OH_AVErrCode}.
+ * {@link AV_ERR_INVALID_VAL}, builder is nullptr.
+ * {@link AV_ERR_UNSUPPORT}, current device not support this function.
+ * {@link AV_ERR_UNKNOWN}, create builder fail with unknown error. For details, check logs.
+ * @note **Lifecycle Management:**
+ *      The instance created by this function must be manually released by calling
+ *      {@link OH_AudioVividMetaBuilder_Destroy} when it is no longer needed to
+ *      prevent memory leaks.
+ * @since 26.0.0
+ */
+OH_AVErrCode OH_AudioVividMetaBuilder_CreateEmptyBuilder(OH_AudioVividMetaBuilder **builder);
+
+/**
+ * @brief Updates the base metadata of the builder.
+ *
+ * The buffer contains complete Audio Vivid metadata, which may include static metadata
+ * and/or dynamic metadata. The builder will retain the soundbed and object information
+ * from the base metadata.
+ *
+ * @param builder Pointer to the OH_AudioVividMetaBuilder.
+ * @param buffer Pointer to the buffer containing the base metadata data.
+ * @param len Length of the buffer in bytes.
+ * @return Returns AV_ERR_OK if successful, otherwise returns a specific error code, refer to {@link OH_AVErrCode}.
+ * {@link AV_ERR_INVALID_VAL}, builder is nullptr or invalid, buffer is nullptr or len is invalid.
+ * @note **Constraint:**
+ *      The total number of soundbed channels plus base objects plus added objects must not exceed 16.
+ * @since 26.0.0
+ */
+OH_AVErrCode OH_AudioVividMetaBuilder_UpdateBaseMeta(OH_AudioVividMetaBuilder *builder, const uint8_t *buffer,
+    int32_t len);
+
+/**
+ * @brief Adds a new audio object to the builder.
+ *
+ * After adding an object, you can update its position and gain using
+ * {@link OH_AudioVividMetaBuilder_UpdateObjectPos} and {@link OH_AudioVividMetaBuilder_UpdateObjectGain}.
+ *
+ * @param builder Pointer to the OH_AudioVividMetaBuilder.
+ * @param objectIndex Output parameter. Pointer to receive the index of the newly added object.
+ * @return Returns AV_ERR_OK if successful, otherwise returns a specific error code, refer to {@link OH_AVErrCode}.
+ * {@link AV_ERR_INVALID_VAL}, builder is nullptr or invalid, objectIndex is nullptr.
+ * {@link AV_ERR_UNKNOWN}, add object fail with unknown error. For details, check logs.
+ * @note **Constraint:**
+ *      The total number of soundbed channels plus base objects plus added objects must not exceed 16.
+ * @since 26.0.0
+ */
+OH_AVErrCode OH_AudioVividMetaBuilder_AddObject(OH_AudioVividMetaBuilder *builder, int32_t *objectIndex);
+
+/**
+ * @brief Removes an audio object from the builder.
+ *
+ * Only objects added by {@link OH_AudioVividMetaBuilder_AddObject} can be removed.
+ * Base objects from the base metadata cannot be removed. After removal, the indices
+ * of remaining objects remain unchanged.
+ *
+ * @param builder Pointer to the OH_AudioVividMetaBuilder.
+ * @param objectIndex Index of the audio object to remove.
+ * @return Returns AV_ERR_OK if successful, otherwise returns a specific error code, refer to {@link OH_AVErrCode}.
+ * {@link AV_ERR_INVALID_VAL}, builder is nullptr or invalid, objectIndex is invalid.
+ * @since 26.0.0
+ */
+OH_AVErrCode OH_AudioVividMetaBuilder_RemoveObject(OH_AudioVividMetaBuilder *builder, int32_t objectIndex);
+
 #ifdef __cplusplus
 }
 #endif

@@ -864,3 +864,498 @@ HWTEST_F(AudioVividUnitTest, AudioVivid_MultipleObjects_001, TestSize.Level1)
     
     OH_AVFormat_Destroy(testFormat);
 }
+
+/**
+ * @tc.name: AudioVivid_CreateEmptyBuilder_001
+ * @tc.desc: Create empty builder with null builder pointer
+ * @tc.type: FUNC
+ */
+HWTEST_F(AudioVividUnitTest, AudioVivid_CreateEmptyBuilder_001, TestSize.Level1)
+{
+    OH_AVErrCode ret = OH_AudioVividMetaBuilder_CreateEmptyBuilder(nullptr);
+    EXPECT_EQ(AV_ERR_INVALID_VAL, ret);
+}
+
+/**
+ * @tc.name: AudioVivid_CreateEmptyBuilder_002
+ * @tc.desc: Create empty builder with valid pointer, lib availability check
+ * @tc.type: FUNC
+ */
+HWTEST_F(AudioVividUnitTest, AudioVivid_CreateEmptyBuilder_002, TestSize.Level1)
+{
+    bool libAvailable = IsAudioVividLibAvailable();
+
+    OH_AudioVividMetaBuilder *builder = nullptr;
+    OH_AVErrCode ret = OH_AudioVividMetaBuilder_CreateEmptyBuilder(&builder);
+
+    if (libAvailable) {
+        EXPECT_EQ(AV_ERR_OK, ret);
+        EXPECT_NE(nullptr, builder);
+        if (builder != nullptr) {
+            OH_AudioVividMetaBuilder_Destroy(builder);
+        }
+    } else {
+        EXPECT_EQ(AV_ERR_UNSUPPORT, ret);
+        EXPECT_EQ(nullptr, builder);
+    }
+}
+
+/**
+ * @tc.name: AudioVivid_CreateEmptyBuilder_Destroy_001
+ * @tc.desc: Create empty builder then destroy
+ * @tc.type: FUNC
+ */
+HWTEST_F(AudioVividUnitTest, AudioVivid_CreateEmptyBuilder_Destroy_001, TestSize.Level1)
+{
+    bool libAvailable = IsAudioVividLibAvailable();
+
+    OH_AudioVividMetaBuilder *builder = nullptr;
+    OH_AVErrCode ret = OH_AudioVividMetaBuilder_CreateEmptyBuilder(&builder);
+
+    if (libAvailable) {
+        EXPECT_EQ(AV_ERR_OK, ret);
+        EXPECT_NE(nullptr, builder);
+        if (builder != nullptr) {
+            ret = OH_AudioVividMetaBuilder_Destroy(builder);
+            EXPECT_EQ(AV_ERR_OK, ret);
+        }
+    } else {
+        EXPECT_EQ(AV_ERR_UNSUPPORT, ret);
+    }
+}
+
+/**
+ * @tc.name: AudioVivid_UpdateBaseMeta_001
+ * @tc.desc: Update base meta with null builder
+ * @tc.type: FUNC
+ */
+HWTEST_F(AudioVividUnitTest, AudioVivid_UpdateBaseMeta_001, TestSize.Level1)
+{
+    uint8_t buffer[64] = {0};
+    OH_AVErrCode ret = OH_AudioVividMetaBuilder_UpdateBaseMeta(nullptr, buffer, sizeof(buffer));
+    EXPECT_EQ(AV_ERR_INVALID_VAL, ret);
+}
+
+/**
+ * @tc.name: AudioVivid_UpdateBaseMeta_002
+ * @tc.desc: Update base meta with null buffer
+ * @tc.type: FUNC
+ */
+HWTEST_F(AudioVividUnitTest, AudioVivid_UpdateBaseMeta_002, TestSize.Level1)
+{
+    bool libAvailable = IsAudioVividLibAvailable();
+
+    OH_AudioVividMetaBuilder *builder = nullptr;
+    OH_AVErrCode ret = OH_AudioVividMetaBuilder_CreateEmptyBuilder(&builder);
+
+    if (libAvailable) {
+        EXPECT_EQ(AV_ERR_OK, ret);
+        EXPECT_NE(nullptr, builder);
+
+        if (builder != nullptr) {
+            ret = OH_AudioVividMetaBuilder_UpdateBaseMeta(builder, nullptr, 64);
+            EXPECT_EQ(AV_ERR_INVALID_VAL, ret);
+
+            OH_AudioVividMetaBuilder_Destroy(builder);
+        }
+    } else {
+        EXPECT_EQ(AV_ERR_UNSUPPORT, ret);
+    }
+}
+
+/**
+ * @tc.name: AudioVivid_UpdateBaseMeta_003
+ * @tc.desc: Update base meta with zero length
+ * @tc.type: FUNC
+ */
+HWTEST_F(AudioVividUnitTest, AudioVivid_UpdateBaseMeta_003, TestSize.Level1)
+{
+    bool libAvailable = IsAudioVividLibAvailable();
+
+    OH_AudioVividMetaBuilder *builder = nullptr;
+    OH_AVErrCode ret = OH_AudioVividMetaBuilder_CreateEmptyBuilder(&builder);
+
+    if (libAvailable) {
+        EXPECT_EQ(AV_ERR_OK, ret);
+        EXPECT_NE(nullptr, builder);
+
+        if (builder != nullptr) {
+            uint8_t buffer[64] = {0};
+            ret = OH_AudioVividMetaBuilder_UpdateBaseMeta(builder, buffer, 0);
+            EXPECT_EQ(AV_ERR_INVALID_VAL, ret);
+
+            OH_AudioVividMetaBuilder_Destroy(builder);
+        }
+    } else {
+        EXPECT_EQ(AV_ERR_UNSUPPORT, ret);
+    }
+}
+
+/**
+ * @tc.name: AudioVivid_AddObject_001
+ * @tc.desc: Add object with null builder
+ * @tc.type: FUNC
+ */
+HWTEST_F(AudioVividUnitTest, AudioVivid_AddObject_001, TestSize.Level1)
+{
+    int32_t objectIndex = 0;
+    OH_AVErrCode ret = OH_AudioVividMetaBuilder_AddObject(nullptr, &objectIndex);
+    EXPECT_EQ(AV_ERR_INVALID_VAL, ret);
+}
+
+/**
+ * @tc.name: AudioVivid_AddObject_002
+ * @tc.desc: Add object with null objectIndex
+ * @tc.type: FUNC
+ */
+HWTEST_F(AudioVividUnitTest, AudioVivid_AddObject_002, TestSize.Level1)
+{
+    bool libAvailable = IsAudioVividLibAvailable();
+
+    OH_AudioVividMetaBuilder *builder = nullptr;
+    OH_AVErrCode ret = OH_AudioVividMetaBuilder_CreateEmptyBuilder(&builder);
+
+    if (libAvailable) {
+        EXPECT_EQ(AV_ERR_OK, ret);
+        EXPECT_NE(nullptr, builder);
+
+        if (builder != nullptr) {
+            ret = OH_AudioVividMetaBuilder_AddObject(builder, nullptr);
+            EXPECT_EQ(AV_ERR_INVALID_VAL, ret);
+
+            OH_AudioVividMetaBuilder_Destroy(builder);
+        }
+    } else {
+        EXPECT_EQ(AV_ERR_UNSUPPORT, ret);
+    }
+}
+
+/**
+ * @tc.name: AudioVivid_AddObject_003
+ * @tc.desc: Add single object and verify objectIndex output
+ * @tc.type: FUNC
+ */
+HWTEST_F(AudioVividUnitTest, AudioVivid_AddObject_003, TestSize.Level1)
+{
+    bool libAvailable = IsAudioVividLibAvailable();
+
+    OH_AudioVividMetaBuilder *builder = nullptr;
+    OH_AVErrCode ret = OH_AudioVividMetaBuilder_CreateEmptyBuilder(&builder);
+
+    if (libAvailable) {
+        EXPECT_EQ(AV_ERR_OK, ret);
+        EXPECT_NE(nullptr, builder);
+
+        if (builder != nullptr) {
+            int32_t objectIndex = -1;
+            ret = OH_AudioVividMetaBuilder_AddObject(builder, &objectIndex);
+            EXPECT_EQ(AV_ERR_OK, ret);
+            EXPECT_GE(objectIndex, 0);
+
+            OH_AudioVividMetaBuilder_Destroy(builder);
+        }
+    } else {
+        EXPECT_EQ(AV_ERR_UNSUPPORT, ret);
+    }
+}
+
+/**
+ * @tc.name: AudioVivid_AddObject_004
+ * @tc.desc: Add multiple objects, verify indices are non-negative
+ * @tc.type: FUNC
+ */
+HWTEST_F(AudioVividUnitTest, AudioVivid_AddObject_004, TestSize.Level1)
+{
+    bool libAvailable = IsAudioVividLibAvailable();
+
+    OH_AudioVividMetaBuilder *builder = nullptr;
+    OH_AVErrCode ret = OH_AudioVividMetaBuilder_CreateEmptyBuilder(&builder);
+
+    if (libAvailable) {
+        EXPECT_EQ(AV_ERR_OK, ret);
+        EXPECT_NE(nullptr, builder);
+
+        if (builder != nullptr) {
+            for (int32_t i = 0; i < OBJECT_NUMBER; i++) {
+                int32_t objectIndex = -1;
+                ret = OH_AudioVividMetaBuilder_AddObject(builder, &objectIndex);
+                EXPECT_EQ(AV_ERR_OK, ret);
+                EXPECT_GE(objectIndex, 0);
+            }
+            OH_AudioVividMetaBuilder_Destroy(builder);
+        }
+    } else {
+        EXPECT_EQ(AV_ERR_UNSUPPORT, ret);
+    }
+}
+
+/**
+ * @tc.name: AudioVivid_RemoveObject_001
+ * @tc.desc: Remove object with null builder
+ * @tc.type: FUNC
+ */
+HWTEST_F(AudioVividUnitTest, AudioVivid_RemoveObject_001, TestSize.Level1)
+{
+    OH_AVErrCode ret = OH_AudioVividMetaBuilder_RemoveObject(nullptr, 0);
+    EXPECT_EQ(AV_ERR_INVALID_VAL, ret);
+}
+
+/**
+ * @tc.name: AudioVivid_RemoveObject_002
+ * @tc.desc: Add then remove object
+ * @tc.type: FUNC
+ */
+HWTEST_F(AudioVividUnitTest, AudioVivid_RemoveObject_002, TestSize.Level1)
+{
+    bool libAvailable = IsAudioVividLibAvailable();
+
+    OH_AudioVividMetaBuilder *builder = nullptr;
+    OH_AVErrCode ret = OH_AudioVividMetaBuilder_CreateEmptyBuilder(&builder);
+
+    if (libAvailable) {
+        EXPECT_EQ(AV_ERR_OK, ret);
+        EXPECT_NE(nullptr, builder);
+
+        if (builder != nullptr) {
+            int32_t objectIndex = -1;
+            ret = OH_AudioVividMetaBuilder_AddObject(builder, &objectIndex);
+            EXPECT_EQ(AV_ERR_OK, ret);
+            EXPECT_GE(objectIndex, 0);
+
+            ret = OH_AudioVividMetaBuilder_RemoveObject(builder, objectIndex);
+            EXPECT_EQ(AV_ERR_OK, ret);
+
+            OH_AudioVividMetaBuilder_Destroy(builder);
+        }
+    } else {
+        EXPECT_EQ(AV_ERR_UNSUPPORT, ret);
+    }
+}
+
+/**
+ * @tc.name: AudioVivid_RemoveObject_003
+ * @tc.desc: Remove object with invalid index (not previously added)
+ * @tc.type: FUNC
+ */
+HWTEST_F(AudioVividUnitTest, AudioVivid_RemoveObject_003, TestSize.Level1)
+{
+    bool libAvailable = IsAudioVividLibAvailable();
+
+    OH_AudioVividMetaBuilder *builder = nullptr;
+    OH_AVErrCode ret = OH_AudioVividMetaBuilder_CreateEmptyBuilder(&builder);
+
+    if (libAvailable) {
+        EXPECT_EQ(AV_ERR_OK, ret);
+        EXPECT_NE(nullptr, builder);
+
+        if (builder != nullptr) {
+            ret = OH_AudioVividMetaBuilder_RemoveObject(builder, 99);
+            EXPECT_EQ(AV_ERR_INVALID_VAL, ret);
+
+            OH_AudioVividMetaBuilder_Destroy(builder);
+        }
+    } else {
+        EXPECT_EQ(AV_ERR_UNSUPPORT, ret);
+    }
+}
+
+/**
+ * @tc.name: AudioVivid_MergeWorkflow_001
+ * @tc.desc: Full merge workflow: create empty, add object, update pos, update gain, get meta
+ * @tc.type: FUNC
+ */
+HWTEST_F(AudioVividUnitTest, AudioVivid_MergeWorkflow_001, TestSize.Level1)
+{
+    bool libAvailable = IsAudioVividLibAvailable();
+
+    OH_AudioVividMetaBuilder *builder = nullptr;
+    OH_AVErrCode ret = OH_AudioVividMetaBuilder_CreateEmptyBuilder(&builder);
+
+    if (libAvailable) {
+        EXPECT_EQ(AV_ERR_OK, ret);
+        EXPECT_NE(nullptr, builder);
+
+        if (builder != nullptr) {
+            int32_t objectIndex = -1;
+            ret = OH_AudioVividMetaBuilder_AddObject(builder, &objectIndex);
+            EXPECT_EQ(AV_ERR_OK, ret);
+            EXPECT_GE(objectIndex, 0);
+
+            OH_AudioObjectPosition pos;
+            pos.isCartesian = true;
+            pos.pos.cartesian.x = CARTESIAN_X;
+            pos.pos.cartesian.y = CARTESIAN_Y;
+            pos.pos.cartesian.z = CARTESIAN_Z;
+            ret = OH_AudioVividMetaBuilder_UpdateObjectPos(builder, objectIndex, pos);
+            EXPECT_EQ(AV_ERR_OK, ret);
+
+            ret = OH_AudioVividMetaBuilder_UpdateObjectGain(builder, objectIndex, GAIN_VALUE);
+            EXPECT_EQ(AV_ERR_OK, ret);
+
+            int32_t len = 0;
+            ret = OH_AudioVividMetaBuilder_GetMetaLen(builder, false, &len);
+            EXPECT_EQ(AV_ERR_OK, ret);
+
+            if (len > 0) {
+                std::vector<uint8_t> buffer(len);
+                ret = OH_AudioVividMetaBuilder_GetMeta(builder, false, buffer.data(), len);
+                EXPECT_EQ(AV_ERR_OK, ret);
+            }
+
+            OH_AudioVividMetaBuilder_Destroy(builder);
+        }
+    } else {
+        EXPECT_EQ(AV_ERR_UNSUPPORT, ret);
+    }
+}
+
+/**
+ * @tc.name: AudioVivid_MergeWorkflow_002
+ * @tc.desc: Merge with multiple objects, cartesian and polar positions
+ * @tc.type: FUNC
+ */
+HWTEST_F(AudioVividUnitTest, AudioVivid_MergeWorkflow_002, TestSize.Level1)
+{
+    bool libAvailable = IsAudioVividLibAvailable();
+
+    OH_AudioVividMetaBuilder *builder = nullptr;
+    OH_AVErrCode ret = OH_AudioVividMetaBuilder_CreateEmptyBuilder(&builder);
+
+    if (libAvailable) {
+        EXPECT_EQ(AV_ERR_OK, ret);
+        EXPECT_NE(nullptr, builder);
+
+        if (builder != nullptr) {
+            int32_t idx0 = -1;
+            int32_t idx1 = -1;
+            ret = OH_AudioVividMetaBuilder_AddObject(builder, &idx0);
+            EXPECT_EQ(AV_ERR_OK, ret);
+            ret = OH_AudioVividMetaBuilder_AddObject(builder, &idx1);
+            EXPECT_EQ(AV_ERR_OK, ret);
+
+            OH_AudioObjectPosition posCartesian;
+            posCartesian.isCartesian = true;
+            posCartesian.pos.cartesian.x = CARTESIAN_X;
+            posCartesian.pos.cartesian.y = CARTESIAN_Y;
+            posCartesian.pos.cartesian.z = CARTESIAN_Z;
+            ret = OH_AudioVividMetaBuilder_UpdateObjectPos(builder, idx0, posCartesian);
+            EXPECT_EQ(AV_ERR_OK, ret);
+
+            OH_AudioObjectPosition posPolar;
+            posPolar.isCartesian = false;
+            posPolar.pos.polar.azimuth = POLAR_AZIMUTH;
+            posPolar.pos.polar.elevation = POLAR_ELEVATION;
+            posPolar.pos.polar.distance = POLAR_DISTANCE;
+            ret = OH_AudioVividMetaBuilder_UpdateObjectPos(builder, idx1, posPolar);
+            EXPECT_EQ(AV_ERR_OK, ret);
+
+            ret = OH_AudioVividMetaBuilder_UpdateObjectGain(builder, idx0, GAIN_VALUE);
+            EXPECT_EQ(AV_ERR_OK, ret);
+            ret = OH_AudioVividMetaBuilder_UpdateObjectGain(builder, idx1, GAIN_VALUE + 0.5f);
+            EXPECT_EQ(AV_ERR_OK, ret);
+
+            int32_t len = 0;
+            ret = OH_AudioVividMetaBuilder_GetMetaLen(builder, false, &len);
+            EXPECT_EQ(AV_ERR_OK, ret);
+
+            if (len > 0) {
+                std::vector<uint8_t> buffer(len);
+                ret = OH_AudioVividMetaBuilder_GetMeta(builder, false, buffer.data(), len);
+                EXPECT_EQ(AV_ERR_OK, ret);
+            }
+
+            OH_AudioVividMetaBuilder_Destroy(builder);
+        }
+    } else {
+        EXPECT_EQ(AV_ERR_UNSUPPORT, ret);
+    }
+}
+
+/**
+ * @tc.name: AudioVivid_MergeWorkflow_003
+ * @tc.desc: Add then remove, then add again and update pos
+ * @tc.type: FUNC
+ */
+HWTEST_F(AudioVividUnitTest, AudioVivid_MergeWorkflow_003, TestSize.Level1)
+{
+    bool libAvailable = IsAudioVividLibAvailable();
+
+    OH_AudioVividMetaBuilder *builder = nullptr;
+    OH_AVErrCode ret = OH_AudioVividMetaBuilder_CreateEmptyBuilder(&builder);
+
+    if (libAvailable) {
+        EXPECT_EQ(AV_ERR_OK, ret);
+        EXPECT_NE(nullptr, builder);
+
+        if (builder != nullptr) {
+            int32_t idx0 = -1;
+            ret = OH_AudioVividMetaBuilder_AddObject(builder, &idx0);
+            EXPECT_EQ(AV_ERR_OK, ret);
+            EXPECT_GE(idx0, 0);
+
+            ret = OH_AudioVividMetaBuilder_RemoveObject(builder, idx0);
+            EXPECT_EQ(AV_ERR_OK, ret);
+
+            int32_t idx1 = -1;
+            ret = OH_AudioVividMetaBuilder_AddObject(builder, &idx1);
+            EXPECT_EQ(AV_ERR_OK, ret);
+            EXPECT_GE(idx1, 0);
+
+            OH_AudioObjectPosition pos;
+            pos.isCartesian = true;
+            pos.pos.cartesian.x = CARTESIAN_X;
+            pos.pos.cartesian.y = CARTESIAN_Y;
+            pos.pos.cartesian.z = CARTESIAN_Z;
+            ret = OH_AudioVividMetaBuilder_UpdateObjectPos(builder, idx1, pos);
+            EXPECT_EQ(AV_ERR_OK, ret);
+
+            OH_AudioVividMetaBuilder_Destroy(builder);
+        }
+    } else {
+        EXPECT_EQ(AV_ERR_UNSUPPORT, ret);
+    }
+}
+
+/**
+ * @tc.name: AudioVivid_MergeWorkflow_004
+ * @tc.desc: Get meta with static metadata included after merge
+ * @tc.type: FUNC
+ */
+HWTEST_F(AudioVividUnitTest, AudioVivid_MergeWorkflow_004, TestSize.Level1)
+{
+    bool libAvailable = IsAudioVividLibAvailable();
+
+    OH_AudioVividMetaBuilder *builder = nullptr;
+    OH_AVErrCode ret = OH_AudioVividMetaBuilder_CreateEmptyBuilder(&builder);
+
+    if (libAvailable) {
+        EXPECT_EQ(AV_ERR_OK, ret);
+        EXPECT_NE(nullptr, builder);
+
+        if (builder != nullptr) {
+            int32_t objectIndex = -1;
+            ret = OH_AudioVividMetaBuilder_AddObject(builder, &objectIndex);
+            EXPECT_EQ(AV_ERR_OK, ret);
+
+            int32_t lenDynamic = 0;
+            ret = OH_AudioVividMetaBuilder_GetMetaLen(builder, false, &lenDynamic);
+            EXPECT_EQ(AV_ERR_OK, ret);
+            EXPECT_GE(lenDynamic, 0);
+
+            int32_t lenWithStatic = 0;
+            ret = OH_AudioVividMetaBuilder_GetMetaLen(builder, true, &lenWithStatic);
+            EXPECT_EQ(AV_ERR_OK, ret);
+            EXPECT_GE(lenWithStatic, lenDynamic);
+
+            if (lenWithStatic > 0) {
+                std::vector<uint8_t> buffer(lenWithStatic);
+                ret = OH_AudioVividMetaBuilder_GetMeta(builder, true, buffer.data(), lenWithStatic);
+                EXPECT_EQ(AV_ERR_OK, ret);
+            }
+
+            OH_AudioVividMetaBuilder_Destroy(builder);
+        }
+    } else {
+        EXPECT_EQ(AV_ERR_UNSUPPORT, ret);
+    }
+}
