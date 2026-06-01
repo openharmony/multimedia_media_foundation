@@ -101,9 +101,10 @@ Status WavDemuxerPlugin::GetMediaInfo(MediaInfo& mediaInfo)
     int64_t duration = 0;
     uint32_t divisor = 0;
     divisor = wavHeader_.sampleRate * wavHeader_.bitsPerSample * wavHeader_.numChannels;
-    if (divisor == 0 || !Sec2HstTime((fileSize_ - wavHeadLength_) * 8 /     // 8
-        divisor, duration)) {
-        MEDIA_LOG_E("divisor is invalid or value overflow!");
+    if (wavHeader_.sampleRate == 0 || wavHeader_.bitsPerSample == 0 || wavHeader_.numChannels == 0 ||
+        !Sec2HstTime((fileSize_ - wavHeadLength_) * 8 /     // 8
+        (wavHeader_.sampleRate * wavHeader_.bitsPerSample * wavHeader_.numChannels), duration)) {
+        MEDIA_LOG_E("wavHeader_ is invalid or value overflow!");
     }
     mediaInfo.tracks[0].Set<Tag::MEDIA_DURATION>(duration);
     mediaInfo.tracks[0].Set<Tag::MEDIA_TYPE>(MediaType::AUDIO);
