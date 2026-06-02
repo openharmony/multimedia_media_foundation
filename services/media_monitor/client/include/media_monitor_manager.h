@@ -65,6 +65,7 @@ private:
     ~MediaMonitorManager() {}
     void WatchHiviewUeEnableParameter();
     bool dumpEnable_ = false;
+    static bool ShouldWriteLogEvent(EventId eventId);
     std::string dumpType_ = DEFAULT_DUMP_TYPE;
     std::string versionType_ = COMMERCIAL_VERSION;
     std::time_t dumpStartTime_ = 0;
