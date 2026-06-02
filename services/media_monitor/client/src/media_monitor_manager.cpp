@@ -25,6 +25,7 @@
 #include "audio_dump_buffer.h"
 #include <atomic>
 #include <cstring>
+#include <set>
 
 namespace {
 constexpr OHOS::HiviewDFX::HiLogLabel LABEL = {LOG_CORE, LOG_DOMAIN_FOUNDATION, "MediaMonitorManager"};
@@ -33,6 +34,13 @@ constexpr OHOS::HiviewDFX::HiLogLabel LABEL = {LOG_CORE, LOG_DOMAIN_FOUNDATION, 
 namespace OHOS {
 namespace Media {
 namespace MediaMonitor {
+
+namespace {
+// Add event IDs here if they should be skipped when hiview UE is disabled.
+const std::set<EventId> HIVIEW_UE_DISABLE_SKIP_EVENT_SET = {
+    AI_VOICE_NOISE_SUPPRESSION
+};
+}
 
 using namespace std;
 
@@ -127,9 +135,18 @@ void MediaMonitorManager::WriteLogMsg(std::shared_ptr<EventBean> &bean)
         MEDIA_LOG_E("proxy is nullptr.");
         return;
     }
-    FALSE_RETURN_MSG(hiviewUeEnable_.load(std::memory_order_relaxed),
-        "persist.hiviewdfx.hiview.ue.enable is false, skip write log msg");
+    FALSE_RETURN_MSG(bean != nullptr, "bean is nullptr.");
+    FALSE_RETURN_MSG(ShouldWriteLogEvent(bean->GetEventId()),
+        "persist.hiviewdfx.hiview.ue.enable is false, skip write log msg, eventId %{public}d",
+        bean->GetEventId());
     proxy->WriteLogMsg(*bean);
+}
+
+bool MediaMonitorManager::ShouldWriteLogEvent(EventId eventId)
+{
+    bool shouldWriteWhenHiviewUeDisable = HIVIEW_UE_DISABLE_SKIP_EVENT_SET.find(eventId) ==
+        HIVIEW_UE_DISABLE_SKIP_EVENT_SET.end();
+    return hiviewUeEnable_.load(std::memory_order_relaxed) || shouldWriteWhenHiviewUeDisable;
 }
 
 void MediaMonitorManager::GetAudioRouteMsg(std::map<PreferredType, shared_ptr<MonitorDeviceInfo>> &preferredDevices)
