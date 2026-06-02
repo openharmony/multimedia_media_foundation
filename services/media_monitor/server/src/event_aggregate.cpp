@@ -178,6 +178,9 @@ void EventAggregate::UpdateAggregateStateEventList(std::shared_ptr<EventBean> &b
         case AUDIO_PLAYBACK_ERROR:
             HandleAudioPlaybackErrorEvent(bean);
             break;
+        case KARAOKE_FEATURE_UTILIZATION:
+            HandleKaraokeFeatureEvent(bean);
+            break;
         default:
             break;
     }
@@ -802,6 +805,12 @@ std::vector<std::shared_ptr<EventBean>> EventAggregate::GetUnifiedFaultCodeRecor
 {
     std::lock_guard<std::mutex> lock(unifiedFaultCodeMutex_);
     return unifiedFaultCodeVector_;
+}
+
+void EventAggregate::HandleKaraokeFeatureEvent(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Handle karaoke feature event");
+    mediaMonitorPolicy_.AddToKaraokeFeatureVector(bean);
 }
 } // namespace MediaMonitor
 } // namespace Media

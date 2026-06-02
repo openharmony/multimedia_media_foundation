@@ -223,7 +223,7 @@ HWTEST_F(PcmConvertUnitTest, ConvertPcm_U8_To_S32LE, TestSize.Level1)
     int32_t* outSamples = reinterpret_cast<int32_t*>(output);
     EXPECT_NEAR(outSamples[0], -2147483648, 1);
     EXPECT_NEAR(outSamples[1], 0, 1);
-    EXPECT_NEAR(outSamples[2], 2130706432, 16777216);
+    EXPECT_NEAR(outSamples[2], 2130706432, 1);
 }
 
 /**
@@ -241,7 +241,7 @@ HWTEST_F(PcmConvertUnitTest, ConvertPcm_U8_To_F32LE, TestSize.Level1)
     float* outSamples = reinterpret_cast<float*>(output);
     EXPECT_NEAR(outSamples[0], -1.0f, 0.01f);
     EXPECT_NEAR(outSamples[1], 0.0f, 0.01f);
-    EXPECT_NEAR(outSamples[2], 0.996f, 0.01f);
+    EXPECT_NEAR(outSamples[2], 127.0f / 128.0f, 0.01f);
 }
 
 /**
@@ -427,18 +427,18 @@ HWTEST_F(PcmConvertUnitTest, ConvertPcm_U8_To_S24LE, TestSize.Level1)
     EXPECT_EQ(status, Status::OK);
 
     auto ReadS24 = [](const uint8_t* p) -> int32_t {
-        int32_t val = static_cast<int32_t>(p[0]) |
-                      (static_cast<int32_t>(p[1]) << 8) |
-                      (static_cast<int32_t>(p[2]) << 16);
-        if (val & 0x00800000) {
-            val |= 0xFF000000;
+        uint32_t val = static_cast<uint32_t>(p[0]) |
+                       (static_cast<uint32_t>(p[1]) << 8) |
+                       (static_cast<uint32_t>(p[2]) << 16);
+        if (val & 0x00800000u) {
+            val |= 0xFF000000u;
         }
-        return val;
+        return static_cast<int32_t>(val);
     };
 
     EXPECT_NEAR(ReadS24(output), -8388608, 1);
     EXPECT_NEAR(ReadS24(output + 3), 0, 1);
-    EXPECT_NEAR(ReadS24(output + 6), 8323072, 65536);
+    EXPECT_NEAR(ReadS24(output + 6), 8323072, 1);
 }
 
 /**
@@ -450,9 +450,10 @@ HWTEST_F(PcmConvertUnitTest, ConvertPcm_S24LE_To_S16LE, TestSize.Level1)
 {
     uint8_t input[9];
     auto WriteS24 = [](uint8_t* p, int32_t val) {
-        p[0] = static_cast<uint8_t>(val & 0xFF);
-        p[1] = static_cast<uint8_t>((val >> 8) & 0xFF);
-        p[2] = static_cast<uint8_t>((val >> 16) & 0xFF);
+        uint32_t uval = static_cast<uint32_t>(val);
+        p[0] = static_cast<uint8_t>(uval & 0xFFu);
+        p[1] = static_cast<uint8_t>((uval >> 8) & 0xFFu);
+        p[2] = static_cast<uint8_t>((uval >> 16) & 0xFFu);
     };
     WriteS24(input, -8388608);
     WriteS24(input + 3, 0);
@@ -477,9 +478,10 @@ HWTEST_F(PcmConvertUnitTest, ConvertPcm_S24LE_To_S32LE, TestSize.Level1)
 {
     uint8_t input[9];
     auto WriteS24 = [](uint8_t* p, int32_t val) {
-        p[0] = static_cast<uint8_t>(val & 0xFF);
-        p[1] = static_cast<uint8_t>((val >> 8) & 0xFF);
-        p[2] = static_cast<uint8_t>((val >> 16) & 0xFF);
+        uint32_t uval = static_cast<uint32_t>(val);
+        p[0] = static_cast<uint8_t>(uval & 0xFFu);
+        p[1] = static_cast<uint8_t>((uval >> 8) & 0xFFu);
+        p[2] = static_cast<uint8_t>((uval >> 16) & 0xFFu);
     };
     WriteS24(input, -8388608);
     WriteS24(input + 3, 0);
@@ -504,9 +506,10 @@ HWTEST_F(PcmConvertUnitTest, ConvertPcm_S24LE_To_F32LE, TestSize.Level1)
 {
     uint8_t input[9];
     auto WriteS24 = [](uint8_t* p, int32_t val) {
-        p[0] = static_cast<uint8_t>(val & 0xFF);
-        p[1] = static_cast<uint8_t>((val >> 8) & 0xFF);
-        p[2] = static_cast<uint8_t>((val >> 16) & 0xFF);
+        uint32_t uval = static_cast<uint32_t>(val);
+        p[0] = static_cast<uint8_t>(uval & 0xFFu);
+        p[1] = static_cast<uint8_t>((uval >> 8) & 0xFFu);
+        p[2] = static_cast<uint8_t>((uval >> 16) & 0xFFu);
     };
     WriteS24(input, -8388608);
     WriteS24(input + 3, 0);
@@ -536,13 +539,13 @@ HWTEST_F(PcmConvertUnitTest, ConvertPcm_S32LE_To_S24LE, TestSize.Level1)
     EXPECT_EQ(status, Status::OK);
 
     auto ReadS24 = [](const uint8_t* p) -> int32_t {
-        int32_t val = static_cast<int32_t>(p[0]) |
-                      (static_cast<int32_t>(p[1]) << 8) |
-                      (static_cast<int32_t>(p[2]) << 16);
-        if (val & 0x00800000) {
-            val |= 0xFF000000;
+        uint32_t val = static_cast<uint32_t>(p[0]) |
+                       (static_cast<uint32_t>(p[1]) << 8) |
+                       (static_cast<uint32_t>(p[2]) << 16);
+        if (val & 0x00800000u) {
+            val |= 0xFF000000u;
         }
-        return val;
+        return static_cast<int32_t>(val);
     };
 
     EXPECT_NEAR(ReadS24(output), -8388608, 1);
@@ -564,13 +567,13 @@ HWTEST_F(PcmConvertUnitTest, ConvertPcm_S16LE_To_S24LE, TestSize.Level1)
     EXPECT_EQ(status, Status::OK);
 
     auto ReadS24 = [](const uint8_t* p) -> int32_t {
-        int32_t val = static_cast<int32_t>(p[0]) |
-                      (static_cast<int32_t>(p[1]) << 8) |
-                      (static_cast<int32_t>(p[2]) << 16);
-        if (val & 0x00800000) {
-            val |= 0xFF000000;
+        uint32_t val = static_cast<uint32_t>(p[0]) |
+                       (static_cast<uint32_t>(p[1]) << 8) |
+                       (static_cast<uint32_t>(p[2]) << 16);
+        if (val & 0x00800000u) {
+            val |= 0xFF000000u;
         }
-        return val;
+        return static_cast<int32_t>(val);
     };
 
     EXPECT_EQ(ReadS24(output), -8388608);
@@ -592,13 +595,13 @@ HWTEST_F(PcmConvertUnitTest, ConvertPcm_F32LE_To_S24LE, TestSize.Level1)
     EXPECT_EQ(status, Status::OK);
 
     auto ReadS24 = [](const uint8_t* p) -> int32_t {
-        int32_t val = static_cast<int32_t>(p[0]) |
-                      (static_cast<int32_t>(p[1]) << 8) |
-                      (static_cast<int32_t>(p[2]) << 16);
-        if (val & 0x00800000) {
-            val |= 0xFF000000;
+        uint32_t val = static_cast<uint32_t>(p[0]) |
+                       (static_cast<uint32_t>(p[1]) << 8) |
+                       (static_cast<uint32_t>(p[2]) << 16);
+        if (val & 0x00800000u) {
+            val |= 0xFF000000u;
         }
-        return val;
+        return static_cast<int32_t>(val);
     };
 
     EXPECT_NEAR(ReadS24(output), -8388608, 1);
@@ -646,8 +649,130 @@ HWTEST_F(PcmConvertUnitTest, ConvertPcm_LargeBuffer, TestSize.Level1)
 
     int32_t* outSamples = reinterpret_cast<int32_t*>(output.data());
     for (size_t i = 0; i < sampleCount; ++i) {
-        EXPECT_EQ(outSamples[i], static_cast<int32_t>(input[i]) << 16);
+        EXPECT_EQ(outSamples[i], static_cast<int32_t>(input[i]) * 65536);
     }
+}
+
+/**
+ * @tc.name: ConvertPcm_S24LE_To_U8
+ * @tc.desc: Test S24LE to U8 conversion
+ * @tc.type: FUNC
+ */
+HWTEST_F(PcmConvertUnitTest, ConvertPcm_S24LE_To_U8, TestSize.Level1)
+{
+    uint8_t input[9];
+    auto WriteS24 = [](uint8_t* p, int32_t val) {
+        uint32_t uval = static_cast<uint32_t>(val);
+        p[0] = static_cast<uint8_t>(uval & 0xFFu);
+        p[1] = static_cast<uint8_t>((uval >> 8) & 0xFFu);
+        p[2] = static_cast<uint8_t>((uval >> 16) & 0xFFu);
+    };
+    WriteS24(input, -8388608);
+    WriteS24(input + 3, 0);
+    WriteS24(input + 6, 8388607);
+
+    uint8_t output[3] = {0};
+    Status status = ConvertPcmSampleFormat(input, 3, SAMPLE_S24LE, SAMPLE_U8, output);
+    EXPECT_EQ(status, Status::OK);
+
+    EXPECT_EQ(output[0], 0);
+    EXPECT_EQ(output[1], 128);
+    EXPECT_EQ(output[2], 255);
+}
+
+/**
+ * @tc.name: ConvertPcm_S32LE_To_U8
+ * @tc.desc: Test S32LE to U8 conversion
+ * @tc.type: FUNC
+ */
+HWTEST_F(PcmConvertUnitTest, ConvertPcm_S32LE_To_U8, TestSize.Level1)
+{
+    int32_t input[] = {-2147483648, 0, 2147483647};
+    uint8_t output[3] = {0};
+    Status status = ConvertPcmSampleFormat(reinterpret_cast<uint8_t*>(input), 3,
+        SAMPLE_S32LE, SAMPLE_U8, output);
+    EXPECT_EQ(status, Status::OK);
+
+    EXPECT_EQ(output[0], 0);
+    EXPECT_EQ(output[1], 128);
+    EXPECT_EQ(output[2], 255);
+}
+
+/**
+ * @tc.name: ConvertPcm_U8_RoundTrip
+ * @tc.desc: Test U8 to F32LE and back to U8 round-trip preserves values
+ * @tc.type: FUNC
+ */
+HWTEST_F(PcmConvertUnitTest, ConvertPcm_U8_RoundTrip, TestSize.Level1)
+{
+    uint8_t input[] = {0, 1, 127, 128, 129, 254, 255};
+    constexpr size_t count = sizeof(input) / sizeof(input[0]);
+
+    uint8_t floatBuf[count * 4] = {0};
+    Status status = ConvertPcmSampleFormat(input, count, SAMPLE_U8, SAMPLE_F32LE, floatBuf);
+    EXPECT_EQ(status, Status::OK);
+
+    uint8_t output[count] = {0};
+    status = ConvertPcmSampleFormat(floatBuf, count, SAMPLE_F32LE, SAMPLE_U8, output);
+    EXPECT_EQ(status, Status::OK);
+
+    for (size_t i = 0; i < count; ++i) {
+        EXPECT_EQ(output[i], input[i]);
+    }
+}
+
+/**
+ * @tc.name: ConvertPcm_S16LE_RoundTrip
+ * @tc.desc: Test S16LE to F32LE and back to S16LE round-trip preserves values
+ * @tc.type: FUNC
+ */
+HWTEST_F(PcmConvertUnitTest, ConvertPcm_S16LE_RoundTrip, TestSize.Level1)
+{
+    int16_t input[] = {-32768, -1, 0, 1, 32767};
+    constexpr size_t count = sizeof(input) / sizeof(input[0]);
+
+    uint8_t floatBuf[count * 4] = {0};
+    Status status = ConvertPcmSampleFormat(reinterpret_cast<uint8_t*>(input), count,
+        SAMPLE_S16LE, SAMPLE_F32LE, floatBuf);
+    EXPECT_EQ(status, Status::OK);
+
+    uint8_t output[count * 2] = {0};
+    status = ConvertPcmSampleFormat(floatBuf, count, SAMPLE_F32LE, SAMPLE_S16LE, output);
+    EXPECT_EQ(status, Status::OK);
+
+    int16_t* outSamples = reinterpret_cast<int16_t*>(output);
+    for (size_t i = 0; i < count; ++i) {
+        EXPECT_EQ(outSamples[i], input[i]);
+    }
+}
+
+/**
+ * @tc.name: ConvertPcm_S24LE_NegativeValues
+ * @tc.desc: Test S24LE conversion with negative intermediate values
+ * @tc.type: FUNC
+ */
+HWTEST_F(PcmConvertUnitTest, ConvertPcm_S24LE_NegativeValues, TestSize.Level1)
+{
+    uint8_t input[9];
+    auto WriteS24 = [](uint8_t* p, int32_t val) {
+        uint32_t uval = static_cast<uint32_t>(val);
+        p[0] = static_cast<uint8_t>(uval & 0xFFu);
+        p[1] = static_cast<uint8_t>((uval >> 8) & 0xFFu);
+        p[2] = static_cast<uint8_t>((uval >> 16) & 0xFFu);
+    };
+    WriteS24(input, -1);         // negative one
+    WriteS24(input + 3, -256);   // -256
+    WriteS24(input + 6, -8388608); // min S24
+
+    // S24 to S16: right shift 8 bits
+    uint8_t output[6] = {0};
+    Status status = ConvertPcmSampleFormat(input, 3, SAMPLE_S24LE, SAMPLE_S16LE, output);
+    EXPECT_EQ(status, Status::OK);
+
+    int16_t* outSamples = reinterpret_cast<int16_t*>(output);
+    EXPECT_EQ(outSamples[0], -1);      // -1 >> 8 = -1
+    EXPECT_EQ(outSamples[1], -1);      // -256 >> 8 = -1
+    EXPECT_EQ(outSamples[2], -32768);  // -8388608 >> 8 = -32768
 }
 
 } // namespace Media

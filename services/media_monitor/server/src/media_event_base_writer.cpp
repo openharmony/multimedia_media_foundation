@@ -664,7 +664,8 @@ void MediaEventBaseWriter::WriteStreamOccupancy(std::shared_ptr<EventBean> &bean
         "PKGNAME", bean->GetStringValue("PKGNAME"),
         "STREAM_OR_SOURCE_TYPE", bean->GetIntValue("STREAM_OR_SOURCE_TYPE"),
         "START_TIME", static_cast<int64_t>(bean->GetUint64Value("START_TIME")),
-        "UPLOAD_TIME", static_cast<int64_t>(bean->GetUint64Value("UPLOAD_TIME")));
+        "UPLOAD_TIME", static_cast<int64_t>(bean->GetUint64Value("UPLOAD_TIME")),
+        "STANDBY_DURATION_S", static_cast<int32_t>(bean->GetIntValue("STANDBY_DURATION_S")));
     if (ret) {
         MEDIA_LOG_E("write event fail: STREAM_OCCUPANCY, ret = %{public}d", ret);
     }
@@ -925,6 +926,32 @@ void MediaEventBaseWriter::WriteAudioLoopbackException(std::shared_ptr<EventBean
     if (ret) {
         MEDIA_LOG_E("write event fail: LOOPBACK_EXCEPTION, ret = %{public}d", ret);
     }
+#endif
+}
+
+void MediaEventBaseWriter::WriteKaraokeFeatureStatistic(std::shared_ptr<EventBean> &bean)
+{
+    if (bean == nullptr) {
+        MEDIA_LOG_E("eventBean is nullptr");
+        return;
+    }
+#ifdef MONITOR_ENABLE_HISYSEVENT
+    std::string name = bean->GetStringValue("APP_NAME");
+    uint64_t duration = bean->GetUint64Value("DURATION");
+    uint32_t deviceType = static_cast<uint32_t>(bean->GetIntValue("DEVICE_TYPE"));
+    int ret = HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO,
+        "KARAOKE_FEATURE_UTILIZATION",
+        HiviewDFX::HiSysEvent::EventType::STATISTIC,
+        "APP_NAME", name,
+        "TYPE", static_cast<uint8_t>(bean->GetIntValue("TYPE")),
+        "FEATURE", static_cast<uint8_t>(bean->GetIntValue("FEATURE")),
+        "DEVICE_TYPE", deviceType,
+        "DURATION", duration);
+    if (ret) {
+        MEDIA_LOG_E("write event fail: KARAOKE_FEATURE_UTILIZATION, ret = %{public}d", ret);
+    }
+    MEDIA_LOG_I("app:%{public}s using duraion: " PUBLIC_LOG_U64 "s, on device: %{public}d", name.c_str(), duration,
+        deviceType);
 #endif
 }
 } // namespace MediaMonitor

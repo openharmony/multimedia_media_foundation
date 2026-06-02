@@ -73,6 +73,8 @@ public:
     void HandleVolumeSettingStatistics(std::shared_ptr<EventBean> &bean);
     void AddLoudVolumeTimes();
     void AddAudioPlaybackErrorEvent(std::shared_ptr<EventBean> &bean);
+    void AddToKaraokeFeatureVector(std::shared_ptr<EventBean> &bean);
+    void HandleToKaraokeFeatureEvent();
 
     void WhetherToHiSysEvent();
     void WriteInfo(int32_t fd, std::string &dumpString);
@@ -88,6 +90,7 @@ private:
     static constexpr uint64_t DEFAULT_TONE_PLAYBACK_TIME_SECEND = 2 * 60 * 60;
     static constexpr uint64_t DEFAULT_VOLUME_API_INVOKE_TIME_SECEND = 24 * 60 * 60;
     static constexpr uint64_t DEFAULT_SUITE_STATS_TIME_SECEND = 24 * 60 * 60;
+    static constexpr uint64_t DEFAULT_KARAOKE_FEATURE_TIME_SECEND = 24 * 60 * 60;
 
     static constexpr int32_t DEFAULT_VOLUME_API_INVOKE_COUNT_ONCE = 20;
 
@@ -113,6 +116,7 @@ private:
     uint64_t lastSystemTonePlaybackTime_ = 0;
     uint64_t lastVolumeApiInvokeTime_ = 0;
     uint64_t lastSuiteStatsTime_ = 0;
+    uint64_t lastKaraokeFeatureTime_ = 0;
     std::unique_ptr<std::thread> timeThread_ = nullptr;
     std::atomic_bool startThread_ = true;
 
@@ -132,6 +136,8 @@ private:
     std::unordered_map<std::string, std::unordered_map<std::string, SuiteEngineNodeStatCounts>>
         suiteEngineNodeStatsMap_;
 
+    std::vector<std::shared_ptr<EventBean>> karaokeFeatureEventVector_;
+
     int32_t volumeApiInvokeRecordSetSize_ = 20 * 30 * 12;
     std::mutex volumeApiInvokeMutex_;
     std::atomic<int32_t> loudVolumeTimes_ = 0;
@@ -147,6 +153,7 @@ private:
     uint64_t volumeApiInvokeSleepTime_ = DEFAULT_VOLUME_API_INVOKE_TIME_SECEND;
     int32_t suiteStatsTime_ = DEFAULT_SUITE_STATS_TIME;
     uint64_t suiteStatsSleepTime_ = DEFAULT_SUITE_STATS_TIME_SECEND;
+    uint64_t karaokeFeatureSleepTime_ = DEFAULT_KARAOKE_FEATURE_TIME_SECEND;
 
     std::mutex callSessionMutex_;
     std::unordered_set<std::string> callSessionHapSet_;

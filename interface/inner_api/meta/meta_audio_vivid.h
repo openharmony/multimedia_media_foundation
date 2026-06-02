@@ -33,6 +33,10 @@ public:
     virtual int32_t UpdateObjectGain(int32_t objectIndex, float gain) = 0;
     virtual int32_t GetMetaLen(bool withStaticMeta, int32_t &len) = 0;
     virtual int32_t GetMeta(bool withStaticMeta, uint8_t *buffer, int32_t len) = 0;
+    virtual int32_t InitEmpty() = 0;
+    virtual int32_t UpdateBaseMeta(const uint8_t *buffer, int32_t len) = 0;
+    virtual int32_t AddObject(int32_t &objectIndex) = 0;
+    virtual int32_t RemoveObject(int32_t objectIndex) = 0;
 };
 
 }

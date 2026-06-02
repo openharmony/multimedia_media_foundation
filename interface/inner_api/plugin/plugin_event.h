@@ -79,6 +79,7 @@ enum PluginDfxEventType : int32_t {
     PERF_AUDIO_SINK,
     PERF_VIDEO_RENDERER,
     PERF_AUDIO_RENDERER,
+    PERF_LOADING_ERROR,
     PERF_MAX,
 
     EVENT_MAX,

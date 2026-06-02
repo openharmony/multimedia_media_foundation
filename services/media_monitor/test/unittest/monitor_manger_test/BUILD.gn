@@ -46,7 +46,11 @@ monitor_unittest_cflags = [
 
 ohos_unittest("monitor_manager_unit_test") {
   module_out_path = module_output_path
-  include_dirs = [ "./include" ]
+  include_dirs = [
+    "./include",
+    "../../../server/include",
+    "../../../common/include",
+  ]
 
   defines = [ "MEDIA_OHOS" ]
 
@@ -57,13 +61,20 @@ ohos_unittest("monitor_manager_unit_test") {
   deps = [
     "../../../:media_monitor_client",
     "../../../:media_monitor_common",
+    "../../../:media_monitor",
   ]
 
   external_deps = [
+    "audio_framework:audio_client",
     "c_utils:utils",
     "hilog:libhilog",
     "init:libbegetutil",
     "ipc:ipc_core",
     "samgr:samgr_proxy",
   ]
+
+  if (has_hisysevent_part) {
+    defines += [ "MONITOR_ENABLE_HISYSEVENT" ]
+    external_deps += [ "hisysevent:libhisysevent" ]
+  }
 }

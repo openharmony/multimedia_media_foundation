@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 Huawei Device Co., Ltd.
+ * Copyright (C) 2025-2026 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -16,6 +16,8 @@
 #ifndef DOLBY_PASSTHROUGH_H
 #define DOLBY_PASSTHROUGH_H
 
+#include "avbuffer.h"
+
 namespace OHOS {
 namespace Media {
 class IDolbyPassthrough {
@@ -23,6 +25,13 @@ public:
     virtual ~IDolbyPassthrough() = default;
     virtual bool IsAudioPass(const char* mime) = 0;
     virtual std::vector<std::string> GetList() = 0;
+};
+
+class IPCMCallback {
+public:
+    virtual ~IPCMCallback() = default;
+    virtual void OnPCMOutput(const std::shared_ptr<AVBuffer> &buffer) = 0;
+    virtual void OnPCMProcessor(const std::shared_ptr<AVBuffer> &buffer) = 0;
 };
 } // namespace Media
 } // namespace OHOS

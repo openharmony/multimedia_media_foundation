@@ -22,6 +22,7 @@
 #include "monitor_error.h"
 #include "media_audio_encoder.h"
 #include "media_monitor_death_recipient.h"
+#include "media_monitor_policy.h"
 #include "iservice_registry.h"
 
 namespace {
@@ -54,6 +55,14 @@ void MediaMonitorService::OnDump()
 int32_t MediaMonitorService::Dump(int32_t fd, const std::vector<std::u16string> &args)
 {
     MEDIA_LOG_I("MediaMonitorService Dump");
+    
+    if (args.size() == 1 && args[0] == u"-dk") {
+        std::string dumpString = "Trigger KARAOKE_FEATURE_UTILIZATION report:\n";
+        MediaMonitorPolicy::GetMediaMonitorPolicy().HandleToKaraokeFeatureEvent();
+        dumpString += "Report completed successfully.\n";
+        return write(fd, dumpString.c_str(), dumpString.size());
+    }
+    
     std::string dumpString = "------------------MediaMonitor------------------\n";
 
     eventAggregate_.WriteInfo(fd, dumpString);
