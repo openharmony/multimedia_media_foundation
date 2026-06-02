@@ -58,6 +58,8 @@ public:
 
     void GetDmDeviceInfo(std::vector<MonitorDmDeviceInfo> &dmDeviceInfos);
 
+    void GetUnifiedFaultCodeRecords(std::vector<std::string> &faultRecords);
+
     static void HiviewUeEnableChangeCallback(const char *key, const char *value, void *context);
 
 private:

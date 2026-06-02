@@ -36,6 +36,7 @@ namespace Media {
 namespace MediaMonitor {
 constexpr int32_t WAIT_DUMP_TIMEOUT_S = 1;
 constexpr int32_t AUDIO_UID = 1041;
+constexpr int32_t ERROR_CODE_HEX_WIDTH = 8;
 REGISTER_SYSTEM_ABILITY_BY_ID(MediaMonitorService, MEDIA_MONITOR_SERVICE_ID, true)
 
 MediaMonitorService::MediaMonitorService(int32_t systemAbilityId, bool runOnCreate)
@@ -232,6 +233,28 @@ ErrCode MediaMonitorService::GetDmDeviceInfo(std::vector<MonitorDmDeviceInfo> &d
 {
     FALSE_UPDATE_RETURN_V_MSG_E(VerifyIsAudio(), funcResult, ERROR, "client permission denied");
     funcResult = audioMemo_.GetDmDeviceInfo(dmDeviceInfos);
+    return funcResult;
+}
+
+ErrCode MediaMonitorService::GetUnifiedFaultCodeRecords(std::vector<std::string> &faultRecords, int32_t &funcResult)
+{
+    MEDIA_LOG_D("MediaMonitorService GetUnifiedFaultCodeRecords");
+    auto faultCodeVector = eventAggregate_.GetUnifiedFaultCodeRecords();
+    for (const auto &bean : faultCodeVector) {
+        if (bean == nullptr) {
+            continue;
+        }
+        std::stringstream ss;
+        ss << "0x" << std::uppercase << std::setfill('0') << std::setw(ERROR_CODE_HEX_WIDTH) << std::hex
+            << bean->GetIntValue("ERROR_CODE");
+        std::string errorCodeHex = ss.str();
+        std::string record = "uid:" + std::to_string(bean->GetIntValue("ERROR_UID")) +
+            ",errorCode:" + errorCodeHex +
+            ",errorReason:" + bean->GetStringValue("ERROR_REASON") +
+            ",timestamp:" + std::to_string(bean->GetUint64Value("TIMESTAMP"));
+        faultRecords.push_back(record);
+    }
+    funcResult = SUCCESS;
     return funcResult;
 }
 
