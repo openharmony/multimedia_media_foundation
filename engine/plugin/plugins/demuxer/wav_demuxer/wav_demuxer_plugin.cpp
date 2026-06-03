@@ -99,8 +99,6 @@ Status WavDemuxerPlugin::GetMediaInfo(MediaInfo& mediaInfo)
         mediaInfo.tracks[0].Set<Tag::AUDIO_CHANNEL_LAYOUT>(AudioChannelLayout::STEREO);
     }
     int64_t duration = 0;
-    uint32_t divisor = 0;
-    divisor = wavHeader_.sampleRate * wavHeader_.bitsPerSample * wavHeader_.numChannels;
     if (wavHeader_.sampleRate == 0 || wavHeader_.bitsPerSample == 0 || wavHeader_.numChannels == 0 ||
         !Sec2HstTime((fileSize_ - wavHeadLength_) * 8 /     // 8
         (wavHeader_.sampleRate * wavHeader_.bitsPerSample * wavHeader_.numChannels), duration)) {
