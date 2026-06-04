@@ -99,9 +99,10 @@ Status WavDemuxerPlugin::GetMediaInfo(MediaInfo& mediaInfo)
         mediaInfo.tracks[0].Set<Tag::AUDIO_CHANNEL_LAYOUT>(AudioChannelLayout::STEREO);
     }
     int64_t duration = 0;
-    if (!Sec2HstTime((fileSize_ - wavHeadLength_) * 8 /     // 8
+    if (wavHeader_.sampleRate == 0 || wavHeader_.bitsPerSample == 0 || wavHeader_.numChannels == 0 ||
+        !Sec2HstTime((fileSize_ - wavHeadLength_) * 8 /     // 8
         (wavHeader_.sampleRate * wavHeader_.bitsPerSample * wavHeader_.numChannels), duration)) {
-        MEDIA_LOG_E("value overflow!");
+        MEDIA_LOG_E("wavHeader_ is invalid or value overflow!");
     }
     mediaInfo.tracks[0].Set<Tag::MEDIA_DURATION>(duration);
     mediaInfo.tracks[0].Set<Tag::MEDIA_TYPE>(MediaType::AUDIO);
