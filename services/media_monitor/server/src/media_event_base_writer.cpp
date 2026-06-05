@@ -946,7 +946,7 @@ void MediaEventBaseWriter::WriteKaraokeFeatureStatistic(std::shared_ptr<EventBea
         "TYPE", static_cast<uint8_t>(bean->GetIntValue("TYPE")),
         "FEATURE", static_cast<uint8_t>(bean->GetIntValue("FEATURE")),
         "DEVICE_TYPE", deviceType,
-        "DURATION", duration);
+        "DURATION", static_cast<uint32_t>(duration));
     if (ret) {
         MEDIA_LOG_E("write event fail: KARAOKE_FEATURE_UTILIZATION, ret = %{public}d", ret);
     }
