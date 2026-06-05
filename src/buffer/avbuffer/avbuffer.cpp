@@ -38,17 +38,20 @@ uint64_t GenerateUniqueId()
     static const uint16_t processId = 0;
 #endif
     static std::atomic<uint32_t> bufferId = 0;
-    if (bufferId == UINT32_MAX) {
-        bufferId = 0;
-    }
+    uint32_t currentId = bufferId.load(std::memory_order_relaxed);
+    uint32_t nextId = 0;
+    do {
+        nextId = (currentId == UINT32_MAX) ? 1 : currentId + 1;
+    } while (!std::atomic_compare_exchange_weak_explicit(&bufferId, &currentId, nextId,
+        std::memory_order_relaxed, std::memory_order_relaxed));
+
     union UniqueId {
         uint64_t startTime;    //  1--16, 16: time
         uint16_t processId[4]; // 17--32, 16: process id
         uint32_t bufferId[2];  // 33--64, 32: atomic val
     } uid = {.startTime = startTime};
-    ++bufferId;
     uid.processId[1] = processId;
-    uid.bufferId[1] = bufferId;
+    uid.bufferId[1] = nextId;
     return uid.startTime;
 }
 } // namespace
