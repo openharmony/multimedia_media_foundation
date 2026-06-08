@@ -157,7 +157,6 @@ HWTEST(TestMeta, omx_state_to_string, TestSize.Level1)
 {
     ASSERT_TRUE(OmxStateToString(OMX_StateInvalid) == "OMX_StateInvalid");
     ASSERT_TRUE(OmxStateToString(OMX_StateLoaded) == "OMX_StateLoaded");
-    ASSERT_TRUE(OmxStateToString(OMX_StateLoaded) == "OMX_StateLoaded");
     ASSERT_TRUE(OmxStateToString(OMX_StateIdle) == "OMX_StateIdle");
     ASSERT_TRUE(OmxStateToString(OMX_StateExecuting) == "OMX_StateExecuting");
     ASSERT_TRUE(OmxStateToString(OMX_StatePause) == "OMX_StatePause");
