@@ -1151,7 +1151,7 @@ void PluginList::AddFFmpegMuxerPlugins()
     aacMuxerPlugin.rank = DEFAULT_RANK;
     pluginDescriptionList_.push_back(aacMuxerPlugin);
 
-    AddFFmpegFlvMuxerplugins();
+    AddFFmpegFlvMuxerPlugins();
 }
 
 void PluginList::AddFFmpegOggMuxerplugins()
@@ -1165,7 +1165,7 @@ void PluginList::AddFFmpegOggMuxerplugins()
     pluginDescriptionList_.push_back(oggMuxerPlugin);
 }
 
-void PluginList::AddFFmpegFlvMuxerplugins()
+void PluginList::AddFFmpegFlvMuxerPlugins()
 {
     PluginDescription flvMuxerPlugin;
     flvMuxerPlugin.pluginName = "ffmpegMux_flv";
