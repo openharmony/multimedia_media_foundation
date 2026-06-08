@@ -16,6 +16,7 @@
 #include "gtest/gtest.h"
 #include "plugin/common/plugin_meta.h"
 #include "pipeline/filters/codec/codec_filter_factory.h"
+#include "pipeline/filters/codec/codec_filter_base.h"
 #include "pipeline/filters/codec/codec_mode.h"
 
 using namespace testing::ext;
