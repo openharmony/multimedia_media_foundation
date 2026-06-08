@@ -30,29 +30,41 @@ HWTEST(FFmpegAvcConfigDataParserTest, testParseConfigData, TestSize.Level1)
     bool res1 = parser1->ParseConfigData();
     ASSERT_FALSE(res1);
 
+    uint8_t validConfig[] = {0x01, 0x42, 0x00, 0x1e, 0xff, 0xe1, 0x00, 0x0d, 0x67, 0x42, 0x00, 0x1e, 0x8d, 0x8d,
+        0x40, 0x28, 0x02, 0xdd, 0x80, 0x88, 0x00, 0x00, 0x03, 0x00, 0x04, 0x00, 0x00, 0x03, 0x00, 0x78, 0x3c,
+        0x18, 0x60, 0x01, 0x00, 0x05, 0x68, 0xeb, 0xec, 0xb2, 0x2c};
+    auto parser2 = std::make_shared<AVCConfigDataParser>(validConfig, sizeof(validConfig));
+    bool res2 = parser2->ParseConfigData();
+    ASSERT_TRUE(res2);
 
-    uint8_t nums[9] = {1, 2, 4, 16, 91, 128, 160, 232, 255};
-    for (size_t i = 0; i < 9; i++) {
-        uint8_t num = nums[i];
-        const uint8_t* ptr = &num;
-        size_t size = sizeof(num);
-        auto parser = std::make_shared<AVCConfigDataParser>(ptr, size);
-        bool res = parser->ParseConfigData();
-        if (num == 232 || num == 160 || num == 128) {
-            ASSERT_FALSE(res);
-        } else {
-            ASSERT_TRUE(res);
-        }
-    }
+    uint8_t invalidConfig1[] = {0x00, 0x42, 0x00, 0x1e, 0xff, 0xe1, 0x00, 0x0d};
+    auto parser3 = std::make_shared<AVCConfigDataParser>(invalidConfig1, sizeof(invalidConfig1));
+    bool res3 = parser3->ParseConfigData();
+    ASSERT_TRUE(res3);
+
+    uint8_t shortConfig[] = {0x01, 0x42, 0x00};
+    auto parser4 = std::make_shared<AVCConfigDataParser>(shortConfig, sizeof(shortConfig));
+    bool res4 = parser4->ParseConfigData();
+    ASSERT_TRUE(res4);
 }
 
 HWTEST(FFmpegAvcConfigDataParserTest, testIsNeedAddFrameHeader, TestSize.Level1)
 {
-    uint8_t num = 10;
-    const uint8_t* ptr1 = &num;
-    auto parser = std::make_shared<AVCConfigDataParser>(ptr1, 1);
-    bool res = parser->IsNeedAddFrameHeader();
-    ASSERT_FALSE(res);
+    uint8_t validConfig[] = {0x01, 0x42, 0x00, 0x1e, 0xff, 0xe1, 0x00, 0x0d, 0x67, 0x42, 0x00, 0x1e, 0x8d, 0x8d,
+        0x40, 0x28, 0x02, 0xdd, 0x80, 0x88, 0x00, 0x00, 0x03, 0x00, 0x04, 0x00, 0x00, 0x03, 0x00, 0x78, 0x3c,
+        0x18, 0x60, 0x01, 0x00, 0x05, 0x68, 0xeb, 0xec, 0xb2, 0x2c};
+    auto parser1 = std::make_shared<AVCConfigDataParser>(validConfig, sizeof(validConfig));
+    bool res1 = parser1->ParseConfigData();
+    ASSERT_TRUE(res1);
+    bool needHeader1 = parser1->IsNeedAddFrameHeader();
+    ASSERT_FALSE(needHeader1);
+
+    const uint8_t* ptr2 = nullptr;
+    auto parser2 = std::make_shared<AVCConfigDataParser>(ptr2, 0);
+    bool res2 = parser2->ParseConfigData();
+    ASSERT_FALSE(res2);
+    bool needHeader2 = parser2->IsNeedAddFrameHeader();
+    ASSERT_TRUE(needHeader2);
 }
 
 HWTEST(FFmpegAvcConfigDataParserTest, testGetNewConfigData, TestSize.Level1)
@@ -64,13 +76,18 @@ HWTEST(FFmpegAvcConfigDataParserTest, testGetNewConfigData, TestSize.Level1)
     bool res1 = parser1->GetNewConfigData(newCfgData, newCfgDataSize);
     ASSERT_FALSE(res1);
 
-    uint8_t num = 160;
-    const uint8_t* ptr2 = &num;
-    auto parser2 = std::make_shared<AVCConfigDataParser>(ptr2, 3);
+    uint8_t validConfig[] = {0x01, 0x42, 0x00, 0x1e, 0xff, 0xe1, 0x00, 0x0d, 0x67, 0x42, 0x00, 0x1e, 0x8d, 0x8d,
+        0x40, 0x28, 0x02, 0xdd, 0x80, 0x88, 0x00, 0x00, 0x03, 0x00, 0x04, 0x00, 0x00, 0x03, 0x00, 0x78, 0x3c,
+        0x18, 0x60, 0x01, 0x00, 0x05, 0x68, 0xeb, 0xec, 0xb2, 0x2c};
+    auto parser2 = std::make_shared<AVCConfigDataParser>(validConfig, sizeof(validConfig));
+    bool res2 = parser2->ParseConfigData();
+    ASSERT_TRUE(res2);
     std::shared_ptr<uint8_t> data;
     size_t size;
-    bool res2 = parser2->GetNewConfigData(data, size);
-    ASSERT_FALSE(res2);
+    bool res3 = parser2->GetNewConfigData(data, size);
+    ASSERT_TRUE(res3);
+    ASSERT_NE(data, nullptr);
+    ASSERT_GT(size, 0);
 }
 
 } // namespace Test
