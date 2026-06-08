@@ -23,6 +23,7 @@
 #include <chrono>   // NOLINT
 #include <iostream> // NOLINT
 #include <memory>   // NOLINT
+#include <thread>   // NOLINT
 #include "foundation/osal/base/synchronizer.h"
 #include "foundation/osal/thread/task.h"
 #include "foundation/pre_defines.h"
