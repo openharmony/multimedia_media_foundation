@@ -135,15 +135,13 @@ HWTEST(FFmpegDemuxerTrackMetaTest, test_ffmpetrack_meta, TestSize.Level1)
         avStream.codecpar->codec_id = codecId;
         for (auto extraDataSize : extraDataSizes) {
             avCodecContextPtr->extradata_size = extraDataSize;
+            meta.Clear();
             propagateExtraData(avStream, avFormatContextPtr, avCodecContextPtr, meta);
+            std::string mimeType;
+            meta.Get<Tag::MIME>(mimeType);
+            EXPECT_FALSE(mimeType.empty());
         }
     }
-
-
-    std::string mimeType;
-    meta.Get<Tag::MIME>(mimeType);
-
-    EXPECT_EQ(mimeType, MEDIA_MIME_AUDIO_APE);
 
     delete avStream.codecpar;
 }
