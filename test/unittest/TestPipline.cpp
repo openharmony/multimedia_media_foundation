@@ -27,11 +27,20 @@ namespace Media {
 namespace Test {
 HWTEST(TestMeta, create_filters, TestSize.Level1)
 {
-    ASSERT_TRUE(CreateCodecFilter("builtin.player.audiodecoder", FilterCodecMode::AUDIO_ASYNC_DECODER) != nullptr);
-    ASSERT_TRUE(CreateCodecFilter("builtin.player.audiodecoder", FilterCodecMode::AUDIO_SYNC_DECODER) != nullptr);
-    ASSERT_TRUE(CreateCodecFilter("builtin.player.videodecoder", FilterCodecMode::VIDEO_ASYNC_DECODER) != nullptr);
-    ASSERT_TRUE(CreateCodecFilter("builtin.player.videodecoder", FilterCodecMode::VIDEO_SYNC_DECODER) != nullptr);
-    ASSERT_TRUE(CreateCodecFilter("builtin.player.audioencoder", FilterCodecMode::AUDIO_SYNC_ENCODER) == nullptr);
+    auto audioAsyncDecoder = CreateCodecFilter("builtin.player.audiodecoder", FilterCodecMode::AUDIO_ASYNC_DECODER);
+    ASSERT_NE(audioAsyncDecoder, nullptr);
+    ASSERT_EQ(audioAsyncDecoder->GetName(), "builtin.player.audiodecoder");
+    auto audioSyncDecoder = CreateCodecFilter("builtin.player.audiodecoder", FilterCodecMode::AUDIO_SYNC_DECODER);
+    ASSERT_NE(audioSyncDecoder, nullptr);
+    ASSERT_EQ(audioSyncDecoder->GetName(), "builtin.player.audiodecoder");
+    auto videoAsyncDecoder = CreateCodecFilter("builtin.player.videodecoder", FilterCodecMode::VIDEO_ASYNC_DECODER);
+    ASSERT_NE(videoAsyncDecoder, nullptr);
+    ASSERT_EQ(videoAsyncDecoder->GetName(), "builtin.player.videodecoder");
+    auto videoSyncDecoder = CreateCodecFilter("builtin.player.videodecoder", FilterCodecMode::VIDEO_SYNC_DECODER);
+    ASSERT_NE(videoSyncDecoder, nullptr);
+    ASSERT_EQ(videoSyncDecoder->GetName(), "builtin.player.videodecoder");
+    auto audioEncoder = CreateCodecFilter("builtin.player.audioencoder", FilterCodecMode::AUDIO_SYNC_ENCODER);
+    ASSERT_EQ(audioEncoder, nullptr);
 }
 } // namespace Test
 } // namespace Media
