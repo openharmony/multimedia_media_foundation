@@ -31,7 +31,7 @@ std::shared_ptr<WavDemuxerPlugin> WavDemuxerPluginCreate(const std::string& name
 HWTEST(TestWavDemuxerPlugin, find_wav_demuxer_plugins_process, TestSize.Level1)
 {
     std::shared_ptr<WavDemuxerPlugin> wavDemuxerPlugin = WavDemuxerPluginCreate("process");
-    ASSERT_TRUE(WavDemuxerPlugin != nullptr);
+    ASSERT_TRUE(wavDemuxerPlugin != nullptr);
     auto resetStatus = wavDemuxerPlugin->Reset();
     ASSERT_TRUE(resetStatus == Status::OK);
     auto initStatus = wavDemuxerPlugin->Init();
