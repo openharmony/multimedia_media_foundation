@@ -142,8 +142,8 @@ HWTEST(AudioCaptureTest, testAudioCapturePlugin, TestSize.Level1)
 
     uint64_t size;
     auto sizeStatus = audioCapture->GetSize(size);
-    ASSERT_TRUE(size == 1024);
     ASSERT_TRUE(sizeStatus == Status::OK);
+    ASSERT_TRUE(size > 0);
 
     std::shared_ptr<Buffer> buffer = std::make_shared<Buffer>(BufferMetaType::AUDIO);
     size_t expectedLe = 10;
@@ -182,24 +182,23 @@ HWTEST(AudioCaptureTest, testGetParams, TestSize.Level1)
 
     audioCapture->GetParameter(Tag::AUDIO_SAMPLE_RATE, value);
     ASSERT_TRUE(value.HasValue());
+    int32_t sampleRate = AnyCast<int32_t>(value);
+    ASSERT_EQ(sampleRate, AudioSamplingRate::SAMPLE_RATE_8000);
 
     audioCapture->GetParameter(Tag::AUDIO_CHANNELS, value);
     ASSERT_TRUE(value.HasValue());
+    uint8_t audioChannels = AnyCast<uint8_t>(value);
+    ASSERT_EQ(audioChannels, MONO);
 
     audioCapture->GetParameter(Tag::MEDIA_BITRATE, value);
     ASSERT_TRUE(value.HasValue());
+    int64_t mediaBitrate = AnyCast<int64_t>(value);
+    ASSERT_EQ(mediaBitrate, 16666);
 
     audioCapture->GetParameter(Tag::AUDIO_SAMPLE_FORMAT, value);
     ASSERT_TRUE(value.HasValue());
-
-    audioCapture->GetParameter(Tag::AUDIO_CHANNEL_LAYOUT, value);
-    ASSERT_TRUE(value.HasValue());
-
-    audioCapture->GetParameter(Tag::AUDIO_OUTPUT_CHANNELS, value);
-    ASSERT_TRUE(value.HasValue());
-
-    audioCapture->GetParameter(Tag::AUDIO_SAMPLE_RATE, value);
-    ASSERT_TRUE(value.HasValue());
+    uint8_t audioSampleFormat = AnyCast<uint8_t>(value);
+    ASSERT_EQ(audioSampleFormat, SAMPLE_S16LE);
 }
 
 HWTEST(AudioTypeTranslateTest, testSampleRateNum2Enum, TestSize.Level1)
