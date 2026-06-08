@@ -30,6 +30,7 @@ HWTEST(FFmpegAvcConfigDataParserTest, testParseConfigData, TestSize.Level1)
     bool res1 = parser1->ParseConfigData();
     ASSERT_FALSE(res1);
 
+
     uint8_t nums[9] = {1, 2, 4, 16, 91, 128, 160, 232, 255};
     for (size_t i = 0; i < 9; i++) {
         uint8_t num = nums[i];
