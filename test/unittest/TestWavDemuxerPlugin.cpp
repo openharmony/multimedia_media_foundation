@@ -31,13 +31,15 @@ std::shared_ptr<WavDemuxerPlugin> WavDemuxerPluginCreate(const std::string& name
 HWTEST(TestWavDemuxerPlugin, find_wav_demuxer_plugins_process, TestSize.Level1)
 {
     std::shared_ptr<WavDemuxerPlugin> wavDemuxerPlugin = WavDemuxerPluginCreate("process");
-    ASSERT_TRUE(WavDemuxerPlugin != nullptr);
+    ASSERT_TRUE(wavDemuxerPlugin != nullptr);
     auto resetStatus = wavDemuxerPlugin->Reset();
     ASSERT_TRUE(resetStatus == Status::OK);
     auto initStatus = wavDemuxerPlugin->Init();
     ASSERT_TRUE(initStatus == Status::OK);
+    ASSERT_TRUE(wavDemuxerPlugin->SetCallback(nullptr) == Status::OK);
     auto prepareStatus = wavDemuxerPlugin->Prepare();
     ASSERT_TRUE(prepareStatus == Status::OK);
+    ASSERT_EQ(wavDemuxerPlugin->GetTrackCount(), 0);
     auto startStatus = wavDemuxerPlugin->Start();
     ASSERT_TRUE(startStatus == Status::OK);
     auto stopStatus = wavDemuxerPlugin->Stop();
@@ -93,7 +95,8 @@ HWTEST(TestWavDemuxerPlugin, find_wav_demuxer_plugins_get_allocator, TestSize.Le
     std::shared_ptr<WavDemuxerPlugin> wavDemuxerPlugin = WavDemuxerPluginCreate("get allocator");
     ASSERT_TRUE(wavDemuxerPlugin != nullptr);
     auto allocator =  wavDemuxerPlugin->GetAllocator();
-    ASSERT_TRUE(allocator == nullptr);
+    ASSERT_EQ(allocator, nullptr);
+    ASSERT_TRUE(wavDemuxerPlugin->GetAllocator() == nullptr);
 }
 
 HWTEST(TestWavDemuxerPlugin, find_wav_demuxer_plugins_set_callback, TestSize.Level1)
@@ -102,13 +105,18 @@ HWTEST(TestWavDemuxerPlugin, find_wav_demuxer_plugins_set_callback, TestSize.Lev
     ASSERT_TRUE(wavDemuxerPlugin != nullptr);
     Callback* cb = new Callback();
     auto status = wavDemuxerPlugin->SetCallback(cb);
-    ASSERT_TRUE(status == Status::OK);
+    ASSERT_EQ(status, Status::OK);
+    status = wavDemuxerPlugin->SetCallback(nullptr);
+    ASSERT_EQ(status, Status::OK);
+    delete cb;
 }
 
 HWTEST(TestWavDemuxerPlugin, find_wav_demuxer_plugins_get_track_count, TestSize.Level1)
 {
     std::shared_ptr<WavDemuxerPlugin> wavDemuxerPlugin = WavDemuxerPluginCreate("get track count");
     ASSERT_TRUE(wavDemuxerPlugin != nullptr);
+    size_t trackCount = wavDemuxerPlugin->GetTrackCount();
+    ASSERT_EQ(trackCount, 0);
     ASSERT_TRUE(wavDemuxerPlugin->GetTrackCount() == 0);
 }
 
@@ -117,7 +125,9 @@ HWTEST(TestWavDemuxerPlugin, find_wav_demuxer_plugins_select_track, TestSize.Lev
     std::shared_ptr<WavDemuxerPlugin> wavDemuxerPlugin = WavDemuxerPluginCreate("select track");
     ASSERT_TRUE(wavDemuxerPlugin != nullptr);
     auto selectStatus = wavDemuxerPlugin->SelectTrack(0);
-    ASSERT_TRUE(selectStatus == Status::OK);
+    ASSERT_EQ(selectStatus, Status::OK);
+    auto unselectStatus = wavDemuxerPlugin->UnselectTrack(0);
+    ASSERT_EQ(unselectStatus, Status::OK);
 }
 
 HWTEST(TestWavDemuxerPlugin, find_wav_demuxer_plugins_unselect_track, TestSize.Level1)
@@ -125,16 +135,21 @@ HWTEST(TestWavDemuxerPlugin, find_wav_demuxer_plugins_unselect_track, TestSize.L
     std::shared_ptr<WavDemuxerPlugin> wavDemuxerPlugin = WavDemuxerPluginCreate("unselect track");
     ASSERT_TRUE(wavDemuxerPlugin != nullptr);
     auto unselectStatus = wavDemuxerPlugin->UnselectTrack(0);
-    ASSERT_TRUE(unselectStatus == Status::OK);
+    ASSERT_EQ(unselectStatus, Status::OK);
+    auto selectStatus = wavDemuxerPlugin->SelectTrack(0);
+    ASSERT_EQ(selectStatus, Status::OK);
 }
 
 HWTEST(TestWavDemuxerPlugin, find_wav_demuxer_plugins_get_select_track, TestSize.Level1)
 {
     std::shared_ptr<WavDemuxerPlugin> wavDemuxerPlugin = WavDemuxerPluginCreate("get select track");
     ASSERT_TRUE(wavDemuxerPlugin != nullptr);
-    std::vector<int32_t> trackIds = new std::vector<int32_t>[1];
+    std::vector<int32_t> trackIds;
     auto selectStatus = wavDemuxerPlugin->GetSelectedTracks(trackIds);
-    ASSERT_TRUE(selectStatus == Status::OK);
+    ASSERT_EQ(selectStatus, Status::OK);
+    ASSERT_TRUE(wavDemuxerPlugin->SelectTrack(0) == Status::OK);
+    selectStatus = wavDemuxerPlugin->GetSelectedTracks(trackIds);
+    ASSERT_EQ(selectStatus, Status::OK);
 }
 
 } // namespace Test

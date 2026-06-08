@@ -23,6 +23,7 @@
 #include <chrono>   // NOLINT
 #include <iostream> // NOLINT
 #include <memory>   // NOLINT
+#include <thread>   // NOLINT
 #include "foundation/osal/base/synchronizer.h"
 #include "foundation/osal/thread/task.h"
 #include "foundation/pre_defines.h"
@@ -110,7 +111,15 @@ HWTEST_F(TestSynchronizer, test_wait_succ, TestSize.Level1)
         synchronizer.Notify(syncId, expect);
     });
     task2->Start();
-    while (!isDataRcved.load()) {}
+    auto startTime = std::chrono::steady_clock::now();
+    auto timeout = std::chrono::seconds(2);
+    while (!isDataRcved.load()) {
+        if (std::chrono::steady_clock::now() - startTime > timeout) {
+            break;
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    }
+    EXPECT_TRUE(isDataRcved.load());
     EXPECT_EQ(expect, result);
 }
 } // namespace Test
