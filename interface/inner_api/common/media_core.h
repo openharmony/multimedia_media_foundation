@@ -114,6 +114,30 @@ enum MediaServiceErrCode : ErrCode {
     MSERR_PARAM_OUT_OF_RANGE,                           // Parameter value out of range.
     MSERR_EXTEND_START      = MS_ERR_OFFSET + 0xF000,   // extend err start.
     MSERR_CLEARTEXT_NOT_PERMITTED,                      // http cleartext not permitted.
+    MSERR_VID_DEC_INIT_FAILED,                          // video mimeType Decoder create failed.
+    MSERR_AUD_DEC_INIT_FAILED,                          // audio mimeType Decoder create failed.
+    MSERR_VID_DEC_CONFIGURE_FAILED,                     // video Decoder configure failed.
+    MSERR_AUD_DEC_CONFIGURE_FAILED,                     // audio Decoder configure failed.
+    MSERR_VID_ENHANCER_CONFIGURE_FAILED,                // video Resize configure failed
+    MSERR_NO_VALID_TRACK_FOUND,                         // no valid video and audio track found.
+    MSERR_SET_INPUT_DATA_SOURCE_FAILED,                 // set input data source failed.
+    MSERR_VID_ENC_INIT_FAILED,                          // video encode create failed.
+    MSERR_VID_ENC_CONFIG_FAILED,                        // video encode configure failed.
+    MSERR_VID_ENC_START_FAILED,                         // video encode start failed.
+    MSERR_VID_ENC_STOP_FAILED,                          // video encode stop failed.
+    MSERR_AUD_FAILED,                                   // Audio init failed.
+    MSERR_AUD_INIT_FAILED,                              // Audio init failed.
+    MSERR_AUD_START_FAILED,                             // Audio start failed.
+    MSERR_AUD_STOP_FAILED,                              // Audio stop failed.
+    MSERR_AUD_ENC_INIT_FAILED,                          // audio encode create failed.
+    MSERR_AUD_ENC_START_FAILED,                         // audio encode start failed.
+    MSERR_AUD_ENC_STOP_FAILED,                          // audio encode stop failed.
+    MSERR_MUXER_INIT_FAILED,                            // muxer create failed.
+    MSERR_MUXER_START_FAILED,                           // muxer start failed.
+    MSERR_MUXER_STOP_FAILED,                            // muxer stop failed.
+    MSERR_FRAMEWORK_ERROR,                              // Framework error.
+    MSERR_VID_CAPTURE_CONFIG_FAILED,                    // Video capture configure failed.
+    MSERR_INVALID_TIMESTAMP,                            // Data error, timestamp is invalid.
 };
 
 // media api error code
