@@ -578,8 +578,9 @@ HWTEST(MediaMonitorManagerUnitTest, Monitor_Karaoke_AddToVector_Existing_001, Te
 
 HWTEST(MediaMonitorManagerUnitTest, Monitor_Karaoke_HandleEvent_Empty_001, TestSize.Level0)
 {
+    MediaMonitorPolicy::GetMediaMonitorPolicy().karaokeFeatureEventVector_.clear();
     MediaMonitorPolicy::GetMediaMonitorPolicy().HandleToKaraokeFeatureEvent();
-    EXPECT_TRUE(true);
+    EXPECT_EQ(MediaMonitorPolicy::GetMediaMonitorPolicy().karaokeFeatureEventVector_.size(), 0);
 }
 
 HWTEST(MediaMonitorManagerUnitTest, Monitor_Karaoke_HandleEvent_NullInVector_001, TestSize.Level0)
@@ -666,7 +667,8 @@ HWTEST(MediaMonitorManagerUnitTest, Monitor_Karaoke_MultipleFeatures_001, TestSi
 {
     std::vector<int32_t> features = {1, 2, 3};
     std::vector<int32_t> deviceTypes = {1, 2, 3, 4, 5};
-    
+
+    MediaMonitorPolicy::GetMediaMonitorPolicy().karaokeFeatureEventVector_.clear();
     for (size_t i = 0; i < features.size(); i++) {
         std::shared_ptr<EventBean> bean = std::make_shared<EventBean>(
             AUDIO, KARAOKE_FEATURE_UTILIZATION, FREQUENCY_AGGREGATION_EVENT);
@@ -680,8 +682,7 @@ HWTEST(MediaMonitorManagerUnitTest, Monitor_Karaoke_MultipleFeatures_001, TestSi
     }
 
     MediaMonitorPolicy::GetMediaMonitorPolicy().HandleToKaraokeFeatureEvent();
-
-    EXPECT_TRUE(true);
+    EXPECT_EQ(MediaMonitorPolicy::GetMediaMonitorPolicy().karaokeFeatureEventVector_.size(), 0);
 }
 
 HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_GetUnifiedFaultCodeRecords_001, TestSize.Level0)
