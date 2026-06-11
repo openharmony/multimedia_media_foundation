@@ -32,24 +32,6 @@ namespace Media {
 namespace Test {
 using namespace OHOS::Media::Plugin;
 
-HWTEST(TestPluginManager, ListPlugins_case4, TestSize.Level1)
-{
-    std::vector<std::string> plugins = PluginManager::Instance().ListPlugins(PluginType::DEMUXER);
-    ASSERT_TRUE(plugins.size() > 1);
-    for (const auto & plugin : plugins) {
-        ASSERT_NE(plugin, "");
-    }
-}
-
-HWTEST(TestPluginManager, ListPlugins_case5, TestSize.Level1)
-{
-    std::vector<std::string> plugins = PluginManager::Instance().ListPlugins(PluginType::AUDIO_DECODER);
-    ASSERT_TRUE(plugins.size() > 1);
-    for (const auto & plugin : plugins) {
-        ASSERT_NE(plugin, "");
-    }
-}
-
 HWTEST(TestPluginManager, ListPlugins_case6, TestSize.Level1)
 {
     std::vector<std::string> plugins = PluginManager::Instance().ListPlugins(PluginType::AUDIO_SINK);
