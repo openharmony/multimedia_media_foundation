@@ -866,7 +866,7 @@ void MediaMonitorPolicy::AddToCallSessionQueue(std::shared_ptr<EventBean> &bean)
 
     std::lock_guard<std::mutex> lock(callSessionMutex_);
     if (callSessionHapSet_.find(key) == callSessionHapSet_.end() &&
-        callSessionHapSet_.size() <= callSessionHapSetSize_) {
+        callSessionHapSet_.size() < callSessionHapSetSize_) {
         callSessionHapSet_.emplace(key);
         mediaEventBaseWriter_.WriteAppCallSession(bean);
     }
