@@ -116,13 +116,10 @@ void propagateExtraData(const AVStream& avStream,
 HWTEST(FFmpegDemuxerTrackMetaTest, test_ffmpetrack_meta, TestSize.Level1)
 {
     AVStream avStream;
-
     avStream.codecpar = new AVCodecParameters();
-    avStream.codecpar->codec_id = AV_CODEC_ID_PCM_S16LE;
 
     const shared_ptr<AVFormatContext> avFormatContextPtr = make_shared<AVFormatContext>();
     const shared_ptr<AVCodecContext> avCodecContextPtr = make_shared<AVCodecContext>();
-    Meta meta;
 
     AVCodecID codecIds[] = {AV_CODEC_ID_PCM_S16LE, AV_CODEC_ID_PCM_S16BE, AV_CODEC_ID_PCM_U16LE, AV_CODEC_ID_PCM_U16BE,
         AV_CODEC_ID_PCM_S24LE, AV_CODEC_ID_PCM_F32LE, AV_CODEC_ID_PCM_S8, AV_CODEC_ID_PCM_U8, AV_CODEC_ID_MP1,
@@ -131,11 +128,30 @@ HWTEST(FFmpegDemuxerTrackMetaTest, test_ffmpetrack_meta, TestSize.Level1)
 
     int extraDataSizes[] = {0, 2};
 
+    std::map<AVCodecID, std::string> expectedMimes = {
+        {AV_CODEC_ID_PCM_S16LE, MEDIA_MIME_AUDIO_RAW},
+        {AV_CODEC_ID_PCM_S16BE, MEDIA_MIME_AUDIO_RAW},
+        {AV_CODEC_ID_PCM_U16LE, MEDIA_MIME_AUDIO_RAW},
+        {AV_CODEC_ID_PCM_U16BE, MEDIA_MIME_AUDIO_RAW},
+        {AV_CODEC_ID_PCM_S24LE, MEDIA_MIME_AUDIO_RAW},
+        {AV_CODEC_ID_PCM_F32LE, MEDIA_MIME_AUDIO_RAW},
+        {AV_CODEC_ID_PCM_S8, MEDIA_MIME_AUDIO_RAW},
+        {AV_CODEC_ID_PCM_U8, MEDIA_MIME_AUDIO_RAW},
+        {AV_CODEC_ID_MP1, MEDIA_MIME_AUDIO_MPEG},
+        {AV_CODEC_ID_MP2, MEDIA_MIME_AUDIO_MPEG},
+        {AV_CODEC_ID_MP3, MEDIA_MIME_AUDIO_MPEG},
+        {AV_CODEC_ID_AAC, MEDIA_MIME_AUDIO_AAC},
+        {AV_CODEC_ID_AAC_LATM, MEDIA_MIME_AUDIO_AAC_LATM},
+        {AV_CODEC_ID_VORBIS, MEDIA_MIME_AUDIO_VORBIS},
+        {AV_CODEC_ID_FLAC, MEDIA_MIME_AUDIO_FLAC},
+        {AV_CODEC_ID_APE, MEDIA_MIME_AUDIO_APE},
+    };
+
     for (auto codecId : codecIds) {
-        avStream.codecpar->codec_id = codecId;
         for (auto extraDataSize : extraDataSizes) {
+            avStream.codecpar->codec_id = codecId;
             avCodecContextPtr->extradata_size = extraDataSize;
-            meta.Clear();
+            Meta meta;
             propagateExtraData(avStream, avFormatContextPtr, avCodecContextPtr, meta);
             std::string mimeType;
             meta.Get<Tag::MIME>(mimeType);
