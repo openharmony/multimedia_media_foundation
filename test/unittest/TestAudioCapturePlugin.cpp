@@ -15,6 +15,8 @@
 
 #include "gtest/gtest.h"
 #include "plugin/common/any.h"
+#define private public
+#define protected public
 #include "plugin/plugins/source/audio_capture/audio_capture_plugin.h"
 #include "plugin/plugins/source/audio_capture/audio_type_translate.h"
 
@@ -47,24 +49,31 @@ HWTEST(AudioCaptureTest, testAudioCapturePluginErrorBranch, TestSize.Level1)
 
     auto status = audioCapture->Init();
     ASSERT_TRUE(status == Status::OK);
+    ASSERT_TRUE(audioCapture->audioCapturer_ != nullptr);
 
     auto prepareStatus = audioCapture->Prepare();
     ASSERT_TRUE(prepareStatus == Status::OK);
+    ASSERT_TRUE(audioCapture->bufferSize_ > 0);
 
     auto deInitStatus = audioCapture->Deinit();
     ASSERT_TRUE(deInitStatus == Status::OK);
+    ASSERT_TRUE(audioCapture->audioCapturer_ == nullptr);
 
     auto resetStatus = audioCapture->Reset();
     ASSERT_FALSE(resetStatus == Status::OK);
+    ASSERT_TRUE(audioCapture->audioCapturer_ == nullptr);
 
     auto prepare = audioCapture->Prepare();
     ASSERT_FALSE(prepare == Status::OK);
+    ASSERT_TRUE(audioCapture->audioCapturer_ == nullptr);
 
     auto startStatus = audioCapture->Start();
     ASSERT_FALSE(startStatus == Status::OK);
+    ASSERT_TRUE(audioCapture->audioCapturer_ == nullptr);
 
     auto stopStatus = audioCapture->Stop();
     ASSERT_TRUE(stopStatus == Status::OK);
+    ASSERT_TRUE(audioCapture->audioCapturer_ == nullptr);
 }
 
 HWTEST(AudioCaptureTest, testAudioCapturePluginStart, TestSize.Level1)
@@ -166,7 +175,6 @@ HWTEST(AudioCaptureTest, testGetParams, TestSize.Level1)
     ASSERT_TRUE(audioCapture != nullptr);
 
     ValueType value;
-    audioCapture->GetParameter(Tag::AUDIO_SAMPLE_RATE, value);
 
     auto initStatus = audioCapture->Init();
     ASSERT_TRUE(initStatus == Status::OK);
