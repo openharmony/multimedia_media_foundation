@@ -116,13 +116,10 @@ void propagateExtraData(const AVStream& avStream,
 HWTEST(FFmpegDemuxerTrackMetaTest, test_ffmpetrack_meta, TestSize.Level1)
 {
     AVStream avStream;
-
-    avStream.codecpar = new AVCodecParameters();
-    avStream.codecpar->codec_id = AV_CODEC_ID_PCM_S16LE;
+    avStream.codecpar = new AVCodecParameters()
 
     const shared_ptr<AVFormatContext> avFormatContextPtr = make_shared<AVFormatContext>();
     const shared_ptr<AVCodecContext> avCodecContextPtr = make_shared<AVCodecContext>();
-    Meta meta;
 
     AVCodecID codecIds[] = {AV_CODEC_ID_PCM_S16LE, AV_CODEC_ID_PCM_S16BE, AV_CODEC_ID_PCM_U16LE, AV_CODEC_ID_PCM_U16BE,
         AV_CODEC_ID_PCM_S24LE, AV_CODEC_ID_PCM_F32LE, AV_CODEC_ID_PCM_S8, AV_CODEC_ID_PCM_U8, AV_CODEC_ID_MP1,
