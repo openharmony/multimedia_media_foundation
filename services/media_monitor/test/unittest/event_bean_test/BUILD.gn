@@ -60,9 +60,9 @@ ohos_unittest("bean_unit_test") {
   ]
 
   external_deps = [
+    "samgr:samgr_proxy",
     "c_utils:utils",
     "hilog:libhilog",
     "ipc:ipc_core",
-    "samgr:samgr_proxy",
   ]
 }
