@@ -138,6 +138,45 @@ enum MediaServiceErrCode : ErrCode {
     MSERR_FRAMEWORK_ERROR,                              // Framework error.
     MSERR_VID_CAPTURE_CONFIG_FAILED,                    // Video capture configure failed.
     MSERR_INVALID_TIMESTAMP,                            // Data error, timestamp is invalid.
+    MSERR_INVALID_FD,                                   // Invalid fd.
+    MSERR_INVALID_WRITE,                                // File descriptor is not in read-write mode or write-only mode.
+    MSERR_INVALID_AUD_BITRATE,                          // Invalid audioBitrate.
+    MSERR_INVALID_INNERCAP,                             // AudioSampleRate and audioChannelCount is 0.
+    MSERR_INVALID_VID_CODEC_FORMAT,                     // Invalid preset.
+    MSERR_INVALID_VID_BITRATE,                          // Invalid videoBitrate.
+    MSERR_INVALID_VID_FRAME_WIDTH,                      // Invalid frameWidth.
+    MSERR_INVALID_VID_FRAME_HEIGHT,                     // invalid frameHeight.
+    MSERR_INVALID_VID_WIDTH_HEIGHT,                     // init default width and height failed.
+    MSERR_INVALID_AUD_CHANNEL,                          // Invalid audioChannelCount.
+    MSERR_INVALID_AUD_SAMPLE_RATE,                      // Invalid audioSampleRate.
+    MSERR_INVALID_FILL_MODE,                            // Invalid fillMode.
+    MSERR_INVALID_OPERATION_CREATE,                     // Capture state is not CREATED.
+    MSERR_INVALID_OPERATION_OVERSIZE,                   // Exceeding the number of instances, max is 2.
+    MSERR_UNKNOWN_RECORDER_INIT,                        // AVRecorder init failed.
+    MSERR_UNKNOWN_RECORDER_SETFILE,                     // AVRecorder set file failed.
+    MSERR_UNKNOWN_RECORDER_PREPARE,                     // AVRecorder Prepare failed.
+    MSERR_UNKNOWN_RECORDER_GETSURFACE,                  // AVRecorder getSurface failed.
+    MSERR_UNKNOWN_RECORDER_SETAUDIO,                    // AVRecorder set audio failed.
+    MSERR_UNKNOWN_RECORDER_STOP,                        // AVRecorder stop failed.
+    MSERR_UNKNOWN_RECORDER_PAUSE,                       // AVRecorder pause failed.
+    MSERR_UNKNOWN_RECORDER_RESUME,                      // AVRecorder Resume failed.
+    MSERR_UNKNOWN_AUDIO_START,                          // AudioCapturer Start failed.
+    MSERR_UNKNOWN_RECORDER_WATERMASK,                   // AVRecorder addWatermark failed.
+    MSERR_UNKNOWN_CREAT_RECORDER,                       // Create AVrecorder failed.
+    MSERR_UNKNOWN_CREATE_VIRTUAL_SCREEN,                // CreateVirtualScreen failed.
+    MSERR_UNKNOWN_MAKE_MIRROR,                          // MakeVirtualScreenMirror failed.
+    MSERR_UNKNOWN_INCALL,                               // call is currently in progress.
+    MSERR_UNSUPPORT_INCALL,                             // a call is currently in progress.
+    MSERR_UNKNOWN_AUDIO_CREATE,                         // Create AudioCapturer failed.
+    MSERR_INVALID_OPERATION_STOPPED_PAUSED,             // Capture state not in CREATED or STOPPED or PAUSED.
+    MSERR_INVALID_OPERATION_ENABLEPAUSE,                // EnablePause is false.
+    MSERR_INVALID_OPERATION_STARTED_RESUMED,            // Capture state is not in STARTED or RESUMED.
+    MSERR_INVALID_OPERATION_PAUSED,                     // Capture state is not in PAUSED.
+    MSERR_INVALID_OPERATION_AREA,                       // GetScreenAreaOfDisplayArea failed.
+    MSERR_INVALID_OPERATION_UNSUPPORT,                  // Device not support.
+    MSERR_INVALID_OPERATION_PRESENT,                    // PresentPicker not support picker.
+    MSERR_INVALID_OPERATION_STARTED,                    // Capture state is not in STARTED.
+    MSERR_UNKNOWN_UNSUPPORT,                            // Device not support.
 };
 
 // media api error code
