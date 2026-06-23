@@ -66,6 +66,7 @@ enum struct EventType : uint32_t {
     EVENT_HW_DECODER_UNSUPPORT_CAP,
     EVENT_NOTIFY_SEEK_CLOSEST,
     EVENT_TIMED_METADATA,
+    EVENT_ADS_CHANGE,
 };
 
 // DFX events and infos reported from filters, modules, and plugins
