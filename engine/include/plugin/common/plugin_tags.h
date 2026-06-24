@@ -172,6 +172,7 @@ enum struct Tag : uint32_t {
     VIDEO_MAX_SURFACE_NUM,                           ///< uint32_t, max video surface num
     VIDEO_CAPTURE_RATE,                              ///< double, video capture rate
     VIDEO_BIT_STREAM_FORMAT,                         ///< @see VideoBitStreamFormat
+    VIDEO_TYPE,                                      ///< int32_t, video type (SDR/HDR_VIVID/HDR_10)
 
     /* -------------------- video specific tag -------------------- */
     VIDEO_SPECIFIC_H264_START = MAKE_VIDEO_SPECIFIC_START(VideoFormat::H264),

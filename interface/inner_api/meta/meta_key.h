@@ -24,6 +24,9 @@ class Tag {
 public:
     /* -------------------- regular tag -------------------- */
     static constexpr const char REGULAR_TRACK_ID[] = "track_index"; ///< track id
+    static constexpr const char STREAM_ID_FOR_REPORT[] = "stream_id_for_report"; ///< stream id for media change report
+    static constexpr const char MEDIA_CHANGE_SEQ[] = "media_change_seq"; ///< media change sequence number
+    static constexpr const char MEDIA_CHANGE_STREAM_TYPE[] = "media_change_stream_type"; ///< media change stream type
     static constexpr const char REQUIRED_IN_BUFFER_CNT[] =
         "max_input_buffer_count"; ///< required buffer count of plugin; read only tag
     static constexpr const char REQUIRED_IN_BUFFER_SIZE[] =
@@ -224,6 +227,7 @@ public:
     static constexpr const char VIDEO_COLOR_RANGE[] = "range_flag";                    ///< bool, video color range
     static constexpr const char VIDEO_IS_HDR_VIVID[] = "video_is_hdr_vivid";           ///< bool, video is hdr vivid
     static constexpr const char VIDEO_HDR_TYPE[] = "video_hdr_type";                   ///< @see HDRType
+    static constexpr const char VIDEO_TYPE[] = "video_type";         ///< int32_t, @see VideoType (SDR/HDR_VIVID/HDR_10)
     static constexpr const char VIDEO_HDR_COMPATIBILITY[] = "video_hdr_compatibility"; ///< @see HDRType
     static constexpr const char VIDEO_STRIDE[] = "stride";                             ///< int32_t, video stride
     static constexpr const char VIDEO_DISPLAY_WIDTH[] = "display_width";            ///< int32_t, video display width
