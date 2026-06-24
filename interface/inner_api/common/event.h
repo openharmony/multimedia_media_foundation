@@ -22,6 +22,14 @@
 
 namespace OHOS {
 namespace Media {
+
+enum MediaStreamType : int32_t {
+    MEDIA_STREAM_TYPE_MIXED = 0,
+    MEDIA_STREAM_TYPE_VIDEO = 1,
+    MEDIA_STREAM_TYPE_AUDIO = 2,
+    MEDIA_STREAM_TYPE_SUBTITLE = 3,
+};
+
 // 各个组件向Pipeline报告的事件类型
 enum struct EventType : uint32_t {
     EVENT_READY = 0,
@@ -67,6 +75,8 @@ enum struct EventType : uint32_t {
     EVENT_NOTIFY_SEEK_CLOSEST,
     EVENT_TIMED_METADATA,
     EVENT_ADS_CHANGE,
+    EVENT_VIDEO_NEW_TRACK_RENDER_START,
+    EVENT_AUDIO_NEW_TRACK_RENDER_START,
 };
 
 // DFX events and infos reported from filters, modules, and plugins
@@ -81,10 +91,14 @@ enum struct DfxEventType : uint32_t {
     DFX_EVENT_BUTT,
     DFX_EVENT_STALLING,
     DFX_EVENT_AVDESYNC,
-    DFX_EVENT_MEDIA_CHANGED,
+    DFX_EVENT_LOADING_BITRATE,
     DFX_EVENT_LOADING_ERROR,
+    DFX_EVENT_MEDIA_CHANGED,
     DFX_EVENT_MEDIA_DISCONTINUE,
-    DFX_EVENT_AUDIO_ERROR
+    DFX_EVENT_CODEC_ABNORMAL,
+    DFX_EVENT_AUDIO_STATUS,
+    DFX_EVENT_AUDIO_ERROR,
+    DFX_EVENT_NEW_TRACK_RENDER_START,
 };
 
 struct Event {
@@ -98,6 +112,30 @@ struct DfxEvent {
     std::string callerName;
     DfxEventType type;
     Any param;
+};
+
+struct MediaDiscontinueInfo {
+    int32_t streamType;
+    int32_t discontinueType;
+    int64_t ptsBefore;
+    int64_t ptsAfter;
+    int32_t sampleRateBefore;
+    int32_t sampleRateAfter;
+    int32_t channelsBefore;
+    int32_t channelsAfter;
+    int32_t sampleFormatBefore;
+    int32_t sampleFormatAfter;
+};
+
+struct CodecAbnormalInfo {
+    int32_t decoderType;
+    int32_t errorCode;
+};
+
+struct LipAsyncInfo {
+    int32_t asyncType;
+    int64_t startTimeMs;
+    int64_t endTimeMs;
 };
 
 const char* GetEventName(EventType type);

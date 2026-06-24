@@ -203,6 +203,7 @@ public:
                            AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_HDR_TYPE, Plugins::HDRType,
                            AnyValueType::INT32_T);
+    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_TYPE, int32_t, AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_HDR_COMPATIBILITY, Plugins::HDRType,
                            AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_COLOR_TRC, Plugins::TransferCharacteristic,
