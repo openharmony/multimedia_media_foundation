@@ -15,6 +15,7 @@
 
 #include "meta/meta.h"
 #include <functional>
+#include <mutex>
 #include "common/log.h"
 #include "meta.h"
 
@@ -658,9 +659,12 @@ static std::map<AnyValueType, const Any &> g_ValueTypeDefaultValueMap = {
     {AnyValueType::VECTOR_INT32, defaultVectorInt32},
     {AnyValueType::VECTOR_INT64, defaultVectorInt64},
 };
+static std::mutex g_metadataDefaultValueMapMutex;
+static std::mutex g_valueTypeDefaultValueMapMutex;
 
 Any GetDefaultAnyValue(const TagType& tag)
 {
+    std::lock_guard<std::mutex> lock(g_metadataDefaultValueMapMutex);
     auto iter = g_metadataDefaultValueMap.find(tag);
     FALSE_RETURN_V(iter != g_metadataDefaultValueMap.end(), defaultString);
     return iter->second;
@@ -668,6 +672,7 @@ Any GetDefaultAnyValue(const TagType& tag)
 
 std::optional<Any> GetDefaultAnyValueOpt(const TagType &tag)
 {
+    std::lock_guard<std::mutex> lock(g_metadataDefaultValueMapMutex);
     auto iter = g_metadataDefaultValueMap.find(tag);
     if (iter == g_metadataDefaultValueMap.end()) {
         return std::nullopt;
@@ -677,8 +682,10 @@ std::optional<Any> GetDefaultAnyValueOpt(const TagType &tag)
 
 Any GetDefaultAnyValue(const TagType &tag, AnyValueType type)
 {
+    std::lock_guard<std::mutex> lock(g_metadataDefaultValueMapMutex);
     auto iter = g_metadataDefaultValueMap.find(tag);
     if (iter == g_metadataDefaultValueMap.end()) {
+        std::lock_guard<std::mutex> lock(g_valueTypeDefaultValueMapMutex);
         auto typeIter = g_ValueTypeDefaultValueMap.find(type);
         if (typeIter != g_ValueTypeDefaultValueMap.end()) {
             return typeIter->second;
@@ -691,6 +698,7 @@ Any GetDefaultAnyValue(const TagType &tag, AnyValueType type)
 
 bool Meta::IsDefinedKey(const TagType &tag) const
 {
+    std::lock_guard<std::mutex> lock(g_metadataDefaultValueMapMutex);
     auto iter = g_metadataDefaultValueMap.find(tag);
     if (iter == g_metadataDefaultValueMap.end()) {
         return false;
