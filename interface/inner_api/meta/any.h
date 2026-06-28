@@ -664,7 +664,7 @@ private:
     };
 
     template <typename ValueType>
-    static FunctionTable* GetFunctionTable()
+    static const FunctionTable* GetFunctionTable()
     {
         using DecayedValueType = decay_t<ValueType>;
         using DetailFunctionTable =
@@ -672,7 +672,7 @@ private:
             TrivialStackFunctionTable<DecayedValueType>,
             conditional_t<IsStackStorable<DecayedValueType>::value,
             StackFunctionTable<DecayedValueType>, HeapFunctionTable<DecayedValueType>>>;
-        static FunctionTable table = {
+        static constexpr FunctionTable table = {
 #ifndef HST_ANY_WITH_NO_RTTI
             .type = DetailFunctionTable::Type,
 #else
@@ -761,7 +761,7 @@ private:
 
 private:
     Storage storage_ {};
-    FunctionTable* functionTable_ {nullptr};
+    const FunctionTable* functionTable_ {nullptr};
 };
 
 /**
