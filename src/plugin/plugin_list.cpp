@@ -99,13 +99,12 @@ PluginList::PluginList()
     AddAudioVendorAacEncodersPlugin();
     AddG711muAudioDecoderPlugins();
     AddG711aAudioDecoderPlugins();
-    AddLbvcAudioDecoderPlugins();
     AddOpusAudioDecoderPlugins();
     AddRawAudioDecoderPlugins();
     AddAudioServerSinkPlugins();
     AddFFmpegAudioEncodersPlugins();
     AddG711muAudioEncoderPlugins();
-    AddLbvcAudioEncoderPlugins();
+    AddLbvcAudioCodecPlugins();
     AddOpusAudioEncoderPlugins();
     AddAmrwbAudioEncoderPlugins();
     AddAmrnbAudioEncoderPlugins();
@@ -744,17 +743,6 @@ void PluginList::AddG711aAudioDecoderPlugins()
     pluginDescriptionList_.push_back(g711aAudioDecoderPlugin);
 }
 
-void PluginList::AddLbvcAudioDecoderPlugins()
-{
-    PluginDescription lbvcAudioDecoderPlugin;
-    lbvcAudioDecoderPlugin.pluginName = "OH.Media.Codec.Decoder.Audio.LBVC";
-    lbvcAudioDecoderPlugin.packageName = "LbvcAudioDecoder";
-    lbvcAudioDecoderPlugin.pluginType = PluginType::AUDIO_DECODER;
-    lbvcAudioDecoderPlugin.cap = "audio/lbvc";
-    lbvcAudioDecoderPlugin.rank = DEFAULT_RANK;
-    pluginDescriptionList_.push_back(lbvcAudioDecoderPlugin);
-}
-
 void PluginList::AddOpusAudioDecoderPlugins()
 {
     PluginDescription opusAudioDecoderPlugin;
@@ -1036,11 +1024,19 @@ void PluginList::AddG711muAudioEncoderPlugins()
     pluginDescriptionList_.push_back(g711muAudioEncoderPlugin);
 }
 
-void PluginList::AddLbvcAudioEncoderPlugins()
+void PluginList::AddLbvcAudioCodecPlugins()
 {
+    PluginDescription lbvcAudioDecoderPlugin;
+    lbvcAudioDecoderPlugin.pluginName = "OH.Media.Codec.Decoder.Audio.LBVC";
+    lbvcAudioDecoderPlugin.packageName = "LbvcAudioCodec";
+    lbvcAudioDecoderPlugin.pluginType = PluginType::AUDIO_DECODER;
+    lbvcAudioDecoderPlugin.cap = "audio/lbvc";
+    lbvcAudioDecoderPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(lbvcAudioDecoderPlugin);
+
     PluginDescription lbvcAudioEncoderPlugin;
     lbvcAudioEncoderPlugin.pluginName = "OH.Media.Codec.Encoder.Audio.LBVC";
-    lbvcAudioEncoderPlugin.packageName = "LbvcAudioEncoder";
+    lbvcAudioEncoderPlugin.packageName = "LbvcAudioCodec";
     lbvcAudioEncoderPlugin.pluginType = PluginType::AUDIO_ENCODER;
     lbvcAudioEncoderPlugin.cap = "audio/lbvc";
     lbvcAudioEncoderPlugin.rank = DEFAULT_RANK;

@@ -82,13 +82,12 @@ private:
     void AddL2hcDecodersPlugins();
     void AddG711muAudioDecoderPlugins();
     void AddG711aAudioDecoderPlugins();
-    void AddLbvcAudioDecoderPlugins();
     void AddOpusAudioDecoderPlugins();
     void AddRawAudioDecoderPlugins();
     void AddAudioServerSinkPlugins();
     void AddFFmpegAudioEncodersPlugins();
     void AddG711muAudioEncoderPlugins();
-    void AddLbvcAudioEncoderPlugins();
+    void AddLbvcAudioCodecPlugins();
     void AddOpusAudioEncoderPlugins();
     void AddAmrwbAudioEncoderPlugins();
     void AddAmrnbAudioEncoderPlugins();
