@@ -17,6 +17,7 @@ group("media_monitor_unit_test") {
   if (hst_is_standard_sys) {
     deps = [
       "event_bean_test:event_bean_unit_test",
+      "media_monitor_dt_test:media_monitor_dt_test",
       "monitor_manger_test:media_monitor_manger_unit_test",
     ]
   }
