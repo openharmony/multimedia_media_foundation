@@ -220,9 +220,6 @@ public:
 
     MediaSource(std::string uri, std::map<std::string, std::string> header);
 
-    // Use cachePath to create MediaSource
-    MediaSource(std::string uri, std::string cachePath);
-
     /// Destructor
     virtual ~MediaSource() = default;
 
@@ -256,9 +253,6 @@ public:
 
     bool GetenableOfflineCache();
 
-    // Get MediaSource cachePath
-    std::string GetCachePath() const;
-
     //std::shared_ptr<DataConsumer> GetDataConsumer() const;
 #ifndef OHOS_LITE
     std::shared_ptr<IMediaDataSource> GetDataSrc() const;
@@ -271,7 +265,6 @@ private:
     std::shared_ptr<PlayStrategy> playStrategy_ {};
     int32_t appUid_ {-1};
     bool enable_ {false};
-    std::string cachePath_ {};  // cache path
     //std::shared_ptr<DataConsumer> dataConsumer_ {};
 #ifndef OHOS_LITE
     std::shared_ptr<IMediaDataSource> dataSrc_ {};
