@@ -62,20 +62,20 @@ template <typename T, typename U>
 inline int32_t HdiSetParameter(T& component, uint32_t paramIndex, U& param)
 {
     const int8_t* p = reinterpret_cast<const int8_t*>(&param);
-    std::vector<int8_t> inVec(p, p + sizeof(T));
+    std::vector<int8_t> inVec(p, p + sizeof(U));
     return component->SetParameter(paramIndex, inVec);
 }
 
 template <typename T, typename U>
 inline int32_t HdiGetParameter(T& component, uint32_t paramIndex, U& param)
 {
-    std::vector<int8_t> inVec(reinterpret_cast<int8_t*>(&param), reinterpret_cast<int8_t*>(&param) + sizeof(T));
+    std::vector<int8_t> inVec(reinterpret_cast<int8_t*>(&param), reinterpret_cast<int8_t*>(&param) + sizeof(U));
     std::vector<int8_t> outVec;
     auto ret = component->GetParameter(paramIndex, inVec, outVec);
-    if (ret != HDF_SUCCESS || outVec.size() != sizeof(T)) {
+    if (ret != HDF_SUCCESS || outVec.size() != sizeof(U)) {
         return HDF_FAILURE;
     }
-    return (memcpy_s(&param, sizeof(T), outVec.data(), outVec.size()) == EOK) ? HDF_SUCCESS : HDF_FAILURE;
+    return (memcpy_s(&param, sizeof(U), outVec.data(), outVec.size()) == EOK) ? HDF_SUCCESS : HDF_FAILURE;
 }
 
 template <typename T, typename U>
