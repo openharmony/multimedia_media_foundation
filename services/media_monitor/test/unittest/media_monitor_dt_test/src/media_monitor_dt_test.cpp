@@ -59,6 +59,50 @@ namespace {
 constexpr int32_t TEST_CLIENT_UID = 1001;
 constexpr uint64_t TEST_DURATION = 31;
 
+// Stub return values
+constexpr int32_t STUB_DUMP_CAPACITY = 64;
+constexpr int32_t STUB_DUMP_SIZE = 32;
+constexpr int32_t STUB_CODEC_OPEN_RET = 24;
+constexpr int32_t STUB_FORMAT_ALLOC_RET = 31;
+constexpr int32_t STUB_CODEC_PARAM_RET = 33;
+constexpr int32_t STUB_IO_OPEN_RET = 34;
+constexpr int32_t STUB_IO_CLOSE_RET = 35;
+constexpr int32_t STUB_WRITE_HEADER_RET = 36;
+constexpr int32_t STUB_WRITE_TRAILER_RET = 37;
+constexpr int32_t STUB_FRAME_GET_BUF_RET = 43;
+constexpr int32_t STUB_SEND_FRAME_RET = 44;
+constexpr int32_t STUB_WRITE_FRAME_RET = 45;
+constexpr int32_t STUB_FLUSH_RET = 46;
+constexpr int32_t STUB_BYTES_PER_SAMPLE = 2;
+constexpr int32_t STUB_CHANNEL_COUNT = 2;
+
+// Bean test data values
+constexpr int32_t TEST_PID = 100;
+constexpr int32_t TEST_APP_PID = 200;
+constexpr int32_t TEST_SAMPLE_RATE = 48000;
+constexpr uint64_t TEST_TRANSACTION_ID = 123;
+constexpr uint64_t TEST_TIME_STAMP = 123;
+constexpr int32_t TEST_SESSION_PID = 10;
+constexpr int32_t TEST_BACK_TASK_PID = 11;
+constexpr int32_t TEST_STREAM_TYPE_PLAYBACK = 1;
+constexpr int32_t TEST_STREAM_TYPE_CAPTURE = 2;
+constexpr int32_t TEST_DEVICE_TYPE_PLAYBACK = 2;
+constexpr int32_t TEST_DEVICE_TYPE_USAGE = 3;
+constexpr int32_t TEST_BT_TYPE = 4;
+constexpr int32_t TEST_PIPE_TYPE_CHANGE = 3;
+constexpr int32_t TEST_PIPE_TYPE_USAGE = 5;
+constexpr int32_t TEST_CHANNEL_LAYOUT = 3;
+constexpr int32_t TEST_VOLUME_LEVEL = 4;
+constexpr int32_t TEST_ERROR_CODE = 7;
+constexpr int32_t TEST_LEVEL = 6;
+constexpr int32_t TEST_RING_MODE = 2;
+constexpr int32_t TEST_STREAM_TYPE_TONE = 3;
+constexpr int32_t TEST_DM_DEVICE_TYPE = 2;
+constexpr int32_t TEST_PARAM_VALUE = 5;
+constexpr int32_t TEST_ACTIVE_PID = 2;
+constexpr int32_t TEST_INCOMING_PID = 1;
+constexpr int32_t TEST_MUTE_PLAY_DURATION = 2;
+
 DumpBuffer *DumpBufferNewStub()
 {
     return reinterpret_cast<DumpBuffer *>(0x10);
@@ -82,12 +126,12 @@ uint8_t *DumpBufferGetAddrStub(DumpBuffer *buffer)
 
 int32_t DumpBufferGetCapacityStub(DumpBuffer *buffer)
 {
-    return buffer == nullptr ? -1 : 64;
+    return buffer == nullptr ? -1 : STUB_DUMP_CAPACITY;
 }
 
 int32_t DumpBufferGetSizeStub(DumpBuffer *buffer)
 {
-    return buffer == nullptr ? -1 : 32;
+    return buffer == nullptr ? -1 : STUB_DUMP_SIZE;
 }
 
 bool DumpBufferSetSizeStub(DumpBuffer *buffer, int32_t size)
@@ -123,7 +167,7 @@ AVCodecContext *CodecAllocContextStub(const AVCodec *codec)
 int CodecOpenStub(AVCodecContext *avctx, const AVCodec *codec, AVDictionary **options)
 {
     (void)options;
-    return avctx == nullptr || codec == nullptr ? -1 : 24;
+    return avctx == nullptr || codec == nullptr ? -1 : STUB_CODEC_OPEN_RET;
 }
 
 int FormatAllocOutputContextStub(AVFormatContext **ctx, const AVOutputFormat *oformat,
@@ -135,7 +179,7 @@ int FormatAllocOutputContextStub(AVFormatContext **ctx, const AVOutputFormat *of
     if (ctx != nullptr) {
         *ctx = reinterpret_cast<AVFormatContext *>(0x31);
     }
-    return 31;
+    return STUB_FORMAT_ALLOC_RET;
 }
 
 AVStream *FormatNewStreamStub(AVFormatContext *s, const AVCodec *c)
@@ -146,7 +190,7 @@ AVStream *FormatNewStreamStub(AVFormatContext *s, const AVCodec *c)
 
 int CodecParamFromContextStub(AVCodecParameters *par, const AVCodecContext *codec)
 {
-    return par == nullptr || codec == nullptr ? -1 : 33;
+    return par == nullptr || codec == nullptr ? -1 : STUB_CODEC_PARAM_RET;
 }
 
 int IoOpenStub(AVIOContext **s, const char *url, int flags, const AVIOInterruptCB *intCb, AVDictionary **options)
@@ -156,7 +200,7 @@ int IoOpenStub(AVIOContext **s, const char *url, int flags, const AVIOInterruptC
     (void)options;
     if (s != nullptr && url != nullptr) {
         *s = reinterpret_cast<AVIOContext *>(0x34);
-        return 34;
+        return STUB_IO_OPEN_RET;
     }
     return -1;
 }
@@ -168,18 +212,18 @@ void IoFlushStub(AVIOContext *s)
 
 int IoCloseStub(AVIOContext *s)
 {
-    return s == nullptr ? -1 : 35;
+    return s == nullptr ? -1 : STUB_IO_CLOSE_RET;
 }
 
 int FormatWriteHeaderStub(AVFormatContext *s, AVDictionary **options)
 {
     (void)options;
-    return s == nullptr ? -1 : 36;
+    return s == nullptr ? -1 : STUB_WRITE_HEADER_RET;
 }
 
 int FormatWriteTrailerStub(AVFormatContext *s)
 {
-    return s == nullptr ? -1 : 37;
+    return s == nullptr ? -1 : STUB_WRITE_TRAILER_RET;
 }
 
 AVPacket *PacketAllocStub()
@@ -195,13 +239,13 @@ AVFrame *FrameAllocStub()
 int FrameGetBufferStub(AVFrame *frame, int align)
 {
     (void)align;
-    return frame == nullptr ? -1 : 43;
+    return frame == nullptr ? -1 : STUB_FRAME_GET_BUF_RET;
 }
 
 int CodecSendFrameStub(AVCodecContext *avctx, const AVFrame *frame)
 {
     (void)frame;
-    return avctx == nullptr ? -1 : 44;
+    return avctx == nullptr ? -1 : STUB_SEND_FRAME_RET;
 }
 
 int CodecRecvPacketStub(AVCodecContext *avctx, AVPacket *avpkt)
@@ -211,12 +255,12 @@ int CodecRecvPacketStub(AVCodecContext *avctx, AVPacket *avpkt)
 
 int FormatWriteFrameStub(AVFormatContext *s, AVPacket *pkt)
 {
-    return s == nullptr || pkt == nullptr ? -1 : 45;
+    return s == nullptr || pkt == nullptr ? -1 : STUB_WRITE_FRAME_RET;
 }
 
 int FormatFlushStub(AVFormatContext *s)
 {
-    return s == nullptr ? -1 : 46;
+    return s == nullptr ? -1 : STUB_FLUSH_RET;
 }
 
 void FormatFreeContextStub(AVFormatContext *s)
@@ -254,7 +298,7 @@ int64_t ChannelLayoutFromMaskStub(AVChannelLayout *channelLayout, uint64_t mask)
 {
     if (channelLayout != nullptr) {
         channelLayout->u.mask = mask;
-        channelLayout->nb_channels = 2;
+        channelLayout->nb_channels = STUB_CHANNEL_COUNT;
     }
     return 0;
 }
@@ -278,7 +322,7 @@ int64_t ChannelLayoutCopyStub(AVChannelLayout *dst, const AVChannelLayout *src)
 
 int BytesPerSampleStub(enum AVSampleFormat sampleFmt)
 {
-    return sampleFmt == AV_SAMPLE_FMT_NONE ? -1 : 2;
+    return sampleFmt == AV_SAMPLE_FMT_NONE ? -1 : STUB_BYTES_PER_SAMPLE;
 }
 
 int SampleFmtIsPlanarStub(enum AVSampleFormat sampleFmt)
@@ -291,7 +335,8 @@ struct SwrContext *SwrAllocStub()
     return reinterpret_cast<SwrContext *>(0x51);
 }
 
-int SwrSetOpts2Stub(struct SwrContext **ps, const AVChannelLayout *outChLayout,
+// Parameter count must match FFmpeg swr_set_opts2 API signature; cannot be reduced.
+int SwrSetOpts2Stub(struct SwrContext **ps, const AVChannelLayout *outChLayout, // NOLINT(readability-function-size)
     enum AVSampleFormat outSampleFmt, int outSampleRate, const AVChannelLayout *inChLayout,
     enum AVSampleFormat inSampleFmt, int inSampleRate, int logOffset, void *logCtx)
 {
@@ -360,15 +405,15 @@ std::shared_ptr<EventBean> MakeStreamChangeBean(int32_t state, int32_t isOutput,
     bean->Add("ISOUTPUT", isOutput);
     bean->Add("STREAMID", streamId);
     bean->Add("UID", TEST_CLIENT_UID);
-    bean->Add("PID", 100);
-    bean->Add("STREAM_TYPE", 1);
-    bean->Add("DEVICETYPE", 2);
-    bean->Add("PIPE_TYPE", 3);
-    bean->Add("SAMPLE_RATE", 48000);
+    bean->Add("PID", TEST_PID);
+    bean->Add("STREAM_TYPE", TEST_STREAM_TYPE_PLAYBACK);
+    bean->Add("DEVICETYPE", TEST_DEVICE_TYPE_PLAYBACK);
+    bean->Add("PIPE_TYPE", TEST_PIPE_TYPE_CHANGE);
+    bean->Add("SAMPLE_RATE", TEST_SAMPLE_RATE);
     AddString(bean, "APP_NAME", "dt.app");
     bean->Add("EFFECT_CHAIN", 0);
     bean->Add("ENCODING_TYPE", 1);
-    bean->Add("CHANNEL_LAYOUT", static_cast<uint64_t>(3));
+    bean->Add("CHANNEL_LAYOUT", static_cast<uint64_t>(TEST_CHANNEL_LAYOUT));
     bean->Add("MUTED", 1);
     return bean;
 }
@@ -379,35 +424,33 @@ std::shared_ptr<EventBean> MakeUsageBean(EventId eventId)
     bean->Add("IS_PLAYBACK", 1);
     bean->Add("STREAMID", 1);
     bean->Add("UID", TEST_CLIENT_UID);
-    bean->Add("PID", 100);
-    bean->Add("STREAM_TYPE", 2);
-    bean->Add("DEVICE_TYPE", 3);
-    bean->Add("BT_TYPE", 4);
-    bean->Add("PIPE_TYPE", 5);
-    bean->Add("SAMPLE_RATE", 48000);
+    bean->Add("PID", TEST_PID);
+    bean->Add("STREAM_TYPE", TEST_STREAM_TYPE_CAPTURE);
+    bean->Add("DEVICE_TYPE", TEST_DEVICE_TYPE_USAGE);
+    bean->Add("BT_TYPE", TEST_BT_TYPE);
+    bean->Add("PIPE_TYPE", TEST_PIPE_TYPE_USAGE);
+    bean->Add("SAMPLE_RATE", TEST_SAMPLE_RATE);
     AddString(bean, "APP_NAME", "dt.app");
     bean->Add("EFFECT_CHAIN", 1);
     bean->Add("ENCODING_TYPE", 1);
-    bean->Add("CHANNEL_LAYOUT", static_cast<uint64_t>(3));
-    bean->Add("LEVEL", 6);
+    bean->Add("CHANNEL_LAYOUT", static_cast<uint64_t>(TEST_CHANNEL_LAYOUT));
+    bean->Add("LEVEL", TEST_LEVEL);
     bean->Add("CLIENT_UID", TEST_CLIENT_UID);
-    bean->Add("ERROR_CODE", 7);
+    bean->Add("ERROR_CODE", TEST_ERROR_CODE);
     bean->Add("TIMES", 1);
     bean->Add("DURATION", TEST_DURATION);
     return bean;
 }
 
-std::shared_ptr<EventBean> MakeRichBean(EventId eventId, EventType type)
+void FillRichBeanDeviceAndSession(const std::shared_ptr<EventBean> &bean)
 {
-    auto bean = MakeUsageBean(eventId);
-    bean->SetEventType(type);
     bean->Add("HASMIC", 1);
     bean->Add("ISCONNECT", 1);
-    bean->Add("DEVICETYPE", 2);
+    bean->Add("DEVICETYPE", TEST_DEVICE_TYPE_PLAYBACK);
     bean->Add("ISOUTPUT", 1);
     bean->Add("APP_UID", TEST_CLIENT_UID);
-    bean->Add("APP_PID", 200);
-    bean->Add("TRANSACTIONID", static_cast<uint64_t>(123));
+    bean->Add("APP_PID", TEST_APP_PID);
+    bean->Add("TRANSACTIONID", TEST_TRANSACTION_ID);
     bean->Add("STATE", AudioStandard::State::RUNNING);
     AddString(bean, "NETWORKID", "net");
     AddString(bean, "ADDRESS", "addr");
@@ -420,7 +463,7 @@ std::shared_ptr<EventBean> MakeRichBean(EventId eventId, EventType type)
     bean->Add("MUTE_STATE", 1);
     bean->Add("APP_BACKGROUND_STATE", 0);
     bean->Add("MUTE_PLAY_START_TIME", static_cast<uint64_t>(1));
-    bean->Add("MUTE_PLAY_DURATION", 2);
+    bean->Add("MUTE_PLAY_DURATION", TEST_MUTE_PLAY_DURATION);
     bean->Add("HDI_TYPE", 1);
     bean->Add("ERROR_CASE", 1);
     bean->Add("ERROR_MSG", 1);
@@ -439,6 +482,10 @@ std::shared_ptr<EventBean> MakeRichBean(EventId eventId, EventType type)
     bean->Add("DEVICE_TYPE_AFTER_CHANGE", 2);
     bean->Add("PRE_AUDIO_SCENE", 1);
     bean->Add("CUR_AUDIO_SCENE", 2);
+}
+
+void FillRichBeanRouteAndInterrupt(const std::shared_ptr<EventBean> &bean)
+{
     AddString(bean, "DEVICE_LIST", "list");
     bean->Add("ROUTER_TYPE", 1);
     AddString(bean, "DB_TYPE", "db");
@@ -462,10 +509,10 @@ std::shared_ptr<EventBean> MakeRichBean(EventId eventId, EventType type)
     bean->Add("INCOMING_UID", TEST_CLIENT_UID);
     bean->Add("ACTIVE_UID", TEST_CLIENT_UID + 1);
     bean->Add("INCOMING_SOURCE", 1);
-    bean->Add("INCOMING_PID", 1);
+    bean->Add("INCOMING_PID", TEST_INCOMING_PID);
     AddString(bean, "INCOMING_PKG", "incoming");
     bean->Add("ACTIVE_SOURCE", 1);
-    bean->Add("ACTIVE_PID", 2);
+    bean->Add("ACTIVE_PID", TEST_ACTIVE_PID);
     AddString(bean, "ACTIVE_PKG", "active");
     bean->Add("TYPE", 1);
     bean->Add("COUNT", 1);
@@ -476,7 +523,7 @@ std::shared_ptr<EventBean> MakeRichBean(EventId eventId, EventType type)
     AddString(bean, "CURRENT_NAME", "cur");
     AddString(bean, "DES_NAME", "des");
     AddString(bean, "FUNC_NAME", "SetVolume");
-    bean->Add("PARAM_VALUE", 5);
+    bean->Add("PARAM_VALUE", TEST_PARAM_VALUE);
     bean->Add("SYSTEMHAP_SET_FOCUSSTRATEGY", 1);
     AddString(bean, "ERROR_INFO", "info");
     bean->Add("INTERRUPT_HINTTYPE", 1);
@@ -501,11 +548,15 @@ std::shared_ptr<EventBean> MakeRichBean(EventId eventId, EventType type)
     bean->Add("ERROR_SCOPE", 1);
     bean->Add("ERROR_TYPE", 1);
     bean->Add("FEATURE", 1);
+}
+
+void FillRichBeanSceneAndDistributed(const std::shared_ptr<EventBean> &bean)
+{
     bean->Add("AUDIO_SCENE", AudioStandard::AUDIO_SCENE_PHONE_CALL);
     bean->Add("AUDIO_DEVICE_USAGE", MEDIA_OUTPUT_DEVICES);
     bean->Add("EXCLUSION_STATUS", 0);
     bean->Add("COLLABORATIVE_STATE", 1);
-    bean->Add("PID", 10);
+    bean->Add("PID", TEST_SESSION_PID);
     bean->Add("HAS_SESSION", 1);
     bean->Add("HAS_BACK_TASK", 1);
     bean->Add("IS_ADD", 1);
@@ -514,25 +565,34 @@ std::shared_ptr<EventBean> MakeRichBean(EventId eventId, EventType type)
     AddString(bean, "NETWORK_ID", "net");
     bean->Add("HDI_PIN", 1);
     AddString(bean, "ORIGINAL_INFO", "origin");
-    bean->Add("DM_DEVICE_TYPE", 2);
+    bean->Add("DM_DEVICE_TYPE", TEST_DM_DEVICE_TYPE);
     bean->Add("ERROR_UID", TEST_CLIENT_UID);
+}
+
+std::shared_ptr<EventBean> MakeRichBean(EventId eventId, EventType type)
+{
+    auto bean = MakeUsageBean(eventId);
+    bean->SetEventType(type);
+    FillRichBeanDeviceAndSession(bean);
+    FillRichBeanRouteAndInterrupt(bean);
+    FillRichBeanSceneAndDistributed(bean);
     return bean;
 }
 
 void FillSystemToneBean(const std::shared_ptr<EventBean> &bean)
 {
-    bean->Add("TIME_STAMP", static_cast<uint64_t>(123));
+    bean->Add("TIME_STAMP", TEST_TIME_STAMP);
     bean->Add("SYSTEM_SOUND_TYPE", 1);
     bean->Add("CLIENT_UID", TEST_CLIENT_UID);
-    bean->Add("DEVICE_TYPE", 2);
+    bean->Add("DEVICE_TYPE", TEST_DEVICE_TYPE_PLAYBACK);
     bean->Add("ERROR_CODE", 0);
     AddString(bean, "ERROR_REASON", "none");
     bean->Add("MUTE_STATE", 0);
     bean->Add("MUTE_HAPTICS", 1);
-    bean->Add("RING_MODE", 2);
-    bean->Add("STREAM_TYPE", 3);
+    bean->Add("RING_MODE", TEST_RING_MODE);
+    bean->Add("STREAM_TYPE", TEST_STREAM_TYPE_TONE);
     bean->Add("VIBRATION_STATE", 1);
-    bean->Add("VOLUME_LEVEL", 4);
+    bean->Add("VOLUME_LEVEL", TEST_VOLUME_LEVEL);
 }
 
 void ResetPolicyState(MediaMonitorPolicy &policy)
@@ -703,8 +763,8 @@ HWTEST(MediaMonitorDtTest, DumpBufferWrap_DefaultAndFuncPtrBranch_001, TestSize.
     EXPECT_NE(wrap.NewDumpBuffer(), nullptr);
     EXPECT_NE(wrap.CreateDumpBuffer(10), nullptr);
     EXPECT_NE(wrap.GetAddr(buffer), nullptr);
-    EXPECT_EQ(wrap.GetCapacity(buffer), 64);
-    EXPECT_EQ(wrap.GetSize(buffer), 32);
+    EXPECT_EQ(wrap.GetCapacity(buffer), STUB_DUMP_CAPACITY);
+    EXPECT_EQ(wrap.GetSize(buffer), STUB_DUMP_SIZE);
     EXPECT_EQ(wrap.Write(buffer, &data, 1), 1);
     EXPECT_EQ(wrap.GetUniqueId(buffer), 0x1234);
     EXPECT_TRUE(wrap.SetSize(buffer, 1));
@@ -744,22 +804,21 @@ HWTEST(MediaMonitorDtTest, FFmpegApiWrap_DefaultAndFuncPtrBranch_001, TestSize.L
     wrap.FrameFree(nullptr);
     wrap.PacketFree(nullptr);
     wrap.PacketUnref(nullptr);
-    EXPECT_EQ(wrap.GetChannelLayoutFromMask(&layout, 3), -1);
-    EXPECT_EQ(wrap.GetChannelLayoutDefault(&layout, 2), -1);
+    EXPECT_EQ(wrap.GetChannelLayoutFromMask(&layout, TEST_CHANNEL_LAYOUT), -1);
+    EXPECT_EQ(wrap.GetChannelLayoutDefault(&layout, STUB_CHANNEL_COUNT), -1);
     EXPECT_EQ(wrap.GetChannelLayoutCopy(&layout, &layout), -1);
     EXPECT_EQ(wrap.GetBytesPerSample(AV_SAMPLE_FMT_S16), -1);
     EXPECT_EQ(wrap.SampleFmtIsPlannar(AV_SAMPLE_FMT_S16), -1);
     EXPECT_EQ(wrap.SwrAlloc(), nullptr);
-    EXPECT_EQ(wrap.SwrSetOpts2(&swrContext, &layout, AV_SAMPLE_FMT_S16, 48000,
-        &layout, AV_SAMPLE_FMT_S16, 48000, 0, nullptr), -1);
+    EXPECT_EQ(wrap.SwrSetOpts2(&swrContext, &layout, AV_SAMPLE_FMT_S16, TEST_SAMPLE_RATE,
+        &layout, AV_SAMPLE_FMT_S16, TEST_SAMPLE_RATE, 0, nullptr), -1);
     EXPECT_EQ(wrap.SwrInit(swrContext), -1);
     wrap.SwrFree(&swrContext);
     EXPECT_EQ(wrap.SwrConvert(swrContext, nullptr, 0, nullptr, 0), -1);
 }
 
-HWTEST(MediaMonitorDtTest, FFmpegApiWrap_FunctionPointersReturnStubValues_001, TestSize.Level0)
+void SetupFFmpegApiWrapFunctionPointers(FFmpegApiWrap &wrap)
 {
-    FFmpegApiWrap wrap;
     wrap.codecFindFunc = CodecFindEncoderStub;
     wrap.codecAllocFunc = CodecAllocContextStub;
     wrap.codecOpenFunc = CodecOpenStub;
@@ -793,6 +852,67 @@ HWTEST(MediaMonitorDtTest, FFmpegApiWrap_FunctionPointersReturnStubValues_001, T
     wrap.swrInitFunc = SwrInitStub;
     wrap.swrFreeFunc = SwrFreeStub;
     wrap.swrConvertFunc = SwrConvertStub;
+}
+
+void VerifyFFmpegApiWrapCodecAndFormat(FFmpegApiWrap &wrap, AVCodecContext *codecContext,
+    AVCodec *codec, AVFormatContext *&formatContext, AVIOContext *&ioContext)
+{
+    EXPECT_NE(codec, nullptr);
+    EXPECT_NE(codecContext, nullptr);
+    EXPECT_EQ(wrap.CodecOpen(codecContext, codec, nullptr), STUB_CODEC_OPEN_RET);
+    EXPECT_EQ(wrap.FormatAllocOutputContext(&formatContext, nullptr, nullptr, "a.flac"),
+        STUB_FORMAT_ALLOC_RET);
+    EXPECT_NE(formatContext, nullptr);
+    EXPECT_NE(wrap.FormatNewStream(formatContext, codec), nullptr);
+    EXPECT_EQ(wrap.CodecParamFromContext(reinterpret_cast<AVCodecParameters *>(0x33), codecContext),
+        STUB_CODEC_PARAM_RET);
+    EXPECT_EQ(wrap.IoOpen(&ioContext, "a.flac", 0, nullptr, nullptr), STUB_IO_OPEN_RET);
+    wrap.IoFlush(ioContext);
+    EXPECT_EQ(wrap.IoClose(ioContext), STUB_IO_CLOSE_RET);
+    EXPECT_EQ(wrap.FormatWriteHeader(formatContext, nullptr), STUB_WRITE_HEADER_RET);
+    EXPECT_EQ(wrap.FormatWriteTrailer(formatContext), STUB_WRITE_TRAILER_RET);
+}
+
+void VerifyFFmpegApiWrapFrameAndPacket(FFmpegApiWrap &wrap, AVFormatContext *formatContext,
+    AVCodecContext *codecContext, AVPacket *&packet, AVFrame *&frame)
+{
+    EXPECT_NE(wrap.PacketAlloc(), nullptr);
+    EXPECT_NE(wrap.FrameAlloc(), nullptr);
+    EXPECT_EQ(wrap.FrameGetBuffer(frame, 0), STUB_FRAME_GET_BUF_RET);
+    EXPECT_EQ(wrap.CodecSendFrame(codecContext, frame), STUB_SEND_FRAME_RET);
+    EXPECT_EQ(wrap.CodecRecvPacket(codecContext, packet), AVERROR_EOF);
+    EXPECT_EQ(wrap.FormatWriteFrame(formatContext, packet), STUB_WRITE_FRAME_RET);
+    EXPECT_EQ(wrap.FormatFlush(formatContext), STUB_FLUSH_RET);
+    wrap.FormatFreeContext(formatContext);
+    wrap.CodecFreeContext(&codecContext);
+    EXPECT_EQ(codecContext, nullptr);
+    wrap.FrameFree(&frame);
+    EXPECT_EQ(frame, nullptr);
+    wrap.PacketFree(&packet);
+    EXPECT_EQ(packet, nullptr);
+    wrap.PacketUnref(packet);
+}
+
+void VerifyFFmpegApiWrapSwrAndLayout(FFmpegApiWrap &wrap, AVChannelLayout &layout, SwrContext *&swrContext)
+{
+    EXPECT_EQ(wrap.GetChannelLayoutFromMask(&layout, TEST_CHANNEL_LAYOUT), 0);
+    EXPECT_EQ(wrap.GetChannelLayoutDefault(&layout, STUB_CHANNEL_COUNT), 0);
+    EXPECT_EQ(wrap.GetChannelLayoutCopy(&layout, &layout), 0);
+    EXPECT_EQ(wrap.GetBytesPerSample(AV_SAMPLE_FMT_S16), STUB_BYTES_PER_SAMPLE);
+    EXPECT_EQ(wrap.SampleFmtIsPlannar(AV_SAMPLE_FMT_FLTP), 1);
+    EXPECT_EQ(wrap.SwrSetOpts2(&swrContext, &layout, AV_SAMPLE_FMT_S16, TEST_SAMPLE_RATE,
+        &layout, AV_SAMPLE_FMT_S16, TEST_SAMPLE_RATE, 0, nullptr), 0);
+    EXPECT_EQ(wrap.SwrInit(swrContext), 0);
+    EXPECT_EQ(wrap.SwrConvert(swrContext, nullptr, TEST_CHANNEL_LAYOUT, nullptr, STUB_BYTES_PER_SAMPLE),
+        STUB_BYTES_PER_SAMPLE);
+    wrap.SwrFree(&swrContext);
+    EXPECT_EQ(swrContext, nullptr);
+}
+
+HWTEST(MediaMonitorDtTest, FFmpegApiWrap_FunctionPointersReturnStubValues_001, TestSize.Level0)
+{
+    FFmpegApiWrap wrap;
+    SetupFFmpegApiWrapFunctionPointers(wrap);
 
     AVFormatContext *formatContext = nullptr;
     AVIOContext *ioContext = nullptr;
@@ -803,44 +923,9 @@ HWTEST(MediaMonitorDtTest, FFmpegApiWrap_FunctionPointersReturnStubValues_001, T
     AVCodec *codec = wrap.CodecFindEncoder(AV_CODEC_ID_FLAC);
     AVCodecContext *codecContext = wrap.CodecAllocContext(codec);
 
-    EXPECT_NE(codec, nullptr);
-    EXPECT_NE(codecContext, nullptr);
-    EXPECT_EQ(wrap.CodecOpen(codecContext, codec, nullptr), 24);
-    EXPECT_EQ(wrap.FormatAllocOutputContext(&formatContext, nullptr, nullptr, "a.flac"), 31);
-    EXPECT_NE(formatContext, nullptr);
-    EXPECT_NE(wrap.FormatNewStream(formatContext, codec), nullptr);
-    EXPECT_EQ(wrap.CodecParamFromContext(reinterpret_cast<AVCodecParameters *>(0x33), codecContext), 33);
-    EXPECT_EQ(wrap.IoOpen(&ioContext, "a.flac", 0, nullptr, nullptr), 34);
-    wrap.IoFlush(ioContext);
-    EXPECT_EQ(wrap.IoClose(ioContext), 35);
-    EXPECT_EQ(wrap.FormatWriteHeader(formatContext, nullptr), 36);
-    EXPECT_EQ(wrap.FormatWriteTrailer(formatContext), 37);
-    EXPECT_NE(wrap.PacketAlloc(), nullptr);
-    EXPECT_NE(wrap.FrameAlloc(), nullptr);
-    EXPECT_EQ(wrap.FrameGetBuffer(frame, 0), 43);
-    EXPECT_EQ(wrap.CodecSendFrame(codecContext, frame), 44);
-    EXPECT_EQ(wrap.CodecRecvPacket(codecContext, packet), AVERROR_EOF);
-    EXPECT_EQ(wrap.FormatWriteFrame(formatContext, packet), 45);
-    EXPECT_EQ(wrap.FormatFlush(formatContext), 46);
-    wrap.FormatFreeContext(formatContext);
-    wrap.CodecFreeContext(&codecContext);
-    EXPECT_EQ(codecContext, nullptr);
-    wrap.FrameFree(&frame);
-    EXPECT_EQ(frame, nullptr);
-    wrap.PacketFree(&packet);
-    EXPECT_EQ(packet, nullptr);
-    wrap.PacketUnref(packet);
-    EXPECT_EQ(wrap.GetChannelLayoutFromMask(&layout, 3), 0);
-    EXPECT_EQ(wrap.GetChannelLayoutDefault(&layout, 2), 0);
-    EXPECT_EQ(wrap.GetChannelLayoutCopy(&layout, &layout), 0);
-    EXPECT_EQ(wrap.GetBytesPerSample(AV_SAMPLE_FMT_S16), 2);
-    EXPECT_EQ(wrap.SampleFmtIsPlannar(AV_SAMPLE_FMT_FLTP), 1);
-    EXPECT_EQ(wrap.SwrSetOpts2(&swrContext, &layout, AV_SAMPLE_FMT_S16, 48000,
-        &layout, AV_SAMPLE_FMT_S16, 48000, 0, nullptr), 0);
-    EXPECT_EQ(wrap.SwrInit(swrContext), 0);
-    EXPECT_EQ(wrap.SwrConvert(swrContext, nullptr, 3, nullptr, 2), 2);
-    wrap.SwrFree(&swrContext);
-    EXPECT_EQ(swrContext, nullptr);
+    VerifyFFmpegApiWrapCodecAndFormat(wrap, codecContext, codec, formatContext, ioContext);
+    VerifyFFmpegApiWrapFrameAndPacket(wrap, formatContext, codecContext, packet, frame);
+    VerifyFFmpegApiWrapSwrAndLayout(wrap, layout, swrContext);
 }
 
 HWTEST(MediaMonitorDtTest, MediaAudioEncoder_ParseAndBufferBranch_001, TestSize.Level0)
@@ -918,7 +1003,7 @@ HWTEST(MediaMonitorDtTest, SampleConvert_InitConvertAndReleaseBranch_001, TestSi
 {
     ResamplePara param;
     param.channels = 2;
-    param.sampleRate = 48000;
+    param.sampleRate = TEST_SAMPLE_RATE;
     param.channelLayout = 3;
     param.srcFfFmt = AV_SAMPLE_FMT_FLTP;
     param.destFmt = AV_SAMPLE_FMT_S16;
@@ -949,14 +1034,12 @@ HWTEST(MediaMonitorDtTest, SampleConvert_InitConvertAndReleaseBranch_001, TestSi
     EXPECT_EQ(convert.Convert(src, sizeof(src), &frame), ERROR);
 }
 
-HWTEST(MediaMonitorDtTest, MediaEventBaseWriter_NullAndValidBranches_001, TestSize.Level0)
+std::shared_ptr<EventBean> MakeWriterTestBean()
 {
-    MediaEventBaseWriter &writer = MediaEventBaseWriter::GetMediaEventBaseWriter();
-    std::shared_ptr<EventBean> nullBean = nullptr;
     auto bean = MakeUsageBean(STREAM_UTILIZATION_STATS);
     bean->Add("HASMIC", 1);
     bean->Add("ISCONNECT", 1);
-    bean->Add("DEVICETYPE", 2);
+    bean->Add("DEVICETYPE", TEST_DEVICE_TYPE_PLAYBACK);
     bean->Add("VOLUME", 0.5f);
     bean->Add("VOLUMEFACTOR", 1.0f);
     bean->Add("POWERVOLUMEFACTOR", 1.0f);
@@ -971,7 +1054,7 @@ HWTEST(MediaMonitorDtTest, MediaEventBaseWriter_NullAndValidBranches_001, TestSi
     bean->Add("MUTE_STATE", 1);
     bean->Add("APP_BACKGROUND_STATE", 0);
     bean->Add("MUTE_PLAY_START_TIME", static_cast<uint64_t>(1));
-    bean->Add("MUTE_PLAY_DURATION", 2);
+    bean->Add("MUTE_PLAY_DURATION", TEST_MUTE_PLAY_DURATION);
     bean->Add("HDI_TYPE", 1);
     bean->Add("ERROR_CASE", 1);
     bean->Add("ERROR_MSG", 1);
@@ -1011,10 +1094,10 @@ HWTEST(MediaMonitorDtTest, MediaEventBaseWriter_NullAndValidBranches_001, TestSi
     bean->Add("UPLOAD_TIME", static_cast<uint64_t>(2));
     bean->Add("STANDBY_DURATION_S", 1);
     bean->Add("INCOMING_SOURCE", 1);
-    bean->Add("INCOMING_PID", 1);
+    bean->Add("INCOMING_PID", TEST_INCOMING_PID);
     AddString(bean, "INCOMING_PKG", "incoming");
     bean->Add("ACTIVE_SOURCE", 1);
-    bean->Add("ACTIVE_PID", 2);
+    bean->Add("ACTIVE_PID", TEST_ACTIVE_PID);
     AddString(bean, "ACTIVE_PKG", "active");
     bean->Add("TYPE", 1);
     bean->Add("COUNT", 1);
@@ -1025,7 +1108,7 @@ HWTEST(MediaMonitorDtTest, MediaEventBaseWriter_NullAndValidBranches_001, TestSi
     AddString(bean, "CURRENT_NAME", "cur");
     AddString(bean, "DES_NAME", "des");
     AddString(bean, "FUNC_NAME", "SetVolume");
-    bean->Add("PARAM_VALUE", 5);
+    bean->Add("PARAM_VALUE", TEST_PARAM_VALUE);
     bean->Add("SYSTEMHAP_SET_FOCUSSTRATEGY", 1);
     AddString(bean, "ERROR_INFO", "info");
     bean->Add("INTERRUPT_HINTTYPE", 1);
@@ -1051,7 +1134,12 @@ HWTEST(MediaMonitorDtTest, MediaEventBaseWriter_NullAndValidBranches_001, TestSi
     bean->Add("ERROR_SCOPE", 1);
     bean->Add("ERROR_TYPE", 1);
     bean->Add("FEATURE", 1);
+    return bean;
+}
 
+void WriteAllEventsWithNull(MediaEventBaseWriter &writer)
+{
+    std::shared_ptr<EventBean> nullBean = nullptr;
     writer.WriteHeasetChange(nullBean);
     writer.WriteVolumeChange(nullBean);
     writer.WriteStreamChange(nullBean);
@@ -1099,7 +1187,10 @@ HWTEST(MediaMonitorDtTest, MediaEventBaseWriter_NullAndValidBranches_001, TestSi
     writer.WriteTonePlaybackFailed(nullBean);
     writer.WriteAudioLoopbackException(nullBean);
     writer.WriteKaraokeFeatureStatistic(nullBean);
+}
 
+void WriteAllEventsWithValidBean(MediaEventBaseWriter &writer, const std::shared_ptr<EventBean> &bean)
+{
     writer.WriteHeasetChange(bean);
     writer.WriteVolumeChange(bean);
     writer.WriteStreamChange(bean);
@@ -1157,6 +1248,14 @@ HWTEST(MediaMonitorDtTest, MediaEventBaseWriter_NullAndValidBranches_001, TestSi
     writer.WriteTonePlaybackFailed(bean);
     writer.WriteAudioLoopbackException(bean);
     writer.WriteKaraokeFeatureStatistic(bean);
+}
+
+HWTEST(MediaMonitorDtTest, MediaEventBaseWriter_NullAndValidBranches_001, TestSize.Level0)
+{
+    MediaEventBaseWriter &writer = MediaEventBaseWriter::GetMediaEventBaseWriter();
+    auto bean = MakeWriterTestBean();
+    WriteAllEventsWithNull(writer);
+    WriteAllEventsWithValidBean(writer, bean);
     EXPECT_EQ(bean->GetStringValue("APP_NAME"), "dt.app");
 }
 
@@ -1308,6 +1407,61 @@ HWTEST(MediaMonitorDtTest, MediaMonitorPolicy_SilentSystemToneAndQueueBranch_001
     EXPECT_FALSE(policy.volumeApiInvokeEventQueue_.empty());
 }
 
+void VerifySuiteEngineNodeStats(MediaMonitorPolicy &policy)
+{
+    auto suite = MakeEvent(SUITE_ENGINE_UTILIZATION_STATS, FREQUENCY_AGGREGATION_EVENT);
+    suite->Add("CLIENT_UID", TEST_CLIENT_UID);
+    AddString(suite, "AUDIO_NODE_TYPE", "node");
+    suite->Add("AUDIO_NODE_COUNT", 1);
+    suite->Add("RT_MODE_RENDER_COUNT", 2);
+    suite->Add("RT_MODE_RTF_OVER_BASE_COUNT", -1);
+    suite->Add("RT_MODE_RTF_OVER_110BASE_COUNT", 3);
+    suite->Add("RT_MODE_RTF_OVER_120BASE_COUNT", 4);
+    suite->Add("RT_MODE_RTF_OVER_100_COUNT", 5);
+    suite->Add("EDIT_MODE_RENDER_COUNT", 6);
+    suite->Add("EDIT_MODE_RTF_OVER_BASE_COUNT", 7);
+    suite->Add("EDIT_MODE_RTF_OVER_110BASE_COUNT", 8);
+    suite->Add("EDIT_MODE_RTF_OVER_120BASE_COUNT", 9);
+    suite->Add("EDIT_MODE_RTF_OVER_100_COUNT", 10);
+    policy.AddToSuiteEngineNodeStatsMap(suite);
+    policy.AddToSuiteEngineNodeStatsMap(suite);
+    ASSERT_EQ(policy.suiteEngineNodeStatsMap_.size(), 1U);
+    auto &stat = policy.suiteEngineNodeStatsMap_.begin()->second.begin()->second;
+    EXPECT_EQ(stat.nodeCount, 2U);
+    EXPECT_EQ(stat.rtfOverBaselineCnt, 0U);
+    policy.HandleToSuiteEngineUtilizationStatsEvent();
+    EXPECT_TRUE(policy.suiteEngineNodeStatsMap_.empty());
+}
+
+void VerifyVolumeSettingAndKaraoke(MediaMonitorPolicy &policy)
+{
+    auto volumeSetting = MakeEvent(VOLUME_SETTING_STATISTICS, FREQUENCY_AGGREGATION_EVENT);
+    volumeSetting->Add("SCENE_TYPE", LOUD_VOLUME_SCENE);
+    policy.HandleVolumeSettingStatistics(volumeSetting);
+    EXPECT_EQ(policy.loudVolumeTimes_.load(), 1);
+    auto otherScene = MakeEvent(VOLUME_SETTING_STATISTICS, FREQUENCY_AGGREGATION_EVENT);
+    otherScene->Add("SCENE_TYPE", 10);
+    policy.HandleVolumeSettingStatistics(otherScene);
+    EXPECT_EQ(policy.loudVolumeTimes_.load(), 1);
+    policy.HandleToVolumeSettingStatisticsEvent();
+    EXPECT_EQ(policy.loudVolumeTimes_.load(), 0);
+    policy.HandleToLoudVolumeSceneEvent(volumeSetting);
+
+    auto karaoke = MakeEvent(KARAOKE_FEATURE_UTILIZATION, FREQUENCY_AGGREGATION_EVENT);
+    karaoke->Add("UID", TEST_CLIENT_UID);
+    karaoke->Add("TYPE", 1);
+    karaoke->Add("FEATURE", 2);
+    karaoke->Add("DEVICE_TYPE", 3);
+    karaoke->Add("DURATION", static_cast<uint64_t>(4));
+    policy.AddToKaraokeFeatureVector(karaoke);
+    policy.AddToKaraokeFeatureVector(karaoke);
+    ASSERT_EQ(policy.karaokeFeatureEventVector_.size(), 1U);
+    EXPECT_EQ(policy.karaokeFeatureEventVector_[0]->GetUint64Value("DURATION"), 8);
+    policy.karaokeFeatureEventVector_.push_back(nullptr);
+    policy.HandleToKaraokeFeatureEvent();
+    EXPECT_TRUE(policy.karaokeFeatureEventVector_.empty());
+}
+
 HWTEST(MediaMonitorDtTest, MediaMonitorPolicy_CallInterruptSuiteVolumeAndKaraokeBranch_001, TestSize.Level0)
 {
     auto &policy = MediaMonitorPolicy::GetMediaMonitorPolicy();
@@ -1339,54 +1493,8 @@ HWTEST(MediaMonitorDtTest, MediaMonitorPolicy_CallInterruptSuiteVolumeAndKaraoke
     playback->Add("TYPE", 1);
     policy.AddAudioPlaybackErrorEvent(playback);
 
-    auto suite = MakeEvent(SUITE_ENGINE_UTILIZATION_STATS, FREQUENCY_AGGREGATION_EVENT);
-    suite->Add("CLIENT_UID", TEST_CLIENT_UID);
-    AddString(suite, "AUDIO_NODE_TYPE", "node");
-    suite->Add("AUDIO_NODE_COUNT", 1);
-    suite->Add("RT_MODE_RENDER_COUNT", 2);
-    suite->Add("RT_MODE_RTF_OVER_BASE_COUNT", -1);
-    suite->Add("RT_MODE_RTF_OVER_110BASE_COUNT", 3);
-    suite->Add("RT_MODE_RTF_OVER_120BASE_COUNT", 4);
-    suite->Add("RT_MODE_RTF_OVER_100_COUNT", 5);
-    suite->Add("EDIT_MODE_RENDER_COUNT", 6);
-    suite->Add("EDIT_MODE_RTF_OVER_BASE_COUNT", 7);
-    suite->Add("EDIT_MODE_RTF_OVER_110BASE_COUNT", 8);
-    suite->Add("EDIT_MODE_RTF_OVER_120BASE_COUNT", 9);
-    suite->Add("EDIT_MODE_RTF_OVER_100_COUNT", 10);
-    policy.AddToSuiteEngineNodeStatsMap(suite);
-    policy.AddToSuiteEngineNodeStatsMap(suite);
-    ASSERT_EQ(policy.suiteEngineNodeStatsMap_.size(), 1U);
-    auto &stat = policy.suiteEngineNodeStatsMap_.begin()->second.begin()->second;
-    EXPECT_EQ(stat.nodeCount, 2U);
-    EXPECT_EQ(stat.rtfOverBaselineCnt, 0U);
-    policy.HandleToSuiteEngineUtilizationStatsEvent();
-    EXPECT_TRUE(policy.suiteEngineNodeStatsMap_.empty());
-
-    auto volumeSetting = MakeEvent(VOLUME_SETTING_STATISTICS, FREQUENCY_AGGREGATION_EVENT);
-    volumeSetting->Add("SCENE_TYPE", LOUD_VOLUME_SCENE);
-    policy.HandleVolumeSettingStatistics(volumeSetting);
-    EXPECT_EQ(policy.loudVolumeTimes_.load(), 1);
-    auto otherScene = MakeEvent(VOLUME_SETTING_STATISTICS, FREQUENCY_AGGREGATION_EVENT);
-    otherScene->Add("SCENE_TYPE", 10);
-    policy.HandleVolumeSettingStatistics(otherScene);
-    EXPECT_EQ(policy.loudVolumeTimes_.load(), 1);
-    policy.HandleToVolumeSettingStatisticsEvent();
-    EXPECT_EQ(policy.loudVolumeTimes_.load(), 0);
-    policy.HandleToLoudVolumeSceneEvent(volumeSetting);
-
-    auto karaoke = MakeEvent(KARAOKE_FEATURE_UTILIZATION, FREQUENCY_AGGREGATION_EVENT);
-    karaoke->Add("UID", TEST_CLIENT_UID);
-    karaoke->Add("TYPE", 1);
-    karaoke->Add("FEATURE", 2);
-    karaoke->Add("DEVICE_TYPE", 3);
-    karaoke->Add("DURATION", static_cast<uint64_t>(4));
-    policy.AddToKaraokeFeatureVector(karaoke);
-    policy.AddToKaraokeFeatureVector(karaoke);
-    ASSERT_EQ(policy.karaokeFeatureEventVector_.size(), 1U);
-    EXPECT_EQ(policy.karaokeFeatureEventVector_[0]->GetUint64Value("DURATION"), 8);
-    policy.karaokeFeatureEventVector_.push_back(nullptr);
-    policy.HandleToKaraokeFeatureEvent();
-    EXPECT_TRUE(policy.karaokeFeatureEventVector_.empty());
+    VerifySuiteEngineNodeStats(policy);
+    VerifyVolumeSettingAndKaraoke(policy);
 }
 
 HWTEST(MediaMonitorDtTest, MediaMonitorPolicy_BundleCacheAndWriteInfoBranch_001, TestSize.Level0)
@@ -1407,6 +1515,26 @@ HWTEST(MediaMonitorDtTest, MediaMonitorPolicy_BundleCacheAndWriteInfoBranch_001,
     EXPECT_TRUE(dump.empty());
     policy.WriteInfo(1, dump);
     EXPECT_NE(dump.find("Counting of eventVector entries"), std::string::npos);
+}
+
+void VerifyUnifiedFaultCodeRecords(EventAggregate &aggregate)
+{
+    for (int32_t i = 0; i < 12; ++i) {
+        auto fault = MakeEvent(UNIFIED_FAULT_CODE, FAULT_EVENT);
+        fault->Add("ERROR_UID", i);
+        fault->Add("ERROR_CODE", 0x1000 + i);
+        fault->Add("ERROR_REASON", "reason" + std::to_string(i));
+        aggregate.WriteEvent(fault);
+    }
+    auto records = aggregate.GetUnifiedFaultCodeRecords();
+    EXPECT_EQ(records.size(), 10U);
+    EXPECT_EQ(records.front()->GetIntValue("ERROR_UID"), 2);
+
+    std::string dump;
+    aggregate.WriteInfo(-1, dump);
+    EXPECT_TRUE(dump.empty());
+    aggregate.WriteInfo(1, dump);
+    EXPECT_FALSE(dump.empty());
 }
 
 HWTEST(MediaMonitorDtTest, EventAggregate_RoutingStateAndFaultRecordBranch_001, TestSize.Level0)
@@ -1452,22 +1580,7 @@ HWTEST(MediaMonitorDtTest, EventAggregate_RoutingStateAndFaultRecordBranch_001, 
     aggregate.WriteEvent(captureStopped);
     EXPECT_TRUE(aggregate.captureMutedVector_.empty());
 
-    for (int32_t i = 0; i < 12; ++i) {
-        auto fault = MakeEvent(UNIFIED_FAULT_CODE, FAULT_EVENT);
-        fault->Add("ERROR_UID", i);
-        fault->Add("ERROR_CODE", 0x1000 + i);
-        fault->Add("ERROR_REASON", "reason" + std::to_string(i));
-        aggregate.WriteEvent(fault);
-    }
-    auto records = aggregate.GetUnifiedFaultCodeRecords();
-    EXPECT_EQ(records.size(), 10U);
-    EXPECT_EQ(records.front()->GetIntValue("ERROR_UID"), 2);
-
-    std::string dump;
-    aggregate.WriteInfo(-1, dump);
-    EXPECT_TRUE(dump.empty());
-    aggregate.WriteInfo(1, dump);
-    EXPECT_FALSE(dump.empty());
+    VerifyUnifiedFaultCodeRecords(aggregate);
 }
 
 HWTEST(MediaMonitorDtTest, EventAggregate_SwitchCaseExpansionBranch_001, TestSize.Level0)
@@ -1560,6 +1673,29 @@ HWTEST(MediaMonitorDtTest, EventAggregate_DeviceVolumeAndStateBranch_001, TestSi
     EXPECT_EQ(unknown->GetEventId(), UNKNOW_EVENTID);
 }
 
+void VerifyExcludedDeviceBranch(AudioMemo &memo)
+{
+    auto excluded = MakeEvent(EXCLUDE_OUTPUT_DEVICE, BEHAVIOR_EVENT);
+    excluded->Add("AUDIO_DEVICE_USAGE", MEDIA_OUTPUT_DEVICES);
+    excluded->Add("DEVICE_TYPE", 1);
+    excluded->Add("BT_TYPE", 1);
+    excluded->Add("STREAM_TYPE", 1);
+    AddString(excluded, "DEVICE_NAME", "device");
+    AddString(excluded, "ADDRESS", "addr");
+    AddString(excluded, "NETWORKID", "net");
+    excluded->Add("EXCLUSION_STATUS", 0);
+    memo.UpdateExcludedDevice(excluded);
+    memo.UpdateExcludedDevice(excluded);
+    std::map<AudioDeviceUsage, std::vector<std::shared_ptr<MonitorDeviceInfo>>> excludedDevices;
+    EXPECT_EQ(memo.GetAudioExcludedDevicesMsg(excludedDevices), SUCCESS);
+    ASSERT_EQ(excludedDevices[MEDIA_OUTPUT_DEVICES].size(), 1U);
+    excluded->UpdateIntMap("EXCLUSION_STATUS", 1);
+    memo.UpdateExcludedDevice(excluded);
+    excludedDevices.clear();
+    memo.GetAudioExcludedDevicesMsg(excludedDevices);
+    EXPECT_TRUE(excludedDevices[MEDIA_OUTPUT_DEVICES].empty());
+}
+
 HWTEST(MediaMonitorDtTest, AudioMemo_RouteExcludedAndStateBranch_001, TestSize.Level0)
 {
     auto &memo = AudioMemo::GetAudioMemo();
@@ -1591,25 +1727,7 @@ HWTEST(MediaMonitorDtTest, AudioMemo_RouteExcludedAndStateBranch_001, TestSize.L
     EXPECT_EQ(memo.ErasePreferredDeviceByType(CALL_RENDER), SUCCESS);
     EXPECT_EQ(memo.ErasePreferredDeviceByType(CALL_RENDER), ERROR);
 
-    auto excluded = MakeEvent(EXCLUDE_OUTPUT_DEVICE, BEHAVIOR_EVENT);
-    excluded->Add("AUDIO_DEVICE_USAGE", MEDIA_OUTPUT_DEVICES);
-    excluded->Add("DEVICE_TYPE", 1);
-    excluded->Add("BT_TYPE", 1);
-    excluded->Add("STREAM_TYPE", 1);
-    AddString(excluded, "DEVICE_NAME", "device");
-    AddString(excluded, "ADDRESS", "addr");
-    AddString(excluded, "NETWORKID", "net");
-    excluded->Add("EXCLUSION_STATUS", 0);
-    memo.UpdateExcludedDevice(excluded);
-    memo.UpdateExcludedDevice(excluded);
-    std::map<AudioDeviceUsage, std::vector<std::shared_ptr<MonitorDeviceInfo>>> excludedDevices;
-    EXPECT_EQ(memo.GetAudioExcludedDevicesMsg(excludedDevices), SUCCESS);
-    ASSERT_EQ(excludedDevices[MEDIA_OUTPUT_DEVICES].size(), 1U);
-    excluded->UpdateIntMap("EXCLUSION_STATUS", 1);
-    memo.UpdateExcludedDevice(excluded);
-    excludedDevices.clear();
-    memo.GetAudioExcludedDevicesMsg(excludedDevices);
-    EXPECT_TRUE(excludedDevices[MEDIA_OUTPUT_DEVICES].empty());
+    VerifyExcludedDeviceBranch(memo);
 
     auto collaborative = MakeEvent(SET_DEVICE_COLLABORATIVE_STATE, BEHAVIOR_EVENT);
     AddString(collaborative, "ADDRESS", "addr");
@@ -1620,41 +1738,8 @@ HWTEST(MediaMonitorDtTest, AudioMemo_RouteExcludedAndStateBranch_001, TestSize.L
     EXPECT_EQ(collaborativeMap["addr"], 1U);
 }
 
-HWTEST(MediaMonitorDtTest, AudioMemo_AppDistributedDmAndWriteInfoBranch_001, TestSize.Level0)
+void VerifyDistributedAndDmDeviceInfo(AudioMemo &memo)
 {
-    auto &memo = AudioMemo::GetAudioMemo();
-    auto session = MakeEvent(APP_SESSION_STATE, BEHAVIOR_EVENT);
-    session->Add("PID", 10);
-    session->Add("HAS_SESSION", 1);
-    session->Add("IS_ADD", 1);
-    memo.UpdateAppSessionState(session);
-    std::unordered_map<int32_t, bool> sessionMap;
-    memo.GetAudioAppSessionMsg(sessionMap);
-    EXPECT_TRUE(sessionMap[10]);
-    session->UpdateIntMap("IS_ADD", 0);
-    memo.UpdateAppSessionState(session);
-    sessionMap.clear();
-    memo.GetAudioAppSessionMsg(sessionMap);
-    EXPECT_TRUE(sessionMap.empty());
-
-    auto backTask = MakeEvent(APP_BACKTASK_STATE, BEHAVIOR_EVENT);
-    backTask->Add("PID", 11);
-    backTask->Add("HAS_BACK_TASK", 1);
-    backTask->Add("IS_ADD", 1);
-    memo.UpdateAppBackTaskState(backTask);
-    std::unordered_map<int32_t, bool> backTaskMap;
-    memo.GetAudioAppBackTaskMsg(backTaskMap);
-    EXPECT_TRUE(backTaskMap[11]);
-    backTask->UpdateIntMap("IS_ADD", 0);
-    memo.UpdateAppBackTaskState(backTask);
-
-    auto scene = MakeEvent(DISTRIBUTED_SCENE_INFO, BEHAVIOR_EVENT);
-    AddString(scene, "SCENE_INFO", "scene");
-    memo.UpdateDistributedSceneInfo(scene);
-    std::string sceneInfo;
-    memo.GetDistributedSceneInfo(sceneInfo);
-    EXPECT_EQ(sceneInfo, "scene");
-
     auto distributed = MakeEvent(DISTRIBUTED_DEVICE_INFO, BEHAVIOR_EVENT);
     distributed->Add("SERVICE_STATUS", 1);
     distributed->Add("IS_ADD", 1);
@@ -1678,7 +1763,7 @@ HWTEST(MediaMonitorDtTest, AudioMemo_AppDistributedDmAndWriteInfoBranch_001, Tes
     dm->Add("IS_ADD", 1);
     AddString(dm, "DEVICE_NAME", "dev");
     AddString(dm, "NETWORK_ID", "net");
-    dm->Add("DM_DEVICE_TYPE", 2);
+    dm->Add("DM_DEVICE_TYPE", TEST_DM_DEVICE_TYPE);
     memo.UpdateDmDeviceInfo(dm);
     std::vector<MonitorDmDeviceInfo> dmInfos;
     memo.GetDmDeviceInfo(dmInfos);
@@ -1692,6 +1777,44 @@ HWTEST(MediaMonitorDtTest, AudioMemo_AppDistributedDmAndWriteInfoBranch_001, Tes
     EXPECT_TRUE(dump.empty());
     memo.WriteInfo(1, dump);
     EXPECT_NE(dump.find("No preferred device set"), std::string::npos);
+}
+
+HWTEST(MediaMonitorDtTest, AudioMemo_AppDistributedDmAndWriteInfoBranch_001, TestSize.Level0)
+{
+    auto &memo = AudioMemo::GetAudioMemo();
+    auto session = MakeEvent(APP_SESSION_STATE, BEHAVIOR_EVENT);
+    session->Add("PID", TEST_SESSION_PID);
+    session->Add("HAS_SESSION", 1);
+    session->Add("IS_ADD", 1);
+    memo.UpdateAppSessionState(session);
+    std::unordered_map<int32_t, bool> sessionMap;
+    memo.GetAudioAppSessionMsg(sessionMap);
+    EXPECT_TRUE(sessionMap[TEST_SESSION_PID]);
+    session->UpdateIntMap("IS_ADD", 0);
+    memo.UpdateAppSessionState(session);
+    sessionMap.clear();
+    memo.GetAudioAppSessionMsg(sessionMap);
+    EXPECT_TRUE(sessionMap.empty());
+
+    auto backTask = MakeEvent(APP_BACKTASK_STATE, BEHAVIOR_EVENT);
+    backTask->Add("PID", TEST_BACK_TASK_PID);
+    backTask->Add("HAS_BACK_TASK", 1);
+    backTask->Add("IS_ADD", 1);
+    memo.UpdateAppBackTaskState(backTask);
+    std::unordered_map<int32_t, bool> backTaskMap;
+    memo.GetAudioAppBackTaskMsg(backTaskMap);
+    EXPECT_TRUE(backTaskMap[TEST_BACK_TASK_PID]);
+    backTask->UpdateIntMap("IS_ADD", 0);
+    memo.UpdateAppBackTaskState(backTask);
+
+    auto scene = MakeEvent(DISTRIBUTED_SCENE_INFO, BEHAVIOR_EVENT);
+    AddString(scene, "SCENE_INFO", "scene");
+    memo.UpdateDistributedSceneInfo(scene);
+    std::string sceneInfo;
+    memo.GetDistributedSceneInfo(sceneInfo);
+    EXPECT_EQ(sceneInfo, "scene");
+
+    VerifyDistributedAndDmDeviceInfo(memo);
 }
 
 HWTEST(MediaMonitorDtTest, MediaMonitorService_PermissionParameterAndQueueBranch_001, TestSize.Level0)
