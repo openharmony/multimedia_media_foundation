@@ -133,6 +133,8 @@ public:
         "video_static_metadata_smpt2086"; // video static metadata.
     static constexpr const char VIDEO_STATIC_METADATA_CTA861[] =
         "video_static_metadata_cta861"; // video static metadata.
+    static constexpr const char CHECK_CODEC_CHANGE[] =
+        "check_codec_change"; ///< check codec change
 
     /* -------------------- timed metadata tag -------------------- */
     static constexpr const char TIMED_METADATA_SRC_TRACK_MIME[] =

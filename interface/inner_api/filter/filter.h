@@ -121,6 +121,12 @@ public:
     {
         return {};
     }
+    virtual void HandleVideoCodecChange(const std::shared_ptr<Meta>& meta, bool& isCodecChanged, bool isSmoothSwitch)
+    {
+        (void)meta;
+        (void)isCodecChanged;
+        (void)isSmoothSwitch;
+    }
 };
 
 class FilterLinkCallback {
