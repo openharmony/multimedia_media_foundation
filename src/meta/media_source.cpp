@@ -43,13 +43,6 @@ MediaSource::MediaSource(std::string uri, std::map<std::string, std::string> hea
     MEDIA_LOG_I("MediaSource ctor called header");
 }
 
-// Use cachePath to create MediaSource
-MediaSource::MediaSource(std::string uri, std::string cachePath)
-    : uri_(std::move(uri)), cachePath_(std::move(cachePath))
-{
-    MEDIA_LOG_I("MediaSource ctor called cachePath");
-}
-
 SourceType MediaSource::GetSourceType() const
 {
     return type_;
@@ -105,12 +98,6 @@ void MediaSource::SetMimeType(const std::string& mimeType)
 std::string MediaSource::GetMimeType() const
 {
     return mimeType_;
-}
-
-// Get MediaSource cache path
-std::string MediaSource::GetCachePath() const
-{
-    return cachePath_;
 }
 
 void MediaSource::SetSourceLoader(std::shared_ptr<IMediaSourceLoader> mediaSourceLoader)

@@ -78,6 +78,10 @@ public:
         return "";
     }
 };
+
+extern "C" __attribute__((visibility("default"))) NetworkClient *CreateNetworkClientExt(RxHeader headCallback,
+    RxBody bodyCallback, void *userParam, std::optional<uint32_t> connectTimeoutMs);
+
 } // namespace HttpPlugin
 } // namespace Plugins
 } // namespace Media
