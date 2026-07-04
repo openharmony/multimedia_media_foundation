@@ -102,6 +102,31 @@ constexpr int32_t TEST_PARAM_VALUE = 5;
 constexpr int32_t TEST_ACTIVE_PID = 2;
 constexpr int32_t TEST_INCOMING_PID = 1;
 constexpr int32_t TEST_MUTE_PLAY_DURATION = 2;
+constexpr int32_t TEST_PIPE_AFTER_CHANGE = 2;
+constexpr int32_t TEST_DEVICE_AFTER_CHANGE = 2;
+constexpr int32_t TEST_CUR_AUDIO_SCENE = 2;
+constexpr uint64_t TEST_UPLOAD_TIME = 2;
+constexpr int32_t TEST_SERVICE_STATUS_OFFLINE = 2;
+constexpr int32_t TEST_FAULT_LOOP_COUNT = 12;
+constexpr int32_t TEST_FAULT_RECORD_LIMIT = 10;
+constexpr int32_t TEST_FAULT_FIRST_UID = 2;
+constexpr int32_t TEST_OTHER_SCENE_TYPE = 10;
+constexpr int32_t TEST_KARAOKE_TYPE = 1;
+constexpr int32_t TEST_KARAOKE_FEATURE = 2;
+constexpr int32_t TEST_KARAOKE_DEVICE_TYPE = 3;
+constexpr uint64_t TEST_KARAOKE_DURATION = 4;
+constexpr uint64_t TEST_KARAOKE_TOTAL_DURATION = 8;
+constexpr int32_t TEST_SUITE_NODE_COUNT = 1;
+constexpr int32_t TEST_SUITE_RT_RENDER = 2;
+constexpr int32_t TEST_SUITE_RT_110BASE = 3;
+constexpr int32_t TEST_SUITE_RT_120BASE = 4;
+constexpr int32_t TEST_SUITE_RT_100 = 5;
+constexpr int32_t TEST_SUITE_EDIT_RENDER = 6;
+constexpr int32_t TEST_SUITE_EDIT_BASE = 7;
+constexpr int32_t TEST_SUITE_EDIT_110BASE = 8;
+constexpr int32_t TEST_SUITE_EDIT_120BASE = 9;
+constexpr int32_t TEST_SUITE_EDIT_100 = 10;
+constexpr int32_t TEST_SUITE_NODE_COUNT_MERGED = 2;
 
 DumpBuffer *DumpBufferNewStub()
 {
@@ -477,14 +502,14 @@ void FillRichBeanDeviceAndSession(const std::shared_ptr<EventBean> &bean)
     bean->Add("SERVICE_ID", 1);
     AddString(bean, "DUBIOUS_APP", "dubious");
     bean->Add("PIPE_TYPE_BEFORE_CHANGE", 1);
-    bean->Add("PIPE_TYPE_AFTER_CHANGE", 2);
+    bean->Add("PIPE_TYPE_AFTER_CHANGE", TEST_PIPE_AFTER_CHANGE);
     bean->Add("DEVICE_TYPE_BEFORE_CHANGE", 1);
-    bean->Add("DEVICE_TYPE_AFTER_CHANGE", 2);
+    bean->Add("DEVICE_TYPE_AFTER_CHANGE", TEST_DEVICE_AFTER_CHANGE);
     bean->Add("PRE_AUDIO_SCENE", 1);
-    bean->Add("CUR_AUDIO_SCENE", 2);
+    bean->Add("CUR_AUDIO_SCENE", TEST_CUR_AUDIO_SCENE);
 }
 
-void FillRichBeanRouteAndInterrupt(const std::shared_ptr<EventBean> &bean)
+void FillRichBeanRouteInfo(const std::shared_ptr<EventBean> &bean)
 {
     AddString(bean, "DEVICE_LIST", "list");
     bean->Add("ROUTER_TYPE", 1);
@@ -504,7 +529,7 @@ void FillRichBeanRouteAndInterrupt(const std::shared_ptr<EventBean> &bean)
     bean->Add("SESSIONID", 1);
     bean->Add("STREAM_OR_SOURCE_TYPE", 1);
     bean->Add("START_TIME", static_cast<uint64_t>(1));
-    bean->Add("UPLOAD_TIME", static_cast<uint64_t>(2));
+    bean->Add("UPLOAD_TIME", TEST_UPLOAD_TIME);
     bean->Add("STANDBY_DURATION_S", 1);
     bean->Add("INCOMING_UID", TEST_CLIENT_UID);
     bean->Add("ACTIVE_UID", TEST_CLIENT_UID + 1);
@@ -513,6 +538,10 @@ void FillRichBeanRouteAndInterrupt(const std::shared_ptr<EventBean> &bean)
     AddString(bean, "INCOMING_PKG", "incoming");
     bean->Add("ACTIVE_SOURCE", 1);
     bean->Add("ACTIVE_PID", TEST_ACTIVE_PID);
+}
+
+void FillRichBeanInterruptInfo(const std::shared_ptr<EventBean> &bean)
+{
     AddString(bean, "ACTIVE_PKG", "active");
     bean->Add("TYPE", 1);
     bean->Add("COUNT", 1);
@@ -548,6 +577,12 @@ void FillRichBeanRouteAndInterrupt(const std::shared_ptr<EventBean> &bean)
     bean->Add("ERROR_SCOPE", 1);
     bean->Add("ERROR_TYPE", 1);
     bean->Add("FEATURE", 1);
+}
+
+void FillRichBeanRouteAndInterrupt(const std::shared_ptr<EventBean> &bean)
+{
+    FillRichBeanRouteInfo(bean);
+    FillRichBeanInterruptInfo(bean);
 }
 
 void FillRichBeanSceneAndDistributed(const std::shared_ptr<EventBean> &bean)
@@ -1034,9 +1069,8 @@ HWTEST(MediaMonitorDtTest, SampleConvert_InitConvertAndReleaseBranch_001, TestSi
     EXPECT_EQ(convert.Convert(src, sizeof(src), &frame), ERROR);
 }
 
-std::shared_ptr<EventBean> MakeWriterTestBean()
+void FillWriterBeanBase(const std::shared_ptr<EventBean> &bean)
 {
-    auto bean = MakeUsageBean(STREAM_UTILIZATION_STATS);
     bean->Add("HASMIC", 1);
     bean->Add("ISCONNECT", 1);
     bean->Add("DEVICETYPE", TEST_DEVICE_TYPE_PLAYBACK);
@@ -1068,11 +1102,15 @@ std::shared_ptr<EventBean> MakeWriterTestBean()
     bean->Add("SERVICE_ID", 1);
     AddString(bean, "DUBIOUS_APP", "dubious");
     bean->Add("PIPE_TYPE_BEFORE_CHANGE", 1);
-    bean->Add("PIPE_TYPE_AFTER_CHANGE", 2);
+    bean->Add("PIPE_TYPE_AFTER_CHANGE", TEST_PIPE_AFTER_CHANGE);
     bean->Add("DEVICE_TYPE_BEFORE_CHANGE", 1);
-    bean->Add("DEVICE_TYPE_AFTER_CHANGE", 2);
+    bean->Add("DEVICE_TYPE_AFTER_CHANGE", TEST_DEVICE_AFTER_CHANGE);
     bean->Add("PRE_AUDIO_SCENE", 1);
-    bean->Add("CUR_AUDIO_SCENE", 2);
+    bean->Add("CUR_AUDIO_SCENE", TEST_CUR_AUDIO_SCENE);
+}
+
+void FillWriterBeanRouteInfo(const std::shared_ptr<EventBean> &bean)
+{
     AddString(bean, "DEVICE_LIST", "list");
     bean->Add("ROUTER_TYPE", 1);
     AddString(bean, "DB_TYPE", "db");
@@ -1091,7 +1129,7 @@ std::shared_ptr<EventBean> MakeWriterTestBean()
     bean->Add("SESSIONID", 1);
     bean->Add("STREAM_OR_SOURCE_TYPE", 1);
     bean->Add("START_TIME", static_cast<uint64_t>(1));
-    bean->Add("UPLOAD_TIME", static_cast<uint64_t>(2));
+    bean->Add("UPLOAD_TIME", TEST_UPLOAD_TIME);
     bean->Add("STANDBY_DURATION_S", 1);
     bean->Add("INCOMING_SOURCE", 1);
     bean->Add("INCOMING_PID", TEST_INCOMING_PID);
@@ -1099,6 +1137,10 @@ std::shared_ptr<EventBean> MakeWriterTestBean()
     bean->Add("ACTIVE_SOURCE", 1);
     bean->Add("ACTIVE_PID", TEST_ACTIVE_PID);
     AddString(bean, "ACTIVE_PKG", "active");
+}
+
+void FillWriterBeanInterruptInfo(const std::shared_ptr<EventBean> &bean)
+{
     bean->Add("TYPE", 1);
     bean->Add("COUNT", 1);
     bean->Add("MSG_TYPE", 1);
@@ -1134,6 +1176,19 @@ std::shared_ptr<EventBean> MakeWriterTestBean()
     bean->Add("ERROR_SCOPE", 1);
     bean->Add("ERROR_TYPE", 1);
     bean->Add("FEATURE", 1);
+}
+
+void FillWriterBeanRouteAndInterrupt(const std::shared_ptr<EventBean> &bean)
+{
+    FillWriterBeanRouteInfo(bean);
+    FillWriterBeanInterruptInfo(bean);
+}
+
+std::shared_ptr<EventBean> MakeWriterTestBean()
+{
+    auto bean = MakeUsageBean(STREAM_UTILIZATION_STATS);
+    FillWriterBeanBase(bean);
+    FillWriterBeanRouteAndInterrupt(bean);
     return bean;
 }
 
@@ -1189,7 +1244,7 @@ void WriteAllEventsWithNull(MediaEventBaseWriter &writer)
     writer.WriteKaraokeFeatureStatistic(nullBean);
 }
 
-void WriteAllEventsWithValidBean(MediaEventBaseWriter &writer, const std::shared_ptr<EventBean> &bean)
+void WriteValidBeanFirstHalf(MediaEventBaseWriter &writer, std::shared_ptr<EventBean> bean)
 {
     writer.WriteHeasetChange(bean);
     writer.WriteVolumeChange(bean);
@@ -1219,6 +1274,10 @@ void WriteAllEventsWithValidBean(MediaEventBaseWriter &writer, const std::shared
     writer.WriteUnderrunStatistic(bean);
     writer.WriteAudioPipeChange(bean);
     writer.WriteAudioRouteChange(bean);
+}
+
+void WriteValidBeanSecondHalf(MediaEventBaseWriter &writer, std::shared_ptr<EventBean> bean)
+{
     writer.WriteDbAccessException(bean);
     writer.WriteDeviceChangeException(bean);
     writer.WriteFocusMigrate(bean);
@@ -1248,6 +1307,12 @@ void WriteAllEventsWithValidBean(MediaEventBaseWriter &writer, const std::shared
     writer.WriteTonePlaybackFailed(bean);
     writer.WriteAudioLoopbackException(bean);
     writer.WriteKaraokeFeatureStatistic(bean);
+}
+
+void WriteAllEventsWithValidBean(MediaEventBaseWriter &writer, const std::shared_ptr<EventBean> &bean)
+{
+    WriteValidBeanFirstHalf(writer, bean);
+    WriteValidBeanSecondHalf(writer, bean);
 }
 
 HWTEST(MediaMonitorDtTest, MediaEventBaseWriter_NullAndValidBranches_001, TestSize.Level0)
@@ -1412,22 +1477,22 @@ void VerifySuiteEngineNodeStats(MediaMonitorPolicy &policy)
     auto suite = MakeEvent(SUITE_ENGINE_UTILIZATION_STATS, FREQUENCY_AGGREGATION_EVENT);
     suite->Add("CLIENT_UID", TEST_CLIENT_UID);
     AddString(suite, "AUDIO_NODE_TYPE", "node");
-    suite->Add("AUDIO_NODE_COUNT", 1);
-    suite->Add("RT_MODE_RENDER_COUNT", 2);
+    suite->Add("AUDIO_NODE_COUNT", TEST_SUITE_NODE_COUNT);
+    suite->Add("RT_MODE_RENDER_COUNT", TEST_SUITE_RT_RENDER);
     suite->Add("RT_MODE_RTF_OVER_BASE_COUNT", -1);
-    suite->Add("RT_MODE_RTF_OVER_110BASE_COUNT", 3);
-    suite->Add("RT_MODE_RTF_OVER_120BASE_COUNT", 4);
-    suite->Add("RT_MODE_RTF_OVER_100_COUNT", 5);
-    suite->Add("EDIT_MODE_RENDER_COUNT", 6);
-    suite->Add("EDIT_MODE_RTF_OVER_BASE_COUNT", 7);
-    suite->Add("EDIT_MODE_RTF_OVER_110BASE_COUNT", 8);
-    suite->Add("EDIT_MODE_RTF_OVER_120BASE_COUNT", 9);
-    suite->Add("EDIT_MODE_RTF_OVER_100_COUNT", 10);
+    suite->Add("RT_MODE_RTF_OVER_110BASE_COUNT", TEST_SUITE_RT_110BASE);
+    suite->Add("RT_MODE_RTF_OVER_120BASE_COUNT", TEST_SUITE_RT_120BASE);
+    suite->Add("RT_MODE_RTF_OVER_100_COUNT", TEST_SUITE_RT_100);
+    suite->Add("EDIT_MODE_RENDER_COUNT", TEST_SUITE_EDIT_RENDER);
+    suite->Add("EDIT_MODE_RTF_OVER_BASE_COUNT", TEST_SUITE_EDIT_BASE);
+    suite->Add("EDIT_MODE_RTF_OVER_110BASE_COUNT", TEST_SUITE_EDIT_110BASE);
+    suite->Add("EDIT_MODE_RTF_OVER_120BASE_COUNT", TEST_SUITE_EDIT_120BASE);
+    suite->Add("EDIT_MODE_RTF_OVER_100_COUNT", TEST_SUITE_EDIT_100);
     policy.AddToSuiteEngineNodeStatsMap(suite);
     policy.AddToSuiteEngineNodeStatsMap(suite);
     ASSERT_EQ(policy.suiteEngineNodeStatsMap_.size(), 1U);
     auto &stat = policy.suiteEngineNodeStatsMap_.begin()->second.begin()->second;
-    EXPECT_EQ(stat.nodeCount, 2U);
+    EXPECT_EQ(stat.nodeCount, static_cast<uint32_t>(TEST_SUITE_NODE_COUNT_MERGED));
     EXPECT_EQ(stat.rtfOverBaselineCnt, 0U);
     policy.HandleToSuiteEngineUtilizationStatsEvent();
     EXPECT_TRUE(policy.suiteEngineNodeStatsMap_.empty());
@@ -1440,7 +1505,7 @@ void VerifyVolumeSettingAndKaraoke(MediaMonitorPolicy &policy)
     policy.HandleVolumeSettingStatistics(volumeSetting);
     EXPECT_EQ(policy.loudVolumeTimes_.load(), 1);
     auto otherScene = MakeEvent(VOLUME_SETTING_STATISTICS, FREQUENCY_AGGREGATION_EVENT);
-    otherScene->Add("SCENE_TYPE", 10);
+    otherScene->Add("SCENE_TYPE", TEST_OTHER_SCENE_TYPE);
     policy.HandleVolumeSettingStatistics(otherScene);
     EXPECT_EQ(policy.loudVolumeTimes_.load(), 1);
     policy.HandleToVolumeSettingStatisticsEvent();
@@ -1449,14 +1514,14 @@ void VerifyVolumeSettingAndKaraoke(MediaMonitorPolicy &policy)
 
     auto karaoke = MakeEvent(KARAOKE_FEATURE_UTILIZATION, FREQUENCY_AGGREGATION_EVENT);
     karaoke->Add("UID", TEST_CLIENT_UID);
-    karaoke->Add("TYPE", 1);
-    karaoke->Add("FEATURE", 2);
-    karaoke->Add("DEVICE_TYPE", 3);
-    karaoke->Add("DURATION", static_cast<uint64_t>(4));
+    karaoke->Add("TYPE", TEST_KARAOKE_TYPE);
+    karaoke->Add("FEATURE", TEST_KARAOKE_FEATURE);
+    karaoke->Add("DEVICE_TYPE", TEST_KARAOKE_DEVICE_TYPE);
+    karaoke->Add("DURATION", TEST_KARAOKE_DURATION);
     policy.AddToKaraokeFeatureVector(karaoke);
     policy.AddToKaraokeFeatureVector(karaoke);
     ASSERT_EQ(policy.karaokeFeatureEventVector_.size(), 1U);
-    EXPECT_EQ(policy.karaokeFeatureEventVector_[0]->GetUint64Value("DURATION"), 8);
+    EXPECT_EQ(policy.karaokeFeatureEventVector_[0]->GetUint64Value("DURATION"), TEST_KARAOKE_TOTAL_DURATION);
     policy.karaokeFeatureEventVector_.push_back(nullptr);
     policy.HandleToKaraokeFeatureEvent();
     EXPECT_TRUE(policy.karaokeFeatureEventVector_.empty());
@@ -1519,7 +1584,7 @@ HWTEST(MediaMonitorDtTest, MediaMonitorPolicy_BundleCacheAndWriteInfoBranch_001,
 
 void VerifyUnifiedFaultCodeRecords(EventAggregate &aggregate)
 {
-    for (int32_t i = 0; i < 12; ++i) {
+    for (int32_t i = 0; i < TEST_FAULT_LOOP_COUNT; ++i) {
         auto fault = MakeEvent(UNIFIED_FAULT_CODE, FAULT_EVENT);
         fault->Add("ERROR_UID", i);
         fault->Add("ERROR_CODE", 0x1000 + i);
@@ -1527,8 +1592,8 @@ void VerifyUnifiedFaultCodeRecords(EventAggregate &aggregate)
         aggregate.WriteEvent(fault);
     }
     auto records = aggregate.GetUnifiedFaultCodeRecords();
-    EXPECT_EQ(records.size(), 10U);
-    EXPECT_EQ(records.front()->GetIntValue("ERROR_UID"), 2);
+    EXPECT_EQ(records.size(), static_cast<size_t>(TEST_FAULT_RECORD_LIMIT));
+    EXPECT_EQ(records.front()->GetIntValue("ERROR_UID"), TEST_FAULT_FIRST_UID);
 
     std::string dump;
     aggregate.WriteInfo(-1, dump);
@@ -1753,7 +1818,7 @@ void VerifyDistributedAndDmDeviceInfo(AudioMemo &memo)
     EXPECT_EQ(distributedInfos[0], "origin");
     distributed->UpdateIntMap("IS_ADD", 0);
     memo.UpdateDistributedDeviceInfo(distributed);
-    distributed->UpdateIntMap("SERVICE_STATUS", 2);
+    distributed->UpdateIntMap("SERVICE_STATUS", TEST_SERVICE_STATUS_OFFLINE);
     memo.UpdateDistributedDeviceInfo(distributed);
     distributedInfos.clear();
     memo.GetDistributedDeviceInfo(distributedInfos);
