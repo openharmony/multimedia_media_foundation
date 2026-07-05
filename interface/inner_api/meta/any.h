@@ -46,6 +46,7 @@
 
 #include <array>
 #include <cstring>
+#include <dlfcn.h>
 #include "cpp_ext/type_cast_ext.h"
 #include "securec.h"
 #include <type_traits>
@@ -312,7 +313,10 @@ public:
     void __attribute__((no_sanitize("cfi"))) Reset() noexcept
     {
         if (HasValue()) {
-            functionTable_->destroy(storage_);
+            if (IsAddrInLoadedSo(reinterpret_cast<const void*>(functionTable_)) &&
+                IsAddrInLoadedSo(reinterpret_cast<const void*>(functionTable_->destroy))) {
+                functionTable_->destroy(storage_);
+            }
             storage_.trivialStack_.fill(0);
         }
         functionTable_ = nullptr;
@@ -692,6 +696,12 @@ private:
     bool IsFunctionTableValid() const noexcept
     {
         return functionTable_ != nullptr;
+    }
+
+    static bool IsAddrInLoadedSo(const void* addr) noexcept
+    {
+        Dl_info info;
+        return dladdr(addr, &info) != 0;
     }
 
     template <typename DecayedValueType, typename... Args>
