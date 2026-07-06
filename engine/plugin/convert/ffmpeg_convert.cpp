@@ -46,9 +46,9 @@ Status Resample::Init(const ResamplePara& resamplePara)
             &av_ch_layout, resamplePara_.destFmt, resamplePara_.sampleRate,
             &av_ch_layout, resamplePara_.srcFfFmt, resamplePara_.sampleRate,
             0, nullptr);
-        FALSE_RETURN_V_MSG_E(!ret, Status::ERROR_UNKNOWN, "swr alloc set opts failed.");
-        if (swr_init(swrContext) != 0) {
-            MEDIA_LOG_E("swr init error");
+        if (ret != 0 || swr_init(swrContext) != 0) {
+            MEDIA_LOG_E("swr alloc set opts failed or swr init error");
+            swr_free(&swrContext);
             return Status::ERROR_UNKNOWN;
         }
         swrCtx_ = std::shared_ptr<SwrContext>(swrContext, [](SwrContext *ptr) {
