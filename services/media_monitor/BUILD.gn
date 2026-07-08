@@ -104,6 +104,7 @@ if (hst_is_lite_sys) {
   }
 } else {
   ohos_shared_library("media_monitor_buffer") {
+    branch_protector_ret = "pac_ret"
     sanitize = {
       ubsan = true
       boundary_sanitize = true
@@ -243,7 +244,7 @@ if (hst_is_lite_sys) {
   }
 } else {
   ohos_shared_library("media_monitor") {
-    stack_protector_ret = true
+    branch_protector_ret = "pac_ret"
     sanitize = {
       ubsan = true
       boundary_sanitize = true
@@ -320,7 +321,7 @@ if (hst_is_lite_sys) {
   }
 } else {
   ohos_shared_library("media_monitor_wrapper") {
-    stack_protector_ret = true
+    branch_protector_ret = "pac_ret"
     sanitize = {
       ubsan = true
       boundary_sanitize = true

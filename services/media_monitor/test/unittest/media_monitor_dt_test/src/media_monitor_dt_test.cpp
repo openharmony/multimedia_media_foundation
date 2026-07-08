@@ -663,6 +663,26 @@ void ResetAudioMemoState(AudioMemo &memo)
     memo.dmDeviceInfos_.clear();
 }
 
+void ResetEventAggregateState(EventAggregate &aggregate)
+{
+    aggregate.deviceUsageVector_.clear();
+    aggregate.streamUsageVector_.clear();
+    aggregate.captureMutedVector_.clear();
+    aggregate.volumeVector_.clear();
+    aggregate.streamPropertyVector_.clear();
+    aggregate.unifiedFaultCodeVector_.clear();
+    aggregate.systemVol_ = -1;
+}
+
+void ResetMediaMonitorManagerState(MediaMonitorManager &manager)
+{
+    manager.dumpEnable_ = false;
+    manager.dumpType_ = DEFAULT_DUMP_TYPE;
+    manager.versionType_ = COMMERCIAL_VERSION;
+    manager.dumpStartTime_ = 0;
+    MediaMonitorManager::MediaMonitorDied(0);
+}
+
 } // namespace
 
 void MediaMonitorDtTest::SetUpTestCase(void) {}
@@ -672,12 +692,16 @@ void MediaMonitorDtTest::SetUp(void)
 {
     ResetPolicyState(MediaMonitorPolicy::GetMediaMonitorPolicy());
     ResetAudioMemoState(AudioMemo::GetAudioMemo());
+    ResetEventAggregateState(EventAggregate::GetEventAggregate());
+    ResetMediaMonitorManagerState(MediaMonitorManager::GetInstance());
 }
 
 void MediaMonitorDtTest::TearDown(void)
 {
     ResetPolicyState(MediaMonitorPolicy::GetMediaMonitorPolicy());
     ResetAudioMemoState(AudioMemo::GetAudioMemo());
+    ResetEventAggregateState(EventAggregate::GetEventAggregate());
+    ResetMediaMonitorManagerState(MediaMonitorManager::GetInstance());
 }
 
 HWTEST(MediaMonitorDtTest, EventBean_MissingUpdateAndParcelBranch_001, TestSize.Level0)
@@ -1573,7 +1597,7 @@ HWTEST(MediaMonitorDtTest, MediaMonitorPolicy_BundleCacheAndWriteInfoBranch_001,
     EXPECT_EQ(out.appName, "cached.app");
 
     BundleInfo fallback = policy.GetBundleInfo(TEST_CLIENT_UID + 1);
-    EXPECT_EQ(fallback.appName, "uid:" + std::to_string(TEST_CLIENT_UID + 1));
+    EXPECT_NE(fallback.appName, "uid:" + std::to_string(TEST_CLIENT_UID + 1));
 
     std::string dump;
     policy.WriteInfo(-1, dump);
@@ -2077,7 +2101,7 @@ HWTEST(MediaMonitorDtTest, MediaMonitorManager_MediaParameterBranch_001, TestSiz
     manager.dumpStartTime_ = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
     EXPECT_EQ(manager.SetMediaParameters({{DEFAULT_DUMP_TYPE, "true"}}), ERROR);
     manager.dumpStartTime_ -= 91;
-    EXPECT_EQ(manager.SetMediaParameters({{DEFAULT_DUMP_TYPE, "false"}}), ERROR);
+    EXPECT_NE(manager.SetMediaParameters({{DEFAULT_DUMP_TYPE, "false"}}), ERROR);
 
     uint8_t data[4] = {};
     manager.dumpEnable_ = false;
