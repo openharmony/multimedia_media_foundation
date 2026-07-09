@@ -112,6 +112,8 @@ enum MediaServiceErrCode : ErrCode {
     MSERR_LPP_INSTANCE_EXCEED_LIMIT,                    // LPP: instance limit exceeded.
     MSERR_HARDWARE_ERROR,                               // underlying hardware error happened.
     MSERR_PARAM_OUT_OF_RANGE,                           // Parameter value out of range.
+    MSERR_SOUNDPOOL_STREAM_NOT_FOUND,                   // soundpool stream not found.
+    MSERR_SOUNDPOOL_SOUND_NOT_LOADED,                   // soundpool sound not loaded.
     MSERR_EXTEND_START      = MS_ERR_OFFSET + 0xF000,   // extend err start.
     MSERR_CLEARTEXT_NOT_PERMITTED,                      // http cleartext not permitted.
     MSERR_VID_DEC_INIT_FAILED,                          // video mimeType Decoder create failed.
