@@ -394,6 +394,7 @@ public:
         tagCharSeq == Tag::BUFFER_DURATION or
         tagCharSeq == Tag::MEDIA_DURATION or
         tagCharSeq == Tag::MEDIA_BITRATE or
+        tagCharSeq == Tag::VIDEOCALL_LOWPOWER_MODE or
         tagCharSeq == Tag::MEDIA_START_TIME or
         tagCharSeq == Tag::MEDIA_CONTAINER_START_TIME or
         tagCharSeq == Tag::USER_FRAME_PTS or

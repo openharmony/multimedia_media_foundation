@@ -83,6 +83,7 @@ public:
     static constexpr const char MEDIA_DURATION[] = "duration";         ///< duration based on {@link HST_TIME_BASE}
     static constexpr const char MEDIA_FILE_SIZE[] = "media.file.size"; ///< file size
     static constexpr const char MEDIA_BITRATE[] = "bitrate";           ///< bite rate
+    static constexpr const char VIDEOCALL_LOWPOWER_MODE[] = "videocall.lowpower,mode";  //< lowpowermode
     static constexpr const char MEDIA_FILE_URI[] = "media.file.uri";   ///< file uri
     static constexpr const char MEDIA_CODEC_CONFIG[] =
         "codec_config"; ///< codec config. e.g. AudioSpecificConfig for mp4
