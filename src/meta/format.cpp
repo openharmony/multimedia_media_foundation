@@ -412,6 +412,8 @@ FormatDataType Format::GetValueType(const std::string_view &key) const
             return FORMAT_TYPE_STRING;
         } else if (Any::IsSameTypeWith<std::vector<uint8_t>>(iter->second)) {
             return FORMAT_TYPE_ADDR;
+        } else if (Any::IsSameTypeWith<std::vector<int32_t>>(iter->second)) {
+            return FORMAT_TYPE_INT32_VECTOR;
         } else {
             int64_t valueTemp;
             bool isLongValue = GetMetaData(*meta_, std::string(key), valueTemp);
@@ -463,6 +465,13 @@ const Format::FormatDataMap &Format::GetFormatMap() const
                 ret = PutBufferToFormatMap(formatTemp, iter->first, addr, size);
                 break;
             }
+            case FORMAT_TYPE_INT32_VECTOR: {
+                Any *value = const_cast<Any *>(&(iter->second));
+                int32_t *addr = (AnyCast<std::vector<int32_t>>(value))->data();
+                size_t size = (AnyCast<std::vector<int32_t>>(value))->size();
+                ret = PutIntBufferToFormatMap(formatTemp, iter->first, addr, size);
+                break;
+            }
             default:
                 MEDIA_LOG_E("Format::Stringify failed. Key: %{public}s", iter->first.c_str());
         }
@@ -506,6 +515,14 @@ std::string Format::Stringify() const
                 Any *value = const_cast<Any *>(&(iter->second));
                 if (AnyCast<std::vector<uint8_t>>(value) != nullptr) {
                     dumpStream << iter->first << ", bufferSize = " << (AnyCast<std::vector<uint8_t>>(value))->size()
+                            << " | ";
+                }
+                break;
+            }
+            case FORMAT_TYPE_INT32_VECTOR: {
+                Any *value = const_cast<Any *>(&(iter->second));
+                if (AnyCast<std::vector<int32_t>>(value) != nullptr) {
+                    dumpStream << iter->first << ", bufferSize = " << (AnyCast<std::vector<int32_t>>(value))->size()
                             << " | ";
                 }
                 break;

@@ -41,6 +41,8 @@ enum FormatDataType : uint32_t {
     FORMAT_TYPE_ADDR,
     /* Uint32 */
     FORMAT_TYPE_UINT32,
+    /* Int32 Vector */
+    FORMAT_TYPE_INT32_VECTOR,
 };
 
 struct FormatData {
