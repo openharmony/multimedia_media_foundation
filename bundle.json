@@ -93,7 +93,8 @@
               "image_framework",
               "qos_manager",
               "resource_schedule_service",
-              "memory_utils"
+              "memory_utils",
+              "json"
           ]
         },
         "build": {

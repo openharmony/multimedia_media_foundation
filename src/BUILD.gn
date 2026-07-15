@@ -206,6 +206,7 @@ if (hst_is_standard_sys) {
       "init:libbegetutil",
       "ipc:ipc_core",
       "samgr:samgr_proxy",
+      "json:nlohmann_json_static",
     ]
 
     public_external_deps = [
