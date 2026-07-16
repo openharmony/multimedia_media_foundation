@@ -703,7 +703,7 @@ void PluginList::AddL2hcEncodersPlugins()
 {
     PluginDescription l2hcEncoderPlugin;
     l2hcEncoderPlugin.pluginName = "OH.Media.Codec.Encoder.Audio.L2HC";
-    l2hcEncoderPlugin.packageName = "AudioL2hcEncoder";
+    l2hcEncoderPlugin.packageName = "AudioL2hcCodec";
     l2hcEncoderPlugin.pluginType = PluginType::AUDIO_ENCODER;
     l2hcEncoderPlugin.cap = "audio/l2hc";
     l2hcEncoderPlugin.rank = DEFAULT_RANK;
@@ -714,7 +714,7 @@ void PluginList::AddL2hcDecodersPlugins()
 {
     PluginDescription l2hcDecoderPlugin;
     l2hcDecoderPlugin.pluginName = "OH.Media.Codec.Decoder.Audio.L2HC";
-    l2hcDecoderPlugin.packageName = "AudioL2hcDecoder";
+    l2hcDecoderPlugin.packageName = "AudioL2hcCodec";
     l2hcDecoderPlugin.pluginType = PluginType::AUDIO_DECODER;
     l2hcDecoderPlugin.cap = "audio/l2hc";
     l2hcDecoderPlugin.rank = DEFAULT_RANK;
