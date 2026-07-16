@@ -83,7 +83,6 @@ public:
     static constexpr const char MEDIA_DURATION[] = "duration";         ///< duration based on {@link HST_TIME_BASE}
     static constexpr const char MEDIA_FILE_SIZE[] = "media.file.size"; ///< file size
     static constexpr const char MEDIA_BITRATE[] = "bitrate";           ///< bite rate
-    static constexpr const char VIDEOCALL_LOWPOWER_MODE[] = "videocall.lowpower,mode";  //< lowpowermode
     static constexpr const char MEDIA_FILE_URI[] = "media.file.uri";   ///< file uri
     static constexpr const char MEDIA_CODEC_CONFIG[] =
         "codec_config"; ///< codec config. e.g. AudioSpecificConfig for mp4
@@ -626,6 +625,9 @@ public:
     static constexpr const char VIDEO_DECODER_ENABLE_MV_UPLOAD[] = "video_decoder_enable_mv_upload";
 /* ----------------- input err tag ----------------- */
     static constexpr const char VIDEO_DECODER_INPUT_STREAM_ERROR[] = "video_decoder_input_stream_error";
+/* ------------ videocall lowpower tag ------------- */
+    static constexpr const char VIDEOCALL_LOWPOWER_MODE[] = "videocall.lowpower.mode";
+    static constexpr const char VIDEO_ENCODER_WITH_LOWPOWER_CAMERA[] = "venc_with_lowpower_cam";
 };
 
 using TagTypeCharSeq = const char *;
