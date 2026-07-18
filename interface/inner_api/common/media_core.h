@@ -179,6 +179,40 @@ enum MediaServiceErrCode : ErrCode {
     MSERR_INVALID_OPERATION_PRESENT,                    // PresentPicker not support picker.
     MSERR_INVALID_OPERATION_STARTED,                    // Capture state is not in STARTED.
     MSERR_UNKNOWN_UNSUPPORT,                            // Device not support.
+    MSERR_NULL_POINTER_5400101,                         // Framework internal error.
+    MSERR_NULL_POINTER_5400102,                         // Framework internal error.
+    MSERR_FRAMEWORK_ERROR_401,                          // Framework internal error.
+    MSERR_FRAMEWORK_ERROR_5400101,                      // Framework internal error.
+    MSERR_FRAMEWORK_ERROR_5400103,                      // Framework internal error.
+    MSERR_IPC_ERROR_5400102,                            // Framework internal error.
+    MSERR_API_FUNC_NOT_FOUND_5400102,                   // Framework internal error.
+    MSERR_GET_AUDIO_CAPTURER_INFO_FAILED_401,           // Framework internal error.
+    MSERR_GET_MAX_AMPLITUDE_FAILED_401,                 // Framework internal error.
+    MSERR_GET_AVAILABLE_ENCODER_FAILED_401,             // Framework internal error.
+    MSERR_SET_WILL_MUTE_WHEN_INTERRUPTED_FAILED_5400103, // Framework internal error.
+    MSERR_GET_INPUT_SURFACE_FAILED_5400102,             // Failed to get input surface.
+    MSERR_GET_ROTATION_FAILED_401,                      // Failed to get the config.rotation parameter value.
+    MSERR_GET_ROTATION_FAILED_5400103,                  // Failed to get the config.rotation parameter value.
+    MSERR_GET_AUDIO_SOURCE_TYPE_FAILED_401,             // Failed to get the config.audioSourceType parameter value.
+    MSERR_GET_AUDIO_SOURCE_TYPE_FAILED_5400103,         // Failed to get the config.audioSourceType parameter value.
+    MSERR_GET_VIDEO_SOURCE_TYPE_FAILED_401,             // Failed to get the config.videoSourceType parameter value.
+    MSERR_GET_VIDEO_SOURCE_TYPE_FAILED_5400103,         // Failed to get the config.videoSourceType parameter value.
+    MSERR_GET_META_SOURCE_TYPES_FAILED_5400103,         // Failed to get the config.metaSourceTypes parameter value.
+    MSERR_NO_PERMISSION_5400102,                        // User do not have the required permissions for the operation.
+    MSERR_NO_SOURCE_TYPE_401,                           // No audioSourceType and videoSourceType is specified.
+    MSERR_ISHDR_VIDEOCODEC_MATCH_ERROR_5400106,         // The value of isHdr and videoCodec is not match.
+    MSERR_GET_AVAILABLE_ENCODERS_SIZE_ERROR_5400102,    // The number of returned encoders is out of range.
+    MSERR_TASK_QUEUE_ERROR_401,                         // Framework internal error.
+    MSERR_TASK_QUEUE_ERROR_5400102,                     // Framework internal error.
+    MSERR_RECORDER_ENGINE_ERROR_5400103,                // Framework internal error.
+    MSERR_AUDIOCODEC_FILEFORMAT_MATCH_ERROR_401,        // The value of audioCodec and fileFormat is not match.
+    MSERR_AUDIO_G711MU_MATCH_ERROR_401,                 // The G711-mulaw and the sampleRate/bitRate is not match.
+    MSERR_SET_META_CONFIGS_FAILED_5400103,              // Framework internal error.
+    MSERR_CREATE_MEDIA_FILE_FAILED_5400103,             // Failed to create file in media library.
+    MSERR_AVCODEC_TIMEOUT_NO_VIDEO_FRAME_RECEIVED_5400103, // The codec timed out because no video frames were received.
+    MSERR_CHECK_CAMERA_OUTPUT_STATUS_FAILED_5400102,    // Check camera output status failed.
+    MSERR_AUDIO_BITRATE_LE_ZERO_ERROR_5400103,          // Audio bitrate cannot be less than or equal to 0.
+    MSERR_VIDEO_BITRATE_LE_ZERO_ERROR_5400103,          // Video bitrate cannot be less than or equal to 0.
 };
 
 // media api error code
