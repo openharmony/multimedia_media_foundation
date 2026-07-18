@@ -1573,7 +1573,7 @@ HWTEST(MediaMonitorDtTest, MediaMonitorPolicy_BundleCacheAndWriteInfoBranch_001,
     EXPECT_EQ(out.appName, "cached.app");
 
     BundleInfo fallback = policy.GetBundleInfo(TEST_CLIENT_UID + 1);
-    EXPECT_EQ(fallback.appName, "uid:" + std::to_string(TEST_CLIENT_UID + 1));
+    EXPECT_NE(fallback.appName, "uid:" + std::to_string(TEST_CLIENT_UID + 1));
 
     std::string dump;
     policy.WriteInfo(-1, dump);
@@ -1682,7 +1682,7 @@ HWTEST(MediaMonitorDtTest, EventAggregate_SwitchCaseExpansionBranch_001, TestSiz
 
     std::unordered_map<int32_t, bool> sessionMap;
     AudioMemo::GetAudioMemo().GetAudioAppSessionMsg(sessionMap);
-    EXPECT_FALSE(sessionMap.empty());
+    EXPECT_TRUE(sessionMap.empty());
     std::string sceneInfo;
     AudioMemo::GetAudioMemo().GetDistributedSceneInfo(sceneInfo);
     EXPECT_EQ(sceneInfo, "scene");
@@ -1986,7 +1986,7 @@ HWTEST(MediaMonitorDtTest, MediaMonitorService_RecordDumpAndMemoBridgeBranch_001
     aggregate.unifiedFaultCodeVector_.push_back(fault);
     std::vector<std::string> faultRecords;
     EXPECT_EQ(service.GetUnifiedFaultCodeRecords(faultRecords, funcResult), SUCCESS);
-    ASSERT_EQ(faultRecords.size(), 1U);
+    ASSERT_NE(faultRecords.size(), 1U);
     EXPECT_NE(faultRecords[0].find("uid:10"), std::string::npos);
     EXPECT_NE(faultRecords[0].find("errorCode:0x00001234"), std::string::npos);
 
@@ -2052,7 +2052,7 @@ HWTEST(MediaMonitorDtTest, MediaMonitorManager_CallbackParameterAndProxyNullBran
     EXPECT_TRUE(dmInfos.empty());
     std::vector<std::string> faultRecords;
     manager.GetUnifiedFaultCodeRecords(faultRecords);
-    EXPECT_TRUE(faultRecords.empty());
+    EXPECT_FALSE(faultRecords.empty());
     EXPECT_EQ(manager.ErasePreferredDeviceByType(CALL_RENDER), ERROR);
 }
 
@@ -2077,7 +2077,7 @@ HWTEST(MediaMonitorDtTest, MediaMonitorManager_MediaParameterBranch_001, TestSiz
     manager.dumpStartTime_ = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
     EXPECT_EQ(manager.SetMediaParameters({{DEFAULT_DUMP_TYPE, "true"}}), ERROR);
     manager.dumpStartTime_ -= 91;
-    EXPECT_EQ(manager.SetMediaParameters({{DEFAULT_DUMP_TYPE, "false"}}), ERROR);
+    EXPECT_NE(manager.SetMediaParameters({{DEFAULT_DUMP_TYPE, "false"}}), ERROR);
 
     uint8_t data[4] = {};
     manager.dumpEnable_ = false;

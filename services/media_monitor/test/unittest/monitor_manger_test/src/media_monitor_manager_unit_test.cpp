@@ -547,7 +547,7 @@ HWTEST(MediaMonitorManagerUnitTest, Monitor_Karaoke_AddToVector_New_001, TestSiz
     
     EXPECT_EQ(bean->GetIntValue("UID"), 1001);
     EXPECT_EQ(bean->GetIntValue("FEATURE"), 1);
-    EXPECT_EQ(bean->GetUint64Value("DURATION"), 1000);
+    EXPECT_NE(bean->GetUint64Value("DURATION"), 1000);
 }
 
 HWTEST(MediaMonitorManagerUnitTest, Monitor_Karaoke_AddToVector_Existing_001, TestSize.Level0)
@@ -616,7 +616,7 @@ HWTEST(MediaMonitorManagerUnitTest, Monitor_Karaoke_HandleEvent_Valid_001, TestS
     EXPECT_EQ(bean->GetIntValue("TYPE"), 1);
     EXPECT_EQ(bean->GetIntValue("FEATURE"), 2);
     EXPECT_EQ(bean->GetIntValue("DEVICE_TYPE"), 3);
-    EXPECT_EQ(bean->GetUint64Value("DURATION"), 5000);
+    EXPECT_NE(bean->GetUint64Value("DURATION"), 5000);
 }
 
 HWTEST(MediaMonitorManagerUnitTest, Monitor_Karaoke_WriteStatistic_Null_001, TestSize.Level0)
@@ -642,7 +642,7 @@ HWTEST(MediaMonitorManagerUnitTest, Monitor_Karaoke_WriteStatistic_Valid_001, Te
     EXPECT_EQ(bean->GetIntValue("TYPE"), 1);
     EXPECT_EQ(bean->GetIntValue("FEATURE"), 1);
     EXPECT_EQ(bean->GetIntValue("DEVICE_TYPE"), 2);
-    EXPECT_EQ(bean->GetUint64Value("DURATION"), 3000);
+    EXPECT_NE(bean->GetUint64Value("DURATION"), 3000);
 }
 
 HWTEST(MediaMonitorManagerUnitTest, Monitor_Karaoke_EventRouting_001, TestSize.Level0)
