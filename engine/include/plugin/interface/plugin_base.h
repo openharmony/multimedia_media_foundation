@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+
 #ifndef HISTREAMER_PLUGIN_INTF_PLUGIN_BASE_H
 #define HISTREAMER_PLUGIN_INTF_PLUGIN_BASE_H
 
