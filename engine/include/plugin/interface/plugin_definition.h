@@ -152,7 +152,7 @@ struct PackageRegister : Register {
 };
 
 /// Plugin registration function, all plugins must be implemented.
-using RegisterFunc = Status (*)(const std::shared_ptr<PackageRegister> reg);
+using RegisterFunc = Status (*)(const std::shared_ptr<PackageRegister>& reg);
 
 /// Plugin deregister function, all plugins must be implemented.
 using UnregisterFunc = void (*)();
