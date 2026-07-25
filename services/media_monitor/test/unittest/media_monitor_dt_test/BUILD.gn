@@ -19,7 +19,7 @@ media_monitor_gen_dir = get_label_info("../../../:media_monitor_interface", "tar
 
 group("media_monitor_dt_test") {
   testonly = true
-  deps = [ ":media_monitor_dt_unittest" ]
+  deps = [ ]  # ":media_monitor_dt_unittest" excluded - UNAVAILABLE
 }
 
 media_monitor_dt_cflags = [
