@@ -46,7 +46,6 @@
 
 #include <array>
 #include <cstring>
-#include <sys/mman.h>
 #include "cpp_ext/type_cast_ext.h"
 #include "securec.h"
 #include <type_traits>
@@ -313,9 +312,7 @@ public:
     void __attribute__((no_sanitize("cfi"))) Reset() noexcept
     {
         if (HasValue()) {
-            if (IsAddrMapped(reinterpret_cast<const void*>(functionTable_))) {
-                functionTable_->destroy(storage_);
-            }
+            functionTable_->destroy(storage_);
             storage_.trivialStack_.fill(0);
         }
         functionTable_ = nullptr;
@@ -695,13 +692,6 @@ private:
     bool IsFunctionTableValid() const noexcept
     {
         return functionTable_ != nullptr;
-    }
-
-    static bool IsAddrMapped(const void* addr) noexcept
-    {
-        uintptr_t page = reinterpret_cast<uintptr_t>(addr) & ~(4096 - 1);
-        unsigned char vec;
-        return mincore(reinterpret_cast<void*>(page), 1, &vec) == 0;
     }
 
     template <typename DecayedValueType, typename... Args>
