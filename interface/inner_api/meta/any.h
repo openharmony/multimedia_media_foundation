@@ -46,7 +46,7 @@
 
 #include <array>
 #include <cstring>
-#include <sys/mman.h>
+#include <dlfcn.h>
 #include "cpp_ext/type_cast_ext.h"
 #include "securec.h"
 #include <type_traits>
@@ -313,7 +313,8 @@ public:
     void __attribute__((no_sanitize("cfi"))) Reset() noexcept
     {
         if (HasValue()) {
-            if (IsAddrMapped(reinterpret_cast<const void*>(functionTable_))) {
+            if (IsAddrInLoadedSo(reinterpret_cast<const void*>(functionTable_)) &&
+                IsAddrInLoadedSo(reinterpret_cast<const void*>(functionTable_->destroy))) {
                 functionTable_->destroy(storage_);
             }
             storage_.trivialStack_.fill(0);
@@ -667,7 +668,7 @@ private:
     };
 
     template <typename ValueType>
-    static FunctionTable* GetFunctionTable()
+    static const FunctionTable* GetFunctionTable()
     {
         using DecayedValueType = decay_t<ValueType>;
         using DetailFunctionTable =
@@ -675,7 +676,7 @@ private:
             TrivialStackFunctionTable<DecayedValueType>,
             conditional_t<IsStackStorable<DecayedValueType>::value,
             StackFunctionTable<DecayedValueType>, HeapFunctionTable<DecayedValueType>>>;
-        static FunctionTable table = {
+        static constexpr FunctionTable table = {
 #ifndef HST_ANY_WITH_NO_RTTI
             .type = DetailFunctionTable::Type,
 #else
@@ -697,11 +698,10 @@ private:
         return functionTable_ != nullptr;
     }
 
-    static bool IsAddrMapped(const void* addr) noexcept
+    static bool IsAddrInLoadedSo(const void* addr) noexcept
     {
-        uintptr_t page = reinterpret_cast<uintptr_t>(addr) & ~(4096 - 1);
-        unsigned char vec;
-        return mincore(reinterpret_cast<void*>(page), 1, &vec) == 0;
+        Dl_info info;
+        return dladdr(addr, &info) != 0;
     }
 
     template <typename DecayedValueType, typename... Args>
@@ -771,7 +771,7 @@ private:
 
 private:
     Storage storage_ {};
-    FunctionTable* functionTable_ {nullptr};
+    const FunctionTable* functionTable_ {nullptr};
 };
 
 /**
