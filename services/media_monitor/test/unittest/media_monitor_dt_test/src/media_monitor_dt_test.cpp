@@ -1761,6 +1761,72 @@ void VerifyExcludedDeviceBranch(AudioMemo &memo)
     EXPECT_TRUE(excludedDevices[MEDIA_OUTPUT_DEVICES].empty());
 }
 
+std::shared_ptr<MonitorDeviceInfo> MakeMonitorDeviceInfo(int32_t deviceType, const std::string &address,
+    const std::string &networkId)
+{
+    auto result = std::make_shared<MonitorDeviceInfo>();
+    result->deviceType_ = deviceType;
+    result->address_ = address;
+    result->networkId_ = networkId;
+    return result;
+}
+
+void VerifyUpdateExcludedDeviceInnerBranch(AudioMemo &memo)
+{
+    constexpr int32_t EXCLUDED = 0;
+    constexpr int32_t UNEXCLUDED = 1;
+    AudioDeviceUsage mediaAndCall = static_cast<AudioDeviceUsage>(MEDIA_OUTPUT_DEVICES | CALL_OUTPUT_DEVICES);
+    ResetAudioMemoState(memo);
+
+    auto deviceInfo1 = MakeMonitorDeviceInfo(1, "addr1", "net1");
+    auto deviceInfo2 = MakeMonitorDeviceInfo(2, "addr2", "net2");
+
+    memo.UpdateExcludedDeviceInner(MEDIA_OUTPUT_DEVICES, deviceInfo1, EXCLUDED);
+    std::map<AudioDeviceUsage, std::vector<std::shared_ptr<MonitorDeviceInfo>>> excludedDevices;
+    memo.GetAudioExcludedDevicesMsg(excludedDevices);
+    EXPECT_EQ(excludedDevices[MEDIA_OUTPUT_DEVICES].size(), 1U);
+
+    memo.UpdateExcludedDeviceInner(MEDIA_OUTPUT_DEVICES, deviceInfo1, EXCLUDED);
+    excludedDevices.clear();
+    memo.GetAudioExcludedDevicesMsg(excludedDevices);
+    EXPECT_EQ(excludedDevices[MEDIA_OUTPUT_DEVICES].size(), 1U);
+
+    memo.UpdateExcludedDeviceInner(CALL_OUTPUT_DEVICES, deviceInfo2, EXCLUDED);
+    excludedDevices.clear();
+    memo.GetAudioExcludedDevicesMsg(excludedDevices);
+    EXPECT_EQ(excludedDevices[CALL_OUTPUT_DEVICES].size(), 1U);
+    EXPECT_EQ(excludedDevices[MEDIA_OUTPUT_DEVICES].size(), 1U);
+
+    memo.UpdateExcludedDeviceInner(MEDIA_OUTPUT_DEVICES, deviceInfo1, UNEXCLUDED);
+    excludedDevices.clear();
+    memo.GetAudioExcludedDevicesMsg(excludedDevices);
+    EXPECT_TRUE(excludedDevices[MEDIA_OUTPUT_DEVICES].empty());
+    EXPECT_EQ(excludedDevices[CALL_OUTPUT_DEVICES].size(), 1U);
+
+    memo.UpdateExcludedDeviceInner(CALL_OUTPUT_DEVICES, deviceInfo2, UNEXCLUDED);
+    excludedDevices.clear();
+    memo.GetAudioExcludedDevicesMsg(excludedDevices);
+    EXPECT_TRUE(excludedDevices[CALL_OUTPUT_DEVICES].empty());
+
+    auto deviceInfo3 = MakeMonitorDeviceInfo(3, "addr3", "net3");
+    memo.UpdateExcludedDeviceInner(mediaAndCall, deviceInfo3, EXCLUDED);
+    excludedDevices.clear();
+    memo.GetAudioExcludedDevicesMsg(excludedDevices);
+    EXPECT_EQ(excludedDevices[MEDIA_OUTPUT_DEVICES].size(), 1U);
+    EXPECT_EQ(excludedDevices[CALL_OUTPUT_DEVICES].size(), 1U);
+
+    memo.UpdateExcludedDeviceInner(mediaAndCall, deviceInfo3, UNEXCLUDED);
+    excludedDevices.clear();
+    memo.GetAudioExcludedDevicesMsg(excludedDevices);
+    EXPECT_TRUE(excludedDevices[MEDIA_OUTPUT_DEVICES].empty());
+    EXPECT_TRUE(excludedDevices[CALL_OUTPUT_DEVICES].empty());
+
+    memo.UpdateExcludedDeviceInner(CALL_OUTPUT_DEVICES, deviceInfo3, UNEXCLUDED);
+    excludedDevices.clear();
+    memo.GetAudioExcludedDevicesMsg(excludedDevices);
+    EXPECT_TRUE(excludedDevices[CALL_OUTPUT_DEVICES].empty());
+}
+
 HWTEST(MediaMonitorDtTest, AudioMemo_RouteExcludedAndStateBranch_001, TestSize.Level0)
 {
     auto &memo = AudioMemo::GetAudioMemo();
@@ -1801,6 +1867,12 @@ HWTEST(MediaMonitorDtTest, AudioMemo_RouteExcludedAndStateBranch_001, TestSize.L
     std::map<std::string, uint32_t> collaborativeMap;
     EXPECT_EQ(memo.GetCollaborativeDeviceState(collaborativeMap), SUCCESS);
     EXPECT_EQ(collaborativeMap["addr"], 1U);
+}
+
+HWTEST(MediaMonitorDtTest, AudioMemo_UpdateExcludedDeviceInnerBranch_001, TestSize.Level0)
+{
+    auto &memo = AudioMemo::GetAudioMemo();
+    VerifyUpdateExcludedDeviceInnerBranch(memo);
 }
 
 void VerifyDistributedAndDmDeviceInfo(AudioMemo &memo)
