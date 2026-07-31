@@ -545,8 +545,8 @@ void PluginList::AddTruehdDemuxerPlugin()
 
 void PluginList::AddDemuxerPlugins()
 {
-    AddFFmpegDemuxerPlugins();
     AddMpeg4DemuxerPlugin();
+    AddFFmpegDemuxerPlugins();
 }
 
 void PluginList::AddMpeg4DemuxerPlugin()
