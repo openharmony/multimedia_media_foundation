@@ -140,6 +140,8 @@ enum MediaServiceErrCode : ErrCode {
     MSERR_FRAMEWORK_ERROR,                              // Framework error.
     MSERR_VID_CAPTURE_CONFIG_FAILED,                    // Video capture configure failed.
     MSERR_INVALID_TIMESTAMP,                            // Data error, timestamp is invalid.
+    MSERR_VIDEO_RESOLUTION_OUT_OF_RANGE,                // Video resolution is out of range.
+    MSERR_TARGET_RESOLUTION_OUT_OF_RANGE,               // Target resolution is out of range.
     MSERR_INVALID_FD,                                   // Invalid fd.
     MSERR_INVALID_WRITE,                                // File descriptor is not in read-write mode or write-only mode.
     MSERR_INVALID_AUD_BITRATE,                          // Invalid audioBitrate.
