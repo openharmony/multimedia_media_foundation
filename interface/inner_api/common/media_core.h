@@ -179,6 +179,7 @@ enum MediaServiceErrCode : ErrCode {
     MSERR_INVALID_OPERATION_PRESENT,                    // PresentPicker not support picker.
     MSERR_INVALID_OPERATION_STARTED,                    // Capture state is not in STARTED.
     MSERR_UNKNOWN_UNSUPPORT,                            // Device not support.
+    MSERR_UNKNOWN_CREATE_AUDIO_RENDER,                  // create audioRender failed
 };
 
 // media api error code
