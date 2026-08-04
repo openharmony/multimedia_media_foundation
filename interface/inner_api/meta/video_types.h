@@ -375,7 +375,6 @@ enum class HDRType : int32_t {
     HLG = 0,
     HDR_10 = 1,
     HDR_VIVID = 2,
-    OTHER = 3,
     NONE = -1,
 };
 
