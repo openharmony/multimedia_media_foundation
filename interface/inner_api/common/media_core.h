@@ -141,7 +141,11 @@ enum MediaServiceErrCode : ErrCode {
     MSERR_VID_CAPTURE_CONFIG_FAILED,                    // Video capture configure failed.
     MSERR_INVALID_TIMESTAMP,                            // Data error, timestamp is invalid.
     MSERR_VIDEO_RESOLUTION_OUT_OF_RANGE,                // Video resolution is out of range.
-    MSERR_TARGET_RESOLUTION_OUT_OF_RANGE,               // Target resolution is out of range.
+ 	MSERR_TARGET_RESOLUTION_OUT_OF_RANGE,               // Target resolution is out of range.
+    MSERR_INVALID_OUTPUT_RESOLUTION,                    // Output resolution is invalid.
+    MSERR_INVALID_AUDIO_BITRATE,                        // Output audio bitrate must be greater than zero.
+    MSERR_WATERMARK_NUM_OUT_OF_RANGE,                   // The number of watermarks cannot exceed five.
+    MSERR_FRAMEWORK_INTERNAL_ERROR,                     // Framework internal error.
     MSERR_INVALID_FD,                                   // Invalid fd.
     MSERR_INVALID_WRITE,                                // File descriptor is not in read-write mode or write-only mode.
     MSERR_INVALID_AUD_BITRATE,                          // Invalid audioBitrate.
