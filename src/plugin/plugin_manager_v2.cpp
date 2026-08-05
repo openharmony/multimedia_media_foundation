@@ -23,6 +23,8 @@ constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION,
 namespace OHOS {
 namespace Media {
 namespace Plugins {
+constexpr int32_t DEMUXER_SNIFF_THRESHOLD = 100;
+
 PluginManagerV2::PluginManagerV2()
 {
     MEDIA_LOG_I("PluginManagerV2");
@@ -64,6 +66,9 @@ std::string PluginManagerV2::SnifferPlugin(PluginType pluginType, std::shared_pt
             if (prob > maxProb) {
                 maxProb = prob;
                 bestMatchedPlugin = (*it);
+            }
+            if (pluginType == PluginType::DEMUXER && prob >= DEMUXER_SNIFF_THRESHOLD) {
+                break;
             }
         }
     }

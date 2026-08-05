@@ -33,6 +33,12 @@ config("histreamer_recorder_config") {
 }
 
 ohos_source_set("histreamer_recorder") {
+  branch_protector_ret = "pac_ret"
+  sanitize = {
+    cfi = true
+    cfi_cross_dso = true
+    debug = false
+  }
   subsystem_name = "multimedia"
   part_name = "media_foundation"
   if (media_foundation_enable_recorder) {

@@ -185,18 +185,26 @@ void AudioMemo::UpdateExcludedDeviceInner(AudioDeviceUsage audioDevUsage,
             device->address_ == deviceInfo->address_ &&
             device->networkId_ == deviceInfo->networkId_;
     };
-    if (exclusionStatus == EXCLUDED) {
-        auto it = find_if(excludedDevices_[audioDevUsage].begin(), excludedDevices_[audioDevUsage].end(),
-            isPresent);
-        if (it == excludedDevices_[audioDevUsage].end()) {
-            excludedDevices_[audioDevUsage].push_back(deviceInfo);
+    auto updateExcludedDevices = [&isPresent](AudioDeviceUsage usage,
+        std::shared_ptr<MonitorDeviceInfo> &deviceInfo, int32_t exclusionStatus,
+        std::map<AudioDeviceUsage, std::vector<std::shared_ptr<MonitorDeviceInfo>>> &excludedDevices) {
+        if (exclusionStatus == EXCLUDED) {
+            auto it = find_if(excludedDevices[usage].begin(), excludedDevices[usage].end(), isPresent);
+            if (it == excludedDevices[usage].end()) {
+                excludedDevices[usage].push_back(deviceInfo);
+            }
+        } else if (exclusionStatus == UNEXCLUDED) {
+            auto it = find_if(excludedDevices[usage].begin(), excludedDevices[usage].end(), isPresent);
+            if (it != excludedDevices[usage].end()) {
+                excludedDevices[usage].erase(it);
+            }
         }
-    } else if (exclusionStatus == UNEXCLUDED) {
-        auto it = find_if(excludedDevices_[audioDevUsage].begin(), excludedDevices_[audioDevUsage].end(),
-            isPresent);
-        if (it != excludedDevices_[audioDevUsage].end()) {
-            excludedDevices_[audioDevUsage].erase(it);
-        }
+    };
+    if (audioDevUsage & MEDIA_OUTPUT_DEVICES) {
+        updateExcludedDevices(MEDIA_OUTPUT_DEVICES, deviceInfo, exclusionStatus, excludedDevices_);
+    }
+    if (audioDevUsage & CALL_OUTPUT_DEVICES) {
+        updateExcludedDevices(CALL_OUTPUT_DEVICES, deviceInfo, exclusionStatus, excludedDevices_);
     }
 }
 

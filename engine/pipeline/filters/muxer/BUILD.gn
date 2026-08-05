@@ -15,6 +15,7 @@
 # build plugin interface
 import("//foundation/multimedia/media_foundation/config.gni")
 ohos_source_set("muxer_filter") {
+  branch_protector_ret = "pac_ret"
   subsystem_name = "multimedia"
   part_name = "media_foundation"
   include_dirs = [
@@ -34,5 +35,10 @@ ohos_source_set("muxer_filter") {
       "hitrace:hitrace_meter",
       "ipc:ipc_single",
     ]
+  }
+  sanitize = {
+    cfi = true
+    cfi_cross_dso = true
+    debug = false
   }
 }
