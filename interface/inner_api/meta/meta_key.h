@@ -95,7 +95,6 @@ public:
     static constexpr const char MEDIA_TYPE[] =
         "track_type"; ///< enum MediaType: Audio Video Subtitle... int32_t, see {link @MediaTrackType}
     static constexpr const char MEDIA_TRACK_COUNT[] = "track_count";           ///< track count in file
-    static constexpr const char MEDIA_TIME_SCALE[] = "time_scale";             ///< time scale
     static constexpr const char MEDIA_FILE_TYPE[] = "file_type";               ///< @see FileType, track type
     static constexpr const char MEDIA_STREAM_TYPE[] = "media.stream.type";     ///< stream type of track data
     static constexpr const char MEDIA_HAS_VIDEO[] = "has_video";               ///< has video track in file
@@ -230,7 +229,6 @@ public:
     static constexpr const char VIDEO_IS_HDR_VIVID[] = "video_is_hdr_vivid";           ///< bool, video is hdr vivid
     static constexpr const char VIDEO_HDR_TYPE[] = "video_hdr_type";                   ///< @see HDRType
     static constexpr const char VIDEO_TYPE[] = "video_type";         ///< int32_t, @see VideoType (SDR/HDR_VIVID/HDR_10)
-    static constexpr const char VIDEO_HDR_COMPATIBILITY[] = "video_hdr_compatibility"; ///< @see HDRType
     static constexpr const char VIDEO_STRIDE[] = "stride";                             ///< int32_t, video stride
     static constexpr const char VIDEO_DISPLAY_WIDTH[] = "display_width";            ///< int32_t, video display width
     static constexpr const char VIDEO_DISPLAY_HEIGHT[] = "display_height";          ///< int32_t, video display height

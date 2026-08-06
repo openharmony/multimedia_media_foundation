@@ -204,8 +204,6 @@ public:
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_HDR_TYPE, Plugins::HDRType,
                            AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_TYPE, int32_t, AnyValueType::INT32_T);
-    DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_HDR_COMPATIBILITY, Plugins::HDRType,
-                           AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_COLOR_TRC, Plugins::TransferCharacteristic,
                            AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_COLOR_MATRIX_COEFF, Plugins::MatrixCoefficient,
@@ -333,7 +331,6 @@ public:
         tagCharSeq == Tag::RECORDER_AUDIO_SAMPLE_RATE or
         tagCharSeq == Tag::RECORDER_AUDIO_CHANNEL_COUNT or
         tagCharSeq == Tag::RECORDER_AUDIO_BITRATE or
-        tagCharSeq == Tag::MEDIA_TIME_SCALE or
         tagCharSeq == Tag::VIDEO_ENCODER_NUMBER_OF_PENDING_FRAMES or
         tagCharSeq == Tag::RECORDER_START_LATENCY, int32_t, AnyValueType::INT32_T);
     DEFINE_INSERT_GET_FUNC(
