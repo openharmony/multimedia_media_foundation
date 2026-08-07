@@ -112,6 +112,8 @@ enum MediaServiceErrCode : ErrCode {
     MSERR_LPP_INSTANCE_EXCEED_LIMIT,                    // LPP: instance limit exceeded.
     MSERR_HARDWARE_ERROR,                               // underlying hardware error happened.
     MSERR_PARAM_OUT_OF_RANGE,                           // Parameter value out of range.
+    MSERR_SOUNDPOOL_STREAM_NOT_FOUND,                   // soundpool stream not found.
+    MSERR_SOUNDPOOL_SOUND_NOT_LOADED,                   // soundpool sound not loaded.
     MSERR_EXTEND_START      = MS_ERR_OFFSET + 0xF000,   // extend err start.
     MSERR_CLEARTEXT_NOT_PERMITTED,                      // http cleartext not permitted.
     MSERR_VID_DEC_INIT_FAILED,                          // video mimeType Decoder create failed.
@@ -138,6 +140,10 @@ enum MediaServiceErrCode : ErrCode {
     MSERR_FRAMEWORK_ERROR,                              // Framework error.
     MSERR_VID_CAPTURE_CONFIG_FAILED,                    // Video capture configure failed.
     MSERR_INVALID_TIMESTAMP,                            // Data error, timestamp is invalid.
+    MSERR_INVALID_OUTPUT_RESOLUTION,                    // Output resolution is invalid.
+    MSERR_INVALID_AUDIO_BITRATE,                        // Output audio bitrate must be greater than zero.
+    MSERR_WATERMARK_NUM_OUT_OF_RANGE,                   // The number of watermarks cannot exceed five.
+    MSERR_FRAMEWORK_INTERNAL_ERROR,                     // Framework internal error.
     MSERR_INVALID_FD,                                   // Invalid fd.
     MSERR_INVALID_WRITE,                                // File descriptor is not in read-write mode or write-only mode.
     MSERR_INVALID_AUD_BITRATE,                          // Invalid audioBitrate.
