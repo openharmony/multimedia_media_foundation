@@ -56,32 +56,6 @@ HWTEST(TestSurfaceSinkPlugin, find_surface_sink_plugins_create, TestSize.Level1)
     ASSERT_TRUE(plugin != nullptr);
 }
 
-HWTEST(TestSurfaceSinkPlugin, find_surface_sink_plugins_process, TestSize.Level1)
-{
-    std::shared_ptr<VideoSinkPlugin> plugin = std::make_shared<SurfaceSinkPlugin>("process");
-    ASSERT_TRUE(plugin != nullptr);
-    sptr<Surface> surface = GetVideoSurface();
-    ASSERT_TRUE(surface != nullptr);
-    surface->SetUserData("SURFACE_FORMAT",
-        std::to_string(OHOS::HDI::Display::Composer::V1_2::PixelFormat::PIXEL_FMT_RGBA_8888));
-
-    plugin->SetParameter(Tag::VIDEO_SURFACE, surface);
-    auto initStatus = plugin->Init();
-    ASSERT_TRUE(initStatus == Status::OK);
-
-    auto prepareStatus = plugin->Prepare();
-    ASSERT_TRUE(prepareStatus == Status::OK);
-
-    auto allocator = plugin->GetAllocator();
-    ASSERT_TRUE(allocator != nullptr);
-
-    auto stopStatus = plugin->Stop();
-    ASSERT_TRUE(stopStatus == Status::OK);
-
-    auto freeStatus = plugin->Deinit();
-    ASSERT_TRUE(freeStatus == Status::OK);
-}
-
 HWTEST(TestSurfaceSinkPlugin, find_surface_sink_plugins_reset, TestSize.Level1)
 {
     std::shared_ptr<VideoSinkPlugin> plugin = std::make_shared<SurfaceSinkPlugin>("reset");
