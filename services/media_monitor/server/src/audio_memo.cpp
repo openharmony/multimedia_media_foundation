@@ -25,7 +25,6 @@ constexpr OHOS::HiviewDFX::HiLogLabel LABEL = {LOG_CORE, LOG_DOMAIN_FOUNDATION, 
 constexpr int32_t EXCLUDED = 0;
 constexpr int32_t UNEXCLUDED = 1;
 constexpr int32_t ADD = 1;
-constexpr int32_t REMOVE = 0;
 constexpr int32_t SERVICE_STATUS_STOP = 2;
 }
 
@@ -217,33 +216,12 @@ int32_t AudioMemo::GetAudioExcludedDevicesMsg(std::map<AudioDeviceUsage,
     return SUCCESS;
 }
 
-void AudioMemo::UpdateCollaborativeDeviceState(std::shared_ptr<EventBean> &bean)
-{
-    MEDIA_LOG_D("Begin update collaborative device state");
-    if (bean == nullptr) {
-        MEDIA_LOG_E("eventBean is nullptr");
-        return;
-    }
-    std::string deviceAddress_ = bean->GetStringValue("ADDRESS");
-    uint32_t state = bean->GetIntValue("COLLABORATIVE_STATE");
-    std::lock_guard<std::mutex> lockEventMap(collaborativeMutex_);
-    addressToCollaborativeEnabledMap_[deviceAddress_] = state;
-}
-
-int32_t AudioMemo::GetCollaborativeDeviceState(std::map<std::string, uint32_t> &addressToCollaborativeEnabledMap)
-{
-    MEDIA_LOG_D("Begin get collaborative device state");
-    std::lock_guard<std::mutex> lockEventMap(collaborativeMutex_);
-    addressToCollaborativeEnabledMap = addressToCollaborativeEnabledMap_;
-    return SUCCESS;
-}
-
-void AudioMemo::UpdateAppSessionStateInner(int32_t pid, bool hasSession, int32_t isAdd)
+void AudioMemo::UpdateAppSessionStateInner(int32_t pid, bool hasSession, bool isAdd)
 {
     MEDIA_LOG_I("pid %{public}d is add %{public}d, hasSession %{public}d", pid, isAdd, hasSession);
-    if (isAdd == ADD) {
+    if (isAdd) {
         appSessionMap_[pid] = hasSession;
-    } else if (isAdd == REMOVE) {
+    } else {
         auto iter = appSessionMap_.find(pid);
         if (iter != appSessionMap_.end()) {
             appSessionMap_.erase(iter);
@@ -251,12 +229,12 @@ void AudioMemo::UpdateAppSessionStateInner(int32_t pid, bool hasSession, int32_t
     }
 }
 
-void AudioMemo::UpdateAppBackTaskStateInner(int32_t pid, bool hasBackTask, int32_t isAdd)
+void AudioMemo::UpdateAppBackTaskStateInner(int32_t pid, bool hasBackTask, bool isAdd)
 {
     MEDIA_LOG_I("pid %{public}d is add %{public}d, hasBackTask %{public}d", pid, isAdd, hasBackTask);
-    if (isAdd == ADD) {
+    if (isAdd) {
         appBackTaskMap_[pid] = hasBackTask;
-    } else if (isAdd == REMOVE) {
+    } else {
         auto iter = appBackTaskMap_.find(pid);
         if (iter != appBackTaskMap_.end()) {
             appBackTaskMap_.erase(iter);
@@ -270,7 +248,7 @@ void AudioMemo::UpdateAppSessionState(std::shared_ptr<EventBean> &bean)
     std::lock_guard<std::mutex> lockEventMap(appSessionMutex_);
     int32_t pid = bean->GetIntValue("PID");
     bool hasSession = bean->GetIntValue("HAS_SESSION");
-    int32_t isAdd = bean->GetIntValue("IS_ADD");
+    bool isAdd = bean->GetIntValue("IS_ADD");
     UpdateAppSessionStateInner(pid, hasSession, isAdd);
 }
 
@@ -280,7 +258,7 @@ void AudioMemo::UpdateAppBackTaskState(std::shared_ptr<EventBean> &bean)
     std::lock_guard<std::mutex> lockEventMap(appBackTaskMutex_);
     int32_t pid = bean->GetIntValue("PID");
     bool hasBackTask = bean->GetIntValue("HAS_BACK_TASK");
-    int32_t isAdd = bean->GetIntValue("IS_ADD");
+    bool isAdd = bean->GetIntValue("IS_ADD");
     UpdateAppBackTaskStateInner(pid, hasBackTask, isAdd);
 }
 
@@ -295,6 +273,27 @@ int32_t AudioMemo::GetAudioAppBackTaskMsg(std::unordered_map<int32_t, bool> &bac
 {
     std::lock_guard<std::mutex> lockEventMap(appBackTaskMutex_);
     backTaskMap = appBackTaskMap_;
+    return SUCCESS;
+}
+
+void AudioMemo::UpdateCollaborativeDeviceState(std::shared_ptr<EventBean> &bean)
+{
+    MEDIA_LOG_D("Begin update collaborative device state");
+    if (bean == nullptr) {
+        MEDIA_LOG_E("eventBean is nullptr");
+        return;
+    }
+    std::string deviceAddress_ = bean->GetStringValue("ADDRESS");
+    uint32_t state = static_cast<uint32_t>(bean->GetIntValue("COLLABORATIVE_STATE"));
+    std::lock_guard<std::mutex> lockEventMap(collaborativeMutex_);
+    addressToCollaborativeEnabledMap_[deviceAddress_] = state;
+}
+
+int32_t AudioMemo::GetCollaborativeDeviceState(std::map<std::string, uint32_t> &addressToCollaborativeEnabledMap)
+{
+    MEDIA_LOG_D("Begin get collaborative device state");
+    std::lock_guard<std::mutex> lockEventMap(collaborativeMutex_);
+    addressToCollaborativeEnabledMap = addressToCollaborativeEnabledMap_;
     return SUCCESS;
 }
 
