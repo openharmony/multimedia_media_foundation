@@ -46,15 +46,14 @@ public:
     void UpdateExcludedDevice(std::shared_ptr<EventBean> &bean);
     int32_t GetAudioExcludedDevicesMsg(std::map<AudioDeviceUsage,
         std::vector<std::shared_ptr<MonitorDeviceInfo>>> &excludedDevices);
-    
-    void UpdateCollaborativeDeviceState(std::shared_ptr<EventBean> &bean);
-    int32_t GetCollaborativeDeviceState(std::map<std::string, uint32_t> &addressToCollaborativeEnabledMap);
 
     void UpdateAppSessionState(std::shared_ptr<EventBean> &bean);
     void UpdateAppBackTaskState(std::shared_ptr<EventBean> &bean);
 
     int32_t GetAudioAppSessionMsg(std::unordered_map<int32_t, bool> &avSessionMap);
     int32_t GetAudioAppBackTaskMsg(std::unordered_map<int32_t, bool> &backTaskMap);
+    void UpdateCollaborativeDeviceState(std::shared_ptr<EventBean> &bean);
+    int32_t GetCollaborativeDeviceState(std::map<std::string, uint32_t> &addressToCollaborativeEnabledMap);
 
     void UpdateDistributedSceneInfo(std::shared_ptr<EventBean> &bean);
     int32_t GetDistributedSceneInfo(std::string &distributedSceneInfo);
@@ -71,8 +70,8 @@ private:
 
     void UpdateExcludedDeviceInner(AudioDeviceUsage audioDevUsage, std::shared_ptr<MonitorDeviceInfo> &deviceInfo,
         int32_t exclusionStatus);
-    void UpdateAppSessionStateInner(int32_t pid, bool hasSession, int32_t isAdd);
-    void UpdateAppBackTaskStateInner(int32_t pid, bool hasBackTask, int32_t isAdd);
+    void UpdateAppSessionStateInner(int32_t pid, bool hasSession, bool isAdd);
+    void UpdateAppBackTaskStateInner(int32_t pid, bool hasBackTask, bool isAdd);
 
     std::mutex preferredDeviceMutex_;
     std::map<PreferredType, std::shared_ptr<MonitorDeviceInfo>> preferredDevices_;
