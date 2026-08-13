@@ -95,9 +95,9 @@ enum EventId {
 
     DM_DEVICE_INFO = 48,
 
-    VOLUME_SETTING_STATISTICS = 51,
+    MUTE_BUNDLE_NAME = 49,
 
-    MUTE_BUNDLE_NAME = 50,
+    VOLUME_SETTING_STATISTICS = 50,
 
     // Ringtone playback failure event
     TONE_PLAYBACK_FAILED = 51,
