@@ -142,6 +142,7 @@ public:
 
     OH_AVErrCode GetLen(bool withStaticMeta, int32_t &len) const
     {
+        std::lock_guard<std::mutex> lock(mutex_);
         FALSE_RETURN_V_MSG_E(builder_ != nullptr, AV_ERR_INVALID_STATE, "builder not init!");
         if (builder_->GetMetaLen(withStaticMeta, len) != 0) {
             return AV_ERR_INVALID_VAL;
@@ -151,6 +152,7 @@ public:
 
     OH_AVErrCode GetMeta(bool withStaticMeta, uint8_t *buffer, int32_t len) const
     {
+        std::lock_guard<std::mutex> lock(mutex_);
         FALSE_RETURN_V_MSG_E(builder_ != nullptr, AV_ERR_INVALID_STATE, "builder not init!");
         if (builder_->GetMeta(withStaticMeta, buffer, len) != 0) {
             return AV_ERR_INVALID_VAL;
@@ -199,7 +201,7 @@ private:
     AudioMetaBuilderBase *builder_ = nullptr;
     void *library_ = nullptr;
     DestroyBuilderFunc destroyFunc_ = nullptr;
-    std::mutex mutex_;
+    mutable std::mutex mutex_;
 };
 
 OH_AVErrCode OH_AudioVividMetaBuilder_Create(OH_AudioVividMetaBuilder **builder, const OH_AVFormat *format)
