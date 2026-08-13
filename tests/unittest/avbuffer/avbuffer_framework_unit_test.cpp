@@ -107,7 +107,7 @@ HWTEST_F(AVBufferFrameworkUnitTest, AVBuffer_SetBufferAttr_001, TestSize.Level1)
 {
     OH_AVCodecBufferAttr attr;
     attr.pts = DEFAULT_PTS;
-    attr.size = MEMSIZE;
+    attr.size = MEMSIZE - DEFAULT_OFFSET;
     attr.offset = DEFAULT_OFFSET;
     attr.flags = DEFAULT_FLAG;
     EXPECT_EQ(static_cast<int32_t>(Status::OK), buffer_->SetBufferAttr(attr));
@@ -282,7 +282,7 @@ HWTEST_F(AVBufferFrameworkUnitTest, AVBuffer_Capi_SetAndGetBufferAttr_001, TestS
     auto buffer = OH_AVBuffer_Create(MEMSIZE);
     ASSERT_NE(buffer, nullptr);
     OH_AVCodecBufferAttr attr;
-    attr.size = MEMSIZE;
+    attr.size = MEMSIZE - DEFAULT_OFFSET;
     attr.offset = DEFAULT_OFFSET;
     attr.pts = DEFAULT_PTS;
     attr.flags = DEFAULT_FLAG;
@@ -290,7 +290,7 @@ HWTEST_F(AVBufferFrameworkUnitTest, AVBuffer_Capi_SetAndGetBufferAttr_001, TestS
 
     OH_AVCodecBufferAttr getAttr;
     EXPECT_EQ(AV_ERR_OK, OH_AVBuffer_GetBufferAttr(buffer, &getAttr));
-    EXPECT_EQ(getAttr.size, MEMSIZE);
+    EXPECT_EQ(getAttr.size, MEMSIZE - DEFAULT_OFFSET);
     EXPECT_EQ(getAttr.offset, DEFAULT_OFFSET);
     EXPECT_EQ(getAttr.pts, DEFAULT_PTS);
     EXPECT_EQ(getAttr.flags, DEFAULT_FLAG);
@@ -332,7 +332,7 @@ HWTEST_F(AVBufferFrameworkUnitTest, AVBuffer_Capi_SetAndGetBufferAttr_003, TestS
     ASSERT_NE(buffer, nullptr);
     for (int32_t i = 0; i < TEST_LOOP_DEPTH; ++i) {
         OH_AVCodecBufferAttr attr;
-        attr.size = MEMSIZE;
+        attr.size = MEMSIZE - DEFAULT_OFFSET;
         attr.offset = DEFAULT_OFFSET;
         attr.pts = DEFAULT_PTS;
         attr.flags = DEFAULT_FLAG;
@@ -340,7 +340,7 @@ HWTEST_F(AVBufferFrameworkUnitTest, AVBuffer_Capi_SetAndGetBufferAttr_003, TestS
 
         OH_AVCodecBufferAttr getAttr;
         EXPECT_EQ(AV_ERR_OK, OH_AVBuffer_GetBufferAttr(buffer, &getAttr));
-        EXPECT_EQ(getAttr.size, MEMSIZE);
+        EXPECT_EQ(getAttr.size, MEMSIZE - DEFAULT_OFFSET);
         EXPECT_EQ(getAttr.offset, DEFAULT_OFFSET);
         EXPECT_EQ(getAttr.pts, DEFAULT_PTS);
         EXPECT_EQ(getAttr.flags, DEFAULT_FLAG);

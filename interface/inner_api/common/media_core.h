@@ -185,6 +185,7 @@ enum MediaServiceErrCode : ErrCode {
     MSERR_INVALID_OPERATION_PRESENT,                    // PresentPicker not support picker.
     MSERR_INVALID_OPERATION_STARTED,                    // Capture state is not in STARTED.
     MSERR_UNKNOWN_UNSUPPORT,                            // Device not support.
+    MSERR_UNKNOWN_CREATE_AUDIO_RENDER,                  // create audioRender failed
     MSERR_NULL_POINTER_5400101,                         // Framework internal error.
     MSERR_NULL_POINTER_5400102,                         // Framework internal error.
     MSERR_FRAMEWORK_ERROR_401,                          // Framework internal error.
