@@ -621,6 +621,7 @@ public:
     static constexpr const char VIDEO_DECODER_FRAME_RETENTION_RATIO[] = "video_decoder_frame_retention_ratio";
     static constexpr const char VIDEO_DECODER_SPEED[] = "video_decoder_speed";
     static constexpr const char VIDEO_DECODER_ENABLE_MV_UPLOAD[] = "video_decoder_enable_mv_upload";
+    static constexpr const char VIDEO_DECODER_IS_MV_CACHE_INVALIDATED[] = "video_decoder_is_mv_cache_invalidated";
 /* ----------------- input err tag ----------------- */
     static constexpr const char VIDEO_DECODER_INPUT_STREAM_ERROR[] = "video_decoder_input_stream_error";
 /* ------------ videocall lowpower tag ------------- */
