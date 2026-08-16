@@ -52,6 +52,8 @@ const int FILE_MAX_SIZE = 20480000 * 8;
 const int MAX_FILE_COUNT = 20;
 const int MAX_DUMP_TIME = 90;
 
+#define MAX_MESSAGE_QUEUE_SIZE 1500
+
 const std::string DEFAULT_DUMP_DIR = "/data/audio_debug/";
 const std::string BETA_DUMP_DIR = "/data/log/audiodump/";
 
