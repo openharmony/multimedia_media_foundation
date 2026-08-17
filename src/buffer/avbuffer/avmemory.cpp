@@ -197,8 +197,6 @@ bool AVMemory::ReadCommonFromMessageParcel(MessageParcel &parcel)
 
     ret = parcel.ReadInt32(size);
     FALSE_RETURN_V_MSG_E(ret && (capacity >= size) && (size >= 0), false, "size is invalid");
-    FALSE_RETURN_V_MSG_E(offset <= (INT32_MAX - size) && (size + offset) <= capacity, false,
-                         "size + offset is invalid");
 
     capacity_ = capacity;
     align_ = align;
@@ -223,8 +221,6 @@ bool AVMemory::SkipCommonFromMessageParcel(MessageParcel &parcel)
 
     ret = parcel.ReadInt32(size);
     FALSE_RETURN_V_MSG_E(ret && (capacity_ >= size) && (size >= 0), false, "size is invalid");
-    FALSE_RETURN_V_MSG_E(offset <= (INT32_MAX - size) && (size + offset) <= capacity_, false,
-                         "size + offset is invalid");
 
     size_ = size;
     offset_ = offset;
@@ -276,8 +272,6 @@ Status AVMemory::SetSize(int32_t size)
                          "size out of range, "
                          "current size:%{public}d , capacity:%{public}d",
                          size_, capacity_);
-    FALSE_RETURN_V_MSG_E(offset_ <= (INT32_MAX - size) && (size + offset_) <= capacity_,
-                         Status::ERROR_INVALID_PARAMETER, "size + offset is invalid");
     size_ = size;
     return Status::OK;
 }
@@ -293,8 +287,6 @@ Status AVMemory::SetOffset(int32_t offset)
                          "offset out of range, "
                          "current offset:%{public}d , capacity:%{public}d",
                          offset_, capacity_);
-    FALSE_RETURN_V_MSG_E(offset <= (INT32_MAX - size_) && (size_ + offset) <= capacity_,
-                         Status::ERROR_INVALID_PARAMETER, "size + offset is invalid");
     offset_ = offset;
     return Status::OK;
 }
