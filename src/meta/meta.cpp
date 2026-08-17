@@ -524,6 +524,7 @@ static std::map<TagType, const Any &> g_metadataDefaultValueMap = {
     {Tag::MEDIA_GLTF_CONTENT_TYPE, defaultString},
     {Tag::MEDIA_GLTF_CONTENT_ENCODING, defaultString},
     {Tag::MEDIA_GLTF_ITEM_TYPE, defaultString},
+    {Tag::VIDEO_SET_DMABUF_NAME_SUFFIX, defaultString},
     
     // Float
     {Tag::MEDIA_LATITUDE, defaultFloat},

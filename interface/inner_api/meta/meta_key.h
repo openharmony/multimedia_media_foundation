@@ -466,6 +466,9 @@ public:
                                                           ///< HEVC encoders and is only used in configure. For other
                                                           ///< encoders, the key is ignored. By default, this feature
                                                           ///< is disabled (0).
+    static constexpr const char VIDEO_SET_DMABUF_NAME_SUFFIX[] =
+        "video_set_dmabuf_name_suffix"; ///< std::string, Key to set dma-buf name suffix for video codec.
+                                        ///< This is an optional key that applies only to video codec configure.
     /* -------------------- video specific tag -------------------- */
     static constexpr const char VIDEO_H264_PROFILE[] = "video.h264.profile"; ///< @see VideoH264Profile
     static constexpr const char VIDEO_H264_LEVEL[] = "video.h264.level";     ///< h264 level

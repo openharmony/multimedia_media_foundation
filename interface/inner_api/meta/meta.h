@@ -464,7 +464,8 @@ public:
         tagCharSeq == Tag::AV_PLAYER_CONTAINER_MIME or
         tagCharSeq == Tag::AV_PLAYER_VIDEO_MIME or
         tagCharSeq == Tag::AV_PLAYER_VIDEO_RESOLUTION or
-        tagCharSeq == Tag::AV_PLAYER_AUDIO_MIME, std::string, AnyValueType::STRING);
+        tagCharSeq == Tag::AV_PLAYER_AUDIO_MIME or
+        tagCharSeq == Tag::VIDEO_SET_DMABUF_NAME_SUFFIX, std::string, AnyValueType::STRING);
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::AV_TRANSCODER_ERR_MSG or
         tagCharSeq == Tag::AV_TRANSCODER_SRC_FORMAT or
