@@ -25,7 +25,7 @@ namespace OHOS {
 namespace Media {
 namespace MediaMonitor {
 
-constexpr int MAX_MAP_SIZE = 1000;
+constexpr int MAX_MAP_SIZE = 200;
 
 EventBean::EventBean() {}
 

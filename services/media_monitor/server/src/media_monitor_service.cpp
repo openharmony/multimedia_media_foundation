@@ -167,6 +167,8 @@ void MediaMonitorService::AddMessageToQueue(std::shared_ptr<EventBean> &message)
         MEDIA_LOG_E("!isRunning_");
         return;
     }
+    FALSE_RETURN_MSG(signal_->messageQueue_.size() < MAX_MESSAGE_QUEUE_SIZE,
+        "messageQueue_ size exceeds limit %{public}d", MAX_MESSAGE_QUEUE_SIZE);
     signal_->messageQueue_.push(message);
     signal_->messageCond_.notify_all();
 }
