@@ -95,7 +95,7 @@ private:
     void HandleSuiteEngineUtilizationStats(std::shared_ptr<EventBean> &bean);
     void HandleVolumeSettingStatisticsEvent(std::shared_ptr<EventBean> &bean);
     void HandleAudioInterruptErrorEvent(std::shared_ptr<EventBean> &bean);
-    void HandleAudioPlaybackErrorEvent(std::shared_ptr<EventBean> &bean);
+    void HandleAudioUnderrunIssueEvent(std::shared_ptr<EventBean> &bean);
     void HandleKaraokeFeatureEvent(std::shared_ptr<EventBean> &bean);
     void AddToUnifiedFaultCodeVector(std::shared_ptr<EventBean> &bean);
 

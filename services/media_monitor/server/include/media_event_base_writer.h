@@ -145,7 +145,7 @@ public:
     void WriteTonePlaybackFailed(std::shared_ptr<EventBean> &bean);
     void WriteAudioLoopbackException(std::shared_ptr<EventBean> &bean);
     void WriteAudioInterruptErrorEvent(std::shared_ptr<EventBean> &bean);
-    void WriteAudioPlaybackErrorEvent(std::shared_ptr<EventBean> &bean);
+    void WriteAudioUnderrunIssueEvent(std::shared_ptr<EventBean> &bean);
     void WriteKaraokeFeatureStatistic(std::shared_ptr<EventBean> &bean);
 };
 

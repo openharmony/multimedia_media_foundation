@@ -72,7 +72,7 @@ public:
     void AddToSuiteEngineNodeStatsMap(std::shared_ptr<EventBean> &bean);
     void HandleVolumeSettingStatistics(std::shared_ptr<EventBean> &bean);
     void AddLoudVolumeTimes();
-    void AddAudioPlaybackErrorEvent(std::shared_ptr<EventBean> &bean);
+    void AddAudioUnderrunIssueEvent(std::shared_ptr<EventBean> &bean);
     void AddToKaraokeFeatureVector(std::shared_ptr<EventBean> &bean);
     void HandleToKaraokeFeatureEvent();
 
