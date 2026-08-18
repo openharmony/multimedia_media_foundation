@@ -92,8 +92,10 @@ Status AVSharedMemoryExt::Init()
 {
     memFlag_ = std::static_pointer_cast<AVSharedAllocator>(allocator_)->GetMemFlag();
 
-    int32_t allocSize = align_ ? (capacity_ + align_ - 1) : capacity_;
-    fd_ = reinterpret_cast<intptr_t>(allocator_->Alloc(allocSize));
+    if (align_ > 0) {
+        capacity_ = static_cast<int32_t>((static_cast<int64_t>(capacity_) + align_ - 1) / align_ * align_);
+    }
+    fd_ = reinterpret_cast<intptr_t>(allocator_->Alloc(capacity_));
     FALSE_RETURN_V_MSG_E(fd_ > 0, Status::ERROR_NO_MEMORY, "Alloc AVSharedMemoryExt failed");
 
     uintptr_t addrBase = reinterpret_cast<uintptr_t>(base_);
@@ -110,7 +112,12 @@ Status AVSharedMemoryExt::Init(MessageParcel &parcel)
     }
     fd_ = parcel.ReadFileDescriptor();
     FALSE_RETURN_V_MSG_E(fd_ > 0, Status::ERROR_INVALID_DATA, "File descriptor is invalid");
-    memFlag_ = static_cast<MemoryFlag>(parcel.ReadUint32());
+    uint32_t flagValue = parcel.ReadUint32();
+    FALSE_RETURN_V_MSG_E(flagValue == static_cast<uint32_t>(MemoryFlag::MEMORY_READ_ONLY) ||
+                         flagValue == static_cast<uint32_t>(MemoryFlag::MEMORY_WRITE_ONLY) ||
+                         flagValue == static_cast<uint32_t>(MemoryFlag::MEMORY_READ_WRITE),
+                         Status::ERROR_INVALID_DATA, "invalid memFlag:%{public}u", flagValue);
+    memFlag_ = static_cast<MemoryFlag>(flagValue);
     return Status::OK;
 #else
     return Status::OK;
@@ -193,12 +200,16 @@ Status AVSharedMemoryExt::MapMemoryAddr()
     ON_SCOPE_EXIT(0)
     {
         MEDIA_LOG_E("create avsharedmemory failed. "
-                    "size:%{public}d, flags:0x%{public}x, fd:%{public}d",
+                    "capacity:%{public}d, flags:0x%{public}x, fd:%{public}d",
                     capacity_, memFlag_, fd_);
         UnMapMemoryAddr();
         return Status::ERROR_NO_MEMORY;
     };
-    FALSE_RETURN_V_MSG_E(capacity_ > 0, Status::ERROR_INVALID_DATA, "size is invalid, size:%{public}d", capacity_);
+    FALSE_RETURN_V_MSG_E(capacity_ > 0, Status::ERROR_INVALID_DATA, "capacity is invalid");
+    FALSE_RETURN_V_MSG_E(fd_ > 0, Status::ERROR_INVALID_DATA, "fd is invalid");
+    int ashmemSize = AshmemGetSize(fd_);
+    FALSE_RETURN_V_MSG_E(ashmemSize == capacity_, Status::ERROR_INVALID_DATA,
+                         "AshmemGetSize not equal capacity, ashmemSize:%{public}d", ashmemSize);
     unsigned int prot = PROT_READ | PROT_WRITE;
     if (memFlag_ == MemoryFlag::MEMORY_READ_ONLY) {
         prot &= ~PROT_WRITE;

@@ -111,7 +111,7 @@ private:
     std::shared_ptr<AVBuffer> remoteBuffer_ = nullptr;
     std::shared_ptr<Meta> meta_ = nullptr;
     std::shared_ptr<MessageParcel> parcel_ = nullptr;
-    MemoryFlag memFlag_;
+    MemoryFlag memFlag_ = MemoryFlag::MEMORY_READ_WRITE;
     int32_t capacity_ = MEMSIZE;
     int32_t align_ = 0;
     int32_t dmaFd_ = -1;
