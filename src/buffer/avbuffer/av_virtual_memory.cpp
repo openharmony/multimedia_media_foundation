@@ -71,12 +71,12 @@ AVVirtualMemory::~AVVirtualMemory()
 
 Status AVVirtualMemory::Init()
 {
-    int32_t allocSize = align_ ? (capacity_ + align_ - 1) : capacity_;
-    base_ = static_cast<uint8_t *>(allocator_->Alloc(allocSize));
+    if (align_ > 0) {
+        capacity_ = static_cast<int32_t>((static_cast<int64_t>(capacity_) + align_ - 1) / align_ * align_);
+    }
+    base_ = static_cast<uint8_t *>(allocator_->Alloc(capacity_));
     FALSE_RETURN_V_MSG_E(base_ != nullptr, Status::ERROR_NO_MEMORY, "Alloc AVVirtualMemory failed");
 
-    uintptr_t addrBase = reinterpret_cast<uintptr_t>(base_);
-    offset_ = static_cast<int32_t>(AlignUp(addrBase, static_cast<uintptr_t>(offset_)) - addrBase);
     return Status::OK;
 }
 
