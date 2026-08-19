@@ -382,7 +382,9 @@ void MediaEventBaseWriter::WriteDeviceStatistic(std::shared_ptr<EventBean> &bean
         "IS_PLAYBACK", static_cast<bool>(bean->GetIntValue("IS_PLAYBACK")),
         "DEVICE_TYPE", static_cast<uint>(bean->GetIntValue("DEVICE_TYPE")),
         "STREAM_TYPE", static_cast<uint>(bean->GetIntValue("STREAM_TYPE")),
-        "DURATION", static_cast<uint32_t>(bean->GetUint64Value("DURATION")));
+        "DURATION", bean->GetUint64Value("DURATION"),
+        "MANUFACTURER", bean->GetStringValue("MANUFACTURER"),
+        "MODEL_NUMBER", bean->GetStringValue("MODEL_NUMBER"));
 #endif
 }
 
