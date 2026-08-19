@@ -296,6 +296,8 @@ void EventAggregate::HandleDeviceChangeForDuration(const DeviceChangeEvent &even
         uint64_t duration = TimeUtils::GetCurSec() - beanInVector->GetUint64Value("START_TIME");
         if (duration > 0 && (static_cast<int64_t>(duration) > NEED_INCREASE_FREQUENCY)) {
             beanInVector->Add("DURATION", duration);
+            beanInVector->UpdateStringMap("MANUFACTURER", bean->GetStringValue("MANUFACTURER"));
+            beanInVector->UpdateStringMap("MODEL_NUMBER", bean->GetStringValue("MODEL_NUMBER"));
             if (event == FOR_DEVICE_EVENT) {
                 mediaMonitorPolicy_.HandDeviceUsageToEventVector(beanInVector);
             } else if (event == FOR_CAPTURE_MUTE_EVENT) {
@@ -364,6 +366,8 @@ void EventAggregate::AddToDeviceUsage(std::shared_ptr<EventBean> &bean, uint64_t
     deviceUsageBean->Add("STREAM_TYPE", bean->GetIntValue("STREAM_TYPE"));
     deviceUsageBean->Add("STATE", bean->GetIntValue("STATE"));
     deviceUsageBean->Add("DEVICE_TYPE", deviceType);
+    deviceUsageBean->Add("MANUFACTURER", bean->GetStringValue("MANUFACTURER"));
+    deviceUsageBean->Add("MODEL_NUMBER", bean->GetStringValue("MODEL_NUMBER"));
     deviceUsageBean->Add("START_TIME", curruntTime);
     deviceUsageVector_.push_back(deviceUsageBean);
     if (deviceType == AudioStandard::DEVICE_TYPE_BLUETOOTH_SCO ||

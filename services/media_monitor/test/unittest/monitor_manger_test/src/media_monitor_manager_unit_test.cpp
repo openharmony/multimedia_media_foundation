@@ -645,6 +645,132 @@ HWTEST(MediaMonitorManagerUnitTest, Monitor_Karaoke_WriteStatistic_Valid_001, Te
     EXPECT_NE(bean->GetUint64Value("DURATION"), 3000);
 }
 
+HWTEST(MediaMonitorManagerUnitTest, Monitor_DeviceUsage_AddToVector_ManufacturerMatch_001, TestSize.Level0)
+{
+    auto &policy = MediaMonitorPolicy::GetMediaMonitorPolicy();
+    policy.eventVector_.clear();
+ 
+    std::shared_ptr<EventBean> bean1 = std::make_shared<EventBean>(
+        AUDIO, DEVICE_CHANGE, BEHAVIOR_EVENT);
+    bean1->Add("ISOUTPUT", 0);
+    bean1->Add("STREAMID", 1001);
+    bean1->Add("UID", 2001);
+    bean1->Add("PID", 3001);
+    bean1->Add("STREAM_TYPE", 13);
+    bean1->Add("STATE", 2);
+    bean1->Add("DEVICETYPE", 5);
+    bean1->Add("MANUFACTURER", "DJI");
+    bean1->Add("MODEL_NUMBER", "CP236");
+    bean1->Add("DURATION", static_cast<uint64_t>(100));
+ 
+    policy.HandDeviceUsageToEventVector(bean1);
+ 
+    std::shared_ptr<EventBean> bean2 = std::make_shared<EventBean>(
+        AUDIO, DEVICE_CHANGE, BEHAVIOR_EVENT);
+    bean2->Add("ISOUTPUT", 0);
+    bean2->Add("STREAMID", 1001);
+    bean2->Add("UID", 2001);
+    bean2->Add("PID", 3001);
+    bean2->Add("STREAM_TYPE", 13);
+    bean2->Add("STATE", 2);
+    bean2->Add("DEVICETYPE", 5);
+    bean2->Add("MANUFACTURER", "DJI");
+    bean2->Add("MODEL_NUMBER", "CP236");
+    bean2->Add("DURATION", static_cast<uint64_t>(200));
+ 
+    policy.HandDeviceUsageToEventVector(bean2);
+ 
+    ASSERT_EQ(policy.eventVector_.size(), 1);
+    EXPECT_EQ(policy.eventVector_[0]->GetStringValue("MANUFACTURER"), "DJI");
+    EXPECT_EQ(policy.eventVector_[0]->GetStringValue("MODEL_NUMBER"), "CP236");
+    EXPECT_EQ(policy.eventVector_[0]->GetUint64Value("DURATION"), static_cast<uint64_t>(300));
+}
+ 
+HWTEST(MediaMonitorManagerUnitTest, Monitor_DeviceUsage_AddToVector_ManufacturerMismatch_001, TestSize.Level0)
+{
+    auto &policy = MediaMonitorPolicy::GetMediaMonitorPolicy();
+    policy.eventVector_.clear();
+ 
+    std::shared_ptr<EventBean> bean1 = std::make_shared<EventBean>(
+        AUDIO, DEVICE_CHANGE, BEHAVIOR_EVENT);
+    bean1->Add("ISOUTPUT", 0);
+    bean1->Add("STREAMID", 1001);
+    bean1->Add("UID", 2001);
+    bean1->Add("PID", 3001);
+    bean1->Add("STREAM_TYPE", 13);
+    bean1->Add("STATE", 2);
+    bean1->Add("DEVICETYPE", 5);
+    bean1->Add("MANUFACTURER", "DJI");
+    bean1->Add("MODEL_NUMBER", "CP236");
+    bean1->Add("DURATION", static_cast<uint64_t>(100));
+ 
+    policy.HandDeviceUsageToEventVector(bean1);
+ 
+    std::shared_ptr<EventBean> bean2 = std::make_shared<EventBean>(
+        AUDIO, DEVICE_CHANGE, BEHAVIOR_EVENT);
+    bean2->Add("ISOUTPUT", 0);
+    bean2->Add("STREAMID", 1001);
+    bean2->Add("UID", 2001);
+    bean2->Add("PID", 3001);
+    bean2->Add("STREAM_TYPE", 13);
+    bean2->Add("STATE", 2);
+    bean2->Add("DEVICETYPE", 5);
+    bean2->Add("MANUFACTURER", "");
+    bean2->Add("MODEL_NUMBER", "");
+    bean2->Add("DURATION", static_cast<uint64_t>(200));
+ 
+    policy.HandDeviceUsageToEventVector(bean2);
+ 
+    ASSERT_EQ(policy.eventVector_.size(), 2);
+    EXPECT_EQ(policy.eventVector_[0]->GetStringValue("MANUFACTURER"), "DJI");
+    EXPECT_EQ(policy.eventVector_[0]->GetStringValue("MODEL_NUMBER"), "CP236");
+    EXPECT_EQ(policy.eventVector_[1]->GetStringValue("MANUFACTURER"), "");
+    EXPECT_EQ(policy.eventVector_[1]->GetStringValue("MODEL_NUMBER"), "");
+}
+ 
+HWTEST(MediaMonitorManagerUnitTest, Monitor_DeviceUsage_KeepIdentity_001, TestSize.Level0)
+{
+    auto &aggregate = EventAggregate::GetEventAggregate();
+    aggregate.deviceUsageVector_.clear();
+ 
+    std::shared_ptr<EventBean> deviceChangeBean = std::make_shared<EventBean>(
+        AUDIO, DEVICE_CHANGE, BEHAVIOR_EVENT);
+    deviceChangeBean->Add("ISOUTPUT", 0);
+    deviceChangeBean->Add("STREAMID", 2001);
+    deviceChangeBean->Add("UID", 3001);
+    deviceChangeBean->Add("PID", 4001);
+    deviceChangeBean->Add("STREAM_TYPE", 13);
+    deviceChangeBean->Add("STATE", 2);
+    deviceChangeBean->Add("DEVICETYPE", 33);
+    deviceChangeBean->Add("MANUFACTURER", "DJI");
+    deviceChangeBean->Add("MODEL_NUMBER", "CP236");
+ 
+    aggregate.WriteEvent(deviceChangeBean);
+ 
+    std::shared_ptr<EventBean> streamChangeBean = std::make_shared<EventBean>(
+        AUDIO, STREAM_CHANGE, BEHAVIOR_EVENT);
+    streamChangeBean->Add("ISOUTPUT", 0);
+    streamChangeBean->Add("STREAMID", 2001);
+    streamChangeBean->Add("UID", 3001);
+    streamChangeBean->Add("PID", 4001);
+    streamChangeBean->Add("STREAM_TYPE", 13);
+    streamChangeBean->Add("STATE", AudioStandard::RUNNING);
+    streamChangeBean->Add("DEVICETYPE", 33);
+    streamChangeBean->Add("MANUFACTURER", "DJI");
+    streamChangeBean->Add("MODEL_NUMBER", "CP236");
+    streamChangeBean->Add("PIPE_TYPE", 1);
+    streamChangeBean->Add("SAMPLE_RATE", 48000);
+    streamChangeBean->Add("CHANNEL_LAYOUT", static_cast<uint64_t>(3));
+    streamChangeBean->Add("ENCODING_TYPE", 2);
+    streamChangeBean->Add("APP_NAME", "demo");
+ 
+    aggregate.WriteEvent(streamChangeBean);
+ 
+    ASSERT_FALSE(aggregate.deviceUsageVector_.empty());
+    EXPECT_EQ(aggregate.deviceUsageVector_.back()->GetStringValue("MANUFACTURER"), "DJI");
+    EXPECT_EQ(aggregate.deviceUsageVector_.back()->GetStringValue("MODEL_NUMBER"), "CP236");
+}
+
 HWTEST(MediaMonitorManagerUnitTest, Monitor_Karaoke_EventRouting_001, TestSize.Level0)
 {
     std::shared_ptr<EventBean> bean = std::make_shared<EventBean>(
