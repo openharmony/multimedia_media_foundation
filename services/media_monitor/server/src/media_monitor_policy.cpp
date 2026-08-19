@@ -446,7 +446,9 @@ void MediaMonitorPolicy::HandDeviceUsageToEventVector(std::shared_ptr<EventBean>
         if (eventBean->GetEventId() == AUDIO_DEVICE_UTILIZATION_STATS &&
             deviceUsage->GetIntValue("IS_PLAYBACK") == eventBean->GetIntValue("IS_PLAYBACK") &&
             deviceUsage->GetIntValue("STREAM_TYPE") == eventBean->GetIntValue("STREAM_TYPE") &&
-            deviceUsage->GetIntValue("DEVICE_TYPE") == eventBean->GetIntValue("DEVICE_TYPE")) {
+            deviceUsage->GetIntValue("DEVICE_TYPE") == eventBean->GetIntValue("DEVICE_TYPE") &&
+            deviceUsage->GetStringValue("MANUFACTURER") == eventBean->GetStringValue("MANUFACTURER") &&
+            deviceUsage->GetStringValue("MODEL_NUMBER") == eventBean->GetStringValue("MODEL_NUMBER")) {
             MEDIA_LOG_D("Find the existing device usage");
             return true;
         }
@@ -466,6 +468,8 @@ void MediaMonitorPolicy::HandDeviceUsageToEventVector(std::shared_ptr<EventBean>
         eventBean->Add("STREAM_TYPE", deviceUsage->GetIntValue("STREAM_TYPE"));
         eventBean->Add("DEVICE_TYPE", deviceUsage->GetIntValue("DEVICE_TYPE"));
         eventBean->Add("IS_PLAYBACK", deviceUsage->GetIntValue("IS_PLAYBACK"));
+        eventBean->Add("MANUFACTURER", deviceUsage->GetStringValue("MANUFACTURER"));
+        eventBean->Add("MODEL_NUMBER", deviceUsage->GetStringValue("MODEL_NUMBER"));
         eventBean->Add("DURATION", deviceUsage->GetUint64Value("DURATION"));
         AddToEventVector(eventBean);
     }
