@@ -24,6 +24,7 @@ namespace Plugin {
 namespace HttpPlugin {
 namespace {
 constexpr int RING_BUFFER_SIZE = 5 * 48 * 1024;
+constexpr size_t MAX_FRAGMENT_TRACKING = 100000;
 }
 
 // Description:
@@ -55,17 +56,23 @@ void HlsMediaDownloader::FragmentDownloadLoop()
         OSAL::SleepFor(10); // 10
         return;
     }
-    if (!fragmentDownloadStart[url]) {
-        fragmentDownloadStart[url] = true;
-        auto realStatusCallback = [this] (DownloadStatus&& status, std::shared_ptr<Downloader>& downloader,
-                                          std::shared_ptr<DownloadRequest>& request) {
-            statusCallback_(status, downloader_, std::forward<decltype(request)>(request));
-        };
-        // TO DO: If the fragment file is too large, should not requestWholeFile.
-        downloadRequest_ = std::make_shared<DownloadRequest>(url, dataSave_, realStatusCallback, true);
-        downloader_->Download(downloadRequest_, -1); // -1
-        downloader_->Start();
+    if (fragmentDownloadStart.find(url) != fragmentDownloadStart.end()) {
+        return;
     }
+    if (fragmentDownloadStart.size() >= MAX_FRAGMENT_TRACKING) {
+        MEDIA_LOG_W("fragmentDownloadStart size " PUBLIC_LOG_ZU " exceeds max " PUBLIC_LOG_ZU
+            ", evict oldest entry", fragmentDownloadStart.size(), MAX_FRAGMENT_TRACKING);
+        fragmentDownloadStart.erase(fragmentDownloadStart.begin());
+    }
+    fragmentDownloadStart.emplace(url, true);
+    auto realStatusCallback = [this] (DownloadStatus&& status, std::shared_ptr<Downloader>& downloader,
+        std::shared_ptr<DownloadRequest>& request) {
+        statusCallback_(status, downloader_, std::forward<decltype(request)>(request));
+    };
+    // TO DO: If the fragment file is too large, should not requestWholeFile.
+    downloadRequest_ = std::make_shared<DownloadRequest>(url, dataSave_, realStatusCallback, true);
+    downloader_->Download(downloadRequest_, -1); // -1
+    downloader_->Start();
 }
 
 bool HlsMediaDownloader::Open(const std::string& url)
@@ -82,6 +89,7 @@ void HlsMediaDownloader::Close(bool isAsync)
     downloadTask_->Stop();
     playListDownloader_->Close();
     downloader_->Stop();
+    fragmentDownloadStart.clear();
 }
 
 void HlsMediaDownloader::Pause()
