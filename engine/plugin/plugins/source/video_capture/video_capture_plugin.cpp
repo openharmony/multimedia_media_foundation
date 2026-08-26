@@ -246,20 +246,35 @@ Status VideoCapturePlugin::AcquireSurfaceBuffer()
         MEDIA_LOG_E("surfaceConsumer AcquireBuffer() fail: " PUBLIC_LOG_U32, ret);
         return Status::ERROR_UNKNOWN;
     }
-    ret = surfaceBuffer_->GetExtraData()->ExtraGet("dataSize", bufferSize_);
-    if (ret != OHOS::SurfaceError::SURFACE_ERROR_OK || bufferSize_ <= 0) {
-        MEDIA_LOG_E("surfaceBuffer get data size fail: " PUBLIC_LOG_U32, ret);
+    auto extraData = surfaceBuffer_->GetExtraData();
+    if (extraData == nullptr) {
+        MEDIA_LOG_E("surfaceBuffer get extraData fail");
+        surfaceConsumer_->ReleaseBuffer(surfaceBuffer_, -1);
         return Status::ERROR_UNKNOWN;
     }
-    ret = surfaceBuffer_->GetExtraData()->ExtraGet("isKeyFrame", isKeyFrame_);
+    ret = extraData->ExtraGet("dataSize", bufferSize_);
+    if (ret != OHOS::SurfaceError::SURFACE_ERROR_OK) {
+        MEDIA_LOG_E("surfaceBuffer get data size fail, ret: " PUBLIC_LOG_U32, ret);
+        surfaceConsumer_->ReleaseBuffer(surfaceBuffer_, -1);
+        return Status::ERROR_UNKNOWN;
+    }
+    if (bufferSize_ <= 0 || static_cast<uint32_t>(bufferSize_) > surfaceBuffer_->GetSize()) {
+        MEDIA_LOG_E("surfaceBuffer dataSize invalid, size: " PUBLIC_LOG_D32
+                    ", realSize: " PUBLIC_LOG_U32, bufferSize_, surfaceBuffer_->GetSize());
+        surfaceConsumer_->ReleaseBuffer(surfaceBuffer_, -1);
+        return Status::ERROR_UNKNOWN;
+    }
+    ret = extraData->ExtraGet("isKeyFrame", isKeyFrame_);
     if (ret != OHOS::SurfaceError::SURFACE_ERROR_OK) {
         MEDIA_LOG_E("surfaceBuffer get isKeyFrame fail: " PUBLIC_LOG_U32, ret);
+        surfaceConsumer_->ReleaseBuffer(surfaceBuffer_, -1);
         return Status::ERROR_UNKNOWN;
     }
-    int64_t pts;
-    ret = surfaceBuffer_->GetExtraData()->ExtraGet("timeStamp", pts);
+    int64_t pts = 0;
+    ret = extraData->ExtraGet("timeStamp", pts);
     if (ret != OHOS::SurfaceError::SURFACE_ERROR_OK || pts < 0) {
-        MEDIA_LOG_E("surfaceBuffer get data size fail: " PUBLIC_LOG_U32, ret);
+        MEDIA_LOG_E("surfaceBuffer get timeStamp fail: " PUBLIC_LOG_U32, ret);
+        surfaceConsumer_->ReleaseBuffer(surfaceBuffer_, -1);
         return Status::ERROR_UNKNOWN;
     }
     if (static_cast<uint64_t>(pts) < curTimestampNs_) {

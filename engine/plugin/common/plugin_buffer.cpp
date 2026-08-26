@@ -224,9 +224,19 @@ std::shared_ptr<Memory> Buffer::WrapMemoryPtr(std::shared_ptr<uint8_t> data, siz
 #if !defined(OHOS_LITE) && defined(VIDEO_SUPPORT)
 std::shared_ptr<Memory> Buffer::WrapSurfaceMemory(sptr<SurfaceBuffer> surfaceBuffer)
 {
-    int32_t bufferSize;
-    auto ret = surfaceBuffer->GetExtraData()->ExtraGet("dataSize", bufferSize);
-    if (ret != OHOS::SurfaceError::SURFACE_ERROR_OK || bufferSize <= 0) {
+    if (surfaceBuffer == nullptr) {
+        return nullptr;
+    }
+    int32_t bufferSize = 0;
+    auto extraData = surfaceBuffer->GetExtraData();
+    if (extraData == nullptr) {
+        return nullptr;
+    }
+    auto ret = extraData->ExtraGet("dataSize", bufferSize);
+    if (ret != OHOS::SurfaceError::SURFACE_ERROR_OK) {
+        return nullptr;
+    }
+    if (bufferSize <= 0 || static_cast<uint32_t>(bufferSize) > surfaceBuffer->GetSize()) {
         return nullptr;
     }
     auto memory = std::shared_ptr<SurfaceMemory>(new SurfaceMemory(surfaceBuffer, bufferSize));
