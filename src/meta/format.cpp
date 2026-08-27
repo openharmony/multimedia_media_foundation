@@ -138,7 +138,8 @@ Format::Format(const Format &rhs)
 
 Format::Format(Format &&rhs) noexcept
 {
-    this->meta_ = rhs.meta_;
+    this->meta_ = std::move(rhs.meta_);
+    rhs.meta_ = std::make_shared<Meta>();
     std::swap(formatVecMap_, rhs.formatVecMap_);
 }
 
@@ -156,8 +157,10 @@ Format &Format::operator=(const Format &rhs)
 Format &Format::operator=(Format &&rhs) noexcept
 {
     FALSE_RETURN_V(&rhs != this, *this);
-    this->meta_ = rhs.meta_;
+    this->meta_ = std::move(rhs.meta_);
+    rhs.meta_ = std::make_shared<Meta>();
     std::swap(this->formatVecMap_, rhs.formatVecMap_);
+    rhs.formatVecMap_.clear();
     return *this;
 }
 

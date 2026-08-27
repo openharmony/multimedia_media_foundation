@@ -176,15 +176,15 @@ Status AVHardwareMemory::Init(MessageParcel &parcel)
     int32_t fd = parcel.ReadFileDescriptor();
     FALSE_RETURN_V_MSG_E(fd > 0, Status::ERROR_INVALID_DATA, "File descriptor is invalid");
 
-    uint32_t flagValue = parcel.ReadUint32();
-    if (flagValue != static_cast<uint32_t>(MemoryFlag::MEMORY_READ_ONLY) &&
-        flagValue != static_cast<uint32_t>(MemoryFlag::MEMORY_WRITE_ONLY) &&
-        flagValue != static_cast<uint32_t>(MemoryFlag::MEMORY_READ_WRITE)) {
-        MEDIA_LOG_E("invalid memFlag:%{public}u", flagValue);
+    MemoryFlag flagValue = static_cast<MemoryFlag>(parcel.ReadUint32());
+    if (flagValue != MemoryFlag::MEMORY_READ_ONLY &&
+        flagValue != MemoryFlag::MEMORY_WRITE_ONLY &&
+        flagValue != MemoryFlag::MEMORY_READ_WRITE) {
+        MEDIA_LOG_E("invalid memFlag:%{public}u", static_cast<uint32_t>(flagValue));
         (void)::close(fd);
         return Status::ERROR_INVALID_DATA;
     }
-    memFlag_ = static_cast<MemoryFlag>(flagValue);
+    memFlag_ = flagValue;
 
     allocator_ = AVAllocatorFactory::CreateHardwareAllocator(fd, capacity_, memFlag_);
     if (allocator_ == nullptr) {

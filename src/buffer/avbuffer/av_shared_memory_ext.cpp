@@ -97,10 +97,9 @@ Status AVSharedMemoryExt::Init()
     }
     fd_ = reinterpret_cast<intptr_t>(allocator_->Alloc(capacity_));
     FALSE_RETURN_V_MSG_E(fd_ > 0, Status::ERROR_NO_MEMORY, "Alloc AVSharedMemoryExt failed");
-
-    uintptr_t addrBase = reinterpret_cast<uintptr_t>(base_);
-    offset_ = static_cast<int32_t>(AlignUp(addrBase, static_cast<uintptr_t>(offset_)) - addrBase);
-
+    int ashmemSize = AshmemGetSize(fd_);
+    FALSE_RETURN_V_MSG_E(ashmemSize == capacity_, Status::ERROR_INVALID_DATA,
+                         "AshmemGetSize not equal capacity, ashmemSize:%{public}d", ashmemSize);
     return Status::OK;
 }
 
@@ -112,12 +111,15 @@ Status AVSharedMemoryExt::Init(MessageParcel &parcel)
     }
     fd_ = parcel.ReadFileDescriptor();
     FALSE_RETURN_V_MSG_E(fd_ > 0, Status::ERROR_INVALID_DATA, "File descriptor is invalid");
-    uint32_t flagValue = parcel.ReadUint32();
-    FALSE_RETURN_V_MSG_E(flagValue == static_cast<uint32_t>(MemoryFlag::MEMORY_READ_ONLY) ||
-                         flagValue == static_cast<uint32_t>(MemoryFlag::MEMORY_WRITE_ONLY) ||
-                         flagValue == static_cast<uint32_t>(MemoryFlag::MEMORY_READ_WRITE),
-                         Status::ERROR_INVALID_DATA, "invalid memFlag:%{public}u", flagValue);
-    memFlag_ = static_cast<MemoryFlag>(flagValue);
+    int ashmemSize = AshmemGetSize(fd_);
+    FALSE_RETURN_V_MSG_E(ashmemSize == capacity_, Status::ERROR_INVALID_DATA,
+                         "AshmemGetSize not equal capacity, ashmemSize:%{public}d", ashmemSize);
+    MemoryFlag flagValue = static_cast<MemoryFlag>(parcel.ReadUint32());
+    FALSE_RETURN_V_MSG_E(flagValue == MemoryFlag::MEMORY_READ_ONLY ||
+                         flagValue == MemoryFlag::MEMORY_WRITE_ONLY ||
+                         flagValue == MemoryFlag::MEMORY_READ_WRITE,
+                         Status::ERROR_INVALID_DATA, "invalid memFlag:%{public}u", static_cast<uint32_t>(flagValue));
+    memFlag_ = flagValue;
     return Status::OK;
 #else
     return Status::OK;
