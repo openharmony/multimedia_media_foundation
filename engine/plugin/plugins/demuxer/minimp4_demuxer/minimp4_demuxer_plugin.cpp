@@ -351,7 +351,9 @@ Status MiniMP4DemuxerPlugin::ReadFrame(Buffer &outBuffer, int32_t timeOutMs)
     unsigned int timeStamp = 0;
     unsigned int duration = 0;
     uint64_t offset = MP4D_frame_offset(&miniMP4_, 0, sampleIndex_, &frameSize, &timeStamp, &duration);
-    if (offset > fileSize_) {
+    if (offset > fileSize_ || offset + frameSize > fileSize_) {
+        MEDIA_LOG_E("invalid frame offset or size, offset " PUBLIC_LOG_D64 " frameSize " PUBLIC_LOG_D64,
+        " fileSize " PUBLIC_LOG_D64, offset, frameSize, fileSize_);
         return Status::ERROR_UNKNOWN;
     }
     MEDIA_LOG_D("frameSize " PUBLIC_LOG_D32 " offset " PUBLIC_LOG_D32 " sampleIndex_ " PUBLIC_LOG_D32,
@@ -370,6 +372,11 @@ Status MiniMP4DemuxerPlugin::ReadFrame(Buffer &outBuffer, int32_t timeOutMs)
     Status retResult = GetDataFromSource();
     if (retResult != Status::OK) {
         return retResult;
+    }
+    if (frameSize > ioDataRemainSize_) {
+        MEDIA_LOG_E(" frameSize " PUBLIC_LOG_D32 " exceeds remaining data " PUBLIC_LOG_D32,
+        frameSize, ioDataRemainSize_);
+        return Status::ERROR_UNKNOWN;
     }
     FillADTSHead(mp4FrameData, frameSize);
     size_t writeSize = mp4FrameData->Write(inIoBuffer_, frameSize, ADTS_HEADER_SIZE);
