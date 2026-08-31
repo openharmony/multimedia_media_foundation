@@ -37,6 +37,8 @@ public:
 private:
     AVHardwareAllocator();
     Status MapMemoryAddr();
+    int64_t GetFdSize();
+    unsigned int GetProtFlag();
 
     int32_t fd_;
     int32_t capacity_;

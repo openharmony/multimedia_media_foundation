@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Huawei Device Co., Ltd.
+ * Copyright (C) 2026 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -14,6 +14,8 @@
  */
 
 #include "av_hardware_memory.h"
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <unistd.h>
 #include <unordered_map>
 #include "ashmem.h"
@@ -114,6 +116,45 @@ bool AVHardwareAllocator::GetIsSecure()
     return isSecure_;
 }
 
+#ifdef MEDIA_OHOS
+int64_t AVHardwareAllocator::GetFdSize()
+{
+    struct stat st {};
+    if (fstat(fd_, &st) != 0) {
+        MEDIA_LOG_E("fstat failed, fd:%{public}d", fd_);
+        return -1;
+    }
+    int64_t fdSize = static_cast<int64_t>(st.st_size);
+    if (fdSize > 0) {
+        return fdSize;
+    }
+    off_t end = lseek(fd_, 0, SEEK_END);
+    if (end <= 0) {
+        MEDIA_LOG_E("fd size unqueryable, fd:%{public}d", fd_);
+        return -1;
+    }
+    fdSize = static_cast<int64_t>(end);
+    (void)lseek(fd_, 0, SEEK_SET);
+    MEDIA_LOG_I("fstat st_size is 0, lseek fallback size:%{public}" PRId64 ", fd:%{public}d", fdSize, fd_);
+    return fdSize;
+}
+
+unsigned int AVHardwareAllocator::GetProtFlag()
+{
+    switch (memFlag_) {
+        case MemoryFlag::MEMORY_READ_ONLY:
+            return PROT_READ;
+        case MemoryFlag::MEMORY_WRITE_ONLY:
+            return PROT_WRITE;
+        case MemoryFlag::MEMORY_READ_WRITE:
+            return PROT_READ | PROT_WRITE;
+        default:
+            MEDIA_LOG_W("memFlag is invalid, memFlag:%{public}d", static_cast<int>(memFlag_));
+            return PROT_READ | PROT_WRITE;
+    }
+}
+#endif
+
 Status AVHardwareAllocator::MapMemoryAddr()
 {
 #ifdef MEDIA_OHOS
@@ -128,15 +169,14 @@ Status AVHardwareAllocator::MapMemoryAddr()
         }
         return Status::ERROR_NO_MEMORY;
     };
+    FALSE_RETURN_V_MSG_E(fd_ > 0, Status::ERROR_INVALID_OPERATION, "fd is invalid, fd:%{public}d", fd_);
     FALSE_RETURN_V_MSG_E(capacity_ > 0, Status::ERROR_INVALID_DATA, "capacity is invalid, capacity:%{public}d",
                          capacity_);
-    unsigned int prot = PROT_READ | PROT_WRITE;
-    FALSE_RETURN_V_MSG_E(fd_ > 0, Status::ERROR_INVALID_OPERATION, "fd is invalid, fd:%{public}d", fd_);
-    if (memFlag_ == MemoryFlag::MEMORY_READ_ONLY) {
-        prot &= ~PROT_WRITE;
-    } else if (memFlag_ == MemoryFlag::MEMORY_WRITE_ONLY) {
-        prot &= ~PROT_READ;
-    }
+    int64_t fdSize = GetFdSize();
+    FALSE_RETURN_V_MSG_E(fdSize > 0, Status::ERROR_INVALID_DATA, "get fd size failed, fd:%{public}d", fd_);
+    FALSE_RETURN_V_MSG_E(capacity_ <= fdSize, Status::ERROR_INVALID_DATA,
+                         "capacity not match fd, capacity:%{public}d, fdSize:%{public}" PRId64, capacity_, fdSize);
+    unsigned int prot = GetProtFlag();
     void *addr = ::mmap(nullptr, static_cast<size_t>(capacity_), static_cast<int>(prot), MAP_SHARED, fd_, 0);
     FALSE_RETURN_V_MSG_E(addr != MAP_FAILED, Status::ERROR_INVALID_OPERATION, "mmap failed, please check params");
     allocBase_ = reinterpret_cast<uint8_t *>(addr);
