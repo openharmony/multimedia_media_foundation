@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2025 Huawei Device Co., Ltd.
+ * Copyright (c) 2021-2026 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -104,18 +104,26 @@ AVBufferQueueImpl::AVBufferQueueImpl(uint32_t size, MemoryType type, const std::
 
 uint32_t AVBufferQueueImpl::GetQueueSize()
 {
+    std::lock_guard<std::mutex> lockGuard(queueMutex_);
     return size_;
 }
 
 Status AVBufferQueueImpl::SetQueueSize(uint32_t size)
 {
+    std::lock_guard<std::mutex> lockGuard(queueMutex_);
     FALSE_RETURN_V(size >= 0 && size <= AVBUFFER_QUEUE_MAX_QUEUE_SIZE && size != size_,
                    Status::ERROR_INVALID_BUFFER_SIZE);
 
-    return SetLargerQueueSize(size);
+    return SetLargerQueueSizeLocked(size);
 }
 
 Status AVBufferQueueImpl::SetLargerQueueSize(uint32_t size)
+{
+    std::lock_guard<std::mutex> lockGuard(queueMutex_);
+    return SetLargerQueueSizeLocked(size);
+}
+
+Status AVBufferQueueImpl::SetLargerQueueSizeLocked(uint32_t size)
 {
     FALSE_RETURN_V(size >= 0 && size <= AVBUFFER_QUEUE_MAX_QUEUE_SIZE_FOR_LARGER  && size != size_,
                    Status::ERROR_INVALID_BUFFER_SIZE);
@@ -126,7 +134,6 @@ Status AVBufferQueueImpl::SetLargerQueueSize(uint32_t size)
             requestCondition.notify_all();
         }
     } else {
-        std::lock_guard<std::mutex> lockGuard(queueMutex_);
         DeleteBuffers(size_ - size);
         size_ = size;
     }
@@ -315,7 +322,7 @@ bool AVBufferQueueImpl::wait_for(std::unique_lock<std::mutex>& lock, int64_t tim
     if (timeoutUs > 0) {
         return requestCondition.wait_for(
             lock, std::chrono::microseconds(timeoutUs), [this]() {
-                return !freeBufferList_.empty() || (GetCachedBufferCount() < GetQueueSize());
+                return !freeBufferList_.empty() || (GetCachedBufferCount() < size_);
             });
     } else if (timeoutUs < 0) {
         requestCondition.wait(lock);
@@ -351,7 +358,7 @@ Status AVBufferQueueImpl::RequestBufferWaitUs(
     }
 
     // check queue size
-    if (GetCachedBufferCount() >= GetQueueSize()) {
+    if (GetCachedBufferCount() >= size_) {
         if (!wait_for(lock, timeoutUs)) {
             MEDIA_LOG_D("FALSE_RETURN_V wait_for(lock, timeoutUs)");
             return Status::ERROR_WAIT_TIMEOUT;
@@ -361,7 +368,7 @@ Status AVBufferQueueImpl::RequestBufferWaitUs(
         if (ret == Status::OK) {
             return RequestReuseBuffer(buffer, configCopy);
         }
-        if (GetCachedBufferCount() >= GetQueueSize()) {
+        if (GetCachedBufferCount() >= size_) {
             return Status::ERROR_NO_FREE_BUFFER;
         }
     }
@@ -551,7 +558,7 @@ Status AVBufferQueueImpl::AttachAvailableBufferLocked(std::shared_ptr<AVBuffer>&
     };
 
     auto cachedCount = GetCachedBufferCount();
-    auto queueSize = GetQueueSize();
+    auto queueSize = size_;
     if (cachedCount >= queueSize) {
         auto validCount = static_cast<uint32_t>(dirtyBufferList_.size() + freeBufferList_.size());
         auto toBeDeleteCount = cachedCount - queueSize;
