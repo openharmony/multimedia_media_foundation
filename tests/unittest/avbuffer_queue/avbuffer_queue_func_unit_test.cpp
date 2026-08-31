@@ -13,6 +13,8 @@
  * limitations under the License.
  */
 
+#include <thread>
+#include <chrono>
 #include <gtest/gtest.h>
 #include "status.h"
 #include "buffer/avbuffer_queue.h"
@@ -548,6 +550,169 @@ HWTEST_F(AVBufferQueueInnerUnitTest, RequestBufferWaitUs_001, TestSize.Level1)
 
     EXPECT_EQ(avBufferQueueImpl_->AcquireBuffer(bufferConsumer), Status::ERROR_NO_DIRTY_BUFFER);
     EXPECT_EQ(avBufferQueueImpl_->GetFilledBufferSize(), 0);
+}
+
+/**
+ * @tc.name: RequestBufferWaitUs_002
+ * @tc.desc: Test RequestBufferWaitUs - free buffer available, reuse from free list directly (line 355-357)
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferQueueInnerUnitTest, RequestBufferWaitUs_002, TestSize.Level1)
+{
+    ASSERT_EQ(avBufferQueueImpl_->SetQueueSize(2), Status::OK);
+    AVBufferConfig config;
+    config.size = 100;
+    config.capacity = 100;
+    config.memoryType = MemoryType::VIRTUAL_MEMORY;
+
+    std::shared_ptr<AVBuffer> buffer1;
+    ASSERT_EQ(avBufferQueueImpl_->AllocBuffer(buffer1, config), Status::OK);
+    avBufferQueueImpl_->InsertFreeBufferInOrder(buffer1->GetUniqueId());
+
+    std::shared_ptr<AVBuffer> reqBuffer;
+    EXPECT_EQ(avBufferQueueImpl_->RequestBufferWaitUs(reqBuffer, config, 0), Status::OK);
+    EXPECT_NE(reqBuffer, nullptr);
+    EXPECT_EQ(reqBuffer->GetUniqueId(), buffer1->GetUniqueId());
+}
+
+/**
+ * @tc.name: RequestBufferWaitUs_003
+ * @tc.desc: Test RequestBufferWaitUs - queue not full, allocate new buffer directly (line 361 false, 376)
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferQueueInnerUnitTest, RequestBufferWaitUs_003, TestSize.Level1)
+{
+    ASSERT_EQ(avBufferQueueImpl_->SetQueueSize(2), Status::OK);
+    AVBufferConfig config;
+    config.size = 100;
+    config.capacity = 100;
+    config.memoryType = MemoryType::VIRTUAL_MEMORY;
+
+    std::shared_ptr<AVBuffer> buffer1;
+    ASSERT_EQ(avBufferQueueImpl_->AllocBuffer(buffer1, config), Status::OK);
+
+    std::shared_ptr<AVBuffer> reqBuffer;
+    EXPECT_EQ(avBufferQueueImpl_->RequestBufferWaitUs(reqBuffer, config, 0), Status::OK);
+    EXPECT_NE(reqBuffer, nullptr);
+    EXPECT_NE(reqBuffer->GetUniqueId(), buffer1->GetUniqueId());
+}
+
+/**
+ * @tc.name: RequestBufferWaitUs_004
+ * @tc.desc: Test RequestBufferWaitUs - queue full, wait_for timeout (line 361 true, 362 -> ERROR_WAIT_TIMEOUT)
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferQueueInnerUnitTest, RequestBufferWaitUs_004, TestSize.Level1)
+{
+    ASSERT_EQ(avBufferQueueImpl_->SetQueueSize(1), Status::OK);
+    AVBufferConfig config;
+    config.size = 100;
+    config.capacity = 100;
+    config.memoryType = MemoryType::VIRTUAL_MEMORY;
+
+    std::shared_ptr<AVBuffer> buffer1;
+    ASSERT_EQ(avBufferQueueImpl_->AllocBuffer(buffer1, config), Status::OK);
+
+    std::shared_ptr<AVBuffer> reqBuffer;
+    EXPECT_EQ(avBufferQueueImpl_->RequestBufferWaitUs(reqBuffer, config, 1000), Status::ERROR_WAIT_TIMEOUT);
+}
+
+/**
+ * @tc.name: RequestBufferWaitUs_005
+ * @tc.desc: Test RequestBufferWaitUs - queue full, wait_for returns true immediately (timeoutUs=0),
+ *           still full after wait -> ERROR_NO_FREE_BUFFER (line 361 true, 371 true)
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferQueueInnerUnitTest, RequestBufferWaitUs_005, TestSize.Level1)
+{
+    ASSERT_EQ(avBufferQueueImpl_->SetQueueSize(1), Status::OK);
+    AVBufferConfig config;
+    config.size = 100;
+    config.capacity = 100;
+    config.memoryType = MemoryType::VIRTUAL_MEMORY;
+
+    std::shared_ptr<AVBuffer> buffer1;
+    ASSERT_EQ(avBufferQueueImpl_->AllocBuffer(buffer1, config), Status::OK);
+
+    std::shared_ptr<AVBuffer> reqBuffer;
+    EXPECT_EQ(avBufferQueueImpl_->RequestBufferWaitUs(reqBuffer, config, 0), Status::ERROR_NO_FREE_BUFFER);
+}
+
+/**
+ * @tc.name: RequestBufferWaitUs_006
+ * @tc.desc: Test RequestBufferWaitUs - queue full, buffer freed during wait,
+ *           reuse after wait (line 361 true, 362 false, 368 true)
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferQueueInnerUnitTest, RequestBufferWaitUs_006, TestSize.Level1)
+{
+    ASSERT_EQ(avBufferQueueImpl_->SetQueueSize(1), Status::OK);
+    AVBufferConfig config;
+    config.size = 100;
+    config.capacity = 100;
+    config.memoryType = MemoryType::VIRTUAL_MEMORY;
+
+    std::shared_ptr<AVBuffer> buffer1;
+    ASSERT_EQ(avBufferQueueImpl_->AllocBuffer(buffer1, config), Status::OK);
+    uint64_t uniqueId = buffer1->GetUniqueId();
+
+    std::shared_ptr<AVBuffer> reqBuffer;
+    Status result = Status::ERROR_UNKNOWN;
+    std::thread requestThread([&result, &reqBuffer, &config, this]() {
+        result = avBufferQueueImpl_->RequestBufferWaitUs(reqBuffer, config, 5000000);
+    });
+
+    std::thread releaseThread([&uniqueId, this]() {
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        {
+            std::lock_guard<std::mutex> lock(avBufferQueueImpl_->queueMutex_);
+            avBufferQueueImpl_->InsertFreeBufferInOrder(uniqueId);
+            avBufferQueueImpl_->requestCondition.notify_all();
+        }
+    });
+
+    releaseThread.join();
+    requestThread.join();
+
+    EXPECT_EQ(result, Status::OK);
+    EXPECT_NE(reqBuffer, nullptr);
+    EXPECT_EQ(reqBuffer->GetUniqueId(), uniqueId);
+}
+
+/**
+ * @tc.name: RequestBufferWaitUs_007
+ * @tc.desc: Test RequestBufferWaitUs - queue full, size increased during wait,
+ *           allocate new buffer after wait (line 361 true, 362 false, 371 false -> 376)
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferQueueInnerUnitTest, RequestBufferWaitUs_007, TestSize.Level1)
+{
+    ASSERT_EQ(avBufferQueueImpl_->SetQueueSize(1), Status::OK);
+    AVBufferConfig config;
+    config.size = 100;
+    config.capacity = 100;
+    config.memoryType = MemoryType::VIRTUAL_MEMORY;
+
+    std::shared_ptr<AVBuffer> buffer1;
+    ASSERT_EQ(avBufferQueueImpl_->AllocBuffer(buffer1, config), Status::OK);
+
+    std::shared_ptr<AVBuffer> reqBuffer;
+    Status result = Status::ERROR_UNKNOWN;
+    std::thread requestThread([&result, &reqBuffer, &config, this]() {
+        result = avBufferQueueImpl_->RequestBufferWaitUs(reqBuffer, config, 5000000);
+    });
+
+    std::thread resizeThread([this]() {
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        EXPECT_EQ(avBufferQueueImpl_->SetQueueSize(2), Status::OK);
+    });
+
+    resizeThread.join();
+    requestThread.join();
+
+    EXPECT_EQ(result, Status::OK);
+    EXPECT_NE(reqBuffer, nullptr);
+    EXPECT_NE(reqBuffer->GetUniqueId(), buffer1->GetUniqueId());
 }
 
 /**
