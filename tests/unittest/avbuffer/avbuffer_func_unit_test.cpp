@@ -13,6 +13,9 @@
  * limitations under the License.
  */
 
+#include <sys/mman.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #include "av_hardware_memory.h"
 #include "av_shared_allocator.h"
 #include "av_shared_memory_ext.h"
@@ -332,6 +335,125 @@ HWTEST_F(AVBufferInnerUnitTest, AVBuffer_CreateWithInvalid_005, TestSize.Level1)
 {
     buffer_ = AVBuffer::CreateAVBuffer(sptr<SurfaceBuffer>(nullptr));
     EXPECT_EQ(nullptr, buffer_);
+}
+
+/**
+ * @tc.name: AVBuffer_CreateWithInvalid_006
+ * @tc.desc: create hardware memory with capacity exceeding fd size
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferInnerUnitTest, AVBuffer_CreateWithInvalid_006, TestSize.Level1)
+{
+    memFlag_ = MemoryFlag::MEMORY_READ_WRITE;
+    DmabufHeapBuffer dmaBuffer = {.size = capacity_, .heapFlags = 0};
+    int32_t dmaHeapFd = HardwareHeapFactory::GetInstance().GetHardwareHeapFd();
+    DmabufHeapBufferAlloc(dmaHeapFd, &dmaBuffer);
+    dmaBufferLst_.push_back(dmaBuffer);
+
+    allocator_ = AVAllocatorFactory::CreateHardwareAllocator(dmaBuffer.fd, capacity_ * 2, memFlag_);
+    buffer_ = AVBuffer::CreateAVBuffer(allocator_);
+    EXPECT_EQ(nullptr, buffer_);
+}
+
+/**
+ * @tc.name: AVHardwareAllocator_GetFdSize_001
+ * @tc.desc: GetFdSize returns -1 when fstat fails (invalid fd)
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferInnerUnitTest, AVHardwareAllocator_GetFdSize_001, TestSize.Level1)
+{
+    auto alloc = std::make_shared<AVHardwareAllocator>();
+    alloc->fd_ = -1;
+    EXPECT_EQ(static_cast<int64_t>(-1), alloc->GetFdSize());
+}
+
+/**
+ * @tc.name: AVHardwareAllocator_GetFdSize_002
+ * @tc.desc: GetFdSize returns fd size via fstat (st_size>0) or lseek fallback (st_size==0)
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferInnerUnitTest, AVHardwareAllocator_GetFdSize_002, TestSize.Level1)
+{
+    DmabufHeapBuffer dmaBuffer = {.size = capacity_, .heapFlags = 0};
+    int32_t dmaHeapFd = HardwareHeapFactory::GetInstance().GetHardwareHeapFd();
+    DmabufHeapBufferAlloc(dmaHeapFd, &dmaBuffer);
+    dmaBufferLst_.push_back(dmaBuffer);
+
+    struct stat st {};
+    ASSERT_EQ(0, fstat(dmaBuffer.fd, &st));
+    allocator_ = AVAllocatorFactory::CreateHardwareAllocator(dmaBuffer.fd, capacity_, memFlag_);
+    ASSERT_NE(nullptr, allocator_);
+    auto hwAlloc = std::static_pointer_cast<AVHardwareAllocator>(allocator_);
+    if (st.st_size > 0) {
+        EXPECT_EQ(static_cast<int64_t>(st.st_size), hwAlloc->GetFdSize());
+    } else {
+        EXPECT_EQ(static_cast<int64_t>(capacity_), hwAlloc->GetFdSize());
+    }
+}
+
+/**
+ * @tc.name: AVHardwareAllocator_GetFdSize_003
+ * @tc.desc: GetFdSize returns -1 when st_size==0 and lseek fails (pipe fd)
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferInnerUnitTest, AVHardwareAllocator_GetFdSize_003, TestSize.Level1)
+{
+    int pipefd[2];
+    ASSERT_EQ(0, pipe(pipefd));
+    auto alloc = std::make_shared<AVHardwareAllocator>();
+    alloc->fd_ = pipefd[0];
+    alloc->isAllocated_ = true;
+    EXPECT_EQ(static_cast<int64_t>(-1), alloc->GetFdSize());
+    close(pipefd[0]);
+    close(pipefd[1]);
+}
+
+/**
+ * @tc.name: AVHardwareAllocator_GetProtFlag_001
+ * @tc.desc: GetProtFlag returns PROT_READ for MEMORY_READ_ONLY
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferInnerUnitTest, AVHardwareAllocator_GetProtFlag_001, TestSize.Level1)
+{
+    auto alloc = std::make_shared<AVHardwareAllocator>();
+    alloc->memFlag_ = MemoryFlag::MEMORY_READ_ONLY;
+    EXPECT_EQ(static_cast<unsigned int>(PROT_READ), alloc->GetProtFlag());
+}
+
+/**
+ * @tc.name: AVHardwareAllocator_GetProtFlag_002
+ * @tc.desc: GetProtFlag returns PROT_WRITE for MEMORY_WRITE_ONLY
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferInnerUnitTest, AVHardwareAllocator_GetProtFlag_002, TestSize.Level1)
+{
+    auto alloc = std::make_shared<AVHardwareAllocator>();
+    alloc->memFlag_ = MemoryFlag::MEMORY_WRITE_ONLY;
+    EXPECT_EQ(static_cast<unsigned int>(PROT_WRITE), alloc->GetProtFlag());
+}
+
+/**
+ * @tc.name: AVHardwareAllocator_GetProtFlag_003
+ * @tc.desc: GetProtFlag returns PROT_READ|PROT_WRITE for MEMORY_READ_WRITE
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferInnerUnitTest, AVHardwareAllocator_GetProtFlag_003, TestSize.Level1)
+{
+    auto alloc = std::make_shared<AVHardwareAllocator>();
+    alloc->memFlag_ = MemoryFlag::MEMORY_READ_WRITE;
+    EXPECT_EQ(static_cast<unsigned int>(PROT_READ | PROT_WRITE), alloc->GetProtFlag());
+}
+
+/**
+ * @tc.name: AVHardwareAllocator_GetProtFlag_004
+ * @tc.desc: GetProtFlag falls back to PROT_READ|PROT_WRITE for invalid memFlag
+ * @tc.type: FUNC
+ */
+HWTEST_F(AVBufferInnerUnitTest, AVHardwareAllocator_GetProtFlag_004, TestSize.Level1)
+{
+    auto alloc = std::make_shared<AVHardwareAllocator>();
+    alloc->memFlag_ = static_cast<MemoryFlag>(0xFF);
+    EXPECT_EQ(static_cast<unsigned int>(PROT_READ | PROT_WRITE), alloc->GetProtFlag());
 }
 
 /**
