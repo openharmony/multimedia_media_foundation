@@ -293,6 +293,7 @@ if (hst_is_lite_sys) {
     external_deps = [
       "ability_base:want",
       "audio_framework:audio_client",
+      "bounds_checking_function:libsec_shared",
       "c_utils:utils",
       "hilog:libhilog",
       "init:libbegetutil",
@@ -421,6 +422,7 @@ if (hst_is_lite_sys) {
     ]
 
     external_deps = [
+      "bounds_checking_function:libsec_shared",
       "c_utils:utils",
       "hilog:libhilog",
       "init:libbegetutil",
