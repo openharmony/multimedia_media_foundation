@@ -82,6 +82,12 @@ public:
     virtual int32_t ReadAt(uint32_t length, const std::shared_ptr<AVSharedMemory> &mem) = 0;
 };
 
+class IAudioDataSourceListener {
+public:
+    virtual ~IAudioDataSourceListener() = default;
+    virtual void OnAudioDataReady() = 0;
+};
+
 class IAudioDataSource {
 public:
     virtual ~IAudioDataSource() = default;
@@ -108,6 +114,8 @@ public:
      * @param firstFramePts First video Frame Pts.
      */
     virtual void SetVideoFirstFramePts(int64_t firstFramePts) = 0;
+
+    virtual void SetListener(std::shared_ptr<IAudioDataSourceListener> listener) = 0;
 };
 
 } // namespace Media
