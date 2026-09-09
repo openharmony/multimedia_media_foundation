@@ -68,6 +68,13 @@ typedef enum OH_AudioVividSignalFormat {
      */
     OH_AUDIO_VIVID_SIGNAL_FORMAT_MC = 2,
     /**
+     * Audio Vivid signal format is HOA(Higher Order Ambisonics), encoder supports
+     * {@link CH_LAYOUT_AMB_ORDER1_ACN_N3D}, {@link CH_LAYOUT_AMB_ORDER1_ACN_SN3D}, {@link CH_LAYOUT_AMB_ORDER1_FUMA},
+     * {@link CH_LAYOUT_AMB_ORDER2_ACN_N3D}, {@link CH_LAYOUT_AMB_ORDER2_ACN_SN3D}, {@link CH_LAYOUT_AMB_ORDER2_FUMA}.
+     * @since 27.0.0
+     */
+    OH_AUDIO_VIVID_SIGNAL_FORMAT_HOA = 3,
+    /**
      * Audio Vivid signal format is mix, contain soundbed and object sounds. Soundbed supports {@link CH_LAYOUT_MONO},
      * {@link CH_LAYOUT_STEREO}, {@link CH_LAYOUT_5POINT1}, {@link CH_LAYOUT_5POINT1POINT2},
      * {@link CH_LAYOUT_5POINT1POINT4}, {@link CH_LAYOUT_7POINT1},

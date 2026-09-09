@@ -37,6 +37,12 @@ constexpr float POLAR_ELEVATION = 30.0f;
 constexpr float POLAR_DISTANCE = 0.8f;
 constexpr int64_t LAYOUT_5_1_2 = 206158431759;
 constexpr int64_t SOUNDBED_LAYOUT = 3;
+constexpr int64_t LAYOUT_AMB_ORDER1_ACN_N3D = 17592186044417;   // AMB_MODE | AMB_ORD_1 | AMB_COM_ACN | AMB_NOR_N3D
+constexpr int64_t LAYOUT_AMB_ORDER1_ACN_SN3D = 17592186044425;  // AMB_MODE | AMB_ORD_1 | AMB_COM_ACN | AMB_NOR_SN3D
+constexpr int64_t LAYOUT_AMB_ORDER1_FUMA = 17592186044481;      // AMB_MODE | AMB_ORD_1 | AMB_COM_FUMA
+constexpr int64_t LAYOUT_AMB_ORDER2_ACN_N3D = 17592186044418;   // AMB_MODE | AMB_ORD_2 | AMB_COM_ACN | AMB_NOR_N3D
+constexpr int64_t LAYOUT_AMB_ORDER2_ACN_SN3D = 17592186044426;  // AMB_MODE | AMB_ORD_2 | AMB_COM_ACN | AMB_NOR_SN3D
+constexpr int64_t LAYOUT_AMB_ORDER2_FUMA = 17592186044482;      // AMB_MODE | AMB_ORD_2 | AMB_COM_FUMA
 
 constexpr const char* AUDIO_VIVID_LIB_NAME = "libAudioVividMetaBuilder.z.so";
 
@@ -278,6 +284,204 @@ HWTEST_F(AudioVividUnitTest, AudioVivid_Create_008, TestSize.Level1)
         EXPECT_EQ(nullptr, builder);
     }
     
+    OH_AVFormat_Destroy(testFormat);
+}
+
+/**
+ * @tc.name: AudioVivid_Create_009
+ * @tc.desc: Create builder with HOA_ORDER1_ACN_N3D signal format
+ * @tc.type: FUNC
+ */
+HWTEST_F(AudioVividUnitTest, AudioVivid_Create_009, TestSize.Level1)
+{
+    bool libAvailable = IsAudioVividLibAvailable();
+
+    OH_AudioVividMetaBuilder *builder = nullptr;
+    OH_AVFormat *testFormat = OH_AVFormat_Create();
+    ASSERT_NE(nullptr, testFormat);
+    OH_AVFormat_SetIntValue(testFormat, Tag::AUDIO_VIVID_SIGNAL_FORMAT,
+        static_cast<int32_t>(OH_AUDIO_VIVID_SIGNAL_FORMAT_HOA));
+    OH_AVFormat_SetLongValue(testFormat, Tag::AUDIO_CHANNEL_LAYOUT,
+        static_cast<int64_t>(LAYOUT_AMB_ORDER1_ACN_N3D));
+
+    OH_AVErrCode ret = OH_AudioVividMetaBuilder_Create(&builder, testFormat);
+
+    if (libAvailable) {
+        EXPECT_EQ(AV_ERR_OK, ret);
+        EXPECT_NE(nullptr, builder);
+        if (builder != nullptr) {
+            OH_AudioVividMetaBuilder_Destroy(builder);
+        }
+    } else {
+        EXPECT_EQ(AV_ERR_UNSUPPORT, ret);
+        EXPECT_EQ(nullptr, builder);
+    }
+
+    OH_AVFormat_Destroy(testFormat);
+}
+
+/**
+ * @tc.name: AudioVivid_Create_010
+ * @tc.desc: Create builder with HOA_ORDER1_ACN_SN3D signal format
+ * @tc.type: FUNC
+ */
+HWTEST_F(AudioVividUnitTest, AudioVivid_Create_010, TestSize.Level1)
+{
+    bool libAvailable = IsAudioVividLibAvailable();
+
+    OH_AudioVividMetaBuilder *builder = nullptr;
+    OH_AVFormat *testFormat = OH_AVFormat_Create();
+    ASSERT_NE(nullptr, testFormat);
+    OH_AVFormat_SetIntValue(testFormat, Tag::AUDIO_VIVID_SIGNAL_FORMAT,
+        static_cast<int32_t>(OH_AUDIO_VIVID_SIGNAL_FORMAT_HOA));
+    OH_AVFormat_SetLongValue(testFormat, Tag::AUDIO_CHANNEL_LAYOUT,
+        static_cast<int64_t>(LAYOUT_AMB_ORDER1_ACN_SN3D));
+
+    OH_AVErrCode ret = OH_AudioVividMetaBuilder_Create(&builder, testFormat);
+
+    if (libAvailable) {
+        EXPECT_EQ(AV_ERR_OK, ret);
+        EXPECT_NE(nullptr, builder);
+        if (builder != nullptr) {
+            OH_AudioVividMetaBuilder_Destroy(builder);
+        }
+    } else {
+        EXPECT_EQ(AV_ERR_UNSUPPORT, ret);
+        EXPECT_EQ(nullptr, builder);
+    }
+
+    OH_AVFormat_Destroy(testFormat);
+}
+
+/**
+ * @tc.name: AudioVivid_Create_011
+ * @tc.desc: Create builder with HOA_ORDER1_FUMA signal format
+ * @tc.type: FUNC
+ */
+HWTEST_F(AudioVividUnitTest, AudioVivid_Create_011, TestSize.Level1)
+{
+    bool libAvailable = IsAudioVividLibAvailable();
+
+    OH_AudioVividMetaBuilder *builder = nullptr;
+    OH_AVFormat *testFormat = OH_AVFormat_Create();
+    ASSERT_NE(nullptr, testFormat);
+    OH_AVFormat_SetIntValue(testFormat, Tag::AUDIO_VIVID_SIGNAL_FORMAT,
+        static_cast<int32_t>(OH_AUDIO_VIVID_SIGNAL_FORMAT_HOA));
+    OH_AVFormat_SetLongValue(testFormat, Tag::AUDIO_CHANNEL_LAYOUT,
+        static_cast<int64_t>(LAYOUT_AMB_ORDER1_FUMA));
+
+    OH_AVErrCode ret = OH_AudioVividMetaBuilder_Create(&builder, testFormat);
+
+    if (libAvailable) {
+        EXPECT_EQ(AV_ERR_OK, ret);
+        EXPECT_NE(nullptr, builder);
+        if (builder != nullptr) {
+            OH_AudioVividMetaBuilder_Destroy(builder);
+        }
+    } else {
+        EXPECT_EQ(AV_ERR_UNSUPPORT, ret);
+        EXPECT_EQ(nullptr, builder);
+    }
+
+    OH_AVFormat_Destroy(testFormat);
+}
+
+/**
+ * @tc.name: AudioVivid_Create_012
+ * @tc.desc: Create builder with HOA_ORDER2_ACN_N3D signal format
+ * @tc.type: FUNC
+ */
+HWTEST_F(AudioVividUnitTest, AudioVivid_Create_012, TestSize.Level1)
+{
+    bool libAvailable = IsAudioVividLibAvailable();
+
+    OH_AudioVividMetaBuilder *builder = nullptr;
+    OH_AVFormat *testFormat = OH_AVFormat_Create();
+    ASSERT_NE(nullptr, testFormat);
+    OH_AVFormat_SetIntValue(testFormat, Tag::AUDIO_VIVID_SIGNAL_FORMAT,
+        static_cast<int32_t>(OH_AUDIO_VIVID_SIGNAL_FORMAT_HOA));
+    OH_AVFormat_SetLongValue(testFormat, Tag::AUDIO_CHANNEL_LAYOUT,
+        static_cast<int64_t>(LAYOUT_AMB_ORDER2_ACN_N3D));
+
+    OH_AVErrCode ret = OH_AudioVividMetaBuilder_Create(&builder, testFormat);
+
+    if (libAvailable) {
+        EXPECT_EQ(AV_ERR_OK, ret);
+        EXPECT_NE(nullptr, builder);
+        if (builder != nullptr) {
+            OH_AudioVividMetaBuilder_Destroy(builder);
+        }
+    } else {
+        EXPECT_EQ(AV_ERR_UNSUPPORT, ret);
+        EXPECT_EQ(nullptr, builder);
+    }
+
+    OH_AVFormat_Destroy(testFormat);
+}
+
+/**
+ * @tc.name: AudioVivid_Create_013
+ * @tc.desc: Create builder with HOA_ORDER2_ACN_SN3D signal format
+ * @tc.type: FUNC
+ */
+HWTEST_F(AudioVividUnitTest, AudioVivid_Create_013, TestSize.Level1)
+{
+    bool libAvailable = IsAudioVividLibAvailable();
+
+    OH_AudioVividMetaBuilder *builder = nullptr;
+    OH_AVFormat *testFormat = OH_AVFormat_Create();
+    ASSERT_NE(nullptr, testFormat);
+    OH_AVFormat_SetIntValue(testFormat, Tag::AUDIO_VIVID_SIGNAL_FORMAT,
+        static_cast<int32_t>(OH_AUDIO_VIVID_SIGNAL_FORMAT_HOA));
+    OH_AVFormat_SetLongValue(testFormat, Tag::AUDIO_CHANNEL_LAYOUT,
+        static_cast<int64_t>(LAYOUT_AMB_ORDER2_ACN_SN3D));
+
+    OH_AVErrCode ret = OH_AudioVividMetaBuilder_Create(&builder, testFormat);
+
+    if (libAvailable) {
+        EXPECT_EQ(AV_ERR_OK, ret);
+        EXPECT_NE(nullptr, builder);
+        if (builder != nullptr) {
+            OH_AudioVividMetaBuilder_Destroy(builder);
+        }
+    } else {
+        EXPECT_EQ(AV_ERR_UNSUPPORT, ret);
+        EXPECT_EQ(nullptr, builder);
+    }
+
+    OH_AVFormat_Destroy(testFormat);
+}
+
+/**
+ * @tc.name: AudioVivid_Create_014
+ * @tc.desc: Create builder with HOA_ORDER2_FUMA signal format
+ * @tc.type: FUNC
+ */
+HWTEST_F(AudioVividUnitTest, AudioVivid_Create_014, TestSize.Level1)
+{
+    bool libAvailable = IsAudioVividLibAvailable();
+
+    OH_AudioVividMetaBuilder *builder = nullptr;
+    OH_AVFormat *testFormat = OH_AVFormat_Create();
+    ASSERT_NE(nullptr, testFormat);
+    OH_AVFormat_SetIntValue(testFormat, Tag::AUDIO_VIVID_SIGNAL_FORMAT,
+        static_cast<int32_t>(OH_AUDIO_VIVID_SIGNAL_FORMAT_HOA));
+    OH_AVFormat_SetLongValue(testFormat, Tag::AUDIO_CHANNEL_LAYOUT,
+        static_cast<int64_t>(LAYOUT_AMB_ORDER2_FUMA));
+
+    OH_AVErrCode ret = OH_AudioVividMetaBuilder_Create(&builder, testFormat);
+
+    if (libAvailable) {
+        EXPECT_EQ(AV_ERR_OK, ret);
+        EXPECT_NE(nullptr, builder);
+        if (builder != nullptr) {
+            OH_AudioVividMetaBuilder_Destroy(builder);
+        }
+    } else {
+        EXPECT_EQ(AV_ERR_UNSUPPORT, ret);
+        EXPECT_EQ(nullptr, builder);
+    }
+
     OH_AVFormat_Destroy(testFormat);
 }
 
