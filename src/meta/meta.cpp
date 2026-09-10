@@ -195,7 +195,7 @@ bool GetMetaData(const Meta& meta, const TagType& tag, int32_t& value)
     if (iter == g_metadataGetterSetterMap.end()) {
         if (std::find(g_metadataBoolVector.begin(), g_metadataBoolVector.end(), tag) != g_metadataBoolVector.end()) {
             bool valueBool = false;
-            FALSE_RETURN_V(meta.GetData(tag, valueBool), false);
+            FALSE_RETURN_V_NOLOG(meta.GetData(tag, valueBool), false);
             value = valueBool ? 1 : 0;
             return true;
         }
@@ -224,7 +224,7 @@ bool GetMetaData(const Meta& meta, const TagType& tag, uint32_t& value)
     if (iter == g_metadataGetterSetterMap.end()) {
         if (std::find(g_metadataBoolVector.begin(), g_metadataBoolVector.end(), tag) != g_metadataBoolVector.end()) {
             bool valueBool = false;
-            FALSE_RETURN_V(meta.GetData(tag, valueBool), false);
+            FALSE_RETURN_V_NOLOG(meta.GetData(tag, valueBool), false);
             value = valueBool ? 1 : 0;
             return true;
         }
