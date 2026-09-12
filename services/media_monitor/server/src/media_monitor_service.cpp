@@ -24,6 +24,8 @@
 #include "media_monitor_death_recipient.h"
 #include "media_monitor_policy.h"
 #include "iservice_registry.h"
+#include "tokenid_kit.h"
+#include "accesstoken_kit.h"
 
 namespace {
 constexpr OHOS::HiviewDFX::HiLogLabel LABEL = {LOG_CORE, LOG_DOMAIN_FOUNDATION, "MediaMonitorService"};
@@ -107,6 +109,8 @@ void MediaMonitorService::OnRemoveSystemAbility(int32_t systemAbilityId, const s
 
 ErrCode MediaMonitorService::WriteLogMsg(const EventBean &bean)
 {
+    FALSE_RETURN_V_MSG_W(VerifySystemPermission(), ERR_SYSTEM_PERMISSION_DENIED,
+        "WriteLogMsg: caller is not system app or system service, denied");
     MEDIA_LOG_D("Write event");
     auto eventBean = std::make_shared<EventBean>(bean);
     if (eventBean == nullptr) {
@@ -275,6 +279,17 @@ bool MediaMonitorService::VerifyIsAudio()
         return true;
     }
     return false;
+}
+
+bool MediaMonitorService::VerifySystemPermission()
+{
+    auto callingTokenId = IPCSkeleton::GetCallingTokenID();
+    auto tokenType = Security::AccessToken::AccessTokenKit::GetTokenTypeFlag(callingTokenId);
+    if (tokenType == Security::AccessToken::ATokenTypeEnum::TOKEN_NATIVE) {
+        return true;
+    }
+    auto fullTokenId = IPCSkeleton::GetCallingFullTokenID();
+    return Security::AccessToken::TokenIdKit::IsSystemAppByFullTokenID(fullTokenId);
 }
 
 bool MediaMonitorService::IsNeedDump()
