@@ -65,6 +65,7 @@
           ],
           "components": [
               "ability_base",
+              "access_token",
               "hilog",
               "hilog_lite",
               "hitrace",

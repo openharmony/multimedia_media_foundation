@@ -119,6 +119,7 @@ private:
     bool isExit_ = false;
 
     bool VerifyIsAudio();
+    bool VerifySystemPermission();
     bool IsNeedDump();
     int32_t DumpThreadProcess();
     void DumpThreadStart();
