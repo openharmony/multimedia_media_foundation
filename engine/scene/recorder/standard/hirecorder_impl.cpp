@@ -33,6 +33,10 @@ namespace Media {
 namespace Record {
 using namespace Pipeline;
 
+namespace {
+constexpr int32_t STATE_CHANGE_TIMEOUT_MS = 3000; // 3000: timeout for waiting state change
+}
+
 HiRecorderImpl::HiRecorderImpl(int32_t appUid, int32_t appPid, uint32_t appTokenId, uint64_t appFullTokenId)
     : appUid_(appUid), appPid_(appPid), appTokenId_(appTokenId), appFullTokenId_(appFullTokenId),
       fsm_(*this), curFsmState_(StateId::INIT)
@@ -190,7 +194,9 @@ int32_t HiRecorderImpl::Prepare()
     }
     OSAL::ScopedLock lock(stateMutex_);
     if (curFsmState_ == StateId::RECORDING_SETTING) { // Wait state change to ready
-        cond_.Wait(lock, [this] { return curFsmState_ != StateId::RECORDING_SETTING; });
+        cond_.WaitFor(lock, STATE_CHANGE_TIMEOUT_MS, [this] {
+            return curFsmState_ != StateId::RECORDING_SETTING;
+        });
     }
     MEDIA_LOG_D("Prepare finished, current fsm state: " PUBLIC_LOG "s.", fsm_.GetCurrentState().c_str());
     PROFILE_END("Prepare finished, current fsm state: " PUBLIC_LOG "s.", fsm_.GetCurrentState().c_str());
@@ -249,7 +255,7 @@ int32_t HiRecorderImpl::Stop(bool isDrainAll)
     SYNC_TRACE_END();
     FALSE_RETURN_V_MSG_E(ret == ERR_OK, ret, "send STOP event to fsm fail");
     OSAL::ScopedLock lock(stateMutex_);
-    cond_.WaitFor(lock, 3000, [this] { // 3000: time out
+    cond_.WaitFor(lock, STATE_CHANGE_TIMEOUT_MS, [this] {
         return curFsmState_ == StateId::ERROR || curFsmState_ == StateId::INIT;
     });
     FALSE_RETURN_V_MSG_E(curFsmState_ == StateId::INIT, ERR_UNKNOWN_REASON, "stop fail");
