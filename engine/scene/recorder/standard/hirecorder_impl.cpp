@@ -190,7 +190,7 @@ int32_t HiRecorderImpl::Prepare()
     }
     OSAL::ScopedLock lock(stateMutex_);
     if (curFsmState_ == StateId::RECORDING_SETTING) { // Wait state change to ready
-        cond_.Wait(lock, [this] { return curFsmState_ != StateId::RECORDING_SETTING; });
+        cond_.WaitFor(lock, 3000, [this] { return curFsmState_ != StateId::RECORDING_SETTING; });
     }
     MEDIA_LOG_D("Prepare finished, current fsm state: " PUBLIC_LOG "s.", fsm_.GetCurrentState().c_str());
     PROFILE_END("Prepare finished, current fsm state: " PUBLIC_LOG "s.", fsm_.GetCurrentState().c_str());
