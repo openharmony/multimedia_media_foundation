@@ -104,6 +104,7 @@ public:
     static constexpr const char AUDIO_TRUEHD[] = "audio/truehd";
     static constexpr const char AUDIO_DVAUDIO[] = "audio/dvaudio";
     static constexpr const char AUDIO_DTS[] = "audio/dts";
+    static constexpr const char AUDIO_DSD[] = "audio/dsd";
 
     static constexpr const char IMAGE_JPG[] = "image/jpeg";
     static constexpr const char IMAGE_PNG[] = "image/png";
