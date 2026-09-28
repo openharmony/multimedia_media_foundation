@@ -68,6 +68,8 @@ private:
     void AddWebvttDemuxerPlugin();
     void AddOggDemuxerPlugin();
     void AddWavDemuxerPlugin();
+    void AddDsfDemuxerPlugin();
+    void AddIffDemuxerPlugin();
     void AddAiffDemuxerPlugin();
     void AddFFmpegDemuxerPlugins();
     void AddMpeg4DemuxerPlugin();
