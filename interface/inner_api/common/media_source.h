@@ -253,6 +253,14 @@ public:
 
     bool GetenableOfflineCache();
 
+    void SetTrackSelectFilter(const TrackSelectionFilter& filter);
+
+    TrackSelectionFilter GetTrackSelectFilter() const;
+
+    void SetRetrieveKey(const std::string& key);
+
+    std::string GetRetrieveKey() const;
+
     //std::shared_ptr<DataConsumer> GetDataConsumer() const;
 #ifndef OHOS_LITE
     std::shared_ptr<IMediaDataSource> GetDataSrc() const;
@@ -271,6 +279,8 @@ private:
 #endif
     std::shared_ptr<IMediaSourceLoader> sourceLoader_ {};
     MediaStreamList playMediaStreamVec_;
+    TrackSelectionFilter trackSelectionFilter_ {};
+    std::string retrieveKey_ {};
 };
 } // namespace Plugins
 } // namespace Media

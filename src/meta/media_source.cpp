@@ -115,6 +115,26 @@ bool MediaSource::GetenableOfflineCache()
 {
     return enable_;
 }
+
+void MediaSource::SetTrackSelectFilter(const TrackSelectionFilter& filter)
+{
+    trackSelectionFilter_ = filter;
+}
+
+TrackSelectionFilter MediaSource::GetTrackSelectFilter() const
+{
+    return trackSelectionFilter_;
+}
+
+void MediaSource::SetRetrieveKey(const std::string& key)
+{
+    retrieveKey_ = key;
+}
+
+std::string MediaSource::GetRetrieveKey() const
+{
+    return retrieveKey_;
+}
  
 std::shared_ptr<IMediaSourceLoader> MediaSource::GetSourceLoader() const
 {
