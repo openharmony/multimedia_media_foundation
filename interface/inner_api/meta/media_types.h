@@ -183,6 +183,8 @@ enum class FileType : int32_t {
     DTSHD = 213,
     TRUEHD = 214,
     AU = 215,
+    DSF = 216,
+    DFF = 217,
     SRT = 301,
     VTT = 302,
     LRC = 303,
