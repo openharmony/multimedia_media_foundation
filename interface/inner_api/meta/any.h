@@ -114,6 +114,16 @@ enum struct AnyValueType : int32_t {
     VECTOR_INT32,
     VECTOR_INT64,
 };
+
+/**
+ * @brief Status of parsing Any from MessageParcel.
+ */
+enum class StatusCodeFromParcel : int32_t {
+    SUCCESS = 0,
+    ENUM_RETRY = 1,
+    NO_RETRY = 2,
+};
+
 /**
  * @brief BadAnyCast exception, which is thrown when error occurs in AnyCast
  *
@@ -478,11 +488,14 @@ private:
         static bool FromParcel(Any *operand, MessageParcel& parcel) noexcept
         {
             int ret = BaseTypesFromParcel(operand, parcel);
-            if (ret == 0) {
+            if (ret == static_cast<int>(StatusCodeFromParcel::SUCCESS)) {
                 return true;
             }
-            MakeAnyFromParcel<T>(*operand, parcel);
-            return true;
+            if (ret == static_cast<int>(StatusCodeFromParcel::NO_RETRY)) {
+                return false; // Type is not supported, report failure honestly
+            }
+            // ENUM_RETRY: try to parse enum value, result decides success/failure
+            return MakeAnyFromParcel<T>(*operand, parcel);
         }
 #endif
 
@@ -554,11 +567,14 @@ private:
         static bool FromParcel(Any *operand, MessageParcel& parcel) noexcept
         {
             int ret = BaseTypesFromParcel(operand, parcel);
-            if (ret == 0) {
+            if (ret == static_cast<int>(StatusCodeFromParcel::SUCCESS)) {
                 return true;
             }
-            MakeAnyFromParcel<T>(*operand, parcel);
-            return true;
+            if (ret == static_cast<int>(StatusCodeFromParcel::NO_RETRY)) {
+                return false; // Type is not supported, report failure honestly
+            }
+            // ENUM_RETRY: try to parse enum value, result decides success/failure
+            return MakeAnyFromParcel<T>(*operand, parcel);
         }
 #endif
 
@@ -631,11 +647,14 @@ private:
         static bool FromParcel(Any *operand, MessageParcel& parcel) noexcept
         {
             int ret = BaseTypesFromParcel(operand, parcel);
-            if (ret == 0) {
+            if (ret == static_cast<int>(StatusCodeFromParcel::SUCCESS)) {
                 return true;
             }
-            MakeAnyFromParcel<T>(*operand, parcel);
-            return true;
+            if (ret == static_cast<int>(StatusCodeFromParcel::NO_RETRY)) {
+                return false; // Type is not supported, report failure honestly
+            }
+            // ENUM_RETRY: try to parse enum value, result decides success/failure
+            return MakeAnyFromParcel<T>(*operand, parcel);
         }
 #endif
 

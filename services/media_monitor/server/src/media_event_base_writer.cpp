@@ -84,7 +84,8 @@ void MediaEventBaseWriter::WriteStreamChange(std::shared_ptr<EventBean> &bean)
         "STREAMTYPE", bean->GetIntValue("STREAM_TYPE"),
         "STATE", bean->GetIntValue("STATE"),
         "DEVICETYPE", bean->GetIntValue("DEVICETYPE"),
-        "NETWORKID", bean->GetStringValue("NETWORKID"));
+        "NETWORKID", bean->GetStringValue("NETWORKID"),
+        "ZONE_INFO", bean->GetStringValue("ZONE_INFO"));
     if (ret) {
         MEDIA_LOG_E("write event fail: STREAM_CHANGE, ret = %{public}d", ret);
     }
@@ -142,7 +143,8 @@ void MediaEventBaseWriter::WriteDeviceChange(std::shared_ptr<EventBean> &bean)
         "DEVICETYPE", bean->GetIntValue("DEVICETYPE"),
         "NETWORKID", bean->GetStringValue("NETWORKID"),
         "ADDRESS", bean->GetStringValue("ADDRESS"),
-        "DEVICE_DETAILED_CATEGORY", bean->GetStringValue("DEVICE_NAME"));
+        "DEVICE_DETAILED_CATEGORY", bean->GetStringValue("DEVICE_NAME"),
+        "ZONE_INFO", bean->GetStringValue("ZONE_INFO"));
     if (ret) {
         MEDIA_LOG_E("write event fail: DEVICE_CHANGE, ret = %{public}d", ret);
     }

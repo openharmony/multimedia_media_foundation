@@ -300,6 +300,8 @@ if (hst_is_lite_sys) {
       "ipc:ipc_single",
       "safwk:system_ability_fwk",
       "samgr:samgr_proxy",
+      "access_token:libaccesstoken_sdk",
+      "access_token:libtokenid_sdk",
     ]
 
     public_external_deps = [ "ffmpeg:libohosffmpeg" ]

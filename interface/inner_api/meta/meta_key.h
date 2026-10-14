@@ -209,6 +209,7 @@ public:
         "audio.hoa.order"; ///< Key for audio hoa order
     static constexpr const char AUDIO_ENCODE_PTS_MODE[] = "audio_encode_pts_mode";     ///< @see AudioEncodePtsMode
     static constexpr const char AUDIO_MAX_INPUT_BUFFER_SIZE[] = "audio_max_input_buffer_size";  ///< int32_t
+    static constexpr const char AUDIO_DSD_CODEC_TYPE[] = "audio_dsd_codec_type";  ///< int32_t
     /* -------------------- video universal tag -------------------- */
     static constexpr const char VIDEO_WIDTH[] = "width";                               ///< video width
     static constexpr const char VIDEO_HEIGHT[] = "height";                             ///< video height

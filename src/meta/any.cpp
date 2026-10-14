@@ -110,12 +110,6 @@ bool Any::BaseTypesToParcel(const Any *operand, MessageParcel &parcel) noexcept
     return ret;
 }
 
-enum class StatusCodeFromParcel {
-    SUCCESS = 0,
-    ENUM_RETRY = 1,
-    NO_RETRY = 2,
-};
-
 static Any BaseTypesVectorUint8(MessageParcel &parcel)
 {
     std::vector<uint8_t> val;

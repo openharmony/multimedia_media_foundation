@@ -220,6 +220,7 @@ enum MediaServiceErrCode : ErrCode {
     MSERR_CHECK_CAMERA_OUTPUT_STATUS_FAILED_5400102,    // Check camera output status failed.
     MSERR_AUDIO_BITRATE_LE_ZERO_ERROR_5400103,          // Audio bitrate cannot be less than or equal to 0.
     MSERR_VIDEO_BITRATE_LE_ZERO_ERROR_5400103,          // Video bitrate cannot be less than or equal to 0.
+    MSERR_SQR_FACTOR_ERROR_401,                         // SqrFactor value must be in range [0, 51].
 };
 
 // media api error code

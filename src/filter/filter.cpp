@@ -18,13 +18,13 @@
 
 #include "filter/filter.h"
 #include "osal/utils/util.h"
+#include "osal/task/thread.h"
 #include "common/log.h"
 #include <algorithm>
 #include "parameters.h"
 
 namespace {
 constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, LOG_DOMAIN_FOUNDATION, "Filter" };
-constexpr uint32_t THREAD_PRIORITY_41 = 7;
 }
 
 namespace OHOS {
@@ -80,9 +80,7 @@ void Filter::LinkPipeLine(const std::string &groupId, bool needTurbo, bool needI
     
     filterTask_ = std::make_unique<Task>(name_, groupId_, taskType, TaskPriority::HIGH, false);
     
-    if (needTurbo) {
-        filterTask_->UpdateThreadPriority(THREAD_PRIORITY_41, "bootanimation");
-    }
+    filterTask_->UpdateThreadPriority(Thread::THREAD_PRIORITY_41, "media_service");
     
     MEDIA_LOG_I("needInit: " PUBLIC_LOG_U32, needInit);
     

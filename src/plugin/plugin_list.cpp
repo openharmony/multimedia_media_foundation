@@ -458,6 +458,28 @@ void PluginList::AddWavDemuxerPlugin()
     pluginDescriptionList_.push_back(wavDemuxerPlugin);
 }
 
+void PluginList::AddDsfDemuxerPlugin()
+{
+    PluginDescription dsfDemuxerPlugin;
+    dsfDemuxerPlugin.pluginName = "avdemux_dsf";
+    dsfDemuxerPlugin.packageName = "FFmpegDemuxer";
+    dsfDemuxerPlugin.pluginType = PluginType::DEMUXER;
+    dsfDemuxerPlugin.cap = "";
+    dsfDemuxerPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(dsfDemuxerPlugin);
+}
+
+void PluginList::AddIffDemuxerPlugin()
+{
+    PluginDescription iffDemuxerPlugin;
+    iffDemuxerPlugin.pluginName = "avdemux_iff";
+    iffDemuxerPlugin.packageName = "FFmpegDemuxer";
+    iffDemuxerPlugin.pluginType = PluginType::DEMUXER;
+    iffDemuxerPlugin.cap = "";
+    iffDemuxerPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(iffDemuxerPlugin);
+}
+
 #ifdef SUPPORT_CODEC_RM
 void PluginList::AddRmDemuxerPlugin()
 {
@@ -583,6 +605,8 @@ void PluginList::AddFFmpegDemuxerPlugins()
     AddWebvttDemuxerPlugin();
     AddOggDemuxerPlugin();
     AddWavDemuxerPlugin();
+    AddDsfDemuxerPlugin();
+    AddIffDemuxerPlugin();
     AddAiffDemuxerPlugin();
     AddAc3DemuxerPlugin();
     AddDtsDemuxerPlugin();

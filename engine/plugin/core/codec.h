@@ -58,9 +58,9 @@ private:
     Codec(uint32_t pkgVer, uint32_t apiVer, std::shared_ptr<CodecPlugin> plugin);
 
 private:
-    std::shared_ptr<CodecPlugin> codec_;
-
     std::shared_ptr<DataCallback> dataCallback_;
+
+    std::shared_ptr<CodecPlugin> codec_;
 };
 } // namespace Plugin
 } // namespace Media

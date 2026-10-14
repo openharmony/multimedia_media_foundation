@@ -163,6 +163,9 @@ Status CodecBuffer::Unbind(std::shared_ptr<Plugin::Buffer>& buffer, const OmxCod
     // decoder 时，PluginBuf 的真正释放时机应该是在sink节点，该数据送显后才能释放
     FALSE_RETURN_V_MSG_E(memory_ != nullptr, Status::ERROR_NULL_POINTER, "Param memory_ is nullptr");
     if (memory_->GetMemoryType() == MemoryType::SHARE_MEMORY) {
+        const size_t capacity = memory_->GetCapacity();
+        FALSE_RETURN_V_MSG_E(omxBuffer.offset <= capacity && omxBuffer.filledLen <= capacity - omxBuffer.offset,
+            Status::ERROR_INVALID_DATA, "offset > capacity or filledLen > capacity - offset");
         memory_->UpdateDataSize(static_cast<size_t>(omxBuffer.filledLen - omxBuffer.offset), 0);
     }
     buffer = buffer_;
