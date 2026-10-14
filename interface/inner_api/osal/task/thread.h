@@ -16,6 +16,7 @@
 #ifndef HISTREAMER_FOUNDATION_OSAL_THREAD_H
 #define HISTREAMER_FOUNDATION_OSAL_THREAD_H
 
+#include <cstdint>
 #include <functional>
 #include <memory> // NOLINT
 #include <pthread.h>
@@ -34,6 +35,8 @@ enum class ThreadPriority : int {
 
 class Thread {
 public:
+    static constexpr uint32_t THREAD_PRIORITY_41 = 7;
+
     explicit Thread(ThreadPriority priority = ThreadPriority::HIGH) noexcept;
 
     Thread(const Thread&) = delete;
@@ -55,6 +58,8 @@ public:
     bool IsRunningInSelf();
 
     void UpdateThreadPriority(const uint32_t newPriority, const std::string &strBundleName);
+
+    static void BoostThreadPriority(const std::string &bundleName);
 
 private:
     struct State {

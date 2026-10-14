@@ -19,7 +19,6 @@
 #include "common/log.h"
 #include "osal/task/autolock.h"
 
-#include "qos.h"
 #include "res_type.h"
 #include "res_sched_client.h"
 
@@ -131,10 +130,6 @@ void Thread::SetNameInternal()
 void Thread::UpdateThreadPriority(const uint32_t newPriority, const std::string &strBundleName)
 {
     MEDIA_LOG_I("winddraw update priority %{public}u %{public}s", newPriority, std::to_string(gettid()).c_str());
-    if (strBundleName == "bootanimation") {
-        OHOS::QOS::SetThreadQos(OHOS::QOS::QosLevel::QOS_USER_INTERACTIVE);
-        return;
-    }
     std::unordered_map<std::string, std::string> mapPayload;
     mapPayload["bundleName"] = strBundleName;
     mapPayload["pid"] = std::to_string(getpid());
@@ -142,6 +137,16 @@ void Thread::UpdateThreadPriority(const uint32_t newPriority, const std::string 
     OHOS::ResourceSchedule::ResSchedClient::GetInstance().ReportData(RES_TYPE, RES_VALUE, mapPayload);
 }
 
+void Thread::BoostThreadPriority(const std::string &bundleName)
+{
+    MEDIA_LOG_I("boost thread priority to 41, bundleName: %{public}s, tid: %{public}s",
+        bundleName.c_str(), std::to_string(gettid()).c_str());
+    std::unordered_map<std::string, std::string> mapPayload;
+    mapPayload["bundleName"] = bundleName;
+    mapPayload["pid"] = std::to_string(getpid());
+    mapPayload[std::to_string(gettid())] = std::to_string(THREAD_PRIORITY_41);
+    OHOS::ResourceSchedule::ResSchedClient::GetInstance().ReportData(RES_TYPE, RES_VALUE, mapPayload);
+}
 
 void* Thread::Run(void* arg) // NOLINT: void*
 {
