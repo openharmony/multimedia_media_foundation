@@ -63,7 +63,7 @@ typedef enum OH_AudioVividSignalFormat {
     /**
      * Audio Vivid signal format is multiple channels, encoder supports {@link CH_LAYOUT_5POINT1},
      * {@link CH_LAYOUT_5POINT1POINT2}, {@link CH_LAYOUT_5POINT1POINT4}, {@link CH_LAYOUT_7POINT1},
-     * {@link CH_LAYOUT_7POINT1_POINT2}, {@link CH_LAYOUT_7POINT1_POINT4}.
+     * {@link CH_LAYOUT_7POINT1_POINT2}.
      * @since 26.0.0
      */
     OH_AUDIO_VIVID_SIGNAL_FORMAT_MC = 2,
@@ -77,8 +77,7 @@ typedef enum OH_AudioVividSignalFormat {
     /**
      * Audio Vivid signal format is mix, contain soundbed and object sounds. Soundbed supports {@link CH_LAYOUT_MONO},
      * {@link CH_LAYOUT_STEREO}, {@link CH_LAYOUT_5POINT1}, {@link CH_LAYOUT_5POINT1POINT2},
-     * {@link CH_LAYOUT_5POINT1POINT4}, {@link CH_LAYOUT_7POINT1},
-     * {@link CH_LAYOUT_7POINT1_POINT2}, {@link CH_LAYOUT_7POINT1_POINT4}.
+     * {@link CH_LAYOUT_5POINT1POINT4}, {@link CH_LAYOUT_7POINT1}, {@link CH_LAYOUT_7POINT1_POINT2}.
      * @since 26.0.0
      */
     OH_AUDIO_VIVID_SIGNAL_FORMAT_MIX = 4,
@@ -289,7 +288,7 @@ OH_AVErrCode OH_AudioVividMetaBuilder_CreateEmptyBuilder(OH_AudioVividMetaBuilde
  * @return Returns AV_ERR_OK if successful, otherwise returns a specific error code, refer to {@link OH_AVErrCode}.
  * {@link AV_ERR_INVALID_VAL}, builder is nullptr or invalid, buffer is nullptr or len is invalid.
  * @note **Constraint:**
- *      The total number of soundbed channels plus base objects plus added objects must not exceed 16.
+ *      The total number of soundbed channels plus base objects plus added objects must not exceed 11.
  * @since 26.0.0
  */
 OH_AVErrCode OH_AudioVividMetaBuilder_UpdateBaseMeta(OH_AudioVividMetaBuilder *builder, const uint8_t *buffer,
@@ -307,7 +306,7 @@ OH_AVErrCode OH_AudioVividMetaBuilder_UpdateBaseMeta(OH_AudioVividMetaBuilder *b
  * {@link AV_ERR_INVALID_VAL}, builder is nullptr or invalid, objectIndex is nullptr.
  * {@link AV_ERR_UNKNOWN}, add object fail with unknown error. For details, check logs.
  * @note **Constraint:**
- *      The total number of soundbed channels plus base objects plus added objects must not exceed 16.
+ *      The total number of soundbed channels plus base objects plus added objects must not exceed 11.
  * @since 26.0.0
  */
 OH_AVErrCode OH_AudioVividMetaBuilder_AddObject(OH_AudioVividMetaBuilder *builder, int32_t *objectIndex);
