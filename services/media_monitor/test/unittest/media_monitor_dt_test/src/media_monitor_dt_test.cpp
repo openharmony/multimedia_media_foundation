@@ -1557,7 +1557,7 @@ HWTEST(MediaMonitorDtTest, MediaMonitorPolicy_CallInterruptSuiteVolumeAndKaraoke
     std::shared_ptr<EventBean> nullBean = nullptr;
     policy.AddToCallSessionQueue(nullBean);
     policy.AddAudioInterruptErrorEvent(nullBean);
-    policy.AddAudioUnderrunIssue(nullBean);
+    policy.AddAudioUnderrunIssueEvent(nullBean);
     policy.AddToKaraokeFeatureVector(nullBean);
 
     auto call = MakeEvent(HAP_CALL_AUDIO_SESSION, FREQUENCY_AGGREGATION_EVENT);
