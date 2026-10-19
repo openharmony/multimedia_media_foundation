@@ -423,7 +423,8 @@ void MediaEventBaseWriter::WriteStreamStatistic(std::shared_ptr<EventBean> &bean
         "SAMPLE_RATE", static_cast<uint>(bean->GetIntValue("SAMPLE_RATE")),
         "APP_NAME", bean->GetStringValue("APP_NAME"),
         "EFFECT_CHAIN", static_cast<uint>(bean->GetIntValue("EFFECT_CHAIN")),
-        "DURATION", static_cast<uint32_t>(bean->GetUint64Value("DURATION")));
+        "DURATION", static_cast<uint32_t>(bean->GetUint64Value("DURATION")),
+        "TIMES", static_cast<uint32_t>(bean->GetUint64Value("TIMES")));
 #endif
 }
 
