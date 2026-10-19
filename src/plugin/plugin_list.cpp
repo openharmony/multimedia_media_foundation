@@ -84,6 +84,7 @@ void PluginList::AddPlugins()
 {
     AddAudioVividDecodersPlugins();
     AddAudioVividEncodersPlugins();
+    AddDsdAudioDecoderPlugins();
 }
 
 PluginList::PluginList()
@@ -880,6 +881,17 @@ void PluginList::AddAc3AudioDecoderPlugins()
     ac3AudioDecoderPlugin.cap = "audio/ac3";
     ac3AudioDecoderPlugin.rank = DEFAULT_RANK;
     pluginDescriptionList_.push_back(ac3AudioDecoderPlugin);
+}
+
+void PluginList::AddDsdAudioDecoderPlugins()
+{
+    PluginDescription dsdAudioDecoderPlugin;
+    dsdAudioDecoderPlugin.pluginName = "OH.Media.Codec.Decoder.Audio.DSD";
+    dsdAudioDecoderPlugin.packageName = "FFmpegAudioDecoders";
+    dsdAudioDecoderPlugin.pluginType = PluginType::AUDIO_DECODER;
+    dsdAudioDecoderPlugin.cap = "audio/dsd";
+    dsdAudioDecoderPlugin.rank = DEFAULT_RANK;
+    pluginDescriptionList_.push_back(dsdAudioDecoderPlugin);
 }
 
 #ifdef SUPPORT_CODEC_EAC3
