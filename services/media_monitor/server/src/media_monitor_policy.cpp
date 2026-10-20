@@ -892,14 +892,14 @@ void MediaMonitorPolicy::AddAudioInterruptErrorEvent(std::shared_ptr<EventBean> 
     }
 }
 
-void MediaMonitorPolicy::AddAudioPlaybackErrorEvent(std::shared_ptr<EventBean> &bean)
+void MediaMonitorPolicy::AddAudioUnderrunIssueEvent(std::shared_ptr<EventBean> &bean)
 {
-    MEDIA_LOG_D("add audio playback error event");
+    MEDIA_LOG_D("add audio underrun error event");
     if (bean == nullptr) {
         MEDIA_LOG_E("eventBean is nullptr");
         return;
     }
-    mediaEventBaseWriter_.WriteAudioPlaybackErrorEvent(bean);
+    mediaEventBaseWriter_.WriteAudioUnderrunIssueEvent(bean);
 }
 
 void MediaMonitorPolicy::AddToSuiteEngineNodeStatsMap(std::shared_ptr<EventBean> &bean)

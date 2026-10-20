@@ -175,8 +175,8 @@ void EventAggregate::UpdateAggregateStateEventList(std::shared_ptr<EventBean> &b
         case INTERRUPT_ERROR:
             HandleAudioInterruptErrorEvent(bean);
             break;
-        case AUDIO_PLAYBACK_ERROR:
-            HandleAudioPlaybackErrorEvent(bean);
+        case UNDERRUN_ISSUE:
+            HandleAudioUnderrunIssueEvent(bean);
             break;
         case KARAOKE_FEATURE_UTILIZATION:
             HandleKaraokeFeatureEvent(bean);
@@ -216,10 +216,10 @@ void EventAggregate::HandleAudioInterruptErrorEvent(std::shared_ptr<EventBean> &
     mediaMonitorPolicy_.AddAudioInterruptErrorEvent(bean);
 }
 
-void EventAggregate::HandleAudioPlaybackErrorEvent(std::shared_ptr<EventBean> &bean)
+void EventAggregate::HandleAudioUnderrunIssueEvent(std::shared_ptr<EventBean> &bean)
 {
-    MEDIA_LOG_D("Handle audio playback error event");
-    mediaMonitorPolicy_.AddAudioPlaybackErrorEvent(bean);
+    MEDIA_LOG_D("Handle audio underrun error event");
+    mediaMonitorPolicy_.AddAudioUnderrunIssueEvent(bean);
 }
 
 void EventAggregate::HandleDeviceChangeEvent(std::shared_ptr<EventBean> &bean)

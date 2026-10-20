@@ -1259,7 +1259,7 @@ void WriteAllEventsWithNull(MediaEventBaseWriter &writer)
     writer.WriteVolumeApiInvoke(nullBean);
     writer.WriteAppCallSession(nullBean);
     writer.WriteAudioInterruptErrorEvent(nullBean);
-    writer.WriteAudioPlaybackErrorEvent(nullBean);
+    writer.WriteAudioUnderrunIssueEvent(nullBean);
     writer.WriteAudioMainThreadEvent(nullBean);
     writer.WriteSuiteEngineException(nullBean);
     writer.WriteMuteBundleName(nullBean);
@@ -1318,7 +1318,7 @@ void WriteValidBeanSecondHalf(MediaEventBaseWriter &writer, std::shared_ptr<Even
     writer.WriteVolumeApiInvoke(bean);
     writer.WriteAppCallSession(bean);
     writer.WriteAudioInterruptErrorEvent(bean);
-    writer.WriteAudioPlaybackErrorEvent(bean);
+    writer.WriteAudioUnderrunIssueEvent(bean);
     writer.WriteAudioMainThreadEvent(bean);
     SuiteEngineUtilizationStatsReportData data;
     data.nodeType = "node";
@@ -1557,7 +1557,7 @@ HWTEST(MediaMonitorDtTest, MediaMonitorPolicy_CallInterruptSuiteVolumeAndKaraoke
     std::shared_ptr<EventBean> nullBean = nullptr;
     policy.AddToCallSessionQueue(nullBean);
     policy.AddAudioInterruptErrorEvent(nullBean);
-    policy.AddAudioPlaybackErrorEvent(nullBean);
+    policy.AddAudioUnderrunIssueEvent(nullBean);
     policy.AddToKaraokeFeatureVector(nullBean);
 
     auto call = MakeEvent(HAP_CALL_AUDIO_SESSION, FREQUENCY_AGGREGATION_EVENT);
@@ -1576,11 +1576,25 @@ HWTEST(MediaMonitorDtTest, MediaMonitorPolicy_CallInterruptSuiteVolumeAndKaraoke
     policy.AddAudioInterruptErrorEvent(interrupt);
     EXPECT_EQ(policy.audioInterruptErrorSet_.size(), 1U);
 
-    auto playback = MakeEvent(AUDIO_PLAYBACK_ERROR, FREQUENCY_AGGREGATION_EVENT);
-    AddString(playback, "APP_NAME", "app");
-    playback->Add("STREAM_TYPE", 1);
-    playback->Add("TYPE", 1);
-    policy.AddAudioPlaybackErrorEvent(playback);
+    auto playback = MakeEvent(UNDERRUN_ISSUE, FREQUENCY_AGGREGATION_EVENT);
+    AddString(playback, "STREAM_INFO_1", "STREAM_INFO_1");
+    AddString(playback, "STREAM_INFO_2", "STREAM_INFO_2");
+    AddString(playback, "APP_INFO_1", "APP_INFO_1");
+    AddString(playback, "APP_INFO_2", "APP_INFO_2");
+    AddString(playback, "EXCEPTION_INFO_1", "EXCEPTION_INFO_1");
+    AddString(playback, "EXCEPTION_INFO_2", "EXCEPTION_INFO_2");
+    AddString(playback, "DEVICE_INFO_1", "DEVICE_INFO_1");
+
+    playback->Add("ISSUE_TYPE", 1);
+    playback->Add("STREAM_INFO_3", 1);
+    playback->Add("STREAM_INFO_4", 1);
+    playback->Add("APP_INFO_3", 1);
+    playback->Add("EXCEPTION_INFO_3", 1);
+    playback->Add("EXCEPTION_INFO_4", 1);
+    playback->Add("DEVICE_INFO_2", 1);
+    playback->Add("SYSTEM_INFO_1", 1);
+    playback->Add("SYSTEM_INFO_2", 1);
+    policy.AddAudioUnderrunIssueEvent(playback);
 
     VerifySuiteEngineNodeStats(policy);
     VerifyVolumeSettingAndKaraoke(policy);
@@ -1696,7 +1710,7 @@ HWTEST(MediaMonitorDtTest, EventAggregate_SwitchCaseExpansionBranch_001, TestSiz
         JANK_PLAYBACK, EXCLUDE_OUTPUT_DEVICE, SET_DEVICE_COLLABORATIVE_STATE, APP_SESSION_STATE,
         APP_BACKTASK_STATE, VOLUME_API_INVOKE, HAP_CALL_AUDIO_SESSION, DISTRIBUTED_DEVICE_INFO,
         DISTRIBUTED_SCENE_INFO, DM_DEVICE_INFO, SUITE_ENGINE_UTILIZATION_STATS,
-        VOLUME_SETTING_STATISTICS, INTERRUPT_ERROR, AUDIO_PLAYBACK_ERROR, KARAOKE_FEATURE_UTILIZATION,
+        VOLUME_SETTING_STATISTICS, INTERRUPT_ERROR, UNDERRUN_ISSUE, KARAOKE_FEATURE_UTILIZATION,
         UNKNOW_EVENTID
     };
     for (auto eventId : aggregateEvents) {

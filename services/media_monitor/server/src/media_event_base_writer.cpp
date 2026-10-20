@@ -243,6 +243,7 @@ void MediaEventBaseWriter::WriteJankPlaybackError(std::shared_ptr<EventBean> &be
     }
 #ifdef MONITOR_ENABLE_HISYSEVENT
     int32_t reason = bean->GetIntValue("REASON");
+    int32_t extraInfo = bean->GetIntValue("EXTRAINFO");
     HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "JANK_PLAYBACK",
         HiviewDFX::HiSysEvent::EventType::FAULT,
         "REASON", static_cast<uint8_t>(reason),
@@ -250,6 +251,7 @@ void MediaEventBaseWriter::WriteJankPlaybackError(std::shared_ptr<EventBean> &be
         "PIPE_TYPE", static_cast<uint8_t>(bean->GetIntValue("PIPE_TYPE")),
         "HDI_ADAPTER", static_cast<uint8_t>(bean->GetIntValue("HDI_ADAPTER")),
         "POSITION", static_cast<uint8_t>(bean->GetIntValue("POSITION")),
+        "EXTRAINFO", static_cast<uint8_t>(extraInfo),
         "APP_NAME", (reason == 0 ? bean->GetStringValue("APP_NAMES") : bean->GetStringValue("APP_NAME")),
         "JANK_START_TIME", static_cast<int64_t>(bean->GetUint64Value("JANK_START_TIME")));
 #endif
@@ -799,19 +801,32 @@ void MediaEventBaseWriter::WriteAudioInterruptErrorEvent(std::shared_ptr<EventBe
 #endif
 }
 
-void MediaEventBaseWriter::WriteAudioPlaybackErrorEvent(std::shared_ptr<EventBean> &bean)
+void MediaEventBaseWriter::WriteAudioUnderrunIssueEvent(std::shared_ptr<EventBean> &bean)
 {
-    MEDIA_LOG_E("Write audio playback error event");
+    MEDIA_LOG_E("Write audio underrun error event");
     if (bean == nullptr) {
         MEDIA_LOG_E("eventBean is nullptr");
         return;
     }
 #ifdef MONITOR_ENABLE_HISYSEVENT
-    HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "AUDIO_PLAYBACK_ERROR",
-        HiviewDFX::HiSysEvent::EventType::STATISTIC,
-        "APP_NAME", bean->GetStringValue("APP_NAME"),
-        "STREAM_TYPE", bean->GetIntValue("STREAM_TYPE"),
-        "TYPE", bean->GetIntValue("TYPE"));
+    HiSysEventWrite(HiviewDFX::HiSysEvent::Domain::AUDIO, "UNDERRUN_ISSUE",
+        HiviewDFX::HiSysEvent::EventType::FAULT,
+        "ISSUE_TYPE", static_cast<uint32_t>(bean->GetIntValue("ISSUE_TYPE")),
+        "STREAM_INFO_1", bean->GetStringValue("STREAM_INFO_1"),
+        "STREAM_INFO_2", bean->GetStringValue("STREAM_INFO_2"),
+        "STREAM_INFO_3", static_cast<uint32_t>(bean->GetIntValue("STREAM_INFO_3")),
+        "STREAM_INFO_4", static_cast<uint32_t>(bean->GetIntValue("STREAM_INFO_4")),
+        "APP_INFO_1", bean->GetStringValue("APP_INFO_1"),
+        "APP_INFO_2", bean->GetStringValue("APP_INFO_2"),
+        "APP_INFO_3", static_cast<uint32_t>(bean->GetIntValue("APP_INFO_3")),
+        "EXCEPTION_INFO_1", bean->GetStringValue("EXCEPTION_INFO_1"),
+        "EXCEPTION_INFO_2", bean->GetStringValue("EXCEPTION_INFO_2"),
+        "EXCEPTION_INFO_3", static_cast<uint32_t>(bean->GetIntValue("EXCEPTION_INFO_3")),
+        "EXCEPTION_INFO_4", static_cast<uint32_t>(bean->GetIntValue("EXCEPTION_INFO_4")),
+        "DEVICE_INFO_1", bean->GetStringValue("DEVICE_INFO_1"),
+        "DEVICE_INFO_2", static_cast<uint32_t>(bean->GetIntValue("DEVICE_INFO_2")),
+        "SYSTEM_INFO_1", static_cast<uint32_t>(bean->GetIntValue("SYSTEM_INFO_1")),
+        "SYSTEM_INFO_2", static_cast<uint32_t>(bean->GetIntValue("SYSTEM_INFO_2")));
 #endif
 }
 
