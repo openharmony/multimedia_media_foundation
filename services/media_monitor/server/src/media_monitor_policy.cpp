@@ -537,6 +537,7 @@ void MediaMonitorPolicy::HandStreamUsageToEventVector(std::shared_ptr<EventBean>
     if (it != eventVector_.end()) {
         uint64_t duration = (*it)->GetUint64Value("DURATION") + streamUsage->GetUint64Value("DURATION");
         (*it)->UpdateUint64Map("DURATION", duration);
+        (*it)->UpdateUint64Map("TIMES", (*it)->GetUint64Value("TIMES") + 1);
         isInEventMap = true;
     }
     if (!isInEventMap) {
@@ -550,6 +551,7 @@ void MediaMonitorPolicy::HandStreamUsageToEventVector(std::shared_ptr<EventBean>
         eventBean->Add("APP_NAME", streamUsage->GetStringValue("APP_NAME"));
         eventBean->Add("EFFECT_CHAIN", streamUsage->GetIntValue("EFFECT_CHAIN"));
         eventBean->Add("DURATION", streamUsage->GetUint64Value("DURATION"));
+        eventBean->Add("TIMES", static_cast<uint64_t>(INITIAL_VALUE));
         AddToEventVector(eventBean);
     }
 }
