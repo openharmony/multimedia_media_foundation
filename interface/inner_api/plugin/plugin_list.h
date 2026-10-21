@@ -121,6 +121,7 @@ private:
 #endif
     void AddAc3DemuxerPlugin();
     void AddAc3AudioDecoderPlugins();
+    void AddDsdAudioDecoderPlugins();
 #ifdef SUPPORT_CODEC_EAC3
     void AddEac3AudioDecoderPlugins();
 #endif
