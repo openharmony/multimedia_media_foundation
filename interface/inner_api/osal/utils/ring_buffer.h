@@ -51,7 +51,7 @@ public:
         auto available = tail_ - head_;
         while (waitTimes > 0 && available == 0) {
             MEDIA_LOG_DD("ReadBuffer wait , waitTimes is " PUBLIC_LOG_U64, waitTimes);
-            writeCondition_.Waitfor(lck, 500); // 500ms
+            writeCondition_.WaitFor(lck, 500); // 500ms
             if (!isActive_ || !isReadBlockingAllowed_) {
                 return 0;
             }
