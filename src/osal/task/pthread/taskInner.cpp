@@ -343,7 +343,7 @@ void TaskInner::UpdateThreadPriority(const uint32_t newPriority, const std::stri
     singleLoop_ = false;
     SubmitJobOnce(
         [this, newPriority, strBundleName] { pipelineThread_->UpdateThreadPriority(newPriority, strBundleName); },
-        0, true);
+        0, false);
     singleLoop_ = tmpFlag;
 }
 
