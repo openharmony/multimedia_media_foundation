@@ -109,13 +109,15 @@ void MediaMonitorService::OnRemoveSystemAbility(int32_t systemAbilityId, const s
 
 ErrCode MediaMonitorService::WriteLogMsg(const EventBean &bean)
 {
-    FALSE_RETURN_V_MSG_W(VerifySystemPermission(), ERR_SYSTEM_PERMISSION_DENIED,
-        "WriteLogMsg: caller is not system app or system service, denied");
     MEDIA_LOG_D("Write event");
     auto eventBean = std::make_shared<EventBean>(bean);
     if (eventBean == nullptr) {
         MEDIA_LOG_E("eventBean is nullptr");
         return ERROR;
+    }
+    if (eventBean->GetEventId() == SET_FORCE_USE_AUDIO_DEVICE) {
+        FALSE_RETURN_V_MSG_W(VerifySystemPermission(), ERR_SYSTEM_PERMISSION_DENIED,
+            "caller is not system service, denied");
     }
     AddMessageToQueue(eventBean);
     return SUCCESS;
