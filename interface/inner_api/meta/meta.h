@@ -379,6 +379,7 @@ public:
         tagCharSeq == Tag::AV_TRANSCODER_DST_VIDEO_BITRATE or
         tagCharSeq == Tag::AV_TRANSCODER_DST_HDR_TYPE or
         tagCharSeq == Tag::AV_TRANSCODER_DST_COLOR_SPACE or
+        tagCharSeq == Tag::AV_TRANSCODER_DEST_HDR_MODE or
         tagCharSeq == Tag::AV_TRANSCODER_DST_AUDIO_SAMPLE_RATE or
         tagCharSeq == Tag::AV_TRANSCODER_DST_AUDIO_CHANNEL_COUNT or
         tagCharSeq == Tag::AV_TRANSCODER_DST_AUDIO_BITRATE or

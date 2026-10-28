@@ -51,8 +51,9 @@ enum class FilterType {
     FILTERTYPE_VIDRESIZE,
     FILTERTYPE_SEI,
     TIMED_METADATA,
-    FILTERTYPE_MAX,
     WATERMARK,
+    FILTERTYPE_VIDRESIZE_OPENGL,
+    FILTERTYPE_MAX,
 };
 
 enum class StreamType {

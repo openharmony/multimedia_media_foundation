@@ -221,6 +221,11 @@ enum MediaServiceErrCode : ErrCode {
     MSERR_AUDIO_BITRATE_LE_ZERO_ERROR_5400103,          // Audio bitrate cannot be less than or equal to 0.
     MSERR_VIDEO_BITRATE_LE_ZERO_ERROR_5400103,          // Video bitrate cannot be less than or equal to 0.
     MSERR_SQR_FACTOR_ERROR_401,                         // SqrFactor value must be in range [0, 51].
+    MSERR_TIME_RANGE_START_ERROR_401,                   // Transcoder time range startTime is greater than or equal to source duration.
+    MSERR_TIME_RANGE_END_ERROR_401,                     // Transcoder time range endTime is greater than source duration.
+    MSERR_TIME_RANGE_INVALID_ERROR_401,                 // Transcoder time range is invalid, startTime >= endTime or time slice < 100ms.
+    MSERR_HDR_VIVID_CODEC_MISMATCH_ERROR_401,           // HDR Vivid output requires HEVC codec, but got non-HEVC codec.
+    MSERR_HDR_VIVID_WATERMARK_ERROR_5400106,            // Watermark is not supported for HDR Vivid output.
 };
 
 // media api error code
