@@ -241,6 +241,7 @@ public:
         tagCharSeq == Tag::VIDEO_ENCODER_PER_FRAME_DISCARD or
         tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_QP_MAP or
         tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_WATERMARK or
+        tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_OPEN_GOP or
         tagCharSeq == Tag::VIDEO_DECODER_BLANK_FRAME_ON_SHUTDOWN or
         tagCharSeq == Tag::VIDEO_DECODER_OUTPUT_IN_DECODING_ORDER or
         tagCharSeq == Tag::VIDEO_ENCODER_REPEAT_HEADER_BEFORE_SYNC_FRAMES or
