@@ -232,6 +232,7 @@ public:
         tagCharSeq == Tag::VIDEO_PER_FRAME_IS_LTR or
         tagCharSeq == Tag::VIDEO_PER_FRAME_IS_SKIP or
         tagCharSeq == Tag::VIDEO_ENABLE_LOW_LATENCY or
+        tagCharSeq == Tag::VIDEO_DECODER_ONLY_I_FRAME or
         tagCharSeq == Tag::VIDEO_ENCODER_ENABLE_SURFACE_INPUT_CALLBACK or
         tagCharSeq == Tag::SCREEN_CAPTURE_USER_AGREE or
         tagCharSeq == Tag::SCREEN_CAPTURE_REQURE_MIC or

@@ -238,6 +238,8 @@ public:
     static constexpr const char VIDEO_SAR[] = "video_sar";                             ///< double, sample aspect ratio
     static constexpr const char VIDEO_FRAME_RATE_ADAPTIVE_MODE[] =
         "frame_rate_adaptive_mode";                            ///< bool, video is framerate adaptive mode
+    static constexpr const char VIDEO_DECODER_ONLY_I_FRAME[] =
+        "video_decoder_only_i_frame"; ///< bool, key to enable the I frame only dec mode.
     static constexpr const char VIDEO_DELAY[] = "video_delay"; ///< video delay
     static constexpr const char VIDEO_I_FRAME_INTERVAL[] = "i_frame_interval"; ///< Key for the interval of key frame.
     static constexpr const char VIDEO_REQUEST_I_FRAME[] =
