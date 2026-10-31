@@ -537,6 +537,7 @@ map<TagType, bool> testBoolData = {
     {Tag::VIDEO_BUFFER_CAN_DROP, true},
     {Tag::VIDEO_ENCODER_PER_FRAME_DISCARD, true},
     {Tag::VIDEO_ENCODER_ENABLE_WATERMARK, true},
+    {Tag::VIDEO_ENCODER_ENABLE_OPEN_GOP, true},
     {Tag::VIDEO_ENCODER_ENABLE_QP_MAP, true},
     {Tag::VIDEO_DECODER_BLANK_FRAME_ON_SHUTDOWN, true},
     {Tag::VIDEO_DECODER_OUTPUT_IN_DECODING_ORDER, true},

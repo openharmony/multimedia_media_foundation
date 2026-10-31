@@ -252,6 +252,8 @@ public:
         "video_codec_scenario"; ///<  Key for video codec scenario, see {link @VideoCodecScenario}
     static constexpr const char VIDEO_ENCODER_ENABLE_B_FRAME[] =
         "video_encoder_enable_b_frame"; ///<  bool,Key for video encode B-frame mode.
+    static constexpr const char VIDEO_ENCODER_ENABLE_OPEN_GOP[] =
+        "video_encoder_enable_open_gop"; ///< bool, key for enabling open GOP encoding.
     static constexpr const char VIDEO_ENCODER_MAX_B_FRAME[] =
         "video_encoder_max_b_frame"; ///<  Key for video encode carmera-recoder mode.
     static constexpr const char VIDEO_ENCODE_QUALITY[] =
