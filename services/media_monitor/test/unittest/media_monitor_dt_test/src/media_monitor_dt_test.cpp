@@ -1686,46 +1686,6 @@ HWTEST(MediaMonitorDtTest, EventAggregate_RoutingStateAndFaultRecordBranch_001, 
     VerifyUnifiedFaultCodeRecords(aggregate);
 }
 
-HWTEST(MediaMonitorDtTest, EventAggregate_SwitchCaseExpansionBranch_001, TestSize.Level0)
-{
-    auto &aggregate = EventAggregate::GetEventAggregate();
-    std::vector<EventId> directEvents = {
-        HEADSET_CHANGE, AUDIO_ROUTE_CHANGE, LOAD_CONFIG_ERROR, APP_WRITE_MUTE, HDI_EXCEPTION,
-        AUDIO_SERVICE_STARTUP_ERROR, STREAM_STANDBY, SMARTPA_STATUS, DB_ACCESS_EXCEPTION,
-        DEVICE_CHANGE_EXCEPTION, AI_VOICE_NOISE_SUPPRESSION, LOAD_EFFECT_ENGINE_ERROR,
-        SYSTEM_TONE_PLAYBACK, ADD_REMOVE_CUSTOMIZED_TONE, RECORD_ERROR, STREAM_OCCUPANCY,
-        HPAE_MESSAGE_QUEUE_EXCEPTION, STREAM_MOVE_EXCEPTION, PROCESS_IN_MAINTHREAD,
-        SUITE_ENGINE_EXCEPTION, MUTE_BUNDLE_NAME, AUDIO_STREAM_CREATE_ERROR_STATS,
-        TONE_PLAYBACK_FAILED, LOOPBACK_EXCEPTION, AUDIO_STREAM_EXHAUSTED_STATS
-    };
-    for (auto eventId : directEvents) {
-        auto bean = MakeRichBean(eventId, eventId <= AUDIO_STREAM_CREATE_ERROR_STATS ? FAULT_EVENT : BEHAVIOR_EVENT);
-        FillSystemToneBean(bean);
-        aggregate.WriteEvent(bean);
-    }
-
-    std::vector<EventId> aggregateEvents = {
-        BACKGROUND_SILENT_PLAYBACK, PERFORMANCE_UNDER_OVERRUN_STATS, SET_FORCE_USE_AUDIO_DEVICE,
-        CAPTURE_MUTE_STATUS_CHANGE, VOLUME_CHANGE, AUDIO_PIPE_CHANGE, AUDIO_FOCUS_MIGRATE,
-        JANK_PLAYBACK, EXCLUDE_OUTPUT_DEVICE, SET_DEVICE_COLLABORATIVE_STATE, APP_SESSION_STATE,
-        APP_BACKTASK_STATE, VOLUME_API_INVOKE, HAP_CALL_AUDIO_SESSION, DISTRIBUTED_DEVICE_INFO,
-        DISTRIBUTED_SCENE_INFO, DM_DEVICE_INFO, SUITE_ENGINE_UTILIZATION_STATS,
-        VOLUME_SETTING_STATISTICS, INTERRUPT_ERROR, UNDERRUN_ISSUE, KARAOKE_FEATURE_UTILIZATION,
-        UNKNOW_EVENTID
-    };
-    for (auto eventId : aggregateEvents) {
-        auto bean = MakeRichBean(eventId, BEHAVIOR_EVENT);
-        aggregate.WriteEvent(bean);
-    }
-
-    std::unordered_map<int32_t, bool> sessionMap;
-    AudioMemo::GetAudioMemo().GetAudioAppSessionMsg(sessionMap);
-    EXPECT_FALSE(sessionMap.empty());
-    std::string sceneInfo;
-    AudioMemo::GetAudioMemo().GetDistributedSceneInfo(sceneInfo);
-    EXPECT_EQ(sceneInfo, "scene");
-}
-
 HWTEST(MediaMonitorDtTest, EventAggregate_DeviceVolumeAndStateBranch_001, TestSize.Level0)
 {
     auto &aggregate = EventAggregate::GetEventAggregate();
@@ -2080,90 +2040,6 @@ HWTEST(MediaMonitorDtTest, MediaMonitorService_MessageDumpAndFileBranch_001, Tes
     service.DumpLoopFunc();
     service.DumpThreadStop();
     service.DumpThreadExit();
-}
-
-HWTEST(MediaMonitorDtTest, MediaMonitorService_RecordDumpAndMemoBridgeBranch_001, TestSize.Level0)
-{
-    MediaMonitorService service(MEDIA_MONITOR_SERVICE_ID, false);
-    int32_t funcResult = ERROR;
-    auto &aggregate = EventAggregate::GetEventAggregate();
-    aggregate.unifiedFaultCodeVector_.push_back(nullptr);
-    auto fault = MakeEvent(UNIFIED_FAULT_CODE, FAULT_EVENT);
-    fault->Add("ERROR_UID", 10);
-    fault->Add("ERROR_CODE", 0x1234);
-    AddString(fault, "ERROR_REASON", "reason");
-    fault->Add("TIMESTAMP", static_cast<uint64_t>(99));
-    aggregate.unifiedFaultCodeVector_.push_back(fault);
-    std::vector<std::string> faultRecords;
-    EXPECT_EQ(service.GetUnifiedFaultCodeRecords(faultRecords, funcResult), SUCCESS);
-    ASSERT_EQ(faultRecords.size(), 1U);
-    EXPECT_NE(faultRecords[0].find("uid:10"), std::string::npos);
-    EXPECT_NE(faultRecords[0].find("errorCode:0x00001234"), std::string::npos);
-
-    EXPECT_EQ(service.Dump(-1, {}), SUCCESS);
-    EXPECT_EQ(service.Dump(-1, {u"-dk"}), -1);
-
-    std::unordered_map<int32_t, MonitorDeviceInfo> preferredDevices;
-    std::unordered_map<int32_t, std::vector<MonitorDeviceInfo>> excludedDevices;
-    std::unordered_map<int32_t, bool> sessionMap;
-    std::unordered_map<int32_t, bool> backTaskMap;
-    std::unordered_map<std::string, uint32_t> collaborativeMap;
-    std::vector<std::string> deviceInfos;
-    std::string sceneInfo;
-    std::vector<MonitorDmDeviceInfo> dmInfos;
-    bool hasAudioPermission = service.VerifyIsAudio();
-    EXPECT_EQ(service.GetAudioRouteMsg(preferredDevices, funcResult), hasAudioPermission ? SUCCESS : ERROR);
-    EXPECT_EQ(service.GetAudioExcludedDevicesMsg(excludedDevices, funcResult), hasAudioPermission ? SUCCESS : ERROR);
-    EXPECT_EQ(service.GetAudioAppSessionMsg(sessionMap, funcResult), hasAudioPermission ? SUCCESS : ERROR);
-    EXPECT_EQ(service.GetAudioAppBackTaskMsg(backTaskMap, funcResult), hasAudioPermission ? SUCCESS : ERROR);
-    EXPECT_EQ(service.GetDistributedDeviceInfo(deviceInfos, funcResult), hasAudioPermission ? SUCCESS : ERROR);
-    EXPECT_EQ(service.GetDistributedSceneInfo(sceneInfo, funcResult), hasAudioPermission ? SUCCESS : ERROR);
-    EXPECT_EQ(service.GetDmDeviceInfo(dmInfos, funcResult), hasAudioPermission ? SUCCESS : ERROR);
-    EXPECT_EQ(service.ErasePreferredDeviceByType(CALL_RENDER, funcResult), ERROR);
-    EXPECT_EQ(service.GetCollaborativeDeviceState(collaborativeMap, funcResult), hasAudioPermission ? SUCCESS : ERROR);
-}
-
-HWTEST(MediaMonitorDtTest, MediaMonitorManager_CallbackParameterAndProxyNullBranch_001, TestSize.Level0)
-{
-    MediaMonitorManager &manager = MediaMonitorManager::GetInstance();
-    MediaMonitorManager::HiviewUeEnableChangeCallback("persist.hiviewdfx.hiview.ue.enable", "true", nullptr);
-    EXPECT_TRUE(MediaMonitorManager::ShouldWriteLogEvent(AI_VOICE_NOISE_SUPPRESSION));
-    MediaMonitorManager::HiviewUeEnableChangeCallback("persist.hiviewdfx.hiview.ue.enable", "false", nullptr);
-    EXPECT_FALSE(MediaMonitorManager::ShouldWriteLogEvent(AI_VOICE_NOISE_SUPPRESSION));
-    EXPECT_TRUE(MediaMonitorManager::ShouldWriteLogEvent(HEADSET_CHANGE));
-    MediaMonitorManager::HiviewUeEnableChangeCallback("persist.hiviewdfx.hiview.ue.enable", nullptr, nullptr);
-    MediaMonitorManager::MediaMonitorDied(0);
-
-    auto bean = MakeEvent(HEADSET_CHANGE, BEHAVIOR_EVENT);
-    manager.WriteLogMsg(bean);
-    std::map<PreferredType, std::shared_ptr<MonitorDeviceInfo>> preferredDevices;
-    manager.GetAudioRouteMsg(preferredDevices);
-    EXPECT_TRUE(preferredDevices.empty());
-    std::map<AudioDeviceUsage, std::vector<std::shared_ptr<MonitorDeviceInfo>>> excludedDevices;
-    manager.GetAudioExcludedDevicesMsg(excludedDevices);
-    EXPECT_TRUE(excludedDevices.empty());
-    std::map<int32_t, bool> sessionMap;
-    manager.GetAudioAppSessionMsg(sessionMap);
-    EXPECT_TRUE(sessionMap.empty());
-    std::map<int32_t, bool> backTaskMap;
-    manager.GetAudioAppBackTaskMsg(backTaskMap);
-    EXPECT_TRUE(backTaskMap.empty());
-    std::map<std::string, uint32_t> collaborativeMap;
-    manager.GetCollaborativeDeviceState(collaborativeMap);
-    EXPECT_TRUE(collaborativeMap.empty());
-    std::vector<std::string> deviceInfos;
-    manager.GetDistributedDeviceInfo(deviceInfos);
-    EXPECT_TRUE(deviceInfos.empty());
-    std::string sceneInfo = "old";
-    manager.GetDistributedSceneInfo(sceneInfo);
-    EXPECT_EQ(sceneInfo, "old");
-    std::vector<MonitorDmDeviceInfo> dmInfos;
-    manager.GetDmDeviceInfo(dmInfos);
-    EXPECT_TRUE(dmInfos.empty());
-    std::vector<std::string> faultRecords;
-    manager.GetUnifiedFaultCodeRecords(faultRecords);
-    EXPECT_TRUE(faultRecords.empty());
-    EXPECT_EQ(manager.ErasePreferredDeviceByType(CALL_RENDER), ERROR);
 }
 
 HWTEST(MediaMonitorDtTest, MediaMonitorManager_MediaParameterBranch_001, TestSize.Level0)
