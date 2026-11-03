@@ -294,6 +294,11 @@ protected:
         (void)isInPrePausing;
     }
 
+    // Common UnLinkNext: removes nextFilter from nextFiltersMap_, calls OnUnLinked.
+    // Subclasses call this from their override and handle their own nextFilter_ cleanup.
+    void UnLinkNextInternal(const std::shared_ptr<Filter>& nextFilter, StreamType outType,
+        const std::shared_ptr<FilterLinkCallback>& callback);
+
     inline void SetIsAsyncMode(bool isAsyncMode)
     {
         isAsyncMode_ = isAsyncMode;

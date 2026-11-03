@@ -80,6 +80,8 @@ enum struct EventType : uint32_t {
     EVENT_VIDEO_DECODER_CHANGE_END,
     EVENT_AUDIO_DECODER_CHANGE,
     EVENT_AUDIO_TRACK_CHANGE_REPORT,
+    EVENT_AUDIO_PREFERRED_OUTPUT_DEVICE_CHANGE,
+    EVENT_WARN,
 };
 
 // DFX events and infos reported from filters, modules, and plugins
