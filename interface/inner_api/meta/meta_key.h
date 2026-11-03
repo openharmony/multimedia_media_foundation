@@ -134,6 +134,8 @@ public:
         "video_static_metadata_cta861"; // video static metadata.
     static constexpr const char CHECK_CODEC_CHANGE[] =
         "check_codec_change"; ///< check codec change
+    static constexpr const char IS_STREAM_SWITCH[] =
+        "is_stream_switch"; ///< bool, true if triggered by stream switch
 
     /* -------------------- timed metadata tag -------------------- */
     static constexpr const char TIMED_METADATA_SRC_TRACK_MIME[] =
