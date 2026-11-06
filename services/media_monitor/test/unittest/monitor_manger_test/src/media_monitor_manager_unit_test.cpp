@@ -360,18 +360,17 @@ HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_GetDmDeviceInfo_002, TestSiz
 
 HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_GetAudioAppSessionMsg_001, TestSize.Level0)
 {
-    auto &aggregate = EventAggregate::GetEventAggregate();
     auto bean = std::make_shared<EventBean>(
         AUDIO, APP_SESSION_STATE, BEHAVIOR_EVENT);
     bean->Add("PID", 1);
     bean->Add("HAS_SESSION", 1);
     bean->Add("IS_ADD", 1);
-    aggregate.WriteEvent(bean);
+    AudioMemo::GetAudioMemo().UpdateAppSessionState(bean);
 
     std::unordered_map<int32_t, bool> appSessionMap;
     AudioMemo::GetAudioMemo().GetAudioAppSessionMsg(appSessionMap);
     auto it = appSessionMap.find(1);
-    EXPECT_NE(it, appSessionMap.end());
+    ASSERT_NE(it, appSessionMap.end());
     EXPECT_EQ(it->second, true);
 
     auto bean1 = std::make_shared<EventBean>(
@@ -379,8 +378,8 @@ HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_GetAudioAppSessionMsg_001, T
     bean1->Add("PID", 1);
     bean1->Add("HAS_SESSION", 1);
     bean1->Add("IS_ADD", 0);
-    aggregate.WriteEvent(bean1);
-    aggregate.WriteEvent(bean1);
+    AudioMemo::GetAudioMemo().UpdateAppSessionState(bean1);
+    AudioMemo::GetAudioMemo().UpdateAppSessionState(bean1);
 
     appSessionMap.clear();
     AudioMemo::GetAudioMemo().GetAudioAppSessionMsg(appSessionMap);
@@ -390,18 +389,17 @@ HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_GetAudioAppSessionMsg_001, T
 
 HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_GetAudioAppBackTaskMsg_001, TestSize.Level0)
 {
-    auto &aggregate = EventAggregate::GetEventAggregate();
     auto bean = std::make_shared<EventBean>(
         AUDIO, APP_BACKTASK_STATE, BEHAVIOR_EVENT);
     bean->Add("PID", 2);
     bean->Add("HAS_BACK_TASK", 1);
     bean->Add("IS_ADD", 1);
-    aggregate.WriteEvent(bean);
+    AudioMemo::GetAudioMemo().UpdateAppBackTaskState(bean);
 
     std::unordered_map<int32_t, bool> appBackTaskMap;
     AudioMemo::GetAudioMemo().GetAudioAppBackTaskMsg(appBackTaskMap);
     auto it = appBackTaskMap.find(2);
-    EXPECT_NE(it, appBackTaskMap.end());
+    ASSERT_NE(it, appBackTaskMap.end());
     EXPECT_EQ(it->second, true);
 
     auto bean1 = std::make_shared<EventBean>(
@@ -409,8 +407,8 @@ HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_GetAudioAppBackTaskMsg_001, 
     bean1->Add("PID", 2);
     bean1->Add("HAS_BACK_TASK", 1);
     bean1->Add("IS_ADD", 0);
-    aggregate.WriteEvent(bean1);
-    aggregate.WriteEvent(bean1);
+    AudioMemo::GetAudioMemo().UpdateAppBackTaskState(bean1);
+    AudioMemo::GetAudioMemo().UpdateAppBackTaskState(bean1);
 
     appBackTaskMap.clear();
     AudioMemo::GetAudioMemo().GetAudioAppBackTaskMsg(appBackTaskMap);
@@ -818,7 +816,7 @@ HWTEST(MediaMonitorManagerUnitTest, Monitor_Manager_GetUnifiedFaultCodeRecords_0
     bean->Add("ERROR_UID", 1001);
     bean->Add("ERROR_CODE", 0x12345678);
     bean->Add("ERROR_REASON", "test_error_reason");
-    aggregate.WriteEvent(bean);
+    aggregate.AddToUnifiedFaultCodeVector(bean);
 
     auto faultCodeVector = aggregate.GetUnifiedFaultCodeRecords();
     EXPECT_GT(faultCodeVector.size(), 0);
