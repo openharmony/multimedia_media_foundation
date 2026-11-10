@@ -790,6 +790,23 @@ Status Filter::UnLinkNext(const std::shared_ptr<Filter>&, StreamType)
     return Status::OK;
 }
 
+void Filter::UnLinkNextInternal(const std::shared_ptr<Filter>& nextFilter, StreamType outType,
+    const std::shared_ptr<FilterLinkCallback>& callback)
+{
+    MEDIA_LOG_I("UnLinkNextInternal, filter: %{public}s, outType: %{public}d",
+        name_.c_str(), static_cast<int32_t>(outType));
+    FALSE_RETURN(nextFilter != nullptr);
+    auto it = nextFiltersMap_.find(outType);
+    if (it != nextFiltersMap_.end()) {
+        auto &filterVec = it->second;
+        filterVec.erase(std::remove(filterVec.begin(), filterVec.end(), nextFilter), filterVec.end());
+        if (filterVec.empty()) {
+            nextFiltersMap_.erase(it);
+        }
+    }
+    nextFilter->OnUnLinked(outType, callback);
+}
+
 FilterType Filter::GetFilterType()
 {
     return filterType_;
