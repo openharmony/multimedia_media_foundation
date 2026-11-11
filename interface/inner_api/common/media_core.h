@@ -172,6 +172,7 @@ enum MediaServiceErrCode : ErrCode {
     MSERR_UNKNOWN_RECORDER_WATERMASK,                   // AVRecorder addWatermark failed.
     MSERR_UNKNOWN_CREAT_RECORDER,                       // Create AVrecorder failed.
     MSERR_UNKNOWN_CREATE_VIRTUAL_SCREEN,                // CreateVirtualScreen failed.
+    MSERR_INVALID_OPERATION_CREATE_HDR,                 // CreateVirtualScreenHdr failed, hdr not support.
     MSERR_UNKNOWN_MAKE_MIRROR,                          // MakeVirtualScreenMirror failed.
     MSERR_UNKNOWN_INCALL,                               // call is currently in progress.
     MSERR_UNSUPPORT_INCALL,                             // a call is currently in progress.
