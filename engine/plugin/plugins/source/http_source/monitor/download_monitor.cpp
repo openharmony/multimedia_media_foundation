@@ -64,7 +64,10 @@ void DownloadMonitor::HttpMonitorLoop()
 bool DownloadMonitor::Open(const std::string& url)
 {
     isPlaying_ = true;
-    retryTasks_.clear();
+    {
+        OSAL::ScopedLock lock(taskMutex_);
+        retryTasks_.clear();
+    }
     return downloader_->Open(url);
 }
 
