@@ -118,8 +118,12 @@ public:
     static constexpr const char MEDIA_GLTF_CONTENT_ENCODING[] = "gltf_content_encoding";///< gltf infe content encoding
     static constexpr const char MEDIA_GLTF_DATA[] = "gltf_data";                        ///< gltf infe data
     static constexpr const char MEDIA_GLTF_ITEM_TYPE[] = "gltf_item_type";              ///< gltf infe item type
-    static constexpr const char MEDIA_ENCODER[] = "encoder";                   ///< encoder info
-    static constexpr const char MEDIA_DEMUXER_MODE[] = "demuxer_mode";         ///< demuxer mode
+    static constexpr const char MEDIA_ENCODER[] = "encoder";                           ///< encoder info
+    static constexpr const char MEDIA_DEMUXER_MODE[] = "demuxer_mode";                 ///< demuxer mode
+    static constexpr const char MEDIA_IS_IOS_TIMED_META_TRACK[] = "is_ios_timed_meta_track";  ///< ios_timed_meta_track
+    static constexpr const char MEDIA_MVHD_TIMESCALE[] = "mvhd_timescale";                    ///< mvhd_timescale
+    static constexpr const char MEDIA_IOS_LIVE_PHOTO_COVER_TIME[] =
+        "ios_live_photo_cover_time";                                                   ///< ios_live_photo_cover_time
 
     /* -------------------- buffer meta tag -------------------- */
     static constexpr const char BUFFER_DECODING_TIMESTAMP[] = "decoding_timestamp";  ///< int64_t, decoding timestamp.
