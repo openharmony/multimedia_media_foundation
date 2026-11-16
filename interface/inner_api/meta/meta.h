@@ -248,7 +248,7 @@ public:
         tagCharSeq == Tag::VIDEO_ENCODER_REPEAT_HEADER_BEFORE_SYNC_FRAMES or
         tagCharSeq == Tag::AUDIO_ENCODER_ENABLE_SAMPLE_FORMAT_CONVERT or
         tagCharSeq == Tag::VIDEO_ENABLE_LOCAL_RELEASE or
-        tagCharSeq == Tag::MEDIA_IS_IOS_TIMED_META_TRACK, bool, AnyValueType::BOOL);
+        tagCharSeq == Tag::MEDIA_IS_IOS_SIT_TRACK, bool, AnyValueType::BOOL);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_BUFFER_CAN_DROP, bool, AnyValueType::BOOL);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::AUDIO_RENDER_SET_FLAG, bool, AnyValueType::BOOL);
     DEFINE_INSERT_GET_FUNC(tagCharSeq == Tag::VIDEO_H265_PROFILE, Plugins::HEVCProfile, AnyValueType::INT32_T);
@@ -310,6 +310,7 @@ public:
         tagCharSeq == Tag::VIDEO_RAWVIDEO_INPUT_PIXEL_FORMAT or
         tagCharSeq == Tag::DRM_ERROR_CODE or
         tagCharSeq == Tag::ENABLE_BUFFER_SKIP_SAMPLES or
+        tagCharSeq == Tag::MEDIA_VIDEO_TRACK_TIMESCALE or
         tagCharSeq == Tag::MEDIA_IOS_LIVE_PHOTO_COVER_TIME, int32_t, AnyValueType::INT32_T);
 
     DEFINE_INSERT_GET_FUNC(
