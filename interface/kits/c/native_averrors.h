@@ -105,8 +105,8 @@ typedef enum OH_AVErrCode {
      */
     AV_ERR_HARDWARE_FAILED = 12,
     /**
-     * @error codec instance has been reclaimed by the system.
-     * @since 26.2.0
+     * @brief The instance has been reclaimed by the system.
+     * @since 26.1.0
      */
     AV_ERR_RECLAIM = 13,
     /**
