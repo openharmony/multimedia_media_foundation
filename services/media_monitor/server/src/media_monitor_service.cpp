@@ -301,7 +301,7 @@ bool MediaMonitorService::IsNeedDump()
     {
         unique_lock<mutex> lock(paramMutex_);
         dumpType = dumpType_;
-        dumpEnable = dumpEnable_
+        dumpEnable = dumpEnable_;
     }
     MEDIA_LOG_D("dumpType_:%{public}s, dumpEnable:%{public}d", dumpType.c_str(), dumpEnable);
     if (versionType_ != BETA_VERSION) {
