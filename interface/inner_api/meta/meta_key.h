@@ -120,11 +120,10 @@ public:
     static constexpr const char MEDIA_GLTF_ITEM_TYPE[] = "gltf_item_type";              ///< gltf infe item type
     static constexpr const char MEDIA_ENCODER[] = "encoder";                           ///< encoder info
     static constexpr const char MEDIA_DEMUXER_MODE[] = "demuxer_mode";                 ///< demuxer mode
-    static constexpr const char MEDIA_IS_IOS_SIT_TRACK[] = "is_ios_sit_track";  ///< ios_timed_meta_track
-    static constexpr const char MEDIA_MVHD_TIMESCALE[] = "mvhd_timescale";                    ///< mvhd_timescale
-    static constexpr const char MEDIA_VIDEO_TRACK_TIMESCALE[] = "video_track_timescale";      ///< video_track_timescale
-    static constexpr const char MEDIA_IOS_LIVE_PHOTO_COVER_TIME[] =
-        "ios_live_photo_cover_time";                                                   ///< ios_live_photo_cover_time
+    static constexpr const char MEDIA_IS_SIT_TRACK[] = "is_sit_track";            ///< ios_timed_meta_track
+    static constexpr const char MEDIA_MVHD_TIMESCALE[] = "mvhd_timescale";                ///< mvhd_timescale
+    static constexpr const char MEDIA_VIDEO_TRACK_TIMESCALE[] = "video_track_timescale";  ///< video_track_timescale
+    static constexpr const char MEDIA_SIT_TRACK_COVER_TIME[] = "sit_track_cover_time";    ///< ios_live_photo_cover_time
 
     /* -------------------- buffer meta tag -------------------- */
     static constexpr const char BUFFER_DECODING_TIMESTAMP[] = "decoding_timestamp";  ///< int64_t, decoding timestamp.
