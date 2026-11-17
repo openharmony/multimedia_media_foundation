@@ -53,11 +53,13 @@ void StateMachine::SetStateCallback(StateChangeCallback* callback)
 
 const std::string& StateMachine::GetCurrentState() const
 {
+    OSAL::ScopedLock lock(mutex_);
     return curState_->GetName();
 }
 
 StateId StateMachine::GetCurrentStateId() const
 {
+    OSAL::ScopedLock lock(mutex_);
     return curState_->GetStateId();
 }
 
@@ -95,11 +97,11 @@ ErrorCode StateMachine::SendEventAsync(Intent intent, const Plugin::Any& param)
 
 Action StateMachine::ProcessIntent(Intent intent, const Plugin::Any& param)
 {
+    OSAL::ScopedLock lock(mutex_);
     MEDIA_LOG_D("ProcessIntent, curState: " PUBLIC_LOG_S ", intent: " PUBLIC_LOG_D32 ".",
                 curState_->GetName().c_str(), intent);
     PROFILE_BEGIN("ProcessIntent, curState: " PUBLIC_LOG_S ", intent: " PUBLIC_LOG_D32 ".",
                   curState_->GetName().c_str(), intent);
-    OSAL::ScopedLock lock(mutex_);
     lastIntent = intent;
     ErrorCode rtv = ErrorCode::SUCCESS;
     Action nextAction = Action::ACTION_BUTT;
