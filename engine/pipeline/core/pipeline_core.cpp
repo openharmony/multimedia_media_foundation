@@ -92,8 +92,11 @@ ErrorCode PipelineCore::Resume()
 
 ErrorCode PipelineCore::Stop()
 {
-    readyEventCnt_ = 0;
-    state_ = FilterState::INITIALIZED;
+    {
+        OSAL::ScopedLock lock(mutex_);
+        readyEventCnt_ = 0;
+        state_ = FilterState::INITIALIZED;
+    }
     filtersToRemove_.clear();
     filtersToRemove_.reserve(filters_.size());
     for (auto it = filters_.rbegin(); it != filters_.rend(); ++it) {
@@ -227,12 +230,19 @@ void PipelineCore::OnEvent(const Event& event)
         return;
     }
 
-    readyEventCnt_++;
-    MEDIA_LOG_I("OnEvent readyCnt: " PUBLIC_LOG_ZU " / " PUBLIC_LOG_ZU, readyEventCnt_, filters_.size());
-    if (readyEventCnt_ == filters_.size()) {
-        state_ = FilterState::READY;
+    bool allredy = false;
+    {
+        OSAL::ScopedLock lock(mutex_);
+        readyEventCnt_++;
+        MEDIA_LOG_I("OnEvent readyCnt: " PUBLIC_LOG_ZU " / " PUBLIC_LOG_ZU, readyEventCnt_, filters_.size());
+        if (readyEventCnt_ == filters_.size()) {
+            state_ = FilterState::READY;
+            allredy = true;
+            readyEventCnt_ = 0;
+        } 
+    }
+    if (allredy) {
         NotifyEvent(event);
-        readyEventCnt_ = 0;
     }
 }
 

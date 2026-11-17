@@ -53,12 +53,12 @@ void StateMachine::SetStateCallback(StateChangeCallback* callback)
 
 const std::string& StateMachine::GetCurrentState() const
 {
-    return curState_->GetName();
+    return std::atomic_load(&curState_)->GetName();
 }
 
 StateId StateMachine::GetCurrentStateId() const
 {
-    return curState_->GetStateId();
+    return std::atomic_load(&curState_)->GetStateId();
 }
 
 ErrorCode StateMachine::SendEvent(Intent intent, const Plugin::Any& param) const
@@ -201,7 +201,7 @@ ErrorCode StateMachine::TransitionTo(const std::shared_ptr<State>& state)
     ErrorCode rtv = ErrorCode::SUCCESS;
     if (state != curState_) {
         curState_->Exit();
-        curState_ = state;
+        std::atomic_store(curState_, state);
         Action nextAction;
         std::tie(rtv, nextAction) = curState_->Enter(lastIntent);
         if (rtv == ErrorCode::SUCCESS) {

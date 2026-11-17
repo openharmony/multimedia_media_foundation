@@ -296,12 +296,19 @@ bool MediaMonitorService::VerifySystemPermission()
 
 bool MediaMonitorService::IsNeedDump()
 {
-    MEDIA_LOG_D("dumpType_:%{public}s, dumpEnable:%{public}d", dumpType_.c_str(), dumpEnable_);
+    std::string dumpType;
+    bool dumpEnable = false;
+    {
+        unique_lock<mutex> lock(paramMutex_);
+        dumpType = dumpType_;
+        dumpEnable = dumpEnable_
+    }
+    MEDIA_LOG_D("dumpType_:%{public}s, dumpEnable:%{public}d", dumpType.c_str(), dumpEnable);
     if (versionType_ != BETA_VERSION) {
         return false;
     }
-    if (dumpType_ == DEFAULT_DUMP_TYPE || dumpType_ == BETA_DUMP_TYPE) {
-        return dumpEnable_;
+    if (dumpType == DEFAULT_DUMP_TYPE || dumpType == BETA_DUMP_TYPE) {
+        return dumpEnable;
     }
     return false;
 }
@@ -352,24 +359,26 @@ ErrCode MediaMonitorService::SetMediaParameters(const std::string &dumpType, con
 
     FALSE_UPDATE_RETURN_V_MSG_E(VerifyIsAudio(), funcResult, ERROR, "client permissionn denied");
     MEDIA_LOG_D("SetMediaParameters dumpEnable: %{public}s", dumpEnable.c_str());
-    unique_lock<mutex> lock(paramMutex_);
-    if (dumpType != DEFAULT_DUMP_TYPE && dumpType != BETA_DUMP_TYPE) {
-        MEDIA_LOG_E("dumpType:%{public}s isvaild", dumpType.c_str());
-        funcResult = ERROR;
-        return funcResult;
-    }
+    {
+        unique_lock<mutex> lock(paramMutex_);
+        if (dumpType != DEFAULT_DUMP_TYPE && dumpType != BETA_DUMP_TYPE) {
+            MEDIA_LOG_E("dumpType:%{public}s isvaild", dumpType.c_str());
+            funcResult = ERROR;
+            return funcResult;
+        }
 
-    bool isDumpEnable = (dumpEnable == "true") ? true : false;
-    if (dumpEnable_ == isDumpEnable) {
-        MEDIA_LOG_D("set dumpType is repeate, current enable:%{public}d", dumpEnable_);
-        funcResult = ERROR;
-        return funcResult;
-    }
+        bool isDumpEnable = (dumpEnable == "true") ? true : false;
+        if (dumpEnable_ == isDumpEnable) {
+            MEDIA_LOG_D("set dumpType is repeate, current enable:%{public}d", dumpEnable_);
+            funcResult = ERROR;
+            return funcResult;
+        }
 
-    dumpType_ = dumpType;
-    dumpEnable_ = isDumpEnable;
-    fileFloader_ = (dumpType_ == BETA_DUMP_TYPE) ? BETA_DUMP_DIR : DEFAULT_DUMP_DIR;
-    dumpThreadTime_ = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+        dumpType_ = dumpType;
+        dumpEnable_ = isDumpEnable;
+        fileFloader_ = (dumpType_ == BETA_DUMP_TYPE) ? BETA_DUMP_DIR : DEFAULT_DUMP_DIR;
+        dumpThreadTime_ = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+    }
 
     funcResult = DumpThreadProcess();
     return funcResult;
@@ -380,7 +389,12 @@ int32_t MediaMonitorService::DumpThreadProcess()
     if (dumpSignal_ != nullptr) {
         dumpSignal_->isRunning_.store(false);
     }
-    if (dumpEnable_) {
+    bool dumoEnable = false;
+    {
+        unique_lock<mutex> lock(paramMutex_);
+        dumoEnable = dumpEnable_;
+    }
+    if (dumoEnable) {
         isDumpExit_ = false;
         if (dumpLoopThread_ && dumpLoopThread_->joinable()) {
             dumpLoopThread_->join();
@@ -405,6 +419,7 @@ void MediaMonitorService::DumpThreadStart()
 void MediaMonitorService::DumpThreadStop()
 {
     MEDIA_LOG_I("DumpThreadStop enter");
+    unique_lock<mutex> lock(paramMutex_);
     dumpSignal_->isRunning_.store(false);
     dumpEnable_ = false;
     DumpBufferClear();
@@ -444,7 +459,12 @@ void MediaMonitorService::DumpLoopFunc()
 
         DumpBufferWrite(tmpBufferQue);
         int duration = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()) - dumpThreadTime_;
-        if (dumpType_ == BETA_DUMP_TYPE && duration >= MAX_DUMP_TIME) {
+        std::string dumpType;
+        {
+            unique_lock<mutex> lock(paramMutex_);
+            dumpType = dumpType_;
+        }
+        if (dumpType == BETA_DUMP_TYPE && duration >= MAX_DUMP_TIME) {
             MEDIA_LOG_I("dump duration %{public}d", duration);
             DumpThreadStop();
         }
@@ -482,8 +502,15 @@ void MediaMonitorService::WriteBufferFromQueue(const std::string &fileName, std:
     MEDIA_LOG_D("WriteBufferFromQueue enter");
     FALSE_RETURN_MSG(buffer != nullptr, "buffer is nullptr");
     FALSE_RETURN_MSG(buffer->data != nullptr, "buffer data is nullptr");
-    std::string realFilePath = fileFloader_ + fileName;
-    FALSE_RETURN_MSG(IsRealPath(fileFloader_), "check path failed");
+    std::string fileFloader;
+    std::string dumpType;
+    {
+        unique_lock<mutex> lock(paramMutex_);
+        fileFloader = fileFloader_;
+        dumpType = dumpType_;
+    }
+    std::string realFilePath = fileFloader + fileName;
+    FALSE_RETURN_MSG(IsRealPath(fileFloader), "check path failed");
     FILE *dumpFile = fopen(realFilePath.c_str(), "a");
     FALSE_RETURN_MSG(dumpFile != nullptr, "pcm file open failed");
     if (fseek(dumpFile, 0, SEEK_END)) {
@@ -491,7 +518,7 @@ void MediaMonitorService::WriteBufferFromQueue(const std::string &fileName, std:
         return;
     }
     int filelen = ftell(dumpFile);
-    if (filelen >= FILE_MAX_SIZE && dumpType_ == BETA_DUMP_TYPE) {
+    if (filelen >= FILE_MAX_SIZE && dumpType == BETA_DUMP_TYPE) {
         (void)fclose(dumpFile);
         (void)DeleteHistoryFile(realFilePath);
         dumpFile = fopen(realFilePath.c_str(), "a");

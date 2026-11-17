@@ -56,6 +56,7 @@ OH_AVErrCode OH_AVBuffer_Destroy(struct OH_AVBuffer *buffer)
 OH_AVErrCode OH_AVBuffer_GetBufferAttr(OH_AVBuffer *buffer, OH_AVCodecBufferAttr *attr)
 {
     FALSE_RETURN_V_MSG_E(buffer != nullptr, AV_ERR_INVALID_VAL, "input buffer is nullptr!");
+    std::lock_guard<std::mutex> lock(buffer->attrMutex_);
     FALSE_RETURN_V_MSG_E(buffer->magic_ == MFMagic::MFMAGIC_AVBUFFER, AV_ERR_INVALID_VAL, "magic error!");
     FALSE_RETURN_V_MSG_E(buffer->buffer_ != nullptr, AV_ERR_INVALID_VAL, "buffer is nullptr!");
     FALSE_RETURN_V_MSG_E(attr != nullptr, AV_ERR_INVALID_VAL, "attr is nullptr!");
@@ -74,6 +75,7 @@ OH_AVErrCode OH_AVBuffer_GetBufferAttr(OH_AVBuffer *buffer, OH_AVCodecBufferAttr
 OH_AVErrCode OH_AVBuffer_SetBufferAttr(OH_AVBuffer *buffer, const OH_AVCodecBufferAttr *attr)
 {
     FALSE_RETURN_V_MSG_E(buffer != nullptr, AV_ERR_INVALID_VAL, "input buffer is nullptr!");
+    std::lock_guard<std::mutex> lock(buffer->attrMutex_);
     FALSE_RETURN_V_MSG_E(buffer->magic_ == MFMagic::MFMAGIC_AVBUFFER, AV_ERR_INVALID_VAL, "magic error!");
     FALSE_RETURN_V_MSG_E(buffer->buffer_ != nullptr, AV_ERR_INVALID_VAL, "buffer is nullptr!");
     FALSE_RETURN_V_MSG_E(attr != nullptr, AV_ERR_INVALID_VAL, "attr is nullptr!");
@@ -93,6 +95,7 @@ OH_AVErrCode OH_AVBuffer_SetBufferAttr(OH_AVBuffer *buffer, const OH_AVCodecBuff
 OH_AVFormat *OH_AVBuffer_GetParameter(OH_AVBuffer *buffer)
 {
     FALSE_RETURN_V_MSG_E(buffer != nullptr, nullptr, "input buffer is nullptr!");
+    std::lock_guard<std::mutex> lock(buffer->attrMutex_);
     FALSE_RETURN_V_MSG_E(buffer->magic_ == MFMagic::MFMAGIC_AVBUFFER, nullptr, "magic error!");
     FALSE_RETURN_V_MSG_E(buffer->buffer_ != nullptr, nullptr, "buffer is nullptr!");
     FALSE_RETURN_V_MSG_E(buffer->buffer_->meta_ != nullptr, nullptr, "buffer's meta is nullptr!");
@@ -109,6 +112,7 @@ OH_AVFormat *OH_AVBuffer_GetParameter(OH_AVBuffer *buffer)
 OH_AVErrCode OH_AVBuffer_SetParameter(OH_AVBuffer *buffer, const OH_AVFormat *format)
 {
     FALSE_RETURN_V_MSG_E(buffer != nullptr, AV_ERR_INVALID_VAL, "input buffer is nullptr!");
+    std::lock_guard<std::mutex> lock(buffer->attrMutex_);
     FALSE_RETURN_V_MSG_E(buffer->magic_ == MFMagic::MFMAGIC_AVBUFFER, AV_ERR_INVALID_VAL, "magic error!");
     FALSE_RETURN_V_MSG_E(buffer->buffer_ != nullptr, AV_ERR_INVALID_VAL, "buffer is nullptr!");
     FALSE_RETURN_V_MSG_E(format != nullptr, AV_ERR_INVALID_VAL, "input format is nullptr!");

@@ -74,9 +74,7 @@ int32_t HdiCodecAdapter::HdiCallback::EmptyBufferDone(int64_t appData, const Omx
         return HDF_SUCCESS;
     }
     hdiAdapter->inBufPool_->UseBufferDone(omxBuffer.bufferId);
-    if (!hdiAdapter->isFlushing_) {
-        hdiAdapter->HandleFrame();
-    }
+    hdiAdapter->HandleFrame();
     MEDIA_LOG_DD("EmptyBufferDone-callback end, free in buffer count: " PUBLIC_LOG_U32,
                  hdiAdapter->inBufPool_->EmptyBufferCount());
     return HDF_SUCCESS;
@@ -240,7 +238,7 @@ Status HdiCodecAdapter::Reset()
         Status::ERROR_WRONG_STATE, "Change omx state to idle failed");
     FALSE_RETURN_V_MSG_E(WaitForState(OMX_StateIdle) == Status::OK,
         Status::ERROR_WRONG_STATE, "Wait omx state to idle failed");
-    curState_ = OMX_StateIdle;
+    curState_.stroe(OMX_StateIdle);
     FALSE_RETURN_V_MSG_E(FreeBuffers() == Status::OK, Status::ERROR_WRONG_STATE, "FreeBuffers failed");
     outBufQue_->SetActive(false);
     outBufQue_->Clear();
@@ -267,7 +265,7 @@ Status HdiCodecAdapter::Start()
         Status::ERROR_WRONG_STATE, "Change omx state to idle failed");
     FALSE_RETURN_V_MSG_E(WaitForState(OMX_StateExecuting) == Status::OK,
         Status::ERROR_WRONG_STATE, "Wait omx state to idle failed");
-    curState_ = OMX_StateExecuting;
+    curState_.stroe(OMX_StateExecuting);
     outBufQue_->SetActive(true);
     if (!FillAllTheOutBuffer()) {
         MEDIA_LOG_E("Fill all buffer error");
@@ -424,9 +422,7 @@ Status HdiCodecAdapter::QueueInputBuffer(const std::shared_ptr<Buffer>& inputBuf
         inBufQue_.push_back(inputBuffer);
         MEDIA_LOG_DD("QueueInputBuffer end, inBufQue_.size: " PUBLIC_LOG_ZU, inBufQue_.size());
     }
-    if (!isFlushing_) {
-        HandleFrame();
-    }
+    HandleFrame();
     return Status::OK;
 }
 
@@ -439,6 +435,9 @@ void HdiCodecAdapter::HandleFrame()
         std::shared_ptr<CodecBuffer> codecBuffer = nullptr;
         {
             OSAL::ScopedLock l(lockInputBuffers_);
+            if (isFlushing_) {
+                return;
+            }
             if (inBufQue_.empty()) {
                 return;
             }

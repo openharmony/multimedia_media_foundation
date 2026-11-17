@@ -144,6 +144,7 @@ PipeLineThread::PipeLineThread(std::string groupId, TaskType type, TaskPriority 
 
 void PipeLineThread::UpdateThreadPriority(const uint32_t newPriority, const std::string &strBundleName)
 {
+    AutoLock lock(mutex_);
     FALSE_RETURN_W(!threadExit_.load() && loop_);
     loop_->UpdateThreadPriority(newPriority, strBundleName);
 }
@@ -155,6 +156,7 @@ PipeLineThread::~PipeLineThread()
 
 void PipeLineThread::Exit()
 {
+    std::unique_ptr<Thread> loopToJoin;
     {
         AutoLock lock(mutex_);
         FALSE_RETURN_W(!threadExit_.load() && loop_);
@@ -165,12 +167,13 @@ void PipeLineThread::Exit()
 
         // trigger to quit thread in current running thread, must not wait,
         // or else the current thread will be suspended and can not quit.
-        if (IsRunningInSelf()) {
+        if (loop_->IsRunningInSelf()) {
             return;
         }
+        loopToJoin = std::move(loop_);
     }
     // loop_ destroy will wait thread join
-    loop_ = nullptr;
+    loopToJoin = nullptr;
 }
 
 void PipeLineThread::Run()
@@ -248,6 +251,7 @@ void PipeLineThread::UnLockJobState(bool notifyChange)
 
 bool PipeLineThread::IsRunningInSelf()
 {
+    AutoLock lock(mutex_);
     return loop_ ? loop_->IsRunningInSelf() : false;
 }
 } // namespace Media

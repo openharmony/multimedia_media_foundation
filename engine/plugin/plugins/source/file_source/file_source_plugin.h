@@ -17,6 +17,7 @@
 #define MEDIA_PIPELINE_FILE_SOURCE_PLUGIN_H
 
 #include <cstdio>
+#include <mutex>
 #include "plugin/common/plugin_types.h"
 #include "plugin/interface/source_plugin.h"
 
@@ -59,6 +60,7 @@ private:
     Seekable seekable_;
     uint64_t position_;
     std::shared_ptr<FileSourceAllocator> mAllocator_ {nullptr};
+    std::mutex mutex_;
 
     Status ParseFileName(const std::string& uri);
     Status CheckFileStat();

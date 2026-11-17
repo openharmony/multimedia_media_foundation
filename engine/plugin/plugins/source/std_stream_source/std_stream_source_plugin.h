@@ -17,6 +17,7 @@
 
 #ifndef OHOS_LITE
 
+#include <mutex>
 #include "avsharedmemorypool.h"
 #include "plugin/common/plugin_types.h"
 #include "plugin/interface/source_plugin.h"
@@ -54,6 +55,7 @@ private:
     std::shared_ptr<AVSharedMemoryPool> pool_;
     int64_t size_ {0};
     uint64_t offset_ {0};
+    std::mutex mutex_;
 };
 } // namespace StdStreamSource
 } // namespace Plugin

@@ -99,6 +99,7 @@ HiPlayerImpl::~HiPlayerImpl()
 }
 void HiPlayerImpl::UpdateStateNoLock(PlayerStates newState, bool notifyUpward)
 {
+    OSAL::ScopedLock lock(stateMutex_);
     if (pipelineStates_ == newState) {
         return;
     }

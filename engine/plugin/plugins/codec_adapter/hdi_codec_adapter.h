@@ -16,6 +16,7 @@
 
 #ifndef HISTREAMER_PLUGIN_HDI_CODEC_ADAPTER_H
 #define HISTREAMER_PLUGIN_HDI_CODEC_ADAPTER_H
+#include <atomic>
 #include <limits>
 #include <list>
 #include "codec_buffer_pool.h"
@@ -125,8 +126,8 @@ private:
     std::map<int64_t, std::shared_ptr<BufferMeta>> bufferMetaMap_;
 
     std::shared_ptr<CodecCmdExecutor> codecCmdExecutor_{};
-    OMX_STATETYPE curState_ {OMX_StateInvalid};
-    OMX_STATETYPE targetState_ {OMX_StateInvalid};
+    std::atomic<OMX_STATETYPE> curState_ {OMX_StateInvalid};
+    std::atomic<OMX_STATETYPE> targetState_ {OMX_StateInvalid};
 };
 } // namespace CodecAdapter
 } // namespace Plugin

@@ -35,6 +35,7 @@ OH_AVFormat::OH_AVFormat(const Format &fmt) : MFObjectMagic(MFMagic::MFMAGIC_FOR
 OH_AVFormat::~OH_AVFormat()
 {
     magic_ = MFMagic::MFMAGIC_UNKNOWN;
+    std::lock_guard<std::mutex> lock(fmtMutex_);
     if (outString_ != nullptr) {
         free(outString_);
         outString_ = nullptr;

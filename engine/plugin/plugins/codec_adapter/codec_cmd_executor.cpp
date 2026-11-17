@@ -65,7 +65,10 @@ Status CodecCmdExecutor::SendCmd(OMX_COMMANDTYPE cmd, const Plugin::Any& param)
     MEDIA_LOG_D("SendCmd Start");
     switch (cmd) {
         case OMX_CommandStateSet: {
-            resultMap_[cmd] = OMX_StateInvalid;
+            {
+                OSAL::ScopedLock lock(mutex_);
+                resultMap_[cmd] = OMX_StateInvalid;
+            }
             auto ret = HdiSendCommand(codecComp_, cmd,  Plugin::AnyCast<OMX_STATETYPE>(param), 0);
             FALSE_RETURN_V_MSG(ret == HDF_SUCCESS, Status::ERROR_INVALID_OPERATION, "HdiSendCommand failed");
             break;

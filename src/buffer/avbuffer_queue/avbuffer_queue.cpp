@@ -179,10 +179,17 @@ bool AVBufferQueueImpl::IsBufferInQueue(const std::shared_ptr<AVBuffer>& buffer)
 {
     FALSE_RETURN_V(buffer != nullptr, false);
     auto uniqueId = buffer->GetUniqueId();
+    std::lock_guard<std::mutex> lockGuard(queueMutex_);
     return cachedBufferMap_.find(uniqueId) != cachedBufferMap_.end();
 }
 
 uint32_t AVBufferQueueImpl::GetCachedBufferCount() const
+{
+    std::lock_guard<std::mutex> lockGuard(queueMutex_);
+    return GetCachedBufferCountLocked();
+}
+
+uint32_t AVBufferQueueImpl::GetCachedBufferCountLocked() const
 {
     // 确保cachedBufferMap_.size()不会超过MAX_UINT32
     return static_cast<uint32_t>(cachedBufferMap_.size());
@@ -322,7 +329,7 @@ bool AVBufferQueueImpl::wait_for(std::unique_lock<std::mutex>& lock, int64_t tim
     if (timeoutUs > 0) {
         return requestCondition.wait_for(
             lock, std::chrono::microseconds(timeoutUs), [this]() {
-                return !freeBufferList_.empty() || (GetCachedBufferCount() < size_);
+                return !freeBufferList_.empty() || (GetCachedBufferCountLocked() < size_);
             });
     } else if (timeoutUs < 0) {
         requestCondition.wait(lock);
@@ -358,7 +365,7 @@ Status AVBufferQueueImpl::RequestBufferWaitUs(
     }
 
     // check queue size
-    if (GetCachedBufferCount() >= size_) {
+    if (GetCachedBufferCountLocked() >= size_) {
         if (!wait_for(lock, timeoutUs)) {
             MEDIA_LOG_D("FALSE_RETURN_V wait_for(lock, timeoutUs)");
             return Status::ERROR_WAIT_TIMEOUT;
@@ -368,7 +375,7 @@ Status AVBufferQueueImpl::RequestBufferWaitUs(
         if (ret == Status::OK) {
             return RequestReuseBuffer(buffer, configCopy);
         }
-        if (GetCachedBufferCount() >= size_) {
+        if (GetCachedBufferCountLocked() >= size_) {
             return Status::ERROR_NO_FREE_BUFFER;
         }
     }
@@ -557,7 +564,7 @@ Status AVBufferQueueImpl::AttachAvailableBufferLocked(std::shared_ptr<AVBuffer>&
         .buffer = buffer
     };
 
-    auto cachedCount = GetCachedBufferCount();
+    auto cachedCount = GetCachedBufferCountLocked();
     auto queueSize = size_;
     if (cachedCount >= queueSize) {
         auto validCount = static_cast<uint32_t>(dirtyBufferList_.size() + freeBufferList_.size());

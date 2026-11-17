@@ -114,6 +114,7 @@ Status StdStreamSourcePlugin::SetCallback(Callback* cb)
 
 Status StdStreamSourcePlugin::SetSource(std::shared_ptr<MediaSource> source)
 {
+    std::lock_guard<std::mutex> lock(mutex_);
     dataSrc_ = source->GetDataSrc();
     FALSE_RETURN_V(dataSrc_ != nullptr, Status::ERROR_INVALID_PARAMETER);
     int64_t size = 0;
@@ -160,6 +161,7 @@ void StdStreamSourcePlugin::ResetPool()
 
 Status StdStreamSourcePlugin::Read(std::shared_ptr<Buffer>& buffer, size_t expectedLen)
 {
+    std::lock_guard<std::mutex> lock(mutex_);
     std::shared_ptr<AVSharedMemory> memory = GetMemory();
     FALSE_RETURN_V_MSG(memory != nullptr, Status::ERROR_NO_MEMORY, "allocate memory failed!");
     int32_t realLen;
@@ -187,17 +189,20 @@ Status StdStreamSourcePlugin::Read(std::shared_ptr<Buffer>& buffer, size_t expec
 
 Status StdStreamSourcePlugin::GetSize(uint64_t& size)
 {
+    std::lock_guard<std::mutex> lock(mutex_);
     size = size_;
     return Status::OK;
 }
 
 Seekable StdStreamSourcePlugin::GetSeekable()
 {
+    std::lock_guard<std::mutex> lock(mutex_);
     return seekable_;
 }
 
 Status StdStreamSourcePlugin::SeekTo(uint64_t offset)
 {
+    std::lock_guard<std::mutex> lock(mutex_);
     if (seekable_ == Seekable::UNSEEKABLE) {
         MEDIA_LOG_E("source is unseekable!");
         return Status::ERROR_INVALID_OPERATION;
