@@ -16,6 +16,7 @@
 #ifndef HISTREAMER_DOWNLOADER_H
 #define HISTREAMER_DOWNLOADER_H
 
+#include <atomic>
 #include <functional>
 #include <memory>
 #include <string>
@@ -38,7 +39,7 @@ struct HeaderInfo {
     size_t fileContentLen {0};
     long contentLen {0};
     bool isChunked {false};
-    bool isClosed {false};
+    std::atomic<bool> isClosed {false};
 
     void Update(const HeaderInfo* info)
     {
@@ -50,7 +51,7 @@ struct HeaderInfo {
 
     size_t GetFileContentLength() const
     {
-        while (fileContentLen == 0 && !isChunked && !isClosed) {
+        while (fileContentLen == 0 && !isChunked && !isClosed.load()) {
             OSAL::SleepFor(10); // 10, wait for fileContentLen updated
         }
         return fileContentLen;
