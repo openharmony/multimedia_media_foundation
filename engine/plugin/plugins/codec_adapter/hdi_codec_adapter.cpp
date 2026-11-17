@@ -467,7 +467,7 @@ Status HdiCodecAdapter::QueueOutputBuffer(const std::shared_ptr<Buffer>& outputB
 {
     MEDIA_LOG_DD("QueueOutputBuffer start, outBufQue size: " PUBLIC_LOG_ZU, outBufQue_->Size());
     outBufQue_->Push(outputBuffer);
-    if (curState_ == OMX_StateExecuting && !isFlushing_) {
+    if (curState_.store(OMX_StateExecuting) && !isFlushing_) {
         FillAllTheOutBuffer();
     }
     MEDIA_LOG_DD("QueueOutputBuffer end");
@@ -559,18 +559,18 @@ Status HdiCodecAdapter::FreeBuffers()
     FALSE_RETURN_V_MSG_E(val == Status::OK, val, "free buffers failed");
     FALSE_RETURN_V_MSG_E(WaitForState(OMX_StateLoaded) == Status::OK,
                          Status::ERROR_WRONG_STATE, "Wait omx state to loaded failed");
-    curState_ = OMX_StateLoaded;
+    curState_.store(OMX_StateLoaded);
     return Status::OK;
 }
 
 Status HdiCodecAdapter::ChangeState(OMX_STATETYPE state)
 {
     MEDIA_LOG_I("change state from " PUBLIC_LOG_S " to " PUBLIC_LOG_S,
-                OmxStateToString(targetState_).c_str(), OmxStateToString(state).c_str());
-    if (targetState_ != state && curState_ != state) {
+                OmxStateToString(targetState_.load()).c_str(), OmxStateToString(state).c_str());
+    if (targetState_.load() != state && curState_.load() != state) {
         auto ret = codecCmdExecutor_->SendCmd(OMX_CommandStateSet, state);
         FALSE_RETURN_V_MSG(ret == Status::OK, Status::ERROR_INVALID_OPERATION, "HdiSendCommand failed");
-        targetState_ = state;
+        targetState_.store(state);
     }
     return Status::OK;
 }
@@ -583,7 +583,7 @@ Status HdiCodecAdapter::WaitForState(OMX_STATETYPE state)
         MEDIA_LOG_E("Wait state failed");
         return Status::ERROR_WRONG_STATE;
     }
-    curState_ = state;
+    curState_.store(state);
     MEDIA_LOG_D("WaitForState end");
     return Status::OK;
 }
