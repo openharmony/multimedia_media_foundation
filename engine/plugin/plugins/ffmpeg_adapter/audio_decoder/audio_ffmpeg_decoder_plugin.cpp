@@ -477,7 +477,7 @@ Status AudioFfmpegDecoderPlugin::SendOutputBuffer()
 {
     MEDIA_LOG_DD("send output buffer");
     Status status = ReceiveBuffer();
-    std::shared_ptr<Buffer>& outBuffer;
+    std::shared_ptr<Buffer> outBuffer;
     {
         OSAL::ScopedLock lock(avMutex_);
         outBuffer = outBuffer_;
