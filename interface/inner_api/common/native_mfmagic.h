@@ -61,6 +61,6 @@ struct OH_AVFormat : public MFObjectMagic {
     OHOS::Media::Format format_;
     char *outString_ = nullptr;
     char *dumpInfo_ = nullptr;
-    std::mutex_ fmtMutex_;
+    std::mutex fmtMutex_;
 };
 #endif // NATIVE_MFMAGIC_H
