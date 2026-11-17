@@ -239,7 +239,7 @@ void PipelineCore::OnEvent(const Event& event)
             state_ = FilterState::READY;
             allredy = true;
             readyEventCnt_ = 0;
-        } 
+        }
     }
     if (allredy) {
         NotifyEvent(event);
