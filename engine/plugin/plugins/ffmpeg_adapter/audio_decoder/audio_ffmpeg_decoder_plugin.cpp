@@ -633,7 +633,6 @@ Status AudioFfmpegDecoderPlugin::ReceiveBuffer()
     {
         OSAL::ScopedLock lock(avMutex_);
         ioInfo = outBuffer_;
-
     }
     if ((ioInfo == nullptr) || ioInfo->IsEmpty() || ioInfo->GetBufferMeta() == nullptr ||
         (ioInfo->GetBufferMeta()->GetType() != BufferMetaType::AUDIO)) {
