@@ -598,6 +598,7 @@ ErrorCode HiPlayerImpl::DoPlay()
     syncManager_->Resume();
     auto ret = pipeline_->Start();
     if (ret != ErrorCode::SUCCESS) {
+        OSAL::ScopedLock lock(stateMutex_);
         UpdateStateNoLock(PlayerStates::PLAYER_STATE_ERROR);
     }
     return ret;
@@ -619,6 +620,7 @@ ErrorCode HiPlayerImpl::DoResume()
     syncManager_->Resume();
     auto ret = pipeline_->Resume();
     if (ret != ErrorCode::SUCCESS) {
+        OSAL::ScopedLock lock(stateMutex_);
         UpdateStateNoLock(PlayerStates::PLAYER_STATE_ERROR);
     }
     return ret;
