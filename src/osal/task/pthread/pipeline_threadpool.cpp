@@ -240,7 +240,7 @@ void PipeLineThread::LockJobState()
 
 void PipeLineThread::UnLockJobState(bool notifyChange)
 {
-    if (IsRunningInSelf()) {
+    if (loop_ && loop_->IsRunningInSelf()) {
         return;
     }
     mutex_.unlock();
