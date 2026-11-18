@@ -89,6 +89,7 @@ Status VideoFileCapturePlugin::Init()
 Status VideoFileCapturePlugin::Deinit()
 {
     MEDIA_LOG_D("IN");
+    OSAL::ScopedLock lock(mutex_);
     if (cacheFrame_ != nullptr) {
         delete[](uint8_t*) cacheFrame_;
         cacheFrame_ = nullptr;
@@ -136,12 +137,12 @@ Status VideoFileCapturePlugin::Start()
 Status VideoFileCapturePlugin::Stop()
 {
     MEDIA_LOG_D("IN");
+    OSAL::ScopedLock lock(mutex_);
     if (fp_ != nullptr) {
         fclose(fp_);
         fp_ = nullptr;
     }
     bufferSize_ = 0;
-    OSAL::ScopedLock lock(mutex_);
     if (!isStop_.load()) {
         stopTimestampNs_ = curTimestampNs_;
         isStop_ = true;

@@ -188,6 +188,7 @@ Status VideoCapturePlugin::GetParameter(Tag tag, ValueType& value)
 
 Status VideoCapturePlugin::SetParameter(Tag tag, const ValueType& value)
 {
+    OSAL::ScopedLock lock(mutex_);
     switch (tag) {
         case Tag::VIDEO_HEIGHT: {
             if (Any::IsSameTypeWith<uint32_t>(value)) {

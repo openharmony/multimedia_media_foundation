@@ -192,15 +192,19 @@ int32_t HiRecorderImpl::Prepare()
     } else {
         PROFILE_END("Prepare successfully,");
     }
-    OSAL::ScopedLock lock(stateMutex_);
-    if (curFsmState_ == StateId::RECORDING_SETTING) { // Wait state change to ready
-        cond_.WaitFor(lock, STATE_CHANGE_TIMEOUT_MS, [this] {
-            return curFsmState_ != StateId::RECORDING_SETTING;
-        });
+    StateId finalState = StateId::INIT;
+    {
+        OSAL::ScopedLock lock(stateMutex_);
+        if (curFsmState_ == StateId::RECORDING_SETTING) { // Wait state change to ready
+            cond_.WaitFor(lock, STATE_CHANGE_TIMEOUT_MS, [this] {
+                return curFsmState_ != StateId::RECORDING_SETTING;
+            });
+        }
+        finalState = curFsmState_;
     }
     MEDIA_LOG_D("Prepare finished, current fsm state: " PUBLIC_LOG "s.", fsm_.GetCurrentState().c_str());
     PROFILE_END("Prepare finished, current fsm state: " PUBLIC_LOG "s.", fsm_.GetCurrentState().c_str());
-    if (curFsmState_ == StateId::READY) {
+    if (finalState == StateId::READY) {
         ret = ErrorCode::SUCCESS;
     } else {
         ret = ErrorCode::ERROR_UNKNOWN;

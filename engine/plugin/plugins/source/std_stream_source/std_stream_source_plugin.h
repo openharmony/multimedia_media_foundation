@@ -18,6 +18,8 @@
 #ifndef OHOS_LITE
 
 #include "avsharedmemorypool.h"
+#include "foundation/osal/thread/mutex.h"
+#include "foundation/osal/thread/scoped_lock.h"
 #include "plugin/common/plugin_types.h"
 #include "plugin/interface/source_plugin.h"
 
@@ -49,6 +51,7 @@ private:
     void InitPool();
     std::shared_ptr<AVSharedMemory> GetMemory();
     void ResetPool();
+    OSAL::Mutex mutex_ {};
     Seekable seekable_ {Seekable::INVALID};
     std::shared_ptr<IMediaDataSource> dataSrc_;
     std::shared_ptr<AVSharedMemoryPool> pool_;
