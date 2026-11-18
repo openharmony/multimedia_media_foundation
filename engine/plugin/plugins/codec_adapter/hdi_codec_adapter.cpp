@@ -74,9 +74,7 @@ int32_t HdiCodecAdapter::HdiCallback::EmptyBufferDone(int64_t appData, const Omx
         return HDF_SUCCESS;
     }
     hdiAdapter->inBufPool_->UseBufferDone(omxBuffer.bufferId);
-    if (!hdiAdapter->isFlushing_) {
-        hdiAdapter->HandleFrame();
-    }
+    hdiAdapter->HandleFrame();
     MEDIA_LOG_DD("EmptyBufferDone-callback end, free in buffer count: " PUBLIC_LOG_U32,
                  hdiAdapter->inBufPool_->EmptyBufferCount());
     return HDF_SUCCESS;
@@ -240,7 +238,7 @@ Status HdiCodecAdapter::Reset()
         Status::ERROR_WRONG_STATE, "Change omx state to idle failed");
     FALSE_RETURN_V_MSG_E(WaitForState(OMX_StateIdle) == Status::OK,
         Status::ERROR_WRONG_STATE, "Wait omx state to idle failed");
-    curState_ = OMX_StateIdle;
+    curState_.store(OMX_StateIdle);
     FALSE_RETURN_V_MSG_E(FreeBuffers() == Status::OK, Status::ERROR_WRONG_STATE, "FreeBuffers failed");
     outBufQue_->SetActive(false);
     outBufQue_->Clear();
@@ -267,7 +265,7 @@ Status HdiCodecAdapter::Start()
         Status::ERROR_WRONG_STATE, "Change omx state to idle failed");
     FALSE_RETURN_V_MSG_E(WaitForState(OMX_StateExecuting) == Status::OK,
         Status::ERROR_WRONG_STATE, "Wait omx state to idle failed");
-    curState_ = OMX_StateExecuting;
+    curState_.store(OMX_StateExecuting);
     outBufQue_->SetActive(true);
     if (!FillAllTheOutBuffer()) {
         MEDIA_LOG_E("Fill all buffer error");
@@ -424,9 +422,7 @@ Status HdiCodecAdapter::QueueInputBuffer(const std::shared_ptr<Buffer>& inputBuf
         inBufQue_.push_back(inputBuffer);
         MEDIA_LOG_DD("QueueInputBuffer end, inBufQue_.size: " PUBLIC_LOG_ZU, inBufQue_.size());
     }
-    if (!isFlushing_) {
-        HandleFrame();
-    }
+    HandleFrame();
     return Status::OK;
 }
 
@@ -439,6 +435,9 @@ void HdiCodecAdapter::HandleFrame()
         std::shared_ptr<CodecBuffer> codecBuffer = nullptr;
         {
             OSAL::ScopedLock l(lockInputBuffers_);
+            if (isFlushing_) {
+                return;
+            }
             if (inBufQue_.empty()) {
                 return;
             }
@@ -468,7 +467,7 @@ Status HdiCodecAdapter::QueueOutputBuffer(const std::shared_ptr<Buffer>& outputB
 {
     MEDIA_LOG_DD("QueueOutputBuffer start, outBufQue size: " PUBLIC_LOG_ZU, outBufQue_->Size());
     outBufQue_->Push(outputBuffer);
-    if (curState_ == OMX_StateExecuting && !isFlushing_) {
+    if (curState_.load() == OMX_StateExecuting && !isFlushing_) {
         FillAllTheOutBuffer();
     }
     MEDIA_LOG_DD("QueueOutputBuffer end");
@@ -560,18 +559,18 @@ Status HdiCodecAdapter::FreeBuffers()
     FALSE_RETURN_V_MSG_E(val == Status::OK, val, "free buffers failed");
     FALSE_RETURN_V_MSG_E(WaitForState(OMX_StateLoaded) == Status::OK,
                          Status::ERROR_WRONG_STATE, "Wait omx state to loaded failed");
-    curState_ = OMX_StateLoaded;
+    curState_.store(OMX_StateLoaded);
     return Status::OK;
 }
 
 Status HdiCodecAdapter::ChangeState(OMX_STATETYPE state)
 {
     MEDIA_LOG_I("change state from " PUBLIC_LOG_S " to " PUBLIC_LOG_S,
-                OmxStateToString(targetState_).c_str(), OmxStateToString(state).c_str());
-    if (targetState_ != state && curState_ != state) {
+                OmxStateToString(targetState_.load()).c_str(), OmxStateToString(state).c_str());
+    if (targetState_.load() != state && curState_.load() != state) {
         auto ret = codecCmdExecutor_->SendCmd(OMX_CommandStateSet, state);
         FALSE_RETURN_V_MSG(ret == Status::OK, Status::ERROR_INVALID_OPERATION, "HdiSendCommand failed");
-        targetState_ = state;
+        targetState_.store(state);
     }
     return Status::OK;
 }
@@ -584,7 +583,7 @@ Status HdiCodecAdapter::WaitForState(OMX_STATETYPE state)
         MEDIA_LOG_E("Wait state failed");
         return Status::ERROR_WRONG_STATE;
     }
-    curState_ = state;
+    curState_.store(state);
     MEDIA_LOG_D("WaitForState end");
     return Status::OK;
 }

@@ -141,6 +141,7 @@ ErrorCode HiPlayerImpl::Init()
         initialized_ = true;
     } else {
         pipeline_->RemoveFilterChain(audioSource_.get());
+        OSAL::ScopedLock lock(stateMutex_);
         UpdateStateNoLock(PlayerStates::PLAYER_STATE_ERROR);
     }
     return ret;
@@ -202,8 +203,12 @@ int32_t HiPlayerImpl::Prepare()
         MEDIA_LOG_E("Prepare failed with error " PUBLIC_LOG_D32, ret);
         return TransErrorCode(ret);
     }
-    OnStateChanged(StateId::PREPARING);
     OSAL::ScopedLock lock(stateMutex_);
+    if (!(pipelineStates_ == PlayerStates::PLAYER_INITIALIZED || pipelineStates_ == PlayerStates::PLAYER_STOPPED)) {
+        return MSERR_INVALID_OPERATION;
+    }
+    UpdateStateNoLock(TransStateId2PlayerState(state));
+    cond_.NotifyOne();
     if (pipelineStates_ == PlayerStates::PLAYER_PREPARING) { // Wait state change to ready
         cond_.Wait(lock, [this] { return pipelineStates_ != PlayerStates::PLAYER_PREPARING; });
     }
@@ -572,6 +577,7 @@ ErrorCode HiPlayerImpl::DoSetSource(const std::shared_ptr<MediaSource>& source)
 {
     auto ret = audioSource_->SetSource(source);
     if (ret != ErrorCode::SUCCESS) {
+        OSAL::ScopedLock lock(stateMutex_);
         UpdateStateNoLock(PlayerStates::PLAYER_STATE_ERROR);
     }
     return ret;
@@ -581,6 +587,7 @@ ErrorCode HiPlayerImpl::PrepareFilters()
 {
     auto ret = pipeline_->Prepare();
     if (ret != ErrorCode::SUCCESS) {
+        OSAL::ScopedLock lock(stateMutex_);
         UpdateStateNoLock(PlayerStates::PLAYER_STATE_ERROR);
     }
     return ret;
@@ -591,6 +598,7 @@ ErrorCode HiPlayerImpl::DoPlay()
     syncManager_->Resume();
     auto ret = pipeline_->Start();
     if (ret != ErrorCode::SUCCESS) {
+        OSAL::ScopedLock lock(stateMutex_);
         UpdateStateNoLock(PlayerStates::PLAYER_STATE_ERROR);
     }
     return ret;
@@ -601,6 +609,7 @@ ErrorCode HiPlayerImpl::DoPause()
     auto ret = pipeline_->Pause();
     syncManager_->Pause();
     if (ret != ErrorCode::SUCCESS) {
+        OSAL::ScopedLock lock(stateMutex_);
         UpdateStateNoLock(PlayerStates::PLAYER_STATE_ERROR);
     }
     return ret;
@@ -611,6 +620,7 @@ ErrorCode HiPlayerImpl::DoResume()
     syncManager_->Resume();
     auto ret = pipeline_->Resume();
     if (ret != ErrorCode::SUCCESS) {
+        OSAL::ScopedLock lock(stateMutex_);
         UpdateStateNoLock(PlayerStates::PLAYER_STATE_ERROR);
     }
     return ret;
@@ -627,6 +637,7 @@ ErrorCode HiPlayerImpl::DoStop()
     auto ret = pipeline_->Stop();
     syncManager_->Reset();
     if (ret != ErrorCode::SUCCESS) {
+        OSAL::ScopedLock lock(stateMutex_);
         UpdateStateNoLock(PlayerStates::PLAYER_STATE_ERROR);
     }
     return ret;
@@ -725,7 +736,10 @@ ErrorCode HiPlayerImpl::DoOnComplete()
 
 ErrorCode HiPlayerImpl::DoOnError(ErrorCode errorCode)
 {
-    UpdateStateNoLock(PlayerStates::PLAYER_STATE_ERROR);
+    {
+        OSAL::ScopedLock lock(stateMutex_);
+        UpdateStateNoLock(PlayerStates::PLAYER_STATE_ERROR);
+    }
     callbackLooper_.OnError(PlayerErrorType::PLAYER_ERROR, TransErrorCode(errorCode), "");
     return ErrorCode::SUCCESS;
 }
@@ -868,11 +882,9 @@ void HiPlayerImpl::OnStateChanged(StateId state)
 {
     MEDIA_LOG_I("OnStateChanged from " PUBLIC_LOG_D32 " to " PUBLIC_LOG_D32, pipelineStates_.load(),
         TransStateId2PlayerState(state));
+    OSAL::ScopedLock lock(stateMutex_);
     UpdateStateNoLock(TransStateId2PlayerState(state));
-    {
-        OSAL::ScopedLock lock(stateMutex_);
-        cond_.NotifyOne();
-    }
+    cond_.NotifyOne();
 }
 
 ErrorCode HiPlayerImpl::OnCallback(const FilterCallbackType& type, Filter* filter, const Plugin::Any& parameter)

@@ -111,7 +111,7 @@ protected:
     std::mutex consumerListenerMutex_;
     std::mutex brokerListenerMutex_;
 
-    std::mutex queueMutex_;
+    mutable std::mutex queueMutex_;
 
     std::weak_ptr<AVBufferQueueProducerImpl> localProducer_;
     std::weak_ptr<AVBufferQueueConsumerImpl> localConsumer_;
@@ -143,6 +143,7 @@ private:
     bool wait_for(std::unique_lock<std::mutex>& lock, int64_t timeoutUs);
 
     uint32_t GetCachedBufferCount() const;
+    uint32_t GetCachedBufferCountLocked() const;
     Status RequestReuseBuffer(std::shared_ptr<AVBuffer>& buffer, const AVBufferConfig& config);
     void InsertFreeBufferInOrder(uint64_t uniqueId);
     Status CancelBuffer(uint64_t uniqueId);

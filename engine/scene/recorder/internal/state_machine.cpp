@@ -203,7 +203,7 @@ ErrorCode StateMachine::TransitionTo(const std::shared_ptr<State>& state)
     ErrorCode rtv = ErrorCode::SUCCESS;
     if (state != curState_) {
         curState_->Exit();
-        curState_ = state;
+        std::atomic_store(curState_, state);
         Action nextAction;
         std::tie(rtv, nextAction) = curState_->Enter(lastIntent);
         if (rtv == ErrorCode::SUCCESS) {

@@ -178,6 +178,7 @@ Status Minimp3DecoderPlugin::QueueInputBuffer(const std::shared_ptr<Buffer>& inp
         MEDIA_LOG_E("decoder does not support fd buffer");
         return Status::ERROR_INVALID_DATA;
     } else {
+        OSAL::ScopedLock lock(ioMutex_);
         inputBuffer_ = inputBuffer;
         return Status::OK;
     }

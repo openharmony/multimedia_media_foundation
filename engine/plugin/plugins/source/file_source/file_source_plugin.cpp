@@ -78,6 +78,7 @@ FileSourcePlugin::FileSourcePlugin(std::string name)
 FileSourcePlugin::~FileSourcePlugin()
 {
     MEDIA_LOG_D("IN");
+    std::lock_guard<std::mutex> lock(mutex_);
     if (fp_) {
         std::fclose(fp_);
         fp_ = nullptr;
@@ -148,6 +149,7 @@ Status FileSourcePlugin::SetSource(std::shared_ptr<MediaSource> source)
 
 Status FileSourcePlugin::Read(std::shared_ptr<Buffer>& buffer, size_t expectedLen)
 {
+    std::lock_guard<std::mutex> lock(mutex_);
     if (std::feof(fp_) || (fileSize_ == position_)) {
         MEDIA_LOG_W("It is the end of file!");
         return Status::END_OF_STREAM;
@@ -178,6 +180,7 @@ Status FileSourcePlugin::Read(std::shared_ptr<Buffer>& buffer, size_t expectedLe
 Status FileSourcePlugin::GetSize(uint64_t& size)
 {
     MEDIA_LOG_DD("IN");
+    std::lock_guard<std::mutex> lock(mutex_);
     if (!fp_) {
         MEDIA_LOG_E("Need call SetSource() to open file first");
         return Status::ERROR_WRONG_STATE;
@@ -195,6 +198,7 @@ Seekable FileSourcePlugin::GetSeekable()
 
 Status FileSourcePlugin::SeekTo(uint64_t offset)
 {
+    std::lock_guard<std::mutex> lock(mutex_);
     if (!fp_ || (offset > fileSize_) || (position_ == offset)) {
         MEDIA_LOG_E("Invalid operation");
         return Status::ERROR_WRONG_STATE;
@@ -272,6 +276,7 @@ Status FileSourcePlugin::CheckFileStat()
 Status FileSourcePlugin::OpenFile()
 {
     MEDIA_LOG_D("IN");
+    std::lock_guard<std::mutex> lock(mutex_);
     auto ret = CheckFileStat();
     if (ret != Status::OK) {
         CloseFile();
@@ -291,6 +296,7 @@ Status FileSourcePlugin::OpenFile()
 
 void FileSourcePlugin::CloseFile()
 {
+    std::lock_guard<std::mutex> lock(mutex_);
     if (fp_) {
         MEDIA_LOG_I("close file");
         std::fclose(fp_);

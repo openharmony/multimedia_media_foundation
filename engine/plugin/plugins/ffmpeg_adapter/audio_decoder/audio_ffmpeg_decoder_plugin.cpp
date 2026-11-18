@@ -466,7 +466,10 @@ Status AudioFfmpegDecoderPlugin::QueueOutputBuffer(const std::shared_ptr<Buffer>
         MEDIA_LOG_E("Queue out buffer is null.");
         return Status::ERROR_INVALID_PARAMETER;
     }
-    outBuffer_ = outputBuffer;
+    {
+        OSAL::ScopedLock lock(avMutex_);
+        outBuffer_ = outputBuffer;
+    }
     return SendOutputBuffer();
 }
 
@@ -474,15 +477,20 @@ Status AudioFfmpegDecoderPlugin::SendOutputBuffer()
 {
     MEDIA_LOG_DD("send output buffer");
     Status status = ReceiveBuffer();
+    std::shared_ptr<Buffer> outBuffer;
+    {
+        OSAL::ScopedLock lock(avMutex_);
+        outBuffer = outBuffer_;
+        outBuffer_.reset();
+    }
     if (status == Status::OK || status == Status::END_OF_STREAM) {
+        FALSE_RETURN_V_MSG_E(outBuffer != nullptr, Status::ERROR_NULL_POINTER, "Send out buffer is null.");
         {
             OSAL::ScopedLock l(bufferMetaMutex_);
-            FALSE_RETURN_V_MSG_E(outBuffer_ != nullptr, Status::ERROR_NULL_POINTER, "Send out buffer is null.");
-            outBuffer_->UpdateBufferMeta(*bufferMeta_);
+            outBuffer->UpdateBufferMeta(*bufferMeta_);
         }
-        dataCallback_->OnOutputBufferDone(outBuffer_);
+        dataCallback_->OnOutputBufferDone(outBuffer);
     }
-    outBuffer_.reset();
     return status;
 }
 
@@ -621,7 +629,11 @@ Status AudioFfmpegDecoderPlugin::ReceiveBufferLocked(const std::shared_ptr<Buffe
 
 Status AudioFfmpegDecoderPlugin::ReceiveBuffer()
 {
-    std::shared_ptr<Buffer> ioInfo {outBuffer_};
+    std::shared_ptr<Buffer> ioInfo;
+    {
+        OSAL::ScopedLock lock(avMutex_);
+        ioInfo = outBuffer_;
+    }
     if ((ioInfo == nullptr) || ioInfo->IsEmpty() || ioInfo->GetBufferMeta() == nullptr ||
         (ioInfo->GetBufferMeta()->GetType() != BufferMetaType::AUDIO)) {
         MEDIA_LOG_W("cannot fetch valid buffer to output");

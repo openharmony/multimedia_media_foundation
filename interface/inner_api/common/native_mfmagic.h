@@ -16,6 +16,7 @@
 #ifndef NATIVE_MFMAGIC_H
 #define NATIVE_MFMAGIC_H
 
+#include <mutex>
 #include <refbase.h>
 #include "buffer/avbuffer.h"
 #include "buffer/avsharedmemory.h"
@@ -42,6 +43,7 @@ struct OH_AVBuffer : public MFObjectMagic {
     bool IsEqualBuffer(const std::shared_ptr<OHOS::Media::AVBuffer> &buf);
     std::shared_ptr<OHOS::Media::AVBuffer> buffer_;
     bool isUserCreated = false;
+    mutable std::mutex attrMutex_;
 };
 
 struct OH_AVMemory : public MFObjectMagic {
@@ -59,5 +61,6 @@ struct OH_AVFormat : public MFObjectMagic {
     OHOS::Media::Format format_;
     char *outString_ = nullptr;
     char *dumpInfo_ = nullptr;
+    std::mutex fmtMutex_;
 };
 #endif // NATIVE_MFMAGIC_H

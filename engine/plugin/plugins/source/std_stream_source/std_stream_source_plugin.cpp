@@ -114,6 +114,7 @@ Status StdStreamSourcePlugin::SetCallback(Callback* cb)
 
 Status StdStreamSourcePlugin::SetSource(std::shared_ptr<MediaSource> source)
 {
+    std::lock_guard<std::mutex> lock(mutex_);
     dataSrc_ = source->GetDataSrc();
     FALSE_RETURN_V(dataSrc_ != nullptr, Status::ERROR_INVALID_PARAMETER);
     int64_t size = 0;
@@ -188,12 +189,14 @@ Status StdStreamSourcePlugin::Read(std::shared_ptr<Buffer>& buffer, size_t expec
 
 Status StdStreamSourcePlugin::GetSize(uint64_t& size)
 {
+    std::lock_guard<std::mutex> lock(mutex_);
     size = size_;
     return Status::OK;
 }
 
 Seekable StdStreamSourcePlugin::GetSeekable()
 {
+    std::lock_guard<std::mutex> lock(mutex_);
     return seekable_;
 }
 

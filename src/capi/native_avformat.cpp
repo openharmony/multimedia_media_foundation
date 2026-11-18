@@ -209,6 +209,7 @@ bool OH_AVFormat_GetStringValue(struct OH_AVFormat *format, const char *key, con
     FALSE_RETURN_V_MSG_E(key != nullptr, false, "key is nullptr!");
     FALSE_RETURN_V_MSG_E(out != nullptr, false, "out is nullptr!");
 
+    std::lock_guard<std::mutex> lock(format->fmtMutex_);
     if (format->outString_ != nullptr) {
         free(format->outString_);
         format->outString_ = nullptr;
@@ -260,6 +261,7 @@ bool OH_AVFormat_GetIntBuffer(struct OH_AVFormat *format, const char *key, int32
 const char *OH_AVFormat_DumpInfo(struct OH_AVFormat *format)
 {
     FALSE_RETURN_V_MSG_E(format != nullptr, nullptr, "input format is nullptr!");
+    std::lock_guard<std::mutex> lock(format->fmtMutex_);
     if (format->dumpInfo_ != nullptr) {
         free(format->dumpInfo_);
         format->dumpInfo_ = nullptr;
@@ -307,6 +309,7 @@ bool OH_AVFormat_GetKey(OH_AVFormat *format, uint32_t index, const char **key)
         return false;
     }
 
+    std::lock_guard<std::mutex> lock(format->fmtMutex_);
     if (format->outString_ != nullptr) {
         free(format->outString_);
         format->outString_ = nullptr;
