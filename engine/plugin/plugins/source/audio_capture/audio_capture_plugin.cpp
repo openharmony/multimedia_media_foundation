@@ -187,13 +187,13 @@ Status AudioCapturePlugin::Prepare()
         FALSE_RETURN_V_MSG_E(audioCapturer_ != nullptr, Status::ERROR_WRONG_STATE, "no available audio capture");
         FAIL_LOG_RETURN(audioCapturer_->SetParams(capturerParams_), "audioCapturer SetParam");
         FAIL_LOG_RETURN(audioCapturer_->GetBufferSize(size), "audioCapturer GetBufferSize");
+        if (size >= MAX_CAPTURE_BUFFER_SIZE) {
+            MEDIA_LOG_E("bufferSize is too big: " PUBLIC_LOG_ZU, size);
+            return Status::ERROR_INVALID_PARAMETER;
+        }
+        bufferSize_ = size;
+        MEDIA_LOG_D("bufferSize is: " PUBLIC_LOG_ZU, bufferSize_);
     }
-    if (size >= MAX_CAPTURE_BUFFER_SIZE) {
-        MEDIA_LOG_E("bufferSize is too big: " PUBLIC_LOG_ZU, size);
-        return Status::ERROR_INVALID_PARAMETER;
-    }
-    bufferSize_ = size;
-    MEDIA_LOG_D("bufferSize is: " PUBLIC_LOG_ZU, bufferSize_);
     return Status::OK;
 }
 
@@ -208,10 +208,10 @@ Status AudioCapturePlugin::Reset()
                 MEDIA_LOG_E("Stop audioCapturer fail");
             }
         }
+        bufferSize_ = 0;
+        bitRate_ = 0;
+        capturerParams_ = AudioStandard::AudioCapturerParams();
     }
-    bufferSize_ = 0;
-    bitRate_ = 0;
-    capturerParams_ = AudioStandard::AudioCapturerParams();
     return Status::OK;
 }
 
@@ -467,6 +467,7 @@ Status AudioCapturePlugin::Read(std::shared_ptr<Buffer>& buffer, size_t expected
 
 Status AudioCapturePlugin::GetSize(uint64_t& size)
 {
+    OSAL::ScopedLock lock(captureMutex_);
     if (bufferSize_ == 0) {
         return Status::ERROR_INVALID_PARAMETER;
     }

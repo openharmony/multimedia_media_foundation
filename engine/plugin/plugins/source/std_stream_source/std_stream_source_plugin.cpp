@@ -161,7 +161,7 @@ void StdStreamSourcePlugin::ResetPool()
 
 Status StdStreamSourcePlugin::Read(std::shared_ptr<Buffer>& buffer, size_t expectedLen)
 {
-    std::lock_guard<std::mutex> lock(mutex_);
+    OSAL::ScopedLock lock(mutex_);
     std::shared_ptr<AVSharedMemory> memory = GetMemory();
     FALSE_RETURN_V_MSG(memory != nullptr, Status::ERROR_NO_MEMORY, "allocate memory failed!");
     int32_t realLen;
@@ -202,7 +202,7 @@ Seekable StdStreamSourcePlugin::GetSeekable()
 
 Status StdStreamSourcePlugin::SeekTo(uint64_t offset)
 {
-    std::lock_guard<std::mutex> lock(mutex_);
+    OSAL::ScopedLock lock(mutex_);
     if (seekable_ == Seekable::UNSEEKABLE) {
         MEDIA_LOG_E("source is unseekable!");
         return Status::ERROR_INVALID_OPERATION;
