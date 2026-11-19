@@ -279,10 +279,10 @@ Status FileSourcePlugin::OpenFile()
     std::lock_guard<std::mutex> lock(mutex_);
     auto ret = CheckFileStat();
     if (ret != Status::OK) {
-        CloseFile();
+        CloseFileLocked();
         return ret;
     }
-    CloseFile();
+    CloseFileLocked();
     fp_ = std::fopen(fileName_.c_str(), "rb");
     if (fp_ == nullptr) {
         MEDIA_LOG_E("Fail to load file from " PUBLIC_LOG_S, fileName_.c_str());
@@ -297,6 +297,12 @@ Status FileSourcePlugin::OpenFile()
 void FileSourcePlugin::CloseFile()
 {
     std::lock_guard<std::mutex> lock(mutex_);
+    CloseFileLocked();
+
+}
+
+void FileSourcePlugin::CloseFileLocked()
+{
     if (fp_) {
         MEDIA_LOG_I("close file");
         std::fclose(fp_);
