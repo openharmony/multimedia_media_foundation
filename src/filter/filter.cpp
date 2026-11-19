@@ -576,7 +576,7 @@ Status Filter::DoSetPerfRecEnabled(bool perfRecNeeded)
 
 Status Filter::DoInitAfterLink()
 {
-    MEDIA_LOG_I("Filter::DoInitAfterLink");
+    MEDIA_LOG_D("Filter::DoInitAfterLink");
     return Status::OK;
 }
 
@@ -675,14 +675,14 @@ void Filter::ChangeState(FilterState state)
     AutoLock lock(stateMutex_);
     curState_ = state == FilterState::RELEASED ? state : (curState_ ==
         FilterState::ERROR ? FilterState::ERROR : state);
-    MEDIA_LOG_I("%{public}s > %{public}d, target: %{public}d", name_.c_str(), curState_, state);
+    MEDIA_LOG_D("%{public}s > %{public}d, target: %{public}d", name_.c_str(), curState_, state);
     cond_.NotifyOne();
 }
 
 Status Filter::WaitAllState(FilterState state)
 {
     AutoLock lock(stateMutex_);
-    MEDIA_LOG_I("%{public}s wait %{public}d", name_.c_str(), state);
+    MEDIA_LOG_D("%{public}s wait %{public}d", name_.c_str(), state);
     if (curState_ != state) {
         bool result = cond_.WaitFor(lock, 30000, [this, state] { // 30000 ms timeout
             return curState_ == state || (state != FilterState::RELEASED && curState_ == FilterState::ERROR);

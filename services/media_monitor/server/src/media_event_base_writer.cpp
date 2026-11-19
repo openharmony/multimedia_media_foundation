@@ -804,7 +804,7 @@ void MediaEventBaseWriter::WriteAudioInterruptErrorEvent(std::shared_ptr<EventBe
 
 void MediaEventBaseWriter::WriteAudioUnderrunIssueEvent(std::shared_ptr<EventBean> &bean)
 {
-    MEDIA_LOG_E("Write audio underrun error event");
+    MEDIA_LOG_D("Write audio underrun error event");
     if (bean == nullptr) {
         MEDIA_LOG_E("eventBean is nullptr");
         return;

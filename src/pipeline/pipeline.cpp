@@ -99,7 +99,7 @@ Status Pipeline::Start()
 
 Status Pipeline::Pause()
 {
-    MEDIA_LOG_I("Pause enter.");
+    MEDIA_LOG_D("Pause enter.");
     Status ret = Status::OK;
     SubmitJobOnce([&] {
         AutoLock lock(mutex_);

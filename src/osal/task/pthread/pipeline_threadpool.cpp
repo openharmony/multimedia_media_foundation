@@ -114,7 +114,7 @@ void PipeLineThreadPool::DestroyThread(const std::string &groupId)
     {
         AutoLock lock(mutex_);
         if (workerGroupMap.find(groupId) == workerGroupMap.end()) {
-            MEDIA_LOG_E("DestroyThread groupId not exist");
+            MEDIA_LOG_D("DestroyThread groupId not exist");
             return;
         }
         threadList = workerGroupMap[groupId];
@@ -159,7 +159,7 @@ void PipeLineThread::Exit()
     std::unique_ptr<Thread> loopToJoin;
     {
         AutoLock lock(mutex_);
-        FALSE_RETURN_W(!threadExit_.load() && loop_);
+        FALSE_RETURN_MSG_D(!threadExit_.load() && loop_, "!threadExit_.load() && loop_");
 
         MEDIA_LOG_I("PipeLineThread " PUBLIC_LOG_S " exit", name_.c_str());
         threadExit_ = true;
