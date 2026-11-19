@@ -298,7 +298,6 @@ void FileSourcePlugin::CloseFile()
 {
     std::lock_guard<std::mutex> lock(mutex_);
     CloseFileLocked();
-
 }
 
 void FileSourcePlugin::CloseFileLocked()
