@@ -26,7 +26,7 @@ namespace Media {
 namespace Plugins {
 std::shared_ptr<PluginBase> CachedPluginPackage::CreatePlugin(PluginDescription pluginDescription)
 {
-    MEDIA_LOG_I("CreatePlugin " PUBLIC_LOG_S, pluginDescription.pluginName.c_str());
+    MEDIA_LOG_D("CreatePlugin " PUBLIC_LOG_S, pluginDescription.pluginName.c_str());
     std::shared_ptr<PluginDefBase> pluginDef = GetPluginDef(pluginDescription);
     if (pluginDef != nullptr) {
         auto plugin = pluginDef->GetCreator()(pluginDef->name);

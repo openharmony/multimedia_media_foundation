@@ -666,7 +666,8 @@ static std::map<AnyValueType, const Any &> g_ValueTypeDefaultValueMap = {
 Any GetDefaultAnyValue(const TagType& tag)
 {
     auto iter = g_metadataDefaultValueMap.find(tag);
-    FALSE_RETURN_V(iter != g_metadataDefaultValueMap.end(), defaultString);
+    FALSE_RETURN_V_MSG_D(iter != g_metadataDefaultValueMap.end(),
+        defaultString, "iter != g_metadataDefaultValueMap.end()");
     return iter->second;
 }
 

@@ -66,6 +66,7 @@ private:
     Status CheckFileStat();
     Status OpenFile();
     void CloseFile();
+    void CloseFileLocked();
 };
 } // namespace FileSource
 } // namespace Plugin

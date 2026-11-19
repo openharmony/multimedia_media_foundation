@@ -356,7 +356,7 @@ Status AVBufferQueueImpl::RequestBufferWaitUs(
     // check param
     std::unique_lock<std::mutex> lock(queueMutex_);
     auto res = CheckConfig(configCopy);
-    FALSE_RETURN_V_MSG(res == Status::OK,
+    FALSE_RETURN_V_MSG_D(res == Status::OK,
         res, "CheckConfig not OK, code %{public}d", static_cast<int32_t>(res));
     // dequeue from free list
     auto ret = PopFromFreeBufferList(buffer, configCopy);
@@ -723,7 +723,7 @@ Status AVBufferQueueImpl::ReleaseBuffer(const std::shared_ptr<AVBuffer>& buffer)
 
 Status AVBufferQueueImpl::Clear()
 {
-    MEDIA_LOG_E("AVBufferQueueImpl Clear");
+    MEDIA_LOG_D("AVBufferQueueImpl Clear");
     std::lock_guard<std::mutex> lockGuard(queueMutex_);
     dirtyBufferList_.clear();
     for (auto it = cachedBufferMap_.begin(); it != cachedBufferMap_.end(); it++) {

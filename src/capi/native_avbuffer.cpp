@@ -131,7 +131,7 @@ uint8_t *OH_AVBuffer_GetAddr(OH_AVBuffer *buffer)
     FALSE_RETURN_V_MSG_E(buffer != nullptr, nullptr, "input buffer is nullptr!");
     FALSE_RETURN_V_MSG_E(buffer->magic_ == MFMagic::MFMAGIC_AVBUFFER, nullptr, "magic error!");
     FALSE_RETURN_V_MSG_E(buffer->buffer_ != nullptr, nullptr, "buffer is nullptr!");
-    FALSE_RETURN_V_MSG_E(buffer->buffer_->memory_ != nullptr, nullptr, "buffer's memory is nullptr!");
+    FALSE_RETURN_V_MSG_D(buffer->buffer_->memory_ != nullptr, nullptr, "buffer's memory is nullptr!");
     return buffer->buffer_->memory_->GetAddr();
 }
 
