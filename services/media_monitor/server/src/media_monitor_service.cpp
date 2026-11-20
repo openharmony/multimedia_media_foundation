@@ -119,6 +119,12 @@ ErrCode MediaMonitorService::WriteLogMsg(const EventBean &bean)
         FALSE_RETURN_V_MSG_W(VerifySystemPermission(), ERR_SYSTEM_PERMISSION_DENIED,
             "caller is not system service, denied");
     }
+    if (eventBean->GetEventId() == UNIFIED_FAULT_CODE) {
+        int32_t callingUid = IPCSkeleton::GetCallingUid();
+        int32_t reportedUid = eventBean->GetIntValue("ERROR_UID");
+        FALSE_RETURN_V_MSG_W(callingUid == AUDIO_UID || reportedUid == callingUid,
+            ERR_PERMISSION_DENIED, "UNIFIED_FAULT_CODE ERROR_UID mismatch with callingUid, rejected");
+    }
     AddMessageToQueue(eventBean);
     return SUCCESS;
 }

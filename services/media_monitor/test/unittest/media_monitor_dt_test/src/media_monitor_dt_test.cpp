@@ -2042,6 +2042,65 @@ HWTEST(MediaMonitorDtTest, MediaMonitorService_MessageDumpAndFileBranch_001, Tes
     service.DumpThreadExit();
 }
 
+HWTEST(MediaMonitorDtTest, MediaMonitorService_WriteLogMsg_FaultUidRejected_001, TestSize.Level0)
+{
+    MediaMonitorService service(MEDIA_MONITOR_SERVICE_ID, false);
+    service.signal_ = std::make_shared<MessageSignal>();
+    service.signal_->isRunning_.store(true);
+    auto &aggregate = EventAggregate::GetEventAggregate();
+    aggregate.unifiedFaultCodeVector_.clear();
+
+    int32_t callingUid = IPCSkeleton::GetCallingUid();
+    bool isAudio = service.VerifyIsAudio();
+    int32_t forgedUid = callingUid + 1;
+    auto bean = MakeEvent(UNIFIED_FAULT_CODE, FAULT_EVENT);
+    bean->Add("ERROR_UID", forgedUid);
+    bean->Add("ERROR_CODE", 0x12345678);
+    bean->Add("ERROR_REASON", "forge_test");
+
+    auto ret = service.WriteLogMsg(*bean);
+    if (isAudio) {
+        EXPECT_EQ(ret, SUCCESS);
+        EXPECT_EQ(service.signal_->messageQueue_.size(), 1U);
+    } else {
+        EXPECT_EQ(ret, ERR_PERMISSION_DENIED);
+        EXPECT_EQ(service.signal_->messageQueue_.size(), 0U);
+        EXPECT_EQ(aggregate.GetUnifiedFaultCodeRecords().size(), 0U);
+    }
+}
+
+HWTEST(MediaMonitorDtTest, MediaMonitorService_WriteLogMsg_FaultUidAccepted_001, TestSize.Level0)
+{
+    MediaMonitorService service(MEDIA_MONITOR_SERVICE_ID, false);
+    service.signal_ = std::make_shared<MessageSignal>();
+    service.signal_->isRunning_.store(true);
+    auto &aggregate = EventAggregate::GetEventAggregate();
+    aggregate.unifiedFaultCodeVector_.clear();
+
+    int32_t callingUid = IPCSkeleton::GetCallingUid();
+    auto bean = MakeEvent(UNIFIED_FAULT_CODE, FAULT_EVENT);
+    bean->Add("ERROR_UID", callingUid);
+    bean->Add("ERROR_CODE", 0x00000002);
+    bean->Add("ERROR_REASON", "self_uid");
+
+    EXPECT_EQ(service.WriteLogMsg(*bean), SUCCESS);
+    ASSERT_EQ(service.signal_->messageQueue_.size(), 1U);
+
+    std::shared_ptr<EventBean> msg;
+    {
+        std::unique_lock<std::mutex> lock(service.signal_->messageMutex_);
+        msg = service.signal_->messageQueue_.front();
+        service.signal_->messageQueue_.pop();
+    }
+    ASSERT_NE(msg, nullptr);
+    EXPECT_EQ(msg->GetIntValue("ERROR_UID"), callingUid);
+    service.GetMessageFromQueue(msg);
+
+    auto records = aggregate.GetUnifiedFaultCodeRecords();
+    ASSERT_GT(records.size(), 0U);
+    EXPECT_EQ(records.back()->GetIntValue("ERROR_UID"), callingUid);
+}
+
 HWTEST(MediaMonitorDtTest, MediaMonitorManager_MediaParameterBranch_001, TestSize.Level0)
 {
     MediaMonitorManager &manager = MediaMonitorManager::GetInstance();
