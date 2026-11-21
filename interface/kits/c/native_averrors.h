@@ -131,6 +131,7 @@ typedef enum OH_AVErrCode {
      * @since 12
      */
     AV_ERR_VIDEO_UNSUPPORTED_COLOR_SPACE_CONVERSION = 301,
+    AV_ERR_EMULATOR_UNSUPPORT = 804,
     /**
      * @error the address of server is incorrect, and IO can not find host.
      * @since 14

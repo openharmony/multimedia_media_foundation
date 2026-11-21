@@ -251,6 +251,7 @@ enum MediaServiceExtErrCodeAPI9 : int32_t {
     MSERR_EXT_API9_PERMISSION_DENIED = 202,         // permission denied (system API).
     MSERR_EXT_API9_INVALID_PARAMETER = 401,         // invalid parameter.
     MSERR_EXT_API9_UNSUPPORT_CAPABILITY = 801,      // unsupport api.
+    MSERR_EXT_API9_EMULATOR_UNSUPPORT = 804,        // unsupport emulator.
     MSERR_EXT_API9_NO_MEMORY = 5400101,             // no memory.
     MSERR_EXT_API9_OPERATE_NOT_PERMIT = 5400102,    // opertation not be permitted.
     MSERR_EXT_API9_IO = 5400103,                    // IO error.
