@@ -308,7 +308,9 @@ public:
         tagCharSeq == Tag::AUDIO_L2HC_VERSION or
         tagCharSeq == Tag::VIDEO_RAWVIDEO_INPUT_PIXEL_FORMAT or
         tagCharSeq == Tag::DRM_ERROR_CODE or
-        tagCharSeq == Tag::ENABLE_BUFFER_SKIP_SAMPLES, int32_t, AnyValueType::INT32_T);
+        tagCharSeq == Tag::ENABLE_BUFFER_SKIP_SAMPLES or
+        tagCharSeq == Tag::MEDIA_VIDEO_TRACK_TIMESCALE or
+        tagCharSeq == Tag::MEDIA_SIT_TRACK_COVER_TIME, int32_t, AnyValueType::INT32_T);
 
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::VIDEO_ENCODER_TEMPORAL_GOP_SIZE or
@@ -429,7 +431,8 @@ public:
         tagCharSeq == Tag::DRM_DECRYPT_AVG_DURATION or
         tagCharSeq == Tag::DRM_DECRYPT_MAX_SIZE or
         tagCharSeq == Tag::DRM_DECRYPT_MAX_DURATION or
-        tagCharSeq == Tag::DRM_DECRYPT_TIMES, uint32_t, AnyValueType::UINT32_T);
+        tagCharSeq == Tag::DRM_DECRYPT_TIMES or
+        tagCharSeq == Tag::MEDIA_MVHD_TIMESCALE, uint32_t, AnyValueType::UINT32_T);
     DEFINE_INSERT_GET_FUNC(
         tagCharSeq == Tag::MEDIA_AIGC or
         tagCharSeq == Tag::MIME_TYPE or

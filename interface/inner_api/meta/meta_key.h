@@ -118,8 +118,11 @@ public:
     static constexpr const char MEDIA_GLTF_CONTENT_ENCODING[] = "gltf_content_encoding";///< gltf infe content encoding
     static constexpr const char MEDIA_GLTF_DATA[] = "gltf_data";                        ///< gltf infe data
     static constexpr const char MEDIA_GLTF_ITEM_TYPE[] = "gltf_item_type";              ///< gltf infe item type
-    static constexpr const char MEDIA_ENCODER[] = "encoder";                   ///< encoder info
-    static constexpr const char MEDIA_DEMUXER_MODE[] = "demuxer_mode";         ///< demuxer mode
+    static constexpr const char MEDIA_ENCODER[] = "encoder";                           ///< encoder info
+    static constexpr const char MEDIA_DEMUXER_MODE[] = "demuxer_mode";                 ///< demuxer mode
+    static constexpr const char MEDIA_MVHD_TIMESCALE[] = "mvhd_timescale";                ///< mvhd timescale
+    static constexpr const char MEDIA_VIDEO_TRACK_TIMESCALE[] = "video_track_timescale";  ///< video track timescale
+    static constexpr const char MEDIA_SIT_TRACK_COVER_TIME[] = "sit_track_cover_time";    ///< sit track cover time
 
     /* -------------------- buffer meta tag -------------------- */
     static constexpr const char BUFFER_DECODING_TIMESTAMP[] = "decoding_timestamp";  ///< int64_t, decoding timestamp.
